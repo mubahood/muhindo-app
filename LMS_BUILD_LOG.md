@@ -854,3 +854,77 @@ format Alpine toggles render and the disabled "coming soon" options are visible)
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 152/152 green (144 pre-existing + 8 new).
+
+### P2.3 — Frontend JS foundation + player heartbeat + YouTube IFrame API wrapper (§6.2/§7.3)
+
+**Built:**
+
+- **Frontend JS foundation (a real prerequisite gap, not optional polish):** research
+  before writing any player code found that `layouts/app.blade.php` (every `/learn`
+  page) loaded **no JavaScript at all** — no Vite, no Alpine, no `@stack('scripts')`,
+  and the toast host wasn't included either (all three exist and are wired up in
+  `layouts/admin.blade.php`, just never carried over to the student layout). Also
+  found `public/build/` had never been generated (`npm run build` had never been
+  run for this project) — adding `@vite(...)` without it would have 500'd every
+  `/learn` page immediately. Fixed all three: added `@vite(['resources/css/app.css',
+  'resources/js/app.js'])`, `@include('partials.toast-host')`, and `@stack('scripts')`
+  to `layouts/app.blade.php`; ran `npm run build` to generate the manifest (already
+  covered by `composer.json`'s existing `setup` script for real deploys — this was
+  a one-time local step, not a new build-process requirement).
+- `ProgressService::recordHeartbeat(Enrollment, Lesson, secondsDelta, positionSeconds)`
+  — the only writer of `lesson_progress.watch_seconds`/`last_position_seconds` and
+  `enrollments.total_watch_seconds`. Authorizes `access` + `view` (the sequential
+  lock) exactly like `completeLesson()`/`recordView()`. Clamps `secondsDelta` to
+  30s and `positionSeconds` to the lesson's duration server-side — heartbeats fire
+  every ~15s of real playback, so nothing legitimate ever reports more; a dishonest
+  client claiming an inflated delta in one call gets capped, not trusted. Records a
+  `video.heartbeat` learning event. Decides `min_watch` auto-completion here —
+  server-side, from the accumulated `watch_seconds` vs. `Lesson::durationSeconds()`
+  (the computed-not-stored value from P2.1) — never from a client "I finished" claim,
+  per §4.3's own wording. Delegates to the existing `completeLesson()` when the
+  threshold is crossed, so certificate issuance/events/fast-path columns all still
+  go through the one path.
+- New endpoint `POST learn/{course}/{lesson}/heartbeat` (`learn.lesson.heartbeat`,
+  `throttle:20,1`) on `LearningController`, following the `ThemeController` house
+  convention exactly (single action, `$request->validate()`, plain
+  `response()->json([...])`) rather than a versioned API or a new resource
+  controller.
+- `Lesson::youtubeVideoId()` — extracts a bare YouTube video id from whatever URL
+  shape an admin pastes (embed/watch/short link); returns `null` for anything else
+  (Vimeo, plain links), which keeps rendering the existing plain `<iframe>` —
+  "existing plain-text lessons keep rendering exactly as today" extended to
+  non-YouTube video too, not just to text lessons.
+- `resources/views/learn/lesson.blade.php` — a YouTube lesson now renders a real
+  IFrame API player (`youtubePlayer()`, a global Alpine function pushed via
+  `@push('scripts')`, matching the `tdAdmin()` convention rather than introducing
+  axios or an ES-module component — house style is manual `fetch()` + the CSRF
+  meta tag). Resumes at `last_position_seconds`, ticks a heartbeat every 15s while
+  actually playing (not while paused), sends a final heartbeat on pause/end so the
+  last few seconds aren't lost, and offers playback-speed buttons (0.75×–2×). An
+  auto-completion toasts via the existing `toast` `CustomEvent` mechanism.
+
+**Tests added:**
+
+- `tests/Unit/LessonYoutubeVideoIdTest.php` (7 cases via a data provider) — embed/
+  watch/short YouTube URLs all extract correctly; Vimeo, null, and empty string all
+  fall back to `null`.
+- `tests/Feature/Learning/PlayerHeartbeatTest.php` (8 tests): recording watch
+  seconds/position, accumulation across repeated heartbeats,
+  `test_a_client_reported_delta_beyond_one_heartbeat_interval_is_clamped` and
+  `test_a_position_beyond_the_lessons_duration_is_clamped` (the dishonest-student
+  abuse-path proofs), `min_watch` auto-completing once the threshold crosses,
+  `manual` never auto-completing from watch time alone, a pending enrollment
+  rejected, and a locked (sequential) lesson's heartbeat rejected.
+- `tests/Feature/Learning/PlayerRenderingTest.php` (3 tests) — a YouTube lesson
+  renders the IFrame API player + speed controls; a non-YouTube URL falls back to
+  a plain iframe; no `video_url` renders neither.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 170/170 green (152 pre-existing + 18 new) · `composer ci` green
+· manual smoke test at the real MAMP-served URL (logged in as a real student,
+confirmed the Vite-built assets load, the `x-data="youtubePlayer(...)"` payload
+renders with correctly escaped values, and the non-YouTube fallback still shows a
+plain iframe). Client-side playback behavior itself (actually pressing play,
+verifying the 15s ticks fire in a real browser) could not be automated — no
+browser-testing tool (Dusk) is installed — so this is the honest limit of what was
+verified; the server-side heartbeat contract it calls is fully tested.

@@ -2,6 +2,7 @@
 
 namespace App\Services\Learning;
 
+use App\Enums\CompletionRule;
 use App\Enums\LearningEventType;
 use App\Models\Enrollment;
 use App\Models\Lesson;
@@ -67,5 +68,60 @@ class ProgressService
             'progress_percent' => $enrollment->progressPercent(),
         ]);
         $this->events->record($enrollment, LearningEventType::LessonViewed, $lesson);
+    }
+
+    /**
+     * §6.2/§4.3 — every ~15s of actual playing time, the player reports how
+     * much it played and where it is. This is the only place `watch_seconds`/
+     * `last_position_seconds`/`total_watch_seconds` are written, and the only
+     * place `min_watch` completion is decided — server-side, from accumulated
+     * telemetry, never from a client "I finished" claim. `$secondsDelta` and
+     * `$positionSeconds` are clamped defensively: a heartbeat fires roughly
+     * every 15s, so nothing legitimate ever reports more than that per call.
+     */
+    public function recordHeartbeat(Enrollment $enrollment, Lesson $lesson, int $secondsDelta, int $positionSeconds): LessonProgress
+    {
+        Gate::authorize('access', $enrollment);
+        Gate::authorize('view', [$lesson, $enrollment]);
+
+        $secondsDelta = max(0, min($secondsDelta, 30));
+        $durationSeconds = $lesson->durationSeconds();
+        $positionSeconds = $durationSeconds ? max(0, min($positionSeconds, $durationSeconds)) : max(0, $positionSeconds);
+
+        $progress = $enrollment->progressRecords()->firstOrNew(['lesson_id' => $lesson->id]);
+        $progress->started_at = $progress->started_at ?? now();
+        $progress->watch_seconds = ($progress->watch_seconds ?? 0) + $secondsDelta;
+        $progress->last_position_seconds = $positionSeconds;
+        $progress->save();
+
+        if ($secondsDelta > 0) {
+            $enrollment->increment('total_watch_seconds', $secondsDelta);
+        }
+
+        $this->events->record($enrollment, LearningEventType::VideoHeartbeat, $lesson, null, [
+            'position_seconds' => $positionSeconds,
+            'seconds_delta' => $secondsDelta,
+        ]);
+
+        if (! $progress->completed_at && $this->minWatchThresholdCrossed($lesson, $progress)) {
+            $this->completeLesson($enrollment, $lesson);
+            $progress->refresh();
+        }
+
+        return $progress;
+    }
+
+    private function minWatchThresholdCrossed(Lesson $lesson, LessonProgress $progress): bool
+    {
+        if ($lesson->completion_rule !== CompletionRule::MinWatch) {
+            return false;
+        }
+
+        $duration = $lesson->durationSeconds();
+        if (! $duration || $duration <= 0) {
+            return false;
+        }
+
+        return ($progress->watch_seconds / $duration) * 100 >= $lesson->completion_threshold;
     }
 }

@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}">
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{
@@ -65,6 +66,8 @@
   </div>
 </header>
 
+@include('partials.toast-host')
+
 <main>
   <div class="wrap">
     @if(session('success'))<div class="alert-success">{{ session('success') }}</div>@endif
@@ -72,5 +75,6 @@
     @yield('content')
   </div>
 </main>
+@stack('scripts')
 </body>
 </html>

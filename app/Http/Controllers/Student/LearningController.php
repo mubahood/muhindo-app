@@ -9,6 +9,7 @@ use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Services\Learning\CertificateService;
 use App\Services\Learning\ProgressService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -91,6 +92,27 @@ class LearningController extends Controller
         }
 
         return redirect()->route('learn.index')->with('success', 'Course completed — congratulations!');
+    }
+
+    /** §6.2/§7.3 — player heartbeat: every ~15s of actual playing time, reports watch progress. */
+    public function heartbeat(Request $request, Course $course, Lesson $lesson): JsonResponse
+    {
+        $enrollment = $this->enrollmentFor($request, $course);
+        abort_unless($lesson->module->course_id === $course->id, 404);
+
+        $data = $request->validate([
+            'seconds_delta' => 'required|integer|min:0|max:60',
+            'position_seconds' => 'required|integer|min:0',
+        ]);
+
+        $progress = $this->progress->recordHeartbeat($enrollment, $lesson, $data['seconds_delta'], $data['position_seconds']);
+
+        return response()->json([
+            'success' => true,
+            'watch_seconds' => $progress->watch_seconds,
+            'last_position_seconds' => $progress->last_position_seconds,
+            'completed' => $progress->completed_at !== null,
+        ]);
     }
 
     public function certificate(Certificate $certificate): StreamedResponse

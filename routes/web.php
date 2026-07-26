@@ -151,6 +151,7 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::get('{course:slug}', [LearningController::class, 'show'])->name('course');
     Route::get('{course:slug}/{lesson}', [LearningController::class, 'lesson'])->name('lesson');
     Route::post('{course:slug}/{lesson}/complete', [LearningController::class, 'complete'])->name('lesson.complete');
+    Route::post('{course:slug}/{lesson}/heartbeat', [LearningController::class, 'heartbeat'])->middleware('throttle:20,1')->name('lesson.heartbeat');
     Route::get('{course:slug}/{lesson}/materials/{material}', [StudentLessonMaterialController::class, 'download'])->name('materials.download');
 });
 

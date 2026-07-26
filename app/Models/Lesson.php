@@ -35,6 +35,20 @@ class Lesson extends Model
         return $this->duration_minutes !== null ? $this->duration_minutes * 60 : null;
     }
 
+    /** §7.3 — the YouTube IFrame API needs a bare video id, not the embed URL admins paste in. Null for non-YouTube URLs (Vimeo, etc.), which fall back to a plain iframe. */
+    public function youtubeVideoId(): ?string
+    {
+        if (! $this->video_url) {
+            return null;
+        }
+
+        if (preg_match('~(?:youtube\.com/(?:embed/|watch\?v=)|youtu\.be/)([A-Za-z0-9_-]{6,})~', $this->video_url, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
     /** @return BelongsTo<CourseModule, $this> */
     public function module(): BelongsTo
     {
