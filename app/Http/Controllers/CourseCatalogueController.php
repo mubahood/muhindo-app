@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Enrollment;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -47,14 +48,14 @@ class CourseCatalogueController extends Controller
                 ->with('error', 'Paid checkout is coming soon — contact me directly to enrol in this course for now.');
         }
 
-        Enrollment::create([
-            'uuid' => (string) Str::uuid(),
-            'user_id' => $user->id,
-            'course_id' => $course->id,
-            'status' => 'active',
-            'source' => 'self',
-            'enrolled_at' => now(),
-        ]);
+        try {
+            Enrollment::firstOrCreate(
+                ['user_id' => $user->id, 'course_id' => $course->id],
+                ['uuid' => (string) Str::uuid(), 'status' => 'active', 'source' => 'self', 'enrolled_at' => now()],
+            );
+        } catch (UniqueConstraintViolationException) {
+            // A concurrent request (double-click) won the race — the enrollment exists either way.
+        }
 
         return redirect()->route('learn.course', $course)->with('success', 'You are enrolled — happy learning!');
     }

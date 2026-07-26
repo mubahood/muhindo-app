@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/', [PortfolioController::class, 'home'])->name('home');
 Route::get('/work/{portfolioProject:slug}', [PortfolioController::class, 'project'])->name('portfolio.project');
-Route::post('/contact', [PortfolioController::class, 'contact'])->name('contact.store');
+Route::post('/contact', [PortfolioController::class, 'contact'])->middleware('throttle:5,1')->name('contact.store');
 Route::view('/privacy', 'marketing.privacy')->name('privacy');
 Route::view('/terms', 'marketing.terms')->name('terms');
 
@@ -46,7 +46,7 @@ Route::view('/terms', 'marketing.terms')->name('terms');
 Route::get('/courses', [CourseCatalogueController::class, 'index'])->name('courses.index');
 Route::get('/courses/{course:slug}', [CourseCatalogueController::class, 'show'])->name('courses.show');
 Route::post('/courses/{course:slug}/enroll', [CourseCatalogueController::class, 'enroll'])
-    ->middleware('auth')->name('courses.enroll');
+    ->middleware(['auth', 'throttle:10,1'])->name('courses.enroll');
 
 /*
 |--------------------------------------------------------------------------

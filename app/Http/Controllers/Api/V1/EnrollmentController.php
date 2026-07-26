@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Support\ApiResponse;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -31,14 +32,15 @@ class EnrollmentController extends Controller
             return ApiResponse::error(\App\Enums\ApiErrorCode::Forbidden, 'This course requires checkout.', 402);
         }
 
-        $enrollment = Enrollment::create([
-            'uuid' => (string) Str::uuid(),
-            'user_id' => $request->user()->id,
-            'course_id' => $course->id,
-            'status' => 'active',
-            'source' => 'self',
-            'enrolled_at' => now(),
-        ]);
+        try {
+            $enrollment = Enrollment::firstOrCreate(
+                ['user_id' => $request->user()->id, 'course_id' => $course->id],
+                ['uuid' => (string) Str::uuid(), 'status' => 'active', 'source' => 'self', 'enrolled_at' => now()],
+            );
+        } catch (UniqueConstraintViolationException) {
+            // A concurrent request (double-tap) won the race — the enrollment exists either way.
+            $enrollment = Enrollment::where('user_id', $request->user()->id)->where('course_id', $course->id)->firstOrFail();
+        }
 
         return ApiResponse::success($enrollment, 'Enrolled.', 201);
     }

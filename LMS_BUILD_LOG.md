@@ -50,3 +50,43 @@ row is written — the abuse path proof), `test_a_cancelled_enrollment_cannot_vi
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 69/69 green (61 pre-existing + 8 new).
+
+### P0.2 — Idempotent enroll + throttling (closes L8)
+
+**Built:**
+
+- `CourseCatalogueController::enroll()` and `Api\V1\EnrollmentController::store()` —
+  the final `Enrollment::create([...])` call replaced with
+  `Enrollment::firstOrCreate(['user_id' => ..., 'course_id' => ...], [...])` wrapped
+  in `try { } catch (\Illuminate\Database\UniqueConstraintViolationException) { }`,
+  matching the exact idempotent-insert pattern already used in
+  `BillingService::createInvoiceWithNumber()`. On the API side the catch branch
+  re-fetches the existing row so the response still has an `Enrollment` to return.
+- Throttling added at the route layer (no new code, just middleware): `throttle:5,1`
+  on `POST /contact` (`routes/web.php`), `throttle:10,1` on `POST /courses/{course:slug}/enroll`
+  (web) and `POST courses/{course}/enroll` (`routes/api.php`).
+
+**Decision:** the API's `courses/{course}/enroll` route uses the bare `{course}`
+placeholder, which — like `Api\V1\CourseController::show()`'s existing `{course}`
+binding — resolves via `Course::getRouteKeyName()` (`'slug'`), not by numeric id.
+This is already the API's established convention (public course reads are
+slug-addressed, consistent with the web routes' explicit `{course:slug}`), so no
+route change was made; a test that had assumed id-based binding was corrected to
+use the slug instead, per rule 1 (never invent a parallel convention — match what
+the API already does).
+
+**Tests added:**
+
+- `tests/Feature/Learning/EnrollIdempotencyTest.php` (4 tests):
+  `test_posting_enroll_twice_in_a_row_never_errors_and_creates_only_one_row`,
+  `test_first_or_create_racing_an_existing_row_does_not_throw_and_stays_a_single_row`
+  (simulates the true race — a row inserted underneath the existence check),
+  `test_the_api_enroll_endpoint_is_also_double_click_safe`,
+  `test_enroll_route_is_throttled_against_rapid_repeated_requests` (11th request in
+  one minute gets a 429).
+- `tests/Feature/Portfolio/ContactFormTest.php` — added
+  `test_the_contact_form_is_throttled_against_spam` (6th submission in one minute
+  gets a 429).
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 74/74 green (69 pre-existing + 5 new).

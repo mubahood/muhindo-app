@@ -29,7 +29,7 @@ Route::prefix('v1')->group(function () {
 
         // Student: my enrollments/progress
         Route::get('my/enrollments', [EnrollmentController::class, 'mine'])->name('api.enrollments.mine');
-        Route::post('courses/{course}/enroll', [EnrollmentController::class, 'store'])->name('api.enrollments.store');
+        Route::post('courses/{course}/enroll', [EnrollmentController::class, 'store'])->middleware('throttle:10,1')->name('api.enrollments.store');
         Route::post('lessons/{lesson}/complete', [EnrollmentController::class, 'completeLesson'])->name('api.lessons.complete');
 
         // Client: my projects

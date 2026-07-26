@@ -63,4 +63,18 @@ class ContactFormTest extends TestCase
 
         $this->actingAs($admin)->get('/admin/messages')->assertOk()->assertSee('Jane Client');
     }
+
+    public function test_the_contact_form_is_throttled_against_spam(): void
+    {
+        Mail::fake();
+
+        $payload = ['name' => 'Spammer', 'email' => 'spam@example.com', 'message' => 'buy now'];
+
+        $last = null;
+        for ($i = 0; $i < 6; $i++) {
+            $last = $this->post('/contact', $payload);
+        }
+
+        $last->assertStatus(429);
+    }
 }
