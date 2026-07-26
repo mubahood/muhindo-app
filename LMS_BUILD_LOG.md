@@ -1167,3 +1167,58 @@ guaranteed order, exactly one registration.
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 203/203 green (196 pre-existing + 7 new) · `composer ci`
 green · `php artisan event:list` confirms exactly one listener per event.
+
+---
+
+## P2 phase gate — closed
+
+All seven items done, one commit per item, in plan order. Closes/advances: §4.3
+(completion rules + sequential progression), §4.5 (events/listeners), §6.2
+(player heartbeat), §7.2 (free preview, closes L5), §7.3 (AJAX player, closes
+L10), §7.4 (markdown authoring, closes L11).
+
+- `composer ci` (repo-wide `pint --test`, `phpstan`, `check-empty-files`,
+  `secrets-scan`, `php artisan test`): **green**, 203 tests / 417 assertions.
+- `php artisan migrate:status` on top of P0+P1's schema: all of this phase's
+  migrations applied cleanly in their own batches — a fresh checkout migrates
+  clean end to end.
+- Two real, previously-undiscovered bugs were found and fixed while building
+  and testing this phase (not routed around):
+  1. **Route name collision** (P2.6) — `routes/api.php`'s unprefixed
+     `apiResource('courses', ...)` silently hijacked `route('courses.show')`/
+     `route('courses.index')` app-wide, including the site's main public
+     navigation, since Laravel API route names defaulted to the exact same
+     names the web catalogue already used.
+  2. **Duplicate event listeners** (P2.7) — this Laravel version auto-discovers
+     `app/Listeners` classes with zero configuration; explicitly registering
+     them too (to control ordering) silently doubled every side effect
+     (a student would have received two completion emails).
+  Both are now pinned by regression tests (`RouteNamingTest`,
+  `LearningEventsTest`) so neither can silently reappear.
+- Every new AJAX surface (heartbeat, lesson completion) has a real
+  form `action`/`method` and degrades to a working non-JS flow — proven by
+  `test_a_plain_form_post_without_js_still_redirects` (P2.4).
+- Client-side JS behavior itself (actually pressing keys, watching the
+  optimistic rollback, the confetti animation, real YouTube playback) is
+  outside what's automatable without a browser-testing tool (Dusk, not
+  installed) — the server contracts every script calls are fully tested, and
+  every new page was manually smoke-tested rendering correctly against the
+  real MAMP-served app, but this is the honest boundary of what P2's
+  verification covers.
+- Explicitly deferred to later phases (each tied to a plan section that
+  itself places the work later, per rule 2's carve-out):
+  - `quiz_pass`/`submission` completion rules, quiz runner, gradebook,
+    certificate-criteria tightening (closes L1 fully) — all P3, need the quiz/
+    assignment models.
+  - `QuizAttemptSubmitted`/`AssignmentSubmitted`/`SubmissionGraded` events —
+    same reason.
+  - Client-side syntax highlighting (Shiki/highlight.js) for markdown code
+    blocks — cosmetic polish needing a new frontend dependency, not core to
+    "safely render markdown."
+  - Notes tab, Q&A, announcements, reviews, drag-drop curriculum builder,
+    bulk enroll — all explicitly P4 in §8, despite living under the same §7.3
+    heading as this phase's AJAX player work.
+
+Next: P3 — Assessment (quiz schema + `QuizService` auto-grading, quiz runner
+UI, assignments + grading queue, gradebook, certificate criteria tightening,
+quiz item analysis).
