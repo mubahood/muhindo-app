@@ -2616,3 +2616,64 @@ page links to the real `admin.quizzes.analysis` route).
 **Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
 `phpstan analyse --memory-limit=1G` 0 errors. Full untargeted
 `php artisan test` — 424/424 green (418 pre-existing + 6 new).
+
+### P4.11 — Nudge emails + weekly instructor digest (§6.4)
+
+**Built:**
+
+- `app/Console/Commands/DetectAtRiskEnrollments.php` — the two rules its own
+  P1 docblock explicitly deferred ("wait on the P3 quiz/assignment models")
+  are now implemented, since P3 landed: `struggling` (a quiz's
+  graded-attempt average is below that quiz's own `pass_percent`, or its two
+  most recent graded attempts both failed) and `missing_work` (a published,
+  past-due assignment with zero submissions from this enrollment). Checked
+  in the plan's listed order — inactive → stalled → struggling →
+  missing_work, first match wins, same single-column model as before.
+- `app/Console/Commands/SendWeeklyInstructorDigest.php` — new. Queries every
+  active enrollment with a non-null `at_risk_reason`, and — only if that
+  list is non-empty — emails one `WeeklyInstructorDigestNotification` to
+  every `super_admin`/`admin` user via `Notification::send()`. An empty list
+  sends nothing at all, matching the plan's "optional" framing literally
+  rather than treating it as an unused config flag.
+- `app/Notifications/WeeklyInstructorDigestNotification.php` — new,
+  mail-only. Subject and greeting match the plan's own example ("5 students
+  at risk: …"); lists up to 20 students with course + human-readable reason,
+  a "…and N more" line beyond that, a link to `admin.enrollments.index`, and
+  a pointer to the drill-down's existing one-click nudge.
+- `routes/console.php` — scheduled `app:send-weekly-instructor-digest`
+  Mondays at 07:00, after the 02:00 nightly at-risk run so the week's
+  numbers are fresh.
+- `resources/views/livewire/admin/course-students.blade.php` — the at-risk
+  badge now renders `str_replace('_', ' ', ...)` before `ucfirst()`, so the
+  new `missing_work` reason reads "Missing work" instead of "Missing_work".
+
+**Decision — the one-click nudge itself needed no new code.**
+`StudentNudgeNotification` and `EnrollmentDrilldown::sendNudge()` already
+existed from P1's per-student drill-down work and already do exactly what
+§6.3.2/§6.4 describe (a templated "you're X% through" email, one click from
+the drill-down page). P4.11's actual remaining scope was completing the
+at-risk rules the digest depends on, plus the digest itself — verified by
+re-reading both the P1 code and its own docblock before starting, per rule
+#1.
+
+**Decision — completing `struggling`/`missing_work` now rather than leaving
+them deferred.** The plan doesn't list "finish the at-risk rules" as its
+own P4 line item, but a weekly digest that claims "N students at risk"
+while silently only ever checking two of the plan's four rules would be
+dishonest about what it's reporting — and the stated blocker (no quiz/
+assignment models) has been gone since P3. Rule #2's "ambiguity resolved in
+favor of the plan's intent" points the same direction: §6.4 describes one
+at-risk concept with four rules, not two now and two later indefinitely.
+
+**Tests added:** `DetectAtRiskEnrollmentsTest` (+6 — below-pass-mark average
+flags struggling; two consecutive failed attempts flag struggling even with
+an above-mark average; an in-progress attempt is ignored; a past-due
+assignment with no submission flags missing_work; a submitted assignment
+clears it even past due; a not-yet-due assignment never flags it).
+`SendWeeklyInstructorDigestTest` (4 — no email when nothing is at risk;
+every admin is reached when something is; only active enrollments with a
+reason are included; the mail content names the student and reason).
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
+`phpstan analyse --memory-limit=1G` 0 errors. Full untargeted
+`php artisan test` — 434/434 green (424 pre-existing + 10 new).
