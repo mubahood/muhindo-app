@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property numeric-string $price
+ * @property-read int|null $lessons_count present only when loaded via withCount('lessons')
  */
 class Course extends Model
 {

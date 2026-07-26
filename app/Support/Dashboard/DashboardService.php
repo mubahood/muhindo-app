@@ -146,7 +146,10 @@ class DashboardService
 
     public function studentEnrollments(User $user): Collection
     {
-        return Enrollment::where('user_id', $user->id)->with('course')->latest()->get();
+        return Enrollment::where('user_id', $user->id)
+            ->with(['course' => fn ($query) => $query->withCount('lessons')])
+            ->withCount(['progressRecords as completed_lessons_count' => fn ($query) => $query->whereNotNull('completed_at')])
+            ->latest()->get();
     }
 
     public function studentCompletedCount(User $user): int

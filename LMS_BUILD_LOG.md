@@ -159,3 +159,47 @@ real MySQL schema).
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 85/85 green (83 pre-existing + 2 new) · `php artisan migrate` clean.
+
+### P0.5 — `withCount`-based progress on list views (closes L9)
+
+**Built:**
+
+- `Enrollment::progressPercent()` (`app/Models/Enrollment.php`) — now prefers
+  `$this->course->lessons_count` and `$this->completed_lessons_count` when present
+  (both nullable `@property-read`s, populated only when a caller eager-loads them),
+  falling back to the original live `lessonCount()`/`progressRecords()->count()` query
+  when they're not — so the same method stays correct for both a hydrated list and a
+  single freshly-mutated `Enrollment` instance (e.g. inside `LearningController::complete()`).
+  This mirrors the existing `withCount('enrollments')`/`withCount('projects')` pattern
+  already used in `Admin\CourseController`/`Admin\ClientController` rather than
+  inventing a new one.
+- `Student\LearningController::index()` (the "My Courses" list) — the enrollment
+  query now does `->with(['course' => fn ($q) => $q->withCount('lessons'), 'certificate'])`
+  plus `->withCount(['progressRecords as completed_lessons_count' => fn ($q) =>
+  $q->whereNotNull('completed_at')])`. Eager-loading `certificate` was necessary too:
+  the view's `@if($enrollment->certificate)` check was its own undiscovered N+1 — same
+  list, same root cause (L9), so it was in scope to fix here rather than opening a
+  second ticket for it.
+- `DashboardService::studentEnrollments()` — the same `course` + `completed_lessons_count`
+  eager-loading, feeding the student dashboard's "My courses" cards.
+
+**Decision:** L9's text also mentions "same shape in admin enrollments list" — checked
+`Admin\EnrollmentController::index()` and its view: it lists enrollments but never
+calls `progressPercent()`/`lessonCount()` today, so there is no N+1 there yet to fix.
+Nothing changed there; the two real hotspots (`learn.index`, student dashboard) are
+the ones actually calling `progressPercent()` per row.
+
+**Tests added:**
+
+- `tests/Feature/Learning/LearnIndexQueryCountTest.php` (2 tests):
+  `test_the_my_courses_list_runs_the_same_query_count_regardless_of_enrollment_row_count`
+  (proves flat query count between 1 and 5 enrollments — the actual N+1 regression
+  proof, stronger than a hardcoded magic number) and
+  `test_the_my_courses_list_still_renders_the_correct_progress_percentage`.
+- `tests/Feature/Learning/StudentDashboardQueryCountTest.php` (2 tests, same shape,
+  against `route('dashboard')`) — the query-count assertion runs a discarded warm-up
+  request first so Spatie's permission-cache warm-up doesn't masquerade as a fake
+  per-row delta.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 89/89 green (85 pre-existing + 4 new).
