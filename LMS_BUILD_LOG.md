@@ -2323,3 +2323,43 @@ an admin reply from the inbox is badged and notifies, admin resolve).
 **Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
 clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
 0 errors. `php artisan test` — 385/385 green (368 pre-existing + 17 new).
+
+### P4.6 — Notes tab (§7.3)
+
+**Built:** `LessonNote` (`enrollment_id`, `lesson_id`, nullable `seconds`,
+`body`) — private, per-student notes, each a discrete timestamped entry
+rather than an editable document (create + delete only, no update — matches
+how a "quick note while watching" tool actually gets used, and keeps the
+feature small). **Decision:** `Enrollment::lessonNotes()` is a deliberately
+different relation name from the already-existing `notes()` (the *admin's*
+private notes about a student, from P1's `EnrollmentNote`) — reusing
+`notes()` would have silently collided with an established relation on the
+same model.
+
+Rendered directly on the lesson page — no separate route/page needed, since
+"Notes tab" here means a panel alongside the video, not a distinct
+destination. **Decision — real forms first, JS as pure enhancement, not a
+fetch-driven reactive widget.** Considered building this as an
+Alpine-reactive add/delete list (fetch, update state, no reload), but
+rejected it: that would mean hydrating Alpine from server-rendered initial
+state just to half-duplicate the same list, for a low-frequency
+interaction where a page reload costs nothing. Instead: add/delete are
+real `<form>`s that work fully with zero JavaScript (a reload shows the
+updated list, matching every other non-AJAX-critical form in this app).
+JS enhancement layers on top of the *same* forms: an inline `onsubmit`
+handler fills the hidden `seconds` field from
+`window.__lessonVideoPlayer.getCurrentTime()` right before the real POST
+(no JS means the note just saves without a timestamp — a degraded but
+correct outcome, not a broken form), and a timestamped note's time renders
+as a `seekTo()` button — meaningless without JS anyway, exactly like the
+rest of the video player controls already are.
+
+**Tests added:** `LessonNotesTest` (6 — a timestamped note saves and
+formats correctly, 125s → "2:05"; a note without a timestamp is allowed;
+the lesson page renders saved notes; a student can delete their own note;
+a student cannot delete another student's note — `404`, not `403`, so the
+URL doesn't confirm the note exists; a non-enrolled user is denied).
+
+**Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
+clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
+0 errors. `php artisan test` — 391/391 green (385 pre-existing + 6 new).
