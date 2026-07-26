@@ -104,6 +104,26 @@ class EnrollmentAccessPolicyTest extends TestCase
         $response->assertOk()->assertSee('Payment pending')->assertDontSee('Continue');
     }
 
+    public function test_an_expired_active_enrollment_cannot_view_the_course_player(): void
+    {
+        [$course] = $this->courseWithLesson();
+        $student = User::factory()->create(['role' => 'student']);
+        $enrollment = $this->enrollmentWithStatus($student, $course, 'active');
+        $enrollment->update(['expires_at' => now()->subDay()]);
+
+        $this->actingAs($student)->get(route('learn.course', $course))->assertForbidden();
+    }
+
+    public function test_an_active_enrollment_with_a_future_expiry_can_still_view_the_course_player(): void
+    {
+        [$course] = $this->courseWithLesson();
+        $student = User::factory()->create(['role' => 'student']);
+        $enrollment = $this->enrollmentWithStatus($student, $course, 'active');
+        $enrollment->update(['expires_at' => now()->addDay()]);
+
+        $this->actingAs($student)->get(route('learn.course', $course))->assertRedirect();
+    }
+
     public function test_a_super_admin_can_view_any_enrollments_player_regardless_of_status(): void
     {
         $this->seed(\Database\Seeders\RbacSeeder::class);

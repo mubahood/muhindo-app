@@ -56,6 +56,11 @@
         </select>
       </div>
       <div class="tb-form-group">
+        <label class="tb-label">Access duration (days)</label>
+        <input class="tb-input" type="number" min="1" name="access_duration_days" value="{{ old('access_duration_days', $course->access_duration_days) }}" placeholder="Leave blank for lifetime access">
+        <p class="muted" style="font-size:.75rem;margin-top:4px;">If set, a student's access expires this many days after enrollment/purchase. Leave blank for lifetime access.</p>
+      </div>
+      <div class="tb-form-group">
         <label class="tb-check-group">
           <input type="checkbox" name="is_published" value="1" {{ old('is_published', $course->is_published) ? 'checked' : '' }}>
           <span>Published (visible on the public site)</span>

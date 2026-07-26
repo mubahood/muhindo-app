@@ -14,9 +14,10 @@ use Livewire\WithPagination;
 
 /**
  * §6.3.2 — the per-student drill-down: activity timeline, lesson-by-lesson
- * progress, private instructor notes, a one-click nudge, and (§7.1) cancel +
- * refund. "reset quiz attempts"/"extend access" buttons remain deferred — the
- * latter needs an enrollment expiry concept that doesn't exist until P5.
+ * progress, private instructor notes, a one-click nudge, (§7.1) cancel +
+ * refund, and (§6.4/P5.2) extend/remove the access-window expiry. "Reset
+ * quiz attempts" remains deferred — nothing in the plan scopes it to a
+ * specific phase, and it isn't needed for any P5 item.
  */
 class EnrollmentDrilldown extends Component
 {
@@ -25,6 +26,8 @@ class EnrollmentDrilldown extends Component
     public Enrollment $enrollment;
 
     public string $newNote = '';
+
+    public int $extendByDays = 30;
 
     public bool $nudgeSent = false;
 
@@ -71,6 +74,23 @@ class EnrollmentDrilldown extends Component
     {
         $this->enrollment->user->notify(new StudentNudgeNotification($this->enrollment));
         $this->nudgeSent = true;
+    }
+
+    /** §6.4/P5.2 — extends from the later of "now" or the current expiry, so a lapsed window doesn't shortchange the extension. */
+    public function extendAccess(): void
+    {
+        $this->validate(['extendByDays' => 'required|integer|min:1|max:3650']);
+
+        $base = $this->enrollment->expires_at && $this->enrollment->expires_at->isFuture()
+            ? $this->enrollment->expires_at
+            : now();
+
+        $this->enrollment->update(['expires_at' => $base->copy()->addDays($this->extendByDays)]);
+    }
+
+    public function removeExpiry(): void
+    {
+        $this->enrollment->update(['expires_at' => null]);
     }
 
     public function render(): View

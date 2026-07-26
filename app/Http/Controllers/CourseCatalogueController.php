@@ -85,7 +85,7 @@ class CourseCatalogueController extends Controller
             try {
                 $enrollment = Enrollment::firstOrCreate(
                     ['user_id' => $user->id, 'course_id' => $course->id],
-                    ['uuid' => (string) Str::uuid(), 'status' => 'active', 'source' => 'self', 'enrolled_at' => now()],
+                    ['uuid' => (string) Str::uuid(), 'status' => 'active', 'source' => 'self', 'enrolled_at' => now(), 'expires_at' => $course->enrollmentExpiresAt()],
                 );
                 if ($enrollment->wasRecentlyCreated) {
                     EnrollmentCreated::dispatch($enrollment);

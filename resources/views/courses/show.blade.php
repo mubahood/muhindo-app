@@ -61,6 +61,9 @@
       @else
         <a href="{{ route('login') }}" class="btn gold lg">Sign in to enrol</a>
       @endif
+      @if($course->access_duration_days)
+        <p class="muted" style="font-size:.8rem;margin-top:10px;">Includes {{ $course->access_duration_days }} days of access from enrollment.</p>
+      @endif
     </div>
   </div>
 </section>

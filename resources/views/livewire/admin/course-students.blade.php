@@ -70,6 +70,11 @@
                   'pending' => 'badge-pending',
                   default => 'badge-danger',
                 } }}">{{ ucfirst($enrollment->status) }}</span>
+                @if($enrollment->isExpired())
+                  <span class="badge-tb badge-danger" style="margin-left:4px;" title="Access window closed {{ $enrollment->expires_at->format('d M Y') }}">
+                    <i class="fas fa-hourglass-end"></i> Expired
+                  </span>
+                @endif
                 @if($enrollment->at_risk_reason)
                   <span class="badge-tb badge-danger" style="margin-left:4px;" title="Flagged by the nightly at-risk check">
                     <i class="fas fa-triangle-exclamation"></i> {{ ucfirst(str_replace('_', ' ', $enrollment->at_risk_reason)) }}

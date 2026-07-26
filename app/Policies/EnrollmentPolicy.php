@@ -12,14 +12,18 @@ class EnrollmentPolicy
         return $user->hasRole('super_admin') ? true : null;
     }
 
-    /** Owns the enrollment and its status actually grants lesson/material/completion access. */
+    /** Owns the enrollment, its status actually grants lesson/material/completion access, and its access window (if any) hasn't closed. */
     public function access(User $user, Enrollment $enrollment): bool
     {
         if ($enrollment->user_id !== $user->id) {
             return false;
         }
 
-        return in_array($enrollment->status, ['active', 'completed'], true);
+        if (! in_array($enrollment->status, ['active', 'completed'], true)) {
+            return false;
+        }
+
+        return ! $enrollment->isExpired();
     }
 
     /** The owner may always view their own enrollment record (any status), e.g. "payment pending" screens. */

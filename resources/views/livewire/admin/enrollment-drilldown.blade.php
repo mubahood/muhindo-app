@@ -57,6 +57,36 @@
         <div class="muted" style="font-size:.75rem;">Enrolled</div>
         <div>{{ $enrollment->enrolled_at?->format('d M Y') }}</div>
       </div>
+      <div>
+        <div class="muted" style="font-size:.75rem;">Access expires</div>
+        <div>
+          @if($enrollment->expires_at)
+            <span class="{{ $enrollment->isExpired() ? 'badge-tb badge-danger' : '' }}">{{ $enrollment->expires_at->format('d M Y') }}</span>
+          @else
+            <span class="muted">Lifetime access</span>
+          @endif
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tb-card" style="margin-bottom:20px;">
+    <div class="tb-card-header"><span class="tb-card-title">Access window</span></div>
+    <div class="tb-card-body" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+      <form wire:submit="extendAccess" style="display:flex;gap:8px;align-items:flex-end;">
+        <div class="tb-form-group" style="margin:0;">
+          <label class="tb-label">Extend by (days)</label>
+          <input type="number" min="1" max="3650" class="tb-input" wire:model="extendByDays" style="width:110px;">
+        </div>
+        <button type="submit" class="btn-tb btn-tb-primary btn-tb-sm"><i class="fas fa-calendar-plus"></i> Extend access</button>
+      </form>
+      @error('extendByDays') <div class="field-error">{{ $message }}</div> @enderror
+      @if($enrollment->expires_at)
+        <button type="button" class="btn-tb btn-tb-ghost btn-tb-sm" wire:click="removeExpiry"
+                wire:confirm="Remove the access window and grant lifetime access?">
+          <i class="fas fa-infinity"></i> Grant lifetime access
+        </button>
+      @endif
     </div>
   </div>
 

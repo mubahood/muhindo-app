@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * @property numeric-string $price
@@ -21,6 +22,7 @@ class Course extends Model
     protected $fillable = [
         'uuid', 'title', 'slug', 'description', 'cover_image', 'price',
         'currency', 'level', 'category', 'is_published', 'created_by', 'progression',
+        'access_duration_days',
     ];
 
     protected function casts(): array
@@ -102,6 +104,12 @@ class Course extends Model
     public function isFree(): bool
     {
         return (float) $this->price <= 0;
+    }
+
+    /** §4.4/§6.4 — the access-window expiry to stamp on a newly-activated enrollment; null (lifetime access) unless the course sets a duration. */
+    public function enrollmentExpiresAt(): ?Carbon
+    {
+        return $this->access_duration_days ? now()->addDays($this->access_duration_days) : null;
     }
 
     public function lessonCount(): int

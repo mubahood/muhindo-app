@@ -75,6 +75,7 @@ class CourseController extends Controller
             'category' => 'nullable|string|max:100',
             'is_published' => 'nullable|boolean',
             'progression' => ['nullable', Rule::in(array_column(CourseProgression::cases(), 'value'))],
+            'access_duration_days' => 'nullable|integer|min:1',
         ]);
 
         $data['slug'] = ($data['slug'] ?? null) ?: Str::slug($data['title']);

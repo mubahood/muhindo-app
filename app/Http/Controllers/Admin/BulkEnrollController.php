@@ -76,6 +76,7 @@ class BulkEnrollController extends Controller
                 'status' => 'active',
                 'source' => 'admin',
                 'enrolled_at' => now(),
+                'expires_at' => $course->enrollmentExpiresAt(),
             ]);
             $enrolled++;
         }

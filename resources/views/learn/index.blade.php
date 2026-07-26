@@ -20,11 +20,17 @@
         <div class="muted" style="font-size:.85rem;margin-bottom:14px;">
           {{ ucfirst($enrollment->status) }}
           @if($enrollment->status === 'active' && $lessonsLeft > 0) · {{ $lessonsLeft }} {{ Str::plural('lesson', $lessonsLeft) }} left @endif
-          @if($enrollment->status === 'active' && $started && $enrollment->lastLesson)
+          @if($enrollment->expires_at && ! $enrollment->isExpired()) · Access until {{ $enrollment->expires_at->format('d M Y') }} @endif
+          @if($enrollment->status === 'active' && $started && $enrollment->lastLesson && ! $enrollment->isExpired())
             <br>Resume at "{{ $enrollment->lastLesson->title }}"
           @endif
         </div>
-        @if(in_array($enrollment->status, ['active', 'completed'], true))
+        @if($enrollment->isExpired())
+          <span class="badge-pill" style="background:#fbe9e9;color:#b91c1c;">Access expired</span>
+          @if($enrollment->certificate)
+            <a href="{{ route('learn.certificate', $enrollment->certificate) }}" class="btn" style="margin-left:8px;" target="_blank"><i class="fas fa-award"></i> Certificate</a>
+          @endif
+        @elseif(in_array($enrollment->status, ['active', 'completed'], true))
           <a href="{{ route('learn.course', $enrollment->course) }}" class="btn gold">
             {{ match(true) {
               $enrollment->status === 'completed' => 'Review',

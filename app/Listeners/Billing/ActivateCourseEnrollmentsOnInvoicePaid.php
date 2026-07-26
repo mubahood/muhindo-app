@@ -38,10 +38,13 @@ class ActivateCourseEnrollmentsOnInvoicePaid implements ShouldQueue
                 continue;
             }
 
+            $course = Course::find($item->source_id);
+
             $enrollment->update([
                 'status' => 'active',
                 'invoice_id' => $invoice->id,
                 'enrolled_at' => $enrollment->enrolled_at ?? now(),
+                'expires_at' => $course?->enrollmentExpiresAt(),
             ]);
 
             EnrollmentCreated::dispatch($enrollment->fresh());

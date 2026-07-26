@@ -16,6 +16,7 @@ class Enrollment extends Model
     protected $fillable = [
         'uuid', 'user_id', 'course_id', 'invoice_id', 'status', 'source', 'enrolled_at', 'completed_at',
         'progress_percent', 'total_watch_seconds', 'last_lesson_id', 'last_accessed_at', 'at_risk_reason',
+        'expires_at',
     ];
 
     protected function casts(): array
@@ -24,7 +25,14 @@ class Enrollment extends Model
             'enrolled_at' => 'datetime',
             'completed_at' => 'datetime',
             'last_accessed_at' => 'datetime',
+            'expires_at' => 'datetime',
         ];
+    }
+
+    /** §4.4/§6.4 — a null `expires_at` means lifetime access; a past one means the access window has closed. */
+    public function isExpired(): bool
+    {
+        return $this->expires_at !== null && $this->expires_at->isPast();
     }
 
     /** @return BelongsTo<Lesson, $this> */
