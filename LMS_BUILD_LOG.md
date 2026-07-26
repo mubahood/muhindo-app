@@ -610,3 +610,47 @@ an enrollment yet, so there's nothing for that button to extend.
 `php artisan test` 124/124 green (119 pre-existing + 5 new) · migrate/rollback/migrate
 clean · manual smoke test at the real MAMP-served URL (drill-down page renders with
 correct title, lesson checklist, and timeline).
+
+### P1.5 — Resume/continue UX (§6.5)
+
+**Built:**
+
+- `Student\LearningController::show()` — now redirects to `$enrollment->lastLesson`
+  when it's set and still belongs to the requested course, instead of always
+  restarting at the first lesson. The course-id check guards against a stale
+  `last_lesson_id` pointing at another course (defensive, in case data is ever
+  migrated/reassigned); `lastLesson()` itself already excludes a soft-deleted
+  lesson via `Lesson`'s own global scope, so a deleted "last lesson" falls through
+  to the first-lesson fallback for free.
+- `learn.index` ("My Courses") rebuilt with: a small CSS `conic-gradient` progress
+  ring per card (no JS/chart library — §6.5's "course card ring"), a "resume at
+  ‹lesson title›" hint once `last_accessed_at` is set, an "N lessons left" hint
+  (§6.5's certificate-progress-hint idea, without the "+ final quiz" clause since
+  quizzes don't exist until P3), and the Continue button now reads "Start course" /
+  "Resume" / "Review" depending on enrollment state instead of always "Continue".
+  The ring and hints read the §6.1 denormalized `progress_percent` column directly
+  (already eager-loaded, so no new queries) rather than the live `progressPercent()`
+  method — consistent with §6.1's "list views read these columns" framing, now that
+  `ProgressService` is the sole writer keeping it in sync (P0.7/P1.1).
+
+**Deferred (explicitly, to phases the plan itself names):** exact video-position
+resume (`last_position_seconds`) waits on P2's player heartbeat — today's resume
+returns to the right *lesson*, not the exact timestamp within it. Per-module sidebar
+progress and a grades tab wait on P3 gradebook data. A weekly streak counter is
+listed as "optional" in §6.5 itself and was skipped as out of scope for this item.
+
+**Tests added** (`tests/Feature/Learning/ResumeUxTest.php`, 5 tests):
+`test_a_never_visited_course_starts_at_the_first_lesson`,
+`test_a_returning_student_resumes_at_their_last_viewed_lesson`,
+`test_a_stale_last_lesson_from_another_course_is_ignored` (the defensive-guard
+proof), `test_the_my_courses_card_shows_a_resume_hint_after_a_lesson_view`,
+`test_the_my_courses_card_shows_lessons_left`. Also updated
+`LearnIndexQueryCountTest`'s fixture: since the view now reads the persisted
+`progress_percent` column, a test enrollment built by directly inserting
+`lesson_progress` (bypassing `ProgressService`) needed the column set explicitly
+to match what real usage would have written.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 129/129 green (124 pre-existing + 5 new) · manual smoke test at
+the real MAMP-served URL (ring, "N lessons left", and the resume hint all render
+correctly for a real logged-in student).

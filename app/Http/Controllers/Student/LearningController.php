@@ -25,7 +25,7 @@ class LearningController extends Controller
     public function index(Request $request): View
     {
         $enrollments = Enrollment::where('user_id', $request->user()->id)
-            ->with(['course' => fn ($query) => $query->withCount('lessons'), 'certificate'])
+            ->with(['course' => fn ($query) => $query->withCount('lessons'), 'certificate', 'lastLesson'])
             ->withCount(['progressRecords as completed_lessons_count' => fn ($query) => $query->whereNotNull('completed_at')])
             ->latest()->get();
 
@@ -35,6 +35,15 @@ class LearningController extends Controller
     public function show(Request $request, Course $course): View|RedirectResponse
     {
         $enrollment = $this->enrollmentFor($request, $course);
+
+        // §6.5 resume UX: pick up where they left off rather than always
+        // restarting at lesson #1. lastLesson() excludes soft-deleted lessons
+        // via Lesson's own global scope, and the course-id check guards against
+        // a stale last_lesson_id left over from before a course was reworked.
+        $resumeLesson = $enrollment->lastLesson;
+        if ($resumeLesson && $resumeLesson->module->course_id === $course->id) {
+            return redirect()->route('learn.lesson', [$course, $resumeLesson]);
+        }
 
         $firstLesson = $course->modules->first()?->lessons->first();
         if ($firstLesson) {

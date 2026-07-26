@@ -34,6 +34,12 @@ class LearnIndexQueryCountTest extends TestCase
         ]);
 
         $enrollment->progressRecords()->create(['lesson_id' => $lessonOne->id, 'completed_at' => now()]);
+
+        // The view now reads the §6.1 denormalized progress_percent column (the
+        // same one ProgressService maintains in real usage) rather than
+        // recomputing it live, so this bypass-created fixture needs to set it
+        // explicitly to match what a real completion would have written.
+        $enrollment->update(['progress_percent' => $enrollment->progressPercent()]);
     }
 
     public function test_the_my_courses_list_runs_the_same_query_count_regardless_of_enrollment_row_count(): void
@@ -69,6 +75,6 @@ class LearnIndexQueryCountTest extends TestCase
         $student = User::factory()->create(['role' => 'student']);
         $this->enrollInANewCourse($student);
 
-        $this->actingAs($student)->get(route('learn.index'))->assertOk()->assertSee('50% complete');
+        $this->actingAs($student)->get(route('learn.index'))->assertOk()->assertSee('50%');
     }
 }
