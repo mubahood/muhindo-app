@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\Learning\EnrollmentCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Enrollment;
@@ -40,8 +41,11 @@ class EnrollmentController extends Controller
                 ['user_id' => $request->user()->id, 'course_id' => $course->id],
                 ['uuid' => (string) Str::uuid(), 'status' => 'active', 'source' => 'self', 'enrolled_at' => now()],
             );
+            if ($enrollment->wasRecentlyCreated) {
+                EnrollmentCreated::dispatch($enrollment);
+            }
         } catch (UniqueConstraintViolationException) {
-            // A concurrent request (double-tap) won the race — the enrollment exists either way.
+            // A concurrent request (double-tap) won the race — the enrollment exists either way, no new event.
             $enrollment = Enrollment::where('user_id', $request->user()->id)->where('course_id', $course->id)->firstOrFail();
         }
 

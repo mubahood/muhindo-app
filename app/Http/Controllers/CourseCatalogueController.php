@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ContentFormat;
+use App\Events\Learning\EnrollmentCreated;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Lesson;
@@ -72,12 +73,15 @@ class CourseCatalogueController extends Controller
         }
 
         try {
-            Enrollment::firstOrCreate(
+            $enrollment = Enrollment::firstOrCreate(
                 ['user_id' => $user->id, 'course_id' => $course->id],
                 ['uuid' => (string) Str::uuid(), 'status' => 'active', 'source' => 'self', 'enrolled_at' => now()],
             );
+            if ($enrollment->wasRecentlyCreated) {
+                EnrollmentCreated::dispatch($enrollment);
+            }
         } catch (UniqueConstraintViolationException) {
-            // A concurrent request (double-click) won the race — the enrollment exists either way.
+            // A concurrent request (double-click) won the race — the enrollment exists either way, no new event.
         }
 
         return redirect()->route('learn.course', $course)->with('success', 'You are enrolled — happy learning!');

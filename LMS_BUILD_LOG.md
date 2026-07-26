@@ -1100,3 +1100,70 @@ green · manual smoke test at the real MAMP-served URL (confirmed the
 homepage's "Courses" nav link now points at `/courses`, not `/api/v1/courses`;
 the free-preview page renders and its content/CTA are correct; the course
 page's "Free preview" tag links to the right URL).
+
+### P2.7 — Events & listeners (§4.5)
+
+**Built:**
+
+- Three plain events (`Dispatchable` only, no broadcasting needed):
+  `App\Events\Learning\LessonCompleted`, `CourseCompleted`, `EnrollmentCreated`.
+  `QuizAttemptSubmitted`/`AssignmentSubmitted`/`SubmissionGraded` from §4.5's
+  full list stay deferred to P3 — no quiz/assignment models exist yet to carry.
+- `ProgressService::completeLesson()` now dispatches `LessonCompleted` right
+  after writing the progress row, and `CourseCompleted` in place of the
+  previous direct `$this->certificates->issue($enrollment)` call — the
+  service now only *decides that* something completed; it no longer knows
+  *what happens as a result*. `CertificateService` is no longer a
+  `ProgressService` constructor dependency at all.
+- `CourseCatalogueController::enroll()` and `Api\V1\EnrollmentController::store()`
+  dispatch `EnrollmentCreated` only when `Enrollment::firstOrCreate()`'s
+  `wasRecentlyCreated` flag is true — a double-click/double-tap race (already
+  idempotent since P0.2) correctly fires the event zero times on the losing
+  request, not twice.
+- New notifications (mail + database, matching the `StudentNudgeNotification`
+  shape from P1.4): `CourseCompletedNotification` ("you finished the course",
+  links to the certificate) and `EnrolledInCourseNotification` ("welcome,
+  start learning").
+- New listener `App\Listeners\Learning\HandleCourseCompletion` — issues the
+  certificate **then** sends `CourseCompletedNotification`, both in one
+  `handle()` method. New listener `NotifyStudentOfEnrollment` sends
+  `EnrolledInCourseNotification` on `EnrollmentCreated`. Both `ShouldQueue`
+  (this app's `QUEUE_CONNECTION=sync`, so they execute inline today —
+  identical observable behavior to before this item — but are already wired
+  correctly for Horizon/a real queue in production, per §4.5's explicit ask).
+
+**Bug found and fixed while wiring this up — duplicate notifications.**
+Registering these listeners explicitly in `AppServiceProvider::boot()`
+(`Event::listen(CourseCompleted::class, ...)`) was the obvious way to
+guarantee "certificate before email" ordering across two listeners on the
+same event. Empirically verified via `php artisan event:list` and a scratch
+test that this app's Laravel version **auto-discovers** `app/Listeners`
+classes by their type-hinted `handle()` parameter with zero configuration —
+so the explicit registration didn't replace auto-discovery, it *doubled* it:
+every side effect fired twice, meaning a student would have received two
+"you completed the course" emails and had two duplicate certificates-issue
+attempts (harmless, since `CertificateService::issue()` is idempotent) but
+two real notification rows. Confirmed by a scratch test counting
+`DatabaseNotification` rows (2, not 1) before the fix. The correct, robust
+fix — not just deleting the explicit registration — was to **merge** the two
+`CourseCompleted` listeners (`IssueCertificateOnCourseCompletion` +
+`NotifyStudentOfCourseCompletion`) into the single `HandleCourseCompletion`
+listener above: Laravel doesn't guarantee execution order across
+independently auto-discovered listeners on the same event, so relying on
+directory-scan ordering between two separate classes would have been fragile
+even without the duplicate-registration bug. One listener, sequential calls,
+guaranteed order, exactly one registration.
+
+**Tests added** (`tests/Feature/Learning/LearningEventsTest.php`, 7 tests):
+`test_completing_a_lesson_dispatches_lesson_completed`,
+`test_completing_the_final_lesson_dispatches_course_completed`,
+`test_course_completion_issues_exactly_one_certificate_and_sends_exactly_one_notification`
+(the duplicate-notification regression proof — pins the count at 1),
+`test_the_course_completed_notification_links_to_the_already_issued_certificate`
+(the ordering proof), `test_a_genuinely_new_enrollment_dispatches_enrollment_created`,
+`test_a_double_click_enroll_does_not_dispatch_enrollment_created_twice`,
+`test_enrolling_sends_a_welcome_notification`.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 203/203 green (196 pre-existing + 7 new) · `composer ci`
+green · `php artisan event:list` confirms exactly one listener per event.

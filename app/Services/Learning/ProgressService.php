@@ -4,31 +4,35 @@ namespace App\Services\Learning;
 
 use App\Enums\CompletionRule;
 use App\Enums\LearningEventType;
+use App\Events\Learning\CourseCompleted;
+use App\Events\Learning\LessonCompleted;
 use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
 use Illuminate\Support\Facades\Gate;
 
 /**
- * The only writer of lesson_progress, enrollment completion, certificate
- * issuance, and the §6.1 denormalized fast-path columns (`progress_percent`,
- * `last_lesson_id`, `last_accessed_at`). The web player and the API both call
- * this instead of writing completion state themselves, so a rule added here
- * (sequencing, watch-time gates, …) can never be true on one surface and false
- * on the other — kills L14. Authorizing here (not just in the calling
- * controller) means the check can't be forgotten by a future caller, closing
- * the gap the API previously had (no enrollment-status check on
- * `completeLesson`). Also authorizes `LessonPolicy::view` (§4.3 sequential
- * progression — a locked lesson can't be viewed or completed through either
- * surface) and emits the corresponding `learning_events` row (§6.2) for every
- * action it writes.
+ * The only writer of lesson_progress, enrollment completion, and the §6.1
+ * denormalized fast-path columns (`progress_percent`, `last_lesson_id`,
+ * `last_accessed_at`). The web player and the API both call this instead of
+ * writing completion state themselves, so a rule added here (sequencing,
+ * watch-time gates, …) can never be true on one surface and false on the
+ * other — kills L14. Authorizing here (not just in the calling controller)
+ * means the check can't be forgotten by a future caller, closing the gap the
+ * API previously had (no enrollment-status check on `completeLesson`). Also
+ * authorizes `LessonPolicy::view` (§4.3 sequential progression — a locked
+ * lesson can't be viewed or completed through either surface) and emits the
+ * corresponding `learning_events` row (§6.2) for every action it writes.
+ *
+ * Certificate issuance, completion notifications, and enrollment-welcome
+ * notifications are §4.5 side-effects and deliberately live in queued
+ * listeners on `LessonCompleted`/`CourseCompleted`/`EnrollmentCreated`
+ * (registered in `AppServiceProvider`), not here — this service only decides
+ * *that* something completed, never what happens as a result.
  */
 class ProgressService
 {
-    public function __construct(
-        private readonly CertificateService $certificates,
-        private readonly LearningEventRecorder $events,
-    ) {}
+    public function __construct(private readonly LearningEventRecorder $events) {}
 
     public function completeLesson(Enrollment $enrollment, Lesson $lesson): LessonProgress
     {
@@ -40,6 +44,7 @@ class ProgressService
             ['completed_at' => now()],
         );
         $this->events->record($enrollment, LearningEventType::LessonCompleted, $lesson);
+        LessonCompleted::dispatch($enrollment, $lesson);
 
         $percent = $enrollment->progressPercent();
         $enrollment->update([
@@ -50,7 +55,7 @@ class ProgressService
 
         if ($percent >= 100 && $enrollment->status !== 'completed') {
             $enrollment->update(['status' => 'completed', 'completed_at' => now()]);
-            $this->certificates->issue($enrollment);
+            CourseCompleted::dispatch($enrollment);
         }
 
         return $progress;
