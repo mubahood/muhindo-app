@@ -1777,3 +1777,63 @@ auto-fix pass — unused-import removal after Pint noticed
 `database`-only). `phpstan analyse --memory-limit=1G` 0 errors (after the
 `Collection` covariance fix above). `php artisan test` — 292/292 green (279
 pre-existing + 13 new).
+
+### P3.8 — Gradebook (§5.4)
+
+**Built:** `GradebookService::itemsFor(Enrollment)` — one entry per
+published quiz/assignment in the enrollment's course: `{type, id, title,
+percent, max_points}`. Quiz percent is computed only over `graded` attempts
+(never `in_progress`), selected per the quiz's own `grading_method`
+(`highest`/`latest`/`first`/`average` — all four implemented, matching the
+enum P3.1 already declared). Assignment percent comes from the *latest*
+`returned` submission (`points_awarded / assignment.points * 100`), with
+`late_penalty_percent` applied **multiplicatively** if that submission was
+late (`percent *= 1 - penalty/100` — a 20% penalty on a 100% submission
+lands at 80%, not a flat 20-point subtraction off whatever the raw score
+happened to be). An item with zero activity, or an assignment that's
+`submitted` but not yet `returned`, comes back with `percent: null` —
+**excluded** from the course average rather than counted as a zero.
+**Decision:** this is deliberately a "current grade so far," matching how
+students actually expect an in-progress gradebook to read (a course that's
+half-finished shouldn't show a crushed average because most items haven't
+been attempted yet); the plan doesn't spell out this choice explicitly, so
+it's resolved the same direction the whole phase has resolved similar
+ambiguities — favor what a real student/instructor would expect over a
+literal zero-fill.
+
+`courseGradePercent()` is the equal-weight average (§5.4: "weights default
+equal") of whichever items came back non-null. `courseGradePercentFromItems()`
+is the same math taking an already-fetched item list, added specifically so
+the admin matrix/CSV export — which iterate every enrollment in a course —
+don't pay for `itemsFor()` twice per row.
+
+Student "Grades" tab (`learn.grades`, linked from My Courses whenever a
+course has any published quiz or assignment) — a course-grade summary card
+plus the per-item table. Admin per-course gradebook (`App\Livewire\Admin\GradeMatrix`,
+linked from the course page next to Students) — students × items grid with
+a course-grade column; `GradebookExportController` streams the identical
+grid as CSV.
+
+**Decision — plain array/foreach construction, not `Collection::map()`
+chains, in both `GradeMatrix::render()` and `GradebookExportController`.**
+The exact PHPStan `Collection`-generic-covariance limitation hit in P3.7's
+`GradingQueue` (documented there) recurred here independently, on an
+unrelated component combining a per-item collection with a per-enrollment
+one. Two independent hits in two phases confirms this is a shape worth
+avoiding by default in this codebase — heterogeneous/derived collections
+built via chained `map()` calls and then combined or nested — rather than a
+one-off to work around case-by-case.
+
+**Tests added:** `tests/Feature/Learning/GradebookServiceTest.php` (9 — a
+never-attempted item excluded from the average; all four `grading_method`
+values pick the right attempt; an `in_progress` attempt ignored; assignment
+percent from the latest returned submission; late penalty applied
+multiplicatively; a submitted-not-returned assignment excluded, not zeroed;
+course grade is the equal-weight average of graded items only).
+`StudentGradesPageTest.php` (2 — page renders the grade/items, non-enrolled
+`404`). `GradeMatrixTest.php` (3 — matrix renders one row per student with
+correct percentages, CSV export contains the same data, non-admin denied).
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
+`phpstan analyse --memory-limit=1G` 0 errors. `php artisan test` —
+306/306 green (292 pre-existing + 14 new).
