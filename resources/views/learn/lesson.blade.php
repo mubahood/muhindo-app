@@ -45,7 +45,9 @@
       <div class="card" style="margin-bottom:20px;">
         <div style="font-weight:600;margin-bottom:10px;">Materials</div>
         @foreach($lesson->materials as $material)
-          <div style="margin-bottom:6px;"><i class="fas fa-paperclip"></i> {{ $material->title }}</div>
+          <div style="margin-bottom:6px;">
+            <a href="{{ route('learn.materials.download', [$course, $lesson, $material]) }}"><i class="fas fa-paperclip"></i> {{ $material->title }}</a>
+          </div>
         @endforeach
       </div>
     @endif

@@ -2,6 +2,7 @@
 
 namespace App\Services\Learning;
 
+use App\Enums\LearningEventType;
 use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
@@ -16,11 +17,15 @@ use Illuminate\Support\Facades\Gate;
  * on the other — kills L14. Authorizing here (not just in the calling
  * controller) means the check can't be forgotten by a future caller, closing
  * the gap the API previously had (no enrollment-status check on
- * `completeLesson`).
+ * `completeLesson`). Also emits the corresponding `learning_events` row
+ * (§6.2) for every action it writes.
  */
 class ProgressService
 {
-    public function __construct(private readonly CertificateService $certificates) {}
+    public function __construct(
+        private readonly CertificateService $certificates,
+        private readonly LearningEventRecorder $events,
+    ) {}
 
     public function completeLesson(Enrollment $enrollment, Lesson $lesson): LessonProgress
     {
@@ -30,6 +35,7 @@ class ProgressService
             ['lesson_id' => $lesson->id],
             ['completed_at' => now()],
         );
+        $this->events->record($enrollment, LearningEventType::LessonCompleted, $lesson);
 
         $percent = $enrollment->progressPercent();
         $enrollment->update([
@@ -56,5 +62,6 @@ class ProgressService
             'last_accessed_at' => now(),
             'progress_percent' => $enrollment->progressPercent(),
         ]);
+        $this->events->record($enrollment, LearningEventType::LessonViewed, $lesson);
     }
 }

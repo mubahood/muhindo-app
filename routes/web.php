@@ -26,6 +26,7 @@ use App\Http\Controllers\Client\PortalController;
 use App\Http\Controllers\CourseCatalogueController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\Student\LearningController;
+use App\Http\Controllers\Student\LessonMaterialController as StudentLessonMaterialController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -148,6 +149,7 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::get('{course:slug}', [LearningController::class, 'show'])->name('course');
     Route::get('{course:slug}/{lesson}', [LearningController::class, 'lesson'])->name('lesson');
     Route::post('{course:slug}/{lesson}/complete', [LearningController::class, 'complete'])->name('lesson.complete');
+    Route::get('{course:slug}/{lesson}/materials/{material}', [StudentLessonMaterialController::class, 'download'])->name('materials.download');
 });
 
 /*

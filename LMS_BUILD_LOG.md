@@ -438,3 +438,63 @@ half undone — only the read-side UI belongs to P1.5.
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 106/106 green (102 pre-existing + 4 new) · migrate/rollback/migrate clean.
+
+### P1.2 — `learning_events` + `LearningEventRecorder` + server-side recording hooks (§6.2)
+
+**Built:**
+
+- New migration `create_learning_events_table` — `enrollment_id` (cascadeOnDelete),
+  `lesson_id` (nullable, nullOnDelete), `nullableMorphs('subject')` for quiz
+  attempts/submissions later, `event` (native enum column, values driven by the new
+  `App\Enums\LearningEventType` backed enum so the DB constraint and the PHP type
+  can't drift apart), `value` (JSON), `created_at` only (no `updated_at` — the table
+  is append-only), composite index `(enrollment_id, created_at)` exactly as specified.
+  Verified clean in both directions (migrate → rollback → migrate).
+- `App\Enums\LearningEventType` — all 11 cases from §6.2's vocabulary declared now
+  (`lesson.viewed`, `video.play/pause/heartbeat/ended`, `lesson.completed`,
+  `quiz.started/submitted`, `material.downloaded`, `note.created`,
+  `question.asked`), even though the `video.*`/`quiz.*`/`note.*`/`question.*` cases
+  have no recorder yet — they wait on the player heartbeat (P2), quiz engine (P3),
+  and community features (P4) respectively, so the enum (and the DB column derived
+  from it) won't need another migration when those phases land.
+- `App\Models\LearningEvent` — `UPDATED_AT = null`, `event` cast to the enum,
+  `value` cast to `array`, `belongsTo` enrollment/lesson, `morphTo` subject.
+- New `app/Services/Learning/LearningEventRecorder.php` (the service named in
+  §4.1) — the single funnel for every event row.
+- `ProgressService` now takes `LearningEventRecorder` in its constructor and emits
+  `lesson.viewed` from `recordView()` and `lesson.completed` from `completeLesson()`
+  — the two hooks that already had a real trigger point in P1.1.
+
+**Decision — built the missing student material-download route.** §6.2 lists
+`material.downloaded` as fed by a "server-side hook," but auditing the actual app
+turned up that no such hook could exist: there was no student-facing download
+route at all. `resources/views/learn/lesson.blade.php` only ever printed a
+material's title as plain, unlinked text — uploading a material through the admin
+worked, but a student could never retrieve it. This isn't a later-phase deferral
+target anywhere in the plan; it's a pre-existing gap this exact item needed filled
+to have anything to hook into. Built `Student\LessonMaterialController::download()`,
+mirroring `ProjectDocumentController`/`DocumentService`'s established private-disk,
+policy-gated-stream convention exactly: ownership via the same `EnrollmentPolicy`
+`access` check already used everywhere else in the student player, a plain
+`Storage::disk('local')->download()` for stored files, and a 302 to the URL for
+`type: link` materials. New route `GET learn/{course}/{lesson}/materials/{material}`
+→ `learn.materials.download`; the lesson view's material list now actually links to
+it.
+
+**Deferred (explicitly, to later phases the plan itself names):** `video.*` events
+wait on the YouTube IFrame API heartbeat (§6.2's own first bullet, P2). `quiz.*`
+waits on the quiz engine (P3). `note.*`/`question.*` wait on the community features
+tabs (§7.3/§7.6, P4). The prune-after-12-months scheduled command mentioned in
+§6.2's retention note is explicitly a **P5** roadmap line item ("event pruning"),
+not part of this item.
+
+**Tests added** (`tests/Feature/Learning/LearningEventRecordingTest.php`, 6 tests):
+`test_viewing_a_lesson_records_a_lesson_viewed_event`,
+`test_completing_a_lesson_records_a_lesson_completed_event`,
+`test_downloading_a_stored_material_streams_it_and_records_an_event`,
+`test_downloading_a_link_material_redirects_to_the_url_and_still_records_an_event`,
+`test_a_pending_enrollment_cannot_download_a_lesson_material` (the abuse-path proof
+for the newly built download route), `test_a_material_belonging_to_a_different_lesson_404s`.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 112/112 green (106 pre-existing + 6 new) · migrate/rollback/migrate clean.
