@@ -10,6 +10,7 @@
   <div style="display:flex;gap:8px;">
     <a href="{{ route('courses.show', $course) }}" target="_blank" class="btn-tb btn-tb-ghost"><i class="fas fa-arrow-up-right-from-square"></i> View public page</a>
     <a href="{{ route('admin.courses.students', $course) }}" class="btn-tb btn-tb-ghost"><i class="fas fa-users"></i> Students</a>
+    <a href="{{ route('admin.courses.gradebook', $course) }}" class="btn-tb btn-tb-ghost"><i class="fas fa-chart-simple"></i> Gradebook</a>
     <a href="{{ route('admin.courses.edit', $course) }}" class="btn-tb btn-tb-primary"><i class="fas fa-pen"></i> Edit</a>
   </div>
 </div>

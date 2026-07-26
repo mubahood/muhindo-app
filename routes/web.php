@@ -121,6 +121,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->shallow()->except(['index', 'show']);
     Route::resource('courses.assignments', \App\Http\Controllers\Admin\AssignmentController::class)
         ->shallow()->except(['index', 'show']);
+    Route::get('courses/{course}/gradebook', \App\Livewire\Admin\GradeMatrix::class)->name('courses.gradebook');
+    Route::get('courses/{course}/gradebook/export', \App\Http\Controllers\Admin\GradebookExportController::class)->name('courses.gradebook.export');
     Route::get('enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::get('enrollments/{enrollment}', \App\Livewire\Admin\EnrollmentDrilldown::class)->name('enrollments.show');
     Route::get('grading-queue', \App\Livewire\Admin\GradingQueue::class)->name('grading-queue');
@@ -182,6 +184,8 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::post('{course:slug}/assignments/{assignment}/draft', [\App\Http\Controllers\Student\AssignmentController::class, 'saveDraft'])->name('assignment.draft');
     Route::post('{course:slug}/assignments/{assignment}/submit', [\App\Http\Controllers\Student\AssignmentController::class, 'submit'])->name('assignment.submit');
     Route::get('{course:slug}/assignments/{assignment}/submissions/{submission}/download', [\App\Http\Controllers\Student\AssignmentController::class, 'download'])->name('assignment.download');
+
+    Route::get('{course:slug}/grades', [\App\Http\Controllers\Student\GradesController::class, 'show'])->name('grades');
 
     Route::get('{course:slug}/{lesson}', [LearningController::class, 'lesson'])->name('lesson');
     Route::post('{course:slug}/{lesson}/complete', [LearningController::class, 'complete'])->name('lesson.complete');
