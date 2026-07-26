@@ -119,6 +119,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->shallow()->except(['index', 'show']);
     Route::resource('quizzes.questions', \App\Http\Controllers\Admin\QuestionController::class)
         ->shallow()->except(['index', 'show']);
+    Route::resource('courses.assignments', \App\Http\Controllers\Admin\AssignmentController::class)
+        ->shallow()->except(['index', 'show']);
     Route::get('enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::get('enrollments/{enrollment}', \App\Livewire\Admin\EnrollmentDrilldown::class)->name('enrollments.show');
     Route::post('courses/{course}/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
@@ -158,12 +160,13 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::get('/', [LearningController::class, 'index'])->name('index');
     Route::get('certificates/{certificate}', [LearningController::class, 'certificate'])->name('certificate');
     Route::get('{course:slug}', [LearningController::class, 'show'])->name('course');
-    Route::get('{course:slug}/{lesson}', [LearningController::class, 'lesson'])->name('lesson');
-    Route::post('{course:slug}/{lesson}/complete', [LearningController::class, 'complete'])->name('lesson.complete');
-    Route::post('{course:slug}/{lesson}/heartbeat', [LearningController::class, 'heartbeat'])->middleware('throttle:20,1')->name('lesson.heartbeat');
-    Route::get('{course:slug}/{lesson}/materials/{material}', [StudentLessonMaterialController::class, 'download'])->name('materials.download');
-    Route::get('{course:slug}/{lesson}/content-images/{filename}', [\App\Http\Controllers\Student\LessonContentImageController::class, 'show'])->name('content-images.show');
 
+    // These literal-prefix routes (GET {course:slug}/quizzes, {course:slug}/assignments) MUST be
+    // registered before the generic {course:slug}/{lesson} route below — Laravel matches GET
+    // routes in registration order at the URI-pattern level, before route-model binding ever
+    // runs, so a later, more specific route is unreachable dead code once a bare {lesson}
+    // wildcard of the same segment count is registered first (confirmed: it 404s on failing to
+    // resolve "quizzes"/"assignments" as a Lesson, never falling through to try this route).
     Route::get('{course:slug}/quizzes', [QuizAttemptController::class, 'index'])->name('quizzes.index');
     Route::get('{course:slug}/quizzes/{quiz}', [QuizAttemptController::class, 'show'])->name('quiz.show');
     Route::post('{course:slug}/quizzes/{quiz}/start', [QuizAttemptController::class, 'start'])->name('quiz.start');
@@ -172,6 +175,18 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
         ->middleware('throttle:60,1')->name('quiz.answer');
     Route::post('{course:slug}/quizzes/{quiz}/attempts/{attempt}/submit', [QuizAttemptController::class, 'submit'])->name('quiz.submit');
     Route::get('{course:slug}/quizzes/{quiz}/attempts/{attempt}/review', [QuizAttemptController::class, 'review'])->name('quiz.review');
+
+    Route::get('{course:slug}/assignments', [\App\Http\Controllers\Student\AssignmentController::class, 'index'])->name('assignments.index');
+    Route::get('{course:slug}/assignments/{assignment}', [\App\Http\Controllers\Student\AssignmentController::class, 'show'])->name('assignment.show');
+    Route::post('{course:slug}/assignments/{assignment}/draft', [\App\Http\Controllers\Student\AssignmentController::class, 'saveDraft'])->name('assignment.draft');
+    Route::post('{course:slug}/assignments/{assignment}/submit', [\App\Http\Controllers\Student\AssignmentController::class, 'submit'])->name('assignment.submit');
+    Route::get('{course:slug}/assignments/{assignment}/submissions/{submission}/download', [\App\Http\Controllers\Student\AssignmentController::class, 'download'])->name('assignment.download');
+
+    Route::get('{course:slug}/{lesson}', [LearningController::class, 'lesson'])->name('lesson');
+    Route::post('{course:slug}/{lesson}/complete', [LearningController::class, 'complete'])->name('lesson.complete');
+    Route::post('{course:slug}/{lesson}/heartbeat', [LearningController::class, 'heartbeat'])->middleware('throttle:20,1')->name('lesson.heartbeat');
+    Route::get('{course:slug}/{lesson}/materials/{material}', [StudentLessonMaterialController::class, 'download'])->name('materials.download');
+    Route::get('{course:slug}/{lesson}/content-images/{filename}', [\App\Http\Controllers\Student\LessonContentImageController::class, 'show'])->name('content-images.show');
 });
 
 /*

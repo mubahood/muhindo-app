@@ -30,7 +30,8 @@ class LearningController extends Controller
     {
         $enrollments = Enrollment::where('user_id', $request->user()->id)
             ->with(['course' => fn ($query) => $query->withCount('lessons')
-                ->withCount(['quizzes as published_quizzes_count' => fn ($q) => $q->where('is_published', true)]),
+                ->withCount(['quizzes as published_quizzes_count' => fn ($q) => $q->where('is_published', true)])
+                ->withCount(['assignments as published_assignments_count' => fn ($q) => $q->where('is_published', true)]),
                 'certificate', 'lastLesson'])
             ->withCount(['progressRecords as completed_lessons_count' => fn ($query) => $query->whereNotNull('completed_at')])
             ->latest()->get();

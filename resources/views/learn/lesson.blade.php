@@ -116,6 +116,17 @@
         </div>
       @endif
 
+      @if($lesson->assignments->where('is_published', true)->count())
+        <div class="card" style="margin-bottom:20px;">
+          <div style="font-weight:600;margin-bottom:10px;">Lesson assignment</div>
+          @foreach($lesson->assignments->where('is_published', true) as $lessonAssignment)
+            <div style="margin-bottom:6px;">
+              <a href="{{ route('learn.assignment.show', [$course, $lessonAssignment]) }}"><i class="fas fa-file-pen"></i> {{ $lessonAssignment->title }}</a>
+            </div>
+          @endforeach
+        </div>
+      @endif
+
       @if($lesson->materials->count())
         <div class="card" style="margin-bottom:20px;">
           <div style="font-weight:600;margin-bottom:10px;">Materials</div>

@@ -37,6 +37,22 @@ class QuizRunnerTest extends TestCase
         return [$course, $student, $enrollment, $quiz];
     }
 
+    /**
+     * Regression test: the plain 2-segment GET {course:slug}/quizzes route once collided with
+     * the generic GET {course:slug}/{lesson} route registered earlier in routes/web.php — since
+     * Laravel matches GET routes in registration order before model binding runs, "quizzes" was
+     * being swallowed as a failed Lesson lookup (404) and this route was unreachable dead code
+     * until the routes were reordered (literal-prefix routes must precede the {lesson} wildcard).
+     */
+    public function test_the_quiz_list_page_renders(): void
+    {
+        [$course, $student, , $quiz] = $this->enrolledStudent();
+        $quiz->questions()->create(['type' => 'mcq_single', 'prompt' => 'Q1', 'points' => 1, 'sort_order' => 0]);
+
+        $this->actingAs($student)->get(route('learn.quizzes.index', $course))
+            ->assertOk()->assertSee($quiz->title);
+    }
+
     public function test_the_quiz_intro_page_renders_with_a_start_button(): void
     {
         [$course, $student, , $quiz] = $this->enrolledStudent();

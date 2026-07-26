@@ -73,6 +73,12 @@ class Lesson extends Model
         return $this->hasMany(Quiz::class);
     }
 
+    /** @return HasMany<Assignment, $this> */
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
     public function course(): ?Course
     {
         return $this->module?->course;

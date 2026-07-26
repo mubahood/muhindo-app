@@ -99,4 +99,35 @@
   </div>
 </div>
 
+<div class="tb-page-header" style="margin-top:32px;">
+  <div><h2 style="font-size:1.1rem;">Assignments</h2></div>
+  <a href="{{ route('admin.courses.assignments.create', $course) }}" class="btn-tb btn-tb-primary btn-tb-sm"><i class="fas fa-plus"></i> New Assignment</a>
+</div>
+
+<div class="tb-card">
+  <div class="tb-card-body" style="padding:0;">
+    @forelse($course->assignments as $assignment)
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bd);">
+        <div>
+          <div style="font-weight:500;">{{ $assignment->title }}
+            <span class="badge-tb {{ $assignment->is_published ? 'badge-active' : 'badge-neutral' }}" style="margin-left:6px;">{{ $assignment->is_published ? 'Published' : 'Draft' }}</span>
+          </div>
+          <div class="muted" style="font-size:.78rem;">{{ $assignment->lesson?->title ?? 'Course-wide' }} · {{ $assignment->points }} pts
+            @if($assignment->due_at) · Due {{ $assignment->due_at->format('M j, Y g:ia') }} @endif
+          </div>
+        </div>
+        <div class="tb-table-actions">
+          <a href="{{ route('admin.assignments.edit', $assignment) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-pen"></i></a>
+          <form method="POST" action="{{ route('admin.assignments.destroy', $assignment) }}" onsubmit="return confirm('Delete this assignment and all its submissions?');">
+            @csrf @method('DELETE')
+            <button type="submit" class="btn-tb btn-tb-danger btn-tb-icon"><i class="fas fa-trash"></i></button>
+          </form>
+        </div>
+      </div>
+    @empty
+      <div class="tb-empty" style="padding:20px;"><p>No assignments yet.</p></div>
+    @endforelse
+  </div>
+</div>
+
 @endsection

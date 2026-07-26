@@ -75,6 +75,12 @@ class Enrollment extends Model
         return $this->hasMany(QuizAttempt::class);
     }
 
+    /** @return HasMany<AssignmentSubmission, $this> */
+    public function assignmentSubmissions(): HasMany
+    {
+        return $this->hasMany(AssignmentSubmission::class);
+    }
+
     /**
      * List views should eager-load counts to avoid an N+1 here: `->with(['course' =>
      * fn ($q) => $q->withCount('lessons')])` on the enrollment query plus
