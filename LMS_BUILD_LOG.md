@@ -2273,3 +2273,53 @@ non-enrolled `404`, markdown renders as real HTML).
 **Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
 clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
 0 errors. `php artisan test` — 368/368 green (358 pre-existing + 10 new).
+
+### P4.5 — Q&A tab (§7.3)
+
+**Built:** `Discussion` (`course_id`, `lesson_id` nullable — a course-wide
+question when null, a lesson-scoped one otherwise — `user_id`, `parent_id`
+nullable for a reply, `body`, `is_instructor_answer`, `resolved_at`,
+soft-deletable). **Decision:** threads stay flat — `DiscussionService::reply()`
+rejects replying to a reply (`422`) rather than allowing arbitrary nesting,
+matching the plan's "per-lesson threads" framing (a thread, not a tree) and
+keeping the UI trivial (one indent level, no recursive rendering).
+`is_instructor_answer` is never a field the replier chooses — it's computed
+automatically from `User::isAdmin()` at reply time, so it can't be
+spoofed or forgotten.
+
+**Decision — where DiscussionService sits on the authorization spectrum.**
+Unlike `QuizService`/`AssignmentService` (which self-check
+`Gate::authorize('access', $enrollment)` internally, because grades and
+money are involved), `DiscussionService` leaves enrollment/admin
+authorization entirely to its callers — matching `GradebookService`/
+`QuizAnalysisService`'s convention for services that read/write community
+content rather than something requiring defense-in-depth. Both student and
+admin controllers do their own access checks before calling in.
+
+Student-facing (`learn.discussions.*`): a course-wide thread list (open/
+resolved status, reply counts, per-thread lesson context), an
+ask-a-question form optionally pre-scoped to a lesson via a query
+parameter (linked from the lesson page breadcrumb as "Ask a question"), a
+thread view with inline reply, and resolve — restricted to the original
+asker or an admin, `403` otherwise.
+
+Instructor-facing: `App\Livewire\Admin\CourseDiscussions`, a per-course Q&A
+inbox mirroring P3.7's grading-queue inline-reply pattern (open a thread,
+type a reply, submit — no separate page navigation). **Decision:** scoped
+per-course, not a cross-course inbox like the grading queue — the plan's
+own wording frames this specifically as a course-level "Q&A tab," and a
+question's context (which course, which lesson) matters more here than in
+grading, where "oldest first, across everything" was the explicit ask.
+
+**Tests added:** `DiscussionServiceTest` (7 — asking notifies the course's
+instructor; a question can be lesson-scoped; an admin's reply is
+auto-badged and notifies the asker; a student's reply is never badged;
+replying to your own question doesn't self-notify; replying to a reply is
+rejected; resolve sets `resolved_at`). `StudentDiscussionsTest` (6 — post/
+list/reply/resolve, only the asker or an admin can resolve, non-enrolled
+`404`). `CourseDiscussionsTest` (4 — non-admin denied, inbox lists threads,
+an admin reply from the inbox is badged and notifies, admin resolve).
+
+**Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
+clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
+0 errors. `php artisan test` — 385/385 green (368 pre-existing + 17 new).
