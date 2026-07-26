@@ -2409,3 +2409,43 @@ denied, queue lists a pending review, publish/unpublish/delete).
 **Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
 clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
 0 errors. `php artisan test` — 402/402 green (391 pre-existing + 11 new).
+
+### P4.8 — Bulk enroll (§7.5)
+
+**Built:** `Admin\BulkEnrollController` — a textarea of pasted emails
+(newline- or comma-separated, deduped, lowercased) against one course. No
+new schema — this is pure orchestration over existing pieces. **Read
+`Admin\UserController::store()` in full before writing anything**, since
+the instruction was explicitly to reuse "the existing WelcomeCredentials
+mail flow," not approximate it: matched its account-creation pattern
+exactly — `Str::password(16)`, `password_change_required = true`,
+`Mail::to()->send(new WelcomeCredentials(...))` wrapped in the identical
+try/catch-and-log so one failed send doesn't abort the rest of the batch.
+An email with no existing account becomes a new `role = student` account;
+one that already has an account is enrolled without creating a duplicate
+or re-sending credentials it was already issued.
+
+**Decision — matched the existing single-enroll behavior's *absence* of a
+notification, rather than introducing a new one.** Read
+`Admin\EnrollmentController::store()` too, and found it does *not* dispatch
+`EnrollmentCreated` for admin-sourced enrollments (only self-serve ones do)
+— so bulk enroll doesn't either, for consistency with the one existing
+precedent for "admin enrolls someone," rather than quietly changing that
+behavior for the bulk case alone. A student already enrolled in this
+specific course is skipped (not double-enrolled), mirroring that same
+controller's existing dedupe check.
+
+Invalid entries (anything failing `FILTER_VALIDATE_EMAIL`) are filtered out
+before any account creation and named back in the result flash message —
+never silently dropped without the admin knowing what got skipped.
+
+**Tests added:** `BulkEnrollTest` (6 — non-admin denied; unknown emails
+create accounts and send exactly one `WelcomeCredentials` each; an existing
+user's email enrolls without a duplicate account or a re-sent credentials
+email; an already-enrolled student isn't enrolled twice; invalid emails are
+skipped and named in the response; comma- and newline-separated lists both
+parse).
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
+`phpstan analyse --memory-limit=1G` 0 errors. `php artisan test` —
+408/408 green (402 pre-existing + 6 new).
