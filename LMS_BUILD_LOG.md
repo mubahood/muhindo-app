@@ -2908,3 +2908,77 @@ future-dated expiry still allows access).
 `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G` 0
 errors. Full untargeted `php artisan test` — 466/466 green (453
 pre-existing + 13 new).
+
+### P5.3 — Self-hosted video option via signed streaming URLs (§6.2/§8 roadmap)
+
+**Built:**
+
+- `database/migrations/..._add_video_disk_path_to_lessons_table.php` —
+  nullable, additive; every existing lesson is completely unaffected.
+- `app/Models/Lesson.php` — `hasSelfHostedVideo(): bool`; takes priority
+  over `video_url`/`youtubeVideoId()` in the player when both are set.
+- `app/Http/Controllers/Admin/LessonController.php` —
+  `applyVideoUpload()`: a new `video_file` upload replaces (and deletes)
+  whatever was attached before; a `remove_video_file` checkbox clears the
+  path and falls back to the plain URL field, so there's always a way back
+  to YouTube-only. Validated `mimes:mp4,mov,webm|max:512000` (500MB).
+- `app/Http/Controllers/Student/LessonVideoController.php` — new,
+  `stream()` on the `learn.lesson.video-stream` route, gated by Laravel's
+  built-in `signed` middleware.
+- `app/Http/Controllers/Student/LearningController.php` — `lesson()`
+  mints a fresh `URL::temporarySignedRoute(..., now()->addHours(6), ...)`
+  on every page load when `hasSelfHostedVideo()`.
+- `resources/views/learn/lesson.blade.php` — a native `<video>` element +
+  new `selfHostedVideoPlayer()` Alpine component. Extracted the heartbeat
+  fetch/toast logic out of `youtubePlayer()` into a shared
+  `postLessonHeartbeat()` function first, then had both players call it —
+  the request/response contract was already player-agnostic
+  (`ProgressService::recordHeartbeat()` takes a plain delta/position,
+  confirmed by re-reading it before assuming so), so this was a
+  refactor, not a new contract. `selfHostedVideoPlayer()` also sets
+  `window.__lessonVideoPlayer` to the same `getCurrentTime()`/`seekTo()`
+  shape `youtubePlayer()` already provides, so the notes tab's seek
+  buttons and the note-form's "current timestamp" field work identically
+  regardless of which player actually mounted — zero changes needed there.
+- `resources/views/admin/courses/lesson-form.blade.php` — file input +
+  conditional "attached" indicator + remove checkbox.
+
+**Decision — the signed URL is a hardening layer, not a replacement for
+real authorization.** A signature alone proves "we generated this exact
+URL, for this exact lesson, within its validity window" — it says nothing
+about whether the enrollment backing it is still `active`/unexpired at the
+moment someone actually pulls the bytes. `LessonVideoController::stream()`
+therefore still runs the identical `EnrollmentPolicy`/`LessonPolicy` checks
+every other lesson surface enforces, on every request (including every
+Range request a seek triggers). This costs a few extra queries per
+seek — a non-issue at this platform's scale — in exchange for closing the
+"leaked link still works after cancellation" gap a signature-only design
+would have left open. The signature itself still earns its place: it keeps
+the real storage path out of the client, and bounds a leaked link's window
+to 6 hours instead of forever.
+
+**Decision — `response()->file()` over a hand-rolled streamed response.**
+Video seeking needs HTTP Range support (206 Partial Content); Symfony's
+`BinaryFileResponse` (what `response()->file()` returns) handles Range
+headers automatically via its own `prepare()`, called as a normal part of
+the response lifecycle — no manual byte-range math needed, and no risk of
+a subtly-wrong hand-rolled implementation breaking seeking on some
+browsers.
+
+**Tests added:** `LessonVideoUploadTest` (5 — a new upload stores the file
+and sets the path; uploading again replaces and deletes the old file; the
+remove checkbox clears the path and deletes the file; a non-video file is
+rejected; leaving the field untouched on update keeps the existing path
+unchanged). `SelfHostedVideoTest` (8 — the lesson page renders the
+self-hosted player with a signed URL; self-hosted wins over a YouTube URL
+when both are set; streaming with no signature is rejected; a valid
+signature streams successfully; a non-enrolled user's request 404s (no
+enrollment row — the same shape `LessonMaterialController::download()`
+already produces for this scenario) while a *pending* enrollment's valid
+signature still 403s from the policy; an expired signature is rejected;
+a lesson with no attached video 404s on the stream route).
+
+**Verification:** `php artisan migrate` / `:rollback` / `migrate` clean.
+`vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G` 0
+errors. Full untargeted `php artisan test` — 479/479 green (466
+pre-existing + 13 new).
