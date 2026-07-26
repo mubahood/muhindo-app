@@ -132,6 +132,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->shallow()->except(['index', 'show']);
     Route::post('announcements/{announcement}/publish', [\App\Http\Controllers\Admin\AnnouncementController::class, 'publish'])
         ->name('announcements.publish');
+    Route::get('courses/{course}/analytics', [\App\Http\Controllers\Admin\CourseAnalyticsController::class, 'show'])->name('courses.analytics');
     Route::get('courses/{course}/gradebook', \App\Livewire\Admin\GradeMatrix::class)->name('courses.gradebook');
     Route::get('courses/{course}/discussions', \App\Livewire\Admin\CourseDiscussions::class)->name('courses.discussions');
     Route::get('courses/{course}/bulk-enroll', [\App\Http\Controllers\Admin\BulkEnrollController::class, 'create'])->name('courses.bulk-enroll.create');
