@@ -2234,3 +2234,42 @@ access and notifies with `refunded=false`).
 **Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
 clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
 0 errors. `php artisan test` — 358/358 green (352 pre-existing + 6 new).
+
+### P4.4 — Announcements tab (§7.3, Classroom's stream)
+
+**Built:** `Announcement` (`course_id`, `title`, `body` markdown, nullable
+`published_at`, soft-deletable). **Decision:** publishing is deliberately
+the *only* action that ever triggers a mass notification — creating can
+publish immediately (a checkbox, checked by default) or save as a draft;
+a separate `publish()` action lets a draft be published later, and editing
+an already-published announcement's title/body afterward never re-notifies
+anyone. Publishing an already-published announcement is rejected outright
+(flash error, no-op) rather than silently re-sending to every student —
+the "publish" transition happens exactly once per announcement, checked via
+`published_at === null` before the update, not via any separate tracking
+flag.
+
+`AnnouncementPublishedNotification` (mail+database) goes to every
+`active`/`completed` enrollment's user via `Notification::send()` — a
+`pending` (unpaid, per P4.1) enrollment is deliberately excluded, matching
+how every other student-facing surface already treats "enrolled" as
+active/completed only.
+
+Student `learn.announcements.index` shows only published announcements,
+newest first, rendered through the existing `MarkdownRenderer`. Entry
+points added from My Courses (an unconditional link — no eager-loaded count
+needed, unlike Quizzes/Assignments, since it's a static link that doesn't
+need to disappear when there's nothing published yet) and the lesson page
+breadcrumb.
+
+**Tests added:** `AnnouncementCrudTest` (7 — a draft notifies nobody;
+publish-immediately notifies every active student but explicitly not a
+pending one; publishing a draft later notifies exactly once; publishing an
+already-published announcement is rejected and sends nothing; editing a
+published announcement's content never re-notifies; delete; non-admin
+denied). `StudentAnnouncementsTest` (3 — only published ones render,
+non-enrolled `404`, markdown renders as real HTML).
+
+**Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
+clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
+0 errors. `php artisan test` — 368/368 green (358 pre-existing + 10 new).
