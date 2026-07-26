@@ -1942,3 +1942,102 @@ links to it, non-admin denied).
 **Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
 `phpstan analyse --memory-limit=1G` 0 errors. `php artisan test` —
 321/321 green (315 pre-existing + 6 new).
+
+## P3 phase gate — closed
+
+All ten items done, one commit per item, in plan order, tagged `lms-p3`.
+Closes/advances: §5.1–§5.2 (quiz schema + `QuizService` auto-grading for all
+9 question types), §5.3 (assignments, Classroom-style draft→submit→return),
+§5.4 (gradebook), §4.6 (certificate criteria — **closes L1 fully**, the last
+of its three prongs), §6.3.3 (grading queue), §6.3.4 (quiz item analysis),
+and closed out three events from §4.5 (`QuizAttemptSubmitted` finally got a
+listener; `AssignmentSubmitted`/`SubmissionGraded` were built for the first
+time) that had been declared or dispatched since earlier phases but never
+fully wired.
+
+- `composer ci` (repo-wide `pint --test`, `phpstan --memory-limit=1G`,
+  `check-empty-files`, `secrets-scan`, `php artisan test`): **green**, exit
+  code 0, 321 tests / 691 assertions.
+- `php artisan migrate` on a fresh checkout applies every P3 migration
+  cleanly in order (verified via `migrate:status` + a full
+  migrate→rollback→migrate cycle after each schema-touching item).
+- **Five real, previously-undiscovered bugs were found and fixed while
+  building and testing this phase (not routed around):**
+  1. **Migration ordering hazard** (P3.1) — `question_options`/`quizzes`
+     and `quiz_attempts`/`attempt_answers` migrations generated in the same
+     wall-clock second fell back to alphabetical filename tie-break,
+     creating a child table before its FK parent existed. Fixed by
+     renaming to strictly later timestamps.
+  2. **PHP array-union footgun** (P3.2) — `$data['question'] + ['sort_order' => ...]`
+     silently discarded the intended default because `+` keeps the left
+     array's value for a key present on both sides; every question
+     create/update without an explicit sort order 500'd. Fixed with `??=`.
+  3. **MySQL 64-character identifier limit** (P3.6) — the auto-generated
+     name for the `(assignment_id, enrollment_id, attempt_no)` unique index
+     was 70 characters; `CREATE TABLE` succeeded but the follow-up
+     `ALTER TABLE ADD UNIQUE` failed, leaving an orphaned, unlogged table.
+     Fixed with an explicit shorter index name.
+  4. **A genuine, shipped routing bug spanning two phases** (P3.6) — `GET
+     {course:slug}/quizzes` and `GET {course:slug}/assignments` were
+     registered after the generic `GET {course:slug}/{lesson}` route, so
+     both were dead code (Laravel matches GET routes in registration order
+     at the URI-pattern level, before model binding runs). The quiz list
+     route had silently shipped broken in **P3.5** — no test ever hit it
+     directly — and only surfaced when P3.6's own list-page test happened
+     to be the first to request a matching 2-segment URL. Fixed by
+     reordering; backfilled the missing P3.5 regression test in the same
+     commit.
+  5. **Three of six §4.5 events had never been fully wired** (P3.7) —
+     `QuizAttemptSubmitted` fired since P3.3 with no listener at all;
+     `LearningEventType::QuizStarted`/`QuizSubmitted` were declared since P1
+     with a docblock flagging them as waiting on the quiz engine, and the
+     quiz engine (P3.3) never came back to record them. Closed all three in
+     one pass, following `ProgressService`'s established two-track
+     convention exactly (direct `LearningEventRecorder::record()` for the
+     analytics log, separate `Event::dispatch()` for side effects).
+- A recurring PHPStan limitation (`Collection`'s generic isn't covariant)
+  surfaced independently in two unrelated components (P3.7's `GradingQueue`,
+  P3.8's `GradeMatrix`/`GradebookExportController`) whenever a heterogeneous
+  or per-row-derived collection got built via chained `map()`/`concat()`
+  calls and combined. Resolved both times by building plain PHP
+  arrays/`foreach` instead of `Collection` chains — noted as a shape to
+  avoid by default going forward in this codebase, not a one-off workaround.
+- Every quiz-runner AJAX surface (autosave, submit) has a real plain-HTML
+  fallback path proven by a real test exercising it
+  (`test_submitting_via_a_plain_form_post_with_bulk_answers_grades_the_attempt`)
+  — not just asserted in prose. A P3.5 draft that used `x-cloak` on the
+  runner's per-question blocks would have hidden every question forever
+  with JS disabled; caught before shipping by re-reading what `x-cloak`
+  actually guarantees, not by a failing test (Laravel's test client doesn't
+  execute Alpine, so this class of bug is invisible to `php artisan test`
+  regardless of coverage — a genuine boundary of what this phase's
+  automated verification can prove, same as P2's).
+- Manual UI verification is partial and honestly reported (P3.5): the new
+  routes resolve correctly through the real Apache+PHP stack (confirmed via
+  `curl .../index.php/learn/...` returning the expected `302`), but a full
+  live-browser click-through of the Alpine-driven interactivity wasn't
+  possible in this environment (no browser tool, and this MAMP install's
+  pretty-URL routing has a pre-existing `mod_rewrite` gap unrelated to this
+  work, confirmed by testing that even long-established routes like
+  `/courses` and `/login` 404 the same way without going through
+  `index.php` explicitly).
+- Explicitly deferred to later phases, each tied to a plan section that
+  itself places the work later:
+  - The rest of §6.3's "Course analytics tab" (enrollment funnel,
+    per-lesson drop-off chart, watch-time histogram) — the plan's own §8
+    roadmap groups these under P4, separately from quiz item analysis which
+    it lists under P3.
+  - Commerce (Flutterwave course checkout, coupons, refunds), community
+    features (announcements, Q&A, notes, reviews), bulk enroll, drag-drop
+    curriculum builder, nudge emails, weekly instructor digest — all P4 in
+    §8.
+  - Badges/streaks, enrollment expiry, API v1 parity for the new quiz/
+    assignment/gradebook surfaces, an accessibility pass, event pruning,
+    heartbeat load sanity — all P5 in §8.
+
+Next: P4 — Commerce & community (Flutterwave course checkout + coupons +
+refunds, announcements + Q&A + notes + reviews, bulk enroll + drag-drop
+curriculum builder, course analytics funnel/drop-off, nudge emails + weekly
+instructor digest).
+
+---
