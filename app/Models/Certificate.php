@@ -14,6 +14,7 @@ class Certificate extends Model
         return ['issued_at' => 'datetime'];
     }
 
+    /** @return BelongsTo<Enrollment, $this> */
     public function enrollment(): BelongsTo
     {
         return $this->belongsTo(Enrollment::class);

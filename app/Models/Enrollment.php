@@ -19,21 +19,25 @@ class Enrollment extends Model
         ];
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return BelongsTo<Course, $this> */
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
     }
 
+    /** @return HasMany<LessonProgress, $this> */
     public function progressRecords(): HasMany
     {
         return $this->hasMany(LessonProgress::class);
     }
 
+    /** @return HasOne<Certificate, $this> */
     public function certificate(): HasOne
     {
         return $this->hasOne(Certificate::class);

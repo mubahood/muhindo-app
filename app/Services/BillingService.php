@@ -29,7 +29,7 @@ class BillingService
     /**
      * Create an invoice for a set of line items, billed to a Client or a User.
      *
-     * @param  list<array{description:string,quantity?:int,unit_price:string,tax_exempt?:bool}>  $items
+     * @param  list<array{description:string,quantity?:int,unit_price:string,tax_exempt?:bool,source?:Model}>  $items
      */
     public function generateInvoice(
         Client|User $billable,
@@ -84,7 +84,7 @@ class BillingService
                     'line_total' => bcmul((string) $item['unit_price'], (string) $qty, 2),
                     'tax_exempt' => $item['tax_exempt'] ?? true,
                     'source_type' => ($item['source'] ?? null) instanceof Model ? $item['source']->getMorphClass() : null,
-                    'source_id' => ($item['source'] ?? null)?->id,
+                    'source_id' => ($item['source'] ?? null)?->getKey(),
                 ]);
             }
 

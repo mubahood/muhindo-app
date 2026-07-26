@@ -32,17 +32,23 @@ class Project extends Model
         ];
     }
 
+    /** @return BelongsTo<Client, $this> */
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
     }
 
+    /** @return BelongsTo<User, $this> */
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    /** Staff working on this project, beyond the owner. */
+    /**
+     * Staff working on this project, beyond the owner.
+     *
+     * @return BelongsToMany<User, $this>
+     */
     public function team(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'project_team')
@@ -50,26 +56,31 @@ class Project extends Model
             ->withTimestamps();
     }
 
+    /** @return HasMany<ProjectTask, $this> */
     public function tasks(): HasMany
     {
         return $this->hasMany(ProjectTask::class)->orderBy('sort_order');
     }
 
+    /** @return HasMany<ProjectNote, $this> */
     public function notes(): HasMany
     {
         return $this->hasMany(ProjectNote::class)->latest();
     }
 
+    /** @return HasMany<ProjectUpdate, $this> */
     public function updates(): HasMany
     {
         return $this->hasMany(ProjectUpdate::class)->latest();
     }
 
+    /** @return HasMany<ProjectDocument, $this> */
     public function documents(): HasMany
     {
         return $this->hasMany(ProjectDocument::class)->latest();
     }
 
+    /** @return HasMany<Invoice, $this> */
     public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);

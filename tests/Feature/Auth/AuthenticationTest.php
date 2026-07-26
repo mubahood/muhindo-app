@@ -8,12 +8,6 @@ use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->markTestSkipped('Pre-existing Breeze scaffold — routes not present in this app.');
-    }
-
     use RefreshDatabase;
 
     public function test_login_screen_can_be_rendered(): void
@@ -33,7 +27,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('admin.dashboard', absolute: false));
+        $response->assertRedirect(route('dashboard', absolute: false));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void

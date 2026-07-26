@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Resources\InvoiceResource;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\InvoiceResource;
 use App\Models\Client;
 use App\Models\Invoice;
 use App\Support\ApiResponse;

@@ -15,11 +15,11 @@ class OpenApiTest extends TestCase
 
         $res->assertOk()
             ->assertJsonPath('openapi', '3.0.3')
-            ->assertJsonPath('info.title', 'True-Doctor HMS API')
+            ->assertJsonPath('info.title', 'Muhindo Mubaraka API')
             ->assertJsonStructure([
                 'openapi', 'info', 'servers',
                 'components' => ['securitySchemes' => ['bearerAuth'], 'schemas' => ['Envelope']],
-                'paths' => ['/auth/login', '/patients', '/appointments', '/consultations'],
+                'paths' => ['/auth/login', '/courses', '/my/projects', '/invoices'],
             ]);
     }
 

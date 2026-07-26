@@ -6,10 +6,9 @@ use Illuminate\Cache\RateLimiter as RateLimiterRegistry;
 use Tests\TestCase;
 
 /**
- * HMS_PLAN.md §3.C — the legacy audit's rate-limit and CORS middleware were
- * 0-byte/unregistered. Confirms the 'api' limiter is actually registered
- * (Laravel's slimmed skeleton leaves the `api` group unthrottled unless
- * asked — see bootstrap/app.php's throttleApi()) and CORS defaults closed.
+ * Confirms the 'api' rate limiter is actually registered (Laravel's slimmed
+ * skeleton leaves the `api` group unthrottled unless asked — see
+ * bootstrap/app.php's throttleApi()) and CORS defaults closed.
  */
 class ApiHardeningConfigTest extends TestCase
 {

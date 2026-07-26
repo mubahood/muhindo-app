@@ -2,17 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\Hospital;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- * The `settings` table is PLATFORM-GLOBAL (no hospital_id) — it drives the
- * public site name/tagline/verify rate-limit shared by every tenant. A tenant
- * hospital_admin must never be able to read or write it; only the SaaS operator
- * (super-admin) may. (Per-hospital config lives in BillingSettingController.)
- */
+/** Site settings are global (site name, tagline, contacts) — only the owner (super_admin) may change them. */
 class GlobalSettingsAuthorizationTest extends TestCase
 {
     use RefreshDatabase;
@@ -23,27 +17,27 @@ class GlobalSettingsAuthorizationTest extends TestCase
         $this->seed(\Database\Seeders\RbacSeeder::class);
     }
 
-    private function make(string $role, ?int $hospitalId): User
+    private function make(string $role): User
     {
-        $u = User::factory()->create(['role' => $role, 'hospital_id' => $hospitalId]);
+        $u = User::factory()->create(['role' => $role, 'is_admin' => $role === 'super_admin']);
         $u->syncSpatieRole();
 
         return $u;
     }
 
-    public function test_hospital_admin_cannot_view_global_site_settings(): void
+    public function test_admin_cannot_view_global_site_settings(): void
     {
-        $admin = $this->make('hospital_admin', Hospital::factory()->create()->id);
+        $admin = $this->make('admin');
 
         $this->actingAs($admin)->get('/admin/settings')->assertForbidden();
     }
 
-    public function test_hospital_admin_cannot_write_global_site_settings(): void
+    public function test_admin_cannot_write_global_site_settings(): void
     {
-        $admin = $this->make('hospital_admin', Hospital::factory()->create()->id);
+        $admin = $this->make('admin');
 
         $this->actingAs($admin)->post('/admin/settings', [
-            'site_name' => 'Hijacked', 'tagline' => 'x', 'default_theme' => 'light', 'verify_rate_limit' => 5,
+            'site_name' => 'Hijacked', 'tagline' => 'x', 'default_theme' => 'light',
         ])->assertForbidden();
 
         $this->assertDatabaseMissing('settings', ['value' => 'Hijacked']);
@@ -51,15 +45,15 @@ class GlobalSettingsAuthorizationTest extends TestCase
 
     public function test_super_admin_can_manage_global_site_settings(): void
     {
-        $super = $this->make('super_admin', null);
+        $super = $this->make('super_admin');
 
         $this->actingAs($super)->get('/admin/settings')->assertOk();
 
         $this->actingAs($super)->post('/admin/settings', [
-            'site_name' => 'True-Doctor', 'tagline' => 'Care, connected',
-            'default_theme' => 'light', 'verify_rate_limit' => 30,
+            'site_name' => 'Muhindo Mubaraka', 'tagline' => 'Systems that work',
+            'default_theme' => 'light',
         ])->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('settings', ['key' => 'site_name', 'value' => 'True-Doctor']);
+        $this->assertDatabaseHas('settings', ['key' => 'site_name', 'value' => 'Muhindo Mubaraka']);
     }
 }

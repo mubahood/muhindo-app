@@ -94,18 +94,27 @@ class User extends Authenticatable implements MustVerifyEmailContract
 
     // ── Domain relations ──────────────────────────────────────────
 
-    /** A `client`-role user's client profile (project billing/portal access). */
+    /**
+     * A `client`-role user's client profile (project billing/portal access).
+     *
+     * @return HasOne<Client, $this>
+     */
     public function client(): HasOne
     {
         return $this->hasOne(Client::class);
     }
 
-    /** Courses this user (as a student) is enrolled in. */
+    /**
+     * Courses this user (as a student) is enrolled in.
+     *
+     * @return HasMany<Enrollment, $this>
+     */
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
     }
 
+    /** @return HasMany<DeviceToken, $this> */
     public function deviceTokens(): HasMany
     {
         return $this->hasMany(DeviceToken::class);

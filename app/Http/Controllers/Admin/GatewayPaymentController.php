@@ -38,7 +38,7 @@ class GatewayPaymentController extends Controller
             [
                 'email' => $billable?->email ?: 'billing@'.parse_url(config('app.url'), PHP_URL_HOST),
                 'name' => $billable?->name,
-                'phone' => $billable?->phone ?? null,
+                'phone' => $billable?->phone,
             ],
         );
 

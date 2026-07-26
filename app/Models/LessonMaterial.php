@@ -9,6 +9,7 @@ class LessonMaterial extends Model
 {
     protected $fillable = ['lesson_id', 'title', 'file_path', 'type'];
 
+    /** @return BelongsTo<Lesson, $this> */
     public function lesson(): BelongsTo
     {
         return $this->belongsTo(Lesson::class);

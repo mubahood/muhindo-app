@@ -62,7 +62,7 @@ class OpenApiController extends Controller
                 '/lessons/{id}/complete' => ['post' => ['summary' => 'Mark a lesson complete', 'tags' => ['Courses'], 'security' => $secured, 'parameters' => [$this->path('id')], 'responses' => ['200' => $ok]]],
                 '/my/enrollments' => ['get' => ['summary' => "The signed-in student's enrollments", 'tags' => ['Courses'], 'security' => $secured, 'responses' => ['200' => $ok]]],
 
-                '/my/projects' => ['get' => ["summary" => "The signed-in client's projects", 'tags' => ['Projects'], 'security' => $secured, 'responses' => ['200' => $ok]]],
+                '/my/projects' => ['get' => ['summary' => "The signed-in client's projects", 'tags' => ['Projects'], 'security' => $secured, 'responses' => ['200' => $ok]]],
                 '/projects/{id}' => ['get' => ['summary' => 'Get a project (tasks, updates, documents)', 'tags' => ['Projects'], 'security' => $secured, 'parameters' => [$this->path('id')], 'responses' => ['200' => $ok, '403' => $ok]]],
 
                 '/invoices' => ['get' => ['summary' => "List the signed-in user's invoices", 'tags' => ['Billing'], 'security' => $secured, 'parameters' => [$this->q('status')], 'responses' => ['200' => $ok]]],

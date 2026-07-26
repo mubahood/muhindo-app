@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -33,21 +34,25 @@ class Course extends Model
         return 'slug';
     }
 
+    /** @return BelongsTo<User, $this> */
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    /** @return HasMany<CourseModule, $this> */
     public function modules(): HasMany
     {
         return $this->hasMany(CourseModule::class)->orderBy('sort_order');
     }
 
-    public function lessons(): HasMany
+    /** @return HasManyThrough<Lesson, CourseModule, $this> */
+    public function lessons(): HasManyThrough
     {
         return $this->hasManyThrough(Lesson::class, CourseModule::class);
     }
 
+    /** @return HasMany<Enrollment, $this> */
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
@@ -60,6 +65,6 @@ class Course extends Model
 
     public function lessonCount(): int
     {
-        return $this->modules->sum(fn (CourseModule $m) => $m->lessons->count());
+        return $this->lessons()->count();
     }
 }

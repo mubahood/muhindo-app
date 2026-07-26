@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/** @property int $id */
 class Client extends Model
 {
     use HasFactory, SoftDeletes;
@@ -18,27 +19,35 @@ class Client extends Model
         'company', 'address', 'district_id', 'notes', 'photo', 'created_by',
     ];
 
-    /** The portal login this client uses, if any. */
+    /**
+     * The portal login this client uses, if any.
+     *
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return BelongsTo<District, $this> */
     public function district(): BelongsTo
     {
         return $this->belongsTo(District::class);
     }
 
+    /** @return BelongsTo<User, $this> */
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    /** @return HasMany<Project, $this> */
     public function projects(): HasMany
     {
         return $this->hasMany(Project::class);
     }
 
+    /** @return MorphMany<Invoice, $this> */
     public function invoices(): MorphMany
     {
         return $this->morphMany(Invoice::class, 'billable');

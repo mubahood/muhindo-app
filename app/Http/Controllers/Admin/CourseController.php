@@ -64,7 +64,7 @@ class CourseController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:200',
-            'slug' => 'nullable|string|max:200|alpha_dash|unique:courses,slug,'.($course?->id ?? 'NULL').',id',
+            'slug' => 'nullable|string|max:200|alpha_dash|unique:courses,slug,'.($course !== null ? $course->id : 'NULL').',id',
             'description' => 'nullable|string',
             'cover_image' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',

@@ -6,10 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- * HMS_PLAN.md constraint C14 — random temporary password, forced reset at
- * first login. App\Http\Middleware\RequirePasswordChange.
- */
+/** Random temporary password, forced reset at first login — App\Http\Middleware\RequirePasswordChange. */
 class ForcedPasswordChangeTest extends TestCase
 {
     use RefreshDatabase;
@@ -21,7 +18,7 @@ class ForcedPasswordChangeTest extends TestCase
             'password_change_required' => true,
         ]);
 
-        $this->actingAs($user)->get('/admin')->assertRedirect(route('password.change'));
+        $this->actingAs($user)->get('/dashboard')->assertRedirect(route('password.change'));
     }
 
     public function test_the_change_form_itself_and_logout_are_reachable_without_a_redirect_loop(): void
@@ -36,6 +33,7 @@ class ForcedPasswordChangeTest extends TestCase
         $user = User::factory()->create([
             'password' => bcrypt('temporary-pass-1'),
             'password_change_required' => true,
+            'role' => 'super_admin',
             'is_admin' => true,
         ]);
 
@@ -45,14 +43,14 @@ class ForcedPasswordChangeTest extends TestCase
             'password_confirmation' => 'a-new-strong-pass1',
         ]);
 
-        $response->assertRedirect(route('admin.dashboard'));
+        $response->assertRedirect(route('dashboard'));
         $this->assertFalse($user->fresh()->password_change_required);
     }
 
     public function test_a_user_without_the_flag_is_never_redirected(): void
     {
-        $user = User::factory()->create(['password_change_required' => false, 'is_admin' => true]);
+        $user = User::factory()->create(['password_change_required' => false, 'role' => 'super_admin', 'is_admin' => true]);
 
-        $this->actingAs($user)->get('/admin')->assertOk();
+        $this->actingAs($user)->get('/dashboard')->assertOk();
     }
 }

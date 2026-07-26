@@ -7,10 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
-/**
- * HMS_PLAN.md §3.D — one consistent JSON envelope for every API error,
- * wired in bootstrap/app.php's withExceptions().
- */
+/** One consistent JSON envelope for every API error, wired in bootstrap/app.php's withExceptions(). */
 class ApiExceptionEnvelopeTest extends TestCase
 {
     use RefreshDatabase;

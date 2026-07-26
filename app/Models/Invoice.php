@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property numeric-string $total
  * @property numeric-string $amount_paid
  * @property numeric-string $balance
+ * @property-read Client|User|null $billable
  */
 class Invoice extends Model
 {

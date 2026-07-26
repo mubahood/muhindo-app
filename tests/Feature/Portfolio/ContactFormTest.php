@@ -1,0 +1,66 @@
+<?php
+
+namespace Tests\Feature\Portfolio;
+
+use App\Models\ContactMessage;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
+use Tests\TestCase;
+
+class ContactFormTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_home_page_renders(): void
+    {
+        $this->get('/')->assertOk();
+    }
+
+    public function test_submitting_the_contact_form_persists_a_message(): void
+    {
+        Mail::fake();
+
+        $response = $this->post('/contact', [
+            'name' => 'Jane Client',
+            'email' => 'jane@example.com',
+            'subject' => 'Project inquiry',
+            'message' => 'I would like to discuss a project.',
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('contact_messages', [
+            'name' => 'Jane Client',
+            'email' => 'jane@example.com',
+            'subject' => 'Project inquiry',
+        ]);
+    }
+
+    public function test_the_honeypot_field_silently_drops_bot_submissions(): void
+    {
+        Mail::fake();
+
+        $this->post('/contact', [
+            'name' => 'Bot',
+            'email' => 'bot@example.com',
+            'message' => 'spam',
+            'website' => 'http://spam.example.com',
+        ]);
+
+        $this->assertDatabaseMissing('contact_messages', ['email' => 'bot@example.com']);
+    }
+
+    public function test_a_missing_required_field_fails_validation(): void
+    {
+        $response = $this->post('/contact', ['name' => 'Jane']);
+
+        $response->assertSessionHasErrors(['email', 'message']);
+    }
+
+    public function test_admin_can_view_the_message_inbox(): void
+    {
+        $admin = \App\Models\User::factory()->create(['role' => 'super_admin', 'is_admin' => true]);
+        ContactMessage::factory()->create(['name' => 'Jane Client']);
+
+        $this->actingAs($admin)->get('/admin/messages')->assertOk()->assertSee('Jane Client');
+    }
+}

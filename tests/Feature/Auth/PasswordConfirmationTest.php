@@ -8,12 +8,6 @@ use Tests\TestCase;
 
 class PasswordConfirmationTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->markTestSkipped('Pre-existing Breeze scaffold — routes not present in this app.');
-    }
-
     use RefreshDatabase;
 
     public function test_confirm_password_screen_can_be_rendered(): void

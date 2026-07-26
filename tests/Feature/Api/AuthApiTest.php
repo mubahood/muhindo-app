@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Api;
 
-use App\Models\Hospital;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -18,9 +17,9 @@ class AuthApiTest extends TestCase
         $this->seed(\Database\Seeders\RbacSeeder::class);
     }
 
-    private function staff(Hospital $h, string $role = 'receptionist'): User
+    private function student(): User
     {
-        $u = User::factory()->create(['hospital_id' => $h->id, 'role' => $role, 'password' => Hash::make('secret123'), 'is_active' => true]);
+        $u = User::factory()->create(['role' => 'student', 'password' => Hash::make('secret123'), 'is_active' => true]);
         $u->syncSpatieRole();
 
         return $u;
@@ -28,8 +27,7 @@ class AuthApiTest extends TestCase
 
     public function test_login_issues_a_token_in_the_envelope(): void
     {
-        $h = Hospital::factory()->create();
-        $u = $this->staff($h);
+        $u = $this->student();
 
         $res = $this->postJson('/api/v1/auth/login', ['email' => $u->email, 'password' => 'secret123']);
 
@@ -42,8 +40,7 @@ class AuthApiTest extends TestCase
 
     public function test_bad_credentials_are_rejected_in_the_envelope(): void
     {
-        $h = Hospital::factory()->create();
-        $u = $this->staff($h);
+        $u = $this->student();
 
         $this->postJson('/api/v1/auth/login', ['email' => $u->email, 'password' => 'wrong'])
             ->assertStatus(401)->assertJsonPath('success', false)->assertJsonPath('code', 'unauthenticated');
@@ -51,8 +48,7 @@ class AuthApiTest extends TestCase
 
     public function test_disabled_account_cannot_log_in(): void
     {
-        $h = Hospital::factory()->create();
-        $u = $this->staff($h);
+        $u = $this->student();
         $u->update(['is_active' => false]);
 
         $this->postJson('/api/v1/auth/login', ['email' => $u->email, 'password' => 'secret123'])
@@ -61,8 +57,7 @@ class AuthApiTest extends TestCase
 
     public function test_me_requires_a_token_and_returns_the_user(): void
     {
-        $h = Hospital::factory()->create();
-        $u = $this->staff($h);
+        $u = $this->student();
 
         $this->getJson('/api/v1/auth/me')->assertStatus(401)->assertJsonPath('success', false);
 
@@ -72,8 +67,7 @@ class AuthApiTest extends TestCase
 
     public function test_logout_revokes_the_token(): void
     {
-        $h = Hospital::factory()->create();
-        $u = $this->staff($h);
+        $u = $this->student();
         $token = $this->postJson('/api/v1/auth/login', ['email' => $u->email, 'password' => 'secret123'])->json('data.token');
         $this->assertSame(1, $u->tokens()->count());
 
