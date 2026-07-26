@@ -27,6 +27,7 @@ use App\Http\Controllers\CourseCatalogueController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\Student\LearningController;
 use App\Http\Controllers\Student\LessonMaterialController as StudentLessonMaterialController;
+use App\Http\Controllers\Student\QuizAttemptController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -162,6 +163,15 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::post('{course:slug}/{lesson}/heartbeat', [LearningController::class, 'heartbeat'])->middleware('throttle:20,1')->name('lesson.heartbeat');
     Route::get('{course:slug}/{lesson}/materials/{material}', [StudentLessonMaterialController::class, 'download'])->name('materials.download');
     Route::get('{course:slug}/{lesson}/content-images/{filename}', [\App\Http\Controllers\Student\LessonContentImageController::class, 'show'])->name('content-images.show');
+
+    Route::get('{course:slug}/quizzes', [QuizAttemptController::class, 'index'])->name('quizzes.index');
+    Route::get('{course:slug}/quizzes/{quiz}', [QuizAttemptController::class, 'show'])->name('quiz.show');
+    Route::post('{course:slug}/quizzes/{quiz}/start', [QuizAttemptController::class, 'start'])->name('quiz.start');
+    Route::get('{course:slug}/quizzes/{quiz}/attempts/{attempt}', [QuizAttemptController::class, 'run'])->name('quiz.attempt');
+    Route::post('{course:slug}/quizzes/{quiz}/attempts/{attempt}/questions/{question}/answer', [QuizAttemptController::class, 'answer'])
+        ->middleware('throttle:60,1')->name('quiz.answer');
+    Route::post('{course:slug}/quizzes/{quiz}/attempts/{attempt}/submit', [QuizAttemptController::class, 'submit'])->name('quiz.submit');
+    Route::get('{course:slug}/quizzes/{quiz}/attempts/{attempt}/review', [QuizAttemptController::class, 'review'])->name('quiz.review');
 });
 
 /*

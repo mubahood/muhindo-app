@@ -29,7 +29,9 @@ class LearningController extends Controller
     public function index(Request $request): View
     {
         $enrollments = Enrollment::where('user_id', $request->user()->id)
-            ->with(['course' => fn ($query) => $query->withCount('lessons'), 'certificate', 'lastLesson'])
+            ->with(['course' => fn ($query) => $query->withCount('lessons')
+                ->withCount(['quizzes as published_quizzes_count' => fn ($q) => $q->where('is_published', true)]),
+                'certificate', 'lastLesson'])
             ->withCount(['progressRecords as completed_lessons_count' => fn ($query) => $query->whereNotNull('completed_at')])
             ->latest()->get();
 

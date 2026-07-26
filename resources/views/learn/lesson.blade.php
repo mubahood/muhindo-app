@@ -49,7 +49,7 @@
   })"
   x-init="init()"
 >
-  <div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}">My Courses</a> / {{ $course->title }}</div>
+  <div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}">My Courses</a> / {{ $course->title }} / <a href="{{ route('learn.quizzes.index', $course) }}">Quizzes</a></div>
   <h1 style="font-size:20px;">{{ $lesson->title }}</h1>
 
   <div class="learn-layout">
@@ -103,6 +103,17 @@
         <div class="card markdown-body" style="margin-bottom:20px;">{!! $renderedContent !!}</div>
       @elseif($lesson->content)
         <div class="card" style="margin-bottom:20px;">{!! nl2br(e($lesson->content)) !!}</div>
+      @endif
+
+      @if($lesson->quizzes->where('is_published', true)->count())
+        <div class="card" style="margin-bottom:20px;">
+          <div style="font-weight:600;margin-bottom:10px;">Lesson quiz</div>
+          @foreach($lesson->quizzes->where('is_published', true) as $lessonQuiz)
+            <div style="margin-bottom:6px;">
+              <a href="{{ route('learn.quiz.show', [$course, $lessonQuiz]) }}"><i class="fas fa-list-check"></i> {{ $lessonQuiz->title }}</a>
+            </div>
+          @endforeach
+        </div>
       @endif
 
       @if($lesson->materials->count())
