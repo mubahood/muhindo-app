@@ -55,8 +55,12 @@ class Course extends Model
         // hasManyThrough does not apply the intermediate model's own soft-delete
         // scope automatically, so a soft-deleted module's lessons must be excluded
         // explicitly to keep lessonCount() (and therefore progressPercent()) correct.
+        // Unpublished (draft) lessons are excluded too — §7.5's publish toggle means a
+        // draft doesn't count toward a course's structure from the student's side at all
+        // (not "locked," genuinely doesn't exist yet), so it can't block 100% completion.
         return $this->hasManyThrough(Lesson::class, CourseModule::class)
-            ->whereNull('course_modules.deleted_at');
+            ->whereNull('course_modules.deleted_at')
+            ->where('lessons.is_published', true);
     }
 
     /** @return HasMany<Enrollment, $this> */

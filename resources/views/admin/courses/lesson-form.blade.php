@@ -27,7 +27,10 @@
         completionRule: '{{ old('completion_rule', $lesson->completion_rule?->value ?? 'manual') }}',
         contentFormat: '{{ old('content_format', $lesson->content_format?->value ?? 'plain') }}',
         content: @js(old('content', $lesson->content ?? '')),
+        videoUrl: @js(old('video_url', $lesson->video_url ?? '')),
+        durationMinutes: @js(old('duration_minutes', $lesson->duration_minutes)),
         previewUrl: @js(route('admin.lessons.preview-markdown')),
+        durationUrl: @js(route('admin.lessons.fetch-video-duration')),
         imageUploadUrl: @js($lesson->exists ? route('admin.lessons.content-images.store', $lesson) : null),
         csrfToken: @js(csrf_token()),
       })">
@@ -66,11 +69,17 @@
       </div>
       <div class="tb-form-group">
         <label class="tb-label">Video URL (YouTube/Vimeo embed)</label>
-        <input class="tb-input" type="url" name="video_url" value="{{ old('video_url', $lesson->video_url) }}">
+        <input class="tb-input" type="url" name="video_url" x-model="videoUrl">
       </div>
       <div class="tb-form-group">
         <label class="tb-label">Duration (minutes)</label>
-        <input class="tb-input" type="number" min="0" name="duration_minutes" value="{{ old('duration_minutes', $lesson->duration_minutes) }}">
+        <div style="display:flex;gap:8px;">
+          <input class="tb-input" type="number" min="0" name="duration_minutes" x-model="durationMinutes" style="flex:1;">
+          <button type="button" class="btn-tb btn-tb-ghost btn-tb-sm" @click="fetchDuration()" :disabled="fetchingDuration" title="Auto-fetch from YouTube (requires a configured API key)">
+            <i class="fas" :class="fetchingDuration ? 'fa-spinner fa-spin' : 'fa-magnifying-glass'"></i>
+          </button>
+        </div>
+        <p class="muted" style="font-size:.75rem;margin-top:4px;" x-show="durationFetchMessage" x-text="durationFetchMessage"></p>
       </div>
       <div class="tb-form-group">
         <label class="tb-label">Sort order</label>
@@ -87,6 +96,12 @@
       <div class="tb-form-group" x-show="completionRule === 'min_watch'">
         <label class="tb-label">Required watch % to auto-complete</label>
         <input class="tb-input" type="number" min="1" max="100" name="completion_threshold" value="{{ old('completion_threshold', $lesson->completion_threshold) }}">
+      </div>
+      <div class="tb-form-group">
+        <label class="tb-check-group">
+          <input type="checkbox" name="is_published" value="1" {{ old('is_published', $lesson->exists ? $lesson->is_published : false) ? 'checked' : '' }}>
+          <span>Published (visible to enrolled students)</span>
+        </label>
       </div>
       <div class="tb-form-group">
         <label class="tb-check-group">
@@ -152,9 +167,41 @@ function lessonEditor(cfg) {
     completionRule: cfg.completionRule,
     contentFormat: cfg.contentFormat,
     content: cfg.content,
+    videoUrl: cfg.videoUrl,
+    durationMinutes: cfg.durationMinutes,
     imageUploadUrl: cfg.imageUploadUrl,
     showPreview: false,
     previewHtml: '',
+    fetchingDuration: false,
+    durationFetchMessage: '',
+    async fetchDuration() {
+      if (!this.videoUrl) {
+        this.durationFetchMessage = 'Paste a video URL first.';
+        return;
+      }
+      this.fetchingDuration = true;
+      this.durationFetchMessage = '';
+      try {
+        const res = await fetch(cfg.durationUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': cfg.csrfToken, 'Accept': 'application/json' },
+          body: JSON.stringify({ video_url: this.videoUrl }),
+        });
+        const data = await res.json();
+        if (data.available) {
+          this.durationMinutes = data.minutes;
+          this.durationFetchMessage = `Fetched: ${data.minutes} min.`;
+        } else if (data.reason === 'not_youtube') {
+          this.durationFetchMessage = 'Not a recognizable YouTube URL — enter the duration manually.';
+        } else {
+          this.durationFetchMessage = 'Could not auto-fetch (no API key configured, or the lookup failed) — enter it manually.';
+        }
+      } catch (e) {
+        this.durationFetchMessage = 'Could not auto-fetch — enter it manually.';
+      } finally {
+        this.fetchingDuration = false;
+      }
+    },
     async togglePreview() {
       if (!this.showPreview) {
         await this.fetchPreview();

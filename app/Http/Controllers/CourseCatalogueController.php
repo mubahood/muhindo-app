@@ -59,7 +59,7 @@ class CourseCatalogueController extends Controller
     {
         abort_unless($course->is_published, 404);
         abort_unless($lesson->module->course_id === $course->id, 404);
-        abort_unless($lesson->is_free_preview, 404);
+        abort_unless($lesson->is_free_preview && $lesson->is_published, 404);
 
         $renderedContent = $lesson->content && $lesson->content_format === ContentFormat::Markdown
             ? $this->markdown->toHtml($lesson->content)

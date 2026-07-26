@@ -16,13 +16,14 @@ class Lesson extends Model
 
     protected $fillable = [
         'course_module_id', 'title', 'content', 'video_url',
-        'duration_minutes', 'sort_order', 'is_free_preview',
+        'duration_minutes', 'sort_order', 'is_published', 'is_free_preview',
         'completion_rule', 'completion_threshold', 'content_format',
     ];
 
     protected function casts(): array
     {
         return [
+            'is_published' => 'boolean',
             'is_free_preview' => 'boolean',
             'completion_rule' => CompletionRule::class,
             'content_format' => ContentFormat::class,
@@ -38,11 +39,13 @@ class Lesson extends Model
     /** §7.3 — the YouTube IFrame API needs a bare video id, not the embed URL admins paste in. Null for non-YouTube URLs (Vimeo, etc.), which fall back to a plain iframe. */
     public function youtubeVideoId(): ?string
     {
-        if (! $this->video_url) {
-            return null;
-        }
+        return $this->video_url ? self::extractYoutubeId($this->video_url) : null;
+    }
 
-        if (preg_match('~(?:youtube\.com/(?:embed/|watch\?v=)|youtu\.be/)([A-Za-z0-9_-]{6,})~', $this->video_url, $matches)) {
+    /** Static so the admin curriculum builder can resolve a pasted URL before any Lesson exists. */
+    public static function extractYoutubeId(string $url): ?string
+    {
+        if (preg_match('~(?:youtube\.com/(?:embed/|watch\?v=)|youtu\.be/)([A-Za-z0-9_-]{6,})~', $url, $matches)) {
             return $matches[1];
         }
 

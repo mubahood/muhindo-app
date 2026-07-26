@@ -1,6 +1,13 @@
 @extends('layouts.admin')
 @section('title', $course->title)
 
+@push('styles')
+<style>
+  .sortable-ghost{opacity:.4;}
+  .sortable-chosen .lesson-row,.module-row.sortable-chosen{background:var(--pri-soft, #eef1f6);}
+</style>
+@endpush
+
 @section('content')
 
 <div class="tb-page-header">
@@ -31,10 +38,14 @@
   <a href="{{ route('admin.courses.modules.create', $course) }}" class="btn-tb btn-tb-primary btn-tb-sm"><i class="fas fa-plus"></i> New Module</a>
 </div>
 
+<div id="curriculum-tree" x-data="curriculumBuilder({
+    reorderUrl: @js(route('admin.courses.curriculum.reorder', $course)),
+    csrfToken: @js(csrf_token()),
+  })">
 @forelse($course->modules as $module)
-  <div class="tb-card" style="margin-bottom:16px;">
+  <div class="tb-card module-row" data-module-id="{{ $module->id }}" style="margin-bottom:16px;">
     <div class="tb-card-header">
-      <span class="tb-card-title">{{ $module->title }}</span>
+      <span class="tb-card-title"><i class="fas fa-grip-vertical module-drag-handle" style="cursor:grab;margin-right:8px;color:var(--mt2);"></i>{{ $module->title }}</span>
       <div style="display:flex;gap:6px;">
         <a href="{{ route('admin.modules.edit', $module) }}" class="btn-tb btn-tb-ghost btn-tb-icon btn-tb-sm"><i class="fas fa-pen"></i></a>
         <form method="POST" action="{{ route('admin.modules.destroy', $module) }}" onsubmit="return confirm('Delete this module and its lessons?');">
@@ -44,19 +55,28 @@
         <a href="{{ route('admin.modules.lessons.create', $module) }}" class="btn-tb btn-tb-primary btn-tb-sm"><i class="fas fa-plus"></i> Lesson</a>
       </div>
     </div>
-    <div class="tb-card-body" style="padding:0;">
+    <div class="tb-card-body lesson-list" data-module-id="{{ $module->id }}" style="padding:0;">
       @forelse($module->lessons as $lesson)
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bd);">
-          <div>
-            <div style="font-weight:500;">{{ $lesson->title }}
-              @if($lesson->is_free_preview)<span class="badge-tb badge-info" style="margin-left:6px;">Free preview</span>@endif
-            </div>
-            <div class="muted" style="font-size:.78rem;">
-              {{ $lesson->duration_minutes ? $lesson->duration_minutes.' min' : '' }}
-              {{ $lesson->materials->count() }} material(s)
+        <div class="lesson-row" data-lesson-id="{{ $lesson->id }}" style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bd);">
+          <div style="display:flex;align-items:center;">
+            <i class="fas fa-grip-vertical lesson-drag-handle" style="cursor:grab;margin-right:10px;color:var(--mt2);"></i>
+            <div>
+              <div style="font-weight:500;">{{ $lesson->title }}
+                <span class="badge-tb {{ $lesson->is_published ? 'badge-active' : 'badge-neutral' }}" style="margin-left:6px;">{{ $lesson->is_published ? 'Published' : 'Draft' }}</span>
+                @if($lesson->is_free_preview)<span class="badge-tb badge-info" style="margin-left:6px;">Free preview</span>@endif
+              </div>
+              <div class="muted" style="font-size:.78rem;">
+                {{ $lesson->duration_minutes ? $lesson->duration_minutes.' min · ' : '' }}{{ $lesson->materials->count() }} material(s)
+                · <a href="{{ route('admin.courses.quizzes.create', $course) }}?lesson_id={{ $lesson->id }}">+ Quiz</a>
+                · <a href="{{ route('admin.courses.assignments.create', $course) }}?lesson_id={{ $lesson->id }}">+ Assignment</a>
+              </div>
             </div>
           </div>
           <div class="tb-table-actions">
+            <form method="POST" action="{{ route('admin.lessons.toggle-publish', $lesson) }}">
+              @csrf
+              <button type="submit" class="btn-tb btn-tb-ghost btn-tb-sm">{{ $lesson->is_published ? 'Unpublish' : 'Publish' }}</button>
+            </form>
             <a href="{{ route('admin.lessons.edit', $lesson) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-pen"></i></a>
             <form method="POST" action="{{ route('admin.lessons.destroy', $lesson) }}" onsubmit="return confirm('Delete this lesson?');">
               @csrf @method('DELETE')
@@ -67,11 +87,71 @@
       @empty
         <div class="tb-empty" style="padding:20px;"><p>No lessons in this module yet.</p></div>
       @endforelse
+      <form method="POST" action="{{ route('admin.modules.lessons.quick-store', $module) }}" style="display:flex;gap:8px;padding:12px 18px;">
+        @csrf
+        <input type="text" name="title" class="tb-input" placeholder="Quick-add a lesson title…" required style="flex:1;">
+        <button type="submit" class="btn-tb btn-tb-ghost btn-tb-sm"><i class="fas fa-plus"></i> Add</button>
+      </form>
     </div>
   </div>
 @empty
   <div class="tb-empty" style="padding:40px;"><i class="fas fa-book"></i><p>No modules yet — add one to start building the course.</p></div>
 @endforelse
+</div>
+
+@push('scripts')
+<script src="{{ asset('vendor/js/sortable.min.js') }}"></script>
+<script>
+/** §7.5 — drag-and-drop module/lesson reorder, one AJAX call per drop, degrades to the static (non-reorderable) list with no JS. */
+function curriculumBuilder(cfg) {
+  return {
+    init() {
+      const tree = document.getElementById('curriculum-tree');
+      if (!tree || typeof Sortable === 'undefined') return;
+
+      Sortable.create(tree, {
+        handle: '.module-drag-handle',
+        animation: 150,
+        draggable: '.module-row',
+        onEnd: () => this.persist(),
+      });
+
+      tree.querySelectorAll('.lesson-list').forEach((list) => {
+        Sortable.create(list, {
+          handle: '.lesson-drag-handle',
+          group: 'lessons',
+          animation: 150,
+          draggable: '.lesson-row',
+          onEnd: () => this.persist(),
+        });
+      });
+    },
+    async persist() {
+      const modules = Array.from(document.querySelectorAll('.module-row')).map((el, i) => ({
+        id: parseInt(el.dataset.moduleId, 10), sort_order: i,
+      }));
+      const lessons = [];
+      document.querySelectorAll('.lesson-list').forEach((list) => {
+        const moduleId = parseInt(list.dataset.moduleId, 10);
+        Array.from(list.querySelectorAll('.lesson-row')).forEach((el, i) => {
+          lessons.push({ id: parseInt(el.dataset.lessonId, 10), sort_order: i, course_module_id: moduleId });
+        });
+      });
+
+      try {
+        await fetch(cfg.reorderUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': cfg.csrfToken, 'Accept': 'application/json' },
+          body: JSON.stringify({ modules, lessons }),
+        });
+      } catch (e) {
+        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not save the new order — please refresh and try again.', type: 'error' } }));
+      }
+    },
+  };
+}
+</script>
+@endpush
 
 <div class="tb-page-header" style="margin-top:32px;">
   <div><h2 style="font-size:1.1rem;">Quizzes</h2></div>

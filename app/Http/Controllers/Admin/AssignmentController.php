@@ -11,9 +11,11 @@ use Illuminate\View\View;
 
 class AssignmentController extends Controller
 {
-    public function create(Course $course): View
+    public function create(Request $request, Course $course): View
     {
-        return view('admin.assignments.form', ['course' => $course, 'assignment' => new Assignment]);
+        $assignment = new Assignment(['lesson_id' => $request->integer('lesson_id') ?: null]);
+
+        return view('admin.assignments.form', ['course' => $course, 'assignment' => $assignment]);
     }
 
     public function store(Request $request, Course $course): RedirectResponse

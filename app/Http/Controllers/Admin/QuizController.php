@@ -23,9 +23,11 @@ class QuizController extends Controller
         ]);
     }
 
-    public function create(Course $course): View
+    public function create(Request $request, Course $course): View
     {
-        return view('admin.quizzes.form', ['course' => $course, 'quiz' => new Quiz]);
+        $quiz = new Quiz(['lesson_id' => $request->integer('lesson_id') ?: null]);
+
+        return view('admin.quizzes.form', ['course' => $course, 'quiz' => $quiz]);
     }
 
     public function store(Request $request, Course $course): RedirectResponse

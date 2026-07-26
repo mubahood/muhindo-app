@@ -56,7 +56,7 @@
     <aside class="learn-side">
       @foreach($course->modules as $module)
         <div class="mod">{{ $module->title }}</div>
-        @foreach($module->lessons as $l)
+        @foreach($module->lessons->where('is_published', true) as $l)
           @if($lockedLessonIds->contains($l->id))
             <span class="locked" title="Complete the previous lesson to unlock this one">
               <i class="fas fa-lock"></i> {{ $l->title }}

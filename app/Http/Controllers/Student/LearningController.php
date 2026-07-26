@@ -51,11 +51,11 @@ class LearningController extends Controller
         // sequential progression since — redirecting straight into a 403 would
         // be a worse experience than just falling through to the first lesson.
         $resumeLesson = $enrollment->lastLesson;
-        if ($resumeLesson && $resumeLesson->module->course_id === $course->id && ! $course->isLessonLocked($enrollment, $resumeLesson)) {
+        if ($resumeLesson && $resumeLesson->module->course_id === $course->id && $resumeLesson->is_published && ! $course->isLessonLocked($enrollment, $resumeLesson)) {
             return redirect()->route('learn.lesson', [$course, $resumeLesson]);
         }
 
-        $firstLesson = $course->modules->first()?->lessons->first();
+        $firstLesson = $this->publishedLessonsFlat($course)->first();
         if ($firstLesson) {
             return redirect()->route('learn.lesson', [$course, $firstLesson]);
         }
@@ -67,12 +67,13 @@ class LearningController extends Controller
     {
         $enrollment = $this->enrollmentFor($request, $course);
         abort_unless($lesson->module->course_id === $course->id, 404);
+        abort_unless($lesson->is_published, 404);
 
         $this->progress->recordView($enrollment, $lesson);
 
         $course->load('modules.lessons');
         $completedLessonIds = $enrollment->progressRecords()->whereNotNull('completed_at')->pluck('lesson_id');
-        $lockedLessonIds = $course->modules->flatMap(fn ($m) => $m->lessons)
+        $lockedLessonIds = $this->publishedLessonsFlat($course)
             ->filter(fn (Lesson $l) => $course->isLessonLocked($enrollment, $l))
             ->pluck('id');
 
@@ -181,9 +182,17 @@ class LearningController extends Controller
     /** Powers both the "complete → auto-advance" flow and the ↑/↓ keyboard shortcuts. */
     private function adjacentLesson(Course $course, Lesson $current, int $offset): ?Lesson
     {
-        $flat = $course->modules->flatMap(fn ($m) => $m->lessons);
+        $flat = $this->publishedLessonsFlat($course);
         $index = $flat->search(fn (Lesson $l) => $l->id === $current->id);
 
         return $index === false ? null : $flat->get($index + $offset);
+    }
+
+    /** §7.5 — a draft (unpublished) lesson is invisible to students: not counted, not navigable to, not resumable. */
+    private function publishedLessonsFlat(Course $course): \Illuminate\Support\Collection
+    {
+        $course->loadMissing('modules.lessons');
+
+        return $course->modules->flatMap(fn ($m) => $m->lessons)->where('is_published', true)->values();
     }
 }

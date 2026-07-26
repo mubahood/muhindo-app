@@ -42,6 +42,14 @@ return [
         'id' => env('TAWK_ID'),
     ],
 
+    // §7.5 — optional: auto-fetches a pasted YouTube lesson video's duration via the Data API
+    // v3 (oEmbed alone doesn't expose duration). Entirely optional — with no key configured,
+    // the curriculum builder's "Auto-fetch duration" button just no-ops and duration stays a
+    // manual field, exactly as it already was before this feature existed.
+    'youtube' => [
+        'key' => env('YOUTUBE_API_KEY'),
+    ],
+
     // Flutterwave payment gateway (HMS_PLAN.md §16). Secrets live ONLY in env
     // (C11) — never commit real keys. secret_hash verifies inbound webhooks.
     'flutterwave' => [

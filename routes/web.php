@@ -112,7 +112,11 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->shallow()->except('show');
     Route::resource('modules.lessons', LessonController::class)
         ->shallow()->except('show');
+    Route::post('modules/{module}/lessons-quick', [LessonController::class, 'storeInline'])->name('modules.lessons.quick-store');
+    Route::post('lessons/{lesson}/toggle-publish', [LessonController::class, 'togglePublish'])->name('lessons.toggle-publish');
     Route::post('lessons/preview-markdown', [LessonController::class, 'previewMarkdown'])->name('lessons.preview-markdown');
+    Route::post('lessons/fetch-video-duration', [LessonController::class, 'fetchVideoDuration'])->name('lessons.fetch-video-duration');
+    Route::post('courses/{course}/curriculum/reorder', [\App\Http\Controllers\Admin\CurriculumController::class, 'reorder'])->name('courses.curriculum.reorder');
     Route::resource('lessons.materials', LessonMaterialController::class)
         ->shallow()->only(['store', 'destroy']);
     Route::post('lessons/{lesson}/content-images', [\App\Http\Controllers\Admin\LessonContentImageController::class, 'store'])
