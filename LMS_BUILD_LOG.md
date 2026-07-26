@@ -1837,3 +1837,71 @@ correct percentages, CSV export contains the same data, non-admin denied).
 **Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
 `phpstan analyse --memory-limit=1G` 0 errors. `php artisan test` —
 306/306 green (292 pre-existing + 14 new).
+
+### P3.9 — Certificate criteria tightening — closes L1 fully (§4.6)
+
+**Built:** `GradebookService::meetsCertificateQuizRequirement(Enrollment): bool`
+— published `counts_toward_certificate` quizzes on the course are the
+"gate." No gating quizzes → trivially satisfied (unchanged behavior for
+every course that doesn't use this feature). One or more gating quizzes →
+each must already have a grade (reuses the same private `quizGradePercent()`
+P3.8 built — an ungraded/unattempted gating quiz blocks issuance outright,
+it does **not** count as a zero), and the average of their grades must meet
+the average of their own `pass_percent` values. **Decision:** each quiz
+keeps its own pass mark rather than inventing a single course-wide one —
+the plan's "average ≥ pass mark" doesn't specify whose mark when multiple
+quizzes are involved, and averaging both sides is the natural reading that
+needs no new schema field. This means a quiz that individually misses its
+own mark can still be compensated for by another that clears its mark by
+more — pinned explicitly by a test — a debatable call, but a defensible one
+given "average" is the literal word the plan uses, not "every quiz
+individually."
+
+`CertificateService::issueIfEligible(Enrollment): ?Certificate` — checks
+`progressPercent() >= 100` **and** the quiz requirement above; returns
+`null` while either is unmet, otherwise delegates to the existing (already
+idempotent) `issue()`. The plain `issue()` method is untouched — still
+callable directly wherever a caller has already verified eligibility itself
+(none currently do, but no reason to remove the simpler primitive).
+
+**A student can satisfy either requirement first**, so two independent
+trigger points now call `issueIfEligible()`:
+- `HandleCourseCompletion` (reacting to `CourseCompleted`, i.e. lessons just
+  hit 100%) — swapped its unconditional `issue()` call for
+  `issueIfEligible()`. If a quiz gate is still open, no certificate is
+  created, but `CourseCompletedNotification` still sends — its mail already
+  conditionally omits the certificate action when
+  `$enrollment->certificate` is null (P0 behavior, unchanged), so a student
+  who finishes the content before the quiz gets an honest "you finished the
+  lessons" email with no premature certificate link, not a broken one.
+- `IssueCertificateWhenQuizRequirementIsMet` (new, reacting to
+  `QuizAttemptSubmitted`) — the other direction: a gating quiz gets graded
+  after lessons were already done. No-ops immediately if a certificate
+  already exists (avoids a redundant `issueIfEligible()` call on every
+  future quiz submission once already certified) or if lessons/the
+  requirement still aren't both satisfied. On success, notifies via the
+  *same* `CourseCompletedNotification` class rather than a new one — its
+  copy ("you finished the course, here's your certificate") reads correctly
+  regardless of which requirement finished last, so a second notification
+  class would only duplicate content, not add anything.
+
+**Closes L1 fully.** The loophole audit (§2) named L1 — "certificates
+attest nothing" — as closed by three prongs: completion rules (§4.3,
+`min_watch`/sequential progression, landed in P2), quiz gates (§5, the
+whole quiz engine, P3.1–P3.5), and certificate criteria (§4.6, this item).
+All three are now in place.
+
+**Tests added:** `GradebookServiceTest` gained 3 (no gating quizzes passes
+trivially; an unattempted gating quiz blocks; two gating quizzes average
+their grades and pass marks — one that individually misses its own 80%
+mark still passes the blended check). `CertificateQuizGateTest.php` (6):
+lessons-done-without-quiz withholds the certificate; passing the quiz after
+lessons finish issues it via the new listener; the reverse order (quiz
+passed first, lessons finish last) issues via the existing listener; a
+failed gating quiz still blocks; a non-gating quiz never blocks; grading a
+quiz on a course where most lessons remain incomplete does not prematurely
+certify (guards against the new listener firing too eagerly).
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
+`phpstan analyse --memory-limit=1G` 0 errors. `php artisan test` —
+315/315 green (306 pre-existing + 9 new).
