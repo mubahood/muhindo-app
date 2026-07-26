@@ -1436,3 +1436,68 @@ analyse --memory-limit=1G` 0 errors (the default 128M limit crashes the
 parallel workers on this machine regardless of new code — a pre-existing
 environment constraint, not a regression). `php artisan test` — 237/237 green
 (217 pre-existing + 20 new).
+
+### P3.4 — QuizService manual grading + feedback_mode gating (§5.2, §5.2.4)
+
+**Built:** three additions to `app/Services/Learning/QuizService.php`, no new
+schema (everything needed — `points_awarded`, `grader_feedback`,
+`auto_graded` — already existed on `attempt_answers` since P3.1):
+
+- `gradeManual(QuizAttempt, Question, float $pointsAwarded, ?string
+  $feedback)` — an instructor scores one flagged answer (an essay, or a
+  short_text miss that fell back to review). Rejects with `409` unless the
+  attempt is `submitted` (not `in_progress`, not already `graded` — no
+  re-grading path exists or is needed yet), and `422` if the points fall
+  outside `[0, question.points]`. **Decision:** rather than add a new column
+  to mark "this answer has been resolved," a pending answer is defined as
+  `auto_graded = false AND points_awarded === null` — the exact state
+  `submit()` already leaves an essay/flagged-short_text row in. Once
+  `gradeManual()` writes a non-null `points_awarded`, that row reads as
+  resolved without needing an extra "manually_graded" boolean anywhere.
+  Private `finalizeIfFullyGraded()` re-checks every answer on the attempt
+  after each manual grade; once none are still pending, it computes
+  `score_points`/`score_percent`/`passed` (identical math to `submit()`'s
+  fully-auto-graded branch) marks the attempt `graded`, and fires
+  `QuizAttemptSubmitted` — the same event `submit()` fires, just triggered
+  later and by a human instead of the grading engine, matching the doc
+  comment already written for that event in P3.3.
+- `previewGrade(Question, ?array $payload)` — a thin public wrapper around
+  the same private `gradeAnswer()` table P3.3 built, but computed on demand
+  and never persisted. This is what "immediate" feedback_mode needs: a
+  per-question right/wrong check the instant the student answers, before the
+  attempt is ever submitted. Building the actual AJAX wiring for this is
+  P3.5's job (the quiz runner UI); P3.4 only had to make sure the grading
+  logic was reusable without side effects, which it already was since
+  `gradeAnswer()` never touched the database itself.
+- `feedbackFor(QuizAttempt): ?array` — the review-page data source, gated by
+  `feedback_mode`: `none` never reveals anything; `immediate`/`after_submit`
+  reveal once the attempt has left `in_progress` (i.e. is `submitted` or
+  `graded` — a still-in-progress attempt has nothing graded yet regardless of
+  mode); `after_close` stays hidden until `quiz.available_until` has passed
+  (and, deliberately, stays hidden forever if the instructor picked
+  after_close without ever setting a close date — a misconfiguration to fix
+  on their end, not a case to special-case around). Returns per-question
+  `is_correct`, `points_awarded`, `max_points`, `explanation`, and
+  `grader_feedback` — everything the review page (P3.5) will need to render
+  without a second round of business logic.
+
+**Abuse paths reasoned through:** an instructor trying to grade an
+in-progress or already-fully-graded attempt → `409`, since neither state has
+anything pending. Awarding more than a question's max points (fat-fingered or
+adversarial input from an admin-side form later) → `422` before anything is
+written. A student polling `feedbackFor` mid-attempt hoping to see answers
+early → `null`, regardless of feedback_mode, until the attempt actually
+leaves `in_progress`.
+
+**Tests added** (`tests/Feature/Learning/QuizManualGradingTest.php`, 9
+tests): grading the only pending essay finalizes the attempt and fires the
+event with the correct combined score; a second still-pending essay keeps the
+attempt `submitted` and un-scored; rejecting grading on a non-submitted
+attempt; rejecting out-of-range points; `previewGrade` persists nothing;
+feedback hidden while in progress; `none` mode never reveals; `after_submit`
+reveals is_correct + explanation once graded; `after_close` stays hidden
+until the close date passes, then reveals on the same attempt.
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean (one
+auto-fix, unused import). `phpstan analyse --memory-limit=1G` 0 errors.
+`php artisan test` — 246/246 green (237 pre-existing + 9 new).
