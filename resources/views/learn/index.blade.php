@@ -41,6 +41,7 @@
           @if($enrollment->course->published_quizzes_count > 0 || $enrollment->course->published_assignments_count > 0)
             <a href="{{ route('learn.grades', $enrollment->course) }}" class="btn" style="margin-left:8px;"><i class="fas fa-chart-simple"></i> Grades</a>
           @endif
+          <a href="{{ route('learn.announcements.index', $enrollment->course) }}" class="btn" style="margin-left:8px;"><i class="fas fa-bullhorn"></i> Announcements</a>
           @if($enrollment->certificate)
             <a href="{{ route('learn.certificate', $enrollment->certificate) }}" class="btn" style="margin-left:8px;" target="_blank"><i class="fas fa-award"></i> Certificate</a>
           @endif

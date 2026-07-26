@@ -131,4 +131,41 @@
   </div>
 </div>
 
+<div class="tb-page-header" style="margin-top:32px;">
+  <div><h2 style="font-size:1.1rem;">Announcements</h2></div>
+  <a href="{{ route('admin.courses.announcements.create', $course) }}" class="btn-tb btn-tb-primary btn-tb-sm"><i class="fas fa-plus"></i> New Announcement</a>
+</div>
+
+<div class="tb-card">
+  <div class="tb-card-body" style="padding:0;">
+    @forelse($course->announcements as $announcement)
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bd);">
+        <div>
+          <div style="font-weight:500;">{{ $announcement->title }}
+            <span class="badge-tb {{ $announcement->isPublished() ? 'badge-active' : 'badge-neutral' }}" style="margin-left:6px;">{{ $announcement->isPublished() ? 'Published' : 'Draft' }}</span>
+          </div>
+          <div class="muted" style="font-size:.78rem;">
+            {{ $announcement->isPublished() ? 'Published '.$announcement->published_at->format('M j, Y g:ia') : 'Not yet published' }}
+          </div>
+        </div>
+        <div class="tb-table-actions">
+          @unless($announcement->isPublished())
+            <form method="POST" action="{{ route('admin.announcements.publish', $announcement) }}" onsubmit="return confirm('Publish this announcement now? Every enrolled student will be notified.');">
+              @csrf
+              <button type="submit" class="btn-tb btn-tb-primary btn-tb-sm"><i class="fas fa-bullhorn"></i> Publish</button>
+            </form>
+          @endunless
+          <a href="{{ route('admin.announcements.edit', $announcement) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-pen"></i></a>
+          <form method="POST" action="{{ route('admin.announcements.destroy', $announcement) }}" onsubmit="return confirm('Delete this announcement?');">
+            @csrf @method('DELETE')
+            <button type="submit" class="btn-tb btn-tb-danger btn-tb-icon"><i class="fas fa-trash"></i></button>
+          </form>
+        </div>
+      </div>
+    @empty
+      <div class="tb-empty" style="padding:20px;"><p>No announcements yet.</p></div>
+    @endforelse
+  </div>
+</div>
+
 @endsection

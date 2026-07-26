@@ -49,7 +49,7 @@
   })"
   x-init="init()"
 >
-  <div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}">My Courses</a> / {{ $course->title }} / <a href="{{ route('learn.quizzes.index', $course) }}">Quizzes</a></div>
+  <div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}">My Courses</a> / {{ $course->title }} / <a href="{{ route('learn.quizzes.index', $course) }}">Quizzes</a> / <a href="{{ route('learn.announcements.index', $course) }}">Announcements</a></div>
   <h1 style="font-size:20px;">{{ $lesson->title }}</h1>
 
   <div class="learn-layout">

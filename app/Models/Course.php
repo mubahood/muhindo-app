@@ -77,6 +77,12 @@ class Course extends Model
         return $this->hasMany(Assignment::class);
     }
 
+    /** @return HasMany<Announcement, $this> */
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(Announcement::class)->latest();
+    }
+
     public function isFree(): bool
     {
         return (float) $this->price <= 0;

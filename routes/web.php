@@ -124,6 +124,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->shallow()->except(['index', 'show']);
     Route::resource('courses.assignments', \App\Http\Controllers\Admin\AssignmentController::class)
         ->shallow()->except(['index', 'show']);
+    Route::resource('courses.announcements', \App\Http\Controllers\Admin\AnnouncementController::class)
+        ->shallow()->except(['index', 'show']);
+    Route::post('announcements/{announcement}/publish', [\App\Http\Controllers\Admin\AnnouncementController::class, 'publish'])
+        ->name('announcements.publish');
     Route::get('courses/{course}/gradebook', \App\Livewire\Admin\GradeMatrix::class)->name('courses.gradebook');
     Route::get('courses/{course}/gradebook/export', \App\Http\Controllers\Admin\GradebookExportController::class)->name('courses.gradebook.export');
     Route::get('enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
@@ -190,6 +194,8 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::get('{course:slug}/assignments/{assignment}/submissions/{submission}/download', [\App\Http\Controllers\Student\AssignmentController::class, 'download'])->name('assignment.download');
 
     Route::get('{course:slug}/grades', [\App\Http\Controllers\Student\GradesController::class, 'show'])->name('grades');
+
+    Route::get('{course:slug}/announcements', [\App\Http\Controllers\Student\AnnouncementController::class, 'index'])->name('announcements.index');
 
     Route::get('{course:slug}/{lesson}', [LearningController::class, 'lesson'])->name('lesson');
     Route::post('{course:slug}/{lesson}/complete', [LearningController::class, 'complete'])->name('lesson.complete');
