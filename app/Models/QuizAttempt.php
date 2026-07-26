@@ -31,6 +31,11 @@ class QuizAttempt extends Model
         ];
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
     /** @return BelongsTo<Quiz, $this> */
     public function quiz(): BelongsTo
     {
