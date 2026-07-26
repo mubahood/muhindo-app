@@ -138,6 +138,36 @@
         </div>
       @endif
 
+      <div class="card" style="margin-bottom:20px;">
+        <div style="font-weight:600;margin-bottom:10px;">My notes</div>
+        @forelse($notes as $note)
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);">
+            <div>
+              @if($note->formattedTime())
+                <button type="button" onclick="window.__lessonVideoPlayer?.seekTo({{ $note->seconds }}, true)"
+                        style="background:none;border:none;color:var(--pri);cursor:pointer;font-weight:600;padding:0;margin-right:8px;">{{ $note->formattedTime() }}</button>
+              @endif
+              <span>{{ $note->body }}</span>
+            </div>
+            <form method="POST" action="{{ route('learn.notes.destroy', [$course, $lesson, $note]) }}">
+              @csrf @method('DELETE')
+              <button type="submit" style="background:none;border:none;color:var(--tx3);cursor:pointer;"><i class="fas fa-trash"></i></button>
+            </form>
+          </div>
+        @empty
+          <p class="muted" style="font-size:13px;">No notes yet — jot one down as you watch.</p>
+        @endforelse
+        <form method="POST" action="{{ route('learn.notes.store', [$course, $lesson]) }}"
+              style="margin-top:12px;display:flex;gap:8px;"
+              onsubmit="this.querySelector('[name=seconds]').value = Math.floor(window.__lessonVideoPlayer?.getCurrentTime?.() ?? 0) || ''">
+          @csrf
+          <input type="hidden" name="seconds" value="">
+          <input type="text" name="body" placeholder="Add a note at the current time…" required
+                 style="flex:1;padding:8px 10px;border:1px solid var(--line);font-family:var(--font);">
+          <button type="submit" class="btn">Add</button>
+        </form>
+      </div>
+
       <form method="POST" action="{{ route('learn.lesson.complete', [$course, $lesson]) }}" @submit.prevent="markComplete()">
         @csrf
         <button type="submit" class="btn gold" :disabled="submitting" x-show="!(completed && !nextLessonUrl && !showAdvance)">

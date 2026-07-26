@@ -210,6 +210,8 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::post('{course:slug}/{lesson}/heartbeat', [LearningController::class, 'heartbeat'])->middleware('throttle:20,1')->name('lesson.heartbeat');
     Route::get('{course:slug}/{lesson}/materials/{material}', [StudentLessonMaterialController::class, 'download'])->name('materials.download');
     Route::get('{course:slug}/{lesson}/content-images/{filename}', [\App\Http\Controllers\Student\LessonContentImageController::class, 'show'])->name('content-images.show');
+    Route::post('{course:slug}/{lesson}/notes', [\App\Http\Controllers\Student\LessonNoteController::class, 'store'])->name('notes.store');
+    Route::delete('{course:slug}/{lesson}/notes/{note}', [\App\Http\Controllers\Student\LessonNoteController::class, 'destroy'])->name('notes.destroy');
 });
 
 /*

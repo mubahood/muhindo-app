@@ -80,6 +80,8 @@ class LearningController extends Controller
             ? $this->markdown->toHtml($lesson->content)
             : null;
 
+        $notes = $enrollment->lessonNotes()->where('lesson_id', $lesson->id)->orderBy('seconds')->get();
+
         return view('learn.lesson', [
             'course' => $course,
             'lesson' => $lesson,
@@ -89,6 +91,7 @@ class LearningController extends Controller
             'previousLesson' => $this->adjacentLesson($course, $lesson, -1),
             'nextLessonForNav' => $this->adjacentLesson($course, $lesson, 1),
             'renderedContent' => $renderedContent,
+            'notes' => $notes,
         ]);
     }
 

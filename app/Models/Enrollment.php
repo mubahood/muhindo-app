@@ -88,6 +88,17 @@ class Enrollment extends Model
     }
 
     /**
+     * The student's own private study notes — distinct from notes(), the admin's private notes
+     * about this student.
+     *
+     * @return HasMany<LessonNote, $this>
+     */
+    public function lessonNotes(): HasMany
+    {
+        return $this->hasMany(LessonNote::class);
+    }
+
+    /**
      * List views should eager-load counts to avoid an N+1 here: `->with(['course' =>
      * fn ($q) => $q->withCount('lessons')])` on the enrollment query plus
      * `->withCount(['progressRecords as completed_lessons_count' => fn ($q) =>
