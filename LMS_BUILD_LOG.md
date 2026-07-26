@@ -2192,3 +2192,45 @@ regression test for the `courses.show()` fix above
 **Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
 clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
 0 errors. `php artisan test` — 352/352 green (334 pre-existing + 18 new).
+
+### P4.3 — Refund path (§7.1)
+
+**Built:** `BillingService::refund(Invoice, ?int $by)` — only `Paid`/
+`PartiallyPaid` invoices can be refunded (a `RuntimeException` otherwise —
+nothing was collected, nothing to give back). **Decision:** a new
+`InvoiceStatus::Refunded` case, distinct from the existing `Void`. Void
+already meant "this charge should never have existed" (used for cancelling
+an unpaid/erroneous invoice); refunded means "money was actually collected,
+then returned" — conflating the two would make it impossible to tell, from
+status alone, whether a given invoice ever had money move against it.
+`amount_paid` and the historical `Payment` rows are deliberately left
+untouched by a refund — only `status` (plus new `refunded_by`/`refunded_at`
+columns, extending the invoice's own existing `issued_by`/`issued_at`
+pattern rather than introducing a new audit mechanism) changes, so the
+permanent record of what was actually paid is never erased or fabricated
+into a negative balance.
+
+`EnrollmentDrilldown::cancelAndRefund()` (Livewire action, a
+`wire:confirm`-guarded "Cancel & refund" button next to the existing nudge
+button) is the one admin-facing entry point for "admin cancels enrollment →
+access revoked, invoice credited": sets the enrollment to `cancelled`
+(sufficient on its own to cut off access — `EnrollmentPolicy::access()`
+already excludes anything but `active`/`completed`, unchanged since P0) and,
+only if the enrollment's funding invoice was actually paid, credits it via
+`refund()`. `EnrollmentCancelledNotification` fires either way, with its
+copy adapting to whether a refund actually happened — cancelling a free
+enrollment has nothing to credit, and the notification says so rather than
+claiming a refund that didn't occur.
+
+**Tests added:** `InvoicePaymentTest` gained 4 (refund records status/
+`refunded_by`/`refunded_at` while the historical `amount_paid` is preserved
+untouched; a partially-paid invoice can also be refunded; refunding one
+with nothing paid is rejected; an already-refunded invoice can't be
+refunded twice). `EnrollmentDrilldownTest` gained 2 (cancelling a paid
+enrollment revokes access, refunds its invoice, and notifies with
+`refunded=true`; cancelling a free enrollment with no invoice just revokes
+access and notifies with `refunded=false`).
+
+**Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
+clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
+0 errors. `php artisan test` — 358/358 green (352 pre-existing + 6 new).
