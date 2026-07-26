@@ -125,4 +125,14 @@ class CourseStudentsTabTest extends TestCase
             ->assertSee('Alice Nakato')
             ->assertDontSee('Brian Okello');
     }
+
+    public function test_an_at_risk_enrollment_shows_the_at_risk_badge(): void
+    {
+        $admin = $this->admin();
+        $course = Course::factory()->create();
+        $enrollment = $this->enrollStudent($course, 'Alice Nakato');
+        $enrollment->update(['at_risk_reason' => 'inactive']);
+
+        $this->actingAs($admin)->get(route('admin.courses.students', $course))->assertSee('Inactive');
+    }
 }

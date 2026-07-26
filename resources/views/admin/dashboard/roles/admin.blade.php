@@ -8,6 +8,8 @@
     :sub="$svc->publishedCoursesTotal().' published'" :href="route('admin.courses.index')" />
   <x-dash.stat :value="number_format($svc->enrollmentsTotal())" label="Enrollments" icon="fa-user-graduate"
     :sub="$svc->newEnrollmentsThisWeek().' new this week'" :href="route('admin.enrollments.index')" />
+  <x-dash.stat :value="number_format($svc->atRiskEnrollmentsCount())" label="Students at risk" icon="fa-triangle-exclamation"
+    :tone="$svc->atRiskEnrollmentsCount() ? 'warn' : ''" :href="route('admin.enrollments.index')" />
   <x-dash.stat :value="number_format($svc->clientsTotal())" label="Clients" icon="fa-address-book"
     :href="route('admin.clients.index')" />
   <x-dash.stat :value="number_format($svc->activeProjectsTotal())" label="Active projects" icon="fa-diagram-project"

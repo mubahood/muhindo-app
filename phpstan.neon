@@ -9,5 +9,12 @@ parameters:
 
     level: 5
 
+    # Every model in this app declares casts via the modern `casts(): array`
+    # method (Laravel 11+), not the legacy `protected $casts` property. Larastan
+    # defaults this off; without it every custom datetime-cast property (e.g.
+    # Enrollment::$enrolled_at) is silently typed as a raw string instead of
+    # Carbon, hiding real type errors on any method call against it.
+    parseModelCastsMethod: true
+
     excludePaths:
         - database/migrations/archive/*

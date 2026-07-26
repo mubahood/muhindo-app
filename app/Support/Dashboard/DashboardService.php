@@ -60,6 +60,12 @@ class DashboardService
         return Enrollment::whereBetween('created_at', $this->weekRange())->count();
     }
 
+    /** §6.4 — count tagged by the nightly app:detect-at-risk-enrollments command. */
+    public function atRiskEnrollmentsCount(): int
+    {
+        return Enrollment::whereNotNull('at_risk_reason')->count();
+    }
+
     public function clientsTotal(): int
     {
         return Client::count();

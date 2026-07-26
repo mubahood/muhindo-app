@@ -654,3 +654,67 @@ to match what real usage would have written.
 `php artisan test` 129/129 green (124 pre-existing + 5 new) · manual smoke test at
 the real MAMP-served URL (ring, "N lessons left", and the resume hint all render
 correctly for a real logged-in student).
+
+### P1.6 — At-risk nightly command + dashboard counter (§6.4)
+
+**Built:**
+
+- New `enrollments.at_risk_reason` column (nullable string, indexed) — written
+  nightly, not computed live, matching §6.4's "nightly scheduled command tags each
+  active enrollment" framing.
+- `App\Console\Commands\DetectAtRiskEnrollments` (`app:detect-at-risk-enrollments`),
+  scheduled `dailyAt('02:00')` in `routes/console.php`. Implements the two rules
+  computable from data that exists today: **inactive** (no activity in 14 days —
+  using `enrolled_at` as the reference point when `last_accessed_at` is still null,
+  so a same-day signup isn't immediately flagged) and **stalled** (activity in the
+  last 3 weeks per `learning_events`, but no `lesson.completed` event in that
+  window — the closest honest proxy for "progress unchanged despite logins"
+  without a progress-history table). A previously-flagged enrollment is cleared
+  (`at_risk_reason` set back to `null`) the moment it's healthy again.
+- `DashboardService::atRiskEnrollmentsCount()` + a new "Students at risk" stat card
+  on the admin dashboard (`tone="warn"` when non-zero).
+- Students tab (P1.3) gets an "At risk" badge next to the status pill, and its
+  "Last active" cell now reads the persisted `at_risk_reason` for red-highlighting
+  instead of recomputing a live 14-day check inline — one source of truth, matching
+  how the nightly command is the actual authority on this signal.
+
+**Decision — `struggling`/`missing_work` deferred to P3; weekly digest and streaks
+skipped as explicitly optional.** Both remaining §6.4 rules need data that doesn't
+exist yet (quiz scores, assignment due dates — P3). The plan itself marks the
+weekly instructor digest email as "optional" and streaks/badges as "later (Phase
+4+)" — both skipped for this item on that basis, same treatment P1.5 gave the
+optional weekly streak counter. The "7 days for short courses" nuance on the
+inactive threshold was simplified to a flat 14 days for all courses — there's no
+"short course" concept (a duration/length flag) in the schema to key that
+distinction off of.
+
+**Root-cause fix, not a suppression — `phpstan.neon`:** implementing this command
+exposed that Larastan's `parseModelCastsMethod` option defaults to `false`, so it
+was never parsing this app's modern `casts(): array` declaration style (used by
+every model in the codebase, e.g. `Enrollment::casts()`) — every custom
+datetime-cast property was silently typed as a raw `string` rather than `Carbon`
+project-wide, just never caught before because no prior analyzed code called a
+Carbon-only method (`->lt()`, `->format()`, …) directly on one. Enabled
+`parseModelCastsMethod: true` in `phpstan.neon` — the documented, correct fix for
+this exact gap — and re-ran the full analysis: zero new errors surfaced elsewhere,
+confirming the rest of the codebase's datetime handling was already correct in
+practice, just unverified by static analysis until now.
+
+**Tests added:**
+
+- `tests/Feature/Learning/DetectAtRiskEnrollmentsTest.php` (8 tests):
+  `test_an_enrollment_never_accessed_since_enrolling_long_ago_is_flagged_inactive`,
+  `test_a_freshly_enrolled_student_with_no_activity_yet_is_not_flagged` (the
+  same-day-signup guard), `test_an_enrollment_inactive_for_over_14_days_is_flagged_inactive`,
+  `test_an_enrollment_active_with_recent_completions_is_not_flagged`,
+  `test_an_enrollment_active_but_with_no_completions_in_3_weeks_is_flagged_stalled`,
+  `test_a_previously_flagged_enrollment_is_cleared_once_it_becomes_healthy_again`,
+  `test_a_completed_enrollment_is_never_flagged`, `test_the_dashboard_counter_reflects_the_flagged_count`.
+- `tests/Feature/Admin/CourseStudentsTabTest.php` — added
+  `test_an_at_risk_enrollment_shows_the_at_risk_badge`.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors (full
+project re-analysis after the `parseModelCastsMethod` fix, not just this item's
+files) · `php artisan test` 138/138 green (129 pre-existing + 9 new) ·
+migrate/rollback/migrate clean · `php artisan schedule:list` confirms the nightly
+job · manual smoke test (dashboard counter renders at the real MAMP-served URL).

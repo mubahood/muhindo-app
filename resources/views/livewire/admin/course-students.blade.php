@@ -43,9 +43,6 @@
         </thead>
         <tbody>
           @forelse($enrollments as $enrollment)
-            @php
-              $isStale = ! $enrollment->last_accessed_at || $enrollment->last_accessed_at->lt(now()->subDays(14));
-            @endphp
             <tr>
               <td>
                 <a href="{{ route('admin.enrollments.show', $enrollment) }}" style="font-weight:500;color:var(--tx);">{{ $enrollment->user->name ?? '—' }}</a>
@@ -62,7 +59,7 @@
               <td>{{ intdiv($enrollment->total_watch_seconds, 60) }}m</td>
               <td>{{ $enrollment->lastLesson->title ?? '—' }}</td>
               <td>
-                <span class="{{ $isStale ? 'badge-tb badge-danger' : 'muted' }}" style="{{ $isStale ? '' : 'font-size:.85rem;' }}">
+                <span class="{{ $enrollment->at_risk_reason ? 'badge-tb badge-danger' : 'muted' }}" style="{{ $enrollment->at_risk_reason ? '' : 'font-size:.85rem;' }}">
                   {{ $enrollment->last_accessed_at?->diffForHumans() ?? 'Never' }}
                 </span>
               </td>
@@ -73,6 +70,11 @@
                   'pending' => 'badge-pending',
                   default => 'badge-danger',
                 } }}">{{ ucfirst($enrollment->status) }}</span>
+                @if($enrollment->at_risk_reason)
+                  <span class="badge-tb badge-danger" style="margin-left:4px;" title="Flagged by the nightly at-risk check">
+                    <i class="fas fa-triangle-exclamation"></i> {{ ucfirst($enrollment->at_risk_reason) }}
+                  </span>
+                @endif
               </td>
             </tr>
           @empty

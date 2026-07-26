@@ -15,7 +15,7 @@ class Enrollment extends Model
 {
     protected $fillable = [
         'uuid', 'user_id', 'course_id', 'status', 'source', 'enrolled_at', 'completed_at',
-        'progress_percent', 'total_watch_seconds', 'last_lesson_id', 'last_accessed_at',
+        'progress_percent', 'total_watch_seconds', 'last_lesson_id', 'last_accessed_at', 'at_risk_reason',
     ];
 
     protected function casts(): array
