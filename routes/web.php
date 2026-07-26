@@ -130,6 +130,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->name('announcements.publish');
     Route::get('courses/{course}/gradebook', \App\Livewire\Admin\GradeMatrix::class)->name('courses.gradebook');
     Route::get('courses/{course}/discussions', \App\Livewire\Admin\CourseDiscussions::class)->name('courses.discussions');
+    Route::get('courses/{course}/bulk-enroll', [\App\Http\Controllers\Admin\BulkEnrollController::class, 'create'])->name('courses.bulk-enroll.create');
+    Route::post('courses/{course}/bulk-enroll', [\App\Http\Controllers\Admin\BulkEnrollController::class, 'store'])->name('courses.bulk-enroll.store');
     Route::get('courses/{course}/gradebook/export', \App\Http\Controllers\Admin\GradebookExportController::class)->name('courses.gradebook.export');
     Route::get('enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::get('enrollments/{enrollment}', \App\Livewire\Admin\EnrollmentDrilldown::class)->name('enrollments.show');
