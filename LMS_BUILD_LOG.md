@@ -358,3 +358,38 @@ check could have missed): `composer ci` — `vendor/bin/pint --test` (whole repo
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 102/102 green (100 pre-existing + 2 new) · `composer ci` green.
+
+---
+
+## P0 phase gate — closed
+
+All eight items done, one commit per item, in plan order. Closes: L2, L8, L7, L13
+(partial — see P0.4's deferral note), L9, L3, L14.
+
+- `composer ci` (repo-wide `pint --test`, `phpstan`, `check-empty-files`,
+  `secrets-scan`, `php artisan test`): **green**, 102 tests / 232 assertions.
+- `php artisan migrate:status`: every migration this phase added
+  (`add_soft_deletes_to_course_modules_and_lessons_tables`,
+  `add_performance_indexes_to_lesson_progress_and_enrollments_tables`,
+  `add_uuid_and_unique_enrollment_to_certificates_table`) applied cleanly in its own
+  batch on top of the pre-existing schema — a fresh checkout migrates clean.
+- AJAX degrade-gracefully check (phase-gate rule 5): not applicable yet — P0 shipped
+  no AJAX surface. `/learn` is still the full-page-reload flow L10 describes; AJAX
+  completion is explicit P2 scope (§7.3/§4.5). Nothing to verify until then.
+- Query-count regression check on learn surfaces: `LearnIndexQueryCountTest` and
+  `StudentDashboardQueryCountTest` assert query count stays flat between 1 and 5
+  enrollments (a direct regression proof, stronger than pinning a specific number
+  that could go stale for unrelated reasons).
+- Explicitly deferred to later phases (each deferral tied to a plan section that
+  itself places the work in a later phase, per rule 2's carve-out):
+  - `enrollments(last_accessed_at)` index — column arrives with P1's fast-path
+    columns (§6.1); index will land in that same migration.
+  - `progress_percent` recompute-on-lesson-change queued job (§4.7) — targets a
+    denormalized column that doesn't exist until P1.
+  - Certificate criteria tightening / quiz-gated certificates (§4.6 first bullet,
+    closes L1 fully) — needs the quiz engine, explicitly P3 in §8.
+  - Replayed-webhook idempotency — no webhook-driven completion path exists until
+    P4's Flutterwave course checkout.
+
+Next: P1 — Monitoring core (enrollment fast-path columns + backfill, `learning_events`,
+Students tab + per-student drill-down, resume/continue UX, at-risk nightly command).
