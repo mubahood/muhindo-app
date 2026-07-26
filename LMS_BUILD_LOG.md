@@ -2562,3 +2562,57 @@ and a correctly-parsed `PT15M33S` → 16 minutes via `Http::fake()`).
 `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G` 0
 errors. Full untargeted `php artisan test` — 418/418 green (408
 pre-existing + 10 new).
+
+### P4.10 — Course analytics tab (§6.3.4)
+
+**Built:**
+
+- `app/Services/Learning/CourseAnalyticsService.php` — new.
+  `funnel(Course)` (enrolled → started → reached_25/50/75 → completed →
+  certified, each stage a `where` over the same base query so the numbers
+  are directly comparable), `lessonDropOff(Course)` (per published lesson,
+  in curriculum order, the % of enrolled students who completed it — a
+  sharp drop between two adjacent bars is exactly the "where do people
+  quit" signal the plan calls out), `watchTimeHistogram(Course)` (six
+  fixed buckets from "no watch time" to "5+ hrs"), and
+  `quizSummaries(Course)` (per-quiz average score across `Graded` attempts
+  only, plus attempt volume).
+- `app/Http/Controllers/Admin/CourseAnalyticsController.php` — new, a
+  plain read-only `show()` action (no Livewire needed — nothing here is
+  sortable/filterable/paginated, unlike Students/Gradebook/Q&A).
+- `resources/views/admin/courses/analytics.blade.php` — new. Reuses
+  `<x-dash.stat>`/`<x-dash.section>`/`<x-dash.bars>` exactly as they exist
+  today — no new chart library, per the plan's explicit note that
+  `components/dash/*` already covers this.
+- `routes/web.php` — `courses/{course}/analytics` (`admin.courses.analytics`).
+- `resources/views/admin/courses/show.blade.php` — "Analytics" button added
+  to the action bar alongside Students/Gradebook/Q&A/Bulk Enroll.
+
+**Decision — linked to the existing per-quiz item analysis instead of
+re-deriving it here.** §6.3.4 lists "quiz item analysis (per-question
+correct-rate…)" as one of the four charts, but `QuizAnalysisService` and
+its `admin.quizzes.analysis` page already do exactly this per-quiz (built
+in P3.10). Duplicating that logic into a fifth chart on this page would
+mean the same per-question numbers computed two different ways. Instead
+the course analytics tab lists each quiz with its average score and a
+direct link into the existing item-analysis page — same data, one source
+of truth.
+
+**Decision — funnel/drop-off/watch-time all scope to `active`/`completed`
+enrollments only, never `pending`.** Matches the definition
+`CourseCatalogueController` already uses for "genuinely enrolled" (P4.2) —
+a student who started Flutterwave checkout but never completed payment
+isn't a real funnel entrant, so pending enrollments are excluded from
+every count on this page, not just hidden from the UI.
+
+**Tests added:** `CourseAnalyticsTest` (6 — non-admin redirected to login;
+funnel stage counts across a mix of pending/active/completed enrollments at
+different progress levels; a certificate moves an enrollment into
+"certified"; per-lesson drop-off is in curriculum order, correctly
+computed, and never includes an unpublished lesson; watch-time histogram
+buckets correctly; quiz summary averages only `Graded` attempts and the
+page links to the real `admin.quizzes.analysis` route).
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
+`phpstan analyse --memory-limit=1G` 0 errors. Full untargeted
+`php artisan test` — 424/424 green (418 pre-existing + 6 new).
