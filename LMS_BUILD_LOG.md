@@ -2363,3 +2363,49 @@ URL doesn't confirm the note exists; a non-enrolled user is denied).
 **Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
 clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
 0 errors. `php artisan test` — 391/391 green (385 pre-existing + 6 new).
+
+### P4.7 — Reviews (§7.3)
+
+**Built:** `CourseReview` (`enrollment_id` unique — one review per
+enrollment; `course_id` denormalized off the enrollment specifically so the
+catalogue's per-course average doesn't need a join through `enrollments`
+just to aggregate; `rating` 1–5; `body` nullable; `is_published` defaulting
+`false`). Gated at ≥50% course progress — reuses
+`Enrollment::progressPercent()` (no new tracking column), enforced with a
+`403` before the review form is even reachable, not only at submit time.
+
+Resubmitting updates the same row (`updateOrCreate` keyed on
+`enrollment_id`) instead of erroring or creating a duplicate. **Decision —
+closing a moderation bypass before it existed:** editing an
+already-published review resets `is_published` back to `false` *only* when
+the rating or body actually changed; resubmitting identical content (a
+double-click, or just re-visiting the form) leaves a published review
+published. Without this check, a student could get a positive review
+approved, then quietly edit it into something else — the review stays
+"published" but the *content* was never re-moderated. Checked by comparing
+old vs. new values before writing, not by any separate "edited" flag.
+
+Admin moderation: `App\Livewire\Admin\ReviewModeration` — a **global**
+queue (unpublished first, publish/unpublish/delete), not per-course.
+**Decision:** unlike P4.5's Q&A inbox (kept per-course, since a question's
+course/lesson context matters to answering it), reviewing feedback across
+every course in one place is the more useful default here, closer to how
+P3.7's grading queue works — there's no per-review action that benefits
+from course-scoping the way replying to a question does.
+
+Catalogue average: `Course::withCount`/`withAvg` scoped to
+`is_published = true` reviews only (a query-time filter on the aggregate,
+not a separate query), shown on both the course index cards and the show
+page's tag row, plus a published-reviews list at the bottom of the show
+page.
+
+**Tests added:** `CourseReviewTest` (6 — ≥50% can submit and starts
+unpublished; <50% is `403`; resubmission updates the same row; editing a
+published review un-publishes it; resubmitting *identical* content leaves
+it published; the catalogue shows the average of published reviews only,
+not the unpublished one mixed in). `ReviewModerationTest` (5 — non-admin
+denied, queue lists a pending review, publish/unpublish/delete).
+
+**Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
+clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
+0 errors. `php artisan test` — 402/402 green (391 pre-existing + 11 new).
