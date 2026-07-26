@@ -1696,3 +1696,84 @@ Plus the one quiz-list regression test noted above.
 the fix in place). `vendor/bin/pint --dirty` clean. `phpstan analyse
 --memory-limit=1G` 0 errors. `php artisan test` — 279/279 green (257
 pre-existing + 22 new, 21 for this item + 1 backfilled P3.5 regression).
+
+### P3.7 — Grading queue + assignment Return flow + remaining §4.5 events (§6.3.3, §5.3, §4.5)
+
+**Built:** `AssignmentService::return(AssignmentSubmission, float $points,
+?string $feedback, User $grader)` — rejects `409` unless the submission is
+`submitted` (not draft, not already returned), `422` if points fall outside
+`[0, assignment.points]`, otherwise sets `points_awarded`/`feedback`/
+`status = returned`/`graded_by`/`graded_at` and dispatches `SubmissionGraded`.
+
+`App\Livewire\Admin\GradingQueue` (full-page, `admin.grading-queue`, added
+to the sidebar under Courses) — the cross-course "daily inbox" (§6.3.3 item
+3): merges every `attempt_answers` row with `auto_graded = false AND
+points_awarded IS NULL` on a `submitted` attempt (the exact "pending manual
+review" definition P3.4 established) with every `assignment_submissions`
+row still `status = submitted`, sorted oldest-first by `submitted_at`. Each
+row expands inline (no separate page/modal) into a points+feedback form that
+calls either `QuizService::gradeManual()` or `AssignmentService::return()`
+depending on the row's `type` discriminator. **Decision:** built as plain
+PHP array/`usort` construction rather than chaining `Collection::map()` +
+`::concat()` — PHPStan (correctly, per a documented limitation:
+`Collection`'s generic isn't covariant) couldn't prove two independently
+`map()`-built collections with structurally-identical-but-separately-inferred
+array shapes were assignable to one declared return type; array-building
+sidesteps the inference entirely and is no less readable. **Decision:**
+`WithTable` (the concern `CourseStudents` reuses) wasn't reused here — it's
+built around one Eloquent query; a queue spanning two unrelated models
+doesn't fit that shape, and at this app's realistic queue depth a plain
+sorted list needs no server-side pagination yet.
+
+**A real, previously-shipped gap closed — three of six §4.5 events had never
+actually been wired.** Re-reading §4.5's event list while building this
+item's notifications surfaced that `QuizAttemptSubmitted` (dispatched since
+P3.3) had **no listener at all** — it fired on every graded/re-graded attempt
+and nothing ever happened. `AssignmentSubmitted` and `SubmissionGraded`
+(named in §4.5, required for "every state change fires notifications")
+didn't exist yet at all — P3.6 built the submission flow itself but never
+wired its own notification, an oversight worth naming rather than quietly
+folding in. Also: `LearningEventType::QuizStarted`/`QuizSubmitted` were
+declared since P1 with a docblock explicitly flagging them as "waiting on
+the quiz engine (P3)" — P3.3 built the quiz engine and never came back to
+wire them. Fixed all three in one pass, each following the *exact* two-track
+convention `ProgressService` already established (a direct
+`LearningEventRecorder::record()` call for the analytics log, a completely
+separate `Event::dispatch()` for cross-cutting side effects — one doesn't
+trigger the other):
+- `QuizService::start()`/`submit()` now call `$this->events->record(...)`
+  with `QuizStarted`/`QuizSubmitted` (start only records on a genuine new
+  attempt, not a resume — pinned by a test).
+- `NotifyStudentOfQuizGrade` (+ `QuizGradedNotification`, mail+database) —
+  listens for `QuizAttemptSubmitted`, notifies the attempt's owner with
+  score/pass-fail, fires whether the attempt was graded by `submit()`'s
+  auto-grading or by `gradeManual()` completing the last pending question.
+- `AssignmentService::submit()` now dispatches `AssignmentSubmitted` (never
+  on a draft save) and records `LearningEventType::AssignmentSubmitted`.
+  `NotifyInstructorOfAssignmentSubmission` (+ `AssignmentSubmittedNotification`,
+  **database-only, no mail** — a per-submission email to the instructor
+  would be noisy; the grading queue page itself is the primary "inbox" per
+  the plan's own framing of item 3) notifies `course.createdBy`, skipping
+  silently if a course has no owner set.
+- `NotifyStudentOfSubmissionGrade` (+ `SubmissionGradedNotification`,
+  mail+database) — listens for `SubmissionGraded`, notifies the student with
+  their grade and any feedback.
+
+**Tests added:** `tests/Feature/Admin/GradingQueueTest.php` (6 — non-admin
+denied; queue renders both pending types; grading a quiz answer finalizes
+the attempt and notifies via `QuizGradedNotification`; returning an
+assignment notifies via `SubmissionGradedNotification`; points above the max
+rejected with `422` and the submission is left untouched; empty-queue state).
+`AssignmentServiceTest.php` gained 5: `return()` success path; rejecting a
+draft or already-returned submission; rejecting out-of-range points; the
+instructor notification fires on submit; `AssignmentSubmitted` is recorded on
+submit but *not* on a draft save. `QuizServiceLifecycleTest.php` gained 2:
+start/submit feed `QuizStarted`/`QuizSubmitted`; resuming an in-progress
+attempt does not record a second `QuizStarted`.
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean (one
+auto-fix pass — unused-import removal after Pint noticed
+`AssignmentSubmittedNotification` never used `MailMessage` once scoped to
+`database`-only). `phpstan analyse --memory-limit=1G` 0 errors (after the
+`Collection` covariance fix above). `php artisan test` — 292/292 green (279
+pre-existing + 13 new).
