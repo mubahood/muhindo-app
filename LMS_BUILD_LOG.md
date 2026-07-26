@@ -1501,3 +1501,96 @@ until the close date passes, then reveals on the same attempt.
 **Verification:** no new migrations. `vendor/bin/pint --dirty` clean (one
 auto-fix, unused import). `phpstan analyse --memory-limit=1G` 0 errors.
 `php artisan test` — 246/246 green (237 pre-existing + 9 new).
+
+### P3.5 — Student-facing quiz runner (§5.2, §7)
+
+**Built:** `App\Http\Controllers\Student\QuizAttemptController` (new) wires
+`QuizService` to the browser — `index` (a course's quiz list with per-quiz
+attempt status/best score), `show` (intro page: question count, time limit,
+pass mark, attempts used, best score, Start/Resume button), `start` (creates
+the attempt, redirects into the runner), `run` (the take-quiz page), `answer`
+(AJAX per-question autosave), `submit` (finalizes, redirects to review), and
+`review` (feedback-gated results). Entry points wired from three places:
+"My Courses" (a new "Quizzes" link per enrolled course — added
+`published_quizzes_count` to `LearningController::index()`'s existing
+`withCount` eager-load rather than an `exists()` check in the Blade loop, to
+avoid reintroducing the exact N+1 pattern P0.5/P1.5 already closed on this
+same page), the lesson page (a "Lesson quiz" card + a breadcrumb link when a
+quiz is attached to that specific lesson), and the quiz list itself.
+
+**Decision — the runner form works with zero JavaScript.** Every question
+type renders as plain form fields whose `name` attributes already match
+what `submit()` (extended in this item to accept a bulk `answers` map) and
+`answer()` expect:
+mcq_single/true_false — radios, `answers[id][selected]`.
+mcq_multi — checkboxes, `answers[id][selected][]`.
+fill_blank/short_text — text input, `answers[id][text]`.
+numeric — number input, `answers[id][value]`.
+matching — one text input per option, `answers[id][pairs][optionId]`.
+essay — textarea, `answers[id][text]`.
+ordering — **numbered position inputs** (`answers[id][order][optionId]`,
+1..N) rather than a drag-and-drop list, specifically so the no-JS and
+JS-enhanced experiences share identical markup — a private
+`normalizePayload()` on the controller collapses the submitted
+`{optionId: position}` map into the sequential id array
+`QuizService::gradeOrdering()` already expects, applied identically whether
+the payload arrived via single-question AJAX autosave or the bulk submit.
+Pressing "Submit quiz" is a normal form submission to `learn.quiz.submit`;
+JS only adds a confirm() dialog on top via `@click`, never `@submit.prevent`.
+
+**Bug caught before it shipped, not after:** the first draft of the runner
+put `x-cloak` on every question block so `one_question_per_page` mode could
+hide all-but-the-current question before Alpine paints. `x-cloak`'s entire
+contract is "hidden until Alpine removes the attribute" — with JavaScript
+disabled, Alpine never runs, so every question would have stayed invisible
+**forever**, turning "degrades gracefully" into "doesn't render at all" for
+any quiz using that setting. Caught by re-reading what `x-cloak` actually
+guarantees (not by a failing test — Laravel's test client doesn't execute
+Alpine, so this specific class of bug is invisible to `php artisan test`
+regardless of coverage). Fixed by dropping `x-cloak` from the question
+blocks entirely and relying solely on `x-show` — which does nothing at all
+when Alpine isn't present, so with JS off every question simply shows at
+once (correct: paging is JS-only sugar, not the only way to see a question).
+`x-cloak` stays on the Prev/Next pagination buttons and the timer bar, since
+those two are meaningless without JS and hiding them permanently in that
+case is the *correct* behavior, not a bug.
+
+**Ownership guard:** `guardAttempt()` checks quiz→course, attempt→quiz, and
+attempt→enrollment on every action and returns `404` (not `403`) on any
+mismatch, so a URL for another student's attempt doesn't even confirm the
+attempt exists.
+
+**Tests added** (`tests/Feature/Learning/QuizRunnerTest.php`, 11 tests):
+intro page renders with a Start button; starting redirects into the runner
+with an in_progress attempt; the runner renders every question type present
+(mcq/numeric/essay in one pass); AJAX answer autosaves; immediate
+feedback_mode returns a grading preview on the answer response; **submitting
+via a plain form POST with a bulk `answers` map and zero prior autosave
+grades correctly** (the no-JS path, exercised for real, not just asserted in
+prose); an ordering question submitted as a position map grades correctly;
+review page shows per-question feedback once graded; a `none`-feedback quiz
+shows score only; cross-student attempt access is `404`; a non-enrolled user
+can't view the quiz at all.
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
+`phpstan analyse --memory-limit=1G` 0 errors. `php artisan test` —
+257/257 green (246 pre-existing + 11 new).
+
+**Manual UI verification — partial, honestly reported.** I confirmed the new
+routes resolve correctly through the real Apache + PHP stack (not just
+PHPUnit's in-process client): `curl` against
+`.../public/index.php/learn/some-course/quizzes` unauthenticated returns
+`302` to `/login`, matching expected `auth`-middleware behavior. I could
+**not** do a full live-browser click-through of the Alpine-driven
+interactivity (autosave requests firing, the countdown ticking, tab-blur
+detection) — there's no browser tool available in this environment, and this
+MAMP install's pretty-URL routing has a pre-existing `mod_rewrite` gap
+unrelated to this work (confirmed by testing: `/public/login` and even the
+long-established `/public/courses` also 404 directly while
+`/public/index.php/<same path>` correctly resolves — every route is affected
+equally, old and new, so this isn't something introduced here, but it does
+mean pretty-URL browser testing isn't possible against this install without
+first fixing that Apache config separately). The automated feature tests
+above render every new Blade view through Laravel's real view engine with
+real assertions on the output, which is the strongest verification available
+without a browser.
