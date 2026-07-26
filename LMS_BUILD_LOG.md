@@ -1905,3 +1905,40 @@ certify (guards against the new listener firing too eagerly).
 **Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
 `phpstan analyse --memory-limit=1G` 0 errors. `php artisan test` —
 315/315 green (306 pre-existing + 9 new).
+
+### P3.10 — Quiz item analysis (§6.3.4)
+
+**Built:** `QuizAnalysisService::itemAnalysisFor(Quiz)` — per question,
+counts every `attempt_answers` row with a non-null `is_correct` (every
+auto-graded objective answer, from any attempt — including one whose
+*other* questions are still sitting in the grading queue, since that
+question's own answer was already scored at `submit()` time regardless).
+Essay answers never contribute (`is_correct` is always null for them, per
+P3.3's grading table). A question with zero answers reports
+`correct_rate: null`, distinguished from a real 0% — "nobody's tried this
+yet" and "everybody failed it" are different signals and shouldn't look the
+same in the table.
+
+Admin-facing page (`admin.quizzes.analysis`, linked from the quiz edit
+form) — one row per question: answered count, correct count, and a
+color-coded correct-rate badge (red `<50%`, amber `<75%`, green otherwise),
+so a question everyone fails is visually obvious per the plan's own framing
+of what this view is for ("a bad question or a bad lesson").
+
+**Decision — scoped to exactly what the roadmap groups under P3, not the
+whole "Course analytics tab."** §6.3 item 4 bundles quiz item analysis
+together with an enrollment funnel, a per-lesson drop-off chart, and a
+watch-time histogram — but the plan's own phase roadmap (§8) lists "quiz
+item analysis (§6.3.4)" as a P3 deliverable and "funnel/drop-off (§6.3.4)"
+separately under P4. Built only the former here; the rest of that tab
+remains deferred to P4 as the plan itself schedules it.
+
+**Tests added:** `QuizItemAnalysisTest.php` (3 — no-answers-yet reports
+null not zero; correct rate computed correctly across three different
+students' attempts, 2/3 correct → 66.7%; essay questions never contribute).
+`QuizAnalysisPageTest.php` (3 — page lists every question, the edit page
+links to it, non-admin denied).
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
+`phpstan analyse --memory-limit=1G` 0 errors. `php artisan test` —
+321/321 green (315 pre-existing + 6 new).
