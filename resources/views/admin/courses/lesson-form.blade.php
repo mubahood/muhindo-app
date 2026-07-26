@@ -1,6 +1,18 @@
 @extends('layouts.admin')
 @section('title', $lesson->exists ? 'Edit Lesson' : 'New Lesson')
 
+@push('styles')
+<style>
+  .markdown-preview-body h1,.markdown-preview-body h2,.markdown-preview-body h3{margin:.8em 0 .4em;font-weight:600;}
+  .markdown-preview-body h1:first-child,.markdown-preview-body h2:first-child,.markdown-preview-body h3:first-child{margin-top:0;}
+  .markdown-preview-body p{margin-bottom:.8em;}
+  .markdown-preview-body img{max-width:100%;height:auto;}
+  .markdown-preview-body code{background:var(--surface-2);padding:2px 5px;font-size:.9em;}
+  .markdown-preview-body pre{background:#0b1f3a;color:#eef1f6;padding:12px 14px;overflow-x:auto;}
+  .markdown-preview-body pre code{background:none;padding:0;color:inherit;}
+</style>
+@endpush
+
 @section('content')
 
 <div class="tb-page-header">
@@ -10,7 +22,15 @@
 </div>
 
 <form method="POST" action="{{ $lesson->exists ? route('admin.lessons.update', $lesson) : route('admin.modules.lessons.store', $module) }}"
-      x-data="{ completionRule: '{{ old('completion_rule', $lesson->completion_rule?->value ?? 'manual') }}', contentFormat: '{{ old('content_format', $lesson->content_format?->value ?? 'plain') }}' }">
+      enctype="multipart/form-data"
+      x-data="lessonEditor({
+        completionRule: '{{ old('completion_rule', $lesson->completion_rule?->value ?? 'manual') }}',
+        contentFormat: '{{ old('content_format', $lesson->content_format?->value ?? 'plain') }}',
+        content: @js(old('content', $lesson->content ?? '')),
+        previewUrl: @js(route('admin.lessons.preview-markdown')),
+        imageUploadUrl: @js($lesson->exists ? route('admin.lessons.content-images.store', $lesson) : null),
+        csrfToken: @js(csrf_token()),
+      })">
 @csrf
 @if($lesson->exists) @method('PUT') @endif
 <div class="tb-card">
@@ -29,8 +49,20 @@
         </select>
       </div>
       <div class="tb-form-group full">
-        <label class="tb-label">Content <span class="muted" x-show="contentFormat === 'markdown'">(Markdown supported)</span></label>
-        <textarea class="tb-textarea" name="content" rows="8">{{ old('content', $lesson->content) }}</textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <label class="tb-label">Content <span class="muted" x-show="contentFormat === 'markdown'">(Markdown supported)</span></label>
+          <div x-show="contentFormat === 'markdown'" style="display:flex;gap:8px;">
+            <label class="btn-tb btn-tb-ghost btn-tb-sm" x-show="imageUploadUrl" style="cursor:pointer;">
+              <i class="fas fa-image"></i> Insert image
+              <input type="file" accept="image/*" style="display:none;" @change="uploadImage($event.target.files[0]); $event.target.value = '';">
+            </label>
+            <button type="button" class="btn-tb btn-tb-ghost btn-tb-sm" @click="togglePreview()">
+              <i class="fas" :class="showPreview ? 'fa-pen' : 'fa-eye'"></i> <span x-text="showPreview ? 'Edit' : 'Preview'"></span>
+            </button>
+          </div>
+        </div>
+        <textarea class="tb-textarea" name="content" rows="10" x-model="content" x-show="!showPreview"></textarea>
+        <div class="tb-card markdown-preview-body" style="padding:16px;min-height:200px;" x-show="showPreview" x-html="previewHtml" x-cloak></div>
       </div>
       <div class="tb-form-group">
         <label class="tb-label">Video URL (YouTube/Vimeo embed)</label>
@@ -104,3 +136,64 @@
 </div>
 @endif
 @endsection
+
+@push('scripts')
+<script>
+/**
+ * §7.4 — split-pane markdown editor. The preview calls the exact same
+ * server-side renderer students see (admin.lessons.preview-markdown), so it
+ * can never show something different from the real output. Image upload
+ * inserts a markdown reference at the end of the textarea (kept simple —
+ * no cursor-position tracking) pointing at the policy-gated content-image
+ * route.
+ */
+function lessonEditor(cfg) {
+  return {
+    completionRule: cfg.completionRule,
+    contentFormat: cfg.contentFormat,
+    content: cfg.content,
+    imageUploadUrl: cfg.imageUploadUrl,
+    showPreview: false,
+    previewHtml: '',
+    async togglePreview() {
+      if (!this.showPreview) {
+        await this.fetchPreview();
+      }
+      this.showPreview = !this.showPreview;
+    },
+    async fetchPreview() {
+      try {
+        const res = await fetch(cfg.previewUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': cfg.csrfToken, 'Accept': 'application/json' },
+          body: JSON.stringify({ content: this.content }),
+        });
+        const data = await res.json();
+        this.previewHtml = data.html ?? '';
+      } catch (e) {
+        this.previewHtml = '<p class="muted">Preview unavailable.</p>';
+      }
+    },
+    async uploadImage(file) {
+      if (!file || !this.imageUploadUrl) return;
+      const body = new FormData();
+      body.append('image', file);
+      try {
+        const res = await fetch(this.imageUploadUrl, {
+          method: 'POST',
+          headers: { 'X-CSRF-TOKEN': cfg.csrfToken, 'Accept': 'application/json' },
+          body,
+        });
+        const data = await res.json();
+        if (data.url) {
+          this.content += `\n![${file.name}](${data.url})\n`;
+          window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Image inserted.', type: 'success' } }));
+        }
+      } catch (e) {
+        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Image upload failed.', type: 'error' } }));
+      }
+    },
+  };
+}
+</script>
+@endpush

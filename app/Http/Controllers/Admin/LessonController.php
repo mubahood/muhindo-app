@@ -7,6 +7,8 @@ use App\Enums\ContentFormat;
 use App\Http\Controllers\Controller;
 use App\Models\CourseModule;
 use App\Models\Lesson;
+use App\Services\Learning\MarkdownRenderer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -14,6 +16,16 @@ use Illuminate\View\View;
 
 class LessonController extends Controller
 {
+    public function __construct(private readonly MarkdownRenderer $markdown) {}
+
+    /** §7.4 — the split-pane editor's live preview renders through the exact same pipeline students see, so it can never drift from the real output. */
+    public function previewMarkdown(Request $request): JsonResponse
+    {
+        $data = $request->validate(['content' => 'nullable|string']);
+
+        return response()->json(['html' => $this->markdown->toHtml($data['content'] ?? '')]);
+    }
+
     public function create(CourseModule $module): View
     {
         return view('admin.courses.lesson-form', ['module' => $module, 'lesson' => new Lesson]);

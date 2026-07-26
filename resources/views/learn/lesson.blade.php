@@ -19,6 +19,16 @@
   .learn-advance{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--pri-soft);border:1px solid var(--pri);padding:14px 18px;margin-top:16px;}
   .learn-advance button{background:none;border:1px solid var(--pri);color:var(--pri);padding:5px 10px;cursor:pointer;font-size:12px;}
   .learn-modal-backdrop{position:fixed;inset:0;background:rgba(6,15,31,.6);display:flex;align-items:center;justify-content:center;z-index:100;}
+  .markdown-body h1,.markdown-body h2,.markdown-body h3{margin:1.2em 0 .5em;font-weight:600;color:var(--pri);}
+  .markdown-body h1:first-child,.markdown-body h2:first-child,.markdown-body h3:first-child{margin-top:0;}
+  .markdown-body p{margin-bottom:1em;}
+  .markdown-body ul,.markdown-body ol{margin:0 0 1em 1.4em;}
+  .markdown-body img{max-width:100%;height:auto;margin:.5em 0;}
+  .markdown-body code{background:var(--surface-2);padding:2px 5px;font-size:.9em;}
+  .markdown-body pre{background:var(--pri-d);color:#eef1f6;padding:14px 16px;overflow-x:auto;margin-bottom:1em;}
+  .markdown-body pre code{background:none;padding:0;color:inherit;}
+  .markdown-body blockquote{border-left:3px solid var(--gold);padding-left:14px;color:var(--tx2);margin-bottom:1em;}
+  .markdown-body a{color:var(--pri);text-decoration:underline;}
   .learn-modal{background:var(--surface);padding:40px;max-width:420px;text-align:center;}
   .learn-modal h2{font-size:20px;font-weight:400;margin-bottom:10px;}
   .confetti-piece{position:fixed;top:-10px;width:8px;height:14px;z-index:200;pointer-events:none;}
@@ -34,6 +44,7 @@
     completeUrl: @js(route('learn.lesson.complete', [$course, $lesson])),
     indexUrl: @js(route('learn.index')),
     previousLessonUrl: @js($previousLesson ? route('learn.lesson', [$course, $previousLesson]) : null),
+    initialNextLessonUrl: @js($nextLessonForNav ? route('learn.lesson', [$course, $nextLessonForNav]) : null),
     csrfToken: @js(csrf_token()),
   })"
   x-init="init()"
@@ -88,7 +99,9 @@
         <div class="learn-video"><iframe src="{{ $lesson->video_url }}" allowfullscreen></iframe></div>
       @endif
 
-      @if($lesson->content)
+      @if($renderedContent)
+        <div class="card markdown-body" style="margin-bottom:20px;">{!! $renderedContent !!}</div>
+      @elseif($lesson->content)
         <div class="card" style="margin-bottom:20px;">{!! nl2br(e($lesson->content)) !!}</div>
       @endif
 
@@ -229,7 +242,7 @@ function lessonPlayer(cfg) {
     showAdvance: false,
     advanceSeconds: 5,
     advanceTimer: null,
-    nextLessonUrl: null,
+    nextLessonUrl: cfg.initialNextLessonUrl || null,
     nextLessonTitle: null,
     showCertificateModal: false,
     certificateUrl: null,

@@ -978,3 +978,71 @@ returned the exact expected JSON shape). As with P2.3, actually pressing keys/
 buttons in a browser to watch the optimistic-rollback and confetti animate isn't
 automatable without Dusk — the server contract and rendered markup are verified;
 the animation itself is not.
+
+### P2.5 — Markdown lesson rendering + admin editor (§7.4)
+
+**Built:**
+
+- `league/commonmark` moved from a transitive to a **direct** `composer.json`
+  dependency (it was already present, pulled in by something else, but never
+  deliberately depended on). Research before writing any code found its own
+  defaults are the *opposite* of "sanitized, no raw HTML passthrough" —
+  `html_input` defaults to `allow` (raw HTML/`<script>` passes straight
+  through) and `allow_unsafe_links` defaults to `true` (`javascript:` hrefs
+  work). New `App\Services\Learning\MarkdownRenderer` explicitly overrides
+  both (`html_input => escape`, `allow_unsafe_links => false`) rather than
+  trusting the library's shipped defaults.
+- `LearningController::lesson()` renders `$lesson->content` through
+  `MarkdownRenderer` only when `content_format === markdown`; a `plain` lesson
+  keeps rendering via the exact same `nl2br(e(...))` as before — "existing
+  plain-text lessons keep rendering exactly as today," unchanged code path.
+- **Images uploadable into lesson content, private-disk, streamed** (the part
+  of L11's original gap list that specifically named "no images"): new
+  `Admin\LessonContentImageController::store()` (private `local` disk, uuid
+  filename — the `DocumentService` convention) and
+  `Student\LessonContentImageController::show()`, gated by the same
+  `EnrollmentPolicy` `access` + `LessonPolicy` `view` (sequential-lock) checks
+  as everything else in the player, so an embedded image in paid content isn't
+  a permanently-public URL and isn't visible for a locked lesson either.
+  `basename($filename)` neutralizes any path-traversal attempt in the URL
+  segment before it ever reaches the filesystem call.
+- Admin split-pane editor (`lesson-form.blade.php`): a new `lessonEditor()`
+  Alpine component (same global-function convention) adds an Edit/Preview
+  toggle — the preview calls a new `POST admin/lessons/preview-markdown`
+  endpoint that renders through **the exact same `MarkdownRenderer`** students'
+  pages use, so the preview can never show something different from the real
+  output (no second, drifting markdown implementation on the client) — and an
+  "Insert image" button that uploads via the content-image endpoint and appends
+  a `![]()` reference to the textarea. The upload button only appears once the
+  lesson already exists (`$lesson->id` is required for the storage path), so a
+  brand-new, not-yet-saved lesson simply doesn't offer it yet — save once,
+  then add images, rather than a broken half-working control.
+- Code blocks render via CommonMark's own fenced-code semantic markup
+  (`<pre><code class="language-xxx">`); actual client-side syntax highlighting
+  (Shiki/highlight.js) was left unwired — it needs a new frontend dependency
+  purely for cosmetic polish, not the "safely render markdown" core requirement
+  this item closes, and is a reasonable follow-up rather than in scope here.
+
+**Tests added:**
+
+- `tests/Unit/MarkdownRendererTest.php` (5 tests): headings/paragraphs, fenced
+  code blocks, images, `test_raw_html_is_escaped_not_passed_through` and
+  `test_javascript_links_are_rejected` (the two "library defaults are unsafe"
+  proofs).
+- `tests/Feature/Learning/MarkdownLessonRenderingTest.php` (3 tests): a
+  markdown lesson renders sanitized HTML; a plain lesson still renders via
+  `nl2br`; a `<script>` tag inside markdown content isn't executable
+  end-to-end through the real controller/view.
+- `tests/Feature/Admin/LessonMarkdownPreviewTest.php` (2 tests): an admin gets
+  rendered HTML back from the preview endpoint; a non-admin is redirected
+  (can't reach it).
+- `tests/Feature/Learning/LessonContentImageTest.php` (4 tests): upload
+  returns a working URL, an enrolled student can view the image, a non-enrolled
+  user cannot (404, no enrollment row to authorize against), and a path-
+  traversal attempt in the filename segment is neutralized.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 188/188 green (174 pre-existing + 14 new) · `composer ci`
+green · manual smoke test at the real MAMP-served URL (the admin editor's
+Edit/Preview toggle and "Insert image" control both render correctly for a
+real lesson).

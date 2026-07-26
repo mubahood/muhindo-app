@@ -108,8 +108,11 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->shallow()->except('show');
     Route::resource('modules.lessons', LessonController::class)
         ->shallow()->except('show');
+    Route::post('lessons/preview-markdown', [LessonController::class, 'previewMarkdown'])->name('lessons.preview-markdown');
     Route::resource('lessons.materials', LessonMaterialController::class)
         ->shallow()->only(['store', 'destroy']);
+    Route::post('lessons/{lesson}/content-images', [\App\Http\Controllers\Admin\LessonContentImageController::class, 'store'])
+        ->name('lessons.content-images.store');
     Route::get('enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::get('enrollments/{enrollment}', \App\Livewire\Admin\EnrollmentDrilldown::class)->name('enrollments.show');
     Route::post('courses/{course}/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
@@ -153,6 +156,7 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::post('{course:slug}/{lesson}/complete', [LearningController::class, 'complete'])->name('lesson.complete');
     Route::post('{course:slug}/{lesson}/heartbeat', [LearningController::class, 'heartbeat'])->middleware('throttle:20,1')->name('lesson.heartbeat');
     Route::get('{course:slug}/{lesson}/materials/{material}', [StudentLessonMaterialController::class, 'download'])->name('materials.download');
+    Route::get('{course:slug}/{lesson}/content-images/{filename}', [\App\Http\Controllers\Student\LessonContentImageController::class, 'show'])->name('content-images.show');
 });
 
 /*

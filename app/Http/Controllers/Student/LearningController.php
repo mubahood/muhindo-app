@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Student;
 
+use App\Enums\ContentFormat;
 use App\Http\Controllers\Controller;
 use App\Models\Certificate;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Services\Learning\CertificateService;
+use App\Services\Learning\MarkdownRenderer;
 use App\Services\Learning\ProgressService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +23,7 @@ class LearningController extends Controller
     public function __construct(
         private readonly CertificateService $certificates,
         private readonly ProgressService $progress,
+        private readonly MarkdownRenderer $markdown,
     ) {}
 
     public function index(Request $request): View
@@ -70,6 +73,10 @@ class LearningController extends Controller
             ->filter(fn (Lesson $l) => $course->isLessonLocked($enrollment, $l))
             ->pluck('id');
 
+        $renderedContent = $lesson->content && $lesson->content_format === ContentFormat::Markdown
+            ? $this->markdown->toHtml($lesson->content)
+            : null;
+
         return view('learn.lesson', [
             'course' => $course,
             'lesson' => $lesson,
@@ -78,6 +85,7 @@ class LearningController extends Controller
             'lockedLessonIds' => $lockedLessonIds,
             'previousLesson' => $this->adjacentLesson($course, $lesson, -1),
             'nextLessonForNav' => $this->adjacentLesson($course, $lesson, 1),
+            'renderedContent' => $renderedContent,
         ]);
     }
 
