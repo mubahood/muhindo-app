@@ -90,3 +90,47 @@ the API already does).
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 74/74 green (69 pre-existing + 5 new).
+
+### P0.3 — Soft deletes on modules/lessons (closes L7)
+
+**Built:**
+
+- New additive migration `2026_07_26_143532_add_soft_deletes_to_course_modules_and_lessons_tables.php`
+  — adds `deleted_at` to `course_modules` and `lessons` (courses already had it;
+  the already-run `create_course_modules_table`/`create_lessons_table` migrations
+  were left untouched per rule 4).
+- `CourseModule` and `Lesson` models — added the `SoftDeletes` trait. No controller
+  changes needed: `CourseModuleController::destroy()`/`LessonController::destroy()`
+  already just call `->delete()`, which now soft-deletes automatically, and implicit
+  route-model-binding on `{module}`/`{lesson}` already excludes trashed rows via the
+  model's own global scope (a deleted lesson's URL now 404s on its own).
+- `Course::lessons()` (`app/Models/Course.php`) — added an explicit
+  `->whereNull('course_modules.deleted_at')`. `hasManyThrough` does **not** apply the
+  intermediate model's own soft-delete global scope automatically (a documented
+  Eloquent gap), so without this a lesson under a soft-deleted module would still be
+  counted by `lessonCount()`/`progressPercent()`. `CourseModule::lessons()` and
+  `Course::modules()` needed no change — direct relations already apply the far
+  model's own scope.
+
+**Decision:** §4.7 also asks for a queued job to recompute a denormalized
+`progress_percent` column on affected enrollments whenever a lesson is added/removed.
+That column doesn't exist yet — it's explicitly introduced by P1's "enrollment
+fast-path columns" (§6.1, §8). Today `progressPercent()` is computed live from
+`lessonCount()` + a progress count, which already self-corrects the instant a lesson
+is soft-deleted (proven by the test below) — there is nothing to recompute yet.
+Deferring the recompute job itself to P1, when the column it targets is introduced.
+
+**Tests added** (`tests/Feature/Learning/ContentSoftDeleteTest.php`, 9 tests):
+`test_deleting_a_lesson_soft_deletes_it_instead_of_removing_the_row`,
+`test_deleting_a_module_soft_deletes_it_instead_of_removing_the_row`,
+`test_deleting_a_lesson_preserves_the_students_progress_row`,
+`test_deleting_a_module_preserves_progress_for_its_lessons`,
+`test_a_completed_enrollments_certificate_survives_deleting_a_lesson_afterwards`
+(the abuse-path proof: finishing a course, then editing it, must not revoke a
+certificate), `test_lesson_count_and_progress_percent_exclude_a_deleted_lesson`,
+`test_lesson_count_excludes_lessons_of_a_deleted_module`,
+`test_a_deleted_lesson_is_no_longer_reachable_in_the_player`,
+`test_admin_can_delete_a_module_via_the_destroy_route_and_it_is_soft_deleted`.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 83/83 green (74 pre-existing + 9 new) · `php artisan migrate` clean.

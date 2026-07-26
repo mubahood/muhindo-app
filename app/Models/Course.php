@@ -49,7 +49,11 @@ class Course extends Model
     /** @return HasManyThrough<Lesson, CourseModule, $this> */
     public function lessons(): HasManyThrough
     {
-        return $this->hasManyThrough(Lesson::class, CourseModule::class);
+        // hasManyThrough does not apply the intermediate model's own soft-delete
+        // scope automatically, so a soft-deleted module's lessons must be excluded
+        // explicitly to keep lessonCount() (and therefore progressPercent()) correct.
+        return $this->hasManyThrough(Lesson::class, CourseModule::class)
+            ->whereNull('course_modules.deleted_at');
     }
 
     /** @return HasMany<Enrollment, $this> */
