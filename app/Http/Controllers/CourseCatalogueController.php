@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\ContentFormat;
 use App\Events\Learning\EnrollmentCreated;
+use App\Exceptions\InvalidCouponException;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Invoice;
@@ -35,13 +36,14 @@ class CourseCatalogueController extends Controller
     {
         abort_unless($course->is_published || auth()->user()?->isAdmin(), 404);
 
-        $enrollment = auth()->check()
+        $existing = auth()->check()
             ? Enrollment::where('user_id', auth()->id())->where('course_id', $course->id)->first()
             : null;
 
         return view('courses.show', [
             'course' => $course->load('modules.lessons'),
-            'enrollment' => $enrollment,
+            'enrollment' => $existing && in_array($existing->status, ['active', 'completed'], true) ? $existing : null,
+            'pendingCheckout' => $existing?->status === 'pending',
         ]);
     }
 
@@ -94,7 +96,13 @@ class CourseCatalogueController extends Controller
             return redirect()->route('courses.checkout', $course);
         }
 
-        $invoice = $this->billing->generateCourseInvoice($user, $course, null);
+        $couponCode = $request->filled('coupon_code') ? trim((string) $request->string('coupon_code')) : null;
+
+        try {
+            $invoice = $this->billing->generateCourseInvoice($user, $course, $couponCode);
+        } catch (InvalidCouponException $e) {
+            return redirect()->route('courses.show', $course)->with('error', $e->getMessage());
+        }
 
         if ($existing) {
             // A previously cancelled enrollment is reactivated as pending against the new invoice.

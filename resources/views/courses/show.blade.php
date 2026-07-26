@@ -44,9 +44,15 @@
     <div style="margin-top:32px;text-align:center;">
       @if($enrollment)
         <a href="{{ route('learn.course', $course) }}" class="btn gold lg">Continue learning</a>
+      @elseif($pendingCheckout ?? false)
+        <a href="{{ route('courses.checkout', $course) }}" class="btn gold lg">Complete checkout</a>
       @elseif(auth()->check())
-        <form method="POST" action="{{ route('courses.enroll', $course) }}">
+        <form method="POST" action="{{ route('courses.enroll', $course) }}" style="display:inline-block;">
           @csrf
+          @if(!$course->isFree())
+            <input type="text" name="coupon_code" placeholder="Coupon code (optional)" value="{{ old('coupon_code') }}"
+                   style="display:block;margin:0 auto 10px;padding:8px 12px;border:1px solid var(--line);text-align:center;">
+          @endif
           <button type="submit" class="btn gold lg">{{ $course->isFree() ? 'Enrol for free' : 'Enrol — '.$course->currency.' '.number_format((float) $course->price) }}</button>
         </form>
       @else

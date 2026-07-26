@@ -34,6 +34,7 @@
       ]],
       ['key' => 'billing', 'label' => 'Billing', 'icon' => 'fa-file-invoice-dollar', 'gate' => 'billing.manage', 'items' => [
           ['label' => 'Invoices', 'icon' => 'fa-file-invoice-dollar', 'route' => 'admin.invoices.index', 'match' => ['admin.invoices.*']],
+          ['label' => 'Coupons', 'icon' => 'fa-tag', 'route' => 'admin.coupons.index', 'match' => ['admin.coupons.*']],
       ]],
       ['key' => 'system', 'label' => 'System', 'icon' => 'fa-users-gear', 'gate' => ['manage-users', 'manage-settings'], 'items' => [
           ['label' => 'Staff', 'icon' => 'fa-user-shield', 'route' => 'admin.users.index', 'match' => ['admin.users.*'], 'can' => 'manage-users'],

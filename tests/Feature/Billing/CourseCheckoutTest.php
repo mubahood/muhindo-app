@@ -16,6 +16,23 @@ class CourseCheckoutTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Regression test: courses.show() originally treated ANY existing enrollment row (including
+     * a pending, unpaid one) as "enrolled," rendering "Continue learning" — which routes into
+     * EnrollmentPolicy::access() and 404s/403s since pending isn't active/completed. Introducing
+     * self-serve paid checkout made this reachable for the first time; fixed by only extending
+     * $enrollment to active/completed and showing a distinct "Complete checkout" state for pending.
+     */
+    public function test_the_course_page_shows_complete_checkout_not_continue_learning_while_pending(): void
+    {
+        $student = User::factory()->create(['role' => 'student']);
+        $course = Course::factory()->create(['is_published' => true, 'price' => '75.00', 'currency' => 'UGX']);
+        $this->actingAs($student)->post(route('courses.enroll', $course));
+
+        $this->get(route('courses.show', $course))
+            ->assertOk()->assertSee('Complete checkout')->assertDontSee('Continue learning');
+    }
+
     public function test_enrolling_in_a_paid_course_creates_a_pending_enrollment_and_invoice_then_redirects_to_checkout(): void
     {
         $student = User::factory()->create(['role' => 'student']);

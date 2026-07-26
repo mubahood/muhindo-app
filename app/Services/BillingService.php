@@ -27,6 +27,8 @@ use RuntimeException;
  */
 class BillingService
 {
+    public function __construct(private readonly CouponService $coupons) {}
+
     /**
      * Create an invoice for a set of line items, billed to a Client or a User.
      *
@@ -93,9 +95,16 @@ class BillingService
         });
     }
 
-    /** Convenience: raise a single-line invoice for a course purchase. */
-    public function generateCourseInvoice(User $student, Course $course, ?int $by = null): Invoice
+    /** Convenience: raise a single-line invoice for a course purchase, with an optional coupon. */
+    public function generateCourseInvoice(User $student, Course $course, ?string $couponCode = null, ?int $by = null): Invoice
     {
+        $discount = '0.00';
+
+        if ($couponCode !== null) {
+            $redemption = $this->coupons->redeem($couponCode, $course, (string) $course->price);
+            $discount = $redemption['discount'];
+        }
+
         return $this->generateInvoice(
             billable: $student,
             items: [[
@@ -104,6 +113,7 @@ class BillingService
                 'unit_price' => (string) $course->price,
                 'source' => $course,
             ]],
+            discount: $discount,
             currency: $course->currency,
             by: $by,
         );
