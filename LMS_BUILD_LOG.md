@@ -2742,3 +2742,98 @@ P1, plus the weekly instructor digest).
   additional data bolted onto the existing lesson/dashboard queries.
 
 **Tagged `lms-p4`.**
+
+---
+
+## P5 — Polish & scale
+
+### P5.1 — Badges & weekly streak counter (§6.5)
+
+**Built:**
+
+- `app/Enums/BadgeType.php` — a fixed, code-defined vocabulary
+  (`FirstCourseCompleted`, `FiveCoursesCompleted`, `PerfectQuiz`,
+  `FourWeekStreak`), matching `LearningEventType`/`CouponType`'s existing
+  backed-enum convention. No admin CRUD — new badges ship as new cases, not
+  database rows.
+- `database/migrations/2026_07_26_231833_create_user_badges_table.php` —
+  `user_badges`: `user_id`, `badge_type`, unique on the pair, `created_at`
+  only (doubles as `earned_at`, mirroring `LearningEvent`'s
+  `UPDATED_AT = null` pattern).
+- `app/Models/UserBadge.php`, `User::badges()` (latest first).
+- `app/Services/Learning/StreakService.php` — `currentWeeklyStreak(User)`:
+  consecutive ISO weeks (ending this week, or last week if this week hasn't
+  had activity yet — a week still in progress doesn't break a live streak)
+  with at least one `learning_events` row across any of the user's
+  enrollments. Computed in PHP over distinct `DATE(created_at)` values
+  rather than a DB-specific week function, since `YEARWEEK()` is MySQL-only
+  and the test suite runs on SQLite.
+- `app/Services/Learning/BadgeService.php` — `awardCourseCompletionBadges()`,
+  `awardPerfectQuizBadgeIfEarned()`, `awardStreakBadgeIfEligible()`. Every
+  award goes through `firstOrCreate`, so nothing can double-issue.
+- `app/Listeners/Learning/AwardCourseCompletionBadges.php` (queued, on
+  `CourseCompleted`) and `AwardPerfectQuizBadge.php` (queued, on
+  `QuizAttemptSubmitted`) — no new events needed; both already fire exactly
+  where required (`QuizAttemptSubmitted` fires once per attempt reaching
+  `Graded`, whether auto- or manually-graded — confirmed by reading
+  `QuizService` before assuming so).
+- `app/Console/Commands/AwardStreakBadges.php` — new, scheduled `02:30`
+  daily in `routes/console.php`. The streak badge is time-based, not
+  action-based, so unlike the other two it has no single triggering event;
+  mirrors `app:detect-at-risk-enrollments`'s nightly-command shape rather
+  than inventing a different pattern for the same kind of problem.
+- `app/Support/Dashboard/DashboardService.php` — `studentBadges()`,
+  `studentWeeklyStreak()`, both flat single queries regardless of
+  enrollment count.
+- `resources/views/admin/dashboard/roles/student.blade.php` — the
+  post-login student dashboard gained a streak stat, a badge-count stat,
+  and an earned-badge shelf.
+
+**Decision — listeners for the two event-triggered badges, a nightly
+command for the time-based one.** §4.5 explicitly names "streak/badge
+updates" as listener-handled side effects, and the codebase's whole
+event/listener apparatus already exists for exactly this. The streak badge
+doesn't fit that shape (nothing "happens" to trigger it — a week just
+passes), so it follows the OTHER existing convention for time-based
+aggregate checks (`DetectAtRiskEnrollments`) instead of forcing a
+listener-only design where one doesn't fit.
+
+**Decision — badges surfaced on the login dashboard, not the "My Courses"
+hub.** `learn/index.blade.php` already has its own per-course progress ring
+(§6.5's other requirement, built in P1); the login dashboard
+(`roles/student.blade.php`) is the actual landing page and didn't yet have
+a motivational-progress section, so that's where the single instance of
+this widget lives — avoids two places rendering slightly different badge
+lists.
+
+**Bug found while writing tests (test code only, not production code):**
+backdating `learning_events.created_at` via
+`->create(['created_at' => ...])` silently no-ops — `created_at` isn't in
+`LearningEvent::$fillable` (deliberately; it's a domain log, not client
+input), so every such call across the *entire* test suite, going back to
+P1's `DetectAtRiskEnrollmentsTest`, had actually been writing `now()`. It
+never flipped an assertion before because every existing test's date
+offset stayed safely inside whatever window it was checking (a few days
+either side of a 14- or 21-day threshold). The week-boundary-sensitive
+streak tests are the first to actually depend on the exact value, and
+caught it immediately. Fixed in the new tests via
+`forceFill(['created_at' => $when])->save()` after `create()`; older tests
+were left as-is since their assertions never depended on the real value.
+
+**Tests added:** `StreakServiceTest` (7 — no activity; this-week-only;
+last-week-only-still-counts; consecutive weeks accumulate; a gap breaks the
+streak before the gap; a 2+-week-old gap resets to zero; another student's
+activity never counts). `BadgeServiceTest` (8 — one completion awards only
+the first-course badge; five completions also awards the five-course
+badge; awarding twice doesn't duplicate the row; completing a course's
+final lesson awards the badge via the real `CourseCompleted` event; a
+100% quiz awards `PerfectQuiz`; 99% doesn't; an in-progress attempt never
+does; the dashboard actually renders the badge shelf and streak stat).
+`AwardStreakBadgesTest` (4 — a 4-week streak earns the badge; a 3-week
+streak doesn't yet; a student with no enrollments is skipped without
+error; admins/clients are never evaluated).
+
+**Verification:** `php artisan migrate` / `:rollback` / `migrate` clean.
+`vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G` 0
+errors. Full untargeted `php artisan test` — 453/453 green (434
+pre-existing + 19 new).
