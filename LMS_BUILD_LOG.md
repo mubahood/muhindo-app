@@ -2449,3 +2449,116 @@ parse).
 **Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
 `phpstan analyse --memory-limit=1G` 0 errors. `php artisan test` —
 408/408 green (402 pre-existing + 6 new).
+
+### P4.9 — Drag-drop curriculum builder (§7.5)
+
+**Built:**
+
+- `database/migrations/2026_07_26_223957_add_is_published_to_lessons_table.php`
+  — `is_published` boolean, `default(true)`, placed after `sort_order`. The
+  DB-level default is `true` deliberately, so every pre-existing lesson
+  stays visible with zero behavior change on deploy.
+- `app/Models/Lesson.php` — `is_published` added to `$fillable`/`$casts`;
+  extracted `extractYoutubeId(string $url): ?string` as a reusable static
+  (used by both the admin duration-fetch endpoint and the model's own
+  `youtubeVideoId()`).
+- `app/Models/Course.php` — `lessons()` (the `hasManyThrough`) now filters
+  `where('lessons.is_published', true)`, so `lessonCount()`,
+  `progressPercent()`, `withCount('lessons')`, and the certificate's 100%
+  gate all automatically respect draft state with no separate plumbing.
+- `app/Http/Controllers/Student/LearningController.php` — new private
+  `publishedLessonsFlat(Course)` helper, used by `show()`'s first-lesson
+  redirect, `lesson()` (`abort_unless($lesson->is_published, 404)` — a
+  student cannot reach a draft lesson by guessing/bookmarking its URL even
+  though it's still technically enrolled-accessible), and
+  `adjacentLesson()`'s prev/next nav.
+- `resources/views/learn/lesson.blade.php` — sidebar lesson list filtered
+  to published only.
+- `app/Http/Controllers/CourseCatalogueController.php` — `preview()` now
+  also requires `is_published` alongside the existing `is_free_preview`
+  check, so a draft lesson can't leak through the public free-preview URL
+  either.
+- `app/Http/Controllers/Admin/LessonController.php` — three new actions:
+  `storeInline()` (curriculum-tree quick-add: title only, always created
+  as an unpublished draft with sane defaults so it's immediately safe to
+  leave half-finished), `togglePublish()` (flips the flag, no full-form
+  visit needed), `fetchVideoDuration()` (validates a URL, extracts a
+  YouTube ID, delegates to `YoutubeService`). `validated()` gained
+  `is_published` handling matching the existing `is_free_preview` pattern
+  — unchecked means `false` for a new lesson via the standard form.
+- `app/Http/Controllers/Admin/CurriculumController.php` — new,
+  `reorder(Request, Course)`: validates `modules[].{id,sort_order}` and
+  `lessons[].{id,sort_order,course_module_id}`, and — critically — verifies
+  every id actually belongs to the route-bound `$course` before writing
+  anything, rejecting (silently dropping, not erroring, since this is a
+  best-effort persist of a drag gesture) any id from a different course.
+  Wrapped in `DB::transaction()` so a partial drag never leaves the tree in
+  a mixed state.
+- `app/Http/Controllers/Admin/QuizController.php` /
+  `Admin/AssignmentController.php` — `create()` now accepts `?lesson_id=`
+  from the curriculum tree's inline "+ Quiz"/"+ Assignment" links and
+  pre-fills the new model, so creating an assessment from a specific lesson
+  no longer requires re-selecting it from a dropdown.
+- `app/Services/YoutubeService.php` — new. `isConfigured()`,
+  `fetchDurationMinutes(string $videoId): ?int` (YouTube Data API v3
+  `videos?part=contentDetails`), private ISO-8601 duration parser.
+- `config/services.php` / `.env.example` — `YOUTUBE_API_KEY`, optional.
+- `routes/web.php` — `modules/{module}/lessons-quick`,
+  `lessons/{lesson}/toggle-publish`, `lessons/fetch-video-duration`,
+  `courses/{course}/curriculum/reorder`.
+- `resources/views/admin/courses/show.blade.php` — curriculum tree wrapped
+  in an Alpine `curriculumBuilder(cfg)` component; SortableJS on the module
+  list and each lesson list; drag handles; per-lesson Published/Draft badge
+  + toggle form; inline "+ Quiz"/"+ Assignment" links; per-module quick-add
+  form.
+- `resources/views/admin/courses/lesson-form.blade.php` — `is_published`
+  checkbox; video URL field wired to Alpine state; "Auto-fetch duration"
+  button with a status message area.
+- `public/vendor/js/sortable.min.js` — new vendored file.
+
+**Decision — vendored SortableJS instead of importing it via npm/Vite.**
+First attempt added `import Sortable from 'sortablejs'` to
+`resources/js/app.js`, then reading `layouts/admin.blade.php` more closely
+turned up its explicit comment that the admin layout deliberately never
+loads the Vite bundle at all (Livewire 3 already bundles Alpine; loading
+`app.js` too would double-instantiate it) — so anything the admin panel
+needs as a plain global variable has to arrive as a vendored `<script>`
+tag, exactly like the existing `public/vendor/js/chart.min.js` precedent.
+Reverted `app.js`, copied `Sortable.min.js` from a temporary
+`npm install sortablejs --save-dev` (immediately `npm uninstall`'d after,
+confirmed zero net diff in `package.json`/`package-lock.json`) into
+`public/vendor/js/sortable.min.js` instead. Caught before any test run or
+commit, so nothing shipped with the broken approach.
+
+**Decision — YouTube Data API v3 instead of oEmbed for duration.** The plan
+text says "duration auto-fetch... via oEmbed," but YouTube's oEmbed
+endpoint only ever returns title/thumbnail/author — it cannot report
+duration under any circumstance. Since the plan's actual intent (auto-fill
+duration so an admin doesn't have to look it up and type it by hand) can't
+be satisfied by the literal mechanism named, built `YoutubeService` against
+the real Data API v3 instead, gated entirely behind an optional
+`YOUTUBE_API_KEY`. Unconfigured behavior is identical to before this item
+existed: the admin types the duration manually.
+
+**Bug found and fixed:** `test_toggling_publish_flips_the_flag` initially
+failed asserting `is_published === true` right after
+`Lesson::create([...])` — the DB-level default isn't reflected on the
+in-memory model until it's reloaded. Fixed the test helper with `->fresh()`
+after `create()`; the same class of bug hit several other places earlier in
+this build and is now a standing thing to check for whenever a factory/
+`create()` call relies on a column's DB default rather than passing it
+explicitly.
+
+**Tests added:** `CurriculumBuilderTest` (10 — publish toggle round-trips;
+an unpublished lesson 404s for an enrolled student; an unpublished lesson
+is excluded from `lessonCount()`; quick-add creates a draft; reordering
+modules and lessons persists together in one request; reordering silently
+rejects ids from a different course without touching them; a non-admin is
+redirected to login for toggle/quick-add/reorder; duration-fetch reports
+`unavailable` with no key configured, `not_youtube` for a non-YouTube URL,
+and a correctly-parsed `PT15M33S` → 16 minutes via `Http::fake()`).
+
+**Verification:** `php artisan migrate` / `:rollback` / `migrate` clean.
+`vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G` 0
+errors. Full untargeted `php artisan test` — 418/418 green (408
+pre-existing + 10 new).
