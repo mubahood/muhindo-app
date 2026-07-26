@@ -14,6 +14,7 @@ use App\Services\Learning\ProgressService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -83,6 +84,12 @@ class LearningController extends Controller
 
         $notes = $enrollment->lessonNotes()->where('lesson_id', $lesson->id)->orderBy('seconds')->get();
 
+        // P5.3 — a fresh signed URL every page load; the 6-hour window comfortably covers a
+        // single viewing session (including pauses) without staying valid indefinitely if shared.
+        $videoStreamUrl = $lesson->hasSelfHostedVideo()
+            ? URL::temporarySignedRoute('learn.lesson.video-stream', now()->addHours(6), ['course' => $course, 'lesson' => $lesson])
+            : null;
+
         return view('learn.lesson', [
             'course' => $course,
             'lesson' => $lesson,
@@ -93,6 +100,7 @@ class LearningController extends Controller
             'nextLessonForNav' => $this->adjacentLesson($course, $lesson, 1),
             'renderedContent' => $renderedContent,
             'notes' => $notes,
+            'videoStreamUrl' => $videoStreamUrl,
         ]);
     }
 

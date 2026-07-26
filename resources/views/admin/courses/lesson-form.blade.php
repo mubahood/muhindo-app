@@ -70,6 +70,20 @@
       <div class="tb-form-group">
         <label class="tb-label">Video URL (YouTube/Vimeo embed)</label>
         <input class="tb-input" type="url" name="video_url" x-model="videoUrl">
+        <p class="muted" style="font-size:.75rem;margin-top:4px;">Ignored if a self-hosted video file is attached below.</p>
+      </div>
+      <div class="tb-form-group full">
+        <label class="tb-label">Self-hosted video file (mp4/mov/webm, max 500MB)</label>
+        @if($lesson->hasSelfHostedVideo())
+          <p class="muted" style="font-size:.85rem;margin-bottom:6px;"><i class="fas fa-circle-check" style="color:var(--ok, #15803d);"></i> A video file is attached. Upload a new one to replace it.</p>
+        @endif
+        <input class="tb-input" type="file" name="video_file" accept="video/mp4,video/quicktime,video/webm">
+        @if($lesson->hasSelfHostedVideo())
+          <label class="tb-check-group" style="margin-top:6px;">
+            <input type="checkbox" name="remove_video_file" value="1">
+            <span>Remove the attached video file (falls back to the video URL above)</span>
+          </label>
+        @endif
       </div>
       <div class="tb-form-group">
         <label class="tb-label">Duration (minutes)</label>

@@ -12,6 +12,8 @@ use App\Services\YoutubeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -55,7 +57,7 @@ class LessonController extends Controller
 
     public function store(Request $request, CourseModule $module): RedirectResponse
     {
-        $data = $this->validated($request);
+        $data = $this->applyVideoUpload($request, $this->validated($request), null);
         $module->lessons()->create($data + ['sort_order' => $data['sort_order'] ?? $module->lessons()->count()]);
 
         return redirect()->route('admin.courses.show', $module->course)->with('success', 'Lesson added.');
@@ -94,7 +96,8 @@ class LessonController extends Controller
 
     public function update(Request $request, Lesson $lesson): RedirectResponse
     {
-        $lesson->update($this->validated($request));
+        $data = $this->applyVideoUpload($request, $this->validated($request), $lesson);
+        $lesson->update($data);
 
         return redirect()->route('admin.courses.show', $lesson->module->course)->with('success', 'Lesson updated.');
     }
@@ -105,6 +108,36 @@ class LessonController extends Controller
         $lesson->delete();
 
         return redirect()->route('admin.courses.show', $course)->with('success', 'Lesson deleted.');
+    }
+
+    /**
+     * P5.3 — an optional self-hosted upload, stored on the private `local` disk and streamed
+     * back to students only via a signed, time-limited URL (LessonVideoController::stream()).
+     * A newly-uploaded file replaces (and deletes) whatever was there before; the "remove"
+     * checkbox is the only way back to YouTube-only once a file has been attached.
+     *
+     * @param  array<string,mixed>  $data
+     * @return array<string,mixed>
+     */
+    private function applyVideoUpload(Request $request, array $data, ?Lesson $lesson): array
+    {
+        $request->validate([
+            'video_file' => 'nullable|file|mimes:mp4,mov,webm|max:512000',
+            'remove_video_file' => 'nullable|boolean',
+        ]);
+
+        if ($request->hasFile('video_file')) {
+            if ($lesson?->video_disk_path) {
+                Storage::disk('local')->delete($lesson->video_disk_path);
+            }
+            $file = $request->file('video_file');
+            $data['video_disk_path'] = $file->storeAs('lesson-videos', Str::uuid().'.'.$file->getClientOriginalExtension(), 'local');
+        } elseif ($request->boolean('remove_video_file') && $lesson?->video_disk_path) {
+            Storage::disk('local')->delete($lesson->video_disk_path);
+            $data['video_disk_path'] = null;
+        }
+
+        return $data;
     }
 
     /** @return array<string,mixed> */

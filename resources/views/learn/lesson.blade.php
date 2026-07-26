@@ -77,7 +77,21 @@
     </aside>
 
     <div>
-      @if($lesson->youtubeVideoId())
+      @if($lesson->hasSelfHostedVideo())
+        <div
+          x-data="selfHostedVideoPlayer({
+            lessonId: {{ $lesson->id }},
+            resumeAt: {{ $enrollment->progressRecords()->where('lesson_id', $lesson->id)->value('last_position_seconds') ?? 0 }},
+            heartbeatUrl: @js(route('learn.lesson.heartbeat', [$course, $lesson])),
+            csrfToken: @js(csrf_token()),
+          })"
+          x-init="init()"
+        >
+          <div class="learn-video">
+            <video id="video-player-{{ $lesson->id }}" src="{{ $videoStreamUrl }}" controls playsinline style="width:100%;height:100%;"></video>
+          </div>
+        </div>
+      @elseif($lesson->youtubeVideoId())
         <div
           x-data="youtubePlayer({
             videoId: @js($lesson->youtubeVideoId()),
@@ -199,6 +213,29 @@
 @push('scripts')
 <script>
 /**
+ * Shared by both player wrappers below — the heartbeat request/response
+ * contract is identical regardless of which player (YouTube IFrame API or
+ * a native <video> element) reports the delta, since ProgressService
+ * itself is already player-agnostic (§6.2).
+ */
+async function postLessonHeartbeat(heartbeatUrl, csrfToken, secondsDelta, positionSeconds) {
+  try {
+    const res = await fetch(heartbeatUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+      body: JSON.stringify({ seconds_delta: secondsDelta, position_seconds: positionSeconds }),
+    });
+    const data = await res.json();
+    if (data.completed) {
+      window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Lesson auto-completed — nice work!', type: 'success' } }));
+      window.dispatchEvent(new CustomEvent('lesson-auto-completed'));
+    }
+  } catch (e) {
+    // Silent — this heartbeat's delta is lost, the next one carries on from now().
+  }
+}
+
+/**
  * §7.3 YouTube IFrame API wrapper. Resumes at `resumeAt`, reports a heartbeat
  * every ~15s of actual playing time (never while paused), and a final
  * heartbeat on pause/end so the last few seconds aren't lost. `min_watch`
@@ -258,24 +295,61 @@ function youtubePlayer(cfg) {
       this.lastHeartbeatAt = now;
       if (delta <= 0) return;
       const position = Math.floor(this.player.getCurrentTime ? this.player.getCurrentTime() : 0);
-      try {
-        const res = await fetch(cfg.heartbeatUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': cfg.csrfToken, 'Accept': 'application/json' },
-          body: JSON.stringify({ seconds_delta: delta, position_seconds: position }),
-        });
-        const data = await res.json();
-        if (data.completed) {
-          window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Lesson auto-completed — nice work!', type: 'success' } }));
-          window.dispatchEvent(new CustomEvent('lesson-auto-completed'));
-        }
-      } catch (e) {
-        // Silent — this heartbeat's delta is lost, the next one carries on from now().
-      }
+      await postLessonHeartbeat(cfg.heartbeatUrl, cfg.csrfToken, delta, position);
     },
     setSpeed(rate) {
       this.speed = rate;
       if (this.player && this.player.setPlaybackRate) this.player.setPlaybackRate(rate);
+    },
+  };
+}
+
+/**
+ * P5.3 — the self-hosted equivalent of youtubePlayer() above, same heartbeat
+ * cadence/contract, native <video> element instead of the YouTube IFrame
+ * API. Exposes the same window.__lessonVideoPlayer.getCurrentTime()/seekTo()
+ * contract the notes tab already relies on, so notes/seek work identically
+ * regardless of which player is actually mounted.
+ */
+function selfHostedVideoPlayer(cfg) {
+  return {
+    player: null,
+    tickTimer: null,
+    lastHeartbeatAt: null,
+    init() {
+      this.player = document.getElementById('video-player-' + cfg.lessonId);
+      if (!this.player) return;
+
+      window.__lessonVideoPlayer = {
+        getCurrentTime: () => this.player.currentTime,
+        seekTo: (seconds, shouldPlay) => {
+          this.player.currentTime = seconds;
+          if (shouldPlay) this.player.play();
+        },
+      };
+
+      if (cfg.resumeAt > 0) {
+        this.player.addEventListener('loadedmetadata', () => { this.player.currentTime = cfg.resumeAt; }, { once: true });
+      }
+
+      this.player.addEventListener('play', () => {
+        this.lastHeartbeatAt = Date.now();
+        this.tickTimer = setInterval(() => this.sendHeartbeat(), 15000);
+      });
+      this.player.addEventListener('pause', () => { this.stopTicking(); this.sendHeartbeat(); });
+      this.player.addEventListener('ended', () => { this.stopTicking(); this.sendHeartbeat(); });
+    },
+    stopTicking() {
+      if (this.tickTimer) { clearInterval(this.tickTimer); this.tickTimer = null; }
+    },
+    async sendHeartbeat() {
+      if (!this.player || !this.lastHeartbeatAt) return;
+      const now = Date.now();
+      const delta = Math.round((now - this.lastHeartbeatAt) / 1000);
+      this.lastHeartbeatAt = now;
+      if (delta <= 0) return;
+      const position = Math.floor(this.player.currentTime || 0);
+      await postLessonHeartbeat(cfg.heartbeatUrl, cfg.csrfToken, delta, position);
     },
   };
 }

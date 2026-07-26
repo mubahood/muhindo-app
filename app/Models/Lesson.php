@@ -15,7 +15,7 @@ class Lesson extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'course_module_id', 'title', 'content', 'video_url',
+        'course_module_id', 'title', 'content', 'video_url', 'video_disk_path',
         'duration_minutes', 'sort_order', 'is_published', 'is_free_preview',
         'completion_rule', 'completion_threshold', 'content_format',
     ];
@@ -34,6 +34,12 @@ class Lesson extends Model
     public function durationSeconds(): ?int
     {
         return $this->duration_minutes !== null ? $this->duration_minutes * 60 : null;
+    }
+
+    /** §6.2/P5.3 — a self-hosted video takes priority over a YouTube/Vimeo `video_url` when both happen to be set. */
+    public function hasSelfHostedVideo(): bool
+    {
+        return filled($this->video_disk_path);
     }
 
     /** §7.3 — the YouTube IFrame API needs a bare video id, not the embed URL admins paste in. Null for non-YouTube URLs (Vimeo, etc.), which fall back to a plain iframe. */
