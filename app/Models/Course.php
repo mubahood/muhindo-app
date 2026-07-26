@@ -65,6 +65,12 @@ class Course extends Model
         return $this->hasMany(Enrollment::class);
     }
 
+    /** @return HasMany<Quiz, $this> */
+    public function quizzes(): HasMany
+    {
+        return $this->hasMany(Quiz::class);
+    }
+
     public function isFree(): bool
     {
         return (float) $this->price <= 0;

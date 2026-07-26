@@ -70,4 +70,33 @@
   <div class="tb-empty" style="padding:40px;"><i class="fas fa-book"></i><p>No modules yet — add one to start building the course.</p></div>
 @endforelse
 
+<div class="tb-page-header" style="margin-top:32px;">
+  <div><h2 style="font-size:1.1rem;">Quizzes</h2></div>
+  <a href="{{ route('admin.courses.quizzes.create', $course) }}" class="btn-tb btn-tb-primary btn-tb-sm"><i class="fas fa-plus"></i> New Quiz</a>
+</div>
+
+<div class="tb-card">
+  <div class="tb-card-body" style="padding:0;">
+    @forelse($course->quizzes as $quiz)
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bd);">
+        <div>
+          <div style="font-weight:500;">{{ $quiz->title }}
+            <span class="badge-tb {{ $quiz->is_published ? 'badge-active' : 'badge-neutral' }}" style="margin-left:6px;">{{ $quiz->is_published ? 'Published' : 'Draft' }}</span>
+          </div>
+          <div class="muted" style="font-size:.78rem;">{{ $quiz->lesson?->title ?? 'Course-final quiz' }} · Pass {{ $quiz->pass_percent }}%</div>
+        </div>
+        <div class="tb-table-actions">
+          <a href="{{ route('admin.quizzes.edit', $quiz) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-pen"></i></a>
+          <form method="POST" action="{{ route('admin.quizzes.destroy', $quiz) }}" onsubmit="return confirm('Delete this quiz and all its questions?');">
+            @csrf @method('DELETE')
+            <button type="submit" class="btn-tb btn-tb-danger btn-tb-icon"><i class="fas fa-trash"></i></button>
+          </form>
+        </div>
+      </div>
+    @empty
+      <div class="tb-empty" style="padding:20px;"><p>No quizzes yet.</p></div>
+    @endforelse
+  </div>
+</div>
+
 @endsection

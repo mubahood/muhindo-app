@@ -1222,3 +1222,70 @@ L10), §7.4 (markdown authoring, closes L11).
 Next: P3 — Assessment (quiz schema + `QuizService` auto-grading, quiz runner
 UI, assignments + grading queue, gradebook, certificate criteria tightening,
 quiz item analysis).
+
+---
+
+## P3 — Assessment
+
+### P3.1 — Quiz schema (5 tables) + models + admin quiz CRUD (§5.1)
+
+**Built:**
+
+- Four new backed enums matching the established convention:
+  `App\Enums\QuestionType` (9 cases per §5.1, plus `isAlwaysManuallyGraded()`
+  and `usesOptions()` helpers the grading engine and admin UI will both need),
+  `QuizGradingMethod` (highest|latest|average|first), `QuizFeedbackMode`
+  (immediate|after_submit|after_close|none), `QuizAttemptStatus`
+  (in_progress|submitted|graded|abandoned).
+- Five additive migrations exactly per §5.1's schema table: `quizzes`
+  (course_id required, lesson_id nullable — null means course-final),
+  `questions`, `question_options`, `quiz_attempts` (uuid + unique
+  `(quiz_id, enrollment_id, attempt_no)`), `attempt_answers` (unique
+  `(quiz_attempt_id, question_id)`). All five models + relations wired onto
+  `Course`/`Lesson`/`Enrollment`.
+- Admin CRUD for quiz *settings* (`Admin\QuizController` — create/store/edit/
+  update/destroy, shallow-nested under `courses.quizzes` exactly like
+  `courses.modules`): title, lesson attachment (or course-final), pass
+  percent, time limit, max attempts, grading method, feedback mode, shuffle/
+  pool-draw/one-per-page toggles, certificate-counting toggle,
+  availability window, published toggle. No dedicated `QuizPolicy` — matches
+  the existing convention exactly: `CourseModuleController`/`LessonController`
+  have no per-action Policy either, relying solely on the blanket
+  `['auth','admin']` middleware group already wrapping every admin route.
+  Question/option management is deliberately a stub ("coming in the next
+  build step") — that's P3.2.
+
+**Decision — `questions` gets `softDeletes` even though §5.1's schema table
+doesn't list it there.** Mirrors the P0.3/L7 reasoning exactly: hard-deleting
+a question after students have answered it would cascade-delete
+`attempt_answers`, silently destroying graded history — the same "content
+that must survive editing" problem the plan itself already solved for
+lessons/modules and explicitly calls out for `quizzes`/`assignments`. A
+question is the same kind of thing.
+
+**Bug found and fixed during the mandatory migrate/rollback/migrate
+verification — a migration ordering hazard.** `create_questions_table` and
+`create_question_options_table` were generated in the same wall-clock second,
+giving them an identical timestamp; Laravel's migration runner then fell back
+to alphabetical filename order as a tie-break, and `question_options`
+alphabetically sorts *before* `questions` (`_` < `s`). Running `migrate` hit
+this exact ordering and created an orphaned `question_options` table (with no
+matching `migrations` table row) before its own FK target (`questions`)
+existed — caught immediately by the routine rollback/re-migrate check, not
+silently. The same latent risk existed between `quiz_attempts` and
+`attempt_answers` (`a` < `q`). Fixed by renaming both later-dependent
+migration files to strictly later timestamps, dropping the orphaned table,
+and re-verifying migrate → rollback → migrate end to end.
+
+**Tests added** (`tests/Feature/Admin/QuizCrudTest.php`, 6 tests):
+`test_an_admin_can_create_a_course_final_quiz`,
+`test_an_admin_can_create_a_lesson_quiz`,
+`test_an_admin_can_update_quiz_settings`,
+`test_an_admin_can_delete_a_quiz_and_it_is_soft_deleted`,
+`test_a_non_admin_cannot_create_a_quiz`,
+`test_the_course_page_lists_its_quizzes`.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 209/209 green (203 pre-existing + 6 new) ·
+migrate/rollback/migrate clean · manual smoke test at the real MAMP-served URL
+(the quiz creation form renders with all settings fields).
