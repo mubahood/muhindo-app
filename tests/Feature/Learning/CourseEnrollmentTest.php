@@ -9,6 +9,7 @@ use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -45,6 +46,7 @@ class CourseEnrollmentTest extends TestCase
 
     public function test_completing_the_only_lesson_issues_a_certificate(): void
     {
+        Storage::fake('local');
         $course = $this->publishedCourseWithOneLesson();
         $lesson = Lesson::first();
         $student = User::factory()->create(['role' => 'student']);
@@ -68,6 +70,7 @@ class CourseEnrollmentTest extends TestCase
 
     public function test_a_student_can_download_their_own_certificate_pdf(): void
     {
+        Storage::fake('local');
         $course = $this->publishedCourseWithOneLesson();
         $student = User::factory()->create(['role' => 'student']);
         $enrollment = Enrollment::create([
@@ -75,7 +78,8 @@ class CourseEnrollmentTest extends TestCase
             'status' => 'completed', 'source' => 'self', 'enrolled_at' => now(), 'completed_at' => now(),
         ]);
         $certificate = Certificate::create([
-            'enrollment_id' => $enrollment->id, 'certificate_no' => 'CRT-TEST-1', 'issued_at' => now(),
+            'uuid' => (string) Str::uuid(), 'enrollment_id' => $enrollment->id,
+            'certificate_no' => 'CRT-TEST-1', 'issued_at' => now(),
         ]);
 
         $response = $this->actingAs($student)->get(route('learn.certificate', $certificate));
@@ -94,7 +98,8 @@ class CourseEnrollmentTest extends TestCase
             'status' => 'completed', 'source' => 'self', 'enrolled_at' => now(), 'completed_at' => now(),
         ]);
         $certificate = Certificate::create([
-            'enrollment_id' => $enrollment->id, 'certificate_no' => 'CRT-TEST-2', 'issued_at' => now(),
+            'uuid' => (string) Str::uuid(), 'enrollment_id' => $enrollment->id,
+            'certificate_no' => 'CRT-TEST-2', 'issued_at' => now(),
         ]);
 
         $this->actingAs($stranger)->get(route('learn.certificate', $certificate))->assertForbidden();

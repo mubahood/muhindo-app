@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\ProjectUpdateController;
 use App\Http\Controllers\Admin\ServicePageController;
 use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\CertificateVerificationController;
 use App\Http\Controllers\Client\PortalController;
 use App\Http\Controllers\CourseCatalogueController;
 use App\Http\Controllers\PortfolioController;
@@ -37,6 +38,7 @@ Route::get('/work/{portfolioProject:slug}', [PortfolioController::class, 'projec
 Route::post('/contact', [PortfolioController::class, 'contact'])->middleware('throttle:5,1')->name('contact.store');
 Route::view('/privacy', 'marketing.privacy')->name('privacy');
 Route::view('/terms', 'marketing.terms')->name('terms');
+Route::get('/verify/{certificate}', [CertificateVerificationController::class, 'show'])->name('certificates.verify');
 
 /*
 |--------------------------------------------------------------------------

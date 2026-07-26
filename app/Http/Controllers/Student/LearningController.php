@@ -7,15 +7,17 @@ use App\Models\Certificate;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Lesson;
-use App\Support\VerificationCode;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\Learning\CertificateService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /** The student's "My Courses" learning portal — enrolled courses, lesson player, certificates. */
 class LearningController extends Controller
 {
+    public function __construct(private readonly CertificateService $certificates) {}
+
     public function index(Request $request): View
     {
         $enrollments = Enrollment::where('user_id', $request->user()->id)
@@ -65,7 +67,7 @@ class LearningController extends Controller
 
         if ($enrollment->progressPercent() >= 100 && $enrollment->status !== 'completed') {
             $enrollment->update(['status' => 'completed', 'completed_at' => now()]);
-            $this->issueCertificate($enrollment);
+            $this->certificates->issue($enrollment);
         }
 
         $next = $this->nextLesson($course, $lesson);
@@ -76,13 +78,12 @@ class LearningController extends Controller
         return redirect()->route('learn.index')->with('success', 'Course completed — congratulations!');
     }
 
-    public function certificate(Certificate $certificate): \Symfony\Component\HttpFoundation\Response
+    public function certificate(Certificate $certificate): StreamedResponse
     {
         $certificate->load('enrollment.user', 'enrollment.course');
         abort_unless($certificate->enrollment->user_id === request()->user()->id || request()->user()->isAdmin(), 403);
 
-        return Pdf::loadView('pdf.certificate', ['certificate' => $certificate])
-            ->stream("certificate-{$certificate->certificate_no}.pdf");
+        return $this->certificates->stream($certificate);
     }
 
     private function enrollmentFor(Request $request, Course $course): Enrollment
@@ -102,14 +103,5 @@ class LearningController extends Controller
         $index = $flat->search(fn (Lesson $l) => $l->id === $current->id);
 
         return $index === false ? null : $flat->get($index + 1);
-    }
-
-    private function issueCertificate(Enrollment $enrollment): Certificate
-    {
-        return Certificate::create([
-            'enrollment_id' => $enrollment->id,
-            'certificate_no' => VerificationCode::make('CRT', $enrollment->id),
-            'issued_at' => now(),
-        ]);
     }
 }

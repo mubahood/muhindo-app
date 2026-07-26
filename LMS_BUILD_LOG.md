@@ -203,3 +203,80 @@ the ones actually calling `progressPercent()` per row.
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 89/89 green (85 pre-existing + 4 new).
+
+### P0.6 — Certificate idempotency + PDF storage + `/verify/{uuid}` + QR (closes L3)
+
+**Built:**
+
+- New additive migration `2026_07_26_144749_add_uuid_and_unique_enrollment_to_certificates_table.php`
+  — adds `certificates.uuid` (unique) and a unique constraint on `enrollment_id`
+  (needed for both idempotent `firstOrCreate` and the `hasOne` semantics
+  `Enrollment::certificate()` already implies).
+- `Certificate::getRouteKeyName()` now returns `'uuid'` — matches `Invoice`'s existing
+  convention exactly (documents addressed by an unguessable public id, not the
+  internal auto-increment). Every existing `route('learn.certificate', $certificate)`
+  call needed no change: Laravel's `route()` helper already resolves the key through
+  the model, so the URL just silently switched from `/certificates/7` to
+  `/certificates/{uuid}`.
+- New `app/Services/Learning/CertificateService.php` (the `CertificateService` named
+  in §4.1) — `issue()` does the `firstOrCreate`-on-`enrollment_id` +
+  `UniqueConstraintViolationException` catch (same idempotent-insert shape as P0.2's
+  enroll fix); `stream()` serves the stored PDF, regenerating once if the row's
+  `pdf_path` is missing or the file was removed from disk. PDF rendering happens at
+  most once per certificate and is written to the private `local` disk under
+  `certificates/{uuid}.pdf` — mirrors `DocumentService`'s "private disk, streamed
+  through a controller after a check" convention exactly, rather than the previous
+  `Pdf::loadView(...)->stream()` which re-rendered from scratch on every request.
+- `Student\LearningController` — now constructor-injects `CertificateService`;
+  `certificate()` calls `$this->certificates->stream()` (ownership `abort_unless`
+  check unchanged, kept inline since it already existed and isn't part of this
+  item's scope); the lesson-completion path calls `$this->certificates->issue()`
+  directly, so the old private `issueCertificate()` wrapper was removed as dead
+  indirection.
+- New public (no `auth` middleware) route `GET /verify/{certificate}` →
+  `CertificateVerificationController::show()` → `resources/views/certificates/verify.blade.php`
+  (extends `layouts.marketing`, matching the public course-catalogue/privacy-page
+  convention) — shows student name, course title, certificate number, and issue
+  date for a real certificate; an unknown uuid 404s via ordinary route-model-binding
+  failure, no extra "not found" branch needed.
+- `resources/views/pdf/certificate.blade.php` — now renders a QR code (existing
+  `QrService::pngDataUri()`) encoding the `/verify/{uuid}` URL, with a "Scan to
+  verify" caption, next to the certificate number/issue date.
+- `tests/Feature/Learning/CourseEnrollmentTest.php` — the two tests that construct a
+  `Certificate::create([...])` directly needed a `'uuid' => (string) Str::uuid()`
+  key added (the column is now required), matching how `Enrollment::create()` calls
+  elsewhere in the same file already supply their own uuid explicitly; both PDF-
+  rendering tests now wrap in `Storage::fake('local')` so the test run doesn't write
+  real files to disk.
+
+**Decision:** the plan is internally inconsistent about the certificate identifier —
+L3's own text says `/verify/{certificate_no}`, §4.6 says `/verify/{uuid}`. Certificates
+had neither a `uuid` column nor any established verify precedent, but `Invoice` already
+sets exactly this precedent (`getRouteKeyName() => 'uuid'`) for "a document addressed
+outside the authenticated area." Went with `uuid` + Invoice's convention: it satisfies
+§4.6's literal wording, avoids exposing/leaking the sequential `certificate_no`
+generation scheme (`VerificationCode::make()` is a checksummed but ultimately
+enumerable sequence) as the sole gate on a public verification URL, and — per rule 1
+— extends an existing pattern rather than inventing a new one.
+
+Also scoped out of P0.6 (deferred to P3, per §8's own roadmap): §4.6's first bullet
+("issue only when `certificate_requires` is satisfied... quizzes counts_toward_certificate")
+depends on the quiz engine, which doesn't exist until P3 ("certificate criteria tighten
+(§4.6 → closes L1 fully)" is explicitly a P3 line item). P0.6 only closes L3
+(verification); L1 (certificates attesting to real completion) stays open until P3.
+
+**Tests added:**
+
+- `tests/Feature/Learning/CertificateIssuanceTest.php` (7 tests):
+  `test_issuing_a_certificate_twice_for_the_same_enrollment_creates_only_one_row`
+  (the idempotency abuse-path proof — a replayed completion event/double-click must
+  not mint a second certificate), `test_issuing_a_certificate_stores_the_rendered_pdf_on_the_private_disk`,
+  `test_a_certificate_has_a_unique_uuid_used_as_its_route_key`,
+  `test_the_public_verify_page_shows_student_name_course_and_issue_date_for_a_real_certificate`,
+  `test_the_public_verify_page_is_reachable_by_a_guest_with_no_authentication`,
+  `test_an_unknown_certificate_uuid_is_not_found`,
+  `test_a_forged_certificate_number_alone_does_not_resolve_on_the_verify_page` (proves
+  the human-readable code alone can't be used to probe the verify endpoint).
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 96/96 green (89 pre-existing + 7 new) · `php artisan migrate` clean.

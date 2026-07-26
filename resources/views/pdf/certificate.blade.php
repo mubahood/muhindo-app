@@ -25,6 +25,12 @@
     <div class="meta">
       <div class="sig">Certificate No.<br>{{ $certificate->certificate_no }}</div>
       <div class="sig">Issued<br>{{ $certificate->issued_at->format('d F Y') }}</div>
+      @isset($qrDataUri)
+        <div style="text-align:center;">
+          <img src="{{ $qrDataUri }}" style="width:70px;height:70px;">
+          <div style="font-size:9px;color:#5b6270;margin-top:4px;">Scan to verify</div>
+        </div>
+      @endisset
     </div>
   </div>
 </body></html>
