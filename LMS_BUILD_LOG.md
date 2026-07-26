@@ -322,3 +322,39 @@ drift-bug proof), `test_an_active_enrollment_can_complete_a_lesson_through_the_a
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 100/100 green (96 pre-existing + 4 new).
+
+### P0.8 — Feature tests for every P0 item
+
+**Built:**
+
+Every P0.1–P0.7 item already shipped with its own dedicated feature tests as part
+of that item's own verification gate (rule 4 requires this per-item, not deferred to
+the end) — 34 tests total across `EnrollmentAccessPolicyTest`, `EnrollIdempotencyTest`,
+`ContentSoftDeleteTest`, `PerformanceIndexTest`, `LearnIndexQueryCountTest`,
+`StudentDashboardQueryCountTest`, `CertificateIssuanceTest`, `ApiProgressServiceParityTest`,
+plus the throttle test in `ContactFormTest` and the two updated tests in
+`CourseEnrollmentTest`. P0.8 is the audit pass rule 5 asks for at the phase gate:
+re-read the abuse-path checklist (rule 4 — "dishonest student, double-click, replayed
+webhook, stale browser tab") against everything shipped and confirm each scenario has
+an explicit test, not just incidental coverage.
+
+Found one real gap: no test proved a **stale browser tab** — a second tab that already
+loaded the lesson page, then POSTs `complete` again after the course was finished in
+another tab — is a safe no-op. `ProgressService::completeLesson()`'s `updateOrCreate` +
+`status !== 'completed'` guard already made this safe structurally, but nothing proved
+it. Added `tests/Feature/Learning/ProgressServiceIdempotencyTest.php` (2 tests):
+`test_a_stale_tab_re_completing_an_already_completed_lesson_does_not_duplicate_the_progress_row`,
+`test_a_stale_tab_re_completing_the_final_lesson_does_not_issue_a_second_certificate`
+(replaying the POST that just earned a certificate must not mint a second one).
+
+A replayed-webhook scenario is explicitly out of scope for P0 — there is no
+webhook-driven completion path yet; that only arrives with P4's Flutterwave course
+checkout, where it will need its own idempotency test at that time.
+
+**Full-repo gate run** (not just `--dirty`, to catch anything an incremental per-item
+check could have missed): `composer ci` — `vendor/bin/pint --test` (whole repo),
+`phpstan analyse`, `scripts/ci/check-empty-files.sh`, `scripts/ci/secrets-scan.sh`,
+`php artisan test` — all green.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 102/102 green (100 pre-existing + 2 new) · `composer ci` green.
