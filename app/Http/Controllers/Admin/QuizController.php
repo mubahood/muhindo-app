@@ -7,6 +7,7 @@ use App\Enums\QuizGradingMethod;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Quiz;
+use App\Services\Learning\QuizAnalysisService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -14,6 +15,14 @@ use Illuminate\View\View;
 
 class QuizController extends Controller
 {
+    public function analysis(Quiz $quiz, QuizAnalysisService $analysis): View
+    {
+        return view('admin.quizzes.analysis', [
+            'quiz' => $quiz,
+            'items' => $analysis->itemAnalysisFor($quiz),
+        ]);
+    }
+
     public function create(Course $course): View
     {
         return view('admin.quizzes.form', ['course' => $course, 'quiz' => new Quiz]);

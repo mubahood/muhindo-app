@@ -117,6 +117,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->name('lessons.content-images.store');
     Route::resource('courses.quizzes', \App\Http\Controllers\Admin\QuizController::class)
         ->shallow()->except(['index', 'show']);
+    Route::get('quizzes/{quiz}/analysis', [\App\Http\Controllers\Admin\QuizController::class, 'analysis'])->name('quizzes.analysis');
     Route::resource('quizzes.questions', \App\Http\Controllers\Admin\QuestionController::class)
         ->shallow()->except(['index', 'show']);
     Route::resource('courses.assignments', \App\Http\Controllers\Admin\AssignmentController::class)

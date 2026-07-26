@@ -7,6 +7,9 @@
   <div><h1>{{ $quiz->exists ? 'Edit Quiz' : 'New Quiz' }}</h1>
     <div class="tb-breadcrumb"><a href="{{ route('admin.courses.show', $course) }}">{{ $course->title }}</a> <span>/</span> {{ $quiz->exists ? 'Edit' : 'New' }} Quiz</div>
   </div>
+  @if($quiz->exists)
+    <a href="{{ route('admin.quizzes.analysis', $quiz) }}" class="btn-tb btn-tb-ghost"><i class="fas fa-chart-simple"></i> Item Analysis</a>
+  @endif
 </div>
 
 <form method="POST" action="{{ $quiz->exists ? route('admin.quizzes.update', $quiz) : route('admin.courses.quizzes.store', $course) }}">
