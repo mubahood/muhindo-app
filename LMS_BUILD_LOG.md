@@ -1594,3 +1594,105 @@ first fixing that Apache config separately). The automated feature tests
 above render every new Blade view through Laravel's real view engine with
 real assertions on the output, which is the strongest verification available
 without a browser.
+
+### P3.6 — Assignments schema + admin CRUD + student submission flow (§5.1, §5.3)
+
+**Built:** `assignments`/`assignment_submissions` migrations exactly per
+§5.1's schema; `Assignment`/`AssignmentSubmission` models (`AssignmentSubmission`
+route-binds by `uuid`, matching Certificate/Invoice/QuizAttempt); a new
+`AssignmentSubmissionStatus` enum (`draft`/`submitted`/`returned`).
+`App\Services\Learning\AssignmentService` — student-side only, grading and
+the Return flow are explicitly P3.7 — with `saveDraft()`/`submit()` sharing
+a private `workingSubmission()` resolver:
+
+- No prior submission → a new attempt (`attempt_no = 1`).
+- Latest attempt is still `draft` → reuse that same row (autosave-style
+  editing, no new attempt_no per keystroke/save).
+- Latest attempt is `submitted` (awaiting grading) → a genuine resubmission
+  is allowed, creating a **new** attempt_no, only if
+  `assignment.resubmit_until_graded` is true; otherwise `409`.
+- Latest attempt is `returned` (graded) → **always** `409`, regardless of
+  `resubmit_until_graded` — the setting's name is literally "until graded,"
+  so once grading has happened that door is closed unconditionally, not
+  merely defaulted closed.
+
+`submit()` additionally checks `assignment.isPastDue()`: if past due and
+`allow_late` is false, `422` before anything is written; if past due and
+allowed, the row is saved with `is_late = true` (the actual late-penalty
+percentage is applied later, in the P3.8 gradebook computation — the
+submission itself just records the fact). File uploads reuse the private
+`local`-disk + policy-checked-stream convention from
+`DocumentService`/`ProjectDocumentController` (not the class itself — it's
+hard-coupled to `ProjectDocument` — but the identical pattern), deleting the
+previous file when a resubmission replaces it.
+
+`Admin\AssignmentController` mirrors `QuizController`'s shape exactly
+(create/store/edit/update/destroy, one `validated()` private method).
+`Student\AssignmentController` wires the service to `index` (course
+assignment list with per-assignment status), `show` (instructions +
+submission form + graded feedback + attempt history), `saveDraft`/`submit`,
+and `download` (streams the student's own file back). Entry points added
+from My Courses (an "Assignments" link alongside the existing "Quizzes" one,
+same eager-loaded-count approach to avoid an N+1) and the lesson page (a
+"Lesson assignment" card next to the existing "Lesson quiz" one).
+
+**Bug found and fixed — MySQL identifier length limit (migration).** The
+auto-generated name for the `(assignment_id, enrollment_id, attempt_no)`
+unique index — `assignment_submissions_assignment_id_enrollment_id_attempt_no_unique`
+— is 70 characters, over MySQL's 64-character identifier limit. `Schema::create`
+compiles the columns/FKs into one `CREATE TABLE` statement and the
+`unique()` call into a **separate** `ALTER TABLE ... ADD UNIQUE` statement
+run right after; the first succeeded, the second failed with a genuinely
+unrelated-looking "table already exists" error on retry (because the table
+from the first, unlogged run was still sitting there). Caught by the
+mandatory migrate/rollback/migrate verification gate — same category of
+hazard as P3.1's same-second migration-ordering bug (an orphaned, unlogged
+table), different root cause this time (identifier length, not FK
+ordering). Fixed with an explicit shorter index name
+(`assignment_submissions_attempt_unique`); full migrate → rollback → migrate
+cycle re-verified clean afterward, including confirming the composite unique
+index's leftmost column (`assignment_id`) still satisfies its own FK without
+needing a redundant single-column index.
+
+**Bug found and fixed — a real, previously-shipped routing bug.** `GET
+{course:slug}/quizzes` and `GET {course:slug}/assignments` were both
+registered **after** the generic `GET {course:slug}/{lesson}` route.
+Laravel matches GET routes in registration order at the URI-pattern level —
+purely by shape, before route-model binding ever runs — so any 2-segment
+GET request matches the *first* 2-segment pattern registered, regardless of
+whether that route's model binding can actually succeed. Both literal
+routes were dead code: a request for `/learn/{course}/quizzes` was being
+swallowed by the lesson route, which then 404'd trying to resolve "quizzes"
+as a `Lesson`. This bug shipped **silently in P3.5** — `QuizRunnerTest` never
+had a test hitting `learn.quizzes.index` directly, only the show/attempt/
+answer/submit/review routes (3+ segments, which don't collide with the
+2-segment `{lesson}` pattern and so were never affected). It surfaced now
+only because this item's own list-page test (`test_the_assignment_list_page_renders`)
+happened to be the first one to actually request a 2-segment `learn/{course}/<literal>`
+URL. Fixed by moving both literal-prefix route blocks before the `{lesson}`
+wildcard in `routes/web.php`, with a comment explaining why the ordering
+matters so it isn't silently reintroduced by a future addition; backfilled
+`test_the_quiz_list_page_renders` into `QuizRunnerTest` so the P3.5 gap is
+now actually covered too, not just the P3.6 one.
+
+**Tests added:** `tests/Feature/Admin/AssignmentCrudTest.php` (4 — create/
+update/delete/non-admin-denied). `tests/Feature/Learning/AssignmentServiceTest.php`
+(11 — draft creates attempt 1; re-drafting updates the same row; submit
+finalizes the same row; late-but-allowed marks `is_late`; late-and-disallowed
+rejects; resubmission creates a new attempt when allowed; resubmission
+rejected when disallowed; **a returned submission can never be resubmitted
+regardless of the flag** — the exact "until graded" semantics above, pinned
+directly; file upload stored on the private disk and replaced on
+resubmission; a disallowed type (e.g. `link` when only `text` is accepted)
+is silently dropped rather than stored; cross-student authorization denial).
+`tests/Feature/Learning/AssignmentSubmissionFlowTest.php` (6 — list/show
+pages render; draft save persists via HTTP; submit with a file upload
+persists and the file downloads back; a `returned` submission hides the
+form and shows the grade/feedback; cross-student file download is `404`).
+Plus the one quiz-list regression test noted above.
+
+**Verification:** `php artisan migrate` → `rollback --step=2` →
+`migrate` cycle clean (see the identifier-length bug above — verified with
+the fix in place). `vendor/bin/pint --dirty` clean. `phpstan analyse
+--memory-limit=1G` 0 errors. `php artisan test` — 279/279 green (257
+pre-existing + 22 new, 21 for this item + 1 backfilled P3.5 regression).
