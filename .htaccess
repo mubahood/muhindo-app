@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # 1. Leave index.php alone
+    RewriteRule ^index\.php$ - [L]
+
+    # 2. Root directory request → serve index.php directly (LiteSpeed compatible)
+    RewriteRule ^$ index.php [L]
+
+    # 3. Serve real files / directories directly (no rewrite needed)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # 4. Everything else → proxy into public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

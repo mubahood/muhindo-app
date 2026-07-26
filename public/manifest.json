@@ -1,0 +1,15 @@
+{
+  "name": "Cryptocoinex Trading Simulator",
+  "short_name": "Cryptocoinex",
+  "description": "Practise trading with virtual funds — no real money.",
+  "start_url": "trade",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07090e",
+  "theme_color": "#f59e0b",
+  "icons": [
+    { "src": "images/logo-square.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "images/logo-square.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
