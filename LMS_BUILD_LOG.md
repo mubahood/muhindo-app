@@ -1343,3 +1343,96 @@ was the exact 500 above), `test_deleting_a_question_is_soft_deleted_and_preserve
 `php artisan test` 217/217 green (209 pre-existing + 8 new) · manual smoke test
 at the real MAMP-served URL (question form renders with the dynamic option
 editor for the default type).
+
+### P3.3 — QuizService attempt lifecycle + objective-type auto-grading (§5.2)
+
+**Built:** `app/Services/Learning/QuizService.php` — the whole attempt
+lifecycle in one service, no controller yet (that's P3.5's job):
+
+- `start(Quiz, Enrollment)` — `Gate::authorize('access', $enrollment)` reuses
+  `EnrollmentPolicy` (owns it, status active/completed); rejects a quiz from a
+  different course, an unpublished quiz, or one outside
+  `Quiz::isAvailableNow()`. Returns an existing `in_progress` attempt instead
+  of creating a second one (re-entering a quiz resumes it, never forks a
+  parallel attempt). Enforces `max_attempts` before creating a new one.
+  `question_order` is frozen at creation: `{questions: [...ids], options:
+  {questionId: [...optionIds]}}`. Question order applies the pool draw
+  (`questions_per_attempt`, a random subset kept in original `sort_order`
+  sequence) then `shuffle_questions` on top. Option order applies
+  `shuffle_options` per question — **except `ordering`-type questions, which
+  always shuffle their options regardless of the flag**, since presenting an
+  ordering question's options pre-sorted would give the answer away; this
+  wasn't spelled out letter-for-letter in the plan's grading table but follows
+  directly from what an "ordering" question is for.
+- `answer(QuizAttempt, Question, ?array $payload)` — per-question AJAX
+  autosave via `updateOrCreate` on `attempt_answers`; rejects if the attempt
+  isn't `in_progress` or the question isn't in that attempt's frozen
+  `question_order` (blocks answering into a different quiz's question via a
+  forged ID).
+- `submit(QuizAttempt, ?array $integrity)` — rejects if already submitted;
+  enforces the server-side timer (`started_at + time_limit_minutes + 30s
+  grace`) when the quiz has one. Iterates the frozen question list (not
+  whatever's already in `attempt_answers`, so an unanswered question still
+  gets a zero-value graded row), grades each via the type-specific table
+  below, and writes `is_correct`/`points_awarded`/`auto_graded` onto its
+  `attempt_answers` row. If every question auto-graded, the attempt becomes
+  `graded` (score/percent/`passed` computed, `QuizAttemptSubmitted` fires);
+  if any question came back `auto_graded = false`, the attempt becomes
+  `submitted` and waits for a human — score fields stay null until P3.4's
+  `gradeManual()` closes it out.
+
+**Grading table implemented** (private `gradeAnswer()`, one method per type):
+mcq_single/true_false — selected option's `is_correct`, full points or zero.
+mcq_multi — partial credit `max(0, (correctPicked − wrongPicked) /
+totalCorrect)`, so picking every option nets zero, matching the plan's
+"floor 0" rule. fill_blank — normalized (trim + collapse whitespace,
+case-insensitive unless `case_sensitive`) match against
+`question.meta.accepted_answers`; always auto-grades, wrong if unmatched.
+numeric — `abs(value − meta.expected) <= meta.tolerance`. matching — fraction
+of `question_options` whose `match_key` the student paired correctly.
+ordering — all-or-nothing: student's submitted ID sequence must exactly equal
+`options` sorted by `sort_order`. short_text — the same accepted-answer match
+as fill_blank, but a miss returns `auto_graded = false` (flagged for review)
+instead of marking it wrong, per the plan's "exact/keyword match → auto, else
+flagged" rule. essay — always `auto_graded = false`, never scored here. An
+unanswered question (any type, including essay) short-circuits to
+`auto_graded = true, points_awarded = 0` before the type match runs — nothing
+to review if the student left it blank, only an *attempted* essay/short_text
+needs a human.
+
+**Decision:** `QuizAttempt::getRouteKeyName()` now returns `'uuid'`, matching
+`Certificate`/`Invoice`'s established convention for any model whose URL is
+student-facing and security-sensitive (sequential IDs would let one student
+probe for another's attempt). No route uses this yet — P3.5 will.
+
+**Abuse paths reasoned through:** re-POSTing `start` after already having an
+in-progress attempt → same attempt returned, no duplicate row (unique
+`(quiz_id, enrollment_id, attempt_no)` backs this too). Re-POSTing `submit`
+on an already-submitted attempt → `409` and no re-grading (score can't be
+inflated by resubmitting after seeing partial results). A stale tab holding
+an attempt open past its time limit → `submit` rejects once `now() >
+started_at + time_limit + 30s`, so the 30-second grace covers real network
+lag without opening a window to keep working past the limit. Forging a
+`question_id` from a different quiz/attempt into `answer()` → rejected, the
+question must be in *this* attempt's frozen `question_order`. Another
+student's enrollment/attempt → `EnrollmentPolicy::access` denies it via
+`Gate::authorize`, both on `start`/`answer`/`submit`.
+
+**Tests added** (`tests/Feature/Learning/QuizServiceLifecycleTest.php`, 20
+tests): attempt creation + frozen order, resume-not-duplicate, max-attempts
+enforcement, unpublished/out-of-window rejection, autosave overwrite, foreign
+question rejection, full-credit grading across mcq_single/true_false/
+fill_blank/numeric in one pass, mcq_multi partial credit with a wrong pick,
+matching + ordering, short_text auto-match vs. flagged-for-review, essay
+always pending, unanswered-question-graded-zero-not-flagged, double-submit
+rejection, timer-exceeded rejection, pool draw keeps original sort sequence,
+ordering options always shuffled, `QuizAttemptSubmitted` fires only when
+fully auto-graded (and not when a question is pending review), cross-student
+authorization denial.
+
+**Verification:** `php artisan migrate` — no new migrations, nothing to run.
+`vendor/bin/pint --dirty` clean (one auto-fix, unused import). `phpstan
+analyse --memory-limit=1G` 0 errors (the default 128M limit crashes the
+parallel workers on this machine regardless of new code — a pre-existing
+environment constraint, not a regression). `php artisan test` — 237/237 green
+(217 pre-existing + 20 new).
