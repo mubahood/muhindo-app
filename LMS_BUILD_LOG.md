@@ -134,3 +134,28 @@ certificate), `test_lesson_count_and_progress_percent_exclude_a_deleted_lesson`,
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 83/83 green (74 pre-existing + 9 new) · `php artisan migrate` clean.
+
+### P0.4 — Indexes for scale (closes L13)
+
+**Built:**
+
+- New additive migration `2026_07_26_143809_add_performance_indexes_to_lesson_progress_and_enrollments_tables.php`
+  — composite index `lesson_progress(lesson_id, completed_at)`; single-column index
+  `enrollments(status)`. `enrollments.user_id`/`course_id` and `lesson_progress.enrollment_id`/`lesson_id`
+  already carry indexes implicitly from their `->constrained()` foreign keys, so nothing
+  new was needed there.
+
+**Decision:** the plan's item 4 also lists `enrollments(last_accessed_at)`. That column
+doesn't exist yet — §6.1/L12 introduce `last_lesson_id` + `last_accessed_at` as part of
+P1's "enrollment fast-path columns," which is explicitly a later phase in §8. Indexing a
+column before it exists isn't possible; deferring this specific index to the P1 migration
+that creates the column (it'll be added in the same migration, not bolted on after).
+
+**Tests added** (`tests/Feature/Learning/PerformanceIndexTest.php`, 2 tests):
+`test_lesson_progress_has_a_composite_index_on_lesson_id_and_completed_at`,
+`test_enrollments_has_an_index_on_status` — both assert via `Schema::getIndexes()`
+(driver-agnostic, so it verifies the same thing against the SQLite test DB and the
+real MySQL schema).
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 85/85 green (83 pre-existing + 2 new) · `php artisan migrate` clean.
