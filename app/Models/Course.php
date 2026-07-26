@@ -83,6 +83,12 @@ class Course extends Model
         return $this->hasMany(Announcement::class)->latest();
     }
 
+    /** @return HasMany<Discussion, $this> */
+    public function discussions(): HasMany
+    {
+        return $this->hasMany(Discussion::class);
+    }
+
     public function isFree(): bool
     {
         return (float) $this->price <= 0;

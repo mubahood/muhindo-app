@@ -129,6 +129,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::post('announcements/{announcement}/publish', [\App\Http\Controllers\Admin\AnnouncementController::class, 'publish'])
         ->name('announcements.publish');
     Route::get('courses/{course}/gradebook', \App\Livewire\Admin\GradeMatrix::class)->name('courses.gradebook');
+    Route::get('courses/{course}/discussions', \App\Livewire\Admin\CourseDiscussions::class)->name('courses.discussions');
     Route::get('courses/{course}/gradebook/export', \App\Http\Controllers\Admin\GradebookExportController::class)->name('courses.gradebook.export');
     Route::get('enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::get('enrollments/{enrollment}', \App\Livewire\Admin\EnrollmentDrilldown::class)->name('enrollments.show');
@@ -196,6 +197,13 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::get('{course:slug}/grades', [\App\Http\Controllers\Student\GradesController::class, 'show'])->name('grades');
 
     Route::get('{course:slug}/announcements', [\App\Http\Controllers\Student\AnnouncementController::class, 'index'])->name('announcements.index');
+
+    Route::get('{course:slug}/discussions', [\App\Http\Controllers\Student\DiscussionController::class, 'index'])->name('discussions.index');
+    Route::get('{course:slug}/discussions/create', [\App\Http\Controllers\Student\DiscussionController::class, 'create'])->name('discussions.create');
+    Route::post('{course:slug}/discussions', [\App\Http\Controllers\Student\DiscussionController::class, 'store'])->name('discussions.store');
+    Route::get('{course:slug}/discussions/{discussion}', [\App\Http\Controllers\Student\DiscussionController::class, 'show'])->name('discussions.show');
+    Route::post('{course:slug}/discussions/{discussion}/reply', [\App\Http\Controllers\Student\DiscussionController::class, 'reply'])->name('discussions.reply');
+    Route::post('{course:slug}/discussions/{discussion}/resolve', [\App\Http\Controllers\Student\DiscussionController::class, 'resolve'])->name('discussions.resolve');
 
     Route::get('{course:slug}/{lesson}', [LearningController::class, 'lesson'])->name('lesson');
     Route::post('{course:slug}/{lesson}/complete', [LearningController::class, 'complete'])->name('lesson.complete');
