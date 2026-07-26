@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CourseProgression;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class CourseController extends Controller
@@ -72,11 +74,13 @@ class CourseController extends Controller
             'level' => 'required|in:beginner,intermediate,advanced',
             'category' => 'nullable|string|max:100',
             'is_published' => 'nullable|boolean',
+            'progression' => ['nullable', Rule::in(array_column(CourseProgression::cases(), 'value'))],
         ]);
 
         $data['slug'] = ($data['slug'] ?? null) ?: Str::slug($data['title']);
         $data['currency'] = ($data['currency'] ?? null) ?: 'UGX';
         $data['is_published'] = $request->boolean('is_published');
+        $data['progression'] = $data['progression'] ?? CourseProgression::Free->value;
 
         return $data;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CourseProgression;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,7 +20,7 @@ class Course extends Model
 
     protected $fillable = [
         'uuid', 'title', 'slug', 'description', 'cover_image', 'price',
-        'currency', 'level', 'category', 'is_published', 'created_by',
+        'currency', 'level', 'category', 'is_published', 'created_by', 'progression',
     ];
 
     protected function casts(): array
@@ -27,6 +28,7 @@ class Course extends Model
         return [
             'price' => 'decimal:2',
             'is_published' => 'boolean',
+            'progression' => CourseProgression::class,
         ];
     }
 

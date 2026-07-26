@@ -9,7 +9,8 @@
   </div>
 </div>
 
-<form method="POST" action="{{ $lesson->exists ? route('admin.lessons.update', $lesson) : route('admin.modules.lessons.store', $module) }}">
+<form method="POST" action="{{ $lesson->exists ? route('admin.lessons.update', $lesson) : route('admin.modules.lessons.store', $module) }}"
+      x-data="{ completionRule: '{{ old('completion_rule', $lesson->completion_rule?->value ?? 'manual') }}', contentFormat: '{{ old('content_format', $lesson->content_format?->value ?? 'plain') }}' }">
 @csrf
 @if($lesson->exists) @method('PUT') @endif
 <div class="tb-card">
@@ -19,9 +20,17 @@
         <label class="tb-label">Title *</label>
         <input class="tb-input" type="text" name="title" value="{{ old('title', $lesson->title) }}" required>
       </div>
+      <div class="tb-form-group">
+        <label class="tb-label">Content format</label>
+        <select class="tb-select" name="content_format" x-model="contentFormat">
+          @foreach(\App\Enums\ContentFormat::options() as $value => $label)
+            <option value="{{ $value }}">{{ $label }}</option>
+          @endforeach
+        </select>
+      </div>
       <div class="tb-form-group full">
-        <label class="tb-label">Content</label>
-        <textarea class="tb-textarea" name="content" rows="6">{{ old('content', $lesson->content) }}</textarea>
+        <label class="tb-label">Content <span class="muted" x-show="contentFormat === 'markdown'">(Markdown supported)</span></label>
+        <textarea class="tb-textarea" name="content" rows="8">{{ old('content', $lesson->content) }}</textarea>
       </div>
       <div class="tb-form-group">
         <label class="tb-label">Video URL (YouTube/Vimeo embed)</label>
@@ -34,6 +43,18 @@
       <div class="tb-form-group">
         <label class="tb-label">Sort order</label>
         <input class="tb-input" type="number" name="sort_order" value="{{ old('sort_order', $lesson->sort_order) }}">
+      </div>
+      <div class="tb-form-group">
+        <label class="tb-label">Completion rule</label>
+        <select class="tb-select" name="completion_rule" x-model="completionRule">
+          @foreach(\App\Enums\CompletionRule::cases() as $rule)
+            <option value="{{ $rule->value }}" {{ ! $rule->isEnforced() ? 'disabled' : '' }}>{{ $rule->label() }}{{ ! $rule->isEnforced() ? ' — coming soon' : '' }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="tb-form-group" x-show="completionRule === 'min_watch'">
+        <label class="tb-label">Required watch % to auto-complete</label>
+        <input class="tb-input" type="number" min="1" max="100" name="completion_threshold" value="{{ old('completion_threshold', $lesson->completion_threshold) }}">
       </div>
       <div class="tb-form-group">
         <label class="tb-check-group">

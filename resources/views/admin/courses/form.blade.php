@@ -48,6 +48,14 @@
         <input class="tb-input" type="text" name="currency" value="{{ old('currency', $course->currency ?? 'UGX') }}">
       </div>
       <div class="tb-form-group">
+        <label class="tb-label">Progression</label>
+        <select class="tb-select" name="progression">
+          @foreach(\App\Enums\CourseProgression::options() as $value => $label)
+            <option value="{{ $value }}" {{ old('progression', $course->progression?->value ?? 'free') === $value ? 'selected' : '' }}>{{ $label }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="tb-form-group">
         <label class="tb-check-group">
           <input type="checkbox" name="is_published" value="1" {{ old('is_published', $course->is_published) ? 'checked' : '' }}>
           <span>Published (visible on the public site)</span>

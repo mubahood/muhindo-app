@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CompletionRule;
+use App\Enums\ContentFormat;
 use App\Http\Controllers\Controller;
 use App\Models\CourseModule;
 use App\Models\Lesson;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class LessonController extends Controller
@@ -47,6 +50,8 @@ class LessonController extends Controller
     /** @return array<string,mixed> */
     private function validated(Request $request): array
     {
+        $enforcedRules = array_map(fn (CompletionRule $r) => $r->value, array_filter(CompletionRule::cases(), fn ($r) => $r->isEnforced()));
+
         $data = $request->validate([
             'title' => 'required|string|max:200',
             'content' => 'nullable|string',
@@ -54,9 +59,15 @@ class LessonController extends Controller
             'duration_minutes' => 'nullable|integer|min:0',
             'sort_order' => 'nullable|integer',
             'is_free_preview' => 'nullable|boolean',
+            'content_format' => ['nullable', Rule::in(array_column(ContentFormat::cases(), 'value'))],
+            'completion_rule' => ['nullable', Rule::in($enforcedRules)],
+            'completion_threshold' => 'nullable|integer|min:1|max:100',
         ]);
 
         $data['is_free_preview'] = $request->boolean('is_free_preview');
+        $data['content_format'] = $data['content_format'] ?? ContentFormat::Plain->value;
+        $data['completion_rule'] = $data['completion_rule'] ?? CompletionRule::Manual->value;
+        $data['completion_threshold'] = $data['completion_threshold'] ?? 80;
 
         return $data;
     }

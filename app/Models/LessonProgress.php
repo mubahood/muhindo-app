@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LessonProgress extends Model
 {
-    protected $fillable = ['enrollment_id', 'lesson_id', 'completed_at', 'watch_seconds'];
+    protected $fillable = ['enrollment_id', 'lesson_id', 'started_at', 'completed_at', 'watch_seconds', 'last_position_seconds'];
 
     protected function casts(): array
     {
-        return ['completed_at' => 'datetime'];
+        return ['started_at' => 'datetime', 'completed_at' => 'datetime'];
     }
 
     public function enrollment(): BelongsTo

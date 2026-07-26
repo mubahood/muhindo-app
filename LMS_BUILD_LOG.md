@@ -758,3 +758,52 @@ All six items done, one commit per item, in plan order. Closes/advances: §6.1
 Next: P2 — Player & AJAX (YouTube IFrame API + heartbeat + resume, AJAX
 completion + sidebar states, markdown lessons, free preview, completion rules
 `manual`/`min_watch` + sequential progression, events/listeners/notifications).
+
+---
+
+## P2 — Player & AJAX
+
+### P2.1 — Schema for completion rules/content format/progression + admin UI (§4.3/§4.4/§7.4)
+
+**Built:**
+
+- Three new backed enums, matching the existing `PaymentMethod`/`InvoiceStatus`
+  convention: `App\Enums\CompletionRule` (`manual`|`min_watch`|`quiz_pass`|
+  `submission`, with an `isEnforced()` helper — only the first two are wired up
+  yet), `App\Enums\CourseProgression` (`free`|`sequential`), `App\Enums\ContentFormat`
+  (`plain`|`markdown`).
+- Three additive migrations: `lessons` gets `completion_rule` (default `manual`),
+  `completion_threshold` (default 80), `content_format` (default `plain`);
+  `courses` gets `progression` (default `free`); `lesson_progress` gets
+  `started_at` and `last_position_seconds` (both needed for P2.3's resume/
+  heartbeat work, added now alongside the rest of the schema pass rather than
+  as a separate item). All three cast to their enum classes on the models.
+  Verified clean in both directions (migrate → rollback → migrate).
+- Admin UI: the lesson form gets a "Content format" select, a "Completion rule"
+  select (`quiz_pass`/`submission` shown but disabled with a "— coming soon"
+  suffix, since they aren't enforced yet — never let an admin configure a rule
+  that silently does nothing), and a threshold input that only appears
+  (`x-show`) when `min_watch` is selected. The course form gets a "Progression"
+  select. `LessonController`/`CourseController` validate against `Rule::in()`
+  restricted to real (or, for completion rules, *enforced*) enum values — a
+  tampered request for `quiz_pass` is rejected server-side, not just hidden by
+  the disabled `<option>`.
+- `Lesson::durationSeconds()` — a computed method (`duration_minutes * 60`), not
+  a new stored column. §4.4 describes `duration_seconds` as a schema column, but
+  adding one risks drift against `duration_minutes` (the admin-facing input,
+  which stays in minutes — nobody wants to type raw seconds) for a value that's
+  trivially derivable. This is the one place this phase deviates from the plan's
+  literal schema table, in favor of the same value with no synchronization risk.
+
+**Tests added** (`tests/Feature/Admin/LessonCompletionSettingsTest.php`, 6 tests):
+`test_a_new_lesson_defaults_to_manual_completion_and_plain_content`,
+`test_an_admin_can_set_a_lesson_to_min_watch_with_a_custom_threshold`,
+`test_a_not_yet_enforced_completion_rule_is_rejected_even_if_submitted_directly`
+(the tamper-proofing proof), `test_an_admin_can_set_a_lessons_content_format_to_markdown`,
+`test_a_new_course_defaults_to_free_progression`,
+`test_an_admin_can_set_a_course_to_sequential_progression`.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 144/144 green (138 pre-existing + 6 new) · migrate/rollback/migrate
+clean · manual smoke test at the real MAMP-served URL (the completion-rule/content-
+format Alpine toggles render and the disabled "coming soon" options are visible).
