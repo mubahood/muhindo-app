@@ -1046,3 +1046,57 @@ the animation itself is not.
 green · manual smoke test at the real MAMP-served URL (the admin editor's
 Edit/Preview toggle and "Insert image" control both render correctly for a
 real lesson).
+
+### P2.6 — Free preview on the public catalogue (§7.2, closes L5)
+
+**Built:**
+
+- New `CourseCatalogueController::preview(Course, Lesson)` (public, no auth
+  middleware) — 404s unless the course is published, the lesson actually
+  belongs to that course, and `is_free_preview` is true. Renders the lesson's
+  video/content (through the same `MarkdownRenderer` as the real player when
+  `content_format=markdown`) plus a sticky bottom "Enrol to continue" bar —
+  no heartbeat/telemetry wiring, since there's no enrollment to attribute it
+  to for an anonymous guest; that's out of scope for a conversion page.
+- New route `GET /courses/{course:slug}/preview/{lesson}` (`courses.preview`).
+  The course page's existing "Free preview" tag on each lesson now links to
+  it instead of being inert text.
+
+**Critical bug found and fixed — a route name collision that's been silently
+misdirecting the site's main navigation.** Writing a test that asserted the
+course page's free-preview link surfaced that `route('courses.show', ...)`
+was returning a JSON API response instead of the HTML page. Root cause:
+`routes/api.php`'s `Route::apiResource('courses', CourseController::class)`
+had no name override, so Laravel defaulted it to the bare `courses.index`/
+`courses.show` — **the exact same names** the public web catalogue already
+uses. With two routes sharing one name, `route('courses.show', ...)`
+resolved to whichever was registered last (the API one), meaning **every**
+`route('courses.show')`/`route('courses.index')` call site — the site's main
+nav "Courses" link (`layouts/marketing.blade.php`, appears on every public
+page), the course catalogue cards, the admin "View public page" link, the
+paid-checkout-unavailable redirect, and this item's own new preview page —
+had been silently generating `/api/v1/courses/...` JSON links instead of the
+real HTML pages. `routes/api.php`'s `invoices` apiResource had the identical
+latent (not yet actually colliding) issue. Fixed both with explicit
+`api.`-prefixed names via `->names([...])`, matching every other route in
+that file's own established convention, and added
+`tests/Feature/RouteNamingTest.php` (3 tests) pinning that `courses.show`/
+`courses.index` resolve to the HTML page (not `/api/v1/`) and that the API
+routes are properly `api.`-prefixed — so this exact class of bug can't
+regress silently again.
+
+**Tests added** (`tests/Feature/Learning/FreePreviewTest.php`, 5 tests):
+`test_a_guest_can_view_a_free_preview_lesson`,
+`test_a_guest_cannot_view_a_lesson_that_is_not_marked_free_preview`,
+`test_a_free_preview_lesson_on_an_unpublished_course_is_not_viewable`,
+`test_the_free_preview_tag_on_the_course_page_links_to_the_preview`,
+`test_a_lesson_belonging_to_a_different_course_404s`. Plus
+`tests/Feature/RouteNamingTest.php` (3 tests, the route-collision regression
+proof above).
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 196/196 green (188 pre-existing + 8 new) · `composer ci`
+green · manual smoke test at the real MAMP-served URL (confirmed the
+homepage's "Courses" nav link now points at `/courses`, not `/api/v1/courses`;
+the free-preview page renders and its content/CTA are correct; the course
+page's "Free preview" tag links to the right URL).

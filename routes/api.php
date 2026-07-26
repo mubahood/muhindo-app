@@ -20,7 +20,10 @@ Route::prefix('v1')->group(function () {
     // Public: docs + auth + course catalogue
     Route::get('openapi.json', OpenApiController::class)->name('api.openapi');
     Route::post('auth/login', [AuthController::class, 'login'])->name('api.auth.login');
-    Route::apiResource('courses', CourseController::class)->only(['index', 'show']);
+    Route::apiResource('courses', CourseController::class)->names([
+        'index' => 'api.courses.index',
+        'show' => 'api.courses.show',
+    ])->only(['index', 'show']);
 
     // Authenticated
     Route::middleware('auth:sanctum')->group(function () {
@@ -37,7 +40,10 @@ Route::prefix('v1')->group(function () {
         Route::get('projects/{project}', [ProjectController::class, 'show'])->name('api.projects.show');
 
         // Invoices (scoped to the authenticated billable — client or student)
-        Route::apiResource('invoices', InvoiceController::class)->only(['index', 'show']);
+        Route::apiResource('invoices', InvoiceController::class)->names([
+            'index' => 'api.invoices.index',
+            'show' => 'api.invoices.show',
+        ])->only(['index', 'show']);
 
         Route::post('device-tokens', [\App\Http\Controllers\Admin\DeviceTokenController::class, 'store'])->name('api.device-tokens.store');
     });

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ContentFormat;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Models\Lesson;
+use App\Services\Learning\MarkdownRenderer;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,6 +15,8 @@ use Illuminate\View\View;
 
 class CourseCatalogueController extends Controller
 {
+    public function __construct(private readonly MarkdownRenderer $markdown) {}
+
     public function index(): View
     {
         return view('courses.index', [
@@ -30,6 +35,24 @@ class CourseCatalogueController extends Controller
         return view('courses.show', [
             'course' => $course->load('modules.lessons'),
             'enrollment' => $enrollment,
+        ]);
+    }
+
+    /** §7.2 — free preview: a guest (no enrollment) can view an is_free_preview lesson, closing L5. */
+    public function preview(Course $course, Lesson $lesson): View
+    {
+        abort_unless($course->is_published, 404);
+        abort_unless($lesson->module->course_id === $course->id, 404);
+        abort_unless($lesson->is_free_preview, 404);
+
+        $renderedContent = $lesson->content && $lesson->content_format === ContentFormat::Markdown
+            ? $this->markdown->toHtml($lesson->content)
+            : null;
+
+        return view('courses.preview', [
+            'course' => $course->load('modules.lessons'),
+            'lesson' => $lesson,
+            'renderedContent' => $renderedContent,
         ]);
     }
 

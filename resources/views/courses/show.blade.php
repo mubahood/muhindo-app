@@ -30,7 +30,11 @@
           <h3>{{ $module->title }}</h3>
           <ul style="margin-top:8px;">
             @foreach($module->lessons as $lesson)
-              <li>{{ $lesson->title }} @if($lesson->duration_minutes)<span class="muted">({{ $lesson->duration_minutes }} min)</span>@endif @if($lesson->is_free_preview)<span class="tag" style="margin-left:6px;">Free preview</span>@endif</li>
+              <li>{{ $lesson->title }} @if($lesson->duration_minutes)<span class="muted">({{ $lesson->duration_minutes }} min)</span>@endif
+                @if($lesson->is_free_preview)
+                  <a href="{{ route('courses.preview', [$course, $lesson]) }}" class="tag" style="margin-left:6px;">Free preview</a>
+                @endif
+              </li>
             @endforeach
           </ul>
         </div>

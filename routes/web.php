@@ -48,6 +48,7 @@ Route::get('/verify/{certificate}', [CertificateVerificationController::class, '
 */
 Route::get('/courses', [CourseCatalogueController::class, 'index'])->name('courses.index');
 Route::get('/courses/{course:slug}', [CourseCatalogueController::class, 'show'])->name('courses.show');
+Route::get('/courses/{course:slug}/preview/{lesson}', [CourseCatalogueController::class, 'preview'])->name('courses.preview');
 Route::post('/courses/{course:slug}/enroll', [CourseCatalogueController::class, 'enroll'])
     ->middleware(['auth', 'throttle:10,1'])->name('courses.enroll');
 
