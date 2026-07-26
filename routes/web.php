@@ -52,6 +52,8 @@ Route::get('/courses/{course:slug}', [CourseCatalogueController::class, 'show'])
 Route::get('/courses/{course:slug}/preview/{lesson}', [CourseCatalogueController::class, 'preview'])->name('courses.preview');
 Route::post('/courses/{course:slug}/enroll', [CourseCatalogueController::class, 'enroll'])
     ->middleware(['auth', 'throttle:10,1'])->name('courses.enroll');
+Route::get('/courses/{course:slug}/checkout', [CourseCatalogueController::class, 'checkout'])
+    ->middleware('auth')->name('courses.checkout');
 
 /*
 |--------------------------------------------------------------------------

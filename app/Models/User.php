@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -118,6 +119,12 @@ class User extends Authenticatable implements MustVerifyEmailContract
     public function deviceTokens(): HasMany
     {
         return $this->hasMany(DeviceToken::class);
+    }
+
+    /** Invoices billed directly to this user (course purchases) — project invoices are billed to a Client instead. */
+    public function invoices(): MorphMany
+    {
+        return $this->morphMany(Invoice::class, 'billable');
     }
 
     // ── Avatar helper ──────────────────────────────────────────

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\InvoiceStatus;
 use App\Enums\PaymentMethod;
+use App\Events\Billing\InvoicePaid;
 use App\Exceptions\OverpaymentException;
 use App\Models\Client;
 use App\Models\Course;
@@ -136,7 +137,7 @@ class BillingService
 
             $locked->update(['amount_paid' => $newPaid, 'balance' => $newBalance, 'status' => $status]);
 
-            return Payment::create([
+            $payment = Payment::create([
                 'uuid' => (string) Str::uuid(),
                 'invoice_id' => $locked->id,
                 'method' => $method,
@@ -146,6 +147,12 @@ class BillingService
                 'received_by' => $by,
                 'created_at' => Carbon::now(),
             ]);
+
+            if ($status === InvoiceStatus::Paid) {
+                InvoicePaid::dispatch($locked->fresh());
+            }
+
+            return $payment;
         });
     }
 

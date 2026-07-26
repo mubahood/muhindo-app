@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Enrollment extends Model
 {
     protected $fillable = [
-        'uuid', 'user_id', 'course_id', 'status', 'source', 'enrolled_at', 'completed_at',
+        'uuid', 'user_id', 'course_id', 'invoice_id', 'status', 'source', 'enrolled_at', 'completed_at',
         'progress_percent', 'total_watch_seconds', 'last_lesson_id', 'last_accessed_at', 'at_risk_reason',
     ];
 
@@ -43,6 +43,12 @@ class Enrollment extends Model
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
+    }
+
+    /** @return BelongsTo<Invoice, $this> */
+    public function invoice(): BelongsTo
+    {
+        return $this->belongsTo(Invoice::class);
     }
 
     /** @return HasMany<LessonProgress, $this> */
