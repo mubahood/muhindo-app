@@ -85,9 +85,13 @@ class LearningController extends Controller
 
     private function enrollmentFor(Request $request, Course $course): Enrollment
     {
-        return Enrollment::where('user_id', $request->user()->id)
+        $enrollment = Enrollment::where('user_id', $request->user()->id)
             ->where('course_id', $course->id)
             ->firstOrFail();
+
+        $this->authorize('access', $enrollment);
+
+        return $enrollment;
     }
 
     private function nextLesson(Course $course, Lesson $current): ?Lesson

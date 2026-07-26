@@ -9,9 +9,15 @@
     <div class="card">
       <div style="font-weight:600;margin-bottom:4px;">{{ $enrollment->course->title }}</div>
       <div class="muted" style="font-size:.85rem;margin-bottom:14px;">{{ ucfirst($enrollment->status) }} · {{ $enrollment->progressPercent() }}% complete</div>
-      <a href="{{ route('learn.course', $enrollment->course) }}" class="btn gold">{{ $enrollment->status === 'completed' ? 'Review' : 'Continue' }}</a>
-      @if($enrollment->certificate)
-        <a href="{{ route('learn.certificate', $enrollment->certificate) }}" class="btn" style="margin-left:8px;" target="_blank"><i class="fas fa-award"></i> Certificate</a>
+      @if(in_array($enrollment->status, ['active', 'completed'], true))
+        <a href="{{ route('learn.course', $enrollment->course) }}" class="btn gold">{{ $enrollment->status === 'completed' ? 'Review' : 'Continue' }}</a>
+        @if($enrollment->certificate)
+          <a href="{{ route('learn.certificate', $enrollment->certificate) }}" class="btn" style="margin-left:8px;" target="_blank"><i class="fas fa-award"></i> Certificate</a>
+        @endif
+      @elseif($enrollment->status === 'pending')
+        <span class="badge-pill" style="background:#f7f0df;color:#93752f;">Payment pending</span>
+      @else
+        <span class="badge-pill" style="background:#fbe9e9;color:#b91c1c;">Cancelled</span>
       @endif
     </div>
   @empty
