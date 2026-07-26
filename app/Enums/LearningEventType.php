@@ -4,10 +4,9 @@ namespace App\Enums;
 
 /**
  * The xAPI-lite event vocabulary fed into `learning_events` (§6.2). Not every
- * case has a recorder yet — the video, quiz, note and question cases wait on
- * the player heartbeat (P2), quiz engine (P3), and community features (P4)
- * respectively; they're declared now so the schema doesn't need another
- * migration when those phases land.
+ * case has a recorder yet — note and question wait on community features
+ * (P4); they're declared now so the schema doesn't need another migration
+ * when that phase lands.
  */
 enum LearningEventType: string
 {
@@ -22,6 +21,7 @@ enum LearningEventType: string
     case MaterialDownloaded = 'material.downloaded';
     case NoteCreated = 'note.created';
     case QuestionAsked = 'question.asked';
+    case AssignmentSubmitted = 'assignment.submitted';
 
     /** Human label for the instructor's per-student activity timeline (§6.3.2). */
     public function label(): string
@@ -38,6 +38,7 @@ enum LearningEventType: string
             self::MaterialDownloaded => 'Downloaded a material',
             self::NoteCreated => 'Left a note',
             self::QuestionAsked => 'Asked a question',
+            self::AssignmentSubmitted => 'Submitted an assignment',
         };
     }
 }

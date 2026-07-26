@@ -123,6 +123,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->shallow()->except(['index', 'show']);
     Route::get('enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::get('enrollments/{enrollment}', \App\Livewire\Admin\EnrollmentDrilldown::class)->name('enrollments.show');
+    Route::get('grading-queue', \App\Livewire\Admin\GradingQueue::class)->name('grading-queue');
     Route::post('courses/{course}/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
     Route::delete('enrollments/{enrollment}', [EnrollmentController::class, 'destroy'])->name('enrollments.destroy');
 

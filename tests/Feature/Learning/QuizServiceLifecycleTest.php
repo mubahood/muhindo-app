@@ -371,4 +371,31 @@ class QuizServiceLifecycleTest extends TestCase
         $this->expectException(\Illuminate\Auth\Access\AuthorizationException::class);
         app(QuizService::class)->submit($attempt);
     }
+
+    public function test_starting_and_submitting_feed_the_learning_events_stream(): void
+    {
+        [, $student, $enrollment, $quiz] = $this->enrolledStudent();
+        $quiz->questions()->create(['type' => 'mcq_single', 'prompt' => 'Q1', 'points' => 1, 'sort_order' => 0]);
+
+        $this->actingAs($student);
+        $service = app(QuizService::class);
+        $attempt = $service->start($quiz, $enrollment);
+        $service->submit($attempt);
+
+        $this->assertSame(1, $enrollment->learningEvents()->where('event', \App\Enums\LearningEventType::QuizStarted)->count());
+        $this->assertSame(1, $enrollment->learningEvents()->where('event', \App\Enums\LearningEventType::QuizSubmitted)->count());
+    }
+
+    public function test_resuming_an_in_progress_attempt_does_not_record_a_second_started_event(): void
+    {
+        [, $student, $enrollment, $quiz] = $this->enrolledStudent();
+        $quiz->questions()->create(['type' => 'mcq_single', 'prompt' => 'Q1', 'points' => 1, 'sort_order' => 0]);
+
+        $this->actingAs($student);
+        $service = app(QuizService::class);
+        $service->start($quiz, $enrollment);
+        $service->start($quiz, $enrollment);
+
+        $this->assertSame(1, $enrollment->learningEvents()->where('event', \App\Enums\LearningEventType::QuizStarted)->count());
+    }
 }

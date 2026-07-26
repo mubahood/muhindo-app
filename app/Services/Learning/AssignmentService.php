@@ -3,9 +3,13 @@
 namespace App\Services\Learning;
 
 use App\Enums\AssignmentSubmissionStatus;
+use App\Enums\LearningEventType;
+use App\Events\Learning\AssignmentSubmitted;
+use App\Events\Learning\SubmissionGraded;
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
 use App\Models\Enrollment;
+use App\Models\User;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Gate;
@@ -15,12 +19,14 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * §5.1/§5.3 — the Classroom-style turn-in flow: draft (private, editable) -> submitted ->
- * returned (graded, P3.7). Files live on the private `local` disk, same convention as
+ * returned (graded). Files live on the private `local` disk, same convention as
  * ProjectDocumentController/DocumentService — never web-served directly.
  */
 class AssignmentService
 {
     private const DISK = 'local';
+
+    public function __construct(private readonly LearningEventRecorder $events) {}
 
     /** @param  array{body?: ?string, link_url?: ?string}  $data */
     public function saveDraft(Enrollment $enrollment, Assignment $assignment, array $data, ?UploadedFile $file): AssignmentSubmission
@@ -47,6 +53,37 @@ class AssignmentService
         $submission->submitted_at = now();
         $submission->is_late = $isLate;
         $submission->save();
+
+        $this->events->record($enrollment, LearningEventType::AssignmentSubmitted, $assignment->lesson, $submission, [
+            'assignment_id' => $assignment->id, 'attempt_no' => $submission->attempt_no, 'is_late' => $isLate,
+        ]);
+        AssignmentSubmitted::dispatch($submission->fresh());
+
+        return $submission;
+    }
+
+    /** An instructor grades and returns a submitted assignment. */
+    public function return(AssignmentSubmission $submission, float $points, ?string $feedback, User $grader): AssignmentSubmission
+    {
+        if ($submission->status !== AssignmentSubmissionStatus::Submitted) {
+            throw new HttpException(409, 'This submission is not awaiting grading.');
+        }
+
+        $max = (float) $submission->assignment->points;
+        if ($points < 0 || $points > $max) {
+            throw new HttpException(422, "Points must be between 0 and {$max}.");
+        }
+
+        $submission->update([
+            'points_awarded' => $points,
+            'feedback' => $feedback,
+            'status' => AssignmentSubmissionStatus::Returned,
+            'graded_by' => $grader->id,
+            'graded_at' => now(),
+        ]);
+
+        $submission = $submission->fresh();
+        SubmissionGraded::dispatch($submission);
 
         return $submission;
     }

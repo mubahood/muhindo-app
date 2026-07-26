@@ -2,6 +2,7 @@
 
 namespace App\Services\Learning;
 
+use App\Enums\LearningEventType;
 use App\Enums\QuestionType;
 use App\Enums\QuizAttemptStatus;
 use App\Enums\QuizFeedbackMode;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 /** §5.2 — the attempt lifecycle: start → answer (autosave) → submit (server-graded). Server is the only source of truth. */
 class QuizService
 {
+    public function __construct(private readonly LearningEventRecorder $events) {}
+
     /** Starts a new attempt, or resumes the caller's existing in-progress one — never a second parallel attempt. */
     public function start(Quiz $quiz, Enrollment $enrollment): QuizAttempt
     {
@@ -51,7 +54,7 @@ class QuizService
             throw new HttpException(403, 'You have used all of your attempts for this quiz.');
         }
 
-        return $quiz->attempts()->create([
+        $attempt = $quiz->attempts()->create([
             'uuid' => (string) Str::uuid(),
             'enrollment_id' => $enrollment->id,
             'attempt_no' => $attemptCount + 1,
@@ -59,6 +62,10 @@ class QuizService
             'started_at' => now(),
             'question_order' => $this->buildQuestionOrder($quiz),
         ]);
+
+        $this->events->record($enrollment, LearningEventType::QuizStarted, $quiz->lesson, $attempt, ['quiz_id' => $quiz->id, 'attempt_no' => $attempt->attempt_no]);
+
+        return $attempt;
     }
 
     /** Autosaves a single question's answer. Safe to call repeatedly as the student changes their mind. */
@@ -132,6 +139,8 @@ class QuizService
         }
 
         $timeSpent = $attempt->started_at ? $attempt->started_at->diffInSeconds(now()) : null;
+
+        $this->events->record($attempt->enrollment, LearningEventType::QuizSubmitted, $quiz->lesson, $attempt, ['quiz_id' => $quiz->id, 'attempt_no' => $attempt->attempt_no]);
 
         if ($needsManualReview) {
             $attempt->update([

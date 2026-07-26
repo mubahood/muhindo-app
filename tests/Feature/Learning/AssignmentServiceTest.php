@@ -176,4 +176,68 @@ class AssignmentServiceTest extends TestCase
         $this->expectException(\Illuminate\Auth\Access\AuthorizationException::class);
         app(AssignmentService::class)->submit($enrollment, $assignment, ['body' => 'x'], null);
     }
+
+    public function test_returning_a_submitted_assignment_grades_it(): void
+    {
+        [, $student, $enrollment, $assignment] = $this->enrolledStudent();
+        $grader = User::factory()->create(['role' => 'super_admin']);
+        $this->actingAs($student);
+        $submission = app(AssignmentService::class)->submit($enrollment, $assignment, ['body' => 'my work'], null);
+
+        $returned = app(AssignmentService::class)->return($submission, 42.5, 'Well argued.', $grader);
+
+        $this->assertSame(AssignmentSubmissionStatus::Returned, $returned->status);
+        $this->assertEquals(42.5, (float) $returned->points_awarded);
+        $this->assertSame('Well argued.', $returned->feedback);
+        $this->assertSame($grader->id, $returned->graded_by);
+        $this->assertNotNull($returned->graded_at);
+    }
+
+    public function test_returning_a_draft_or_already_returned_submission_is_rejected(): void
+    {
+        [, $student, $enrollment, $assignment] = $this->enrolledStudent();
+        $grader = User::factory()->create(['role' => 'super_admin']);
+        $this->actingAs($student);
+        $draft = app(AssignmentService::class)->saveDraft($enrollment, $assignment, ['body' => 'wip'], null);
+
+        $this->expectException(HttpException::class);
+        app(AssignmentService::class)->return($draft, 10, null, $grader);
+    }
+
+    public function test_returning_rejects_points_above_the_assignments_max(): void
+    {
+        [, $student, $enrollment, $assignment] = $this->enrolledStudent(['points' => 20]);
+        $grader = User::factory()->create(['role' => 'super_admin']);
+        $this->actingAs($student);
+        $submission = app(AssignmentService::class)->submit($enrollment, $assignment, ['body' => 'x'], null);
+
+        $this->expectException(HttpException::class);
+        app(AssignmentService::class)->return($submission, 21, null, $grader);
+    }
+
+    public function test_submitting_notifies_the_courses_instructor(): void
+    {
+        \Illuminate\Support\Facades\Notification::fake();
+        $instructor = User::factory()->create(['role' => 'super_admin']);
+        [$course, $student, $enrollment, $assignment] = $this->enrolledStudent();
+        $course->update(['created_by' => $instructor->id]);
+        $this->actingAs($student);
+
+        app(AssignmentService::class)->submit($enrollment, $assignment, ['body' => 'final'], null);
+
+        \Illuminate\Support\Facades\Notification::assertSentTo($instructor, \App\Notifications\AssignmentSubmittedNotification::class);
+    }
+
+    public function test_submitting_feeds_the_learning_events_stream_but_a_draft_save_does_not(): void
+    {
+        [, $student, $enrollment, $assignment] = $this->enrolledStudent();
+        $this->actingAs($student);
+        $service = app(AssignmentService::class);
+
+        $service->saveDraft($enrollment, $assignment, ['body' => 'wip'], null);
+        $this->assertSame(0, $enrollment->learningEvents()->where('event', \App\Enums\LearningEventType::AssignmentSubmitted)->count());
+
+        $service->submit($enrollment, $assignment, ['body' => 'final'], null);
+        $this->assertSame(1, $enrollment->learningEvents()->where('event', \App\Enums\LearningEventType::AssignmentSubmitted)->count());
+    }
 }
