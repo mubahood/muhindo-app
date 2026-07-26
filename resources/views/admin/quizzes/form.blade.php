@@ -114,10 +114,29 @@
 </form>
 
 @if($quiz->exists)
-<div class="tb-card" style="margin-top:20px;">
-  <div class="tb-card-header"><span class="tb-card-title">Questions ({{ $quiz->questions->count() }})</span></div>
-  <div class="tb-card-body">
-    <p class="muted">Question management is coming in the next build step.</p>
+<div class="tb-page-header" style="margin-top:20px;">
+  <div><h2 style="font-size:1.1rem;">Questions ({{ $quiz->questions->count() }})</h2></div>
+  <a href="{{ route('admin.quizzes.questions.create', $quiz) }}" class="btn-tb btn-tb-primary btn-tb-sm"><i class="fas fa-plus"></i> New Question</a>
+</div>
+<div class="tb-card">
+  <div class="tb-card-body" style="padding:0;">
+    @forelse($quiz->questions as $question)
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bd);">
+        <div>
+          <div style="font-weight:500;">{{ \Illuminate\Support\Str::limit(strip_tags($question->prompt), 80) }}</div>
+          <div class="muted" style="font-size:.78rem;">{{ $question->type->label() }} · {{ $question->points }} pt(s)</div>
+        </div>
+        <div class="tb-table-actions">
+          <a href="{{ route('admin.questions.edit', $question) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-pen"></i></a>
+          <form method="POST" action="{{ route('admin.questions.destroy', $question) }}" onsubmit="return confirm('Delete this question?');">
+            @csrf @method('DELETE')
+            <button type="submit" class="btn-tb btn-tb-danger btn-tb-icon"><i class="fas fa-trash"></i></button>
+          </form>
+        </div>
+      </div>
+    @empty
+      <div class="tb-empty" style="padding:20px;"><p>No questions yet.</p></div>
+    @endforelse
   </div>
 </div>
 @endif

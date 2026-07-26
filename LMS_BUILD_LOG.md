@@ -1289,3 +1289,57 @@ and re-verifying migrate → rollback → migrate end to end.
 `php artisan test` 209/209 green (203 pre-existing + 6 new) ·
 migrate/rollback/migrate clean · manual smoke test at the real MAMP-served URL
 (the quiz creation form renders with all settings fields).
+
+### P3.2 — Admin question/option builder UI (§5.1)
+
+**Built:**
+
+- `Admin\QuestionController` (create/store/edit/update/destroy, shallow-nested
+  under `quizzes.questions` like `modules.lessons`) + one adaptive Blade form
+  (`admin/quizzes/question-form.blade.php`) covering all 9 `QuestionType`
+  cases from one template: a repeatable Alpine-driven option-row editor
+  (add/remove rows client-side, serialized as `options[N][label]` etc.) for
+  the five option-based types (mcq_single/mcq_multi/true_false/matching/
+  ordering — `true_false` deliberately reuses the exact same free-form rows
+  as `mcq_single` rather than a special-cased fixed pair, since under the hood
+  it's graded identically: "pick the correct option"), an accepted-answers
+  textarea + case-sensitivity toggle for fill_blank/short_text (stored in
+  `meta`), expected-value/tolerance inputs for numeric (`meta`), and no extra
+  config at all for essay (always manually graded). `matching`'s
+  `question_options.match_key` holds the right-hand side of each pair
+  directly, rather than requiring a second linked option row.
+- The quiz edit page now lists its questions (type, points, truncated prompt)
+  with edit/delete, replacing P3.1's "coming in the next build step" stub.
+- Deleting a question is a soft delete (already in place from P3.1); deleting
+  it never touches the quiz or other questions.
+
+**Bugs found and fixed — a real, repeated array-merge footgun.** Both
+`store()` and `update()` originally tried to default `sort_order` via
+`$data['question'] + ['sort_order' => ...]` (create) and passed
+`$data['question']` straight into `update()` (edit). PHP's `+` array union
+operator keeps the **left** array's value for any key present in both sides —
+since the validated array already had a `sort_order` key (explicitly `null`
+when the field was omitted), the intended default was silently discarded and
+`null` was written every time, violating the column's `NOT NULL` constraint
+with a 500 on every request that didn't supply a sort order. Caught
+immediately by the new tests (not shipped silently) — `update()` had the
+worse version, since a normal edit-question round trip (which doesn't always
+resubmit an unchanged sort order) would 500 outright. Fixed both call sites
+to explicitly compute the value with `??=` before passing it to
+`create()`/`update()`, instead of relying on array-union semantics to inject
+a default into an already-populated array.
+
+**Tests added** (`tests/Feature/Admin/QuestionBuilderTest.php`, 8 tests):
+`test_an_admin_can_create_an_mcq_single_question_with_options`,
+`test_an_admin_can_create_a_fill_blank_question_with_accepted_answers`,
+`test_an_admin_can_create_a_numeric_question_with_tolerance`,
+`test_an_admin_can_create_a_matching_question_with_match_keys`,
+`test_an_admin_can_create_an_essay_question_with_no_grading_config`,
+`test_updating_a_question_replaces_its_options` (the fix's regression proof —
+was the exact 500 above), `test_deleting_a_question_is_soft_deleted_and_preserves_the_quiz`,
+`test_a_non_admin_cannot_create_a_question`.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 217/217 green (209 pre-existing + 8 new) · manual smoke test
+at the real MAMP-served URL (question form renders with the dynamic option
+editor for the default type).

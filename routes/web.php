@@ -116,6 +116,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->name('lessons.content-images.store');
     Route::resource('courses.quizzes', \App\Http\Controllers\Admin\QuizController::class)
         ->shallow()->except(['index', 'show']);
+    Route::resource('quizzes.questions', \App\Http\Controllers\Admin\QuestionController::class)
+        ->shallow()->except(['index', 'show']);
     Route::get('enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::get('enrollments/{enrollment}', \App\Livewire\Admin\EnrollmentDrilldown::class)->name('enrollments.show');
     Route::post('courses/{course}/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
