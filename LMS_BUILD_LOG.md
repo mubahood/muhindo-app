@@ -2129,3 +2129,66 @@ redirects away; an already-active enrollment never creates a stray invoice;
 **Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
 clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
 0 errors. `php artisan test` — 334/334 green (321 pre-existing + 13 new).
+
+### P4.2 — Coupons (§7.1)
+
+**Built:** `coupons` table (`code` unique, `type` percent|amount, `value`,
+`max_uses`/`used_count`, `expires_at`, `course_id` nullable — null scopes to
+any course), `CouponType` enum, `Coupon` model.
+`CouponService::redeem(string $code, Course $course, string $subtotal)` —
+looks the code up case-insensitively (uppercased + trimmed before the
+query), locks the row for the duration of validation so two students racing
+for the last remaining use can't both succeed, rejects unknown/inactive/
+expired/exhausted/wrong-course-scope codes with `InvalidCouponException`
+(same `::make(string $reason)` factory pattern as the existing
+`OverpaymentException`), computes the discount via bcmath (percent against
+the subtotal; a flat amount capped at the subtotal itself so a coupon can
+never make an invoice go negative), and increments `used_count` atomically
+within the same lock.
+
+`BillingService::generateCourseInvoice()` gained an optional `$couponCode`
+parameter — redeems before generating the invoice and feeds the computed
+discount straight into `generateInvoice()`'s existing `discount` parameter,
+so no invoice-side logic needed to change at all. **Decision:** a coupon
+use is consumed at invoice-creation time, not at payment — matches the
+plan's own framing of coupons as "nearly free to build," a lightweight
+growth lever rather than something needing perfect atomicity if a student
+abandons checkout after applying one.
+
+`CourseCatalogueController::enroll()` accepts an optional `coupon_code`
+input; an invalid code redirects back to the course page with a flash error
+and — critically — creates **no** invoice or enrollment row at all, rather
+than silently falling back to full price. `Admin\CouponController` (CRUD)
+plus `CouponPolicy` (gated on `billing.manage`, mirroring `InvoicePolicy`
+exactly) let an admin manage codes from a new "Coupons" entry in the
+Billing nav group.
+
+**Bug found and fixed — directly caused by P4.1, surfaced while building
+this item.** `CourseCatalogueController::show()` originally computed
+`$enrollment` as *any* existing row for the user+course, with no status
+filter, and the view rendered "Continue learning" whenever it was truthy.
+Before P4.1, only `active`/`completed` enrollments could ever exist (paid
+checkout was fully blocked), so this was harmless. P4.1 introduced real
+`pending` rows — and "Continue learning" now routes into
+`EnrollmentPolicy::access()`, which explicitly excludes `pending`, so a
+student who'd started but not finished checkout would hit a wall clicking
+the button the course page told them to click. Fixed by restricting
+`$enrollment` to `active`/`completed` only and adding a distinct "Complete
+checkout" call-to-action (linking to `courses.checkout`) for the `pending`
+case — caught and fixed in this item rather than left for later, since it
+was directly adjacent to the coupon-code input being added to the same
+enroll form on the same view.
+
+**Tests added:** `CouponServiceTest` (8 — percent/flat-amount discount
+math including the subtotal cap, `used_count` increments, unknown/
+inactive/expired/exhausted/wrong-scope rejection, a no-scope coupon applies
+to any course). `CouponCheckoutTest` (3 — a valid coupon discounts the real
+invoice end to end through the controller, an invalid code creates nothing
+and flashes an error, a second student can't exceed a coupon's `max_uses`
+even across two different requests). `CouponCrudTest` (6). Plus one
+regression test for the `courses.show()` fix above
+(`test_the_course_page_shows_complete_checkout_not_continue_learning_while_pending`).
+
+**Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
+clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
+0 errors. `php artisan test` — 352/352 green (334 pre-existing + 18 new).
