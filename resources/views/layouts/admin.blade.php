@@ -6,7 +6,8 @@
   @include('partials.sw-kill')
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>@yield('title', 'Dashboard') · Muhindo Mubaraka</title>
+  {{-- $title is set by Livewire full-page components via ->title(); @yield covers classic Blade pages --}}
+  <title>{{ $title ?? $__env->yieldContent('title', 'Dashboard') }} · Muhindo Mubaraka</title>
   <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon.png') }}">
   <meta name="theme-color" content="#ffffff">
   <link rel="preconnect" href="https://fonts.googleapis.com">

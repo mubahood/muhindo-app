@@ -103,6 +103,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 
     // Courses / LMS
     Route::resource('courses', AdminCourseController::class);
+    Route::get('courses/{course}/students', \App\Livewire\Admin\CourseStudents::class)->name('courses.students');
     Route::resource('courses.modules', CourseModuleController::class)
         ->shallow()->except('show');
     Route::resource('modules.lessons', LessonController::class)

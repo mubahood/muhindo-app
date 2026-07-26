@@ -498,3 +498,69 @@ for the newly built download route), `test_a_material_belonging_to_a_different_l
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 112/112 green (106 pre-existing + 6 new) · migrate/rollback/migrate clean.
+
+### P1.3 — Course → Students tab (§6.3.1)
+
+**Built:**
+
+- First real Livewire component in this app: `App\Livewire\Admin\CourseStudents`
+  (full-page, routed directly via `Route::get('courses/{course}/students',
+  \App\Livewire\Admin\CourseStudents::class)->name('admin.courses.students')`,
+  inside the existing `admin`-middleware group). Research confirmed there was no
+  prior `WithTable` concern or any other Livewire component anywhere in the app to
+  reuse — `resources/views/layouts/admin.blade.php`'s own comment ("Livewire
+  full-page components fill `{{ $slot }}`") and its already-configured
+  `@livewireStyles`/`@livewireScripts` show the layout was prepared for exactly this,
+  just never used yet. One orphaned convention *was* already sitting there —
+  `resources/views/livewire/partials/sort-caret.blade.php`, expecting
+  `$sortField`/`$sortDir`/`$field` — reused it as-is for the sortable column headers
+  rather than inventing different prop names.
+- One row per enrollment: student name/email, progress bar + %, watch time
+  (`total_watch_seconds` — real column, honestly shows 0m for everyone until P2's
+  heartbeat starts accumulating it), current lesson (`lastLesson->title`), last
+  active (`last_accessed_at->diffForHumans()`, red `badge-danger` if stale >14 days
+  or never accessed), status badge. Sortable on progress/watch-time/last-active/
+  status (`wire:click="sortBy(...)"`, reusing the sort-caret partial), searchable by
+  student name/email (`wire:model.live.debounce.400ms`), filterable by status —
+  all via Livewire, no page reload. `#[Url]` attributes keep sort/search/filter
+  state in the query string so a link to a specific view is shareable.
+- Table markup reuses `td-admin.css` exactly (`.tb-table`, `.tb-filter-bar`,
+  `.tb-page-header`, `.badge-tb` + state classes) — no new CSS.
+- `admin.courses.show` gets a "Students" header link to the new page.
+
+**Deferred (explicitly, to P3):** grade-to-date, quiz average, and missing-
+assignments columns from §6.3.1's spec — none are computable without the quiz/
+assignment models, which are P3 scope. Rather than show a permanent placeholder
+column, they're simply not in the table yet; P3 adds them when the underlying data
+exists.
+
+**Decision — row click → drill-down deferred to P1.4, not stubbed here.** §6.3.1
+says "row click → per-student drill-down," but that page doesn't exist until P1.4
+(the very next item). Per the no-dead-links rule established back in P0.1, student
+rows are plain (not linked) in this item rather than pointing `route()` at a name
+that doesn't exist yet — P1.4 adds the link in the same commit that builds its
+target.
+
+**Bug found and fixed via manual smoke test — not caught by Pint/PHPStan/tests:**
+Livewire's full-page `->title()` merges a `$title` variable into the layout render;
+it does **not** populate `@yield('title')`. `layouts/admin.blade.php`'s `<title>`
+tag only read `@yield('title', 'Dashboard')`, so every future full-page Livewire
+route would have silently kept the browser tab reading "Dashboard" — this is exactly
+why rule 4 requires a manual pass, not just the automated gate. Fixed the layout to
+`{{ $title ?? $__env->yieldContent('title', 'Dashboard') }}`, which serves classic
+Blade pages and Livewire full-page components correctly from the same layout.
+
+**Tests added** (`tests/Feature/Admin/CourseStudentsTabTest.php`, 7 tests):
+`test_a_non_admin_cannot_view_the_students_tab`,
+`test_the_browser_tab_title_reflects_the_course_name` (pins the layout-title fix),
+`test_an_admin_sees_every_enrolled_student`,
+`test_searching_by_student_name_filters_the_list` (via `Livewire::test()`),
+`test_filtering_by_status_only_shows_matching_enrollments`,
+`test_a_students_progress_percent_is_visible_in_the_row`,
+`test_a_students_from_a_different_course_are_not_listed` (proves no cross-course
+data leak).
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 119/119 green (112 pre-existing + 7 new) · manual smoke test at
+the real MAMP-served URL (login → students tab renders, searches/filters/sorts
+live with no full page reload, tab title correct).
