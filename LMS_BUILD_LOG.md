@@ -928,3 +928,53 @@ plain iframe). Client-side playback behavior itself (actually pressing play,
 verifying the 15s ticks fire in a real browser) could not be automated — no
 browser-testing tool (Dusk) is installed — so this is the honest limit of what was
 verified; the server-side heartbeat contract it calls is fully tested.
+
+### P2.4 — AJAX lesson completion + keyboard shortcuts (§7.3)
+
+**Built:**
+
+- `LearningController::complete()` — one route now serves both modes exactly per
+  §7.3's graceful-degradation rule: a plain form POST (no JS) still gets the
+  classic redirect; an AJAX POST (`Accept: application/json`, detected via
+  `$request->wantsJson()`) gets `{success, progress_percent, course_completed,
+  next_lesson_url, next_lesson_title, certificate_url}`. `ProgressService::completeLesson()`
+  was already idempotent (P0.2/P0.7's shape), so a double-submit from either path
+  stays safe with no new work needed here.
+- New `lessonPlayer()` Alpine component (`learn/lesson.blade.php`, same
+  global-function convention as `youtubePlayer()`/`tdAdmin()`) wraps the whole
+  page: `markComplete()` optimistically flips the sidebar's current-lesson icon
+  to ✓ before the server responds, rolls it back and toasts on failure (via the
+  existing `toast` `CustomEvent`), and on success either starts a 5-second
+  "Next: ‹title› — starting in Ns" auto-advance card (pausable via a "Stay here"
+  button that clears the countdown) or — on the course's last lesson — fires a
+  small hand-rolled CSS confetti burst and opens a certificate modal linking to
+  the existing `learn.certificate` stream. No new npm dependency for confetti;
+  a lightweight rule-10 touch, not a data-model change.
+- Keyboard shortcuts (`space` play/pause, `←`/`→` seek ±10s, `↑`/`↓` prev/next
+  lesson, `m` mark complete) via a single `keydown` listener in `lessonPlayer()`,
+  guarded against firing while focus is in a text input and against modifier-key
+  combinations. The YouTube player instance is exposed on `window.__lessonVideoPlayer`
+  by `youtubePlayer.createPlayer()` so the two independent Alpine scopes (video
+  vs. page chrome) can cooperate without a shared store — a single-instance-per-page
+  pragmatic choice, not a general pub/sub mechanism.
+- `LearningController::adjacentLesson()` replaces the old `nextLesson()`-only
+  helper (kept as a thin wrapper for the existing call site) so ↑/↓ and the
+  auto-advance card share one lookup instead of two near-duplicate ones.
+
+**Tests added** (`tests/Feature/Learning/AjaxLessonCompletionTest.php`, 4 tests):
+`test_an_ajax_completion_returns_json_with_the_next_lesson`,
+`test_an_ajax_completion_of_the_final_lesson_returns_the_certificate_url`,
+`test_a_plain_form_post_without_js_still_redirects` (the no-JS degradation proof),
+`test_an_ajax_completion_of_a_locked_lesson_returns_a_json_403` (confirms the
+existing `ApiResponse` envelope — already proven generic in
+`ApiExceptionEnvelopeTest` — covers this web route too when JSON is requested).
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 174/174 green (170 pre-existing + 4 new) · `composer ci` green ·
+manual smoke test at the real MAMP-served URL (rendered markup contains the
+`lessonPlayer(`/`markComplete`/auto-advance/modal/confetti elements; a direct
+curl POST with `Accept: application/json` to the live completion endpoint
+returned the exact expected JSON shape). As with P2.3, actually pressing keys/
+buttons in a browser to watch the optimistic-rollback and confetti animate isn't
+automatable without Dusk — the server contract and rendered markup are verified;
+the animation itself is not.

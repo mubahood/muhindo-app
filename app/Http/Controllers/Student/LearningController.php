@@ -76,17 +76,42 @@ class LearningController extends Controller
             'enrollment' => $enrollment,
             'completedLessonIds' => $completedLessonIds,
             'lockedLessonIds' => $lockedLessonIds,
+            'previousLesson' => $this->adjacentLesson($course, $lesson, -1),
+            'nextLessonForNav' => $this->adjacentLesson($course, $lesson, 1),
         ]);
     }
 
-    public function complete(Request $request, Course $course, Lesson $lesson): RedirectResponse
+    /**
+     * §7.3 — "complete without reload": the same action serves both. A plain
+     * form POST (no JS) gets the classic redirect; an AJAX POST (Accept:
+     * application/json) gets a JSON summary the player uses for the
+     * optimistic-UI auto-advance card and certificate modal. Every mutation
+     * here is idempotent server-side already (ProgressService), so a
+     * double-submit from either path is safe.
+     */
+    public function complete(Request $request, Course $course, Lesson $lesson): RedirectResponse|JsonResponse
     {
         $enrollment = $this->enrollmentFor($request, $course);
         abort_unless($lesson->module->course_id === $course->id, 404);
 
         $this->progress->completeLesson($enrollment, $lesson);
+        $enrollment->refresh();
 
         $next = $this->nextLesson($course, $lesson);
+
+        if ($request->wantsJson()) {
+            $certificate = $enrollment->certificate;
+
+            return response()->json([
+                'success' => true,
+                'progress_percent' => $enrollment->progress_percent,
+                'course_completed' => $enrollment->status === 'completed',
+                'next_lesson_url' => $next ? route('learn.lesson', [$course, $next]) : null,
+                'next_lesson_title' => $next?->title,
+                'certificate_url' => $certificate ? route('learn.certificate', $certificate) : null,
+            ]);
+        }
+
         if ($next) {
             return redirect()->route('learn.lesson', [$course, $next])->with('success', 'Lesson completed!');
         }
@@ -136,9 +161,15 @@ class LearningController extends Controller
 
     private function nextLesson(Course $course, Lesson $current): ?Lesson
     {
+        return $this->adjacentLesson($course, $current, 1);
+    }
+
+    /** Powers both the "complete → auto-advance" flow and the ↑/↓ keyboard shortcuts. */
+    private function adjacentLesson(Course $course, Lesson $current, int $offset): ?Lesson
+    {
         $flat = $course->modules->flatMap(fn ($m) => $m->lessons);
         $index = $flat->search(fn (Lesson $l) => $l->id === $current->id);
 
-        return $index === false ? null : $flat->get($index + 1);
+        return $index === false ? null : $flat->get($index + $offset);
     }
 }
