@@ -152,6 +152,34 @@ class GradebookServiceTest extends TestCase
         $this->assertEquals(100.0, app(GradebookService::class)->courseGradePercent($enrollment));
     }
 
+    public function test_certificate_quiz_requirement_is_met_with_no_gating_quizzes_at_all(): void
+    {
+        $enrollment = $this->enrollment();
+        $enrollment->course->quizzes()->create(['title' => 'Practice', 'pass_percent' => 70, 'is_published' => true, 'counts_toward_certificate' => false]);
+
+        $this->assertTrue(app(GradebookService::class)->meetsCertificateQuizRequirement($enrollment));
+    }
+
+    public function test_certificate_quiz_requirement_blocks_on_an_unattempted_gating_quiz(): void
+    {
+        $enrollment = $this->enrollment();
+        $enrollment->course->quizzes()->create(['title' => 'Final', 'pass_percent' => 70, 'is_published' => true, 'counts_toward_certificate' => true]);
+
+        $this->assertFalse(app(GradebookService::class)->meetsCertificateQuizRequirement($enrollment));
+    }
+
+    public function test_certificate_quiz_requirement_averages_across_multiple_gating_quizzes(): void
+    {
+        $enrollment = $this->enrollment();
+        $quizA = $enrollment->course->quizzes()->create(['title' => 'A', 'pass_percent' => 60, 'is_published' => true, 'counts_toward_certificate' => true]);
+        $quizB = $enrollment->course->quizzes()->create(['title' => 'B', 'pass_percent' => 80, 'is_published' => true, 'counts_toward_certificate' => true]);
+        $this->attempt($quizA, $enrollment, 1, 90.0); // well above its own 60% mark
+        $this->attempt($quizB, $enrollment, 1, 60.0); // below its own 80% mark
+
+        // Average grade (75%) >= average pass mark (70%) -> requirement met even though quiz B alone failed its own mark.
+        $this->assertTrue(app(GradebookService::class)->meetsCertificateQuizRequirement($enrollment));
+    }
+
     private function attempt($quiz, Enrollment $enrollment, int $attemptNo, float $percent): void
     {
         $quiz->attempts()->create([

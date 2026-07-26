@@ -71,6 +71,41 @@ class GradebookService
         return round(array_sum(array_column($graded, 'percent')) / count($graded), 2);
     }
 
+    /**
+     * §4.6 — the certificate gate: no counts_toward_certificate quizzes means no gate at all.
+     * Otherwise every gating quiz must have a grade yet (an unattempted one blocks issuance
+     * outright), and the average of their grades must reach the average of their own pass
+     * marks — each quiz keeps its own pass_percent, there's no single course-wide pass mark.
+     */
+    public function meetsCertificateQuizRequirement(Enrollment $enrollment): bool
+    {
+        $gatingQuizzes = $enrollment->course->quizzes()
+            ->where('is_published', true)
+            ->where('counts_toward_certificate', true)
+            ->get();
+
+        if ($gatingQuizzes->isEmpty()) {
+            return true;
+        }
+
+        $percents = [];
+
+        foreach ($gatingQuizzes as $quiz) {
+            $percent = $this->quizGradePercent($enrollment, $quiz);
+
+            if ($percent === null) {
+                return false;
+            }
+
+            $percents[] = $percent;
+        }
+
+        $averagePercent = array_sum($percents) / count($percents);
+        $averagePassMark = $gatingQuizzes->avg('pass_percent');
+
+        return $averagePercent >= $averagePassMark;
+    }
+
     private function quizGradePercent(Enrollment $enrollment, Quiz $quiz): ?float
     {
         $attempts = QuizAttempt::where('quiz_id', $quiz->id)

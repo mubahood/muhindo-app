@@ -24,7 +24,29 @@ class CertificateService
 {
     private const DISK = 'local';
 
-    public function __construct(private readonly QrService $qr) {}
+    public function __construct(
+        private readonly QrService $qr,
+        private readonly GradebookService $gradebook,
+    ) {}
+
+    /**
+     * §4.6 — issues only when every lesson is complete *and*, if the course has any
+     * counts_toward_certificate quiz, the gradebook's quiz-requirement check passes. Safe to
+     * call from multiple trigger points (a lesson finishing, a quiz being graded) — issues at
+     * most once (issue()'s own idempotency) and returns null while any requirement is unmet.
+     */
+    public function issueIfEligible(Enrollment $enrollment): ?Certificate
+    {
+        if ($enrollment->progressPercent() < 100) {
+            return null;
+        }
+
+        if (! $this->gradebook->meetsCertificateQuizRequirement($enrollment)) {
+            return null;
+        }
+
+        return $this->issue($enrollment);
+    }
 
     public function issue(Enrollment $enrollment): Certificate
     {
