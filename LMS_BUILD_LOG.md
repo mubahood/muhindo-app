@@ -2041,3 +2041,91 @@ curriculum builder, course analytics funnel/drop-off, nudge emails + weekly
 instructor digest).
 
 ---
+
+## P4 — Commerce & community
+
+### P4.1 — Flutterwave course checkout (§7.1)
+
+**Built:** wired paid-course enrollment through the invoice/payment machinery
+already built for client project billing — reused entirely unmodified, not
+duplicated. A research pass before writing any code confirmed
+`BillingService::generateCourseInvoice(User, Course)` already existed
+(unused anywhere), `Invoice.billable_type/billable_id` is already polymorphic
+across `Client`/`User`, and `InvoicePolicy::isOwner()` already branches on
+`billable_type === User::class` — meaning `portal.invoice.pay` /
+`gateway.callback` / `gateway.webhook` / `GatewayPaymentService::settle()`
+already work correctly for a course invoice billed to a student with **zero**
+changes needed to any of them.
+
+The one genuine gap: nothing reacted to an invoice reaching `Paid`, for
+either billing use case — `BillingService::recordPayment()` only ever wrote
+a `Payment` row and flipped the status. Added `App\Events\Billing\InvoicePaid`,
+dispatched from `recordPayment()` the moment the balance hits exactly zero
+(not on a partial payment — a course isn't "partially deliverable").
+**Decision:** placed the dispatch inside `recordPayment()` itself — the one
+chokepoint shared by *both* Flutterwave and admin-recorded cash/bank/mobile-money
+payments — rather than only inside `GatewayPaymentService::settle()`, so an
+instructor manually recording "he paid me cash for the course" also
+activates access. The plan only mentioned Flutterwave explicitly, but the
+shared code path makes supporting both essentially free, and there's no
+reason a cash-paying student should be treated differently.
+
+`ActivateCourseEnrollmentsOnInvoicePaid` (listener) walks the invoice's line
+items for any with `source_type = Course::class` (via `InvoiceItem`'s
+existing polymorphism — no new column needed to find "which course(s) this
+invoice is for") and activates the matching `Enrollment` per item —
+`firstOrCreate`, so it still works even if no enrollment row exists yet
+(e.g. an admin raised the invoice directly without the student going
+through checkout first). Idempotent: an already-`active`/`completed`
+enrollment is a no-op, so a webhook/callback settlement race (both call
+`settle()` on the same transaction) can't double-enroll or fire
+`EnrollmentCreated` twice.
+
+`CourseCatalogueController::enroll()` rewritten: an existing `active`/
+`completed` enrollment still short-circuits to "already enrolled" (unchanged
+free-course behavior); a paid course with no enrollment (or a previously
+`cancelled` one) generates the invoice and creates/reactivates a `pending`
+enrollment, then redirects to a new `courses.checkout` page; re-POSTing
+`enroll()` while a `pending` invoice is already outstanding reuses it rather
+than generating a duplicate. The checkout page itself is new
+(`resources/views/courses/checkout.blade.php`, `layouts.app` — checkout is
+inherently an authenticated action, not public marketing) but its "Pay with
+Flutterwave" button posts straight to the **existing** `portal.invoice.pay`
+route — no new payment-initiation endpoint was needed at all.
+
+**Decision — `enrollments.invoice_id`, a new nullable FK, added via
+migration.** Not strictly required (the listener locates course line items
+through `InvoiceItem` regardless), but gives the checkout page a direct way
+to re-find "the" pending invoice for an enrollment and makes "which invoice
+funded this enrollment" auditable — consistent with §9's "grades are
+auditable" principle extended to enrollments-from-payment.
+
+**Gap closed in test infrastructure, not just app code:** no test anywhere
+exercised `GatewayPaymentService`/the webhook layer before this item — only
+`BillingService` in isolation (`InvoicePaymentTest`). Built
+`tests/Support/FakePaymentGateway` (implements the existing `PaymentGateway`
+interface, bound via `$this->app->instance()`) so the full chain — enroll →
+checkout → `portal.invoice.pay` → webhook → `settle()` → `recordPayment()` →
+`InvoicePaid` → enrollment activated — could be tested end to end with zero
+real HTTP calls to Flutterwave. This fake is reusable for P4.3's refund path
+and any future gateway-touching work.
+
+**Explicitly deferred:** the `Api\V1\EnrollmentController` paid-course stub
+(currently a 402 "checkout required" response) is left unchanged — the
+plan's own §8 roadmap places "API v1 parity for every new module" in P5 as
+a batched item, not per-feature in P4.
+
+**Tests added:** `InvoicePaidEventTest` (2 — full payment dispatches,
+partial doesn't). `ActivateCourseEnrollmentsOnInvoicePaidTest` (5 —
+activates + dispatches `EnrollmentCreated`; creates the enrollment if none
+existed; idempotent against a re-fire; a client/project invoice never
+touches enrollments; a course invoice with no course line item is a no-op).
+`CourseCheckoutTest` (6 — pending enrollment+invoice created and redirected
+to checkout; a repeat enroll reuses the same invoice rather than
+re-invoicing; checkout page renders; checkout with no pending invoice
+redirects away; an already-active enrollment never creates a stray invoice;
+**the full Flutterwave webhook chain end to end** via the new fake gateway).
+
+**Verification:** `php artisan migrate` → `rollback --step=1` → `migrate`
+clean. `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G`
+0 errors. `php artisan test` — 334/334 green (321 pre-existing + 13 new).
