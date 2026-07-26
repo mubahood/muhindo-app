@@ -2677,3 +2677,68 @@ reason are included; the mail content names the student and reason).
 **Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
 `phpstan analyse --memory-limit=1G` 0 errors. Full untargeted
 `php artisan test` — 434/434 green (424 pre-existing + 10 new).
+
+## P4 phase gate — closed
+
+All eleven items done, one commit per item, in plan order, tagged `lms-p4`.
+Closes/advances: §7.1 (Flutterwave course checkout, coupons, refunds),
+§7.3 (announcements/Q&A/notes/reviews — all four community tabs), §7.5
+(bulk enroll, drag-drop curriculum builder), §6.3.4 (course analytics tab —
+funnel/drop-off/watch-time, on top of P3.10's quiz item analysis), and
+§6.4 (at-risk detection's `struggling`/`missing_work` rules, deferred since
+P1, plus the weekly instructor digest).
+
+- `composer ci` (repo-wide `pint --test`, `phpstan --memory-limit=1G`,
+  `check-empty-files`, `secrets-scan`, `php artisan test`): **green**, exit
+  code 0, 434 tests / 945 assertions.
+- `php artisan migrate` on a fresh checkout applies every P4 migration
+  cleanly in order (verified via a full migrate→rollback→migrate cycle
+  after each schema-touching item, same discipline as every prior phase).
+- **Real bugs found and fixed while building and testing this phase (not
+  routed around):**
+  1. **Pending enrollment treated as fully enrolled** (found during P4.2) —
+     `courses/show.blade.php` only checked "does an enrollment row exist,"
+     so a student who'd started Flutterwave checkout but never paid saw
+     "Continue learning," which then 403/404'd against `EnrollmentPolicy`.
+     Fixed by restricting the "enrolled" state to `active`/`completed` and
+     adding a distinct "Complete checkout" state for `pending`; pinned with
+     a regression test.
+  2. **`Lesson::create()` without an explicit `is_published` left the
+     in-memory model `null`** (P4.9) — the DB-level `default(true)` isn't
+     reflected until the model is reloaded, so a test asserting
+     `$lesson->is_published === true` right after `create()` failed. Same
+     class of bug hit several times across earlier phases; fixed with
+     `->fresh()` in the test helper.
+  3. **Self-caught before shipping** (P4.9) — first attempt at loading
+     SortableJS added it to `resources/js/app.js` (the Vite bundle), then
+     re-reading `layouts/admin.blade.php`'s own comment turned up that the
+     admin panel deliberately never loads that bundle at all (avoids a
+     double-Alpine conflict with Livewire 3's bundled Alpine). Caught
+     before any test ran or anything committed; reverted, vendored
+     `Sortable.min.js` into `public/vendor/js/` instead, matching the
+     existing `chart.min.js` precedent.
+- **One plan-text ambiguity resolved via judgment call, documented at the
+  time (P4.9):** the plan says duration auto-fetch works "via oEmbed," but
+  YouTube's oEmbed endpoint cannot report duration under any circumstance —
+  only the real Data API v3 can. Built `YoutubeService` against the Data
+  API, gated behind an optional `YOUTUBE_API_KEY`, since the plan's actual
+  intent (auto-fill duration) couldn't be satisfied by the literal
+  mechanism named.
+- **One scope decision made explicitly in favor of the plan's intent
+  (P4.11):** `struggling`/`missing_work` at-risk detection had been
+  deferred in P1 pending the P3 quiz/assignment models. Rather than leave
+  the weekly digest reporting against only half of §6.4's rules now that
+  the blocker was gone, both rules were completed as part of P4.11 before
+  the digest was built on top of them.
+- Every new AJAX/interactive surface added this phase degrades without
+  JavaScript: the curriculum builder's quick-add/publish-toggle/materials
+  forms are real `<form>` posts (drag-reorder is the one JS-only
+  enhancement, with the existing edit-form reorder fields as the
+  non-JS fallback); Q&A and Notes are plain forms; reviews and coupons are
+  plain forms; the checkout page posts to the pre-existing
+  `portal.invoice.pay` route.
+- No query-count regressions on any learn surface — every new tab
+  (announcements, Q&A, notes, reviews) is its own dedicated route/page, not
+  additional data bolted onto the existing lesson/dashboard queries.
+
+**Tagged `lms-p4`.**
