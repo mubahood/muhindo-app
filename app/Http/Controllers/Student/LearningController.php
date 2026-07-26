@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Services\Learning\CertificateService;
+use App\Services\Learning\ProgressService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,7 +17,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 /** The student's "My Courses" learning portal — enrolled courses, lesson player, certificates. */
 class LearningController extends Controller
 {
-    public function __construct(private readonly CertificateService $certificates) {}
+    public function __construct(
+        private readonly CertificateService $certificates,
+        private readonly ProgressService $progress,
+    ) {}
 
     public function index(Request $request): View
     {
@@ -60,15 +64,7 @@ class LearningController extends Controller
         $enrollment = $this->enrollmentFor($request, $course);
         abort_unless($lesson->module->course_id === $course->id, 404);
 
-        $enrollment->progressRecords()->updateOrCreate(
-            ['lesson_id' => $lesson->id],
-            ['completed_at' => now()]
-        );
-
-        if ($enrollment->progressPercent() >= 100 && $enrollment->status !== 'completed') {
-            $enrollment->update(['status' => 'completed', 'completed_at' => now()]);
-            $this->certificates->issue($enrollment);
-        }
+        $this->progress->completeLesson($enrollment, $lesson);
 
         $next = $this->nextLesson($course, $lesson);
         if ($next) {

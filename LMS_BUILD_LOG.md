@@ -280,3 +280,45 @@ depends on the quiz engine, which doesn't exist until P3 ("certificate criteria 
 
 **Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
 `php artisan test` 96/96 green (89 pre-existing + 7 new) · `php artisan migrate` clean.
+
+### P0.7 — Extract `ProgressService`; web + API both call it (closes L14)
+
+**Built:**
+
+- New `app/Services/Learning/ProgressService.php` (the `ProgressService` named in
+  §4.1) — `completeLesson(Enrollment, Lesson)` is now the single writer of
+  `lesson_progress`, enrollment completion, and certificate triggering. It calls
+  `Gate::authorize('access', $enrollment)` itself, so the enrollment-status check
+  lives in the one place both callers go through instead of depending on each
+  controller remembering to add it — this is what actually closes L14, not just
+  moving the duplicated code into a shared function.
+- `Student\LearningController::complete()` — the inline `updateOrCreate` +
+  progress-percent + certificate-issue block (previously duplicating what P0.6 had
+  just moved into `CertificateService`) is replaced with one call:
+  `$this->progress->completeLesson($enrollment, $lesson)`.
+- `Api\V1\EnrollmentController::completeLesson()` — same replacement. This is the
+  piece P0.1's worklog explicitly deferred to this item. Two real gaps closed at
+  once: (1) a `pending`/`cancelled` enrollment can no longer POST a completion
+  through the API (previously only blocked on the web); (2) completing a course's
+  last lesson through the API now issues a certificate too — previously it silently
+  didn't, since the certificate-issuance logic only existed in the web controller.
+  That second gap wasn't in the L1–L14 list by name, but it's the exact kind of
+  web/API behavioral drift L14 describes, on the same completion path this item was
+  already touching.
+
+**Decision:** `Gate::authorize()` (not `$this->authorize()`, unavailable outside a
+controller) throws `AuthorizationException`, which `bootstrap/app.php` already maps
+to the `ApiResponse` envelope with a 403 for JSON requests and a normal 403 page
+otherwise (an existing, pre-LMS exception-handling convention) — so no new error
+formatting work was needed for the API to reject a blocked completion attempt
+correctly.
+
+**Tests added** (`tests/Feature/Learning/ApiProgressServiceParityTest.php`, 4 tests):
+`test_a_pending_enrollment_cannot_complete_a_lesson_through_the_api` (asserts no
+`lesson_progress` row is written — the abuse-path proof, mirroring P0.1's web-side
+test), `test_a_cancelled_enrollment_cannot_complete_a_lesson_through_the_api`,
+`test_completing_the_only_lesson_through_the_api_also_issues_a_certificate` (the
+drift-bug proof), `test_an_active_enrollment_can_complete_a_lesson_through_the_api`.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 100/100 green (96 pre-existing + 4 new).

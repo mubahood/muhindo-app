@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Lesson;
+use App\Services\Learning\ProgressService;
 use App\Support\ApiResponse;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
@@ -14,6 +15,8 @@ use Illuminate\Support\Str;
 
 class EnrollmentController extends Controller
 {
+    public function __construct(private readonly ProgressService $progress) {}
+
     public function mine(Request $request): JsonResponse
     {
         $enrollments = Enrollment::where('user_id', $request->user()->id)->with('course')->latest()->get();
@@ -51,10 +54,7 @@ class EnrollmentController extends Controller
             ->where('course_id', $lesson->module->course_id)
             ->firstOrFail();
 
-        $progress = $enrollment->progressRecords()->updateOrCreate(
-            ['lesson_id' => $lesson->id],
-            ['completed_at' => now()]
-        );
+        $progress = $this->progress->completeLesson($enrollment, $lesson);
 
         return ApiResponse::success($progress);
     }
