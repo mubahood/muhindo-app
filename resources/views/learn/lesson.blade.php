@@ -6,9 +6,11 @@
   .learn-layout{display:grid;grid-template-columns:260px 1fr;gap:28px;align-items:start;}
   .learn-side{background:var(--surface);border:1px solid var(--line);}
   .learn-side .mod{padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx3);border-bottom:1px solid var(--line);}
-  .learn-side a{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;color:var(--tx2);border-bottom:1px solid var(--line);}
+  .learn-side a,.learn-side span.locked{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;color:var(--tx2);border-bottom:1px solid var(--line);}
   .learn-side a.on{background:var(--pri-soft);color:var(--pri);font-weight:600;}
   .learn-side a .fa-circle-check{color:var(--ok);}
+  .learn-side span.locked{color:var(--tx3);cursor:not-allowed;}
+  .learn-side span.locked .fa-lock{font-size:11px;}
   .learn-video{aspect-ratio:16/9;width:100%;background:#000;margin-bottom:20px;}
   .learn-video iframe{width:100%;height:100%;border:0;}
   @media(max-width:760px){.learn-layout{grid-template-columns:1fr;}}
@@ -24,10 +26,16 @@
     @foreach($course->modules as $module)
       <div class="mod">{{ $module->title }}</div>
       @foreach($module->lessons as $l)
-        <a href="{{ route('learn.lesson', [$course, $l]) }}" class="{{ $l->id === $lesson->id ? 'on' : '' }}">
-          <i class="fas {{ $completedLessonIds->contains($l->id) ? 'fa-circle-check' : 'fa-circle' }}" style="font-size:11px;"></i>
-          {{ $l->title }}
-        </a>
+        @if($lockedLessonIds->contains($l->id))
+          <span class="locked" title="Complete the previous lesson to unlock this one">
+            <i class="fas fa-lock"></i> {{ $l->title }}
+          </span>
+        @else
+          <a href="{{ route('learn.lesson', [$course, $l]) }}" class="{{ $l->id === $lesson->id ? 'on' : '' }}">
+            <i class="fas {{ $completedLessonIds->contains($l->id) ? 'fa-circle-check' : 'fa-circle' }}" style="font-size:11px;"></i>
+            {{ $l->title }}
+          </a>
+        @endif
       @endforeach
     @endforeach
   </aside>

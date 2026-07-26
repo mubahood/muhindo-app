@@ -74,4 +74,29 @@ class Course extends Model
     {
         return $this->lessons()->count();
     }
+
+    /**
+     * §4.3 — in `sequential` progression, a lesson is locked until the one
+     * immediately before it (in module/lesson sort order) is completed. The
+     * first lesson is never locked. `free` progression never locks anything.
+     */
+    public function isLessonLocked(Enrollment $enrollment, Lesson $lesson): bool
+    {
+        if ($this->progression !== CourseProgression::Sequential) {
+            return false;
+        }
+
+        $ordered = $this->modules->flatMap(fn (CourseModule $module) => $module->lessons);
+        $index = $ordered->search(fn (Lesson $candidate) => $candidate->id === $lesson->id);
+        if ($index === false || $index === 0) {
+            return false;
+        }
+
+        $previous = $ordered->get($index - 1);
+
+        return ! $enrollment->progressRecords()
+            ->where('lesson_id', $previous->id)
+            ->whereNotNull('completed_at')
+            ->exists();
+    }
 }

@@ -17,8 +17,10 @@ use Illuminate\Support\Facades\Gate;
  * on the other — kills L14. Authorizing here (not just in the calling
  * controller) means the check can't be forgotten by a future caller, closing
  * the gap the API previously had (no enrollment-status check on
- * `completeLesson`). Also emits the corresponding `learning_events` row
- * (§6.2) for every action it writes.
+ * `completeLesson`). Also authorizes `LessonPolicy::view` (§4.3 sequential
+ * progression — a locked lesson can't be viewed or completed through either
+ * surface) and emits the corresponding `learning_events` row (§6.2) for every
+ * action it writes.
  */
 class ProgressService
 {
@@ -30,6 +32,7 @@ class ProgressService
     public function completeLesson(Enrollment $enrollment, Lesson $lesson): LessonProgress
     {
         Gate::authorize('access', $enrollment);
+        Gate::authorize('view', [$lesson, $enrollment]);
 
         $progress = $enrollment->progressRecords()->updateOrCreate(
             ['lesson_id' => $lesson->id],
@@ -56,6 +59,7 @@ class ProgressService
     public function recordView(Enrollment $enrollment, Lesson $lesson): void
     {
         Gate::authorize('access', $enrollment);
+        Gate::authorize('view', [$lesson, $enrollment]);
 
         $enrollment->update([
             'last_lesson_id' => $lesson->id,

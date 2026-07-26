@@ -38,10 +38,13 @@ class LearningController extends Controller
 
         // §6.5 resume UX: pick up where they left off rather than always
         // restarting at lesson #1. lastLesson() excludes soft-deleted lessons
-        // via Lesson's own global scope, and the course-id check guards against
-        // a stale last_lesson_id left over from before a course was reworked.
+        // via Lesson's own global scope, the course-id check guards against a
+        // stale last_lesson_id left over from before a course was reworked, and
+        // the lock check guards against the course having switched to
+        // sequential progression since — redirecting straight into a 403 would
+        // be a worse experience than just falling through to the first lesson.
         $resumeLesson = $enrollment->lastLesson;
-        if ($resumeLesson && $resumeLesson->module->course_id === $course->id) {
+        if ($resumeLesson && $resumeLesson->module->course_id === $course->id && ! $course->isLessonLocked($enrollment, $resumeLesson)) {
             return redirect()->route('learn.lesson', [$course, $resumeLesson]);
         }
 
@@ -60,13 +63,18 @@ class LearningController extends Controller
 
         $this->progress->recordView($enrollment, $lesson);
 
+        $course->load('modules.lessons');
         $completedLessonIds = $enrollment->progressRecords()->whereNotNull('completed_at')->pluck('lesson_id');
+        $lockedLessonIds = $course->modules->flatMap(fn ($m) => $m->lessons)
+            ->filter(fn (Lesson $l) => $course->isLessonLocked($enrollment, $l))
+            ->pluck('id');
 
         return view('learn.lesson', [
-            'course' => $course->load('modules.lessons'),
+            'course' => $course,
             'lesson' => $lesson,
             'enrollment' => $enrollment,
             'completedLessonIds' => $completedLessonIds,
+            'lockedLessonIds' => $lockedLessonIds,
         ]);
     }
 

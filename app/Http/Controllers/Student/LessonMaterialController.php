@@ -29,6 +29,7 @@ class LessonMaterialController extends Controller
             ->where('course_id', $course->id)
             ->firstOrFail();
         $this->authorize('access', $enrollment);
+        $this->authorize('view', [$lesson, $enrollment]);
 
         $this->events->record($enrollment, LearningEventType::MaterialDownloaded, $lesson, $material);
 

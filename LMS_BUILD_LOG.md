@@ -807,3 +807,50 @@ completion + sidebar states, markdown lessons, free preview, completion rules
 `php artisan test` 144/144 green (138 pre-existing + 6 new) · migrate/rollback/migrate
 clean · manual smoke test at the real MAMP-served URL (the completion-rule/content-
 format Alpine toggles render and the disabled "coming soon" options are visible).
+
+### P2.2 — Sequential progression enforcement (§4.3)
+
+**Built:**
+
+- `Course::isLessonLocked(Enrollment, Lesson)` — the single source of truth: `free`
+  progression never locks anything; in `sequential`, the first lesson (by module/
+  lesson sort order — the same flattening `LearningController::nextLesson()`
+  already used) is never locked, and every other lesson is locked unless the
+  immediately-preceding one has a `completed_at` in `lesson_progress` for that
+  enrollment.
+- New `App\Policies\LessonPolicy` (`before()` super_admin bypass, matching the
+  `EnrollmentPolicy` convention exactly) — `view(User, Lesson, Enrollment)` just
+  delegates to `Course::isLessonLocked()`.
+- `ProgressService::recordView()` and `completeLesson()` both now also call
+  `Gate::authorize('view', [$lesson, $enrollment])` alongside the existing
+  `access` check — putting it in the shared service (not just the web
+  controller) means the API can't drift out of sync with the lock, the same
+  reasoning P0.7 used for the enrollment-status check. `Student\LessonMaterialController::download()`
+  gets the same check directly, closing the loophole of a locked lesson's
+  materials being downloadable even though the lesson content itself isn't
+  reachable.
+- `learn/lesson.blade.php` sidebar — a locked lesson renders as a plain,
+  non-clickable `<span>` with a padlock icon instead of an `<a>`, so a normal
+  student never even reaches the server 403 — only a deliberate bypass attempt
+  (typing the URL, replaying a request) does. The client is a rendering hint;
+  the policy is the actual authority (rule 8).
+- `LearningController::show()`'s resume redirect now also checks
+  `! $course->isLessonLocked(...)` before redirecting to `last_lesson_id` —
+  otherwise switching a course to sequential after a student had already jumped
+  ahead under free navigation would send their next visit straight into a 403.
+  Falls back to the first lesson instead.
+
+**Tests added** (`tests/Feature/Learning/SequentialProgressionTest.php`, 8 tests):
+`test_the_first_lesson_is_never_locked_in_a_sequential_course`,
+`test_the_second_lesson_is_locked_until_the_first_is_completed`,
+`test_a_direct_complete_post_on_a_locked_lesson_is_rejected_and_writes_no_progress`
+(the abuse-path proof — no `lesson_progress` row survives a bypass attempt),
+`test_the_second_lesson_unlocks_once_the_first_is_completed`,
+`test_a_locked_lessons_materials_cannot_be_downloaded`,
+`test_a_free_progression_course_never_locks_any_lesson`,
+`test_the_locked_lesson_is_rendered_as_a_padlock_not_a_link_in_the_sidebar`,
+`test_resuming_a_now_locked_lesson_falls_back_to_the_first_lesson_instead_of_403ing`
+(the stale-resume-after-a-progression-change edge case).
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 152/152 green (144 pre-existing + 8 new).
