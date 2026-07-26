@@ -718,3 +718,43 @@ project re-analysis after the `parseModelCastsMethod` fix, not just this item's
 files) · `php artisan test` 138/138 green (129 pre-existing + 9 new) ·
 migrate/rollback/migrate clean · `php artisan schedule:list` confirms the nightly
 job · manual smoke test (dashboard counter renders at the real MAMP-served URL).
+
+---
+
+## P1 phase gate — closed
+
+All six items done, one commit per item, in plan order. Closes/advances: §6.1
+(fast-path columns), §6.2 (event stream), §6.3.1–2 (Students tab + drill-down),
+§6.4 (at-risk detection, `inactive`/`stalled` rules), §6.5 (resume UX).
+
+- `composer ci` (repo-wide `pint --test`, `phpstan`, `check-empty-files`,
+  `secrets-scan`, `php artisan test`): **green**, 138 tests / 295 assertions.
+- `php artisan migrate:status` on top of the P0 schema: all 8 of this phase's
+  migrations applied cleanly in their own batches — a fresh checkout migrates
+  clean end to end.
+- Two real Livewire components now exist (`CourseStudents`, `EnrollmentDrilldown`)
+  — the first ever built in this app — both full-page, both covered by
+  `Livewire::test()` assertions in addition to HTTP-level feature tests.
+- A real, previously-invisible project-wide static-analysis gap was found and
+  fixed (`parseModelCastsMethod: true` in `phpstan.neon`) rather than routed
+  around — every model's datetime-cast property is now correctly type-checked,
+  not just the ones this phase happened to touch.
+- Explicitly deferred to later phases (each tied to a plan section that itself
+  places the work later, per rule 2's carve-out):
+  - `total_watch_seconds` stays at 0 for everyone until P2's player heartbeat
+    exists to write it (the column and its display are real; there is simply no
+    watch-time source yet).
+  - Per-lesson watched-vs-duration bars (§6.3.2) — needs the same heartbeat data;
+    a lesson-completion checklist ships in its place for now.
+  - `struggling`/`missing_work` at-risk rules, grade-to-date, quiz average,
+    missing-assignments columns, "every attempt + submission with scores",
+    "reset quiz attempts" — all wait on the P3 quiz/assignment models.
+  - "Extend access" button — waits on P5's enrollment-expiry concept.
+  - Weekly instructor digest email, weekly student streak counter — both
+    explicitly marked optional/later in the plan text itself.
+  - Exact video-position resume (`last_position_seconds`) — waits on P2;
+    today's resume returns to the right lesson, not the exact timestamp.
+
+Next: P2 — Player & AJAX (YouTube IFrame API + heartbeat + resume, AJAX
+completion + sidebar states, markdown lessons, free preview, completion rules
+`manual`/`min_watch` + sequential progression, events/listeners/notifications).
