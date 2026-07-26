@@ -4,7 +4,9 @@ namespace App\Services\Learning;
 
 use App\Enums\QuestionType;
 use App\Enums\QuizAttemptStatus;
+use App\Enums\QuizFeedbackMode;
 use App\Events\Learning\QuizAttemptSubmitted;
+use App\Models\AttemptAnswer;
 use App\Models\Enrollment;
 use App\Models\Question;
 use App\Models\Quiz;
@@ -60,7 +62,7 @@ class QuizService
     }
 
     /** Autosaves a single question's answer. Safe to call repeatedly as the student changes their mind. */
-    public function answer(QuizAttempt $attempt, Question $question, ?array $payload): \App\Models\AttemptAnswer
+    public function answer(QuizAttempt $attempt, Question $question, ?array $payload): AttemptAnswer
     {
         Gate::authorize('access', $attempt->enrollment);
 
@@ -161,6 +163,101 @@ class QuizService
         QuizAttemptSubmitted::dispatch($attempt);
 
         return $attempt;
+    }
+
+    /**
+     * A non-persisting grade check for one question, used by "immediate" feedback mode so the
+     * student can see whether their answer was right before the attempt is ever submitted.
+     *
+     * @return array{is_correct: ?bool, points_awarded: ?float, auto_graded: bool}
+     */
+    public function previewGrade(Question $question, ?array $payload): array
+    {
+        return $this->gradeAnswer($question, $payload);
+    }
+
+    /**
+     * An instructor grades one flagged answer (essay, or a short_text miss). Once every answer on
+     * the attempt has been either auto-graded or manually graded, the attempt itself is finalized.
+     */
+    public function gradeManual(QuizAttempt $attempt, Question $question, float $pointsAwarded, ?string $feedback = null): AttemptAnswer
+    {
+        if ($attempt->status !== QuizAttemptStatus::Submitted) {
+            throw new HttpException(409, 'This attempt is not awaiting manual grading.');
+        }
+
+        $maxPoints = (float) $question->points;
+        if ($pointsAwarded < 0 || $pointsAwarded > $maxPoints) {
+            throw new HttpException(422, "Points must be between 0 and {$maxPoints}.");
+        }
+
+        $answer = $attempt->answers()->where('question_id', $question->id)->firstOrFail();
+        $answer->update(['points_awarded' => $pointsAwarded, 'grader_feedback' => $feedback]);
+
+        $this->finalizeIfFullyGraded($attempt->fresh(['answers.question']));
+
+        return $answer->fresh();
+    }
+
+    /**
+     * Per-question feedback for the attempt's review page, gated by the quiz's feedback_mode —
+     * null means "don't show anything yet" (client renders score-only or a "pending" message).
+     *
+     * @return array<int,array{question_id:int,is_correct:?bool,points_awarded:?float,max_points:float,explanation:?string,grader_feedback:?string}>|null
+     */
+    public function feedbackFor(QuizAttempt $attempt): ?array
+    {
+        if (! $this->feedbackIsVisible($attempt)) {
+            return null;
+        }
+
+        return $attempt->answers()->with('question')->get()->map(fn (AttemptAnswer $answer) => [
+            'question_id' => $answer->question_id,
+            'is_correct' => $answer->is_correct,
+            'points_awarded' => $answer->points_awarded !== null ? (float) $answer->points_awarded : null,
+            'max_points' => (float) $answer->question->points,
+            'explanation' => $answer->question->explanation,
+            'grader_feedback' => $answer->grader_feedback,
+        ])->values()->all();
+    }
+
+    private function feedbackIsVisible(QuizAttempt $attempt): bool
+    {
+        if ($attempt->status === QuizAttemptStatus::InProgress) {
+            return false;
+        }
+
+        return match ($attempt->quiz->feedback_mode) {
+            QuizFeedbackMode::None => false,
+            QuizFeedbackMode::Immediate, QuizFeedbackMode::AfterSubmit => true,
+            QuizFeedbackMode::AfterClose => $attempt->quiz->available_until !== null
+                && now()->gt($attempt->quiz->available_until),
+        };
+    }
+
+    /** Once no answer is left waiting on a human, compute the final score and fire QuizAttemptSubmitted. */
+    private function finalizeIfFullyGraded(QuizAttempt $attempt): void
+    {
+        $answers = $attempt->answers;
+
+        $stillPending = $answers->contains(fn (AttemptAnswer $a) => ! $a->auto_graded && $a->points_awarded === null);
+        if ($stillPending) {
+            return;
+        }
+
+        $earned = (float) $answers->sum(fn (AttemptAnswer $a) => (float) ($a->points_awarded ?? 0));
+        $max = (float) $attempt->max_points;
+        $percent = $max > 0 ? round(($earned / $max) * 100, 2) : 0.0;
+
+        $attempt->update([
+            'status' => QuizAttemptStatus::Graded,
+            'graded_at' => now(),
+            'score_points' => $earned,
+            'score_percent' => $percent,
+            'passed' => $percent >= $attempt->quiz->pass_percent,
+        ]);
+
+        QuizAttemptSubmitted::dispatch($attempt->fresh());
     }
 
     /** Freezes question order (respecting the pool draw) and, per question, option order — so a resumed attempt is stable. */
