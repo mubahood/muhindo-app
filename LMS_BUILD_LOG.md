@@ -2837,3 +2837,74 @@ error; admins/clients are never evaluated).
 `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G` 0
 errors. Full untargeted `php artisan test` — 453/453 green (434
 pre-existing + 19 new).
+
+### P5.2 — Enrollment expiry windows (§4.4/§6.4)
+
+**Built:**
+
+- `database/migrations/..._add_expires_at_to_enrollments_table.php`,
+  `..._add_access_duration_days_to_courses_table.php` — both additive,
+  both nullable, both default to no behavior change (null = lifetime
+  access) for every enrollment/course that exists today.
+- `app/Models/Course.php` — `enrollmentExpiresAt(): ?Carbon`, the single
+  place that turns a course's `access_duration_days` into a concrete
+  timestamp. Every call site below goes through this one method rather
+  than each computing its own `now()->addDays(...)`.
+- `app/Models/Enrollment.php` — `isExpired(): bool`.
+- `app/Policies/EnrollmentPolicy.php` — `access()` now denies an expired
+  window on top of the existing status check, regardless of status (a
+  completed-but-expired enrollment loses lesson access exactly like an
+  active one — certificate viewing was already unaffected by this policy,
+  confirmed by reading `LearningController::certificate()` before assuming
+  so).
+- `expires_at` now stamped at all four places an enrollment actually
+  activates: `CourseCatalogueController::enroll()`'s free self-enroll path,
+  `Admin\EnrollmentController::store()`, `Admin\BulkEnrollController::store()`,
+  and `ActivateCourseEnrollmentsOnInvoicePaid` (paid checkout). All four
+  route through `Course::enrollmentExpiresAt()` so there's exactly one
+  place the "days → timestamp" math lives.
+- `app/Livewire/Admin/EnrollmentDrilldown.php` — `extendAccess()` (extends
+  from the later of "now" or the current expiry, so a lapsed window doesn't
+  shortchange the extension) and `removeExpiry()` (grants lifetime access).
+  This is P1's explicitly-deferred "extend access" button — its own
+  docblock said it "needs an enrollment expiry concept that doesn't exist
+  until P5," which is exactly what this item builds.
+- UI: an "Expired" badge on the admin Students tab
+  (`course-students.blade.php`), an "Access expired" state on the "My
+  Courses" hub that replaces the Resume/Continue/Quizzes/etc. button row
+  entirely (a live certificate link still shows if one was already earned),
+  an access-days disclosure on the public course page, and the admin course
+  form's new "Access duration (days)" field.
+
+**Decision — expiry denies access regardless of enrollment status, not just
+`active`.** A `completed` enrollment with a lapsed access window still
+loses lesson/material access under this policy — matching the actual
+intent of a "Udemy-style access window" (a time-limited license, not just
+a block on unfinished courses). The certificate a student already earned
+during that window remains permanently viewable, since certificate
+delivery was never gated by `EnrollmentPolicy::access()` to begin with.
+
+**Bug prevented before it shipped (same class as a real P4.2 bug, caught by
+re-reading `learn/index.blade.php` before assuming the existing status
+check was sufficient):** without the "My Courses" hub fix, an expired
+enrollment would still render a "Resume"/"Continue" button (since its
+`status` column is still `active`), which would then 403 the moment it's
+clicked — the same dead-link shape P4.2 fixed for pending enrollments.
+Fixed in the same commit as the policy change, not left for a follow-up.
+
+**Tests added:** `EnrollmentExpiryWindowTest` (11 — a lifetime-access
+course computes a null expiry; a course with a duration computes the right
+future timestamp; all four activation sites correctly stamp `expires_at`
+(free self-enroll, admin single-enroll, bulk-enroll, paid-checkout
+end-to-end through the real gateway/webhook flow); a lifetime-access course
+leaves `expires_at` null; extending a lapsed window starts from now, not
+the stale past date; extending a still-active window adds on top of the
+current expiry; removing the expiry grants lifetime access; the "My
+Courses" hub shows the expired state and hides Resume). Plus 2 added to
+`EnrollmentAccessPolicyTest` (an expired active enrollment is denied; a
+future-dated expiry still allows access).
+
+**Verification:** `php artisan migrate` / `:rollback` / `migrate` clean.
+`vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G` 0
+errors. Full untargeted `php artisan test` — 466/466 green (453
+pre-existing + 13 new).
