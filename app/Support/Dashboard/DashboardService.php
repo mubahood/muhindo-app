@@ -11,6 +11,7 @@ use App\Models\Invoice;
 use App\Models\Project;
 use App\Models\ProjectTask;
 use App\Models\User;
+use App\Services\Learning\StreakService;
 use App\Services\ReportService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -21,7 +22,7 @@ use Illuminate\Support\Collection;
  */
 class DashboardService
 {
-    public function __construct(private readonly ReportService $reports) {}
+    public function __construct(private readonly ReportService $reports, private readonly StreakService $streaks) {}
 
     private function todayRange(): array
     {
@@ -161,6 +162,17 @@ class DashboardService
     public function studentCompletedCount(User $user): int
     {
         return Enrollment::where('user_id', $user->id)->where('status', 'completed')->count();
+    }
+
+    /** §6.5 — the earned-badges shelf, most recent first. @return Collection<int, \App\Models\UserBadge> */
+    public function studentBadges(User $user): Collection
+    {
+        return $user->badges;
+    }
+
+    public function studentWeeklyStreak(User $user): int
+    {
+        return $this->streaks->currentWeeklyStreak($user);
     }
 
     // ── Client dashboard ─────────────────────────────────────────

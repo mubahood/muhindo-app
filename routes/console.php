@@ -13,3 +13,6 @@ Schedule::command('app:detect-at-risk-enrollments')->dailyAt('02:00');
 
 // §6.4 — weekly instructor digest, after Monday's nightly at-risk run.
 Schedule::command('app:send-weekly-instructor-digest')->weeklyOn(1, '07:00');
+
+// §6.5 — nightly streak-badge check.
+Schedule::command('app:award-streak-badges')->dailyAt('02:30');

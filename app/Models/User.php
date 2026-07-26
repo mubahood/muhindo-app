@@ -121,6 +121,12 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $this->hasMany(DeviceToken::class);
     }
 
+    /** §6.5 — earned badges, most recent first. @return HasMany<UserBadge, $this> */
+    public function badges(): HasMany
+    {
+        return $this->hasMany(UserBadge::class)->latest('created_at');
+    }
+
     /** Invoices billed directly to this user (course purchases) — project invoices are billed to a Client instead. */
     public function invoices(): MorphMany
     {

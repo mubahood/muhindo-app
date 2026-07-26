@@ -1,12 +1,29 @@
 @php
     $enrollments = $svc->studentEnrollments($user);
+    $badges = $svc->studentBadges($user);
+    $streak = $svc->studentWeeklyStreak($user);
 @endphp
 
 <div class="tb-stats-grid">
   <x-dash.stat :value="number_format($enrollments->count())" label="Enrolled courses" icon="fa-book"
     :href="route('learn.index')" />
   <x-dash.stat :value="number_format($svc->studentCompletedCount($user))" label="Completed" icon="fa-circle-check" tone="ok" />
+  <x-dash.stat :value="$streak" label="Week streak" icon="fa-fire" :tone="$streak > 0 ? 'ok' : ''" />
+  <x-dash.stat :value="number_format($badges->count())" label="Badges earned" icon="fa-award" />
 </div>
+
+@if($badges->isNotEmpty())
+<div class="dash-section">
+  <div class="dash-section-title"><i class="fas fa-award"></i> Badges</div>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+    @foreach($badges as $badge)
+      <span class="badge-tb badge-info" style="font-size:.85rem;padding:8px 14px;" title="{{ $badge->badge_type->description() }}">
+        <i class="fas {{ $badge->badge_type->icon() }}"></i> {{ $badge->badge_type->label() }}
+      </span>
+    @endforeach
+  </div>
+</div>
+@endif
 
 <div class="dash-section">
   <div class="dash-section-title"><i class="fas fa-graduation-cap"></i> My courses</div>
