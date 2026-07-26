@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Learning;
 
+use App\Enums\AssignmentSubmissionStatus;
 use App\Enums\LearningEventType;
+use App\Enums\QuizAttemptStatus;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\User;
@@ -10,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.4 — nightly rules-first at-risk tagging: inactive and stalled. */
+/** §6.4 — nightly rules-first at-risk tagging: inactive, stalled, struggling, missing_work. */
 class DetectAtRiskEnrollmentsTest extends TestCase
 {
     use RefreshDatabase;
@@ -90,6 +92,104 @@ class DetectAtRiskEnrollmentsTest extends TestCase
     public function test_a_completed_enrollment_is_never_flagged(): void
     {
         $enrollment = $this->activeEnrollment(['status' => 'completed', 'last_accessed_at' => now()->subDays(60)]);
+
+        $this->artisan('app:detect-at-risk-enrollments');
+
+        $this->assertNull($enrollment->fresh()->at_risk_reason);
+    }
+
+    public function test_a_below_pass_mark_quiz_average_flags_struggling(): void
+    {
+        $enrollment = $this->activeEnrollment(['last_accessed_at' => now()->subDay()]);
+        $enrollment->learningEvents()->create(['event' => LearningEventType::LessonCompleted->value, 'created_at' => now()->subDay()]);
+        $quiz = $enrollment->course->quizzes()->create(['title' => 'Q1', 'pass_percent' => 70, 'is_published' => true]);
+        $quiz->attempts()->create([
+            'uuid' => (string) Str::uuid(), 'enrollment_id' => $enrollment->id, 'attempt_no' => 1,
+            'status' => QuizAttemptStatus::Graded, 'started_at' => now(), 'submitted_at' => now(), 'graded_at' => now(),
+            'score_percent' => 50.0, 'score_points' => 50, 'max_points' => 100, 'passed' => false,
+        ]);
+
+        $this->artisan('app:detect-at-risk-enrollments');
+
+        $this->assertSame('struggling', $enrollment->fresh()->at_risk_reason);
+    }
+
+    public function test_two_consecutive_failed_attempts_flag_struggling_even_above_average(): void
+    {
+        $enrollment = $this->activeEnrollment(['last_accessed_at' => now()->subDay()]);
+        $enrollment->learningEvents()->create(['event' => LearningEventType::LessonCompleted->value, 'created_at' => now()->subDay()]);
+        $quiz = $enrollment->course->quizzes()->create(['title' => 'Q1', 'pass_percent' => 70, 'is_published' => true]);
+        $quiz->attempts()->create([
+            'uuid' => (string) Str::uuid(), 'enrollment_id' => $enrollment->id, 'attempt_no' => 1,
+            'status' => QuizAttemptStatus::Graded, 'started_at' => now(), 'submitted_at' => now(), 'graded_at' => now(),
+            'score_percent' => 69.0, 'score_points' => 69, 'max_points' => 100, 'passed' => false,
+        ]);
+        $quiz->attempts()->create([
+            'uuid' => (string) Str::uuid(), 'enrollment_id' => $enrollment->id, 'attempt_no' => 2,
+            'status' => QuizAttemptStatus::Graded, 'started_at' => now(), 'submitted_at' => now(), 'graded_at' => now(),
+            'score_percent' => 69.0, 'score_points' => 69, 'max_points' => 100, 'passed' => false,
+        ]);
+
+        $this->artisan('app:detect-at-risk-enrollments');
+
+        $this->assertSame('struggling', $enrollment->fresh()->at_risk_reason);
+    }
+
+    public function test_an_in_progress_quiz_attempt_does_not_count_toward_struggling(): void
+    {
+        $enrollment = $this->activeEnrollment(['last_accessed_at' => now()->subDay()]);
+        $enrollment->learningEvents()->create(['event' => LearningEventType::LessonCompleted->value, 'created_at' => now()->subDay()]);
+        $quiz = $enrollment->course->quizzes()->create(['title' => 'Q1', 'pass_percent' => 70, 'is_published' => true]);
+        $quiz->attempts()->create([
+            'uuid' => (string) Str::uuid(), 'enrollment_id' => $enrollment->id, 'attempt_no' => 1,
+            'status' => QuizAttemptStatus::InProgress, 'started_at' => now(),
+        ]);
+
+        $this->artisan('app:detect-at-risk-enrollments');
+
+        $this->assertNull($enrollment->fresh()->at_risk_reason);
+    }
+
+    public function test_a_past_due_assignment_with_no_submission_flags_missing_work(): void
+    {
+        $enrollment = $this->activeEnrollment(['last_accessed_at' => now()->subDay()]);
+        $enrollment->learningEvents()->create(['event' => LearningEventType::LessonCompleted->value, 'created_at' => now()->subDay()]);
+        $enrollment->course->assignments()->create([
+            'title' => 'A1', 'points' => 50, 'max_file_mb' => 20, 'allowed_types' => 'text',
+            'is_published' => true, 'due_at' => now()->subDay(),
+        ]);
+
+        $this->artisan('app:detect-at-risk-enrollments');
+
+        $this->assertSame('missing_work', $enrollment->fresh()->at_risk_reason);
+    }
+
+    public function test_a_submitted_assignment_clears_missing_work_even_past_due(): void
+    {
+        $enrollment = $this->activeEnrollment(['last_accessed_at' => now()->subDay()]);
+        $enrollment->learningEvents()->create(['event' => LearningEventType::LessonCompleted->value, 'created_at' => now()->subDay()]);
+        $assignment = $enrollment->course->assignments()->create([
+            'title' => 'A1', 'points' => 50, 'max_file_mb' => 20, 'allowed_types' => 'text',
+            'is_published' => true, 'due_at' => now()->subDay(),
+        ]);
+        $assignment->submissions()->create([
+            'uuid' => (string) Str::uuid(), 'enrollment_id' => $enrollment->id, 'attempt_no' => 1,
+            'status' => AssignmentSubmissionStatus::Submitted, 'submitted_at' => now(),
+        ]);
+
+        $this->artisan('app:detect-at-risk-enrollments');
+
+        $this->assertNull($enrollment->fresh()->at_risk_reason);
+    }
+
+    public function test_a_not_yet_due_assignment_never_flags_missing_work(): void
+    {
+        $enrollment = $this->activeEnrollment(['last_accessed_at' => now()->subDay()]);
+        $enrollment->learningEvents()->create(['event' => LearningEventType::LessonCompleted->value, 'created_at' => now()->subDay()]);
+        $enrollment->course->assignments()->create([
+            'title' => 'A1', 'points' => 50, 'max_file_mb' => 20, 'allowed_types' => 'text',
+            'is_published' => true, 'due_at' => now()->addWeek(),
+        ]);
 
         $this->artisan('app:detect-at-risk-enrollments');
 

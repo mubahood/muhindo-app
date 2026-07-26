@@ -72,7 +72,7 @@
                 } }}">{{ ucfirst($enrollment->status) }}</span>
                 @if($enrollment->at_risk_reason)
                   <span class="badge-tb badge-danger" style="margin-left:4px;" title="Flagged by the nightly at-risk check">
-                    <i class="fas fa-triangle-exclamation"></i> {{ ucfirst($enrollment->at_risk_reason) }}
+                    <i class="fas fa-triangle-exclamation"></i> {{ ucfirst(str_replace('_', ' ', $enrollment->at_risk_reason)) }}
                   </span>
                 @endif
               </td>
