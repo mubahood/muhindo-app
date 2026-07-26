@@ -48,7 +48,7 @@
             @endphp
             <tr>
               <td>
-                <div style="font-weight:500;">{{ $enrollment->user->name ?? '—' }}</div>
+                <a href="{{ route('admin.enrollments.show', $enrollment) }}" style="font-weight:500;color:var(--tx);">{{ $enrollment->user->name ?? '—' }}</a>
                 <div class="muted" style="font-size:.78rem;">{{ $enrollment->user->email ?? '' }}</div>
               </td>
               <td>

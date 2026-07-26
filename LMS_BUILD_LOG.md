@@ -564,3 +564,49 @@ data leak).
 `php artisan test` 119/119 green (112 pre-existing + 7 new) · manual smoke test at
 the real MAMP-served URL (login → students tab renders, searches/filters/sorts
 live with no full page reload, tab title correct).
+
+### P1.4 — Per-student drill-down (§6.3.2)
+
+**Built:**
+
+- New `enrollment_notes` table + `EnrollmentNote` model (`enrollment_id`,
+  `user_id` nullable/`nullOnDelete`, `note`, timestamps) — mirrors `ProjectNote`'s
+  shape exactly, minus the `is_client_visible` toggle (§6.3.2 says these notes are
+  always private, so there's nothing to toggle). `Enrollment` gets `notes(): HasMany`
+  (latest-first) and `learningEvents(): HasMany`.
+- `App\Enums\LearningEventType::label()` — a human label per event case for the
+  timeline (`Viewed a lesson`, `Completed a lesson`, …), matching the `label()`
+  convention already established on `InvoiceStatus`/`PaymentMethod`.
+- Second full-page Livewire component: `App\Livewire\Admin\EnrollmentDrilldown`
+  (`admin.enrollments.show`, `GET /admin/enrollments/{enrollment}`), showing: student
+  info, status/progress/watch-time/last-active summary, a lesson-by-lesson completion
+  checklist (✓/○ per lesson from `lesson_progress` — real per-lesson *watched-vs-
+  duration* bars need per-lesson watch-seconds data that doesn't exist until P2's
+  heartbeat, so this ships as a completion checklist instead of a fabricated bar),
+  a paginated activity timeline from `learningEvents()`, and a private-notes panel
+  (add + list, no page reload).
+- `App\Notifications\StudentNudgeNotification` — the "message/nudge" button, sent
+  via `['mail', 'database']` so it lands in the student's own existing (previously
+  unused) in-app `/notifications` inbox as well as their email. `toArray()` matches
+  the `{title, message}` shape `admin/notifications/index.blade.php` already expects
+  — the first real notification ever sent through that infrastructure.
+- `admin.courses.students`'s student-name cell now links to this new page —
+  completing the "row click → drill-down" wiring P1.3 explicitly deferred.
+
+**Deferred (explicitly, to phases the plan itself names):** "every attempt +
+submission with scores" (needs the P3 quiz/assignment models) and the "reset quiz
+attempts" button (same). The "extend access" button is deferred to **P5**, where
+`enrollment expiry` is an explicit roadmap line item — there's no expiry concept on
+an enrollment yet, so there's nothing for that button to extend.
+
+**Tests added** (`tests/Feature/Admin/EnrollmentDrilldownTest.php`, 5 tests):
+`test_a_non_admin_cannot_view_the_drilldown`,
+`test_an_admin_sees_the_students_lesson_checklist_and_activity`,
+`test_an_admin_can_add_a_private_note`, `test_an_empty_note_is_rejected`,
+`test_sending_a_nudge_notifies_the_student_and_shows_a_confirmation`
+(`Notification::fake()` + `assertSentTo`).
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 124/124 green (119 pre-existing + 5 new) · migrate/rollback/migrate
+clean · manual smoke test at the real MAMP-served URL (drill-down page renders with
+correct title, lesson checklist, and timeline).

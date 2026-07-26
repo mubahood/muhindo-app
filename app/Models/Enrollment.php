@@ -57,6 +57,18 @@ class Enrollment extends Model
         return $this->hasOne(Certificate::class);
     }
 
+    /** @return HasMany<LearningEvent, $this> */
+    public function learningEvents(): HasMany
+    {
+        return $this->hasMany(LearningEvent::class);
+    }
+
+    /** @return HasMany<EnrollmentNote, $this> */
+    public function notes(): HasMany
+    {
+        return $this->hasMany(EnrollmentNote::class)->latest();
+    }
+
     /**
      * List views should eager-load counts to avoid an N+1 here: `->with(['course' =>
      * fn ($q) => $q->withCount('lessons')])` on the enrollment query plus
