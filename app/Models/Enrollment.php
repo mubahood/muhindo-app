@@ -13,14 +13,24 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Enrollment extends Model
 {
-    protected $fillable = ['uuid', 'user_id', 'course_id', 'status', 'source', 'enrolled_at', 'completed_at'];
+    protected $fillable = [
+        'uuid', 'user_id', 'course_id', 'status', 'source', 'enrolled_at', 'completed_at',
+        'progress_percent', 'total_watch_seconds', 'last_lesson_id', 'last_accessed_at',
+    ];
 
     protected function casts(): array
     {
         return [
             'enrolled_at' => 'datetime',
             'completed_at' => 'datetime',
+            'last_accessed_at' => 'datetime',
         ];
+    }
+
+    /** @return BelongsTo<Lesson, $this> */
+    public function lastLesson(): BelongsTo
+    {
+        return $this->belongsTo(Lesson::class, 'last_lesson_id');
     }
 
     /** @return BelongsTo<User, $this> */

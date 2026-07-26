@@ -49,6 +49,8 @@ class LearningController extends Controller
         $enrollment = $this->enrollmentFor($request, $course);
         abort_unless($lesson->module->course_id === $course->id, 404);
 
+        $this->progress->recordView($enrollment, $lesson);
+
         $completedLessonIds = $enrollment->progressRecords()->whereNotNull('completed_at')->pluck('lesson_id');
 
         return view('learn.lesson', [

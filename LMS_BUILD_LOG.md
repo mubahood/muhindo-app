@@ -393,3 +393,48 @@ All eight items done, one commit per item, in plan order. Closes: L2, L8, L7, L1
 
 Next: P1 — Monitoring core (enrollment fast-path columns + backfill, `learning_events`,
 Students tab + per-student drill-down, resume/continue UX, at-risk nightly command).
+
+---
+
+## P1 — Monitoring core
+
+### P1.1 — Enrollment fast-path columns + backfill (§6.1)
+
+**Built:**
+
+- New additive migration `2026_07_26_150119_add_fast_path_columns_to_enrollments_table.php`
+  — adds `progress_percent` (unsigned tinyint, default 0), `total_watch_seconds`
+  (unsigned int, default 0), `last_lesson_id` (nullable FK → lessons, `nullOnDelete`),
+  `last_accessed_at` (nullable timestamp, indexed — this is the index P0.4 explicitly
+  deferred to "the same migration that creates the column"). Backfill runs in the same
+  migration's `up()`: only `progress_percent` has a historical source to backfill from
+  (existing `lesson_progress` rows); `total_watch_seconds`/`last_lesson_id`/
+  `last_accessed_at` have none and start populating from the next lesson view/completion.
+  Verified clean in both directions: `migrate` → `migrate:rollback --step=1` →
+  `migrate` all ran without error.
+- `Enrollment` model — the four columns added to `$fillable`, `last_accessed_at` cast
+  to `datetime`, new `lastLesson(): BelongsTo` relation.
+- `ProgressService::completeLesson()` — now also writes `last_lesson_id`,
+  `last_accessed_at`, and the freshly computed `progress_percent` onto the enrollment
+  (computed once and reused for both the write and the ≥100% certificate check, rather
+  than calling `progressPercent()` twice).
+- `ProgressService::recordView(Enrollment, Lesson)` — new; same three-column write,
+  for a lesson *view* (not completion). Wired into `Student\LearningController::lesson()`
+  so browsing to a lesson (not just finishing it) updates "last seen" — this is the
+  write-side half of §6.5's resume UX, which reads these columns in P1.5.
+
+**Decision:** wiring `recordView()` into the lesson-view action now (rather than
+leaving `last_lesson_id`/`last_accessed_at` unwritten until P1.5) was deliberate:
+adding a column nobody writes to yet is exactly the "dead schema" anti-pattern L4/L5
+already called out elsewhere in this codebase. Since Resume UX (P1.5) is the *same*
+phase, not a later one, there was no rule-2 justification to leave the write-side
+half undone — only the read-side UI belongs to P1.5.
+
+**Tests added** (`tests/Feature/Learning/EnrollmentFastPathColumnsTest.php`, 4 tests):
+`test_enrollments_has_an_index_on_last_accessed_at`,
+`test_viewing_a_lesson_records_last_lesson_and_last_accessed_at`,
+`test_completing_a_lesson_updates_the_denormalized_progress_percent`,
+`test_completing_the_final_lesson_brings_the_denormalized_percent_to_100`.
+
+**Verification:** `vendor/bin/pint --dirty` pass · `phpstan analyse` 0 errors ·
+`php artisan test` 106/106 green (102 pre-existing + 4 new) · migrate/rollback/migrate clean.
