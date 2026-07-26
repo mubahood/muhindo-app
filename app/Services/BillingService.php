@@ -166,6 +166,30 @@ class BillingService
         });
     }
 
+    /**
+     * §7.1 — credits an invoice that money was actually collected against (Paid or
+     * PartiallyPaid only — nothing to credit on one that was never paid). Distinct from
+     * void(): void means "this charge should never have existed"; refunded means "money was
+     * collected, then given back." amount_paid/payments stay as the permanent historical
+     * record of what was collected — only status changes, so a refund never fabricates a
+     * negative balance.
+     */
+    public function refund(Invoice $invoice, ?int $by = null): Invoice
+    {
+        return DB::transaction(function () use ($invoice, $by) {
+            /** @var Invoice $locked */
+            $locked = Invoice::whereKey($invoice->id)->lockForUpdate()->firstOrFail();
+
+            if (! in_array($locked->status, [InvoiceStatus::Paid, InvoiceStatus::PartiallyPaid], true)) {
+                throw new RuntimeException("Invoice is {$locked->status->label()}; nothing to refund.");
+            }
+
+            $locked->update(['status' => InvoiceStatus::Refunded, 'refunded_by' => $by, 'refunded_at' => Carbon::now()]);
+
+            return $locked;
+        });
+    }
+
     private function createInvoiceWithNumber(array $attributes, int $attempt = 0): Invoice
     {
         $now = Carbon::now();

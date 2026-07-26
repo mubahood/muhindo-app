@@ -32,7 +32,7 @@ class Invoice extends Model
     protected $fillable = [
         'uuid', 'invoice_no', 'billable_type', 'billable_id', 'project_id', 'currency',
         'subtotal', 'tax_total', 'discount', 'total', 'amount_paid', 'balance',
-        'status', 'notes', 'issued_by', 'issued_at',
+        'status', 'notes', 'issued_by', 'issued_at', 'refunded_by', 'refunded_at',
     ];
 
     protected function casts(): array
@@ -42,6 +42,7 @@ class Invoice extends Model
             'total' => 'decimal:2', 'amount_paid' => 'decimal:2', 'balance' => 'decimal:2',
             'status' => InvoiceStatus::class,
             'issued_at' => 'datetime',
+            'refunded_at' => 'datetime',
         ];
     }
 
@@ -61,6 +62,12 @@ class Invoice extends Model
     public function issuedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'issued_by');
+    }
+
+    /** @return BelongsTo<User, $this> */
+    public function refundedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'refunded_by');
     }
 
     /** @return HasMany<InvoiceItem, $this> */

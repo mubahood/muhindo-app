@@ -110,4 +110,48 @@ class EnrollmentDrilldownTest extends TestCase
 
         Notification::assertSentTo($enrollment->user, StudentNudgeNotification::class);
     }
+
+    public function test_cancelling_a_paid_enrollment_revokes_access_refunds_the_invoice_and_notifies(): void
+    {
+        Notification::fake();
+        $admin = $this->admin();
+        $enrollment = $this->enrollmentWithLessons();
+        $enrollment->course->update(['price' => '50.00']);
+        $billing = app(\App\Services\BillingService::class);
+        $invoice = $billing->generateCourseInvoice($enrollment->user, $enrollment->course->fresh());
+        $billing->recordPayment($invoice, \App\Enums\PaymentMethod::Cash, '50.00');
+        $enrollment->update(['status' => 'active', 'invoice_id' => $invoice->id]);
+
+        Livewire::actingAs($admin)
+            ->test(EnrollmentDrilldown::class, ['enrollment' => $enrollment])
+            ->call('cancelAndRefund')
+            ->assertSee('Cancelled');
+
+        $this->assertSame('cancelled', $enrollment->fresh()->status);
+        $this->assertSame('refunded', $invoice->fresh()->status->value);
+        Notification::assertSentTo(
+            $enrollment->user,
+            \App\Notifications\EnrollmentCancelledNotification::class,
+            fn ($n) => $n->refunded === true,
+        );
+    }
+
+    public function test_cancelling_a_free_enrollment_with_no_invoice_just_revokes_access(): void
+    {
+        Notification::fake();
+        $admin = $this->admin();
+        $enrollment = $this->enrollmentWithLessons();
+        $enrollment->update(['status' => 'active']);
+
+        Livewire::actingAs($admin)
+            ->test(EnrollmentDrilldown::class, ['enrollment' => $enrollment])
+            ->call('cancelAndRefund');
+
+        $this->assertSame('cancelled', $enrollment->fresh()->status);
+        Notification::assertSentTo(
+            $enrollment->user,
+            \App\Notifications\EnrollmentCancelledNotification::class,
+            fn ($n) => $n->refunded === false,
+        );
+    }
 }

@@ -8,12 +8,22 @@
         {{ $enrollment->user->name }}
       </div>
     </div>
-    <div>
+    <div style="display:flex;gap:8px;">
       @if($nudgeSent)
         <span class="badge-tb badge-active"><i class="fas fa-check"></i> Nudge sent</span>
       @else
         <button type="button" class="btn-tb btn-tb-primary" wire:click="sendNudge">
           <i class="fas fa-paper-plane"></i> Send nudge
+        </button>
+      @endif
+
+      @if($cancelled)
+        <span class="badge-tb badge-danger"><i class="fas fa-check"></i> Cancelled</span>
+      @elseif($enrollment->status !== 'cancelled')
+        <button type="button" class="btn-tb btn-tb-danger"
+                wire:click="cancelAndRefund"
+                wire:confirm="Cancel this enrollment and refund any payment collected for it? This revokes access immediately.">
+          <i class="fas fa-ban"></i> Cancel &amp; refund
         </button>
       @endif
     </div>

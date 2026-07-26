@@ -9,6 +9,7 @@ enum InvoiceStatus: string
     case PartiallyPaid = 'partially_paid';
     case Paid = 'paid';
     case Void = 'void';
+    case Refunded = 'refunded';
 
     public function label(): string
     {
@@ -26,6 +27,7 @@ enum InvoiceStatus: string
             self::PartiallyPaid => 'badge-warn',
             self::Paid => 'badge-success',
             self::Void => 'badge-danger',
+            self::Refunded => 'badge-danger',
         };
     }
 
