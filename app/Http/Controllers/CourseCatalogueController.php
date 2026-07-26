@@ -28,7 +28,10 @@ class CourseCatalogueController extends Controller
     public function index(): View
     {
         return view('courses.index', [
-            'courses' => Course::where('is_published', true)->latest()->get(),
+            'courses' => Course::where('is_published', true)
+                ->withCount(['reviews as reviews_count' => fn ($q) => $q->where('is_published', true)])
+                ->withAvg(['reviews as reviews_avg_rating' => fn ($q) => $q->where('is_published', true)], 'rating')
+                ->latest()->get(),
         ]);
     }
 
@@ -40,10 +43,14 @@ class CourseCatalogueController extends Controller
             ? Enrollment::where('user_id', auth()->id())->where('course_id', $course->id)->first()
             : null;
 
+        $course->loadCount(['reviews as reviews_count' => fn ($q) => $q->where('is_published', true)])
+            ->loadAvg(['reviews as reviews_avg_rating' => fn ($q) => $q->where('is_published', true)], 'rating');
+
         return view('courses.show', [
             'course' => $course->load('modules.lessons'),
             'enrollment' => $existing && in_array($existing->status, ['active', 'completed'], true) ? $existing : null,
             'pendingCheckout' => $existing?->status === 'pending',
+            'publishedReviews' => $course->reviews()->where('is_published', true)->with('enrollment.user')->latest()->get(),
         ]);
     }
 

@@ -12,6 +12,9 @@
       <span class="tag">{{ ucfirst($course->level) }}</span>
       @if($course->category)<span class="tag">{{ $course->category }}</span>@endif
       <span class="tag">{{ $course->lessonCount() }} lessons</span>
+      @if($course->reviews_count > 0)
+        <span class="tag"><i class="fas fa-star" style="color:var(--gold);"></i> {{ number_format($course->reviews_avg_rating, 1) }} ({{ $course->reviews_count }})</span>
+      @endif
     </div>
   </div>
 </section>
@@ -61,5 +64,21 @@
     </div>
   </div>
 </section>
+
+@if($publishedReviews->isNotEmpty())
+<section style="padding-top:0;">
+  <div class="wrap page">
+    <h2 style="font-size:20px;margin-bottom:16px;">Student reviews</h2>
+    @foreach($publishedReviews as $review)
+      <div class="feature-box" style="margin-bottom:14px;">
+        <div style="font-weight:600;">{{ $review->enrollment->user->name }} — {{ $review->rating }} <i class="fas fa-star" style="color:var(--gold);"></i></div>
+        @if($review->body)
+          <p style="margin-top:6px;">{{ $review->body }}</p>
+        @endif
+      </div>
+    @endforeach
+  </div>
+</section>
+@endif
 
 @endsection

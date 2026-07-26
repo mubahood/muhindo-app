@@ -134,6 +134,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::get('enrollments/{enrollment}', \App\Livewire\Admin\EnrollmentDrilldown::class)->name('enrollments.show');
     Route::get('grading-queue', \App\Livewire\Admin\GradingQueue::class)->name('grading-queue');
+    Route::get('reviews', \App\Livewire\Admin\ReviewModeration::class)->name('reviews.index');
     Route::post('courses/{course}/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
     Route::delete('enrollments/{enrollment}', [EnrollmentController::class, 'destroy'])->name('enrollments.destroy');
 
@@ -197,6 +198,9 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::get('{course:slug}/grades', [\App\Http\Controllers\Student\GradesController::class, 'show'])->name('grades');
 
     Route::get('{course:slug}/announcements', [\App\Http\Controllers\Student\AnnouncementController::class, 'index'])->name('announcements.index');
+
+    Route::get('{course:slug}/review', [\App\Http\Controllers\Student\CourseReviewController::class, 'create'])->name('review.create');
+    Route::post('{course:slug}/review', [\App\Http\Controllers\Student\CourseReviewController::class, 'store'])->name('review.store');
 
     Route::get('{course:slug}/discussions', [\App\Http\Controllers\Student\DiscussionController::class, 'index'])->name('discussions.index');
     Route::get('{course:slug}/discussions/create', [\App\Http\Controllers\Student\DiscussionController::class, 'create'])->name('discussions.create');

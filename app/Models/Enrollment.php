@@ -98,6 +98,12 @@ class Enrollment extends Model
         return $this->hasMany(LessonNote::class);
     }
 
+    /** @return HasOne<CourseReview, $this> */
+    public function review(): HasOne
+    {
+        return $this->hasOne(CourseReview::class);
+    }
+
     /**
      * List views should eager-load counts to avoid an N+1 here: `->with(['course' =>
      * fn ($q) => $q->withCount('lessons')])` on the enrollment query plus

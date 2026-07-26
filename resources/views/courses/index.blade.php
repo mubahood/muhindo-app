@@ -26,6 +26,12 @@
           <a href="{{ route('courses.show', $course) }}" class="proj-card">
             <div class="tag-row"><span class="tag">{{ ucfirst($course->level) }}</span>@if($course->category)<span class="tag">{{ $course->category }}</span>@endif</div>
             <h3>{{ $course->title }}</h3>
+            @if($course->reviews_count > 0)
+              <div style="font-size:13px;color:var(--tx3);margin-bottom:6px;">
+                <i class="fas fa-star" style="color:var(--gold);"></i> {{ number_format($course->reviews_avg_rating, 1) }}
+                <span>({{ $course->reviews_count }} {{ \Illuminate\Support\Str::plural('review', $course->reviews_count) }})</span>
+              </div>
+            @endif
             <p>{{ \Illuminate\Support\Str::limit($course->description, 140) }}</p>
             <span class="link">{{ $course->isFree() ? 'Free' : $course->currency.' '.number_format((float) $course->price) }} <i class="fas fa-arrow-right"></i></span>
           </a>

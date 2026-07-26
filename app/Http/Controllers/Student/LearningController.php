@@ -32,7 +32,7 @@ class LearningController extends Controller
             ->with(['course' => fn ($query) => $query->withCount('lessons')
                 ->withCount(['quizzes as published_quizzes_count' => fn ($q) => $q->where('is_published', true)])
                 ->withCount(['assignments as published_assignments_count' => fn ($q) => $q->where('is_published', true)]),
-                'certificate', 'lastLesson'])
+                'certificate', 'lastLesson', 'review'])
             ->withCount(['progressRecords as completed_lessons_count' => fn ($query) => $query->whereNotNull('completed_at')])
             ->latest()->get();
 
