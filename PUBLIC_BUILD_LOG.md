@@ -327,3 +327,83 @@ in the W7 walkthrough if the literal fixed bar is wanted after seeing it live.
 `feat(public): seed a real 7-course public catalogue` ·
 `feat(public): rebuild the e-learning listing page with filters, sort and search` ·
 `feat(public): rebuild the course detail page into a real sales page`
+
+---
+
+## Stage 2 — W3: Registration flow
+
+**Date:** 2026‑07‑28. Tag: `public-w3`. Two commits.
+
+1. **`feat(public): contextual auth continuation for guest enrollment`** — §3.2, the
+   item flagged in plan v2 as "genuinely new, does not exist today," confirmed still
+   true right up to writing the code: `StudentRegistrationController::store` used to
+   always redirect to the dashboard, and `AuthenticatedSessionController::store` used
+   Laravel's built-in `redirect()->intended()`, which only fires when a real
+   auth-middleware redirect stashed a URL — clicking "Sign in to enrol" from a public
+   course page is a plain link, not a middleware redirect, so nothing was ever stashed.
+   Register/login now accept `intended_course` (query param on the GET form, hidden
+   field on the POST), show a course-context banner ("to start {course}"), and on
+   success call the existing, already-tested `CourseCatalogueController::enroll()`
+   directly rather than duplicating its coupon/idempotency/free-vs-paid logic — landing
+   the student straight in lesson 1 instead of the dashboard. The course-page CTA
+   changed from "Sign in to enrol" (login-only) to "Enrol now"/"Buy course" pointing at
+   registration first, with a "Sign in" fallback link, matching §3.1's "new student"
+   framing. An unpublished or nonexistent `intended_course` slug is looked up
+   server-side and silently ignored, never trusted blindly. §3.3's terms checkbox
+   added to the registration form (the one field the existing minimal form was
+   missing). Replaced the auth layout's inherited medical `doodle-bg` (flagged in
+   plan v2's verified-current-state section) with a plain brand surface, since this
+   pass already had the shared auth layout open. Tested: `CourseContextRegistrationTest`
+   (8 tests — free-course register-and-enroll, no-context still reaches dashboard,
+   terms required, unpublished/nonexistent slug abuse paths, banner rendering,
+   sign-in continuation, already-enrolled sign-in doesn't double-enroll).
+2. **`feat(public): first-visit onboarding checklist on the student dashboard`** —
+   §3.4. Three items, each backed by a real, checkable fact rather than a fake
+   progress bar: `hasVerifiedEmail()`, whether any enrollment has `progress_percent >
+   0`, whether `avatar` is set. New `users.onboarding_dismissed_at` column, dismissible
+   via a small POST route, and the card auto-hides once every item is genuinely
+   complete (not just on dismiss). Verified via `OnboardingChecklistTest` (4 tests,
+   run through real HTTP requests with `actingAs()`) rather than a live-server curl
+   check — curl can't carry an authenticated session/CSRF pair without a lot of extra
+   plumbing, and the tests already exercise the identical code path end-to-end.
+   **§3.4's welcome-email requirement needed no new code** — enrolling already sends
+   `EnrolledInCourseNotification` (mail + database channels), which already covers
+   "what you enrolled in" and "link to continue" (confirmed via the pre-existing
+   `enrolling sends a welcome notification` test); building a second email would have
+   meant double-emailing every new student, so this is recorded as a verified-already-
+   built finding, not a skipped item.
+
+### A plan gap noticed and resolved
+
+Plan v2's §8 execution order maps W1/W2/W6 cleanly to §1/§2/§6, but §7 ("Responsiveness
+& stability")'s concrete action items — replace the doodle-bg, branded 404/500 pages,
+rate-limit the future project-inquiry endpoint — were never assigned a W-number. Two
+decisions made now, recorded here rather than left implicit: the doodle-bg replacement
+landed in this W3 commit (opportunistic — W3 already had the shared auth layout open,
+no reason to touch it twice); rate-limiting the inquiry endpoint will happen at the
+point it's built in W5, not as a separate later pass (`AGENT_COMMAND.md`'s "no
+placeholders" rule already implies this); and branded 404/500 pages are assigned to
+W6, alongside the SEO/stability pass, as the more natural home for the one action item
+still unplaced.
+
+### Verification
+
+- `vendor/bin/pint --dirty` — pass, both commits.
+- `vendor/bin/phpstan analyse --memory-limit=1G` — 0 errors (309 then 310 files).
+- Combined targeted run —
+  `php artisan test --filter="OnboardingChecklist|CourseContext|Auth|ELearning|RouteNaming|Portfolio|ContactForm|CourseEnrollment|FreePreview|EnrollIdempotency|EnrollmentAccessPolicy|EnrollmentExpiryWindow|LearningEvents"`
+  — **136 passed, 310 assertions, 10.44s.** Includes every pre-existing `Auth/*` test
+  (login, registration wasn't previously tested at all — confirmed via a repo-wide
+  grep before writing this item's tests, so nothing existing could regress from adding
+  the `terms` field) plus every course/checkout/enrollment test already covered in W1/
+  W2, confirming the new controller logic didn't disturb the existing enroll path it
+  now reuses.
+- Live server: course-context banner confirmed on `GET /register?intended_course=...`
+  (shows the real course title); course detail page's guest CTA confirmed showing
+  "Enrol now" with a "Sign in" fallback. The dashboard checklist was verified via the
+  test suite instead of live curl (see above).
+
+### Commits
+
+`feat(public): contextual auth continuation for guest enrollment` ·
+`feat(public): first-visit onboarding checklist on the student dashboard`
