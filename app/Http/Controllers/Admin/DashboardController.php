@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Support\Dashboard\DashboardService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -29,5 +30,13 @@ class DashboardController extends Controller
             'svc' => $svc,
             'role' => $role,
         ]);
+    }
+
+    /** §3.4 — dismisses the first-visit onboarding checklist card, remembered per user. */
+    public function dismissOnboarding(Request $request): RedirectResponse
+    {
+        $request->user()->update(['onboarding_dismissed_at' => now()]);
+
+        return redirect()->route('dashboard');
     }
 }

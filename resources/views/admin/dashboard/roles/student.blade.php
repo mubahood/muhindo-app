@@ -2,7 +2,50 @@
     $enrollments = $svc->studentEnrollments($user);
     $badges = $svc->studentBadges($user);
     $streak = $svc->studentWeeklyStreak($user);
+
+    $onboardingItems = [
+        'verified' => $user->hasVerifiedEmail(),
+        'started' => $enrollments->contains(fn ($e) => $e->progress_percent > 0),
+        'profile' => filled($user->avatar),
+    ];
+    $showOnboarding = ! $user->onboarding_dismissed_at && in_array(false, $onboardingItems, true);
 @endphp
+
+@if($showOnboarding)
+<div class="dash-section">
+  <div class="tb-card" style="border-left:3px solid var(--tb-gold, #b8933f);">
+    <div class="tb-card-body" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div class="dash-section-title" style="margin-bottom:10px;"><i class="fas fa-list-check"></i> Getting started</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:.85rem;">
+          <span>
+            <i class="fas {{ $onboardingItems['verified'] ? 'fa-circle-check' : 'fa-circle' }}" style="color:{{ $onboardingItems['verified'] ? 'var(--tb-ok,#0f6b30)' : '#9aa2af' }};margin-right:8px;"></i>
+            Verify your email
+            @unless($onboardingItems['verified'])
+              <form method="POST" action="{{ route('verification.send') }}" style="display:inline;">@csrf<button type="submit" class="btn-tb btn-tb-ghost btn-tb-sm" style="margin-left:6px;">Resend</button></form>
+            @endunless
+          </span>
+          <span>
+            <i class="fas {{ $onboardingItems['started'] ? 'fa-circle-check' : 'fa-circle' }}" style="color:{{ $onboardingItems['started'] ? 'var(--tb-ok,#0f6b30)' : '#9aa2af' }};margin-right:8px;"></i>
+            Start your first lesson
+            @unless($onboardingItems['started'])
+              <a href="{{ route('learn.index') }}" class="btn-tb btn-tb-ghost btn-tb-sm" style="margin-left:6px;">Go</a>
+            @endunless
+          </span>
+          <span>
+            <i class="fas {{ $onboardingItems['profile'] ? 'fa-circle-check' : 'fa-circle' }}" style="color:{{ $onboardingItems['profile'] ? 'var(--tb-ok,#0f6b30)' : '#9aa2af' }};margin-right:8px;"></i>
+            Complete your profile <span class="muted">(add a photo from the profile menu)</span>
+          </span>
+        </div>
+      </div>
+      <form method="POST" action="{{ route('dashboard.onboarding.dismiss') }}">
+        @csrf
+        <button type="submit" class="btn-tb btn-tb-ghost btn-tb-sm" title="Dismiss"><i class="fas fa-xmark"></i></button>
+      </form>
+    </div>
+  </div>
+</div>
+@endif
 
 <div class="tb-stats-grid">
   <x-dash.stat :value="number_format($enrollments->count())" label="Enrolled courses" icon="fa-book"

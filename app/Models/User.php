@@ -33,7 +33,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
     protected $fillable = [
         'name', 'username', 'email', 'password', 'role',
         'phone', 'bio', 'avatar', 'is_active', 'is_admin', 'theme', 'last_active_at',
-        'password_change_required',
+        'password_change_required', 'onboarding_dismissed_at',
     ];
 
     protected $hidden = [
@@ -49,6 +49,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
             'is_admin' => 'boolean',
             'last_active_at' => 'datetime',
             'password_change_required' => 'boolean',
+            'onboarding_dismissed_at' => 'datetime',
         ];
     }
 
