@@ -239,3 +239,91 @@ courses.
 ### Commit
 
 `feat(public): e-learning canonical routes, landing strip, two-door copy rewording`
+
+---
+
+## Stage 2 — W2: Catalogue
+
+**Date:** 2026‑07‑27. Tag: `public-w2`. Four commits (schema+admin, seeder, listing
+page, detail page), each gated individually per `AGENT_COMMAND.md`'s one-item-one-
+commit discipline — W2 in the plan is one execution-order line, but it bundles four
+genuinely separable pieces of work, so each got its own verification pass rather than
+one giant diff.
+
+1. **`feat(public): add tagline/outcomes/requirements/cover_alt to courses`** — new
+   migration (`2026_07_27_100000_add_catalogue_fields_to_courses_table.php`), `Course`
+   model gains `cardTagline()`/`coverAlt()` fallback helpers (never render blank space
+   for an unset field), admin course form gains the four new inputs (outcomes/
+   requirements as one-per-line textareas, converted to a clean array or `null` server-
+   side — `Admin\CourseController::linesToArray()`). Tested: `CourseCatalogueFieldsTest`
+   (4 tests) — round-trip through the form, blank input stores `null` not `[]`, both
+   fallback helpers.
+2. **`feat(public): seed a real 7-course public catalogue`** — §2.5's decision: the
+   existing `DemoCourseSeeder` is dev-scoped (one free course titled "(Demo)"), so a
+   separate `PublicCourseCatalogueSeeder` (opt-in, not in the default chain) seeds 7
+   real courses — web dev, mobile dev, databases, git — spanning free/paid, every
+   level, several categories, each with real modules/lessons/durations and at least
+   one free-preview lesson. Applied to the dev database; the one leftover bare
+   `CourseFactory` stub ("Accusantium perferendis ut.") it replaced was deleted from
+   local dev data (not a tracked seeder — safe, not reverting anyone's work). Tested:
+   `PublicCourseCatalogueSeederTest` (3 tests) — spans free/paid/category/level, every
+   course has real content (no lorem, every field populated), idempotent re-run.
+3. **`feat(public): rebuild the e-learning listing page with filters, sort and search`**
+   — §2.2. `CourseCatalogueController::index()` takes server-rendered, URL-driven
+   `category`/`level`/`price`/`sort`/`q` params (shareable, crawlable, zero JS
+   required), eager-loads lesson counts/duration sums/enrollment counts to avoid N+1.
+   New card design (cover placeholder, chips, meta row, honest trust chips from live
+   counts), friendly empty state with clear-filters + contact link, pagination past 9.
+   Tested: `ELearningListingTest` (9 tests) — publish-gating, every filter, search,
+   sort ordering, empty state, pagination page 2, trust-chip accuracy.
+4. **`feat(public): rebuild the course detail page into a real sales page`** — §2.3.
+   Two-column layout (buy box promotes to the top of the page via CSS `order` on
+   ≤1024px instead of a literal fixed bottom bar — see the reasoning below), breadcrumb,
+   meta chips, outcomes/requirements sections (hidden when empty, not shown blank), a
+   native `<details>`/`<summary>` curriculum accordion (no JS, reuses the already-built
+   free-preview route unchanged), instructor bio from portfolio settings, the existing
+   reviews block carried forward, and a new FAQ section — real product-FAQ content
+   (how to pay, self-paced, certificates, getting help) seeded into
+   `courses.faq` via `PortfolioContentSeeder`, not invented copy. Per §5.1's decision,
+   the coupon field now lives in the buy box (still posts through the unchanged
+   `courses.enroll` route). Tested: `ELearningDetailPageTest` (7 tests) — outcomes/
+   requirements presence and hide-when-empty, free vs. paid buy box content, payment
+   icons gated on price, FAQ rendering, breadcrumb category link round-trips into the
+   listing's own filter.
+
+### A deliberate scope trim, documented as asked
+
+§2.3's "sticky bottom bar" for the buy box on mobile was implemented as **CSS-order
+promotion** (the buy box moves to the top of the content flow on ≤1024px, `position:
+static`) instead of a literal `position: fixed` bar pinned to the viewport bottom.
+Reasoning: a true fixed bar needs either a second, duplicate enroll/coupon form (real
+bug surface — two forms means two places a submission can drift out of sync) or JS to
+mirror one form's state into a fixed-position clone. At this catalogue's scale, moving
+the *existing* single buy box to the top of the mobile flow gets a visitor to price +
+the CTA immediately without scrolling past the whole curriculum — the actual
+conversion goal — with zero JS and zero duplicate forms. Not marked `DEFERRED` in the
+plan itself since the capability (buy box visible immediately on mobile) is delivered,
+just via a simpler mechanism; flagged here for the owner's awareness, and revisitable
+in the W7 walkthrough if the literal fixed bar is wanted after seeing it live.
+
+### Verification
+
+- `vendor/bin/pint --dirty` — pass, all four commits.
+- `vendor/bin/phpstan analyse --memory-limit=1G` — 0 errors, 309 files, all four commits.
+- Combined targeted run after the final commit —
+  `php artisan test --filter="ELearning|RouteNaming|Portfolio|ContactForm|CourseEnrollment|CourseReview|CourseCheckout|CouponCheckout|FreePreview|EnrollIdempotency|CourseCatalogueFields|PublicCourseCatalogueSeeder"`
+  — **93 passed, 288 assertions, 6.14s.** (No untargeted `php artisan test` run, per
+  standing instruction.)
+- Live server (`http://localhost:8888/muhindo-app`): `/e-learning` listing shows all 7
+  seeded courses with real covers/chips/prices; category filter confirmed live
+  (`?category=Databases` returns only the Databases course); a free course
+  (`/e-learning/web-development-foundations`) correctly shows no payment icons; a paid
+  course (`/e-learning/laravel-from-scratch`) shows `UGX 150,000`, MTN MoMo/Airtel
+  Money icons, the Flutterwave reassurance line, and a working free-preview tag.
+
+### Commits
+
+`feat(public): add tagline/outcomes/requirements/cover_alt to courses` ·
+`feat(public): seed a real 7-course public catalogue` ·
+`feat(public): rebuild the e-learning listing page with filters, sort and search` ·
+`feat(public): rebuild the course detail page into a real sales page`
