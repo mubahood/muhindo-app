@@ -157,8 +157,20 @@
             <button type="submit" class="btn gold lg" style="width:100%;justify-content:center;">{{ $course->isFree() ? 'Enrol for free' : 'Buy course' }}</button>
           </form>
         @else
-          <a href="{{ route('register', ['intended_course' => $course->slug]) }}" wire:navigate class="btn gold lg" style="width:100%;justify-content:center;">{{ $course->isFree() ? 'Enrol now' : 'Buy course' }}</a>
-          <p class="muted" style="font-size:11.5px;text-align:center;margin-top:8px;">Already have an account? <a href="{{ route('login', ['intended_course' => $course->slug]) }}" wire:navigate style="color:var(--pri);font-weight:600;">Sign in</a></p>
+          {{-- §3.2/W7 — a guest with a coupon needs somewhere to enter it before the
+               account even exists; a plain link (as this used to be) can't carry a
+               typed value. A GET form works with no JS, and StudentRegistrationController
+               forwards coupon_code straight into the same enroll() call an authenticated
+               buyer uses, so there's no separate "guest coupon" code path to keep in sync. --}}
+          <form method="GET" action="{{ route('register') }}">
+            <input type="hidden" name="intended_course" value="{{ $course->slug }}">
+            @if(!$course->isFree())
+              <label for="guest_coupon_code" class="sr-only">Coupon code (optional)</label>
+              <input type="text" id="guest_coupon_code" name="coupon_code" placeholder="Coupon code (optional)" class="coupon-field">
+            @endif
+            <button type="submit" class="btn gold lg" style="width:100%;justify-content:center;">{{ $course->isFree() ? 'Enrol now' : 'Buy course' }}</button>
+            <button type="submit" formaction="{{ route('login') }}" class="btn ghost" style="width:100%;justify-content:center;margin-top:8px;">Already have an account? Sign in</button>
+          </form>
         @endif
 
         <ul class="includes">

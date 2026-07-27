@@ -18,7 +18,10 @@
 
 <form method="POST" action="{{ route('login') }}">
   @csrf
-  @if($intendedCourse)<input type="hidden" name="intended_course" value="{{ $intendedCourse->slug }}">@endif
+  @if($intendedCourse)
+    <input type="hidden" name="intended_course" value="{{ $intendedCourse->slug }}">
+    @if(request('coupon_code'))<input type="hidden" name="coupon_code" value="{{ request('coupon_code') }}">@endif
+  @endif
   <div class="a-field">
     <label class="a-label" for="email">Email address</label>
     <div class="a-inwrap">
@@ -46,7 +49,7 @@
   <button type="submit" class="a-btn"><i class="fas fa-right-to-bracket"></i> Sign in</button>
 </form>
 
-<div class="a-alt">New student? <a href="{{ route('register', $intendedCourse ? ['intended_course' => $intendedCourse->slug] : []) }}">Create an account</a></div>
+<div class="a-alt">New student? <a href="{{ route('register', $intendedCourse ? array_filter(['intended_course' => $intendedCourse->slug, 'coupon_code' => request('coupon_code')]) : []) }}">Create an account</a></div>
 <div style="text-align:center;"><a href="{{ route('home') }}" class="a-back"><i class="fas fa-arrow-left"></i> Back to home</a></div>
 
 <div class="a-secure">

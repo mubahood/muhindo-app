@@ -17,7 +17,10 @@ class SitemapController extends Controller
     public function sitemap(): Response
     {
         $urls = [
-            ['loc' => route('home'), 'lastmod' => null],
+            // Trailing slash avoids an extra redirect hop some server configs add for a bare
+            // subdirectory path (found crawling the live sitemap during the W7 walkthrough) —
+            // harmless and equivalent at a plain domain root, where most servers serve both forms identically.
+            ['loc' => route('home').'/', 'lastmod' => null],
             ['loc' => route('courses.index'), 'lastmod' => null],
             ['loc' => route('portfolio.work'), 'lastmod' => null],
             ['loc' => route('portfolio.about'), 'lastmod' => null],

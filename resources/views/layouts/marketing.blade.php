@@ -49,15 +49,19 @@
     main{padding-top:var(--hd);}
 
     /* ── Buttons ── */
-    .btn{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:12.5px;padding:8px 14px;
-      border:1px solid var(--pri);background:var(--pri);color:#fff;transition:background .15s,border-color .15s,color .15s;white-space:nowrap;}
+    /* §7 — "tap targets >= 44px": base/.lg padding+line-height sized to clear 44px total
+       height (a real gap the W7 walkthrough caught — the original 36px/41px heights
+       looked fine on desktop but fail the plan's own mobile tap-target requirement). */
+    .btn{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:12.5px;padding:12px 16px;
+      min-height:44px;border:1px solid var(--pri);background:var(--pri);color:#fff;
+      transition:background .15s,border-color .15s,color .15s;white-space:nowrap;}
     .btn:hover{background:var(--pri-d);border-color:var(--pri-d);}
     .btn.gold{border-color:var(--gold);background:var(--gold);color:var(--pri-d);}
     .btn.gold:hover{background:var(--gold-d);border-color:var(--gold-d);color:#fff;}
     .btn.ghost{background:transparent;color:var(--pri);}
     .btn.ghost:hover{background:var(--pri-soft);}
-    .btn.sm{padding:7px 12px;font-size:12px;}
-    .btn.lg{padding:10px 18px;font-size:13px;}
+    .btn.sm{padding:9px 12px;font-size:12px;min-height:38px;} /* header/inline use only — never a primary conversion CTA */
+    .btn.lg{padding:14px 20px;font-size:13px;min-height:48px;}
 
     /* ── Sections ── */
     section{padding:52px 0;}

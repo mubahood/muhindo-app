@@ -14,7 +14,10 @@
 
 <form method="POST" action="{{ route('register') }}">
   @csrf
-  @if($intendedCourse)<input type="hidden" name="intended_course" value="{{ $intendedCourse->slug }}">@endif
+  @if($intendedCourse)
+    <input type="hidden" name="intended_course" value="{{ $intendedCourse->slug }}">
+    @if(request('coupon_code'))<input type="hidden" name="coupon_code" value="{{ request('coupon_code') }}">@endif
+  @endif
   <div class="a-field">
     <label class="a-label" for="name">Full name</label>
     <div class="a-inwrap">
@@ -52,7 +55,7 @@
   <button type="submit" class="a-btn"><i class="fas fa-user-plus"></i> Create account</button>
 </form>
 
-<div class="a-alt">Already have an account? <a href="{{ route('login', $intendedCourse ? ['intended_course' => $intendedCourse->slug] : []) }}">Sign in</a></div>
+<div class="a-alt">Already have an account? <a href="{{ route('login', $intendedCourse ? array_filter(['intended_course' => $intendedCourse->slug, 'coupon_code' => request('coupon_code')]) : []) }}">Sign in</a></div>
 <div class="a-alt">Creating an account to hire me for a project? <a href="{{ route('start-a-project') }}">Use Start a project instead →</a></div>
 <div style="text-align:center;"><a href="{{ route('home') }}" class="a-back"><i class="fas fa-arrow-left"></i> Back to home</a></div>
 @endsection
