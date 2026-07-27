@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
+use App\Models\GatewayLog;
 use App\Models\Invoice;
 use App\Services\Gateway\GatewayPaymentService;
 use App\Services\Gateway\PaymentGateway;
@@ -54,16 +56,34 @@ class GatewayPaymentController extends Controller
     {
         $transactionId = (string) $request->query('transaction_id', '');
         $flwStatus = (string) $request->query('status', '');
+        $txRef = (string) $request->query('tx_ref', '');
 
         $result = 'cancelled';
         if ($transactionId !== '' && in_array($flwStatus, ['successful', 'completed'], true)) {
             $result = $this->service->settle($transactionId);
         }
 
+        $ok = in_array($result, ['settled', 'already_settled'], true);
+
         return view('gateway.result', [
-            'ok' => in_array($result, ['settled', 'already_settled'], true),
+            'ok' => $ok,
             'result' => $result,
+            'retryUrl' => $ok ? null : $this->retryUrl($txRef),
         ]);
+    }
+
+    /**
+     * §5.2 — on a failed/cancelled Flutterwave attempt, send the payer back to the
+     * specific course's checkout page (invoice is untouched, reusable) rather than a
+     * dead-end. Falls back to browsing courses when the invoice isn't a course
+     * purchase or can't be resolved from the tx_ref.
+     */
+    private function retryUrl(string $txRef): string
+    {
+        $invoice = $txRef !== '' ? GatewayLog::where('tx_ref', $txRef)->first()?->invoice : null;
+        $courseItem = $invoice?->items->first(fn ($item) => $item->source_type === Course::class);
+
+        return $courseItem ? route('courses.checkout', $courseItem->source) : route('courses.index');
     }
 
     /** Server-to-server webhook. Public, CSRF-exempt; authenticity via verif-hash. */

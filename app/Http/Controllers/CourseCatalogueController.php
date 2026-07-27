@@ -194,7 +194,7 @@ class CourseCatalogueController extends Controller
             return redirect()->route('courses.show', $course);
         }
 
-        $invoice = Invoice::findOrFail($enrollment->invoice_id);
+        $invoice = Invoice::with('items')->findOrFail($enrollment->invoice_id);
         abort_unless($invoice->billable_type === User::class && $invoice->billable_id === $user->id, 403);
 
         return view('courses.checkout', ['course' => $course, 'invoice' => $invoice]);
