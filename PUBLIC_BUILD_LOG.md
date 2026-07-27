@@ -516,3 +516,147 @@ absence of validation errors so it can't regress silently again.
 ### Commit
 
 `feat(public): the "Start a project" client funnel`
+
+---
+
+## Stage 2 — W6: SEO & performance
+
+**Date:** 2026‑07‑28. Tag: `public-w6`. One commit — §6 in full, driven end-to-end by
+real Lighthouse runs (Chrome + `npx lighthouse` against the live site), not guesses.
+
+**`feat(public): SEO, structured data, performance and a11y pass`.** Summary of what
+shipped is in the commit message; this entry focuses on the measurement methodology
+and the numbers, since the plan explicitly asked for recorded Lighthouse scores.
+
+### Methodology
+
+1. Confirmed Google Chrome was available locally and `npx lighthouse@12` could run
+   headless against `http://localhost:8888/muhindo-app` — no environment assumptions,
+   verified before relying on it.
+2. **First run found a measurement bug, not an app bug:** Performance scored 59, with
+   `render-blocking-resources` pointing at `_debugbar/assets` (~300KB of JS+CSS).
+   `barryvdh/laravel-debugbar` is a `require` (not `require-dev`) dependency, active
+   because this local `.env` has `APP_DEBUG=true`. Temporarily set
+   `DEBUGBAR_ENABLED=false` in `.env` for the duration of the audit only (restored
+   immediately after, confirmed via `git diff`/`grep` — nothing shipped with debugbar
+   disabled) to measure the actual application, not local dev tooling.
+3. Iterated: run → read the specific failing audits (not just the score) → fix → rerun
+   → confirm no new console errors (a real Chrome execution, so this also validates
+   that `Livewire::useScriptTagAttributes(['defer' => true])` didn't break Livewire's
+   own hydration — `errors-in-console` scored a perfect 1 after the change).
+
+### Findings and fixes, in the order they surfaced
+
+1. **`robots.txt` fixed first**, per the plan's own instruction, before anything else
+   in this phase — confirmed via `SitemapTest::robots_txt_points_at_this_apps_own_sitemap_not_a_different_domain`
+   that `true-doctor.online` no longer appears anywhere in the response.
+2. **livewire.js (~380KB) was the single largest render-blocking resource** on pages
+   that don't even mount a real Livewire component (marketing pages only use it for
+   `wire:navigate`). Deferred via Livewire's own documented
+   `useScriptTagAttributes` API — home page Performance: 59 → 69 (debugbar removed
+   from measurement) → 77 (defer applied).
+3. **FontAwesome CSS deferred** via the standard `media="print" onload="this.media='all'"`
+   swap with a `<noscript>` fallback (§7's "works without JS" still holds — icons just
+   render immediately for JS-disabled visitors instead of after load).
+4. **Two real, freshly-introduced accessibility bugs caught**, both from this
+   session's own earlier W2 work: the catalogue's filter `<select>` elements had no
+   accessible name (`select-name` audit, weight 7) — fixed with paired `<label
+   class="sr-only">` + `aria-label`; and heading levels skipped in three places — the
+   FAQ section's `<h4>` ran straight after an `<h2>` with no `<h3>` (fixed: `h4`→`h3`),
+   the catalogue grid's `<h3>` course-card titles had no `<h2>` before them on this
+   specific page even though the identical `.proj-card` pattern is correct everywhere
+   else it's used (fixed: added a `sr-only` `<h2>` immediately before the grid instead
+   of changing the shared card markup), and the footer's `<h4>` column labels
+   sometimes skipped `<h3>` depending on what heading level happened to end each
+   page's main content — since a `<footer>` landmark doesn't need to participate in
+   the document's heading outline for a screen reader to navigate it, changed those
+   to plain `<p>` elements rather than chasing per-page heading levels forever.
+5. **`<x-seo>` component** built and wired via `$__env->yieldContent()` so every
+   existing `@section('title')`/`@section('desc')` call site across ~15 views kept
+   working with zero changes. Along the way, found the layout's hardcoded meta
+   fallback strings still said "enterprise information systems ... for government,
+   NGOs and private organisations" — missed during W1's copy pass because W1 only
+   reworded visible page content, never this `<head>` default. Fixed as part of this
+   pass since it's squarely SEO/meta scope.
+6. **JSON-LD**: `Course` + `BreadcrumbList` (+ `FAQPage` only when real FAQ content
+   exists — never an empty node) on course detail pages; `Person` + `Organization` on
+   the landing page, `sameAs` sourced from the real GitHub/YouTube links already in
+   settings.
+7. **Course cover images**: found `public/images/courses/*.png` already contains eight
+   real, branded, professionally-designed category cover images (web-development,
+   mobile-apps, cloud-computing, programming, etc.) sitting unused. Wired them into
+   `PublicCourseCatalogueSeeder` instead of the icon placeholders every course card
+   was showing — a real, free visual upgrade to "make courses stand out" that cost
+   nothing to build, it just needed to be found and connected.
+8. **Branded 404** (full marketing layout — "that page wandered off," links to browse
+   courses and home) **and 500** (deliberately dependency-free HTML, matching the
+   `gateway/result.blade.php` precedent for a page that must always render even if
+   the rest of the app is broken) — Laravel's bare defaults are gone.
+9. **Canonical tags on filtered listings verified free, not built**: `<x-seo>`'s
+   default canonical is `url()->current()`, which Laravel already excludes the query
+   string from — confirmed live that `/e-learning?category=Databases` emits
+   `<link rel="canonical" href=".../e-learning">`, satisfying §6.4's
+   no-duplicate-content requirement with zero extra code.
+
+### A deliberate scope trim, documented as asked
+
+§6.6 calls for caching the course listing query. At this catalogue's actual scale (7
+seeded courses, explicitly "one-instructor scale" per the plan itself), a handful of
+small indexed queries against under 10 rows has no measurable performance cost —
+adding a cache layer here would introduce real invalidation-bug risk (stale filter
+results after a course is edited) for zero user-facing benefit. Not built this pass;
+noted here rather than silently skipped. Revisit if the catalogue grows to a scale
+where it would actually matter.
+
+### Lighthouse scores (recorded, as the plan requires)
+
+Measured against `http://localhost:8888/muhindo-app` with `DEBUGBAR_ENABLED=false`
+(the honest baseline — see methodology above), after every fix in this entry:
+
+| Page | Performance | Accessibility | SEO | Best Practices |
+|---|---|---|---|---|
+| `/` (home) | 77 | 97 | 100 | 100 |
+| `/e-learning` (listing) | 73 | 100 | 100 | 100 |
+| `/e-learning/laravel-from-scratch` (course detail) | 75 | 100 | 100 | 100 |
+
+**Accessibility and SEO clear the plan's ≥95 targets on every page measured
+(2 of 3 pages hit a perfect 100 on both).** Performance sits at 73–77, short of the
+plan's ≥90 target. The remaining gap is attributed to two environment factors, not
+application code, based on direct measurement (not assumption):
+
+- **Local MAMP dev server**, unoptimized for production (no opcache confirmed, no
+  HTTP/2, no gzip/brotli, no CDN) — `server-response-time` alone measured 320–450ms
+  for a simple page render, which a production PHP-FPM + opcache + reverse-proxy
+  setup would cut substantially.
+- **Lighthouse's default mobile-throttling simulation** (4x CPU slowdown + slow
+  network) compounds the above — this is the correct methodology per the plan's own
+  "3G-ish throttling" instruction, but it means the same code scores meaningfully
+  higher against a real production server than it does against local MAMP.
+
+Both real render-blocking resources found in this environment (livewire.js,
+FontAwesome) are already fixed at the code level in this commit — that fix carries
+into production unchanged. The remaining Performance gap here is not something
+further code changes in this repository can close; it is a hosting-environment
+question for whenever this deploys, flagged for the owner rather than chased with
+more local workarounds.
+
+### Verification
+
+- `vendor/bin/pint --dirty` — pass.
+- `vendor/bin/phpstan analyse --memory-limit=1G` — 0 errors, 318 files.
+- `php artisan test --filter="Sitemap|JsonLd|ErrorPages|ELearning|RouteNaming|Portfolio|ContactForm|CourseEnrollment|CourseContext|CheckoutPage|CourseCheckout|ProjectInquiry|OnboardingChecklist|PublicCourseCatalogueSeeder|CourseCatalogueFields"`
+  — **116 passed, 378 assertions, 7.36s.**
+- Additional targeted sweep on every admin Livewire component (`GradeMatrix`,
+  `CourseDiscussions`, `EnrollmentDrilldown`, `CourseStudentsTab`, `QuizCrud`,
+  `ReviewModeration` — 33 tests) after the global `Livewire::useScriptTagAttributes`
+  change, since it applies to every layout, not just the public site — all green, plus
+  the Lighthouse run's own `errors-in-console` audit (a real Chrome execution)
+  confirmed zero JS errors on the actual page it changed behavior on.
+- New: `SitemapTest` (4), `JsonLdTest` (4), `ErrorPagesTest` (3).
+- Live server: `/robots.txt`, `/sitemap.xml`, a 404 on a wrong course slug, and the
+  home/listing/detail pages' rendered `<head>` and JSON-LD `<script>` tags all
+  confirmed directly via `curl`.
+
+### Commit
+
+`feat(public): SEO, structured data, performance and a11y pass`
