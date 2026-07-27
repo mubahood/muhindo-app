@@ -5,6 +5,15 @@
 
     RewriteEngine On
 
+    # 0. Pass the Authorization header through — Apache/mod_fastcgi doesn't expose it to PHP by
+    # default, which silently breaks every Sanctum bearer-token API request (they 401 as if
+    # unauthenticated, with no error pointing at the real cause). public/.htaccess already had
+    # this rule, but requests never reach it as bearer-token requests: rule 4 below proxies into
+    # public/ internally, and by then this rewrite must have already run against the original
+    # request in *this* .htaccess — the header doesn't automatically carry over.
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
     # 1. Leave index.php alone
     RewriteRule ^index\.php$ - [L]
 
