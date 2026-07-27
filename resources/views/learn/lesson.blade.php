@@ -1,9 +1,11 @@
 @extends('layouts.app')
 @section('title', $lesson->title)
+@section('wrap_width', 'wide')
 
 @push('styles')
 <style>
-  .learn-layout{display:grid;grid-template-columns:260px 1fr;gap:28px;align-items:start;}
+  .learn-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start;}
+  .learn-layout > div{min-width:0;} /* lets the video/cards column shrink below its content's intrinsic width instead of overflowing */
   .learn-side{background:var(--surface);border:1px solid var(--line);}
   .learn-side .mod{padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx3);border-bottom:1px solid var(--line);}
   .learn-side a,.learn-side span.locked{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;color:var(--tx2);border-bottom:1px solid var(--line);}

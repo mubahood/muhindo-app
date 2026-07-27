@@ -22,6 +22,7 @@
     a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{
       outline:2px solid var(--gold);outline-offset:2px;}
     .wrap{max-width:960px;margin:0 auto;padding:0 24px;}
+    .wrap.wide{max-width:1440px;}
     header.app{position:sticky;top:0;z-index:40;height:var(--hd);background:rgba(247,246,242,.92);
       backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
     header.app .bar{display:flex;align-items:center;gap:20px;height:var(--hd);max-width:960px;margin:0 auto;padding:0 24px;}
@@ -79,7 +80,7 @@
 @include('partials.toast-host')
 
 <main>
-  <div class="wrap">
+  <div class="wrap {{ trim($__env->yieldContent('wrap_width', '')) }}">
     @if(session('success'))<div class="alert-success">{{ session('success') }}</div>@endif
     @if(session('error'))<div class="alert-success" style="background:#fbe9e9;color:#b91c1c;border-color:#b91c1c;">{{ session('error') }}</div>@endif
     @yield('content')
