@@ -65,7 +65,7 @@ class ELearningDetailPageTest extends TestCase
 
         $response = $this->get(route('courses.show', $course));
 
-        $response->assertOk()->assertSeeInOrder(['Free', 'Sign in to enrol']);
+        $response->assertOk()->assertSeeInOrder(['Free', 'Enrol now']);
     }
 
     public function test_the_buy_box_shows_price_and_payment_icons_for_a_paid_course(): void

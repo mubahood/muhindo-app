@@ -17,11 +17,18 @@
       --ok:#0f6b30; --ok-soft:#e6f4ea; --bad:#b91c1c; --bad-soft:#fbe9e9;
       --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     }
-    body{font-family:var(--font);font-size:13px;font-weight:400;color:var(--tx);background-color:var(--bg);
+    body{font-family:var(--font);font-size:13px;font-weight:400;color:var(--tx);
+      background:radial-gradient(circle at 15% 8%,#eef1f6 0%,var(--bg) 42%),var(--bg);
       -webkit-font-smoothing:antialiased;letter-spacing:.002em;min-height:100vh;
       display:flex;align-items:center;justify-content:center;padding:24px;}
     a{color:inherit;text-decoration:none;}
-    .bgdoodle{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.32;}
+    .a-course-ctx{display:flex;align-items:center;gap:12px;background:var(--pri-soft);border:1px solid var(--line);
+      padding:12px 14px;margin-bottom:20px;}
+    .a-course-ctx .thumb{width:44px;height:44px;flex-shrink:0;background:var(--pri);color:#b8933f;
+      display:flex;align-items:center;justify-content:center;font-size:16px;}
+    .a-course-ctx .thumb img{width:100%;height:100%;object-fit:cover;}
+    .a-course-ctx p{font-size:12.5px;color:var(--tx2);line-height:1.45;}
+    .a-course-ctx p b{color:var(--tx);}
     .auth-card{width:100%;max-width:392px;}
     .a-brand{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:22px;}
     .a-brand .mk{width:32px;height:32px;object-fit:contain;display:block;}
@@ -60,7 +67,6 @@
   @stack('styles')
 </head>
 <body>
-  @include('partials.doodle-bg')
   <div class="auth-card">
     <div class="a-brand"><span style="width:32px;height:32px;background:var(--pri);color:#b8933f;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">MM</span> <b>Muhindo Mubaraka</b></div>
     <div class="card">

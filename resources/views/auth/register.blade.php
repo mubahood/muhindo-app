@@ -6,12 +6,15 @@
 <h2 class="af-title">Create your account</h2>
 <p class="af-sub">Sign up to enrol in courses and track your progress.</p>
 
+@include('auth.partials.course-context')
+
 @if($errors->any())
 <div class="a-alert err"><i class="fas fa-circle-exclamation"></i><span>{{ $errors->first() }}</span></div>
 @endif
 
 <form method="POST" action="{{ route('register') }}">
   @csrf
+  @if($intendedCourse)<input type="hidden" name="intended_course" value="{{ $intendedCourse->slug }}">@endif
   <div class="a-field">
     <label class="a-label" for="name">Full name</label>
     <div class="a-inwrap">
@@ -44,9 +47,11 @@
     </div>
   </div>
 
+  <label class="a-check"><input type="checkbox" name="terms" value="1" required> I agree to the <a href="{{ route('terms') }}" target="_blank">Terms</a> and <a href="{{ route('privacy') }}" target="_blank">Privacy Policy</a></label>
+
   <button type="submit" class="a-btn"><i class="fas fa-user-plus"></i> Create account</button>
 </form>
 
-<div class="a-alt">Already have an account? <a href="{{ route('login') }}">Sign in</a></div>
+<div class="a-alt">Already have an account? <a href="{{ route('login', $intendedCourse ? ['intended_course' => $intendedCourse->slug] : []) }}">Sign in</a></div>
 <div style="text-align:center;"><a href="{{ route('home') }}" class="a-back"><i class="fas fa-arrow-left"></i> Back to home</a></div>
 @endsection

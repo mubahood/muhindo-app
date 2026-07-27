@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\CourseCatalogueController;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Course;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,9 +17,11 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view (shared by every role — owner, admin, student, client).
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('auth.login');
+        return view('auth.login', [
+            'intendedCourse' => $this->intendedCourse($request),
+        ]);
     }
 
     /**
@@ -43,7 +47,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if ($course = $this->intendedCourse($request)) {
+            return app(CourseCatalogueController::class)->enroll($request, $course);
+        }
+
         return redirect()->intended(route('dashboard'));
+    }
+
+    /** §3.2 — a guest arriving via "Enrol now" on a course page carries the course through sign-in. */
+    private function intendedCourse(Request $request): ?Course
+    {
+        $slug = $request->string('intended_course')->trim()->value();
+
+        return $slug !== '' ? Course::where('slug', $slug)->where('is_published', true)->first() : null;
     }
 
     /**

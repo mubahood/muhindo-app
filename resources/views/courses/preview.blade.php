@@ -48,7 +48,7 @@
       <button type="submit" class="btn gold">{{ $course->isFree() ? 'Enrol for free' : 'Enrol — '.$course->currency.' '.number_format((float) $course->price) }}</button>
     </form>
   @else
-    <a href="{{ route('register') }}" class="btn gold">Sign up to enrol</a>
+    <a href="{{ route('register', ['intended_course' => $course->slug]) }}" wire:navigate class="btn gold">Sign up to enrol</a>
   @endauth
 </div>
 @endsection

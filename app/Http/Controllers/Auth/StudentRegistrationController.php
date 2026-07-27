@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\CourseCatalogueController;
+use App\Models\Course;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -18,9 +20,11 @@ use Illuminate\View\View;
  */
 class StudentRegistrationController extends Controller
 {
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('auth.register');
+        return view('auth.register', [
+            'intendedCourse' => $this->intendedCourse($request),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -29,6 +33,7 @@ class StudentRegistrationController extends Controller
             'name' => 'required|string|max:150',
             'email' => 'required|string|email|max:150|unique:users,email',
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
+            'terms' => 'accepted',
         ]);
 
         $user = User::create([
@@ -43,6 +48,18 @@ class StudentRegistrationController extends Controller
 
         Auth::login($user);
 
+        if ($course = $this->intendedCourse($request)) {
+            return app(CourseCatalogueController::class)->enroll($request, $course);
+        }
+
         return redirect()->route('dashboard')->with('success', 'Welcome! Your account has been created.');
+    }
+
+    /** §3.2 — a guest arriving via "Enrol now" on a course page carries the course through registration. */
+    private function intendedCourse(Request $request): ?Course
+    {
+        $slug = $request->string('intended_course')->trim()->value();
+
+        return $slug !== '' ? Course::where('slug', $slug)->where('is_published', true)->first() : null;
     }
 }

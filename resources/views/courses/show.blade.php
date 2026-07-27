@@ -149,7 +149,8 @@
             <button type="submit" class="btn gold lg" style="width:100%;justify-content:center;">{{ $course->isFree() ? 'Enrol for free' : 'Buy course' }}</button>
           </form>
         @else
-          <a href="{{ route('login') }}" class="btn gold lg" style="width:100%;justify-content:center;">Sign in to enrol</a>
+          <a href="{{ route('register', ['intended_course' => $course->slug]) }}" wire:navigate class="btn gold lg" style="width:100%;justify-content:center;">{{ $course->isFree() ? 'Enrol now' : 'Buy course' }}</a>
+          <p class="muted" style="font-size:11.5px;text-align:center;margin-top:8px;">Already have an account? <a href="{{ route('login', ['intended_course' => $course->slug]) }}" wire:navigate style="color:var(--pri);font-weight:600;">Sign in</a></p>
         @endif
 
         <ul class="includes">

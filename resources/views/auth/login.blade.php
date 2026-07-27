@@ -6,6 +6,8 @@
 <h2 class="af-title">Sign in</h2>
 <p class="af-sub">One account for owner, students and clients — sign in below.</p>
 
+@include('auth.partials.course-context')
+
 @if(session('status'))
 <div class="a-alert ok"><i class="fas fa-circle-check"></i><span>{{ session('status') }}</span></div>
 @endif
@@ -16,6 +18,7 @@
 
 <form method="POST" action="{{ route('login') }}">
   @csrf
+  @if($intendedCourse)<input type="hidden" name="intended_course" value="{{ $intendedCourse->slug }}">@endif
   <div class="a-field">
     <label class="a-label" for="email">Email address</label>
     <div class="a-inwrap">
@@ -43,7 +46,7 @@
   <button type="submit" class="a-btn"><i class="fas fa-right-to-bracket"></i> Sign in</button>
 </form>
 
-<div class="a-alt">New student? <a href="{{ route('register') }}">Create an account</a></div>
+<div class="a-alt">New student? <a href="{{ route('register', $intendedCourse ? ['intended_course' => $intendedCourse->slug] : []) }}">Create an account</a></div>
 <div style="text-align:center;"><a href="{{ route('home') }}" class="a-back"><i class="fas fa-arrow-left"></i> Back to home</a></div>
 
 <div class="a-secure">
