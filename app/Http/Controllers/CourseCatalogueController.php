@@ -12,6 +12,7 @@ use App\Models\Lesson;
 use App\Models\User;
 use App\Services\BillingService;
 use App\Services\Learning\MarkdownRenderer;
+use App\Support\Settings;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -76,14 +77,29 @@ class CourseCatalogueController extends Controller
             : null;
 
         $course->loadCount(['reviews as reviews_count' => fn ($q) => $q->where('is_published', true)])
-            ->loadAvg(['reviews as reviews_avg_rating' => fn ($q) => $q->where('is_published', true)], 'rating');
+            ->loadAvg(['reviews as reviews_avg_rating' => fn ($q) => $q->where('is_published', true)], 'rating')
+            ->loadCount('lessons')
+            ->loadSum('lessons', 'duration_minutes');
+
+        $identity = $this->settingsJson('portfolio.identity');
+        $about = $this->settingsJson('portfolio.about');
 
         return view('courses.show', [
             'course' => $course->load('modules.lessons'),
             'enrollment' => $existing && in_array($existing->status, ['active', 'completed'], true) ? $existing : null,
             'pendingCheckout' => $existing?->status === 'pending',
             'publishedReviews' => $course->reviews()->where('is_published', true)->with('enrollment.user')->latest()->get(),
+            'instructor' => $identity !== [] ? array_merge($identity, ['bio' => $about['lead'] ?? null]) : null,
+            'faq' => $this->settingsJson('courses.faq'),
         ]);
+    }
+
+    /** @return array<string,mixed> */
+    private function settingsJson(string $key): array
+    {
+        $raw = Settings::get($key);
+
+        return $raw ? json_decode($raw, true) : [];
     }
 
     /** §7.2 — free preview: a guest (no enrollment) can view an is_free_preview lesson, closing L5. */

@@ -185,6 +185,39 @@
     .pagination a,.pagination span{color:var(--tx2);}
     .pagination a:hover{color:var(--gold-d);}
 
+    /* course detail (sales page) */
+    .course-layout{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start;}
+    .course-layout .main{min-width:0;}
+    .buy-box{border:1px solid var(--line);background:var(--surface);padding:22px;position:sticky;top:calc(var(--hd) + 16px);}
+    .buy-box .thumb{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,var(--pri),var(--pri-d));
+      display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:30px;margin-bottom:16px;}
+    .buy-box .thumb img{width:100%;height:100%;object-fit:cover;}
+    .buy-box .price{font-size:26px;font-weight:700;color:var(--pri);margin-bottom:14px;}
+    .buy-box .price.free{color:var(--gold-d);}
+    .buy-box ul.includes{list-style:none;margin:16px 0;}
+    .buy-box ul.includes li{font-size:12.5px;color:var(--tx2);padding:5px 0 5px 22px;position:relative;}
+    .buy-box ul.includes li::before{content:'\2713';position:absolute;left:0;color:var(--gold-d);font-weight:700;}
+    .pay-icons{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;font-size:11px;color:var(--tx3);}
+    .pay-icons span{border:1px solid var(--line-2);padding:4px 8px;}
+    .buy-box .coupon-field{width:100%;border:1px solid var(--line-2);padding:9px 12px;font-family:var(--font);font-size:13px;margin-bottom:10px;}
+    .buy-box .money-comfort{font-size:11px;color:var(--tx3);margin-top:12px;text-align:center;}
+    .accordion-mod{border:1px solid var(--line);margin-bottom:10px;}
+    .accordion-mod summary{padding:14px 18px;font-weight:600;font-size:14px;cursor:pointer;list-style:none;
+      display:flex;justify-content:space-between;align-items:center;background:var(--surface);}
+    .accordion-mod summary::-webkit-details-marker{display:none;}
+    .accordion-mod summary .n{font-size:11.5px;color:var(--tx3);font-weight:400;}
+    .lesson-row{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--tx2);}
+    .outcomes-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 20px;}
+    .outcomes-list li{padding-left:24px;position:relative;font-size:13.5px;color:var(--tx2);}
+    .outcomes-list li::before{content:'\2713';position:absolute;left:0;color:var(--gold-d);font-weight:700;}
+    .instructor-card{display:flex;gap:16px;align-items:flex-start;}
+    .instructor-card .ph{width:56px;height:56px;border-radius:50%;background:var(--gold-soft);color:var(--gold-d);
+      display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0;}
+    .faq-item{border-bottom:1px solid var(--line);padding:14px 0;}
+    .faq-item h4{font-size:14px;font-weight:600;margin-bottom:6px;}
+    .faq-item p{font-size:13px;color:var(--tx2);}
+    @media(max-width:1024px){.course-layout{grid-template-columns:1fr;} .buy-box{position:static;order:-1;margin-bottom:30px;}}
+
     /* content/legal prose */
     .page{max-width:760px;margin:0 auto;}
     .page h1{font-size:34px;margin-bottom:8px;}

@@ -69,6 +69,13 @@ class PortfolioContentSeeder extends Seeder
             ],
         ]));
 
+        Settings::set('courses.faq', json_encode([
+            ['q' => 'How do I pay?', 'a' => 'Pay with MTN Mobile Money, Airtel Money, or a Visa/Mastercard card, all handled securely through Flutterwave. Free courses need no payment at all.'],
+            ['q' => 'Is it self-paced?', 'a' => "Yes — you learn on your own schedule. There are no live class times to catch; lessons stay available for the course's access window."],
+            ['q' => 'Do I get a certificate?', 'a' => 'Yes, a certificate is issued automatically once you complete every lesson in the course, and you can verify it any time from its own link.'],
+            ['q' => 'What if I get stuck?', 'a' => "Use the course's discussion Q&A to ask a question — I read and answer these myself."],
+        ]));
+
         Settings::set('portfolio.clients', json_encode([
             'Ministry of Agriculture', 'Uganda Wildlife Authority', 'Uganda Communications Commission',
             'NUDIPU', 'CEHURD', 'Makerere University', 'Eight Tech Consults',
