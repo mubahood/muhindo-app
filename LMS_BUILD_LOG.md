@@ -3263,3 +3263,78 @@ running against zero events is a clean no-op).
 **Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
 `phpstan analyse --memory-limit=1G` 0 errors. Full untargeted
 `php artisan test` — 513/513 green (508 pre-existing + 5 new).
+
+## P5 phase gate — closed
+
+All seven items done, one commit per item, in plan order, tagged `lms-p5`.
+Closes/advances: §6.5 (badges, weekly streak counter), §4.4/§6.4
+(enrollment expiry windows — closing a gap originally scoped for P0/P1
+that was never actually built, plus P1's explicitly-deferred "extend
+access" drill-down button), the P5 roadmap's "self-hosted video option
+(signed URLs)" bullet, API v1 parity for the core learning loop (scoped
+down from full P3+P4 parity per an explicit user decision), §7.6
+(accessibility), the heartbeat endpoint's real-world load
+characteristics, and §6.2's retention half (the prune job).
+
+- `composer ci` (repo-wide `pint --test`, `phpstan --memory-limit=1G`,
+  `check-empty-files`, `secrets-scan`, `php artisan test`): **green**, exit
+  code 0, 513 tests / 1089 assertions.
+- `php artisan migrate` applies every P5 migration cleanly in order on both
+  the sqlite test database and, since P5.6 required actually serving the
+  app to load-test it, the real local MySQL dev database as well
+  (`migrate:status` shows all 23 migrations `Ran`) — the first time this
+  session verified a fresh-checkout migration path against a real,
+  non-sqlite database rather than only the test suite's in-memory one.
+- **One explicit scope decision, asked of the user rather than assumed
+  (P5.4):** the API v1 surface was still the P0/P1 skeleton; genuinely full
+  parity for every P3/P4 web capability would have been roughly as large
+  as P3+P4's API-facing work combined. Given the choice between full
+  parity as its own mini-phase, a scoped-down "core learning loop only"
+  slice, or deferring entirely, the user chose the scoped slice —
+  documented in P5.4's own entry, including exactly what's deferred
+  (checkout/coupons, announcements/Q&A/reviews) and why.
+- **A real, previously-invisible production bug found and fixed (P5.6):**
+  every Sanctum bearer-token API request 401'd through the actual
+  Apache-served app, root-caused to a missing "pass the Authorization
+  header through" rewrite rule in the project's root `.htaccess` (only
+  `public/.htaccess` had it, and the root `.htaccess` proxies every
+  request into `public/` before that rule would ever run). This had been
+  invisible to the entire test suite for the whole session, since
+  PHPUnit's HTTP kernel simulation never goes through Apache at all — only
+  a load test that actually hit the served app could have found it. Fixed
+  and manually verified with real `curl` requests; a real load test run
+  against the real dev database is also the first (and only) time this
+  session touched non-test data, and every fixture created for it was
+  confirmed fully cleaned up afterward.
+- **A second bug found and fixed while auditing for the first (P5.4):**
+  the free-self-enroll API endpoint never stamped `expires_at` from a
+  course's access-duration setting — P5.2 updated the other three
+  enrollment-activation call sites but missed the API one, since the API
+  wasn't in scope for P5.2 at the time.
+- **A third, subtler bug — this time in test code, not the app — found
+  while writing P5.4's tests:** mixing session auth (`actingAs()`, used to
+  authorize a direct service call during fixture setup) with bearer-token
+  auth (`withToken()`) in the same test let the session user silently win
+  once Sanctum treated the test request as stateful, which meant a test
+  built specifically to prove "student B can't see student A's data" was
+  actually still running as whichever user session auth had last set —
+  defeating its own purpose without ever failing. Fixed everywhere the
+  pattern recurred; documented at length in P5.4's entry since it's the
+  kind of gotcha that could easily recur in any future API test.
+- **Two items delivered with an honestly-bounded scope rather than a
+  fabricated full pass:** P5.5's accessibility work fixed every genuinely
+  code-verifiable issue (WCAG contrast computed against the real formula,
+  not eyeballed; tap targets; focus states; a real 360px layout bug;
+  captions; accessible names; the two places that actually lacked
+  `aria-live`) but explicitly didn't claim to verify things that need a
+  real browser or screen reader. P5.6's load test measured real numbers
+  honestly, isolated the actual confound (this specific local MAMP
+  environment's per-request PHP bootstrap cost, demonstrated by comparing
+  against a zero-DB-work baseline endpoint) rather than either claiming a
+  false "<300ms p95 verified" or silently dropping the item.
+- No query-count regressions: the two new dashboard widgets (streak,
+  badge shelf) add a fixed number of extra queries regardless of
+  enrollment count, verified against the pre-existing flat-query-count
+  test rather than assumed safe.
+
+**Tagged `lms-p5`.**
