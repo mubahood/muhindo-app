@@ -36,7 +36,16 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [PortfolioController::class, 'home'])->name('home');
+Route::get('/work', [PortfolioController::class, 'work'])->name('portfolio.work');
 Route::get('/work/{portfolioProject:slug}', [PortfolioController::class, 'project'])->name('portfolio.project');
+Route::get('/about', [PortfolioController::class, 'about'])->name('portfolio.about');
+Route::get('/services', [PortfolioController::class, 'services'])->name('portfolio.services');
+Route::get('/skills', [PortfolioController::class, 'skills'])->name('portfolio.skills');
+Route::get('/experience', [PortfolioController::class, 'experience'])->name('portfolio.experience');
+Route::get('/education', [PortfolioController::class, 'education'])->name('portfolio.education');
+Route::get('/research', [PortfolioController::class, 'research'])->name('portfolio.research');
+Route::get('/products', [PortfolioController::class, 'products'])->name('portfolio.products');
+Route::get('/contact', [PortfolioController::class, 'contactPage'])->name('contact');
 Route::post('/contact', [PortfolioController::class, 'contact'])->middleware('throttle:5,1')->name('contact.store');
 Route::view('/privacy', 'marketing.privacy')->name('privacy');
 Route::view('/terms', 'marketing.terms')->name('terms');

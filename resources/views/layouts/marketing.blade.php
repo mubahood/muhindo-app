@@ -14,17 +14,16 @@
   <meta property="og:description" content="@yield('desc', 'Enterprise information systems, database administration and digital solutions for government, NGOs and private organisations across Uganda.')">
   <meta property="og:url" content="{{ url()->current() }}">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('vendor/fonts/inter/inter.css') }}">
   <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}">
+  @livewireStyles
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{
       --bg:#f7f6f2; --surface:#fff; --surface-2:#f0eee7; --line:#e7e3d8; --line-2:#d8d2c0;
       --tx:#141a26; --tx2:#5b6270; --tx3:#706f5c; --pri:#0b1f3a; --pri-d:#060f1f; --pri-soft:#eef1f6;
       --gold:#b8933f; --gold-d:#7d6228; --gold-soft:#f7f0df;
-      --ok:#0f6b30; --ok-soft:#e6f4ea; --hd:60px;
+      --ok:#0f6b30; --ok-soft:#e6f4ea; --hd:52px;
       --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     }
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
@@ -37,48 +36,68 @@
     /* ── Fixed header ── */
     header.site{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--hd);
       background:rgba(247,246,242,.88);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line);}
-    header.site .bar{display:flex;align-items:center;gap:22px;height:var(--hd);}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;letter-spacing:.01em;}
-    .brand .badge{width:30px;height:30px;background:var(--pri);color:var(--gold);display:flex;align-items:center;
-      justify-content:center;font-size:12px;font-weight:700;letter-spacing:.02em;}
-    .nav{display:flex;align-items:center;gap:24px;font-size:13.5px;font-weight:400;}
+    header.site .bar{display:flex;align-items:center;gap:18px;height:var(--hd);}
+    .brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;letter-spacing:.01em;}
+    .brand .badge{width:25px;height:25px;background:var(--pri);color:var(--gold);display:flex;align-items:center;
+      justify-content:center;font-size:10.5px;font-weight:700;letter-spacing:.02em;}
+    .nav{display:flex;align-items:center;gap:19px;font-size:13px;font-weight:400;}
     .nav a{color:var(--tx2);transition:color .15s;}
     .nav a:hover,.nav a.on{color:var(--tx);}
     .nav a.on{color:var(--gold-d);}
-    .hd-r{margin-left:auto;display:flex;align-items:center;gap:12px;}
-    .burger{display:none;width:38px;height:38px;border:1px solid var(--line-2);background:var(--surface);
-      color:var(--tx2);align-items:center;justify-content:center;cursor:pointer;font-size:15px;}
+    .hd-r{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .burger{display:none;width:32px;height:32px;border:1px solid var(--line-2);background:var(--surface);
+      color:var(--tx2);align-items:center;justify-content:center;cursor:pointer;font-size:13.5px;}
     main{padding-top:var(--hd);}
 
     /* ── Buttons ── */
-    .btn{display:inline-flex;align-items:center;gap:8px;font-weight:500;font-size:13px;padding:10px 18px;
+    .btn{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:12.5px;padding:8px 14px;
       border:1px solid var(--pri);background:var(--pri);color:#fff;transition:background .15s,border-color .15s,color .15s;white-space:nowrap;}
     .btn:hover{background:var(--pri-d);border-color:var(--pri-d);}
     .btn.gold{border-color:var(--gold);background:var(--gold);color:var(--pri-d);}
     .btn.gold:hover{background:var(--gold-d);border-color:var(--gold-d);color:#fff;}
     .btn.ghost{background:transparent;color:var(--pri);}
     .btn.ghost:hover{background:var(--pri-soft);}
-    .btn.sm{padding:8px 14px;font-size:12.5px;}
-    .btn.lg{padding:13px 24px;font-size:14px;}
+    .btn.sm{padding:7px 12px;font-size:12px;}
+    .btn.lg{padding:10px 18px;font-size:13px;}
 
     /* ── Sections ── */
-    section{padding:60px 0;}
-    .eyebrow{font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-d);}
-    h1{font-size:42px;font-weight:200;letter-spacing:-.025em;line-height:1.12;}
+    section{padding:52px 0;}
+    .eyebrow{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-d);}
+    h1{font-size:38px;font-weight:200;letter-spacing:-.025em;line-height:1.12;}
     h1 b{font-weight:600;color:var(--pri);}
-    h2{font-size:26px;font-weight:300;letter-spacing:-.02em;line-height:1.2;}
-    .lead{font-size:16px;font-weight:300;color:var(--tx2);line-height:1.65;}
+    h2{font-size:24px;font-weight:300;letter-spacing:-.02em;line-height:1.2;}
+    .lead{font-size:15px;font-weight:300;color:var(--tx2);line-height:1.6;}
 
-    /* hero */
-    .hero{padding:56px 0 52px;text-align:center;position:relative;overflow:hidden;}
-    .hero .eyebrow{margin-bottom:14px;}
-    .hero h1{margin-bottom:18px;}
-    .hero p{max-width:620px;margin:0 auto 30px;}
-    .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-    .stat-row{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;margin-top:44px;}
+    /* hero (home only) */
+    .hero{padding:48px 0 44px;text-align:center;position:relative;overflow:hidden;}
+    .hero .eyebrow{margin-bottom:12px;}
+    .hero h1{margin-bottom:14px;}
+    .hero p{max-width:560px;margin:0 auto 24px;}
+    .ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+    .stat-row{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;margin-top:36px;}
     .stat-row .stat{text-align:center;}
-    .stat-row .v{font-size:26px;font-weight:600;color:var(--pri);}
-    .stat-row .l{font-size:11.5px;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+    .stat-row .v{font-size:23px;font-weight:600;color:var(--pri);}
+    .stat-row .l{font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+
+    /* compact "what I do" teaser row (home only — the full grid lives on /services) */
+    .icon-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;}
+    .icon-row a{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:20px 12px;
+      border:1px solid var(--line);background:var(--surface);transition:border-color .15s,transform .15s;}
+    .icon-row a:hover{border-color:var(--gold);transform:translateY(-2px);}
+    .icon-row .ic{width:38px;height:38px;background:var(--gold-soft);color:var(--gold-d);display:flex;align-items:center;justify-content:center;font-size:15px;}
+    .icon-row span{font-size:12.5px;font-weight:600;color:var(--tx);}
+
+    /* page hero (every sub-page) — shorter, left-aligned, no stat row */
+    .page-hero{padding:34px 0 30px;border-bottom:1px solid var(--line);background:var(--surface);}
+    .page-hero .eyebrow{margin-bottom:8px;}
+    .page-hero h1{font-size:28px;font-weight:400;margin-bottom:6px;}
+    .page-hero p{color:var(--tx2);font-size:13.5px;max-width:560px;}
+
+    /* subnav — cross-links between the about-family pages */
+    .subnav{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+    .subnav a{font-size:12px;font-weight:500;color:var(--tx2);padding:5px 12px;border:1px solid var(--line-2);background:var(--bg);transition:all .15s;}
+    .subnav a:hover{border-color:var(--gold);color:var(--gold-d);}
+    .subnav a.on{background:var(--pri);border-color:var(--pri);color:#fff;}
 
     /* module / feature grid */
     .band-surface{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
@@ -159,7 +178,7 @@
 
     /* footer */
     footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0 30px;}
-    .foot{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:30px;}
+    .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:26px;}
     .foot .blurb{font-size:13px;color:var(--tx3);max-width:280px;margin-top:12px;line-height:1.6;}
     .foot h4{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:12px;}
     .foot a{display:block;font-size:13px;color:var(--tx2);margin:8px 0;}
@@ -170,16 +189,16 @@
     /* mobile menu */
     .mmenu{position:fixed;inset:var(--hd) 0 0 0;z-index:55;background:var(--bg);padding:22px 24px;display:none;flex-direction:column;gap:4px;}
     .mmenu.open{display:flex;}
-    .mmenu a{font-size:20px;font-weight:300;color:var(--tx);padding:13px 0;border-bottom:1px solid var(--line);}
+    .mmenu a{font-size:18px;font-weight:300;color:var(--tx);padding:12px 0;border-bottom:1px solid var(--line);}
     .mmenu .btn{margin-top:16px;justify-content:center;}
 
     @media(max-width:820px){
       .nav{display:none;} .burger{display:inline-flex;} .hd-r .btn.desk{display:none;}
-      h1,.hero h1{font-size:32px;} h2{font-size:22px;}
+      h1,.hero h1{font-size:30px;} h2{font-size:20px;} .page-hero h1{font-size:25px;}
       .foot{grid-template-columns:1fr 1fr;}
       .contact-grid{grid-template-columns:1fr;}
     }
-    @media(max-width:520px){ .foot{grid-template-columns:1fr;} section{padding:48px 0;} }
+    @media(max-width:520px){ .foot{grid-template-columns:1fr;} section{padding:40px 0;} }
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
   </style>
   @stack('styles')
@@ -190,26 +209,30 @@
 
 <header class="site">
   <div class="wrap bar">
-    <a href="{{ route('home') }}" class="brand"><span class="badge">MM</span> Muhindo Mubaraka</a>
+    <a href="{{ route('home') }}" wire:navigate class="brand"><span class="badge">MM</span> Muhindo Mubaraka</a>
     <nav class="nav">
-      <a href="{{ route('home') }}#work" class="{{ $r('portfolio.project') }}">Work</a>
-      <a href="{{ route('courses.index') }}" class="{{ $r('courses.*') }}">Courses</a>
-      <a href="{{ route('home') }}#contact">Contact</a>
+      <a href="{{ route('portfolio.work') }}" wire:navigate class="{{ $r('portfolio.work') }} {{ $r('portfolio.project') }}">Work</a>
+      <a href="{{ route('portfolio.about') }}" wire:navigate class="{{ $r('portfolio.about') }}">About</a>
+      <a href="{{ route('portfolio.skills') }}" wire:navigate class="{{ $r('portfolio.skills') }}">Skills</a>
+      <a href="{{ route('courses.index') }}" wire:navigate class="{{ $r('courses.*') }}">Courses</a>
+      <a href="{{ route('contact') }}" wire:navigate class="{{ $r('contact') }}">Contact</a>
     </nav>
     <div class="hd-r">
-      <a href="{{ route('login') }}" class="btn ghost desk sm">Sign in</a>
-      <a href="{{ route('home') }}#contact" class="btn gold desk sm">Get in touch</a>
+      <a href="{{ route('login') }}" wire:navigate class="btn ghost desk sm">Sign in</a>
+      <a href="{{ route('contact') }}" wire:navigate class="btn gold desk sm">Get in touch</a>
       <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
     </div>
   </div>
 </header>
 
 <div class="mmenu" id="mmenu">
-  <a href="{{ route('home') }}#work">Work</a>
-  <a href="{{ route('courses.index') }}">Courses</a>
-  <a href="{{ route('home') }}#contact">Contact</a>
-  <a href="{{ route('login') }}" class="btn ghost">Sign in</a>
-  <a href="{{ route('home') }}#contact" class="btn gold">Get in touch</a>
+  <a href="{{ route('portfolio.work') }}" wire:navigate>Work</a>
+  <a href="{{ route('portfolio.about') }}" wire:navigate>About</a>
+  <a href="{{ route('portfolio.skills') }}" wire:navigate>Skills</a>
+  <a href="{{ route('courses.index') }}" wire:navigate>Courses</a>
+  <a href="{{ route('contact') }}" wire:navigate>Contact</a>
+  <a href="{{ route('login') }}" wire:navigate class="btn ghost">Sign in</a>
+  <a href="{{ route('contact') }}" wire:navigate class="btn gold">Get in touch</a>
 </div>
 
 <main>
@@ -220,20 +243,29 @@
   <div class="wrap">
     <div class="foot">
       <div>
-        <a href="{{ route('home') }}" class="brand"><span class="badge">MM</span> Muhindo Mubaraka</a>
+        <a href="{{ route('home') }}" wire:navigate class="brand"><span class="badge">MM</span> Muhindo Mubaraka</a>
         <p class="blurb">Manager, Information Systems — enterprise information systems, database administration and digital solutions delivery for government, NGOs and private organisations across Uganda.</p>
       </div>
       <div>
         <h4>Site</h4>
-        <a href="{{ route('home') }}#work">Work</a>
-        <a href="{{ route('courses.index') }}">Courses</a>
-        <a href="{{ route('home') }}#contact">Contact</a>
+        <a href="{{ route('portfolio.work') }}" wire:navigate>Work</a>
+        <a href="{{ route('portfolio.about') }}" wire:navigate>About</a>
+        <a href="{{ route('portfolio.skills') }}" wire:navigate>Skills</a>
+        <a href="{{ route('contact') }}" wire:navigate>Contact</a>
+      </div>
+      <div>
+        <h4>More</h4>
+        <a href="{{ route('portfolio.services') }}" wire:navigate>Services</a>
+        <a href="{{ route('portfolio.experience') }}" wire:navigate>Experience</a>
+        <a href="{{ route('portfolio.education') }}" wire:navigate>Education</a>
+        <a href="{{ route('portfolio.research') }}" wire:navigate>Research</a>
+        <a href="{{ route('portfolio.products') }}" wire:navigate>Products</a>
       </div>
       <div>
         <h4>Legal</h4>
-        <a href="{{ route('privacy') }}">Privacy</a>
-        <a href="{{ route('terms') }}">Terms</a>
-        <a href="{{ route('login') }}">Sign in</a>
+        <a href="{{ route('privacy') }}" wire:navigate>Privacy</a>
+        <a href="{{ route('terms') }}" wire:navigate>Terms</a>
+        <a href="{{ route('login') }}" wire:navigate>Sign in</a>
       </div>
     </div>
     <div class="foot-bar">
@@ -244,11 +276,23 @@
 </footer>
 
 <script>
-  (function(){
+  function initBurgerMenu(){
     var b=document.getElementById('burger'), m=document.getElementById('mmenu');
-    if(b){ b.addEventListener('click',function(){ var o=m.classList.toggle('open'); b.setAttribute('aria-expanded',o); b.querySelector('i').className=o?'fas fa-xmark':'fas fa-bars'; document.body.style.overflow=o?'hidden':''; }); }
-  })();
+    if(!b || b.dataset.wired) return;
+    b.dataset.wired = '1';
+    b.addEventListener('click',function(){ var o=m.classList.toggle('open'); b.setAttribute('aria-expanded',o); b.querySelector('i').className=o?'fas fa-xmark':'fas fa-bars'; document.body.style.overflow=o?'hidden':''; });
+  }
+  initBurgerMenu();
+  // wire:navigate swaps <body> for internal links (pjax-style — no full reload, every
+  // page is still a real server-rendered URL, so SEO is unaffected); re-wire the burger
+  // button and close any menu left open after each swap.
+  document.addEventListener('livewire:navigated', function(){
+    initBurgerMenu();
+    var m=document.getElementById('mmenu'), b=document.getElementById('burger');
+    if(m && m.classList.contains('open')){ m.classList.remove('open'); document.body.style.overflow=''; if(b){ b.setAttribute('aria-expanded','false'); b.querySelector('i').className='fas fa-bars'; } }
+  });
 </script>
 @stack('scripts')
+@livewireScripts
 </body>
 </html>

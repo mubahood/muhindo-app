@@ -16,22 +16,22 @@ use Illuminate\View\View;
 
 class PortfolioController extends Controller
 {
+    /** Lean landing page — a taste of everything, the detail lives on its own page. */
     public function home(): View
     {
         return view('portfolio.home', [
             'identity' => $this->json('portfolio.identity'),
-            'contact' => $this->json('portfolio.contact'),
             'stats' => $this->json('portfolio.stats', []),
             'about' => $this->json('portfolio.about'),
-            'clients' => $this->json('portfolio.clients', []),
-            'services' => Service::orderBy('sort_order')->get(),
+            'services' => Service::orderBy('sort_order')->limit(4)->get(),
+            'projects' => PortfolioProject::orderBy('sort_order')->limit(3)->get(),
+        ]);
+    }
+
+    public function work(): View
+    {
+        return view('portfolio.work', [
             'projects' => PortfolioProject::orderBy('sort_order')->get(),
-            'skills' => Skill::orderBy('sort_order')->get()->groupBy('category'),
-            'experience' => Experience::orderBy('sort_order')->get(),
-            'education' => Education::orderBy('sort_order')->get(),
-            'research' => $this->json('portfolio.research'),
-            'products' => $this->json('portfolio.products', []),
-            'languages' => $this->json('portfolio.languages', []),
         ]);
     }
 
@@ -43,6 +43,64 @@ class PortfolioController extends Controller
             'contact' => $this->json('portfolio.contact'),
             'related' => PortfolioProject::where('id', '!=', $portfolioProject->id)
                 ->orderBy('sort_order')->limit(3)->get(),
+        ]);
+    }
+
+    public function about(): View
+    {
+        return view('portfolio.about', [
+            'about' => $this->json('portfolio.about'),
+            'clients' => $this->json('portfolio.clients', []),
+        ]);
+    }
+
+    public function services(): View
+    {
+        return view('portfolio.services', [
+            'services' => Service::orderBy('sort_order')->get(),
+        ]);
+    }
+
+    public function skills(): View
+    {
+        return view('portfolio.skills', [
+            'skills' => Skill::orderBy('sort_order')->get()->groupBy('category'),
+        ]);
+    }
+
+    public function experience(): View
+    {
+        return view('portfolio.experience', [
+            'experience' => Experience::orderBy('sort_order')->get(),
+        ]);
+    }
+
+    public function education(): View
+    {
+        return view('portfolio.education', [
+            'education' => Education::orderBy('sort_order')->get(),
+        ]);
+    }
+
+    public function research(): View
+    {
+        return view('portfolio.research', [
+            'research' => $this->json('portfolio.research'),
+        ]);
+    }
+
+    public function products(): View
+    {
+        return view('portfolio.products', [
+            'products' => $this->json('portfolio.products', []),
+        ]);
+    }
+
+    public function contactPage(): View
+    {
+        return view('portfolio.contact', [
+            'contact' => $this->json('portfolio.contact'),
+            'languages' => $this->json('portfolio.languages', []),
         ]);
     }
 
@@ -58,7 +116,7 @@ class PortfolioController extends Controller
 
         if ($request->filled('website')) {
             // Honeypot tripped — pretend success, do nothing.
-            return redirect(route('home').'#contact')->with('success', 'Thanks — I\'ll be in touch shortly.');
+            return redirect()->route('contact')->with('success', 'Thanks — I\'ll be in touch shortly.');
         }
 
         $message = ContactMessage::create([
@@ -76,7 +134,7 @@ class PortfolioController extends Controller
             );
         }
 
-        return redirect(route('home').'#contact')->with('success', 'Thanks for reaching out — I\'ll reply as soon as I can.');
+        return redirect()->route('contact')->with('success', 'Thanks for reaching out — I\'ll reply as soon as I can.');
     }
 
     public function inbox()
