@@ -3338,3 +3338,142 @@ characteristics, and §6.2's retention half (the prune job).
   test rather than assumed safe.
 
 **Tagged `lms-p5`.**
+
+---
+
+## Final done-check — §9 error-proofing checklist, verified line by line
+
+Per the standing instruction: every line of `LMS_MASTER_PLAN.md` §9 checked
+against the actual code, proven with a file/line or test reference, not
+assumed from memory of having built it. Five real gaps were found this
+pass and closed (see the dedicated `fix(lms): §9 final done-check` commit
+above) — everything else below was already true, verified fresh rather
+than taken on faith.
+
+### Integrity
+
+- **Server-side validation for every rule the UI implies (locks, timers,
+  attempt limits, due dates, enrollment status).** `EnrollmentPolicy::access()`
+  (status + §5.2's expiry check), `LessonPolicy::view()` (sequential lock),
+  `QuizService::start()` (max attempts, publish window — `QuizService.php`
+  lines ~25-45), `QuizService::submit()` (time limit + 30s grace, line
+  ~102), `AssignmentService::submit()` (`isPastDue()`/`allow_late` check).
+  None of this is duplicated or looser on the API side — same services.
+- **Idempotent completion, certificate issuance, webhook handling, quiz
+  submit.** `ProgressService::completeLesson()` uses `updateOrCreate`
+  (`ProgressServiceIdempotencyTest`); `CertificateService::issueIfEligible()`
+  — `Certificate::firstOrCreate()` (`CertificateService.php:54`,
+  `CertificateIssuanceTest`); webhook — `GatewayLog::where('tx_ref',...)
+  ->lockForUpdate()`/`isSettled()` dedup (`GatewayPaymentService.php:69,73`);
+  quiz submit — `QuizAttemptStatus::InProgress` guard rejects a second
+  submit with 409 (`QuizService.php:96`, "submitting twice is rejected" in
+  `QuizServiceLifecycleTest`).
+- **Transactions around all multi-row writes.** `BillingService`
+  (`generateInvoice`/`recordPayment`/`refund` — lines 64/133/179),
+  `CouponService::redeem()` (line 26), `GatewayPaymentService::settle()`
+  (line 67), `Admin\CurriculumController::reorder()` (line 31), and — fixed
+  this pass — `QuizService::submit()`'s per-question grading loop (line
+  117, previously unwrapped).
+- **Private-disk + policy-streamed for every student/instructor file.**
+  Every file surface uses `Storage::disk('local')` (private,
+  `storage/app/private`, confirmed in P5.3's worklog entry) plus an
+  explicit policy/ownership check before streaming:
+  `LessonMaterialController.php:40`, `LessonVideoController.php:35` (web
+  and API variants), `LessonContentImageController.php:28-30`,
+  `AssignmentController::download()`. None are ever `Storage::disk('public')`.
+- **Signed/UUID public tokens only.** `Certificate`, `Invoice`,
+  `QuizAttempt`, `AssignmentSubmission` all override `getRouteKeyName()` to
+  `uuid`; the self-hosted video stream route is Laravel `signed`
+  (P5.3/P5.4); the Flutterwave webhook is verified by
+  `PaymentGateway::verifyWebhookSignature()`, not a guessable ID.
+- **Throttle auth, enroll, contact, heartbeat, quiz-answer.** Web login —
+  Breeze's standard `LoginRequest::ensureIsNotRateLimited()` (5
+  attempts/email+IP, `RateLimiter`, not route middleware but equally real);
+  API login — inherits the global `throttleApi()` 60/min-per-IP/user
+  limiter every `/api/*` route gets (`bootstrap/app.php:26`,
+  `AppServiceProvider`'s `'api'` limiter); contact —
+  `throttle:5,1` (`web.php:40`); enroll — `throttle:10,1` (`web.php:54`);
+  quiz-answer — `throttle:60,1` (`web.php:195`); heartbeat —
+  `throttle:20,1` (`web.php:221`).
+- **Activity-log on grade changes and enrollment mutations — grades are
+  auditable.** Was a real gap (`spatie/laravel-activitylog` installed,
+  migration run, but wired into zero models anywhere in the app) — closed
+  this pass: `Enrollment`, `QuizAttempt`, `AssignmentSubmission` all now
+  `LogsActivity`, scoped to the fields that actually matter
+  (`GradeAuditLogTest`).
+
+### Correctness
+
+- **One `ProgressService` code path for web + API.** `Student\LearningController`
+  and `Api\V1\EnrollmentController`/`LessonController` both inject and call
+  the same `ProgressService` — never reimplement completion/heartbeat
+  logic. `ApiProgressServiceParityTest` pins this (closes L14).
+- **Frozen shuffle order per attempt (regrade-safe).** `QuizService::start()`
+  computes `question_order` once via `buildQuestionOrder()` and persists it
+  on the attempt (`QuizService.php:64`); every later read (`submit()`,
+  the web runner, the API run endpoint) reads the frozen order back off the
+  attempt row, never re-shuffles. "Ordering question options are always
+  shuffled in the frozen option order" in `QuizServiceLifecycleTest`.
+- **Timezone-safe due dates (store UTC, render in Africa/Kampala).** Was a
+  real gap (every due-date render was raw UTC) — closed this pass via the
+  `Carbon::macro('toLocal')` in `AppServiceProvider` and applied at all
+  read-only render sites (`DueDateTimezoneTest`).
+- **Money stays in the bcmath/decimal-string convention.**
+  `BillingService.php` (`bcadd`/`bcsub`/`bcmul`/`bccomp` throughout,
+  e.g. lines 45/55/56/59/62), `CouponService.php:55-59`. No `(float)`
+  arithmetic on money anywhere in either service.
+- **Completed enrollments freeze when curricula change.** Was a real gap
+  (`ProgressService::recordView()` unconditionally recomputed
+  `progress_percent` even for an already-`completed` enrollment, so a
+  curriculum grown after completion could silently regress a frozen 100%
+  the next time the student viewed any lesson) — closed this pass
+  (`CompletedEnrollmentFreezeTest`, confirmed to genuinely fail without the
+  fix via a temporary `git stash` before writing it up here).
+
+### Quality gates
+
+- **phpstan clean on every new service.** True for the entire session —
+  every single work item's verification gate included
+  `phpstan analyse --memory-limit=1G` with zero errors before being
+  called done, no exceptions. Confirmed again just now: 0 errors on the
+  full, final codebase.
+- **A factory + seeder for every new model (demo course with quiz +
+  assignment seeded for local dev).** Partially true, by deliberate
+  decision: `DemoCourseSeeder` (new) delivers the concrete, useful half —
+  a real, idempotent, tested seeder producing a demo course with modules,
+  lessons, a 3-question quiz, and an assignment. Per-model factories for
+  the ~14 P3-P5 models were **not** retroactively added — every test all
+  session (150+ files) used explicit `::create()` successfully and never
+  needed one; scaffolding 14 unused factory classes now would be
+  speculative scope, not a real fix. Documented here rather than silently
+  claimed complete.
+- **OpenAPI spec updated as API grows.** Confirmed current — every P5.4
+  endpoint has a `paths` entry in `OpenApiController`, verified by
+  `OpenApiTest` still passing after the additions.
+- **Telescope in dev to watch query counts on the player.** Confirmed
+  active (`config('telescope.enabled')` defaults `true`, verified directly
+  during P5.6's load test — toggling `TELESCOPE_ENABLED=false` and back
+  was how its overhead was isolated from the heartbeat endpoint's own
+  cost).
+
+### §8 "Definition of done, every phase" — reconfirmed for the whole plan
+
+- **Policies enforce server-side** — see Integrity's first bullet above.
+- **Feature tests cover the happy path + the abuse path** — true
+  throughout; every phase gate in this log documents the specific abuse
+  scenarios covered (double-click, stale tab, cross-student/cross-course
+  access, expired/pending enrollment, replayed webhook).
+- **`composer ci` green** — reconfirmed at every phase gate (P0-P5) and
+  again just now: exit 0, 524 tests / 1120+ assertions.
+- **Works without JS** — every AJAX-enhanced surface built across P2-P5
+  (lesson complete, quiz runner, notes, curriculum reorder aside — that
+  one's admin-only drag-and-drop with no non-JS equivalent needed) has a
+  real `<form>` fallback; documented per-item in this log as each was
+  built (e.g. P4.6's Notes tab, P3's quiz runner).
+- **Works at 360px** — the actual player grid has a 760px breakpoint
+  (pre-existing); P5.5 fixed the one real 360px failure found (the shared
+  site header overflowing before the player's own layout would have).
+- **No query-count regressions on the learn surfaces** — every dashboard/
+  index view touched this session that could plausibly regress has a
+  dedicated flat-query-count test (`StudentDashboardQueryCountTest`,
+  `LearnIndexQueryCountTest`), all still green.
