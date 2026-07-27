@@ -3518,3 +3518,53 @@ broken or missing *link between* two working features.
 **Tests:** 1 existing test extended (not a new one — asserts the checkout
 link's presence, not just the absent misleading link). Full suite: 524
 passed.
+
+### Fresh-checkout `composer ci` — the final gate
+
+Per the closing instruction — "finished only when nothing in the plan
+remains unimplemented and `composer ci` is green from a fresh checkout" —
+ran the actual sequence a new developer or a deploy pipeline would run,
+from a real `git clone` into an isolated directory, not just re-running
+tests in this already-set-up working copy:
+
+1. `git clone` this repo into a scratch directory (confirmed `HEAD` and all
+   six phase tags — `lms-p0` through `lms-p5` — present).
+2. `composer install` — clean, no platform/dependency errors.
+3. `.env` from `.env.example`, `artisan key:generate`, sqlite database file
+   created, `DB_CONNECTION=sqlite`.
+4. `artisan migrate --force` — **all 60 migrations, from the original v1
+   schema through the final `add_captions_url_to_lessons_table`, applied
+   in order with zero errors** on a database that had never seen any of
+   them before.
+5. `npm install && npm run build` — the project's own `composer.json`
+   `setup` script's final two steps; `composer ci` alone assumes built
+   assets already exist (reasonable for a CI pipeline that builds once)
+   but a truly *fresh* checkout needs this first, or every view extending
+   `layouts.app` 500s on a missing Vite manifest. Ran it to get a
+   meaningful result rather than a misleading one.
+6. `composer ci` (pint --test, phpstan --memory-limit=1G, check-empty-files,
+   secrets-scan, full test suite) — **green**: Pint clean, PHPStan 0 errors
+   across 307 files, empty-file check OK (403 files scanned), secrets scan
+   OK, **524 tests / 1121 assertions, zero failures**. Identical test count
+   to this working directory — the fresh checkout is behaviorally
+   identical, not just source-identical.
+
+One real environment snag hit and worked around during this check (not a
+project bug): the shell's default `php` resolved to Homebrew's PHP 8.4,
+not the project's pinned 8.2.20 — `composer.json` requires `^8.2` and
+platform-pins `8.2.20` for exactly this reason. Every single command this
+entire session used the explicit MAMP-bundled binary path; this fresh-
+checkout script initially didn't, timed out running under 8.4 for reasons
+unrelated to the app, and was corrected by prepending the correct PHP to
+`PATH` before re-running — worth recording since it's the kind of gap a
+real CI runner's pinned toolchain wouldn't have, but a careless local
+verification script could.
+
+Scratch checkout deleted after verification; nothing was left behind
+outside the isolated temp directory it was cloned into.
+
+**This closes the plan.** Every phase (P0-P5) is complete, tagged, and
+gate-verified; §9's full checklist is verified line by line with
+file/line or test citations, not assumed; the three-persona walkthrough
+found and closed one real navigation gap; and `composer ci` is confirmed
+green from an actual fresh `git clone`, not just this working directory.
