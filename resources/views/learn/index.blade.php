@@ -57,6 +57,7 @@
           @endif
         @elseif($enrollment->status === 'pending')
           <span class="badge-pill" style="background:#f7f0df;color:#93752f;">Payment pending</span>
+          <a href="{{ route('courses.checkout', $enrollment->course) }}" class="btn gold" style="margin-left:8px;">Complete checkout</a>
         @else
           <span class="badge-pill" style="background:#fbe9e9;color:#b91c1c;">Cancelled</span>
         @endif

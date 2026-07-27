@@ -93,7 +93,12 @@ class EnrollmentAccessPolicyTest extends TestCase
         $this->actingAs($student)->get(route('learn.course', $course))->assertRedirect();
     }
 
-    public function test_the_my_courses_list_shows_a_pending_badge_with_no_dead_continue_link(): void
+    /**
+     * Final-walkthrough finding: the pending badge alone was a dead end — a student who
+     * abandoned checkout had no way back to it from "My Courses" and would have had to
+     * independently remember to revisit the course's public page.
+     */
+    public function test_the_my_courses_list_shows_a_pending_badge_with_a_way_back_to_checkout_not_a_dead_continue_link(): void
     {
         [$course] = $this->courseWithLesson();
         $student = User::factory()->create(['role' => 'student']);
@@ -102,6 +107,7 @@ class EnrollmentAccessPolicyTest extends TestCase
         $response = $this->actingAs($student)->get(route('learn.index'));
 
         $response->assertOk()->assertSee('Payment pending')->assertDontSee('Continue');
+        $response->assertSee(route('courses.checkout', $course), false);
     }
 
     public function test_an_expired_active_enrollment_cannot_view_the_course_player(): void
