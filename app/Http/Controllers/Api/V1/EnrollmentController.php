@@ -39,7 +39,7 @@ class EnrollmentController extends Controller
         try {
             $enrollment = Enrollment::firstOrCreate(
                 ['user_id' => $request->user()->id, 'course_id' => $course->id],
-                ['uuid' => (string) Str::uuid(), 'status' => 'active', 'source' => 'self', 'enrolled_at' => now()],
+                ['uuid' => (string) Str::uuid(), 'status' => 'active', 'source' => 'self', 'enrolled_at' => now(), 'expires_at' => $course->enrollmentExpiresAt()],
             );
             if ($enrollment->wasRecentlyCreated) {
                 EnrollmentCreated::dispatch($enrollment);
@@ -61,5 +61,26 @@ class EnrollmentController extends Controller
         $progress = $this->progress->completeLesson($enrollment, $lesson);
 
         return ApiResponse::success($progress);
+    }
+
+    /** §6.2 — same ProgressService::recordHeartbeat() the web player calls; player-agnostic by design. */
+    public function heartbeat(Request $request, Lesson $lesson): JsonResponse
+    {
+        $enrollment = Enrollment::where('user_id', $request->user()->id)
+            ->where('course_id', $lesson->module->course_id)
+            ->firstOrFail();
+
+        $data = $request->validate([
+            'seconds_delta' => 'required|integer|min:0|max:60',
+            'position_seconds' => 'required|integer|min:0',
+        ]);
+
+        $progress = $this->progress->recordHeartbeat($enrollment, $lesson, $data['seconds_delta'], $data['position_seconds']);
+
+        return ApiResponse::success([
+            'watch_seconds' => $progress->watch_seconds,
+            'last_position_seconds' => $progress->last_position_seconds,
+            'completed' => $progress->completed_at !== null,
+        ]);
     }
 }
