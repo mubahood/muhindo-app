@@ -25,13 +25,45 @@ class CourseCatalogueController extends Controller
         private readonly BillingService $billing,
     ) {}
 
-    public function index(): View
+    /** §2.2 — server-rendered, URL-driven filters/sort/search so listing pages stay shareable and crawlable. */
+    public function index(Request $request): View
     {
+        $query = Course::where('is_published', true)
+            ->withCount(['reviews as reviews_count' => fn ($q) => $q->where('is_published', true)])
+            ->withAvg(['reviews as reviews_avg_rating' => fn ($q) => $q->where('is_published', true)], 'rating')
+            ->withCount('lessons')
+            ->withSum('lessons', 'duration_minutes')
+            ->withCount('enrollments');
+
+        if ($category = trim((string) $request->query('category'))) {
+            $query->where('category', $category);
+        }
+
+        if ($level = trim((string) $request->query('level'))) {
+            $query->where('level', $level);
+        }
+
+        if ($price = $request->query('price')) {
+            $price === 'free' ? $query->where('price', 0) : $query->where('price', '>', 0);
+        }
+
+        if ($search = trim((string) $request->query('q'))) {
+            $query->where(fn ($w) => $w->where('title', 'like', "%{$search}%")->orWhere('description', 'like', "%{$search}%"));
+        }
+
+        match ($request->query('sort')) {
+            'price_asc' => $query->orderBy('price'),
+            'most_enrolled' => $query->orderByDesc('enrollments_count'),
+            default => $query->latest(),
+        };
+
         return view('courses.index', [
-            'courses' => Course::where('is_published', true)
-                ->withCount(['reviews as reviews_count' => fn ($q) => $q->where('is_published', true)])
-                ->withAvg(['reviews as reviews_avg_rating' => fn ($q) => $q->where('is_published', true)], 'rating')
-                ->latest()->get(),
+            'courses' => $query->paginate(9)->withQueryString(),
+            'categories' => Course::where('is_published', true)->whereNotNull('category')->distinct()->orderBy('category')->pluck('category'),
+            'totalLessonCount' => Lesson::where('is_published', true)
+                ->whereHas('module', fn ($q) => $q->whereNull('deleted_at')->whereHas('course', fn ($c) => $c->where('is_published', true)))
+                ->count(),
+            'filters' => $request->only(['category', 'level', 'price', 'sort', 'q']),
         ]);
     }
 

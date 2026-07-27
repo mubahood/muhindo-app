@@ -166,6 +166,25 @@
     /* honeypot — hidden from real visitors, catches simple bots */
     .hp-field{position:absolute;left:-9999px;top:-9999px;}
 
+    /* e-learning catalogue */
+    .filter-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+    .filter-bar select,.filter-bar input[type=text]{border:1px solid var(--line-2);background:var(--surface);
+      padding:9px 12px;font-family:var(--font);font-size:13px;color:var(--tx);}
+    .filter-bar input[type=text]{flex:1;min-width:180px;}
+    .filter-bar select:focus,.filter-bar input[type=text]:focus{outline:2px solid var(--gold);outline-offset:-1px;}
+    .trust-chips{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:center;margin-top:16px;font-size:12.5px;color:var(--tx2);}
+    .trust-chips span{white-space:nowrap;}
+    .course-cover{width:calc(100% + 48px);aspect-ratio:16/9;background:linear-gradient(135deg,var(--pri),var(--pri-d));
+      display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:26px;margin:-24px -24px 14px;}
+    .course-cover img{width:100%;height:100%;object-fit:cover;}
+    .course-meta{display:flex;flex-wrap:wrap;gap:8px 12px;font-size:12px;color:var(--tx3);margin:6px 0;}
+    .course-price{font-weight:700;color:var(--pri);font-size:14px;}
+    .course-price .free{color:var(--gold-d);}
+    .course-price .was{font-weight:400;color:var(--tx3);text-decoration:line-through;margin-right:6px;}
+    .pagination{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:34px;font-size:13px;}
+    .pagination a,.pagination span{color:var(--tx2);}
+    .pagination a:hover{color:var(--gold-d);}
+
     /* content/legal prose */
     .page{max-width:760px;margin:0 auto;}
     .page h1{font-size:34px;margin-bottom:8px;}
