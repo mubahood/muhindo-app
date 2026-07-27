@@ -3229,3 +3229,37 @@ and documented here as the evidence.
 **Verification:** no app-code changes beyond `.htaccess`. Full untargeted
 `php artisan test` — 508/508 green, unchanged (this item added no new
 application-layer surface for the suite to cover).
+
+### P5.7 — Monthly prune job for `learning_events` (§6.2)
+
+**Built:**
+
+- `app/Console/Commands/PruneLearningEvents.php` — deletes
+  `learning_events` rows with `created_at` older than 12 months. §6.2 has
+  said "raw events pruned after ~12 months by a scheduled command" since
+  P1, but only the write side (`LearningEventRecorder`) had ever actually
+  been built — the retention half was still outstanding until now.
+- `routes/console.php` — scheduled `1st of the month, 03:30`. Matches the
+  plan's own "volume at your scale is a non-issue" framing for this
+  table — nothing else in the app depends on it staying small in real
+  time, so a monthly cadence (rather than nightly, like the other
+  scheduled commands) is the right fit.
+
+**Decision — a single `where(...)->delete()` rather than chunked
+batching.** Every other bulk-touching command in this codebase
+(`DetectAtRiskEnrollments`, etc.) chunks because it runs per-row *domain
+logic* (rule evaluation, conditional updates) that benefits from bounded
+memory. This command does none of that — it's one unconditional bulk
+delete — and the plan explicitly frames volume as a non-issue at this
+platform's scale, so a single query is both simpler and correct here.
+
+**Tests added:** `PruneLearningEventsTest` (5 — an event past the 12-month
+cutoff is deleted; one within the window is kept; one exactly one day
+inside the boundary survives (pins the `<` vs `<=` cutoff comparison);
+pruning never touches an enrollment's denormalized
+`total_watch_seconds`, proving the aggregate/raw-log split actually holds;
+running against zero events is a clean no-op).
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
+`phpstan analyse --memory-limit=1G` 0 errors. Full untargeted
+`php artisan test` — 513/513 green (508 pre-existing + 5 new).
