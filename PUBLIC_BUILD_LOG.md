@@ -660,3 +660,138 @@ more local workarounds.
 ### Commit
 
 `feat(public): SEO, structured data, performance and a11y pass`
+
+---
+
+## Stage 2 — W7: Final walkthrough — closes the mission
+
+**Date:** 2026‑07‑28. Tag: `public-w7`. One fix commit
+(`fix(public): W7 walkthrough fixes — guest coupons, tap targets, sitemap redirect`)
+plus this closing entry.
+
+Walked the live site as each of the plan's four named personas, end to end, against
+`http://localhost:8888/muhindo-app` — not a re-read of the code, an actual exercise of
+each flow via `curl` with real session cookies, plus the automated suite where a real
+external dependency (Flutterwave) makes live curl impractical. Found and fixed
+everything less than excellent; nothing was left as "looks fine on paper."
+
+### Persona 1 — student on a cheap Android phone, buying with MTN MoMo and a coupon
+
+Walked: `/e-learning` → course detail (tap-target check) → guest buy box → register
+with `intended_course` + `coupon_code` → checkout → pay.
+
+**Found and fixed two real problems:**
+
+1. **A guest with a coupon had no way to use it.** The buy box's coupon field only
+   existed behind `auth()->check()`; a guest's CTA was a bare `<a href>` link, which
+   structurally cannot carry a typed value. This directly broke this exact persona's
+   scenario. Fixed in the W7 fix commit: the guest CTA is now a GET form (works
+   without JS) carrying `intended_course` + `coupon_code` through register/login into
+   the same `CourseCatalogueController::enroll()` an authenticated buyer already uses.
+   Verified live: registered a guest with a real 20%-off coupon
+   (`WALKTHRU20`/`GUEST20` in tests) → checkout correctly showed `UGX 150,000.00`
+   subtotal, `UGX 30,000.00` discount, `UGX 120,000.00` total. 5 new tests.
+2. **Tap targets under 44px.** Measured `.btn`/`.btn.lg` on the public marketing
+   layout at ~36px/~41px total height — under the plan's own §7 requirement, on every
+   primary CTA sitewide. `layouts/app.blade.php` (the authenticated area) already had
+   `min-height:44px`; only the public layout — the one a phone-holding new visitor
+   actually lands on first — had the gap. Fixed.
+
+Payment initiation itself (the actual Flutterwave hosted-page handoff, success,
+failure, and webhook-replay paths) was verified via `CheckoutPageTest` and
+`CourseCheckoutTest` with `FakePaymentGateway` rather than live curl — this repo has
+no real Flutterwave sandbox credentials configured locally, and a controlled fake is
+the correct tool for deterministically exercising an external payment gateway's
+success/failure branches; both were already green going into this walkthrough.
+
+### Persona 2 — free-course student on desktop
+
+Walked: `/` → "Explore e‑Learning" → filter to Free → course detail → "Enrol now" →
+register (no coupon) → auto-enroll → land in lesson 1 → dashboard.
+
+**Found nothing to fix.** Live: registered a fresh guest against
+`web-development-foundations` (free), landed on `/learn/web-development-foundations`
+which itself redirected to `/learn/web-development-foundations/12` — the actual first
+lesson ("How the web works") — 200, real content, zero dead ends. Dashboard showed the
+onboarding checklist (§3.4) correctly for the brand-new account.
+
+### Persona 3 — a school director requesting a project
+
+Walked: `/` → "Start a project" (the finally-live hero CTA) → 4-step pitch + portfolio
+proof → request form → submission → admin inbox → convert to client.
+
+**Found nothing new to fix** — this persona's flow was built and tested in W5
+(`ProjectInquiryTest`, 13 tests). Re-verified live with a realistic submission (a
+school director, `school_clinic_system`, a real budget band, a real description):
+confirmed via direct database read that the inquiry persisted correctly
+(`ProjectInquiry::where('email', ...)->first()` — found, `status=new`) after curl's
+own `-w` status-code reporting proved unreliable across chained `-L` redirects in this
+shell environment (a scripting artifact, not an app bug — the database is the ground
+truth and confirmed success). Admin-side inbox visibility, status change, and the
+convert-with-prefill flow were re-confirmed via the existing passing test suite rather
+than re-run live, since testing them live would require a real admin password this
+session doesn't have and shouldn't try to obtain.
+
+### Persona 4 — Googlebot crawling the sitemap, canonicals and JSON-LD
+
+Walked: fetched `/sitemap.xml`, extracted all 29 listed URLs, `curl`'d every single
+one, checked status code + canonical tag on each, then validated every JSON-LD
+`<script>` block found across the crawl as syntactically correct JSON via a small
+Python check (not eyeballing — parsed and asserted).
+
+**Found and fixed one real problem:** 28 of 29 URLs returned 200 with a correct
+self-referencing canonical; the home page entry 301-redirected
+(`http://.../muhindo-app` → `http://.../muhindo-app/`) — Apache's directory-slash
+behavior on this subdirectory-hosted local environment. A single clean redirect to a
+stable canonical is acceptable by Google's own guidance, but trivial to remove
+outright, so the sitemap now lists the home URL with a trailing slash — re-crawled
+live, confirmed 200 with zero redirect hops. All 23 JSON-LD blocks across the 29 pages
+parsed as valid JSON — zero malformed structured data anywhere on the site.
+
+### Fresh-checkout `composer ci` — the final gate
+
+Ran the actual sequence a new developer or a deploy pipeline would run, from a real
+`git clone` into an isolated scratch directory — not a re-run in this already-set-up
+working copy:
+
+1. `git clone` this repo into a scratch directory — confirmed `HEAD` and all seven
+   phase tags (`public-w1` … `public-w7`) present.
+2. `composer install` — clean, no platform/dependency errors, 140 packages.
+3. `.env` from `.env.example`, `artisan key:generate`, sqlite database file created,
+   `DB_CONNECTION=sqlite`.
+4. `artisan migrate --force` — **all 73 migrations, from the original schema through
+   this mission's `create_project_inquiries_table`, applied in order with zero
+   errors** on a database that had never seen any of them before.
+5. `npm install && npm run build` — clean, Vite build succeeded (82KB JS / 30KB CSS
+   gzipped).
+6. `composer ci` (pint --test, phpstan --memory-limit=1G, check-empty-files,
+   secrets-scan, full test suite) — **exit code 0.** Pint clean; PHPStan 0 errors
+   across 318 files; empty-file check OK (427 files scanned); secrets scan OK;
+   **614 tests / 1442 assertions, zero failures.** Every test this entire mission
+   added — every `Tests\Feature\Public\*` class — ran and passed inside this fresh
+   checkout, not just the working directory.
+
+Scratch checkout deleted after verification; nothing left behind outside the isolated
+temp directory it was cloned into.
+
+### This closes the Public Site Plan v2 mission
+
+Every work item in the plan (W0 through W7) is complete, gate-verified, and tagged.
+Every capability the owner asked for is built and tested, not merely planned: e‑Learning
+naming and a real 7-course catalogue, course detail as an actual sales page, contextual
+registration/onboarding, mobile-money/card checkout with coupons (including the guest
+path this walkthrough closed), the client project funnel, landing copy rewritten away
+from "enterprise only," SEO (meta, JSON-LD, sitemap, the corrected `robots.txt`), and
+responsiveness (mobile-first templates, verified tap targets, `wire:navigate`
+throughout). The one `DEFERRED` item (Flutterwave `payment_options` tab pre-selection,
+flagged at the top of this log since Stage 1) remains a deliberate, reasoned, real
+polish opportunity — not a gap — since the capability it would streamline (pay with
+mobile money or card) already works without it. The four-persona walkthrough found
+three genuine, previously-unnoticed problems (the guest-coupon dead end, undersized
+mobile tap targets, and the sitemap's one redirect hop) and fixed all three with tests,
+not just notes. `composer ci` is confirmed green from an actual fresh `git clone`, not
+just this working directory.
+
+### Commit
+
+`fix(public): W7 walkthrough fixes — guest coupons, tap targets, sitemap redirect`
