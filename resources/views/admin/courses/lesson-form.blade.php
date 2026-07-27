@@ -85,6 +85,11 @@
           </label>
         @endif
       </div>
+      <div class="tb-form-group full">
+        <label class="tb-label">Captions URL (.vtt)</label>
+        <input class="tb-input" type="url" name="captions_url" value="{{ old('captions_url', $lesson->captions_url) }}" placeholder="https://…/captions-en.vtt">
+        <p class="muted" style="font-size:.75rem;margin-top:4px;">For a self-hosted video file only — a YouTube video's own captions already show automatically.</p>
+      </div>
       <div class="tb-form-group">
         <label class="tb-label">Duration (minutes)</label>
         <div style="display:flex;gap:8px;">

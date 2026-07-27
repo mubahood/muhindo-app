@@ -29,7 +29,7 @@
 <section style="padding-top:0;">
   <div class="wrap page">
     @if($lesson->video_url)
-      <div class="preview-video"><iframe src="{{ $lesson->video_url }}" allowfullscreen></iframe></div>
+      <div class="preview-video"><iframe src="{{ $lesson->video_url }}" title="{{ $lesson->title }}" allowfullscreen></iframe></div>
     @endif
 
     @if($renderedContent)

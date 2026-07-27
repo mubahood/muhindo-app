@@ -118,7 +118,7 @@
                     @change="autosave({{ $question->id }})">{{ $existing['text'] ?? '' }}</textarea>
         @endif
 
-        <span class="autosave-hint" x-show="savedQuestionId === {{ $question->id }}" x-cloak>Saved</span>
+        <span class="autosave-hint" aria-live="polite" x-show="savedQuestionId === {{ $question->id }}" x-cloak>Saved</span>
       </div>
     @endforeach
 
@@ -173,7 +173,13 @@ function quizRunner(cfg) {
       const m = Math.floor(this.secondsLeft / 60);
       const s = this.secondsLeft % 60;
       this.formattedTime = `${m}:${String(s).padStart(2, '0')}`;
-      if (this.secondsLeft === 0) {
+      // §7.6 — announced to screen readers via the existing aria-live toast host, not just
+      // shown visually; the countdown itself isn't aria-live (that would read every second).
+      if (this.secondsLeft === 300) {
+        window.dispatchEvent(new CustomEvent('toast', { detail: { message: '5 minutes remaining.', type: 'info' } }));
+      } else if (this.secondsLeft === 60) {
+        window.dispatchEvent(new CustomEvent('toast', { detail: { message: '1 minute remaining.', type: 'info' } }));
+      } else if (this.secondsLeft === 0) {
         window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Time is up — submitting your quiz.', type: 'error' } }));
         this.$el.querySelector('form').requestSubmit();
       }

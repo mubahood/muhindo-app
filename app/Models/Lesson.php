@@ -15,7 +15,7 @@ class Lesson extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'course_module_id', 'title', 'content', 'video_url', 'video_disk_path',
+        'course_module_id', 'title', 'content', 'video_url', 'video_disk_path', 'captions_url',
         'duration_minutes', 'sort_order', 'is_published', 'is_free_preview',
         'completion_rule', 'completion_threshold', 'content_format',
     ];

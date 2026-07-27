@@ -149,6 +149,7 @@ class LessonController extends Controller
             'title' => 'required|string|max:200',
             'content' => 'nullable|string',
             'video_url' => 'nullable|url|max:500',
+            'captions_url' => 'nullable|url|max:500',
             'duration_minutes' => 'nullable|integer|min:0',
             'sort_order' => 'nullable|integer',
             'is_published' => 'nullable|boolean',

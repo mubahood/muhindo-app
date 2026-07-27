@@ -22,9 +22,9 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{
       --bg:#f7f6f2; --surface:#fff; --surface-2:#f0eee7; --line:#e7e3d8; --line-2:#d8d2c0;
-      --tx:#141a26; --tx2:#5b6270; --tx3:#93927e; --pri:#0b1f3a; --pri-d:#060f1f; --pri-soft:#eef1f6;
-      --gold:#b8933f; --gold-d:#93752f; --gold-soft:#f7f0df;
-      --ok:#15803d; --ok-soft:#e6f4ea; --hd:60px;
+      --tx:#141a26; --tx2:#5b6270; --tx3:#706f5c; --pri:#0b1f3a; --pri-d:#060f1f; --pri-soft:#eef1f6;
+      --gold:#b8933f; --gold-d:#7d6228; --gold-soft:#f7f0df;
+      --ok:#0f6b30; --ok-soft:#e6f4ea; --hd:60px;
       --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     }
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}

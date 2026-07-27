@@ -88,7 +88,11 @@
           x-init="init()"
         >
           <div class="learn-video">
-            <video id="video-player-{{ $lesson->id }}" src="{{ $videoStreamUrl }}" controls playsinline style="width:100%;height:100%;"></video>
+            <video id="video-player-{{ $lesson->id }}" src="{{ $videoStreamUrl }}" aria-label="{{ $lesson->title }}" controls playsinline style="width:100%;height:100%;">
+              @if($lesson->captions_url)
+                <track kind="captions" src="{{ $lesson->captions_url }}" srclang="en" label="English" default>
+              @endif
+            </video>
           </div>
         </div>
       @elseif($lesson->youtubeVideoId())
@@ -102,7 +106,7 @@
           })"
           x-init="init()"
         >
-          <div class="learn-video"><div id="yt-player-{{ $lesson->id }}" style="width:100%;height:100%;"></div></div>
+          <div class="learn-video"><div id="yt-player-{{ $lesson->id }}" role="region" aria-label="{{ $lesson->title }}" style="width:100%;height:100%;"></div></div>
           <div class="learn-speed">
             <template x-for="rate in [0.75, 1, 1.25, 1.5, 2]" :key="rate">
               <button type="button" :class="{on: speed === rate}" @click="setSpeed(rate)" x-text="rate + 'x'"></button>
@@ -110,7 +114,7 @@
           </div>
         </div>
       @elseif($lesson->video_url)
-        <div class="learn-video"><iframe src="{{ $lesson->video_url }}" allowfullscreen></iframe></div>
+        <div class="learn-video"><iframe src="{{ $lesson->video_url }}" title="{{ $lesson->title }}" allowfullscreen></iframe></div>
       @endif
 
       @if($renderedContent)
@@ -266,7 +270,7 @@ function youtubePlayer(cfg) {
     createPlayer() {
       this.player = new YT.Player('yt-player-' + cfg.lessonId, {
         videoId: cfg.videoId,
-        playerVars: { rel: 0, modestbranding: 1 },
+        playerVars: { rel: 0, modestbranding: 1, cc_load_policy: 1 },
         events: {
           onReady: (e) => { if (cfg.resumeAt > 0) e.target.seekTo(cfg.resumeAt, true); },
           onStateChange: (e) => this.onStateChange(e),
