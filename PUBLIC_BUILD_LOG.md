@@ -407,3 +407,55 @@ still unplaced.
 
 `feat(public): contextual auth continuation for guest enrollment` ·
 `feat(public): first-visit onboarding checklist on the student dashboard`
+
+---
+
+## Stage 2 — W4: Checkout
+
+**Date:** 2026‑07‑28. Tag: `public-w4`. One commit — §5's remaining pieces (the buy
+box + coupon relocation from §5.1 already landed in W2's course-detail-page commit,
+since that's where the buy box physically lives) turned out to be small and coherent
+enough for a single gated change rather than needing further splitting.
+
+**`feat(public): checkout order summary and a real failure-path retry`** — the
+checkout page (`courses/checkout.blade.php`) now shows a real order summary —
+subtotal, a discount line only when a coupon was actually applied, total — read
+directly off the already-computed `Invoice` (`subtotal`/`discount`/`total` columns),
+per §5.1's decision not to add a separate validate-then-redirect endpoint. Payment-
+method icons are informational only, confirmed unnecessary as functional UI since
+Flutterwave's hosted page already exposes card/mobile-money/bank/USSD by default.
+
+The real finding this item surfaced: `gateway/result.blade.php` (the Flutterwave
+return screen) was a generic, unbranded page whose only action on failure was "Return
+to the app" → dashboard — no way back to retry the specific course purchase, exactly
+the "white error page" / dead-end the plan's §5.2 explicitly forbids. Rebuilt on-brand;
+on a failed/cancelled payment, the originating course is resolved from the `tx_ref`
+(via `GatewayLog` → `Invoice` → the course line item) and the retry button links
+straight back to that course's checkout — the invoice stays untouched and reusable.
+Also added an HTTP-level webhook-replay test (posting the same settled transaction
+twice) to prove the existing `gateway_logs` dedup guard at the layer the plan asked
+for, without rebuilding it — it was already correct.
+
+**§5 is now fully closed.** The one intentionally `DEFERRED` item from plan v2 (the
+Flutterwave `payment_options` per-request tab hint) remains deferred — nothing in this
+pass changed that decision.
+
+### Verification
+
+- `vendor/bin/pint --dirty` — pass.
+- `vendor/bin/phpstan analyse --memory-limit=1G` — 0 errors, 310 files.
+- Combined targeted run —
+  `php artisan test --filter="CheckoutPage|CourseCheckout|CouponCheckout|ActivateCourseEnrollments|ELearning|RouteNaming|Portfolio|ContactForm|CourseEnrollment|FreePreview|EnrollIdempotency|CourseContext|OnboardingChecklist"`
+  — **97 passed, 265 assertions, 6.43s.** Every pre-existing checkout/coupon/
+  enrollment-activation test (`CourseCheckoutTest`, `CouponCheckoutTest`,
+  `ActivateCourseEnrollmentsOnInvoicePaidTest`) still green unmodified, confirming the
+  rebuilt checkout view and result page didn't disturb the underlying payment flow —
+  only the presentation layer changed.
+- New: `CheckoutPageTest` (5 tests) — subtotal/total with no discount line by default,
+  discount line + correct math with a real coupon applied, failed-callback retry link
+  resolves to the right course's checkout, successful callback shows no retry link,
+  webhook replay doesn't double-pay.
+
+### Commit
+
+`feat(public): checkout order summary and a real failure-path retry`
