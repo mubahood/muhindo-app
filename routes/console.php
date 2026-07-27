@@ -16,3 +16,6 @@ Schedule::command('app:send-weekly-instructor-digest')->weeklyOn(1, '07:00');
 
 // §6.5 — nightly streak-badge check.
 Schedule::command('app:award-streak-badges')->dailyAt('02:30');
+
+// §6.2 — monthly retention prune; volume at this scale makes a tighter schedule unnecessary.
+Schedule::command('app:prune-learning-events')->monthlyOn(1, '03:30');
