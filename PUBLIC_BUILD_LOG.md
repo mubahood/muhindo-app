@@ -459,3 +459,60 @@ pass changed that decision.
 ### Commit
 
 `feat(public): checkout order summary and a real failure-path retry`
+
+---
+
+## Stage 2 — W5: Client funnel
+
+**Date:** 2026‑07‑28. Tag: `public-w5`. One commit — §4 in full.
+
+**`feat(public): the "Start a project" client funnel`** — `/start-a-project`: reworded
+pitch (§1.1's two-door framing, who it's for, the 4-step process, real portfolio
+proof), one sectioned request form (not a multi-step maze), honeypot + throttle
+matching the contact form. New `project_inquiries` table + `ProjectInquiry` model +
+`ProjectInquiryStatus` enum (`new|contacted|converted|closed`) — kept deliberately
+separate from `contact_messages` per the plan ("this is a sales lead, not a contact
+message"). Admin inbox (list + detail + status-change) added to the sidebar nav under
+"Clients & Projects," not left deep-link-only. "Convert to client" redirects to the
+*existing* `admin.clients.create` form with `from_inquiry` pre-filling name/email/
+phone/organisation/notes on the unsaved `Client` model — zero new create-form code,
+reusing what's already there exactly as the plan specifies. Linked from all four
+places the plan named: hero CTA (finally swapped from the W1-deferred "Get in touch"
+now that the route exists), the services page CTA, the footer, the contact page, and
+the register page's "hiring, not learning?" line.
+
+### A real bug found and fixed, in code this pass was patterned after
+
+While writing the honeypot abuse-path test, the "pretend success" branch never
+actually fired: both the new form and `PortfolioController::contact()` (which this was
+copied from) validated the honeypot field with `'website' => 'nullable|max:0'` *before*
+checking `$request->filled('website')` — a bot's non-empty value fails `max:0` and
+throws a validation error immediately, so the intended "silently pretend success, tell
+the bot nothing" behavior was dead code on both forms. The bot got a validation error
+instead, which is exactly the tell a honeypot exists to avoid. Fixed both by moving the
+honeypot check before validation runs. The pre-existing `ContactFormTest` only ever
+asserted the database write didn't happen, not what response the bot actually saw, so
+this shipped unnoticed — strengthened that test to assert the success redirect and
+absence of validation errors so it can't regress silently again.
+
+### Verification
+
+- `vendor/bin/pint --dirty` — pass.
+- `vendor/bin/phpstan analyse --memory-limit=1G` — 0 errors, 317 files.
+- Combined targeted run —
+  `php artisan test --filter="ProjectInquiry|ContactForm|Portfolio|ELearning|RouteNaming|CourseEnrollment|CourseContext|CheckoutPage|CourseCheckout"`
+  — **94 passed, 261 assertions, 5.75s.**
+- New: `ProjectInquiryTest` (13 tests) — page renders, valid submission persists +
+  notifies every admin (`Notification::fake()` + `assertSentTo`), missing-field and
+  invalid-project-type validation, the honeypot abuse path (now actually verified to
+  return a success redirect, not a validation error), throttling, optional
+  organisation, guest-cannot-view-inbox, admin can view inbox + single inquiry, status
+  change, invalid-status rejection, convert-prefill (asserts the actual pre-filled
+  input values), and a nonexistent inquiry id on the convert link not 500ing.
+- Live server: `/start-a-project` 200 with the real form fields and portfolio proof
+  grid rendering; home page hero confirmed showing "Start a project" in three places
+  (hero CTA, build-with-me strip CTA, footer).
+
+### Commit
+
+`feat(public): the "Start a project" client funnel`
