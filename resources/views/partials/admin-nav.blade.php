@@ -32,6 +32,7 @@
       ['key' => 'work', 'label' => 'Clients & Projects', 'icon' => 'fa-handshake', 'gate' => ['clients.manage', 'projects.manage'], 'items' => [
           ['label' => 'Clients', 'icon' => 'fa-address-book', 'route' => 'admin.clients.index', 'match' => ['admin.clients.*'], 'can' => 'clients.manage'],
           ['label' => 'Projects', 'icon' => 'fa-diagram-project', 'route' => 'admin.projects.index', 'match' => ['admin.projects.*'], 'can' => 'projects.manage'],
+          ['label' => 'Project Inquiries', 'icon' => 'fa-inbox', 'route' => 'admin.project-inquiries.index', 'match' => ['admin.project-inquiries.*'], 'can' => 'clients.manage'],
       ]],
       ['key' => 'billing', 'label' => 'Billing', 'icon' => 'fa-file-invoice-dollar', 'gate' => 'billing.manage', 'items' => [
           ['label' => 'Invoices', 'icon' => 'fa-file-invoice-dollar', 'route' => 'admin.invoices.index', 'match' => ['admin.invoices.*']],

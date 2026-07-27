@@ -35,7 +35,7 @@
   <div class="wrap">
     <h2>Have a project in mind?</h2>
     <p class="lead" style="max-width:480px;margin:12px auto 22px;">Let's talk about what you're building.</p>
-    <a href="{{ route('contact') }}" wire:navigate class="btn gold">Get in touch</a>
+    <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Start a project</a>
   </div>
 </section>
 

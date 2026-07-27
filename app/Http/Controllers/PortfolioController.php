@@ -108,18 +108,19 @@ class PortfolioController extends Controller
 
     public function contact(Request $request): RedirectResponse
     {
+        // Checked before validation — a `max:0` rule on the honeypot would otherwise
+        // reject a bot's non-empty value with a validation error before this branch
+        // is ever reached, tipping the bot off instead of silently pretending success.
+        if ($request->filled('website')) {
+            return redirect()->route('contact')->with('success', 'Thanks — I\'ll be in touch shortly.');
+        }
+
         $data = $request->validate([
             'name' => 'required|string|max:150',
             'email' => 'required|email|max:150',
             'subject' => 'nullable|string|max:200',
             'message' => 'required|string|max:5000',
-            'website' => 'nullable|max:0', // honeypot — real visitors never fill this
         ]);
-
-        if ($request->filled('website')) {
-            // Honeypot tripped — pretend success, do nothing.
-            return redirect()->route('contact')->with('success', 'Thanks — I\'ll be in touch shortly.');
-        }
 
         $message = ContactMessage::create([
             'name' => $data['name'],

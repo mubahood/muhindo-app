@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\District;
+use App\Models\ProjectInquiry;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,10 +22,26 @@ class ClientController extends Controller
         ]);
     }
 
-    public function create(): View
+    /** §4.3 — "Convert" from the project-inquiry inbox pre-fills a new client from the lead. */
+    public function create(Request $request): View
     {
+        $client = new Client;
+
+        if ($request->filled('from_inquiry')) {
+            $inquiry = ProjectInquiry::find($request->integer('from_inquiry'));
+            if ($inquiry) {
+                $client->fill([
+                    'name' => $inquiry->name,
+                    'email' => $inquiry->email,
+                    'phone' => $inquiry->phone,
+                    'company' => $inquiry->organisation,
+                    'notes' => "From project inquiry #{$inquiry->id} ({$inquiry->project_type}): {$inquiry->description}",
+                ]);
+            }
+        }
+
         return view('admin.clients.form', [
-            'client' => new Client,
+            'client' => $client,
             'districts' => District::orderBy('name')->get(),
         ]);
     }

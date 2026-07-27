@@ -47,6 +47,8 @@ Route::get('/research', [PortfolioController::class, 'research'])->name('portfol
 Route::get('/products', [PortfolioController::class, 'products'])->name('portfolio.products');
 Route::get('/contact', [PortfolioController::class, 'contactPage'])->name('contact');
 Route::post('/contact', [PortfolioController::class, 'contact'])->middleware('throttle:5,1')->name('contact.store');
+Route::get('/start-a-project', [\App\Http\Controllers\ProjectInquiryController::class, 'create'])->name('start-a-project');
+Route::post('/start-a-project', [\App\Http\Controllers\ProjectInquiryController::class, 'store'])->middleware('throttle:5,1')->name('start-a-project.store');
 Route::view('/privacy', 'marketing.privacy')->name('privacy');
 Route::view('/terms', 'marketing.terms')->name('terms');
 Route::get('/verify/{certificate}', [CertificateVerificationController::class, 'show'])->name('certificates.verify');
@@ -170,6 +172,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     // Clients & Projects
     Route::resource('clients', ClientController::class);
     Route::resource('projects', ProjectController::class);
+    Route::get('project-inquiries', [\App\Http\Controllers\Admin\ProjectInquiryController::class, 'index'])->name('project-inquiries.index');
+    Route::get('project-inquiries/{projectInquiry}', [\App\Http\Controllers\Admin\ProjectInquiryController::class, 'show'])->name('project-inquiries.show');
+    Route::patch('project-inquiries/{projectInquiry}/status', [\App\Http\Controllers\Admin\ProjectInquiryController::class, 'updateStatus'])->name('project-inquiries.status');
     Route::post('projects/{project}/tasks', [ProjectTaskController::class, 'store'])->name('projects.tasks.store');
     Route::put('projects/{project}/tasks/{task}', [ProjectTaskController::class, 'update'])->name('projects.tasks.update');
     Route::delete('projects/{project}/tasks/{task}', [ProjectTaskController::class, 'destroy'])->name('projects.tasks.destroy');

@@ -8,7 +8,7 @@
   <div class="wrap">
     <div class="eyebrow">Contact</div>
     <h1>Let's build something together</h1>
-    <p>Reach out about a project, a role, or just to say hi.</p>
+    <p>Reach out about a project, a role, or just to say hi. Have a specific project brief already? <a href="{{ route('start-a-project') }}" wire:navigate style="color:var(--gold-d);font-weight:600;">Start a project →</a></p>
   </div>
 </section>
 

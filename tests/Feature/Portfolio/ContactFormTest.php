@@ -39,13 +39,18 @@ class ContactFormTest extends TestCase
     {
         Mail::fake();
 
-        $this->post('/contact', [
+        $response = $this->post('/contact', [
             'name' => 'Bot',
             'email' => 'bot@example.com',
             'message' => 'spam',
             'website' => 'http://spam.example.com',
         ]);
 
+        // The bot must see an ordinary success redirect, not a validation error — a
+        // validation error would tip it off that it was caught by the honeypot.
+        $response->assertRedirect(route('contact'));
+        $response->assertSessionHas('success');
+        $response->assertSessionDoesntHaveErrors();
         $this->assertDatabaseMissing('contact_messages', ['email' => 'bot@example.com']);
     }
 

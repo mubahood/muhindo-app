@@ -155,13 +155,21 @@
     .contact-info .item h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx3);margin-bottom:5px;}
     .contact-info .item a,.contact-info .item span{font-size:14px;color:var(--tx);}
     form.contact-form{display:flex;flex-direction:column;gap:14px;}
-    form.contact-form input,form.contact-form textarea{
+    form.contact-form input,form.contact-form textarea,form.contact-form select{
       width:100%;border:1px solid var(--line-2);background:var(--surface);padding:12px 14px;font-family:var(--font);
       font-size:13.5px;color:var(--tx);}
-    form.contact-form input:focus,form.contact-form textarea:focus{outline:2px solid var(--gold);outline-offset:-1px;}
+    form.contact-form input:focus,form.contact-form textarea:focus,form.contact-form select:focus{outline:2px solid var(--gold);outline-offset:-1px;}
     form.contact-form textarea{min-height:120px;resize:vertical;}
     form.contact-form label{font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:4px;display:block;}
+    form.contact-form .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    @media(max-width:520px){form.contact-form .row2{grid-template-columns:1fr;}}
     .field-error{font-size:12px;color:#b91c1c;margin-top:4px;}
+    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;margin:26px 0 0;}
+    .steps .step{border:1px solid var(--line);background:var(--surface);padding:20px;}
+    .steps .step .n{width:26px;height:26px;background:var(--pri);color:var(--gold);font-size:12px;font-weight:700;
+      display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+    .steps .step h4{font-size:13.5px;font-weight:600;margin-bottom:5px;}
+    .steps .step p{font-size:12.5px;color:var(--tx2);line-height:1.5;}
     .alert-success{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);padding:12px 16px;font-size:13px;margin-bottom:16px;}
     /* honeypot — hidden from real visitors, catches simple bots */
     .hp-field{position:absolute;left:-9999px;top:-9999px;}
@@ -302,6 +310,7 @@
       <div>
         <h4>Site</h4>
         <a href="{{ route('courses.index') }}" wire:navigate>e&#8209;Learning</a>
+        <a href="{{ route('start-a-project') }}" wire:navigate>Start a project</a>
         <a href="{{ route('portfolio.work') }}" wire:navigate>Work</a>
         <a href="{{ route('portfolio.about') }}" wire:navigate>About</a>
         <a href="{{ route('portfolio.skills') }}" wire:navigate>Skills</a>

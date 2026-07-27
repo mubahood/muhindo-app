@@ -53,5 +53,6 @@
 </form>
 
 <div class="a-alt">Already have an account? <a href="{{ route('login', $intendedCourse ? ['intended_course' => $intendedCourse->slug] : []) }}">Sign in</a></div>
+<div class="a-alt">Creating an account to hire me for a project? <a href="{{ route('start-a-project') }}">Use Start a project instead →</a></div>
 <div style="text-align:center;"><a href="{{ route('home') }}" class="a-back"><i class="fas fa-arrow-left"></i> Back to home</a></div>
 @endsection
