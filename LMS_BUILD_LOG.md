@@ -3477,3 +3477,44 @@ than taken on faith.
   index view touched this session that could plausibly regress has a
   dedicated flat-query-count test (`StudentDashboardQueryCountTest`,
   `LearnIndexQueryCountTest`), all still green.
+
+### Three-persona final walkthrough
+
+Traced each persona's actual navigation hub — the views/partials that link
+everything else together — rather than re-reading test names, since
+feature tests each exercise one action in isolation and don't catch a
+broken or missing *link between* two working features.
+
+- **Student.** `learn/index.blade.php` ("My Courses", the real landing
+  hub): every button (`Continue`/`Resume`/`Review`, Quizzes, Assignments,
+  Grades, Announcements, Q&A, Rate this course, Certificate) resolves to a
+  real named route, gated correctly per enrollment status. **Found one real
+  dead end**, fixed this pass: a `pending` (unpaid) enrollment showed a
+  static "Payment pending" badge with no way back to checkout — a student
+  who abandoned Flutterwave checkout had no path forward from this page at
+  all, and would have had to independently remember to revisit the
+  course's public page (which already has a "Complete checkout" button,
+  built in P4.2) to find their way back. Added the same link here;
+  extended the existing pending-enrollment test, which had only ever
+  asserted the misleading "Continue" link was absent, not that a real path
+  forward existed.
+- **Instructor/Admin.** `partials/admin-nav.blade.php` (the sidebar,
+  permission-gated per group): confirmed every *global* LMS surface built
+  across P3-P5 is actually reachable from the main nav, not just
+  deep-linkable — Grading Queue and Reviews under "Courses", Coupons under
+  "Billing", Enrollments alongside Courses — all present already, wired up
+  as each feature was originally built rather than left as an
+  afterthought. `admin/courses/show.blade.php`'s action bar has every
+  *course-scoped* surface (Students, Analytics, Gradebook, Q&A, Bulk
+  Enroll, Edit) plus the inline curriculum builder. Nothing missing.
+- **Client.** Pre-existing portal (`portal/index.blade.php`,
+  `project.blade.php`, `invoices.blade.php`) — entirely outside this
+  plan's scope and untouched by any P0-P5 work beyond the shared
+  `layouts/app.blade.php` (nav links, theme colors, focus states, tap
+  targets — all edited during P5.5). `ClientProjectIsolationTest`'s full 5
+  tests still pass unchanged, confirming the shared-layout edits never
+  leaked into or broke client-facing pages.
+
+**Tests:** 1 existing test extended (not a new one — asserts the checkout
+link's presence, not just the absent misleading link). Full suite: 524
+passed.
