@@ -3088,3 +3088,72 @@ expired signature is rejected).
 **Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
 `phpstan analyse --memory-limit=1G` 0 errors. Full untargeted
 `php artisan test` — 501/501 green (479 pre-existing + 22 new).
+
+### P5.5 — Accessibility audit pass (§7.6)
+
+**Built:**
+
+- Computed real WCAG contrast ratios (relative-luminance formula, not
+  eyeballed) for the navy/gold theme across the three public/portal layouts
+  (`layouts/app.blade.php`, `marketing.blade.php`, `auth.blade.php`, which
+  keep identical `:root` blocks). Found and fixed three genuine failures,
+  confirmed against real usages in `learn/*` templates (status pills, the
+  Q&A "Instructor" badge, success alerts), not just the raw variable
+  declarations: `--tx3` "muted" text 2.92:1 → `#706f5c` (4.72:1); `--gold-d`
+  on `--gold-soft` 3.83:1 → `#7d6228` (5.06:1); `--ok` on `--ok-soft` 4.42:1
+  → `#0f6b30` (5.84:1). The admin back-office's separate blue theme
+  (`td-admin.css`) was deliberately left untouched — it isn't the
+  "navy/gold theme" §7.6 names, and there's no dark-mode implementation
+  anywhere in the app yet, so "in both light/dark" had nothing to check.
+- Tap targets: `layouts/app.blade.php`'s `.btn` measured ~41px tall
+  (13px font + 9px padding + 1px border, under the 44px minimum); added
+  `min-height:44px` there and on the header's sign-out button.
+- Focus states: `layouts/app.blade.php` had no `:focus-visible` styling at
+  all (the other two public layouts already did); added a themed gold
+  outline ring.
+- 360px layout: the actual lesson-player grid already had a 760px
+  breakpoint from earlier work and needed nothing further, but the shared
+  header above it (wordmark + nav + username + sign-out, one un-wrapping
+  flex row) had zero narrow-viewport handling and overflowed well before
+  360px. Added a 480px breakpoint dropping the wordmark and username —
+  the two least essential pieces — first.
+- Captions: new `lessons.captions_url` (nullable, additive) for a
+  self-hosted video's WebVTT track, rendered as a real
+  `<track kind="captions">` element. YouTube's own captions needed no new
+  data field at all — just `cc_load_policy:1` in `playerVars` to have them
+  show by default, since the video's captions (if any) already live on
+  YouTube's side and "pass through" the IFrame player once enabled.
+- Accessible names: the static Vimeo/plain-URL iframe and the self-hosted
+  `<video>` element had no `title`/`aria-label`; fixed both. The YouTube
+  player's iframe is created by Google's own script, not ours, so it isn't
+  directly addressable — added `role="region" aria-label` on its wrapper
+  div instead as the closest achievable equivalent.
+- `aria-live`: read `partials/toast-host.blade.php` before assuming
+  anything was missing — it already had `aria-live="polite"` from earlier
+  work, so every toast-routed notification (lesson auto-complete, etc.)
+  was already covered. Added it to the two things that genuinely lacked
+  it: the quiz autosave "Saved" hint, and new 5-minute/1-minute quiz-timer
+  threshold announcements — routed through the *existing* toast bus rather
+  than making the visible countdown itself a live region, which would
+  re-announce every single second.
+
+**Decision — left the lesson auto-advance countdown card alone.** "Next: X
+— starting in 5s" ticks every second same as the quiz timer; making it
+`aria-live` would have the identical every-second-announcement problem the
+timer fix was built specifically to avoid. It already has a "Stay here"
+button for control, and unlike the quiz timer, §7.6 doesn't name it
+specifically — a defensible scope boundary rather than a missed item.
+
+**Tests added:** `AccessibilityTest` (7 — captions_url persists via the
+admin form; a self-hosted video with captions renders a real `<track>`
+element and one without renders none; the YouTube player's
+`cc_load_policy: 1` is present; both static-iframe and self-hosted-video
+embeds carry an accessible name; the three corrected theme colors are
+asserted against the actual WCAG contrast formula, not just "looks fine,"
+so a future accidental revert of any of the three hex values fails CI
+immediately).
+
+**Verification:** `php artisan migrate` / `:rollback` / `migrate` clean.
+`vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G` 0
+errors. Full untargeted `php artisan test` — 508/508 green (501
+pre-existing + 7 new).
