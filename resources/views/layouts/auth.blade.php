@@ -8,7 +8,8 @@
   <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon.png') }}">
   <meta name="theme-color" content="#ffffff">
   <link rel="stylesheet" href="{{ asset('vendor/fonts/inter/inter.css') }}">
-  <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}"></noscript>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{

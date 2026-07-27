@@ -1,6 +1,13 @@
 @extends('layouts.marketing')
 @section('title', $course->title.' — e-Learning | Muhindo Mubaraka')
 @section('desc', $course->cardTagline())
+@section('og_image', $course->cover_image ?? '')
+
+@push('jsonld')
+@foreach($jsonLd as $node)
+<script type="application/ld+json">{!! json_encode($node, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endforeach
+@endpush
 
 @section('content')
 
@@ -114,7 +121,7 @@
           <h2 style="font-size:19px;margin-bottom:6px;">Frequently asked questions</h2>
           @foreach($faq as $item)
             <div class="faq-item">
-              <h4>{{ $item['q'] }}</h4>
+              <h3>{{ $item['q'] }}</h3>
               <p>{{ $item['a'] }}</p>
             </div>
           @endforeach
@@ -144,7 +151,8 @@
           <form method="POST" action="{{ route('courses.enroll', $course) }}">
             @csrf
             @if(!$course->isFree())
-              <input type="text" name="coupon_code" placeholder="Coupon code (optional)" value="{{ old('coupon_code') }}" class="coupon-field">
+              <label for="coupon_code" class="sr-only">Coupon code (optional)</label>
+              <input type="text" id="coupon_code" name="coupon_code" placeholder="Coupon code (optional)" value="{{ old('coupon_code') }}" class="coupon-field">
             @endif
             <button type="submit" class="btn gold lg" style="width:100%;justify-content:center;">{{ $course->isFree() ? 'Enrol for free' : 'Buy course' }}</button>
           </form>

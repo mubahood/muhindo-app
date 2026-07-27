@@ -20,14 +20,46 @@ class PortfolioController extends Controller
     /** Lean landing page — a taste of everything, the detail lives on its own page. */
     public function home(): View
     {
+        $identity = $this->json('portfolio.identity');
+        $contact = $this->json('portfolio.contact');
+
         return view('portfolio.home', [
-            'identity' => $this->json('portfolio.identity'),
+            'identity' => $identity,
             'stats' => $this->json('portfolio.stats', []),
             'about' => $this->json('portfolio.about'),
             'services' => Service::orderBy('sort_order')->limit(4)->get(),
             'projects' => PortfolioProject::orderBy('sort_order')->limit(3)->get(),
             'courses' => Course::where('is_published', true)->latest()->limit(3)->get(),
+            'jsonLd' => $this->homeJsonLd($identity, $contact),
         ]);
+    }
+
+    /**
+     * §6.2 — Person + Organization structured data for the landing page.
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    private function homeJsonLd(array $identity, array $contact): array
+    {
+        $sameAs = array_values(array_filter([$contact['github'] ?? null, $contact['youtube'] ?? null]));
+
+        return [
+            array_filter([
+                '@context' => 'https://schema.org',
+                '@type' => 'Person',
+                'name' => $identity['name'] ?? 'Muhindo Mubaraka',
+                'jobTitle' => $identity['title'] ?? null,
+                'url' => route('home'),
+                'sameAs' => $sameAs,
+            ]),
+            [
+                '@context' => 'https://schema.org',
+                '@type' => 'Organization',
+                'name' => $identity['name'] ?? 'Muhindo Mubaraka',
+                'url' => route('home'),
+                'logo' => asset('images/logo-square.png'),
+            ],
+        ];
     }
 
     public function work(): View

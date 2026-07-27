@@ -21,25 +21,30 @@
 <section style="padding-top:0;">
   <div class="wrap">
     <form method="GET" action="{{ route('courses.index') }}" class="filter-bar">
-      <input type="text" name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Search courses…">
-      <select name="category" onchange="this.form.submit()">
+      <label for="q" class="sr-only">Search courses</label>
+      <input type="text" id="q" name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Search courses…">
+      <label for="category" class="sr-only">Category</label>
+      <select id="category" name="category" aria-label="Category" onchange="this.form.submit()">
         <option value="">All categories</option>
         @foreach($categories as $c)
           <option value="{{ $c }}" {{ ($filters['category'] ?? '') === $c ? 'selected' : '' }}>{{ $c }}</option>
         @endforeach
       </select>
-      <select name="level" onchange="this.form.submit()">
+      <label for="level" class="sr-only">Level</label>
+      <select id="level" name="level" aria-label="Level" onchange="this.form.submit()">
         <option value="">All levels</option>
         @foreach(['beginner' => 'Beginner', 'intermediate' => 'Intermediate', 'advanced' => 'Advanced'] as $v => $label)
           <option value="{{ $v }}" {{ ($filters['level'] ?? '') === $v ? 'selected' : '' }}>{{ $label }}</option>
         @endforeach
       </select>
-      <select name="price" onchange="this.form.submit()">
+      <label for="price" class="sr-only">Price</label>
+      <select id="price" name="price" aria-label="Price" onchange="this.form.submit()">
         <option value="">Free & paid</option>
         <option value="free" {{ ($filters['price'] ?? '') === 'free' ? 'selected' : '' }}>Free</option>
         <option value="paid" {{ ($filters['price'] ?? '') === 'paid' ? 'selected' : '' }}>Paid</option>
       </select>
-      <select name="sort" onchange="this.form.submit()">
+      <label for="sort" class="sr-only">Sort</label>
+      <select id="sort" name="sort" aria-label="Sort" onchange="this.form.submit()">
         <option value="">Newest</option>
         <option value="price_asc" {{ ($filters['sort'] ?? '') === 'price_asc' ? 'selected' : '' }}>Price: low to high</option>
         <option value="most_enrolled" {{ ($filters['sort'] ?? '') === 'most_enrolled' ? 'selected' : '' }}>Most enrolled</option>
@@ -49,6 +54,7 @@
 
     @if($courses->isEmpty())
       <div class="feature-box" style="text-align:center;max-width:560px;margin:0 auto;">
+        <h2 class="sr-only">No results</h2>
         <h3>No courses match those filters</h3>
         <p style="margin-top:8px;">
           <a href="{{ route('courses.index') }}" wire:navigate style="color:var(--pri);font-weight:600;">Clear filters</a>
@@ -57,6 +63,7 @@
         </p>
       </div>
     @else
+      <h2 class="sr-only">Courses</h2>
       <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
         @foreach($courses as $course)
           <a href="{{ route('courses.show', $course) }}" wire:navigate class="proj-card">

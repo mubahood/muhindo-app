@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 /**
  * @property numeric-string $price
  * @property-read int|null $lessons_count present only when loaded via withCount('lessons')
+ * @property-read int|null $lessons_sum_duration_minutes present only when loaded via withSum('lessons', 'duration_minutes')
  */
 class Course extends Model
 {

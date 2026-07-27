@@ -79,6 +79,15 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $this->fixLivewireSubdirectoryUrls();
+
+        // PUBLIC_SITE_PLAN.md §6.6 — livewire.js is ~380KB and was measured as the single
+        // largest render-blocking resource on the public marketing pages (Lighthouse:
+        // ~3.6s of estimated savings). Those pages don't mount real Livewire components —
+        // it's only loaded there to power wire:navigate's link interception, which is a
+        // progressive enhancement over real <a href> navigation and works fine once the
+        // script finishes loading a beat later. `defer` costs nothing on pages that DO use
+        // live components either, since Livewire itself waits for DOMContentLoaded.
+        \Livewire\Livewire::useScriptTagAttributes(['defer' => true]);
     }
 
     /**

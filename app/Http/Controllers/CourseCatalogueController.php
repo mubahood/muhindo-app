@@ -83,6 +83,7 @@ class CourseCatalogueController extends Controller
 
         $identity = $this->settingsJson('portfolio.identity');
         $about = $this->settingsJson('portfolio.about');
+        $faq = $this->settingsJson('courses.faq');
 
         return view('courses.show', [
             'course' => $course->load('modules.lessons'),
@@ -90,7 +91,8 @@ class CourseCatalogueController extends Controller
             'pendingCheckout' => $existing?->status === 'pending',
             'publishedReviews' => $course->reviews()->where('is_published', true)->with('enrollment.user')->latest()->get(),
             'instructor' => $identity !== [] ? array_merge($identity, ['bio' => $about['lead'] ?? null]) : null,
-            'faq' => $this->settingsJson('courses.faq'),
+            'faq' => $faq,
+            'jsonLd' => $this->courseJsonLd($course, $faq),
         ]);
     }
 
@@ -100,6 +102,65 @@ class CourseCatalogueController extends Controller
         $raw = Settings::get($key);
 
         return $raw ? json_decode($raw, true) : [];
+    }
+
+    /**
+     * §6.2 — Course + BreadcrumbList (+ FAQPage when real FAQ content exists) structured
+     * data for the course detail page. Returned as a list of separate JSON-LD nodes, one
+     * <script> tag per node — simpler and just as valid as merging into a single @graph.
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    private function courseJsonLd(Course $course, array $faq): array
+    {
+        $nodes = [
+            [
+                '@context' => 'https://schema.org',
+                '@type' => 'Course',
+                'name' => $course->title,
+                'description' => $course->cardTagline(),
+                'provider' => [
+                    '@type' => 'Person',
+                    'name' => 'Muhindo Mubaraka',
+                    'url' => route('home'),
+                ],
+                'hasCourseInstance' => array_filter([
+                    '@type' => 'CourseInstance',
+                    'courseMode' => 'online',
+                    'courseWorkload' => $course->lessons_sum_duration_minutes
+                        ? 'PT'.$course->lessons_sum_duration_minutes.'M' : null,
+                ]),
+                'offers' => [
+                    '@type' => 'Offer',
+                    'price' => (string) $course->price,
+                    'priceCurrency' => $course->currency,
+                    'availability' => 'https://schema.org/InStock',
+                    'url' => route('courses.show', $course),
+                ],
+            ],
+            [
+                '@context' => 'https://schema.org',
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => [
+                    ['@type' => 'ListItem', 'position' => 1, 'name' => 'e-Learning', 'item' => route('courses.index')],
+                    ['@type' => 'ListItem', 'position' => 2, 'name' => $course->title, 'item' => route('courses.show', $course)],
+                ],
+            ],
+        ];
+
+        if ($faq !== []) {
+            $nodes[] = [
+                '@context' => 'https://schema.org',
+                '@type' => 'FAQPage',
+                'mainEntity' => array_map(fn (array $item) => [
+                    '@type' => 'Question',
+                    'name' => $item['q'],
+                    'acceptedAnswer' => ['@type' => 'Answer', 'text' => $item['a']],
+                ], $faq),
+            ];
+        }
+
+        return $nodes;
     }
 
     /** §7.2 — free preview: a guest (no enrollment) can view an is_free_preview lesson, closing L5. */

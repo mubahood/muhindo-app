@@ -25,6 +25,7 @@ use App\Http\Controllers\CertificateVerificationController;
 use App\Http\Controllers\Client\PortalController;
 use App\Http\Controllers\CourseCatalogueController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Student\LearningController;
 use App\Http\Controllers\Student\LessonMaterialController as StudentLessonMaterialController;
 use App\Http\Controllers\Student\QuizAttemptController;
@@ -36,6 +37,8 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [PortfolioController::class, 'home'])->name('home');
+Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 Route::get('/work', [PortfolioController::class, 'work'])->name('portfolio.work');
 Route::get('/work/{portfolioProject:slug}', [PortfolioController::class, 'project'])->name('portfolio.project');
 Route::get('/about', [PortfolioController::class, 'about'])->name('portfolio.about');

@@ -39,6 +39,7 @@ class PublicCourseCatalogueSeeder extends Seeder
         return [
             [
                 'title' => 'Web Development Foundations',
+                'cover' => 'web-development.png',
                 'tagline' => 'HTML, CSS and JavaScript from zero — build and publish your first real web page.',
                 'description' => 'A practical start for anyone who has never written a line of code. You will build a real, working website from scratch — no prior experience needed.',
                 'level' => 'beginner', 'category' => 'Web Development', 'price' => 0,
@@ -62,6 +63,7 @@ class PublicCourseCatalogueSeeder extends Seeder
             ],
             [
                 'title' => 'Laravel From Scratch',
+                'cover' => 'web-development.png',
                 'tagline' => 'Build real, database-backed web applications with Laravel and PHP.',
                 'description' => 'A project-based course covering routing, Eloquent, Blade, authentication and deployment — everything you need to build and ship a real Laravel application.',
                 'level' => 'intermediate', 'category' => 'Web Development', 'price' => 150000,
@@ -86,6 +88,7 @@ class PublicCourseCatalogueSeeder extends Seeder
             ],
             [
                 'title' => 'Flutter Mobile App Development',
+                'cover' => 'mobile-apps.png',
                 'tagline' => 'Build native Android and iOS apps from one Dart codebase.',
                 'description' => 'Learn Flutter and Dart by building a real, working mobile app — widgets, navigation, state management and connecting to a live API.',
                 'level' => 'intermediate', 'category' => 'Mobile Development', 'price' => 200000,
@@ -105,6 +108,7 @@ class PublicCourseCatalogueSeeder extends Seeder
             ],
             [
                 'title' => 'MySQL Database Design & Administration',
+                'cover' => 'cloud-computing.png',
                 'tagline' => 'Design, query and administer relational databases the right way.',
                 'description' => 'From your first table to indexing and backups — a practical guide to designing and running MySQL databases for real applications.',
                 'level' => 'beginner', 'category' => 'Databases', 'price' => 120000,
@@ -124,6 +128,7 @@ class PublicCourseCatalogueSeeder extends Seeder
             ],
             [
                 'title' => 'React for Beginners',
+                'cover' => 'web-development.png',
                 'tagline' => 'Build fast, interactive user interfaces with React.',
                 'description' => 'Learn React by building real components — hooks, props, state and connecting to an API — the way modern front-ends are actually built.',
                 'level' => 'beginner', 'category' => 'Web Development', 'price' => 130000,
@@ -142,6 +147,7 @@ class PublicCourseCatalogueSeeder extends Seeder
             ],
             [
                 'title' => 'REST APIs with Laravel',
+                'cover' => 'programming.png',
                 'tagline' => 'Design and build production-ready APIs with Laravel and Sanctum.',
                 'description' => 'A focused, advanced course on API design — authentication, resource responses, rate limiting and versioning, built the way real production APIs are built.',
                 'level' => 'advanced', 'category' => 'Web Development', 'price' => 100000,
@@ -160,6 +166,7 @@ class PublicCourseCatalogueSeeder extends Seeder
             ],
             [
                 'title' => 'Git & GitHub for Developers',
+                'cover' => 'programming.png',
                 'tagline' => 'Version control, branching and collaborating on real projects with Git.',
                 'description' => 'Everything you need to use Git and GitHub confidently on a real team — branching, pull requests, merge conflicts and a clean commit history.',
                 'level' => 'beginner', 'category' => 'Tools', 'price' => 0,
@@ -187,6 +194,8 @@ class PublicCourseCatalogueSeeder extends Seeder
             [
                 'uuid' => (string) Str::uuid(),
                 'title' => $definition['title'],
+                'cover_image' => asset('images/courses/'.$definition['cover']),
+                'cover_alt' => $definition['title'].' course cover',
                 'tagline' => $definition['tagline'],
                 'description' => $definition['description'],
                 'outcomes' => $definition['outcomes'],

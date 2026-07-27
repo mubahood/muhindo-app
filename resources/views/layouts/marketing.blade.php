@@ -3,19 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>@yield('title', 'Muhindo Mubaraka — Information Systems & Software Engineering')</title>
-  <meta name="description" content="@yield('desc', 'Portfolio of Muhindo Mubaraka — enterprise information systems, database administration and digital solutions for government, NGOs and private organisations across Uganda.')">
-  <link rel="canonical" href="{{ url()->current() }}">
-  <meta name="theme-color" content="#0b1f3a">
-  <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon.png') }}">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Muhindo Mubaraka">
-  <meta property="og:title" content="@yield('title', 'Muhindo Mubaraka — Information Systems & Software Engineering')">
-  <meta property="og:description" content="@yield('desc', 'Enterprise information systems, database administration and digital solutions for government, NGOs and private organisations across Uganda.')">
-  <meta property="og:url" content="{{ url()->current() }}">
-  <meta name="twitter:card" content="summary_large_image">
+  <x-seo
+    :title="trim($__env->yieldContent('title', 'Muhindo Mubaraka — Software Engineer & Programming Teacher'))"
+    :description="trim($__env->yieldContent('desc', 'I teach computer programming and computer-related courses, and I build software for anyone with a real problem — individuals, startups, schools, clinics, NGOs and enterprises across Uganda.'))"
+    :image="trim($__env->yieldContent('og_image', '')) ?: null"
+  >@stack('jsonld')</x-seo>
   <link rel="stylesheet" href="{{ asset('vendor/fonts/inter/inter.css') }}">
-  <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}">
+  {{-- §6.6 — FontAwesome (74KB) isn't needed for first paint (icons are secondary to text/
+       layout); loaded at print-media priority then swapped to all, so it never blocks
+       render. noscript fallback covers JS-disabled visitors (§7's "works without JS"). --}}
+  <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}"></noscript>
   @livewireStyles
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -175,6 +173,8 @@
     .hp-field{position:absolute;left:-9999px;top:-9999px;}
 
     /* e-learning catalogue */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+      clip:rect(0,0,0,0);white-space:nowrap;border:0;}
     .filter-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
     .filter-bar select,.filter-bar input[type=text]{border:1px solid var(--line-2);background:var(--surface);
       padding:9px 12px;font-family:var(--font);font-size:13px;color:var(--tx);}
@@ -222,7 +222,7 @@
     .instructor-card .ph{width:56px;height:56px;border-radius:50%;background:var(--gold-soft);color:var(--gold-d);
       display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0;}
     .faq-item{border-bottom:1px solid var(--line);padding:14px 0;}
-    .faq-item h4{font-size:14px;font-weight:600;margin-bottom:6px;}
+    .faq-item h3{font-size:14px;font-weight:600;margin-bottom:6px;}
     .faq-item p{font-size:13px;color:var(--tx2);}
     @media(max-width:1024px){.course-layout{grid-template-columns:1fr;} .buy-box{position:static;order:-1;margin-bottom:30px;}}
 
@@ -241,7 +241,7 @@
     footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0 30px;}
     .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:26px;}
     .foot .blurb{font-size:13px;color:var(--tx3);max-width:280px;margin-top:12px;line-height:1.6;}
-    .foot h4{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:12px;}
+    .foot .foot-h{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:12px;}
     .foot a{display:block;font-size:13px;color:var(--tx2);margin:8px 0;}
     .foot a:hover{color:var(--gold-d);}
     .foot-bar{border-top:1px solid var(--line);margin-top:34px;padding-top:20px;font-size:12px;color:var(--tx3);
@@ -308,7 +308,7 @@
         <p class="blurb">Software engineer and programming teacher based in Kampala, Uganda. I teach computer programming courses online, and I build software for anyone with a real problem — individuals, startups, schools, clinics, NGOs and enterprises.</p>
       </div>
       <div>
-        <h4>Site</h4>
+        <p class="foot-h">Site</p>
         <a href="{{ route('courses.index') }}" wire:navigate>e&#8209;Learning</a>
         <a href="{{ route('start-a-project') }}" wire:navigate>Start a project</a>
         <a href="{{ route('portfolio.work') }}" wire:navigate>Work</a>
@@ -317,7 +317,7 @@
         <a href="{{ route('contact') }}" wire:navigate>Contact</a>
       </div>
       <div>
-        <h4>More</h4>
+        <p class="foot-h">More</p>
         <a href="{{ route('portfolio.services') }}" wire:navigate>Services</a>
         <a href="{{ route('portfolio.experience') }}" wire:navigate>Experience</a>
         <a href="{{ route('portfolio.education') }}" wire:navigate>Education</a>
@@ -325,7 +325,7 @@
         <a href="{{ route('portfolio.products') }}" wire:navigate>Products</a>
       </div>
       <div>
-        <h4>Legal</h4>
+        <p class="foot-h">Legal</p>
         <a href="{{ route('privacy') }}" wire:navigate>Privacy</a>
         <a href="{{ route('terms') }}" wire:navigate>Terms</a>
         <a href="{{ route('login') }}" wire:navigate>Sign in</a>

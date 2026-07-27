@@ -2,6 +2,12 @@
 @section('title', ($identity['name'] ?? 'Muhindo Mubaraka').' — '.($identity['title'] ?? 'Information Systems'))
 @section('desc', $identity['tagline'] ?? '')
 
+@push('jsonld')
+@foreach($jsonLd as $node)
+<script type="application/ld+json">{!! json_encode($node, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endforeach
+@endpush
+
 @section('content')
 
 <section class="hero">
