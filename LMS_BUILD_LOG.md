@@ -2982,3 +2982,109 @@ a lesson with no attached video 404s on the stream route).
 `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G` 0
 errors. Full untargeted `php artisan test` — 479/479 green (466
 pre-existing + 13 new).
+
+### P5.4 — API v1 parity for the core learning loop (§8 roadmap)
+
+**Scope decision, asked of the user before starting:** the API v1 surface was
+still the original P0/P1 skeleton (catalogue, my-enrollments, enroll,
+complete-lesson, invoices, projects) — nothing from P2 (heartbeat/resume),
+P3 (quizzes, assignments, gradebook), or P4 (checkout/coupons,
+announcements/Q&A/notes/reviews) existed in the API at all. Genuinely full
+parity is roughly as large as P3+P4's API-facing surface combined —
+disproportionately large next to every other single-feature P5 item. Given
+the choice between full parity as its own mini-phase, this scoped-down
+slice, or deferring entirely, the user chose: **core learning loop only**
+(lesson player, quizzes, assignments, grades, notes) — the things a mobile
+app needs to be usable day-to-day. Commerce (checkout/coupons) and
+community (announcements/Q&A/reviews) endpoints are explicitly deferred as
+naturally web-first flows, not mobile-critical, and out of scope for this
+item.
+
+**Built:**
+
+- `Api\V1\LessonController::show()` — content, video source (a signed
+  stream URL when self-hosted), resume position, lock state. Calls
+  `ProgressService::recordView()`, same as the web player.
+- `Api\V1\LessonVideoController::stream()` — the mobile equivalent of
+  P5.3's web stream controller, but deliberately `signed`-only with no
+  `auth:sanctum` layer on top. Documented at length in the class's own
+  docblock: a native mobile video player generally can't attach a bearer
+  token to its own request the way a browser attaches a session cookie for
+  free, so the signature has to be the sole credential at stream time —
+  real authorization already happened once, at mint time, in
+  `LessonController::show()`.
+- `Api\V1\EnrollmentController::heartbeat()` — calls the exact same
+  `ProgressService::recordHeartbeat()` the web player calls; confirmed
+  player-agnostic by design back in P5.3, so this needed zero new logic.
+- `Api\V1\QuizController` + `QuizAttemptController` — start/run/answer/
+  submit/review, all routed through `QuizService`. Deliberately simpler
+  than the web `QuizAttemptController`: no "no-JS form" bulk-answers
+  fallback and no ordering-question position-input normalization, since a
+  native JSON client always sends a well-shaped `{"order": [id, id, id]}`
+  array directly rather than an HTML form's positional inputs.
+- `App\Http\Resources\QuestionRunResource` — new. The web quiz runner gets
+  "never reveal `is_correct`/`match_key` before grading" for free by simply
+  never echoing those fields in Blade; a JSON API has no equivalent
+  implicit safety (a naive `$question->load('options')` would serialize
+  the whole model, correctness data included), so this resource explicitly
+  strips them. Caught by writing a real test that asserts the string
+  `is_correct` never appears anywhere in the run-endpoint's raw response
+  body, not just that a specific key is absent.
+- `Api\V1\AssignmentController` — index/show/draft/submit/download, same
+  `AssignmentService` and the same per-`Assignment::acceptsType()`
+  validation rules the web controller builds.
+- `Api\V1\GradeController` — a direct mirror of `Student\GradesController`.
+- `Api\V1\LessonNoteController` — index/store/destroy, same ownership
+  checks as `Student\LessonNoteController`.
+- `OpenApiController` — every new path documented, matching the class's
+  own "hand-maintained alongside the routes" convention.
+
+**Bug found and fixed:** `Api\V1\EnrollmentController::store()` (the free
+self-enroll endpoint) never stamped `expires_at` from
+`Course::enrollmentExpiresAt()` — P5.2 updated the other three
+enrollment-activation call sites (web free-enroll, admin single-enroll,
+bulk-enroll, paid-checkout activation) but missed this one, since the API
+wasn't in scope for that item at the time. Found while auditing the API
+surface for this item; fixed and pinned with
+`test_free_self_enroll_via_the_api_stamps_the_courses_access_window`.
+
+**A second, more subtle bug — this time in the *test* code, not the app —
+found and fixed while writing this item's tests:** several tests mixed
+`$this->actingAs($user)` (used to authorize a direct service-layer call
+during fixture setup, e.g. starting a quiz attempt outside of any HTTP
+request) with `$this->withToken($token)` (bearer-token HTTP requests) in
+the same test method. Sanctum treats a Laravel test request as "stateful"
+by default, which means the session user set by `actingAs()` silently wins
+over the bearer token — so a test built specifically to prove "student B
+cannot see student A's quiz attempt" was actually, invisibly, still
+running as whichever user `actingAs()` had last set, defeating its own
+purpose. Caught because fixing the course-slug/attempt-uuid route-key bugs
+below made this particular test go from an accidental false-positive pass
+to a real failure — the fix (`auth()->logout()` before each
+token-authenticated assertion) is now applied everywhere the pattern
+recurs in this file.
+
+**Two route-key mismatches also found while first running these tests
+(both test bugs, not app bugs):** `Course` and `QuizAttempt`/
+`AssignmentSubmission` all override `getRouteKeyName()` (`slug` and `uuid`
+respectively, both pre-existing conventions from earlier phases) — the
+first test drafts used numeric ids in the URL for all three, which 404'd
+immediately at the routing layer before ever reaching a controller. Fixed
+across all five new test files.
+
+**Tests added:** 22 across five files — `LessonApiTest` (6: auth required,
+content + resume position, signed video URL present when self-hosted, a
+pending enrollment denied, heartbeat records watch time and applies the
+same `min_watch` rule as the web player, free self-enroll stamps
+`expires_at`), `QuizApiTest` (6: index, start, the run endpoint never
+leaks correctness data, immediate-feedback preview, submit+review
+end-to-end, a genuine cross-student denial), `AssignmentApiTest` (4: index,
+draft, submit, a pending enrollment denied), `GradesAndNotesApiTest` (3:
+grade percent matches `GradebookService`, note create/list/delete,
+cross-student note deletion denied), `LessonVideoStreamApiTest` (3: a
+valid signature streams with no token, no signature is rejected, an
+expired signature is rejected).
+
+**Verification:** no new migrations. `vendor/bin/pint --dirty` clean.
+`phpstan analyse --memory-limit=1G` 0 errors. Full untargeted
+`php artisan test` — 501/501 green (479 pre-existing + 22 new).
