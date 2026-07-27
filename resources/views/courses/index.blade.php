@@ -23,7 +23,7 @@
     @else
       <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
         @foreach($courses as $course)
-          <a href="{{ route('courses.show', $course) }}" class="proj-card">
+          <a href="{{ route('courses.show', $course) }}" wire:navigate class="proj-card">
             <div class="tag-row"><span class="tag">{{ ucfirst($course->level) }}</span>@if($course->category)<span class="tag">{{ $course->category }}</span>@endif</div>
             <h3>{{ $course->title }}</h3>
             @if($course->reviews_count > 0)

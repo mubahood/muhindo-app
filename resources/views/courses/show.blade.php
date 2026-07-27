@@ -6,7 +6,7 @@
 
 <section class="hero" style="padding-bottom:20px;">
   <div class="wrap">
-    <div class="eyebrow"><a href="{{ route('courses.index') }}" style="color:var(--gold-d);">&larr; All courses</a></div>
+    <div class="eyebrow"><a href="{{ route('courses.index') }}" wire:navigate style="color:var(--gold-d);">&larr; All courses</a></div>
     <h1 style="font-size:32px;">{{ $course->title }}</h1>
     <div class="tag-row" style="justify-content:center;margin-top:14px;">
       <span class="tag">{{ ucfirst($course->level) }}</span>
@@ -35,7 +35,7 @@
             @foreach($module->lessons as $lesson)
               <li>{{ $lesson->title }} @if($lesson->duration_minutes)<span class="muted">({{ $lesson->duration_minutes }} min)</span>@endif
                 @if($lesson->is_free_preview)
-                  <a href="{{ route('courses.preview', [$course, $lesson]) }}" class="tag" style="margin-left:6px;">Free preview</a>
+                  <a href="{{ route('courses.preview', [$course, $lesson]) }}" wire:navigate class="tag" style="margin-left:6px;">Free preview</a>
                 @endif
               </li>
             @endforeach

@@ -7,9 +7,7 @@
   <title>@yield('title', 'Sign in') — Muhindo Mubaraka</title>
   <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon.png') }}">
   <meta name="theme-color" content="#ffffff">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('vendor/fonts/inter/inter.css') }}">
   <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
