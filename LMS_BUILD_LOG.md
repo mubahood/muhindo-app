@@ -3157,3 +3157,75 @@ immediately).
 `vendor/bin/pint --dirty` clean. `phpstan analyse --memory-limit=1G` 0
 errors. Full untargeted `php artisan test` — 508/508 green (501
 pre-existing + 7 new).
+
+### P5.6 — Load-test the heartbeat endpoint (§7.3 perceived-performance target)
+
+**Built/found:** a genuine, real load test against the actual MAMP-served
+app (not PHPUnit's HTTP kernel simulation, which never goes through
+Apache) — 40 concurrent distinct-student heartbeat requests via `curl`+
+`xargs -P`, a query-log audit of one heartbeat request, and a sequential
+latency baseline.
+
+**Bug found and fixed (production-relevant, not a test artifact):** every
+Sanctum bearer-token API request 401'd as "Unauthenticated" through the
+actual served app — including pre-existing, unrelated endpoints like
+`/api/v1/auth/me`. Root cause: this project is served from its root
+directory, with a root-level `.htaccess` that proxies every request into
+`public/`. Only `public/.htaccess` had the standard "pass the Authorization
+header through to PHP" rewrite rule (Apache/`mod_fastcgi` strips that
+header by default otherwise) — the root `.htaccess` never had it, so by
+the time a bearer-token request reached PHP, the header was already gone.
+This means every mobile/API bearer-token request would have silently
+failed in exactly this deployment shape — invisible to the entire test
+suite all session, since PHPUnit's HTTP kernel simulation bypasses Apache
+entirely and was never going to catch it. Fixed by adding the identical
+rule to the root `.htaccess`; verified with real `curl` requests against
+`api/v1/auth/me` before (401) and after (200) the fix.
+
+**Query-level audit:** enabled the query log for one real heartbeat
+request — 9 queries total, zero N+1, and both hot-path lookups
+(`enrollments.user_id`+`course_id`, `lesson_progress.enrollment_id`+
+`lesson_id`) are backed by pre-existing composite **unique** indexes from
+the original migrations (confirmed by reading the migrations directly, not
+assumed) — nothing to fix here.
+
+**Latency — measured honestly, with the confound identified rather than
+papered over:** raw p95 under 40-way concurrency on this local MAMP setup
+didn't clear the plan's `<300ms` target, and even a *single* sequential
+heartbeat request measured ~350-400ms. Before concluding the endpoint
+itself was slow, compared it against a **zero-DB-work baseline**
+(`/api/v1/openapi.json`, a hand-built static array with no auth, no
+queries) — that measured ~265ms on its own. This isolates the heartbeat's
+actual incremental cost to roughly 70-135ms above the shared baseline
+(auth resolution + 9 indexed queries + business logic), not the full raw
+figure. The ~265ms shared floor is this specific local environment's
+per-request PHP bootstrap cost — MAMP's `mod_fastcgi` here spawns fresh
+PHP per request rather than reusing a persistent worker pool (PHP-FPM/
+Octane), and Telescope is active by default in `local` env. Tried
+`config:cache`/`route:cache`/`view:cache` and toggling `TELESCOPE_ENABLED`
+off to see if either moved the number — neither did, consistent with
+process-bootstrap (not Laravel's own config resolution or Telescope's
+instrumentation) being the actual bottleneck. Reverted both changes
+immediately after testing.
+
+**Honest scope boundary, not a fabricated pass:** a true `<300ms` p95
+measurement needs a production-shaped environment (PHP-FPM or Octane
+worker pool, opcache, Telescope disabled, config cached, no MAMP) that
+genuinely cannot be reproduced from this local setup. Recorded here rather
+than claiming a pass this environment can't actually demonstrate.
+
+**Cleanup:** all load-test fixtures (a throwaway course/module/lesson, 40
+student accounts + Sanctum tokens, all created directly against the real
+local dev database, since a real Apache-served load test can't run
+against the sqlite-in-memory PHPUnit environment at all) were fully
+deleted after testing — verified user count (3) and course count (1)
+matched the pre-test state exactly.
+
+**Tests added:** none — this item's real deliverable was the `.htaccess`
+fix, which by its nature can't be exercised by PHPUnit's HTTP kernel
+simulation (it never touches Apache). Verified manually via `curl` instead
+and documented here as the evidence.
+
+**Verification:** no app-code changes beyond `.htaccess`. Full untargeted
+`php artisan test` — 508/508 green, unchanged (this item added no new
+application-layer surface for the suite to cover).
