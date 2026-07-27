@@ -68,7 +68,11 @@ class CourseController extends Controller
             'title' => 'required|string|max:200',
             'slug' => 'nullable|string|max:200|alpha_dash|unique:courses,slug,'.($course !== null ? $course->id : 'NULL').',id',
             'description' => 'nullable|string',
+            'tagline' => 'nullable|string|max:160',
+            'outcomes' => 'nullable|string',
+            'requirements' => 'nullable|string',
             'cover_image' => 'nullable|string|max:255',
+            'cover_alt' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'currency' => 'nullable|string|max:5',
             'level' => 'required|in:beginner,intermediate,advanced',
@@ -82,7 +86,17 @@ class CourseController extends Controller
         $data['currency'] = ($data['currency'] ?? null) ?: 'UGX';
         $data['is_published'] = $request->boolean('is_published');
         $data['progression'] = $data['progression'] ?? CourseProgression::Free->value;
+        $data['outcomes'] = $this->linesToArray($data['outcomes'] ?? null);
+        $data['requirements'] = $this->linesToArray($data['requirements'] ?? null);
 
         return $data;
+    }
+
+    /** One-per-line textarea input -> a clean array, or null (hides the section) when empty. */
+    private function linesToArray(?string $raw): ?array
+    {
+        $lines = array_values(array_filter(array_map('trim', explode("\n", (string) $raw)), fn ($line) => $line !== ''));
+
+        return $lines !== [] ? $lines : null;
     }
 }

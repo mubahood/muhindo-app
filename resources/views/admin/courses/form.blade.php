@@ -24,8 +24,22 @@
         <input class="tb-input" type="text" name="slug" value="{{ old('slug', $course->slug) }}" placeholder="auto-generated from title">
       </div>
       <div class="tb-form-group full">
+        <label class="tb-label">Tagline</label>
+        <input class="tb-input" type="text" name="tagline" maxlength="160" value="{{ old('tagline', $course->tagline) }}" placeholder="One-line hook shown on the course card (max 160 chars)">
+      </div>
+      <div class="tb-form-group full">
         <label class="tb-label">Description</label>
         <textarea class="tb-textarea" name="description" rows="3">{{ old('description', $course->description) }}</textarea>
+      </div>
+      <div class="tb-form-group full">
+        <label class="tb-label">What you'll learn</label>
+        <textarea class="tb-textarea" name="outcomes" rows="4" placeholder="One outcome per line">{{ old('outcomes', $course->outcomes ? implode("\n", $course->outcomes) : '') }}</textarea>
+        <p class="muted" style="font-size:.75rem;margin-top:4px;">One per line. Leave blank to hide this section on the course page.</p>
+      </div>
+      <div class="tb-form-group full">
+        <label class="tb-label">Requirements</label>
+        <textarea class="tb-textarea" name="requirements" rows="3" placeholder="One requirement per line">{{ old('requirements', $course->requirements ? implode("\n", $course->requirements) : '') }}</textarea>
+        <p class="muted" style="font-size:.75rem;margin-top:4px;">One per line. Leave blank to hide this section on the course page.</p>
       </div>
       <div class="tb-form-group">
         <label class="tb-label">Level *</label>
@@ -38,6 +52,10 @@
       <div class="tb-form-group">
         <label class="tb-label">Category</label>
         <input class="tb-input" type="text" name="category" value="{{ old('category', $course->category) }}">
+      </div>
+      <div class="tb-form-group full">
+        <label class="tb-label">Cover image alt text</label>
+        <input class="tb-input" type="text" name="cover_alt" value="{{ old('cover_alt', $course->cover_alt) }}" placeholder="Leave blank to use the course title">
       </div>
       <div class="tb-form-group">
         <label class="tb-label">Price *</label>

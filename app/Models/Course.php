@@ -20,7 +20,8 @@ class Course extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'uuid', 'title', 'slug', 'description', 'cover_image', 'price',
+        'uuid', 'title', 'slug', 'description', 'tagline', 'outcomes', 'requirements',
+        'cover_image', 'cover_alt', 'price',
         'currency', 'level', 'category', 'is_published', 'created_by', 'progression',
         'access_duration_days',
     ];
@@ -31,6 +32,8 @@ class Course extends Model
             'price' => 'decimal:2',
             'is_published' => 'boolean',
             'progression' => CourseProgression::class,
+            'outcomes' => 'array',
+            'requirements' => 'array',
         ];
     }
 
@@ -115,6 +118,18 @@ class Course extends Model
     public function lessonCount(): int
     {
         return $this->lessons()->count();
+    }
+
+    /** §2.2 — the one-line card hook; falls back to a trimmed description so an unset tagline never shows blank space. */
+    public function cardTagline(): string
+    {
+        return $this->tagline ?: \Illuminate\Support\Str::limit((string) $this->description, 80);
+    }
+
+    /** §2.3/§6.5 — image alt text; falls back to the course title so a cover is never missing alt text. */
+    public function coverAlt(): string
+    {
+        return $this->cover_alt ?: $this->title;
     }
 
     /**
