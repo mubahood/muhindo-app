@@ -37,7 +37,7 @@ class PortfolioContentSeeder extends Seeder
         Settings::set('portfolio.identity', json_encode([
             'name' => 'Muhindo Mubaraka',
             'title' => 'Manager, Information Systems',
-            'tagline' => 'Building enterprise systems that work in the real conditions of East Africa.',
+            'tagline' => 'I teach programming and build software that works in the real conditions of East Africa.',
             'location' => 'Kampala, Uganda',
             'initials' => 'MM',
         ]));
@@ -55,7 +55,7 @@ class PortfolioContentSeeder extends Seeder
 
         Settings::set('portfolio.stats', json_encode([
             ['value' => '9+', 'label' => 'Years in systems delivery'],
-            ['value' => '20+', 'label' => 'Enterprise systems shipped'],
+            ['value' => '20+', 'label' => 'Systems shipped'],
             ['value' => '23K+', 'label' => 'YouTube subscribers'],
             ['value' => '200+', 'label' => 'Free tutorials published'],
         ]));
@@ -63,7 +63,7 @@ class PortfolioContentSeeder extends Seeder
         Settings::set('portfolio.about', json_encode([
             'lead' => 'IT professional with over 9 years of experience in systems development, database administration, IT infrastructure management, and digital solutions delivery.',
             'paragraphs' => [
-                'I lead the design and deployment of enterprise-level information systems for government ministries, universities, NGOs, and private organisations across Uganda — owning the full lifecycle from requirements and architecture through development, deployment, training, and support.',
+                'I teach computer programming and computer-related courses online, practically and in plain language. I also design and build software for anyone with a real problem — individuals, startups, schools, clinics, NGOs, government ministries and private organisations across Uganda — owning the full lifecycle from requirements and architecture through development, deployment, training, and support.',
                 'My work spans full-stack software engineering, relational database management, server administration, network systems, cybersecurity best practices, and ICT project management. I am currently completing a Master of Science in Computer Science at Makerere University, researching distributed systems, blockchain, and machine learning.',
                 'Beyond delivery, I focus on stakeholder engagement, staff training and capacity building, IT policy development, and digital transformation strategy — building systems that hold up in the real conditions of East Africa.',
             ],

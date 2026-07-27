@@ -44,6 +44,7 @@
     .nav a{color:var(--tx2);transition:color .15s;}
     .nav a:hover,.nav a.on{color:var(--tx);}
     .nav a.on{color:var(--gold-d);}
+    .nav .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin-left:4px;vertical-align:middle;}
     .hd-r{margin-left:auto;display:flex;align-items:center;gap:10px;}
     .burger{display:none;width:32px;height:32px;border:1px solid var(--line-2);background:var(--surface);
       color:var(--tx2);align-items:center;justify-content:center;cursor:pointer;font-size:13.5px;}
@@ -211,10 +212,10 @@
   <div class="wrap bar">
     <a href="{{ route('home') }}" wire:navigate class="brand"><span class="badge">MM</span> Muhindo Mubaraka</a>
     <nav class="nav">
+      <a href="{{ route('courses.index') }}" wire:navigate class="{{ $r('courses.*') }}">e&#8209;Learning<span class="dot"></span></a>
       <a href="{{ route('portfolio.work') }}" wire:navigate class="{{ $r('portfolio.work') }} {{ $r('portfolio.project') }}">Work</a>
       <a href="{{ route('portfolio.about') }}" wire:navigate class="{{ $r('portfolio.about') }}">About</a>
       <a href="{{ route('portfolio.skills') }}" wire:navigate class="{{ $r('portfolio.skills') }}">Skills</a>
-      <a href="{{ route('courses.index') }}" wire:navigate class="{{ $r('courses.*') }}">Courses</a>
       <a href="{{ route('contact') }}" wire:navigate class="{{ $r('contact') }}">Contact</a>
     </nav>
     <div class="hd-r">
@@ -226,10 +227,10 @@
 </header>
 
 <div class="mmenu" id="mmenu">
+  <a href="{{ route('courses.index') }}" wire:navigate>e&#8209;Learning</a>
   <a href="{{ route('portfolio.work') }}" wire:navigate>Work</a>
   <a href="{{ route('portfolio.about') }}" wire:navigate>About</a>
   <a href="{{ route('portfolio.skills') }}" wire:navigate>Skills</a>
-  <a href="{{ route('courses.index') }}" wire:navigate>Courses</a>
   <a href="{{ route('contact') }}" wire:navigate>Contact</a>
   <a href="{{ route('login') }}" wire:navigate class="btn ghost">Sign in</a>
   <a href="{{ route('contact') }}" wire:navigate class="btn gold">Get in touch</a>
@@ -244,10 +245,11 @@
     <div class="foot">
       <div>
         <a href="{{ route('home') }}" wire:navigate class="brand"><span class="badge">MM</span> Muhindo Mubaraka</a>
-        <p class="blurb">Manager, Information Systems — enterprise information systems, database administration and digital solutions delivery for government, NGOs and private organisations across Uganda.</p>
+        <p class="blurb">Software engineer and programming teacher based in Kampala, Uganda. I teach computer programming courses online, and I build software for anyone with a real problem — individuals, startups, schools, clinics, NGOs and enterprises.</p>
       </div>
       <div>
         <h4>Site</h4>
+        <a href="{{ route('courses.index') }}" wire:navigate>e&#8209;Learning</a>
         <a href="{{ route('portfolio.work') }}" wire:navigate>Work</a>
         <a href="{{ route('portfolio.about') }}" wire:navigate>About</a>
         <a href="{{ route('portfolio.skills') }}" wire:navigate>Skills</a>

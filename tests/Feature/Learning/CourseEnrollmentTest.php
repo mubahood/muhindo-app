@@ -30,7 +30,7 @@ class CourseEnrollmentTest extends TestCase
     {
         $course = $this->publishedCourseWithOneLesson();
 
-        $this->post("/courses/{$course->slug}/enroll")->assertRedirect('/login');
+        $this->post(route('courses.enroll', $course))->assertRedirect('/login');
     }
 
     public function test_student_can_self_enrol_in_a_free_published_course(): void
@@ -38,7 +38,7 @@ class CourseEnrollmentTest extends TestCase
         $course = $this->publishedCourseWithOneLesson();
         $student = User::factory()->create(['role' => 'student']);
 
-        $response = $this->actingAs($student)->post("/courses/{$course->slug}/enroll");
+        $response = $this->actingAs($student)->post(route('courses.enroll', $course));
 
         $response->assertRedirect(route('learn.course', $course));
         $this->assertDatabaseHas('enrollments', ['user_id' => $student->id, 'course_id' => $course->id, 'status' => 'active']);

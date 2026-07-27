@@ -18,8 +18,8 @@ class EnrollIdempotencyTest extends TestCase
         $course = Course::factory()->create(['is_published' => true, 'price' => 0]);
         $student = User::factory()->create(['role' => 'student']);
 
-        $first = $this->actingAs($student)->post("/courses/{$course->slug}/enroll");
-        $second = $this->actingAs($student)->post("/courses/{$course->slug}/enroll");
+        $first = $this->actingAs($student)->post(route('courses.enroll', $course));
+        $second = $this->actingAs($student)->post(route('courses.enroll', $course));
 
         $first->assertRedirect(route('learn.course', $course));
         $second->assertRedirect(route('learn.course', $course));
@@ -71,7 +71,7 @@ class EnrollIdempotencyTest extends TestCase
 
         $last = null;
         for ($i = 0; $i < 11; $i++) {
-            $last = $this->actingAs($student)->post("/courses/{$course->slug}/enroll");
+            $last = $this->actingAs($student)->post(route('courses.enroll', $course));
         }
 
         $last->assertStatus(429);

@@ -53,16 +53,28 @@ Route::get('/verify/{certificate}', [CertificateVerificationController::class, '
 
 /*
 |--------------------------------------------------------------------------
-| Public — course catalogue & checkout
+| Public — e‑Learning catalogue & checkout
 |--------------------------------------------------------------------------
+| Public-facing URL is /e-learning (§2.1 of PUBLIC_SITE_PLAN.md — "e‑Learning" is the
+| product name shown to visitors). Route *names* stay `courses.*` deliberately: every
+| `route('courses.show', ...)` call site (controllers, views, tests) keeps working
+| unchanged and automatically generates the new /e-learning URL — only the URI
+| pattern changed, not the internal naming, so this is zero backend churn.
+| /courses/* is kept as a permanent redirect below for anyone who already bookmarked
+| or indexed the old URL.
 */
-Route::get('/courses', [CourseCatalogueController::class, 'index'])->name('courses.index');
-Route::get('/courses/{course:slug}', [CourseCatalogueController::class, 'show'])->name('courses.show');
-Route::get('/courses/{course:slug}/preview/{lesson}', [CourseCatalogueController::class, 'preview'])->name('courses.preview');
-Route::post('/courses/{course:slug}/enroll', [CourseCatalogueController::class, 'enroll'])
+Route::get('/e-learning', [CourseCatalogueController::class, 'index'])->name('courses.index');
+Route::get('/e-learning/{course:slug}', [CourseCatalogueController::class, 'show'])->name('courses.show');
+Route::get('/e-learning/{course:slug}/preview/{lesson}', [CourseCatalogueController::class, 'preview'])->name('courses.preview');
+Route::post('/e-learning/{course:slug}/enroll', [CourseCatalogueController::class, 'enroll'])
     ->middleware(['auth', 'throttle:10,1'])->name('courses.enroll');
-Route::get('/courses/{course:slug}/checkout', [CourseCatalogueController::class, 'checkout'])
+Route::get('/e-learning/{course:slug}/checkout', [CourseCatalogueController::class, 'checkout'])
     ->middleware('auth')->name('courses.checkout');
+
+Route::redirect('/courses', '/e-learning', 301);
+Route::redirect('/courses/{course}/preview/{lesson}', '/e-learning/{course}/preview/{lesson}', 301);
+Route::redirect('/courses/{course}/checkout', '/e-learning/{course}/checkout', 301);
+Route::redirect('/courses/{course}', '/e-learning/{course}', 301);
 
 /*
 |--------------------------------------------------------------------------

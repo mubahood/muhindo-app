@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
+use App\Models\Course;
 use App\Models\Education;
 use App\Models\Experience;
 use App\Models\PortfolioProject;
@@ -25,6 +26,7 @@ class PortfolioController extends Controller
             'about' => $this->json('portfolio.about'),
             'services' => Service::orderBy('sort_order')->limit(4)->get(),
             'projects' => PortfolioProject::orderBy('sort_order')->limit(3)->get(),
+            'courses' => Course::where('is_published', true)->latest()->limit(3)->get(),
         ]);
     }
 

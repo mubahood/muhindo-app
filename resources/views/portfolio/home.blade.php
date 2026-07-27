@@ -10,7 +10,7 @@
     <h1>Hi, I'm <b>{{ $identity['name'] ?? 'Muhindo Mubaraka' }}</b>.<br>{{ $identity['tagline'] ?? '' }}</h1>
     <p class="lead">{{ $about['lead'] ?? '' }}</p>
     <div class="ctas">
-      <a href="{{ route('portfolio.work') }}" wire:navigate class="btn gold lg">See my work</a>
+      <a href="{{ route('courses.index') }}" wire:navigate class="btn gold lg">Explore e&#8209;Learning</a>
       <a href="{{ route('contact') }}" wire:navigate class="btn ghost lg">Get in touch</a>
     </div>
     @if(count($stats))
@@ -22,6 +22,8 @@
     @endif
   </div>
 </section>
+
+@include('portfolio.partials.elearning-strip')
 
 @if($services->count())
 <section class="band-surface">
