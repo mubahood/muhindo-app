@@ -5,9 +5,13 @@ namespace App\Models;
 use App\Enums\AssignmentSubmissionStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class AssignmentSubmission extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'uuid', 'assignment_id', 'enrollment_id', 'attempt_no', 'body', 'link_url',
         'file_path', 'file_name', 'file_size', 'file_mime', 'status', 'submitted_at',
@@ -51,5 +55,15 @@ class AssignmentSubmission extends Model
     public function hasFile(): bool
     {
         return $this->file_path !== null;
+    }
+
+    /** §9 — grades are auditable: the grade itself and the status transition (submitted → returned), not draft edits. */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['status', 'points_awarded', 'graded_by'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('grading');
     }
 }

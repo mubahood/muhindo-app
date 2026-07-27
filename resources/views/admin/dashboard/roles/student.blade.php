@@ -32,7 +32,7 @@
       <div class="tb-card">
         <div class="tb-card-body">
           <div style="font-weight:600;margin-bottom:4px;">{{ $enrollment->course->title }}</div>
-          <div class="muted" style="font-size:.8rem;margin-bottom:10px;">{{ ucfirst($enrollment->status) }} · {{ $enrollment->progressPercent() }}% complete</div>
+          <div class="muted" style="font-size:.8rem;margin-bottom:10px;">{{ ucfirst($enrollment->status) }} · {{ $enrollment->progress_percent }}% complete</div>
           <a href="{{ route('learn.course', $enrollment->course) }}" class="btn-tb btn-tb-primary btn-tb-sm">Continue</a>
         </div>
       </div>

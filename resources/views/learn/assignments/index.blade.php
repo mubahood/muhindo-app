@@ -30,7 +30,7 @@
           @php $assignment = $row['assignment']; $latest = $row['latest']; @endphp
           <tr>
             <td>{{ $assignment->title }}</td>
-            <td class="muted">{{ $assignment->due_at?->format('M j, Y g:ia') ?? 'No due date' }}</td>
+            <td class="muted">{{ $assignment->due_at?->toLocal()->format('M j, Y g:ia') ?? 'No due date' }}</td>
             <td>
               @if($latest?->status?->value === 'returned')
                 {{ rtrim(rtrim(number_format((float) $latest->points_awarded, 2), '0'), '.') }} / {{ $assignment->points }}

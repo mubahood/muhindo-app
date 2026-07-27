@@ -31,6 +31,10 @@ class StudentDashboardQueryCountTest extends TestCase
             'status' => 'active',
             'source' => 'self',
             'enrolled_at' => now(),
+            // §9 — the dashboard now reads the denormalized column (frozen once an enrollment
+            // completes), not a live recompute, so this fixture has to set it directly rather
+            // than relying on the progressRecords() insert below alone.
+            'progress_percent' => 50,
         ]);
 
         $enrollment->progressRecords()->create(['lesson_id' => $lessonOne->id, 'completed_at' => now()]);

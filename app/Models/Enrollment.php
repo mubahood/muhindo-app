@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property-read int|null $completed_lessons_count present only when loaded via the
@@ -13,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Enrollment extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'uuid', 'user_id', 'course_id', 'invoice_id', 'status', 'source', 'enrolled_at', 'completed_at',
         'progress_percent', 'total_watch_seconds', 'last_lesson_id', 'last_accessed_at', 'at_risk_reason',
@@ -110,6 +114,16 @@ class Enrollment extends Model
     public function review(): HasOne
     {
         return $this->hasOne(CourseReview::class);
+    }
+
+    /** §9 — enrollment mutations are auditable: status transitions (enrolled/activated/cancelled/completed) and access-window changes, not every denormalized progress tick. */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['status', 'expires_at', 'invoice_id'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('enrollment');
     }
 
     /**

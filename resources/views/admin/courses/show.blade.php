@@ -197,7 +197,7 @@ function curriculumBuilder(cfg) {
             <span class="badge-tb {{ $assignment->is_published ? 'badge-active' : 'badge-neutral' }}" style="margin-left:6px;">{{ $assignment->is_published ? 'Published' : 'Draft' }}</span>
           </div>
           <div class="muted" style="font-size:.78rem;">{{ $assignment->lesson?->title ?? 'Course-wide' }} · {{ $assignment->points }} pts
-            @if($assignment->due_at) · Due {{ $assignment->due_at->format('M j, Y g:ia') }} @endif
+            @if($assignment->due_at) · Due {{ $assignment->due_at->toLocal()->format('M j, Y g:ia') }} @endif
           </div>
         </div>
         <div class="tb-table-actions">

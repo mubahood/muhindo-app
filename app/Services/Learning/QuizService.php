@@ -12,6 +12,7 @@ use App\Models\Enrollment;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -108,68 +109,75 @@ class QuizService
 
         $questionIds = $attempt->question_order['questions'] ?? [];
         $questions = Question::whereIn('id', $questionIds)->with('options')->get()->keyBy('id');
-
-        $totalPoints = 0.0;
-        $earnedPoints = 0.0;
-        $needsManualReview = false;
-
-        foreach ($questionIds as $questionId) {
-            $question = $questions->get($questionId);
-
-            if (! $question) {
-                continue;
-            }
-
-            $totalPoints += (float) $question->points;
-
-            $answerRow = $attempt->answers()->firstOrCreate(['question_id' => $questionId]);
-            $result = $this->gradeAnswer($question, $answerRow->answer);
-
-            $answerRow->update([
-                'is_correct' => $result['is_correct'],
-                'points_awarded' => $result['points_awarded'],
-                'auto_graded' => $result['auto_graded'],
-            ]);
-
-            if ($result['auto_graded']) {
-                $earnedPoints += $result['points_awarded'] ?? 0.0;
-            } else {
-                $needsManualReview = true;
-            }
-        }
-
         $timeSpent = $attempt->started_at ? $attempt->started_at->diffInSeconds(now()) : null;
 
-        $this->events->record($attempt->enrollment, LearningEventType::QuizSubmitted, $quiz->lesson, $attempt, ['quiz_id' => $quiz->id, 'attempt_no' => $attempt->attempt_no]);
+        // §9 — every answer's grade, the learning_events row, and the attempt's final status all
+        // finalize together or not at all; a crash mid-loop must never leave some questions
+        // graded and others not while the attempt is still nominally "in progress".
+        [$attempt, $needsManualReview] = DB::transaction(function () use ($attempt, $quiz, $questionIds, $questions, $timeSpent, $integrity) {
+            $totalPoints = 0.0;
+            $earnedPoints = 0.0;
+            $needsManualReview = false;
 
-        if ($needsManualReview) {
+            foreach ($questionIds as $questionId) {
+                $question = $questions->get($questionId);
+
+                if (! $question) {
+                    continue;
+                }
+
+                $totalPoints += (float) $question->points;
+
+                $answerRow = $attempt->answers()->firstOrCreate(['question_id' => $questionId]);
+                $result = $this->gradeAnswer($question, $answerRow->answer);
+
+                $answerRow->update([
+                    'is_correct' => $result['is_correct'],
+                    'points_awarded' => $result['points_awarded'],
+                    'auto_graded' => $result['auto_graded'],
+                ]);
+
+                if ($result['auto_graded']) {
+                    $earnedPoints += $result['points_awarded'] ?? 0.0;
+                } else {
+                    $needsManualReview = true;
+                }
+            }
+
+            $this->events->record($attempt->enrollment, LearningEventType::QuizSubmitted, $quiz->lesson, $attempt, ['quiz_id' => $quiz->id, 'attempt_no' => $attempt->attempt_no]);
+
+            if ($needsManualReview) {
+                $attempt->update([
+                    'status' => QuizAttemptStatus::Submitted,
+                    'submitted_at' => now(),
+                    'max_points' => $totalPoints,
+                    'time_spent_seconds' => $timeSpent,
+                    'integrity' => $integrity,
+                ]);
+
+                return [$attempt->fresh(), true];
+            }
+
+            $percent = $totalPoints > 0 ? round(($earnedPoints / $totalPoints) * 100, 2) : 0.0;
+
             $attempt->update([
-                'status' => QuizAttemptStatus::Submitted,
+                'status' => QuizAttemptStatus::Graded,
                 'submitted_at' => now(),
+                'graded_at' => now(),
+                'score_points' => $earnedPoints,
                 'max_points' => $totalPoints,
+                'score_percent' => $percent,
+                'passed' => $percent >= $quiz->pass_percent,
                 'time_spent_seconds' => $timeSpent,
                 'integrity' => $integrity,
             ]);
 
-            return $attempt->fresh();
+            return [$attempt->fresh(), false];
+        });
+
+        if (! $needsManualReview) {
+            QuizAttemptSubmitted::dispatch($attempt);
         }
-
-        $percent = $totalPoints > 0 ? round(($earnedPoints / $totalPoints) * 100, 2) : 0.0;
-
-        $attempt->update([
-            'status' => QuizAttemptStatus::Graded,
-            'submitted_at' => now(),
-            'graded_at' => now(),
-            'score_points' => $earnedPoints,
-            'max_points' => $totalPoints,
-            'score_percent' => $percent,
-            'passed' => $percent >= $quiz->pass_percent,
-            'time_spent_seconds' => $timeSpent,
-            'integrity' => $integrity,
-        ]);
-
-        $attempt = $attempt->fresh();
-        QuizAttemptSubmitted::dispatch($attempt);
 
         return $attempt;
     }

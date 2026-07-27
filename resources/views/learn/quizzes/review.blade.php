@@ -82,7 +82,7 @@
         @if($quiz->feedback_mode->value === 'none')
           This quiz is scored only — no per-question feedback is shown.
         @elseif($quiz->feedback_mode->value === 'after_close')
-          Feedback for this quiz becomes available after it closes{{ $quiz->available_until ? ' on ' . $quiz->available_until->format('M j, Y g:ia') : '' }}.
+          Feedback for this quiz becomes available after it closes{{ $quiz->available_until ? ' on ' . $quiz->available_until->toLocal()->format('M j, Y g:ia') : '' }}.
         @endif
       </p>
     </div>

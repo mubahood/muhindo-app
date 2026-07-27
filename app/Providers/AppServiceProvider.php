@@ -37,6 +37,16 @@ class AppServiceProvider extends ServiceProvider
         // the 1000-byte key limit on older MySQL/MariaDB builds.
         Schema::defaultStringLength(191);
 
+        // §9 — every timestamp is stored/computed in UTC (config('app.timezone'));
+        // student/instructor-facing due dates and time windows render in the
+        // learners' actual timezone instead. Deliberately a Carbon macro (not a
+        // model accessor) so it applies uniformly to any datetime that needs it —
+        // currently Assignment::due_at and Quiz::available_from/available_until.
+        \Illuminate\Support\Carbon::macro('toLocal', function () {
+            /** @var \Illuminate\Support\Carbon $this */
+            return $this->copy()->timezone('Africa/Kampala');
+        });
+
         // API JSON Resources don't add their own {"data": …} wrapper — the single
         // envelope comes from App\Support\ApiResponse, so resources stay flat.
         \Illuminate\Http\Resources\Json\JsonResource::withoutWrapping();

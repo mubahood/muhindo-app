@@ -6,9 +6,13 @@ use App\Enums\QuizAttemptStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class QuizAttempt extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'uuid', 'quiz_id', 'enrollment_id', 'attempt_no', 'status', 'started_at',
         'submitted_at', 'graded_at', 'score_points', 'max_points', 'score_percent',
@@ -52,5 +56,15 @@ class QuizAttempt extends Model
     public function answers(): HasMany
     {
         return $this->hasMany(AttemptAnswer::class);
+    }
+
+    /** §9 — grades are auditable: the score/pass outcome and the status transition that produced it, not every autosaved answer. */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['status', 'score_percent', 'passed'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('grading');
     }
 }

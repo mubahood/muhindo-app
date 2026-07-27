@@ -61,7 +61,13 @@ class ProgressService
         return $progress;
     }
 
-    /** Records that the student viewed (not necessarily completed) a lesson — feeds resume UX (§6.5). */
+    /**
+     * Records that the student viewed (not necessarily completed) a lesson — feeds resume UX
+     * (§6.5). §9 — a `completed` enrollment's `progress_percent` freezes at 100 permanently: if
+     * the course's curriculum grows later (a new lesson added), a completed student revisiting
+     * any old lesson must never have their snapshot silently recomputed downward against the
+     * new, larger lesson count.
+     */
     public function recordView(Enrollment $enrollment, Lesson $lesson): void
     {
         Gate::authorize('access', $enrollment);
@@ -70,7 +76,7 @@ class ProgressService
         $enrollment->update([
             'last_lesson_id' => $lesson->id,
             'last_accessed_at' => now(),
-            'progress_percent' => $enrollment->progressPercent(),
+            'progress_percent' => $enrollment->status === 'completed' ? $enrollment->progress_percent : $enrollment->progressPercent(),
         ]);
         $this->events->record($enrollment, LearningEventType::LessonViewed, $lesson);
     }

@@ -27,7 +27,7 @@
 <div class="assign-meta">
   <span><i class="fas fa-star"></i> {{ $assignment->points }} points</span>
   @if($assignment->due_at)
-    <span><i class="fas fa-calendar"></i> Due {{ $assignment->due_at->format('M j, Y g:ia') }}</span>
+    <span><i class="fas fa-calendar"></i> Due {{ $assignment->due_at->toLocal()->format('M j, Y g:ia') }}</span>
   @endif
   @if($assignment->isPastDue())
     <span style="color:#b91c1c;"><i class="fas fa-triangle-exclamation"></i> {{ $assignment->allow_late ? 'Past due — late submissions accepted' : 'Closed — past due' }}</span>
