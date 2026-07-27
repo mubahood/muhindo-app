@@ -1,5 +1,6 @@
 @extends('layouts.auth')
 @section('title', 'Create your account')
+@section('card_width', 'wide')
 
 @section('form')
 <div class="af-eyebrow">Student sign-up</div>
@@ -18,35 +19,41 @@
     <input type="hidden" name="intended_course" value="{{ $intendedCourse->slug }}">
     @if(request('coupon_code'))<input type="hidden" name="coupon_code" value="{{ request('coupon_code') }}">@endif
   @endif
-  <div class="a-field">
-    <label class="a-label" for="name">Full name</label>
-    <div class="a-inwrap">
-      <i class="fas fa-user"></i>
-      <input class="a-input" id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name">
+  <div class="a-row2">
+    <div class="a-field">
+      <label class="a-label" for="name">Full name</label>
+      <div class="a-inwrap">
+        <i class="fas fa-user"></i>
+        <input class="a-input" id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name">
+      </div>
+    </div>
+
+    <div class="a-field">
+      <label class="a-label" for="email">Email address</label>
+      <div class="a-inwrap">
+        <i class="fas fa-envelope"></i>
+        <input class="a-input" id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username">
+      </div>
     </div>
   </div>
 
-  <div class="a-field">
-    <label class="a-label" for="email">Email address</label>
-    <div class="a-inwrap">
-      <i class="fas fa-envelope"></i>
-      <input class="a-input" id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username">
+  <div class="a-row2">
+    <div class="a-field">
+      <label class="a-label" for="password">Password</label>
+      <div class="a-inwrap">
+        <i class="fas fa-lock"></i>
+        <input class="a-input" id="password" type="password" name="password" required autocomplete="new-password" style="padding-right:44px;">
+        <button type="button" class="a-eye" data-eye="password"><i class="fas fa-eye"></i></button>
+      </div>
     </div>
-  </div>
 
-  <div class="a-field">
-    <label class="a-label" for="password">Password</label>
-    <div class="a-inwrap">
-      <i class="fas fa-lock"></i>
-      <input class="a-input" id="password" type="password" name="password" required autocomplete="new-password">
-    </div>
-  </div>
-
-  <div class="a-field">
-    <label class="a-label" for="password_confirmation">Confirm password</label>
-    <div class="a-inwrap">
-      <i class="fas fa-lock"></i>
-      <input class="a-input" id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password">
+    <div class="a-field">
+      <label class="a-label" for="password_confirmation">Confirm password</label>
+      <div class="a-inwrap">
+        <i class="fas fa-lock"></i>
+        <input class="a-input" id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" style="padding-right:44px;">
+        <button type="button" class="a-eye" data-eye="password_confirmation"><i class="fas fa-eye"></i></button>
+      </div>
     </div>
   </div>
 

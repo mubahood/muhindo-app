@@ -31,11 +31,15 @@
     .a-course-ctx p{font-size:12.5px;color:var(--tx2);line-height:1.45;}
     .a-course-ctx p b{color:var(--tx);}
     .auth-card{width:100%;max-width:392px;}
+    .auth-card.wide{max-width:600px;}
     .a-brand{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:22px;}
     .a-brand .mk{width:32px;height:32px;object-fit:contain;display:block;}
     .a-brand b{font-weight:500;font-size:15px;}
     .card{background:var(--surface);border:1px solid var(--line);
       box-shadow:0 1px 0 var(--line),0 14px 36px -22px rgba(17,28,46,.3);padding:32px 30px;}
+    .auth-card.wide .card{padding:38px 44px;}
+    .a-row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:560px){.auth-card.wide .card{padding:28px 22px;} .a-row2{grid-template-columns:1fr;}}
     .af-eyebrow{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--pri);}
     .af-title{font-size:24px;font-weight:200;letter-spacing:-.02em;margin:6px 0 4px;}
     .af-sub{font-size:13px;font-weight:300;color:var(--tx2);margin-bottom:24px;}
@@ -68,7 +72,7 @@
   @stack('styles')
 </head>
 <body>
-  <div class="auth-card">
+  <div class="auth-card {{ trim($__env->yieldContent('card_width', '')) }}">
     <div class="a-brand"><span style="width:32px;height:32px;background:var(--pri);color:#b8933f;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">MM</span> <b>Muhindo Mubaraka</b></div>
     <div class="card">
       @yield('form')
