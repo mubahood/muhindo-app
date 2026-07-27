@@ -32,7 +32,7 @@ class StudentRegistrationController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:150',
             'email' => 'required|string|email|max:150|unique:users,email',
-            'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
+            'password' => ['required', 'confirmed', Password::defaults()],
             'terms' => 'accepted',
         ]);
 

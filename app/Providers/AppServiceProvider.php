@@ -53,7 +53,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Password policy enforced. Applies
         // everywhere Password::defaults() is used (reset, forced change, API).
-        Password::defaults(fn () => Password::min(8)->letters()->numbers());
+        Password::defaults(fn () => Password::min(8));
 
         // Use our themed pagination view for every ->links() call,
         // instead of the default unstyled Tailwind markup.
