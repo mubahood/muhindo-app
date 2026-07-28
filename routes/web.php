@@ -249,6 +249,7 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::get('{course:slug}/{lesson}', [LearningController::class, 'lesson'])->name('lesson');
     Route::post('{course:slug}/{lesson}/complete', [LearningController::class, 'complete'])->name('lesson.complete');
     Route::post('{course:slug}/{lesson}/heartbeat', [LearningController::class, 'heartbeat'])->middleware('throttle:20,1')->name('lesson.heartbeat');
+    Route::post('{course:slug}/{lesson}/time', [LearningController::class, 'activeTime'])->middleware('throttle:20,1')->name('lesson.time');
     Route::get('{course:slug}/{lesson}/materials/{material}', [StudentLessonMaterialController::class, 'download'])->name('materials.download');
     Route::get('{course:slug}/{lesson}/materials/{material}/preview', [StudentLessonMaterialController::class, 'preview'])->name('materials.preview');
     Route::get('{course:slug}/{lesson}/video-stream', [\App\Http\Controllers\Student\LessonVideoController::class, 'stream'])

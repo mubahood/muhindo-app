@@ -122,6 +122,30 @@ class ProgressService
         return $progress;
     }
 
+    /**
+     * Focused-time beat: total engaged seconds on a lesson (reading or watching), sent
+     * by the frontend only while the tab is visible AND focused. Same gates and the
+     * same 30s-per-beat clamp as the video heartbeat, so a tampered client can't bank
+     * more than ~2x real time. Deliberately records no learning_event per beat (unlike
+     * the video heartbeat) — this fires on every lesson a student ever reads, and the
+     * running total on lesson_progress is the queryable fact; per-beat events would
+     * only flood the stream.
+     */
+    public function recordActiveTime(Enrollment $enrollment, Lesson $lesson, int $activeDelta): LessonProgress
+    {
+        Gate::authorize('access', $enrollment);
+        Gate::authorize('view', [$lesson, $enrollment]);
+
+        $activeDelta = max(0, min($activeDelta, 30));
+
+        $progress = $enrollment->progressRecords()->firstOrNew(['lesson_id' => $lesson->id]);
+        $progress->started_at = $progress->started_at ?? now();
+        $progress->active_seconds = ($progress->active_seconds ?? 0) + $activeDelta;
+        $progress->save();
+
+        return $progress;
+    }
+
     private function minWatchThresholdCrossed(Lesson $lesson, LessonProgress $progress): bool
     {
         if ($lesson->completion_rule !== CompletionRule::MinWatch) {

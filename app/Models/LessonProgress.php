@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LessonProgress extends Model
 {
-    protected $fillable = ['enrollment_id', 'lesson_id', 'started_at', 'completed_at', 'watch_seconds', 'last_position_seconds'];
+    protected $fillable = ['enrollment_id', 'lesson_id', 'started_at', 'completed_at', 'watch_seconds', 'active_seconds', 'last_position_seconds'];
 
     protected function casts(): array
     {

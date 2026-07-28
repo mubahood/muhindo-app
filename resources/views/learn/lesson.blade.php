@@ -23,6 +23,10 @@
   $progressPct = $totalLessons > 0 ? (int) round($doneLessons / $totalLessons * 100) : 0;
   $lessonPosition = ($flatLessons->search(fn ($l) => $l->id === $lesson->id) ?? 0) + 1;
   $currentModuleDone = $sideModules->firstWhere('isCurrent', true)['done'] ?? 0;
+  $activeSeconds = (int) ($enrollment->progressRecords()->where('lesson_id', $lesson->id)->value('active_seconds') ?? 0);
+  $activeSecondsLabel = $activeSeconds >= 3600
+      ? sprintf('%d:%02d:%02d', intdiv($activeSeconds, 3600), intdiv($activeSeconds % 3600, 60), $activeSeconds % 60)
+      : sprintf('%d:%02d', intdiv($activeSeconds, 60), $activeSeconds % 60);
 @endphp
 
 @push('styles')
@@ -46,6 +50,10 @@
   .learn-hd .course-t{font-size:12.5px;font-weight:600;color:#fff;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .learn-hd .lesson-t{font-size:12px;color:rgba(255,255,255,.65);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
   .learn-hd .pos{font-size:11px;color:rgba(255,255,255,.75);white-space:nowrap;flex-shrink:0;}
+  .learn-hd .timer{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--gold);
+    white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;}
+  .learn-hd .timer.paused{color:rgba(255,255,255,.45);}
+  .learn-hd .timer.paused i{opacity:.6;}
   .learn-hd .hd-progress{display:flex;align-items:center;gap:8px;flex-shrink:0;}
   .learn-hd .hd-progress .bar{width:110px;height:4px;background:rgba(255,255,255,.18);overflow:hidden;}
   .learn-hd .hd-progress .bar i{display:block;height:100%;background:var(--gold);transition:width .4s ease;}
@@ -189,6 +197,8 @@
     totalLessons: {{ $totalLessons }},
     moduleDone: {{ $currentModuleDone }},
     notesStoreUrl: @js(route('learn.notes.store', [$course, $lesson])),
+    activeSeconds: {{ $activeSeconds }},
+    timeUrl: @js(route('learn.lesson.time', [$course, $lesson])),
   })"
   x-init="init()"
 >
@@ -199,6 +209,11 @@
     <span class="course-t">{{ $course->title }}</span>
     <span class="lesson-t">{{ $lesson->title }}</span>
     <span class="pos">Lesson {{ $lessonPosition }} of {{ $totalLessons }}</span>
+    <span class="timer" title="Your time on this lesson — counts only while this tab is focused"
+          :class="{paused: !isFocused}">
+      <i class="far fa-clock" aria-hidden="true"></i>
+      <span x-text="formatTime(activeSeconds)">{{ $activeSecondsLabel }}</span>
+    </span>
     <span class="hd-progress">
       <span class="bar"><i :style="'width:' + progressPct() + '%'" style="width:{{ $progressPct }}%"></i></span>
       <span class="pct" x-text="progressPct() + '%'">{{ $progressPct }}%</span>
@@ -603,9 +618,62 @@ function lessonPlayer(cfg) {
     moduleDone: cfg.moduleDone,
     counted: false,
     noteSaving: false,
+    activeSeconds: cfg.activeSeconds,
+    unsyncedSeconds: 0,
+    isFocused: true,
     init() {
       window.addEventListener('lesson-auto-completed', () => { this.bumpProgress(); this.completed = true; });
       window.addEventListener('keydown', (e) => this.onKeydown(e));
+      this.startActiveTimer();
+    },
+    /* ── Focused-time tracking ─────────────────────────────────────────────
+       The header timer ticks once per second, but ONLY while the tab is both
+       visible and focused — switch tabs, minimize, or click another window
+       and it pauses (the chip dims to show it). Accumulated seconds sync to
+       the server every 15s over fetch; losing focus or leaving the page
+       flushes immediately (sendBeacon on exit, which survives navigation).
+       A failed sync keeps the delta queued and retries on the next flush. */
+    startActiveTimer() {
+      this.isFocused = document.visibilityState === 'visible' && document.hasFocus();
+      window.addEventListener('focus', () => { this.isFocused = true; });
+      window.addEventListener('blur', () => { this.isFocused = false; this.flushActiveTime(); });
+      document.addEventListener('visibilitychange', () => {
+        this.isFocused = document.visibilityState === 'visible' && document.hasFocus();
+        if (!this.isFocused) this.flushActiveTime(true);
+      });
+      window.addEventListener('pagehide', () => this.flushActiveTime(true));
+      setInterval(() => {
+        if (!this.isFocused) return;
+        this.activeSeconds++;
+        this.unsyncedSeconds++;
+        if (this.unsyncedSeconds >= 15) this.flushActiveTime();
+      }, 1000);
+    },
+    async flushActiveTime(useBeacon = false) {
+      const delta = Math.min(this.unsyncedSeconds, 30); // server clamps at 30/beat — never send more
+      if (delta <= 0) return;
+      if (useBeacon && navigator.sendBeacon) {
+        const fd = new FormData();
+        fd.append('_token', cfg.csrfToken);
+        fd.append('active_delta', delta);
+        if (navigator.sendBeacon(cfg.timeUrl, fd)) this.unsyncedSeconds -= delta;
+        return;
+      }
+      try {
+        const res = await fetch(cfg.timeUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': cfg.csrfToken, 'Accept': 'application/json' },
+          body: JSON.stringify({ active_delta: delta }),
+        });
+        if (res.ok) this.unsyncedSeconds -= delta;
+      } catch (e) {
+        // Keep the delta queued — the next flush retries it.
+      }
+    },
+    formatTime(s) {
+      const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+      const ss = (sec < 10 ? '0' : '') + sec;
+      return h > 0 ? h + ':' + (m < 10 ? '0' : '') + m + ':' + ss : m + ':' + ss;
     },
     progressPct() {
       return this.totalLessons > 0 ? Math.round(this.doneLessons / this.totalLessons * 100) : 0;

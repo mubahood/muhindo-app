@@ -163,6 +163,24 @@ class LearningController extends Controller
         ]);
     }
 
+    /** Focused-time beat from the lesson page's visibility-gated timer (JSON fetch or a page-exit sendBeacon form post). */
+    public function activeTime(Request $request, Course $course, Lesson $lesson): JsonResponse
+    {
+        $enrollment = $this->enrollmentFor($request, $course);
+        abort_unless($lesson->module->course_id === $course->id, 404);
+
+        $data = $request->validate([
+            'active_delta' => 'required|integer|min:0|max:60',
+        ]);
+
+        $progress = $this->progress->recordActiveTime($enrollment, $lesson, $data['active_delta']);
+
+        return response()->json([
+            'success' => true,
+            'active_seconds' => $progress->active_seconds,
+        ]);
+    }
+
     public function certificate(Certificate $certificate): StreamedResponse
     {
         $certificate->load('enrollment.user', 'enrollment.course');
