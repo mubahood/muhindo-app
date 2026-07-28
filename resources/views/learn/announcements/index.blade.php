@@ -2,7 +2,7 @@
 @section('title', 'Announcements — ' . $course->title)
 
 @section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}">My Courses</a> / <a href="{{ route('learn.course', $course) }}">{{ $course->title }}</a> / Announcements</div>
+<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / <a href="{{ route('learn.course', $course) }}" wire:navigate>{{ $course->title }}</a> / Announcements</div>
 <h1 style="font-size:20px;">Announcements</h1>
 
 @if($announcements->isEmpty())

@@ -2,7 +2,7 @@
 @section('title', 'Ask a question — ' . $course->title)
 
 @section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.discussions.index', $course) }}">Q&amp;A</a> / Ask a question</div>
+<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.discussions.index', $course) }}" wire:navigate>Q&amp;A</a> / Ask a question</div>
 <h1 style="font-size:20px;">Ask a question{{ $lesson ? ' about "'.$lesson->title.'"' : '' }}</h1>
 
 <div class="card" style="max-width:640px;">

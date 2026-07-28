@@ -2,7 +2,7 @@
 @section('title', 'Review — ' . $course->title)
 
 @section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}">My Courses</a> / {{ $course->title }} / Review</div>
+<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / {{ $course->title }} / Review</div>
 <h1 style="font-size:20px;">{{ $review ? 'Edit your review' : 'Rate this course' }}</h1>
 
 <div class="card" style="max-width:520px;">

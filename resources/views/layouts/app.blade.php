@@ -54,6 +54,7 @@
       .nav{gap:14px;}
     }
   </style>
+  @livewireStyles
   @stack('styles')
 </head>
 <body>
@@ -61,14 +62,14 @@
 @if(trim($__env->yieldContent('layout_mode', '')) !== 'full')
 <header class="app">
   <div class="bar">
-    <a href="{{ route('dashboard') }}" class="brand"><span class="badge">MM</span> <span class="brand-name">Muhindo Mubaraka</span></a>
+    <a href="{{ route('dashboard') }}" wire:navigate class="brand"><span class="badge">MM</span> <span class="brand-name">Muhindo Mubaraka</span></a>
     <nav class="nav">
       @if($u?->isStudent())
-        <a href="{{ route('learn.index') }}" class="{{ request()->routeIs('learn.*') ? 'on' : '' }}">My Courses</a>
-        <a href="{{ route('courses.index') }}">Browse Courses</a>
+        <a href="{{ route('learn.index') }}" wire:navigate class="{{ request()->routeIs('learn.*') ? 'on' : '' }}">My Courses</a>
+        <a href="{{ route('courses.index') }}" wire:navigate>Browse Courses</a>
       @elseif($u?->isClient())
-        <a href="{{ route('portal.index') }}" class="{{ request()->routeIs('portal.index') || request()->routeIs('portal.project') ? 'on' : '' }}">My Projects</a>
-        <a href="{{ route('portal.invoices') }}" class="{{ request()->routeIs('portal.invoices') ? 'on' : '' }}">Invoices</a>
+        <a href="{{ route('portal.index') }}" wire:navigate class="{{ request()->routeIs('portal.index') || request()->routeIs('portal.project') ? 'on' : '' }}">My Projects</a>
+        <a href="{{ route('portal.invoices') }}" wire:navigate class="{{ request()->routeIs('portal.invoices') ? 'on' : '' }}">Invoices</a>
       @endif
     </nav>
     <div class="hd-r">
@@ -95,5 +96,6 @@
   @endif
 </main>
 @stack('scripts')
+@livewireScripts
 </body>
 </html>

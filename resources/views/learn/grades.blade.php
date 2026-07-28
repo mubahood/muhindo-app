@@ -13,7 +13,7 @@
 @endpush
 
 @section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}">My Courses</a> / <a href="{{ route('learn.course', $course) }}">{{ $course->title }}</a> / Grades</div>
+<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / <a href="{{ route('learn.course', $course) }}" wire:navigate>{{ $course->title }}</a> / Grades</div>
 <h1 style="font-size:20px;">Grades</h1>
 
 <div class="card" style="margin-bottom:20px;">

@@ -20,7 +20,7 @@
 @endphp
 
 <div class="muted" style="margin-bottom:6px;">
-  <a href="{{ route('learn.assignments.index', $course) }}">Assignments</a> / {{ $assignment->title }}
+  <a href="{{ route('learn.assignments.index', $course) }}" wire:navigate>Assignments</a> / {{ $assignment->title }}
 </div>
 <h1 style="font-size:20px;">{{ $assignment->title }}</h1>
 
@@ -72,7 +72,7 @@
           </label>
           @if($latest?->hasFile())
             <p style="margin-bottom:8px;font-size:13px;">
-              Current file: <a href="{{ route('learn.assignment.download', [$course, $assignment, $latest]) }}"><i class="fas fa-paperclip"></i> {{ $latest->file_name }}</a>
+              Current file: <a href="{{ route('learn.assignment.download', [$course, $assignment, $latest]) }}" wire:navigate><i class="fas fa-paperclip"></i> {{ $latest->file_name }}</a>
             </p>
           @endif
           <input type="file" name="file">

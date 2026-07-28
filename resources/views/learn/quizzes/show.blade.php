@@ -3,8 +3,8 @@
 
 @section('content')
 <div class="muted" style="margin-bottom:6px;">
-  <a href="{{ route('learn.index') }}">My Courses</a> / <a href="{{ route('learn.course', $course) }}">{{ $course->title }}</a> /
-  <a href="{{ route('learn.quizzes.index', $course) }}">Quizzes</a> / {{ $quiz->title }}
+  <a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / <a href="{{ route('learn.course', $course) }}" wire:navigate>{{ $course->title }}</a> /
+  <a href="{{ route('learn.quizzes.index', $course) }}" wire:navigate>Quizzes</a> / {{ $quiz->title }}
 </div>
 <h1 style="font-size:20px;">{{ $quiz->title }}</h1>
 
@@ -34,7 +34,7 @@
   @endif
 
   @if($inProgress)
-    <a href="{{ route('learn.quiz.attempt', [$course, $quiz, $inProgress]) }}" class="btn gold">
+    <a href="{{ route('learn.quiz.attempt', [$course, $quiz, $inProgress]) }}" wire:navigate class="btn gold">
       <i class="fas fa-play"></i> Resume attempt
     </a>
   @elseif($quiz->max_attempts && $attemptsUsed >= $quiz->max_attempts)

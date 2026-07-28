@@ -18,13 +18,13 @@
 
 @section('content')
 <div class="muted" style="margin-bottom:6px;">
-  <a href="{{ route('learn.quizzes.index', $course) }}">Quizzes</a> / {{ $quiz->title }} / Review
+  <a href="{{ route('learn.quizzes.index', $course) }}" wire:navigate>Quizzes</a> / {{ $quiz->title }} / Review
 </div>
 <h1 style="font-size:20px;">{{ $quiz->title }} — Attempt {{ $attempt->attempt_no }}</h1>
 
 @if($attempt->status->value === 'in_progress')
   <div class="card"><p class="muted">This attempt hasn't been submitted yet.</p>
-    <a href="{{ route('learn.quiz.attempt', [$course, $quiz, $attempt]) }}" class="btn gold" style="margin-top:12px;">Continue attempt</a>
+    <a href="{{ route('learn.quiz.attempt', [$course, $quiz, $attempt]) }}" wire:navigate class="btn gold" style="margin-top:12px;">Continue attempt</a>
   </div>
 @else
   <div class="card" style="margin-bottom:20px;">
@@ -88,6 +88,6 @@
     </div>
   @endif
 
-  <a href="{{ route('learn.quiz.show', [$course, $quiz]) }}" class="btn" style="margin-top:10px;">Back to quiz</a>
+  <a href="{{ route('learn.quiz.show', [$course, $quiz]) }}" wire:navigate class="btn" style="margin-top:10px;">Back to quiz</a>
 @endif
 @endsection

@@ -11,7 +11,7 @@
 @endpush
 
 @section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.discussions.index', $course) }}">Q&amp;A</a> / Thread</div>
+<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.discussions.index', $course) }}" wire:navigate>Q&amp;A</a> / Thread</div>
 
 <div class="thread-post {{ $discussion->is_instructor_answer ? 'instructor' : '' }}">
   <div class="meta">

@@ -16,7 +16,7 @@
 @endpush
 
 @section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}">My Courses</a> / <a href="{{ route('learn.course', $course) }}">{{ $course->title }}</a> / Assignments</div>
+<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / <a href="{{ route('learn.course', $course) }}" wire:navigate>{{ $course->title }}</a> / Assignments</div>
 <h1 style="font-size:20px;">Assignments</h1>
 
 @if($assignments->isEmpty())
@@ -47,7 +47,7 @@
                 <span class="status-pill ok">Returned</span>
               @endif
             </td>
-            <td><a href="{{ route('learn.assignment.show', [$course, $assignment]) }}" class="btn">View</a></td>
+            <td><a href="{{ route('learn.assignment.show', [$course, $assignment]) }}" wire:navigate class="btn">View</a></td>
           </tr>
         @endforeach
       </tbody>

@@ -15,7 +15,7 @@
 @endpush
 
 @section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}">My Courses</a> / <a href="{{ route('learn.course', $course) }}">{{ $course->title }}</a> / Quizzes</div>
+<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / <a href="{{ route('learn.course', $course) }}" wire:navigate>{{ $course->title }}</a> / Quizzes</div>
 <h1 style="font-size:20px;">Quizzes</h1>
 
 @if($quizzes->isEmpty())
@@ -54,9 +54,9 @@
             </td>
             <td>
               @if($latest?->status->value === 'in_progress')
-                <a href="{{ route('learn.quiz.attempt', [$course, $quiz, $latest]) }}" class="btn gold">Resume</a>
+                <a href="{{ route('learn.quiz.attempt', [$course, $quiz, $latest]) }}" wire:navigate class="btn gold">Resume</a>
               @else
-                <a href="{{ route('learn.quiz.show', [$course, $quiz]) }}" class="btn">View</a>
+                <a href="{{ route('learn.quiz.show', [$course, $quiz]) }}" wire:navigate class="btn">View</a>
               @endif
             </td>
           </tr>

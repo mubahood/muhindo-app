@@ -204,7 +204,7 @@
 >
   {{-- Learning-mode header: exit, course, current lesson, position, live progress. --}}
   <header class="learn-hd">
-    <a href="{{ route('learn.index') }}" class="exit" title="Back to My Courses"><i class="fas fa-arrow-left"></i> <span>Exit</span></a>
+    <a href="{{ route('learn.index') }}" wire:navigate class="exit" title="Back to My Courses"><i class="fas fa-arrow-left"></i> <span>Exit</span></a>
     <span class="divider"></span>
     <span class="course-t">{{ $course->title }}</span>
     <span class="lesson-t">{{ $lesson->title }}</span>
@@ -229,9 +229,9 @@
       <button type="button" class="learn-side-close" @click="sidebarOpen = false" aria-label="Close"><i class="fas fa-xmark"></i></button>
     </div>
     <div class="learn-side-links">
-      <a href="{{ route('learn.quizzes.index', $course) }}"><i class="fas fa-list-check"></i><span>Quizzes</span></a>
-      <a href="{{ route('learn.announcements.index', $course) }}"><i class="fas fa-bullhorn"></i><span>News</span></a>
-      <a href="{{ route('learn.discussions.create', [$course, 'lesson_id' => $lesson->id]) }}"><i class="fas fa-circle-question"></i><span>Ask</span></a>
+      <a href="{{ route('learn.quizzes.index', $course) }}" wire:navigate><i class="fas fa-list-check"></i><span>Quizzes</span></a>
+      <a href="{{ route('learn.announcements.index', $course) }}" wire:navigate><i class="fas fa-bullhorn"></i><span>News</span></a>
+      <a href="{{ route('learn.discussions.create', [$course, 'lesson_id' => $lesson->id]) }}" wire:navigate><i class="fas fa-circle-question"></i><span>Ask</span></a>
     </div>
     <div class="learn-side-list">
       @foreach($sideModules as $sideModule)
@@ -253,13 +253,13 @@
                 @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
               </span>
             @elseif($l->id === $lesson->id)
-              <a href="{{ route('learn.lesson', [$course, $l]) }}" class="lesson-link on">
+              <a href="{{ route('learn.lesson', [$course, $l]) }}" wire:navigate class="lesson-link on">
                 <span class="st"><i class="fas" :class="completed ? 'fa-circle-check' : 'fa-circle'"></i></span>
                 <span class="t">{{ $l->title }}</span>
                 @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
               </a>
             @else
-              <a href="{{ route('learn.lesson', [$course, $l]) }}" class="lesson-link">
+              <a href="{{ route('learn.lesson', [$course, $l]) }}" wire:navigate class="lesson-link">
                 <span class="st"><i class="fas {{ $completedLessonIds->contains($l->id) ? 'fa-circle-check' : 'fa-circle' }}"></i></span>
                 <span class="t">{{ $l->title }}</span>
                 @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
@@ -326,7 +326,7 @@
           <div class="card-title">Lesson quiz</div>
           @foreach($lesson->quizzes->where('is_published', true) as $lessonQuiz)
             <div style="margin-bottom:6px;">
-              <a href="{{ route('learn.quiz.show', [$course, $lessonQuiz]) }}"><i class="fas fa-list-check"></i> {{ $lessonQuiz->title }}</a>
+              <a href="{{ route('learn.quiz.show', [$course, $lessonQuiz]) }}" wire:navigate><i class="fas fa-list-check"></i> {{ $lessonQuiz->title }}</a>
             </div>
           @endforeach
         </div>
@@ -337,7 +337,7 @@
           <div class="card-title">Lesson assignment</div>
           @foreach($lesson->assignments->where('is_published', true) as $lessonAssignment)
             <div style="margin-bottom:6px;">
-              <a href="{{ route('learn.assignment.show', [$course, $lessonAssignment]) }}"><i class="fas fa-file-pen"></i> {{ $lessonAssignment->title }}</a>
+              <a href="{{ route('learn.assignment.show', [$course, $lessonAssignment]) }}" wire:navigate><i class="fas fa-file-pen"></i> {{ $lessonAssignment->title }}</a>
             </div>
           @endforeach
         </div>
@@ -413,7 +413,7 @@
   <div class="learn-action-bar">
     <div class="learn-action-bar-inner">
       <template x-if="previousLessonUrl">
-        <a :href="previousLessonUrl" class="learn-prev"><i class="fas fa-chevron-left"></i> <span>Previous</span></a>
+        <a :href="previousLessonUrl" wire:navigate class="learn-prev"><i class="fas fa-chevron-left"></i> <span>Previous</span></a>
       </template>
       <template x-if="!previousLessonUrl">
         <span class="learn-prev disabled"><i class="fas fa-chevron-left"></i> <span>Previous</span></span>
@@ -441,7 +441,7 @@
       <p class="muted" style="margin-bottom:20px;">Congratulations on finishing {{ $course->title }}.</p>
       <a :href="certificateUrl" target="_blank" class="btn gold" style="margin-bottom:10px;" x-show="certificateUrl"><i class="fas fa-award"></i> View certificate</a>
       <br>
-      <a href="{{ route('learn.index') }}" class="btn" style="margin-top:10px;">Back to My Courses</a>
+      <a href="{{ route('learn.index') }}" wire:navigate class="btn" style="margin-top:10px;">Back to My Courses</a>
     </div>
   </div>
 </div>
@@ -510,6 +510,8 @@ function youtubePlayer(cfg) {
         },
       });
       window.__lessonVideoPlayer = this.player;
+      // pjax-safety: stop the beat loop and send a final heartbeat before the body swaps.
+      document.addEventListener('livewire:navigating', () => { this.stopTicking(); this.sendHeartbeat(); }, { once: true });
     },
     onStateChange(e) {
       if (e.data === YT.PlayerState.PLAYING) {
@@ -575,6 +577,8 @@ function selfHostedVideoPlayer(cfg) {
       });
       this.player.addEventListener('pause', () => { this.stopTicking(); this.sendHeartbeat(); });
       this.player.addEventListener('ended', () => { this.stopTicking(); this.sendHeartbeat(); });
+      // pjax-safety: stop the beat loop and send a final heartbeat before the body swaps.
+      document.addEventListener('livewire:navigating', () => { this.stopTicking(); this.sendHeartbeat(); }, { once: true });
     },
     stopTicking() {
       if (this.tickTimer) { clearInterval(this.tickTimer); this.tickTimer = null; }
@@ -621,54 +625,69 @@ function lessonPlayer(cfg) {
     activeSeconds: cfg.activeSeconds,
     unsyncedSeconds: 0,
     isFocused: true,
+    activeTimerId: null,
+    listeners: null, // AbortController for every window/document listener this component adds
     init() {
-      window.addEventListener('lesson-auto-completed', () => { this.bumpProgress(); this.completed = true; });
-      window.addEventListener('keydown', (e) => this.onKeydown(e));
-      this.startActiveTimer();
+      this.listeners = new AbortController();
+      const sig = { signal: this.listeners.signal };
+      window.addEventListener('lesson-auto-completed', () => { this.bumpProgress(); this.completed = true; }, sig);
+      window.addEventListener('keydown', (e) => this.onKeydown(e), sig);
+      this.startActiveTimer(sig);
+      // wire:navigate swaps the body but keeps the JS context alive — without this
+      // teardown, the old lesson's timers and key handlers would keep running (and
+      // keep posting time to the WRONG lesson) after every pjax navigation.
+      document.addEventListener('livewire:navigating', () => this.destroy(), { once: true });
+    },
+    destroy() {
+      this.flushActiveTime(true);
+      if (this.activeTimerId) clearInterval(this.activeTimerId);
+      if (this.advanceTimer) clearInterval(this.advanceTimer);
+      this.listeners?.abort();
+      window.__lessonVideoPlayer = null;
+    },
+    navigate(url) {
+      window.Livewire?.navigate ? window.Livewire.navigate(url) : (window.location.href = url);
     },
     /* ── Focused-time tracking ─────────────────────────────────────────────
        The header timer ticks once per second, but ONLY while the tab is both
        visible and focused — switch tabs, minimize, or click another window
        and it pauses (the chip dims to show it). Accumulated seconds sync to
-       the server every 15s over fetch; losing focus or leaving the page
-       flushes immediately (sendBeacon on exit, which survives navigation).
+       the server every 15s; losing focus or leaving the page flushes
+       immediately (fetch keepalive on exit — it survives navigation and,
+       unlike sendBeacon, isn't blocked by privacy shields like Brave's).
        A failed sync keeps the delta queued and retries on the next flush. */
-    startActiveTimer() {
+    startActiveTimer(sig) {
       this.isFocused = document.visibilityState === 'visible' && document.hasFocus();
-      window.addEventListener('focus', () => { this.isFocused = true; });
-      window.addEventListener('blur', () => { this.isFocused = false; this.flushActiveTime(); });
+      window.addEventListener('focus', () => { this.isFocused = true; }, sig);
+      window.addEventListener('blur', () => { this.isFocused = false; this.flushActiveTime(); }, sig);
       document.addEventListener('visibilitychange', () => {
         this.isFocused = document.visibilityState === 'visible' && document.hasFocus();
         if (!this.isFocused) this.flushActiveTime(true);
-      });
-      window.addEventListener('pagehide', () => this.flushActiveTime(true));
-      setInterval(() => {
+      }, sig);
+      window.addEventListener('pagehide', () => this.flushActiveTime(true), sig);
+      this.activeTimerId = setInterval(() => {
         if (!this.isFocused) return;
         this.activeSeconds++;
         this.unsyncedSeconds++;
         if (this.unsyncedSeconds >= 15) this.flushActiveTime();
       }, 1000);
     },
-    async flushActiveTime(useBeacon = false) {
+    flushActiveTime(isExit = false) {
       const delta = Math.min(this.unsyncedSeconds, 30); // server clamps at 30/beat — never send more
       if (delta <= 0) return;
-      if (useBeacon && navigator.sendBeacon) {
-        const fd = new FormData();
-        fd.append('_token', cfg.csrfToken);
-        fd.append('active_delta', delta);
-        if (navigator.sendBeacon(cfg.timeUrl, fd)) this.unsyncedSeconds -= delta;
+      const send = () => fetch(cfg.timeUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': cfg.csrfToken, 'Accept': 'application/json' },
+        body: JSON.stringify({ active_delta: delta }),
+        keepalive: isExit, // lets the request outlive an unloading page
+      });
+      if (isExit) {
+        // Fire-and-forget — the page may be going away, so count it sent now.
+        this.unsyncedSeconds -= delta;
+        try { send().catch(() => {}); } catch (e) { /* nothing left to try */ }
         return;
       }
-      try {
-        const res = await fetch(cfg.timeUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': cfg.csrfToken, 'Accept': 'application/json' },
-          body: JSON.stringify({ active_delta: delta }),
-        });
-        if (res.ok) this.unsyncedSeconds -= delta;
-      } catch (e) {
-        // Keep the delta queued — the next flush retries it.
-      }
+      send().then((res) => { if (res.ok) this.unsyncedSeconds -= delta; }).catch(() => {});
     },
     formatTime(s) {
       const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
@@ -709,9 +728,9 @@ function lessonPlayer(cfg) {
       } else if (e.code === 'ArrowRight' && player) {
         player.seekTo(player.getCurrentTime() + 10, true);
       } else if (e.code === 'ArrowUp' && this.previousLessonUrl) {
-        window.location.href = this.previousLessonUrl;
+        this.navigate(this.previousLessonUrl);
       } else if (e.code === 'ArrowDown' && this.nextLessonUrl) {
-        window.location.href = this.nextLessonUrl;
+        this.navigate(this.nextLessonUrl);
       } else if (e.key === 'm' || e.key === 'M') {
         this.markComplete();
       } else if (e.key === 'Escape' && this.sidebarOpen) {
@@ -825,7 +844,7 @@ function lessonPlayer(cfg) {
         this.advanceSeconds--;
         if (this.advanceSeconds <= 0) {
           clearInterval(this.advanceTimer);
-          window.location.href = this.nextLessonUrl;
+          this.navigate(this.nextLessonUrl);
         }
       }, 1000);
     },

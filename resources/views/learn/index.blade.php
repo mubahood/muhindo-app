@@ -31,7 +31,7 @@
             <a href="{{ route('learn.certificate', $enrollment->certificate) }}" class="btn" style="margin-left:8px;" target="_blank"><i class="fas fa-award"></i> Certificate</a>
           @endif
         @elseif(in_array($enrollment->status, ['active', 'completed'], true))
-          <a href="{{ route('learn.course', $enrollment->course) }}" class="btn gold">
+          <a href="{{ route('learn.course', $enrollment->course) }}" wire:navigate class="btn gold">
             {{ match(true) {
               $enrollment->status === 'completed' => 'Review',
               $started => 'Resume',
@@ -39,25 +39,25 @@
             } }}
           </a>
           @if($enrollment->course->published_quizzes_count > 0)
-            <a href="{{ route('learn.quizzes.index', $enrollment->course) }}" class="btn" style="margin-left:8px;"><i class="fas fa-list-check"></i> Quizzes</a>
+            <a href="{{ route('learn.quizzes.index', $enrollment->course) }}" wire:navigate class="btn" style="margin-left:8px;"><i class="fas fa-list-check"></i> Quizzes</a>
           @endif
           @if($enrollment->course->published_assignments_count > 0)
-            <a href="{{ route('learn.assignments.index', $enrollment->course) }}" class="btn" style="margin-left:8px;"><i class="fas fa-file-pen"></i> Assignments</a>
+            <a href="{{ route('learn.assignments.index', $enrollment->course) }}" wire:navigate class="btn" style="margin-left:8px;"><i class="fas fa-file-pen"></i> Assignments</a>
           @endif
           @if($enrollment->course->published_quizzes_count > 0 || $enrollment->course->published_assignments_count > 0)
-            <a href="{{ route('learn.grades', $enrollment->course) }}" class="btn" style="margin-left:8px;"><i class="fas fa-chart-simple"></i> Grades</a>
+            <a href="{{ route('learn.grades', $enrollment->course) }}" wire:navigate class="btn" style="margin-left:8px;"><i class="fas fa-chart-simple"></i> Grades</a>
           @endif
-          <a href="{{ route('learn.announcements.index', $enrollment->course) }}" class="btn" style="margin-left:8px;"><i class="fas fa-bullhorn"></i> Announcements</a>
-          <a href="{{ route('learn.discussions.index', $enrollment->course) }}" class="btn" style="margin-left:8px;"><i class="fas fa-comments"></i> Q&amp;A</a>
+          <a href="{{ route('learn.announcements.index', $enrollment->course) }}" wire:navigate class="btn" style="margin-left:8px;"><i class="fas fa-bullhorn"></i> Announcements</a>
+          <a href="{{ route('learn.discussions.index', $enrollment->course) }}" wire:navigate class="btn" style="margin-left:8px;"><i class="fas fa-comments"></i> Q&amp;A</a>
           @if($percent >= 50 && !$enrollment->review)
-            <a href="{{ route('learn.review.create', $enrollment->course) }}" class="btn" style="margin-left:8px;"><i class="fas fa-star"></i> Rate this course</a>
+            <a href="{{ route('learn.review.create', $enrollment->course) }}" wire:navigate class="btn" style="margin-left:8px;"><i class="fas fa-star"></i> Rate this course</a>
           @endif
           @if($enrollment->certificate)
             <a href="{{ route('learn.certificate', $enrollment->certificate) }}" class="btn" style="margin-left:8px;" target="_blank"><i class="fas fa-award"></i> Certificate</a>
           @endif
         @elseif($enrollment->status === 'pending')
           <span class="badge-pill" style="background:#f7f0df;color:#93752f;">Payment pending</span>
-          <a href="{{ route('courses.checkout', $enrollment->course) }}" class="btn gold" style="margin-left:8px;">Complete checkout</a>
+          <a href="{{ route('courses.checkout', $enrollment->course) }}" wire:navigate class="btn gold" style="margin-left:8px;">Complete checkout</a>
         @else
           <span class="badge-pill" style="background:#fbe9e9;color:#b91c1c;">Cancelled</span>
         @endif
@@ -66,7 +66,7 @@
   @empty
     <div class="card" style="text-align:center;">
       <p class="muted">You're not enrolled in any courses yet.</p>
-      <a href="{{ route('courses.index') }}" class="btn gold" style="margin-top:14px;">Browse courses</a>
+      <a href="{{ route('courses.index') }}" wire:navigate class="btn gold" style="margin-top:14px;">Browse courses</a>
     </div>
   @endforelse
 </div>
