@@ -74,12 +74,13 @@ class QuizController extends Controller
             'one_question_per_page' => 'nullable|boolean',
             'feedback_mode' => ['required', Rule::in(array_column(QuizFeedbackMode::cases(), 'value'))],
             'counts_toward_certificate' => 'nullable|boolean',
+            'is_required' => 'nullable|boolean',
             'is_published' => 'nullable|boolean',
             'available_from' => 'nullable|date',
             'available_until' => 'nullable|date|after_or_equal:available_from',
         ]);
 
-        foreach (['shuffle_questions', 'shuffle_options', 'one_question_per_page', 'counts_toward_certificate', 'is_published'] as $flag) {
+        foreach (['shuffle_questions', 'shuffle_options', 'one_question_per_page', 'counts_toward_certificate', 'is_required', 'is_published'] as $flag) {
             $data[$flag] = $request->boolean($flag);
         }
 

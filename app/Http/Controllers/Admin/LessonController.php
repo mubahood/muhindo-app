@@ -157,6 +157,7 @@ class LessonController extends Controller
             'content_format' => ['nullable', Rule::in(array_column(ContentFormat::cases(), 'value'))],
             'completion_rule' => ['nullable', Rule::in($enforcedRules)],
             'completion_threshold' => 'nullable|integer|min:1|max:100',
+            'min_active_minutes' => 'nullable|integer|min:1|max:240',
         ]);
 
         $data['is_published'] = $request->boolean('is_published');
@@ -164,6 +165,9 @@ class LessonController extends Controller
         $data['content_format'] = $data['content_format'] ?? ContentFormat::Plain->value;
         $data['completion_rule'] = $data['completion_rule'] ?? CompletionRule::Manual->value;
         $data['completion_threshold'] = $data['completion_threshold'] ?? 80;
+        // Admin enters minutes; the tracker and enforcement both work in seconds.
+        $data['min_active_seconds'] = isset($data['min_active_minutes']) ? $data['min_active_minutes'] * 60 : null;
+        unset($data['min_active_minutes']);
 
         return $data;
     }

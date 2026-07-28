@@ -142,6 +142,33 @@
   .learn-modal-backdrop{position:fixed;inset:0;background:rgba(6,15,31,.6);display:flex;align-items:center;justify-content:center;z-index:100;}
   .learn-modal{background:var(--surface);padding:36px;max-width:420px;text-align:center;}
   .learn-modal h2{font-size:20px;font-weight:400;margin-bottom:10px;}
+
+  /* Activities: a slim banner in the flow + an independent overlay layer for the
+     detail (fixed position — opening/closing it can never shift the page). */
+  .activities-banner{display:flex;align-items:center;gap:10px;background:var(--gold-soft);border:1px solid var(--gold);
+    padding:8px 12px;margin-bottom:10px;font-size:12.5px;}
+  .activities-banner .ab-icon{color:var(--gold-d);font-size:14px;flex-shrink:0;}
+  .activities-banner .ab-text{flex:1;min-width:0;}
+  .activities-modal{background:var(--surface);width:min(560px, 94vw);max-height:84vh;display:flex;flex-direction:column;}
+  .activities-modal .am-head{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:12px 16px;border-bottom:1px solid var(--line);}
+  .activities-modal .am-head h2{font-size:15px;font-weight:600;margin:0;}
+  .activities-modal .am-close{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:16px;padding:4px;}
+  .activities-modal .am-list{overflow-y:auto;}
+  .activity-row{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);}
+  .activity-row:last-child{border-bottom:none;}
+  .activity-row .ar-icon{width:32px;height:32px;flex-shrink:0;background:var(--pri-soft);color:var(--pri);
+    display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .activity-row .ar-main{flex:1;min-width:0;}
+  .activity-row .ar-title{font-size:13px;font-weight:600;}
+  .activity-row .ar-meta{font-size:11.5px;color:var(--tx3);}
+  .activity-row .ar-badges{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .badge-req{font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;
+    background:var(--gold-soft);color:var(--gold-d);border:1px solid var(--gold);}
+  .badge-opt{font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;
+    background:var(--surface-2);color:var(--tx3);border:1px solid var(--line-2);}
+  .badge-done{font-size:11px;color:var(--ok);font-weight:600;white-space:nowrap;}
+  .lock-note{font-size:11.5px;color:var(--tx3);white-space:nowrap;font-variant-numeric:tabular-nums;}
   .confetti-piece{position:fixed;top:-10px;width:8px;height:14px;z-index:200;pointer-events:none;}
 
   .markdown-body h1,.markdown-body h2,.markdown-body h3{margin:1.1em 0 .5em;font-weight:600;color:var(--pri);}
@@ -199,6 +226,8 @@
     notesStoreUrl: @js(route('learn.notes.store', [$course, $lesson])),
     activeSeconds: {{ $activeSeconds }},
     timeUrl: @js(route('learn.lesson.time', [$course, $lesson])),
+    minActiveSeconds: {{ (int) ($lesson->min_active_seconds ?? 0) }},
+    requiredPending: {{ $activities->where('required', true)->where('done', false)->count() }},
   })"
   x-init="init()"
 >
@@ -315,32 +344,26 @@
         <div class="learn-video"><iframe src="{{ $lesson->video_url }}" title="{{ $lesson->title }}" allowfullscreen></iframe></div>
       @endif
 
+      @php $requiredPending = $activities->where('required', true)->where('done', false)->count(); @endphp
+      @if($activities->isNotEmpty())
+        <div class="activities-banner">
+          <span class="ab-icon"><i class="fas fa-clipboard-check" aria-hidden="true"></i></span>
+          <span class="ab-text">
+            This lesson has {{ $activities->count() }} {{ \Illuminate\Support\Str::plural('activity', $activities->count()) }}
+            @if($requiredPending > 0)
+              — <b>{{ $requiredPending }} required</b> before you can complete the lesson
+            @elseif($activities->where('required', true)->isNotEmpty())
+              — all required work submitted <i class="fas fa-circle-check" style="color:var(--ok);"></i>
+            @endif
+          </span>
+          <button type="button" class="btn" @click="activitiesOpen = true">View</button>
+        </div>
+      @endif
+
       @if($renderedContent)
         <div class="card markdown-body">{!! $renderedContent !!}</div>
       @elseif($lesson->content)
         <div class="card">{!! nl2br(e($lesson->content)) !!}</div>
-      @endif
-
-      @if($lesson->quizzes->where('is_published', true)->count())
-        <div class="card">
-          <div class="card-title">Lesson quiz</div>
-          @foreach($lesson->quizzes->where('is_published', true) as $lessonQuiz)
-            <div style="margin-bottom:6px;">
-              <a href="{{ route('learn.quiz.show', [$course, $lessonQuiz]) }}" wire:navigate><i class="fas fa-list-check"></i> {{ $lessonQuiz->title }}</a>
-            </div>
-          @endforeach
-        </div>
-      @endif
-
-      @if($lesson->assignments->where('is_published', true)->count())
-        <div class="card">
-          <div class="card-title">Lesson assignment</div>
-          @foreach($lesson->assignments->where('is_published', true) as $lessonAssignment)
-            <div style="margin-bottom:6px;">
-              <a href="{{ route('learn.assignment.show', [$course, $lessonAssignment]) }}" wire:navigate><i class="fas fa-file-pen"></i> {{ $lessonAssignment->title }}</a>
-            </div>
-          @endforeach
-        </div>
       @endif
 
       @if($lesson->materials->count())
@@ -424,14 +447,50 @@
         <button type="button" @click="cancelAdvance()"><i class="fas fa-pause"></i> Stay</button>
       </div>
 
-      <form method="POST" action="{{ route('learn.lesson.complete', [$course, $lesson]) }}" @submit.prevent="markComplete()" x-show="!showAdvance">
+      <form method="POST" action="{{ route('learn.lesson.complete', [$course, $lesson]) }}" @submit.prevent="attemptComplete()" x-show="!showAdvance"
+            style="display:flex;align-items:center;gap:10px;">
         @csrf
-        <button type="submit" class="btn gold" :disabled="submitting" x-show="!(completed && !nextLessonUrl && !showAdvance)">
-          <span x-show="!submitting" x-text="completed ? 'Next lesson' : 'Mark complete & continue'">Mark complete & continue</span>
+        <span class="lock-note" x-show="!completed && timeRemaining() > 0" x-cloak>
+          <i class="fas fa-hourglass-half" aria-hidden="true"></i>
+          Min. time: <b x-text="formatTime(timeRemaining())"></b> left
+        </span>
+        <button type="submit" class="btn gold" :disabled="submitting || (!completed && timeRemaining() > 0)" x-show="!(completed && !nextLessonUrl && !showAdvance)">
+          <span x-show="!submitting" x-text="completeLabel()">Mark complete & continue</span>
           <span x-show="submitting" x-cloak>Saving…</span>
           <i class="fas fa-arrow-right"></i>
         </button>
       </form>
+    </div>
+  </div>
+
+  {{-- Activities overlay — its own fixed layer; responding to it never shakes the page. --}}
+  <div class="learn-modal-backdrop" x-show="activitiesOpen" x-cloak @click.self="activitiesOpen = false">
+    <div class="activities-modal" role="dialog" aria-label="Lesson activities">
+      <div class="am-head">
+        <h2>Lesson activities</h2>
+        <button type="button" class="am-close" @click="activitiesOpen = false" aria-label="Close"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="am-list">
+        @foreach($activities as $activity)
+          <div class="activity-row">
+            <span class="ar-icon"><i class="fas {{ $activity['kind'] === 'quiz' ? 'fa-list-check' : 'fa-file-pen' }}" aria-hidden="true"></i></span>
+            <span class="ar-main">
+              <span class="ar-title">{{ $activity['title'] }}</span><br>
+              <span class="ar-meta">{{ ucfirst($activity['kind']) }} · {{ $activity['meta'] }}</span>
+            </span>
+            <span class="ar-badges">
+              @if($activity['done'])
+                <span class="badge-done"><i class="fas fa-circle-check"></i> Submitted</span>
+              @elseif($activity['required'])
+                <span class="badge-req">Required</span>
+              @else
+                <span class="badge-opt">Optional</span>
+              @endif
+              <a href="{{ $activity['url'] }}" wire:navigate class="btn {{ $activity['done'] ? '' : 'gold' }}">{{ $activity['done'] ? 'Review' : 'Start' }}</a>
+            </span>
+          </div>
+        @endforeach
+      </div>
     </div>
   </div>
 
@@ -626,6 +685,8 @@ function lessonPlayer(cfg) {
     unsyncedSeconds: 0,
     isFocused: true,
     activeTimerId: null,
+    activitiesOpen: false,
+    requiredPending: cfg.requiredPending,
     listeners: null, // AbortController for every window/document listener this component adds
     init() {
       this.listeners = new AbortController();
@@ -694,6 +755,23 @@ function lessonPlayer(cfg) {
       const ss = (sec < 10 ? '0' : '') + sec;
       return h > 0 ? h + ':' + (m < 10 ? '0' : '') + m + ':' + ss : m + ':' + ss;
     },
+    /* ── Completion requirements (mirrored client-side for UX; the server is the
+       authority and re-checks everything in ProgressService::completionBlockers) ── */
+    timeRemaining() {
+      // Live countdown for free: activeSeconds ticks every focused second, so this shrinks with it.
+      return Math.max(0, cfg.minActiveSeconds - this.activeSeconds);
+    },
+    completeLabel() {
+      if (this.completed) return 'Next lesson';
+      if (this.requiredPending > 0) return 'View required activity';
+      return 'Mark complete & continue';
+    },
+    attemptComplete() {
+      if (this.completed) { this.markComplete(); return; }
+      if (this.timeRemaining() > 0) return; // the button is disabled with a live countdown beside it
+      if (this.requiredPending > 0) { this.activitiesOpen = true; return; }
+      this.markComplete();
+    },
     progressPct() {
       return this.totalLessons > 0 ? Math.round(this.doneLessons / this.totalLessons * 100) : 0;
     },
@@ -732,9 +810,10 @@ function lessonPlayer(cfg) {
       } else if (e.code === 'ArrowDown' && this.nextLessonUrl) {
         this.navigate(this.nextLessonUrl);
       } else if (e.key === 'm' || e.key === 'M') {
-        this.markComplete();
-      } else if (e.key === 'Escape' && this.sidebarOpen) {
-        this.sidebarOpen = false;
+        this.attemptComplete();
+      } else if (e.key === 'Escape') {
+        if (this.activitiesOpen) this.activitiesOpen = false;
+        else if (this.sidebarOpen) this.sidebarOpen = false;
       }
     },
     async markComplete() {
@@ -750,6 +829,18 @@ function lessonPlayer(cfg) {
           headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': cfg.csrfToken, 'Accept': 'application/json' },
           body: JSON.stringify({}),
         });
+        if (res.status === 422) {
+          // The server found an unmet requirement this client didn't know about.
+          const payload = await res.json().catch(() => null);
+          this.completed = wasCompleted;
+          if (!wasCounted) this.unbumpProgress();
+          this.submitting = false;
+          const blockers = payload?.blockers ?? [];
+          this.requiredPending = blockers.filter((b) => b.type === 'quiz' || b.type === 'assignment').length;
+          if (this.requiredPending > 0) this.activitiesOpen = true;
+          window.dispatchEvent(new CustomEvent('toast', { detail: { message: payload?.message ?? 'This lesson has unmet requirements.', type: 'error' } }));
+          return;
+        }
         if (!res.ok) throw new Error('request failed');
         const data = await res.json();
         this.submitting = false;

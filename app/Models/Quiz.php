@@ -18,7 +18,7 @@ class Quiz extends Model
         'course_id', 'lesson_id', 'title', 'description', 'time_limit_minutes',
         'max_attempts', 'pass_percent', 'grading_method', 'shuffle_questions',
         'shuffle_options', 'questions_per_attempt', 'one_question_per_page',
-        'feedback_mode', 'counts_toward_certificate', 'is_published',
+        'feedback_mode', 'counts_toward_certificate', 'is_required', 'is_published',
         'available_from', 'available_until',
     ];
 
@@ -31,6 +31,7 @@ class Quiz extends Model
             'shuffle_options' => 'boolean',
             'one_question_per_page' => 'boolean',
             'counts_toward_certificate' => 'boolean',
+            'is_required' => 'boolean',
             'is_published' => 'boolean',
             'available_from' => 'datetime',
             'available_until' => 'datetime',

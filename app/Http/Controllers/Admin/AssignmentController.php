@@ -60,12 +60,13 @@ class AssignmentController extends Controller
             'allowed_types' => 'required|array|min:1',
             'allowed_types.*' => 'string|in:text,link,pdf,doc,docx,zip,jpg,png',
             'resubmit_until_graded' => 'nullable|boolean',
+            'is_required' => 'nullable|boolean',
             'is_published' => 'nullable|boolean',
         ]);
 
         $data['allowed_types'] = implode(',', $data['allowed_types']);
 
-        foreach (['allow_late', 'resubmit_until_graded', 'is_published'] as $flag) {
+        foreach (['allow_late', 'resubmit_until_graded', 'is_required', 'is_published'] as $flag) {
             $data[$flag] = $request->boolean($flag);
         }
 

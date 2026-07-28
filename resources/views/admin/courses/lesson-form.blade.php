@@ -117,6 +117,13 @@
         <input class="tb-input" type="number" min="1" max="100" name="completion_threshold" value="{{ old('completion_threshold', $lesson->completion_threshold) }}">
       </div>
       <div class="tb-form-group">
+        <label class="tb-label">Minimum time on lesson (minutes)</label>
+        <input class="tb-input" type="number" min="1" max="240" name="min_active_minutes"
+               value="{{ old('min_active_minutes', $lesson->min_active_seconds ? (int) ceil($lesson->min_active_seconds / 60) : '') }}"
+               placeholder="No minimum">
+        <p class="muted" style="font-size:.75rem;margin-top:4px;">Students can't mark the lesson complete until they've spent this much focused time on it (their timer only runs while the tab is active). Leave blank for no minimum.</p>
+      </div>
+      <div class="tb-form-group">
         <label class="tb-check-group">
           <input type="checkbox" name="is_published" value="1" {{ old('is_published', $lesson->exists ? $lesson->is_published : false) ? 'checked' : '' }}>
           <span>Published (visible to enrolled students)</span>

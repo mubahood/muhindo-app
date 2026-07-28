@@ -58,7 +58,11 @@ class EnrollmentController extends Controller
             ->where('course_id', $lesson->module->course_id)
             ->firstOrFail();
 
-        $progress = $this->progress->completeLesson($enrollment, $lesson);
+        try {
+            $progress = $this->progress->completeLesson($enrollment, $lesson);
+        } catch (\App\Exceptions\LessonCompletionBlockedException $e) {
+            return ApiResponse::error(\App\Enums\ApiErrorCode::ValidationFailed, $e->getMessage(), 422, ['blockers' => $e->blockers]);
+        }
 
         return ApiResponse::success($progress);
     }

@@ -90,6 +90,27 @@ class LearningController extends Controller
             ? URL::temporarySignedRoute('learn.lesson.video-stream', now()->addHours(6), ['course' => $course, 'lesson' => $lesson])
             : null;
 
+        // §activities — every quiz/assignment attached to this lesson, with the
+        // student's submission status, for the banner + overlay picker.
+        $activities = $lesson->quizzes()->where('is_published', true)->get()->map(fn ($quiz) => [
+            'kind' => 'quiz',
+            'title' => $quiz->title,
+            'required' => (bool) $quiz->is_required,
+            'done' => $quiz->attempts()->where('enrollment_id', $enrollment->id)->whereNotNull('submitted_at')->exists(),
+            'url' => route('learn.quiz.show', [$course, $quiz]),
+            'meta' => $quiz->questions()->count().' question(s)'
+                .($quiz->time_limit_minutes ? ' · '.$quiz->time_limit_minutes.' min limit' : ''),
+        ])->concat(
+            $lesson->assignments()->where('is_published', true)->get()->map(fn ($assignment) => [
+                'kind' => 'assignment',
+                'title' => $assignment->title,
+                'required' => (bool) $assignment->is_required,
+                'done' => $assignment->submissions()->where('enrollment_id', $enrollment->id)->whereNotNull('submitted_at')->exists(),
+                'url' => route('learn.assignment.show', [$course, $assignment]),
+                'meta' => $assignment->points.' points · submit '.str_replace(',', ' / ', $assignment->allowed_types),
+            ])
+        )->values();
+
         return view('learn.lesson', [
             'course' => $course,
             'lesson' => $lesson,
@@ -101,6 +122,7 @@ class LearningController extends Controller
             'renderedContent' => $renderedContent,
             'notes' => $notes,
             'videoStreamUrl' => $videoStreamUrl,
+            'activities' => $activities,
         ]);
     }
 
@@ -117,7 +139,19 @@ class LearningController extends Controller
         $enrollment = $this->enrollmentFor($request, $course);
         abort_unless($lesson->module->course_id === $course->id, 404);
 
-        $this->progress->completeLesson($enrollment, $lesson);
+        try {
+            $this->progress->completeLesson($enrollment, $lesson);
+        } catch (\App\Exceptions\LessonCompletionBlockedException $e) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'blockers' => $e->blockers,
+                ], 422);
+            }
+
+            return back()->with('error', $e->getMessage());
+        }
         $enrollment->refresh();
 
         $next = $this->nextLesson($course, $lesson);

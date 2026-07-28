@@ -15,7 +15,7 @@ class Assignment extends Model
     protected $fillable = [
         'course_id', 'lesson_id', 'title', 'instructions', 'due_at', 'points',
         'allow_late', 'late_penalty_percent', 'max_file_mb', 'allowed_types',
-        'resubmit_until_graded', 'is_published',
+        'resubmit_until_graded', 'is_required', 'is_published',
     ];
 
     protected function casts(): array
@@ -24,6 +24,7 @@ class Assignment extends Model
             'due_at' => 'datetime',
             'allow_late' => 'boolean',
             'resubmit_until_graded' => 'boolean',
+            'is_required' => 'boolean',
             'is_published' => 'boolean',
         ];
     }

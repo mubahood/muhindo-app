@@ -103,6 +103,12 @@
       </div>
       <div class="tb-form-group">
         <label class="tb-check-group">
+          <input type="checkbox" name="is_required" value="1" {{ old('is_required', $quiz->is_required) ? 'checked' : '' }}>
+          <span>Compulsory — students cannot complete the attached lesson until they submit this quiz</span>
+        </label>
+      </div>
+      <div class="tb-form-group">
+        <label class="tb-check-group">
           <input type="checkbox" name="is_published" value="1" {{ old('is_published', $quiz->is_published) ? 'checked' : '' }}>
           <span>Published</span>
         </label>

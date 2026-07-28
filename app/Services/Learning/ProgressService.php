@@ -6,6 +6,7 @@ use App\Enums\CompletionRule;
 use App\Enums\LearningEventType;
 use App\Events\Learning\CourseCompleted;
 use App\Events\Learning\LessonCompleted;
+use App\Exceptions\LessonCompletionBlockedException;
 use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
@@ -38,6 +39,20 @@ class ProgressService
     {
         Gate::authorize('access', $enrollment);
         Gate::authorize('view', [$lesson, $enrollment]);
+
+        // Enforced here, not in the controllers, so no surface (web, API, or a
+        // future caller) can complete a lesson whose requirements aren't met.
+        // An already-completed lesson bypasses the check: re-completion is an
+        // idempotent no-op (stale tab, the "Next lesson" button re-posting) and
+        // must never start failing because a requirement was added afterwards.
+        $alreadyCompleted = $enrollment->progressRecords()
+            ->where('lesson_id', $lesson->id)->whereNotNull('completed_at')->exists();
+        if (! $alreadyCompleted) {
+            $blockers = $this->completionBlockers($enrollment, $lesson);
+            if ($blockers !== []) {
+                throw new LessonCompletionBlockedException($blockers);
+            }
+        }
 
         $progress = $enrollment->progressRecords()->updateOrCreate(
             ['lesson_id' => $lesson->id],
@@ -114,12 +129,70 @@ class ProgressService
             'seconds_delta' => $secondsDelta,
         ]);
 
-        if (! $progress->completed_at && $this->minWatchThresholdCrossed($lesson, $progress)) {
+        if (! $progress->completed_at
+            && $this->minWatchThresholdCrossed($lesson, $progress)
+            && $this->completionBlockers($enrollment, $lesson) === []) {
+            // Blockers silently defer auto-completion — the next heartbeat after the
+            // requirement is met (enough focused time / quiz submitted) completes it.
             $this->completeLesson($enrollment, $lesson);
             $progress->refresh();
         }
 
         return $progress;
+    }
+
+    /**
+     * Everything currently standing between this student and completing this lesson:
+     * unmet minimum focused time (lessons.min_active_seconds vs. the active_seconds
+     * tracker), and required-but-unsubmitted quizzes/assignments attached to the
+     * lesson. An empty array means completion is allowed.
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    public function completionBlockers(Enrollment $enrollment, Lesson $lesson): array
+    {
+        $blockers = [];
+
+        if ($lesson->min_active_seconds) {
+            $active = (int) ($enrollment->progressRecords()->where('lesson_id', $lesson->id)->value('active_seconds') ?? 0);
+            if ($active < $lesson->min_active_seconds) {
+                $remaining = $lesson->min_active_seconds - $active;
+                $blockers[] = [
+                    'type' => 'min_time',
+                    'remaining_seconds' => $remaining,
+                    'message' => 'Spend at least '.ceil($lesson->min_active_seconds / 60).' minute(s) on this lesson before completing it — '
+                        .ceil($remaining / 60).' minute(s) to go.',
+                ];
+            }
+        }
+
+        $pendingQuizzes = $lesson->quizzes()
+            ->where('is_published', true)->where('is_required', true)
+            ->whereDoesntHave('attempts', fn ($q) => $q->where('enrollment_id', $enrollment->id)->whereNotNull('submitted_at'))
+            ->get();
+        foreach ($pendingQuizzes as $quiz) {
+            $blockers[] = [
+                'type' => 'quiz',
+                'id' => $quiz->id,
+                'title' => $quiz->title,
+                'message' => "Submit the required quiz \"{$quiz->title}\" before completing this lesson.",
+            ];
+        }
+
+        $pendingAssignments = $lesson->assignments()
+            ->where('is_published', true)->where('is_required', true)
+            ->whereDoesntHave('submissions', fn ($q) => $q->where('enrollment_id', $enrollment->id)->whereNotNull('submitted_at'))
+            ->get();
+        foreach ($pendingAssignments as $assignment) {
+            $blockers[] = [
+                'type' => 'assignment',
+                'id' => $assignment->id,
+                'title' => $assignment->title,
+                'message' => "Submit the required assignment \"{$assignment->title}\" before completing this lesson.",
+            ];
+        }
+
+        return $blockers;
     }
 
     /**
