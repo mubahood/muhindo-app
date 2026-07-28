@@ -42,7 +42,10 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         try {
-            $authenticated = Auth::attempt($this->only('email', 'password'), $this->boolean('remember'));
+            // Always issue the long-lived remember cookie: a signed-in user stays
+            // signed in until they explicitly log out, even after the server-side
+            // session itself expires (the recaller silently re-authenticates them).
+            $authenticated = Auth::attempt($this->only('email', 'password'), true);
         } catch (\RuntimeException $e) {
             // Catches "This password does not use the Bcrypt algorithm" for legacy accounts
             RateLimiter::hit($this->throttleKey());

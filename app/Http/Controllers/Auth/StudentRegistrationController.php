@@ -46,7 +46,8 @@ class StudentRegistrationController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        // remember=true — same policy as login: signed in until they sign out.
+        Auth::login($user, true);
 
         if ($course = $this->intendedCourse($request)) {
             return app(CourseCatalogueController::class)->enroll($request, $course);

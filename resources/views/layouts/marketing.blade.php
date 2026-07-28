@@ -270,7 +270,19 @@
 </head>
 <body>
 
-@php $r = fn($n) => request()->routeIs($n) ? 'on' : ''; @endphp
+@php
+  $r = fn($n) => request()->routeIs($n) ? 'on' : '';
+  /* Role-aware account entry point: every signed-in visitor gets a direct door to
+     THEIR side of the platform, from every public page. */
+  $u = auth()->user();
+  if ($u?->isAdmin()) {
+      [$accountLabel, $accountUrl, $accountIcon] = ['Dashboard', route('dashboard'), 'fa-gauge'];
+  } elseif ($u?->isClient()) {
+      [$accountLabel, $accountUrl, $accountIcon] = ['My Projects', route('portal.index'), 'fa-diagram-project'];
+  } else {
+      [$accountLabel, $accountUrl, $accountIcon] = ['My Courses', route('learn.index'), 'fa-graduation-cap'];
+  }
+@endphp
 
 <header class="site">
   <div class="wrap bar">
@@ -283,8 +295,16 @@
       <a href="{{ route('contact') }}" wire:navigate class="{{ $r('contact') }}">Contact</a>
     </nav>
     <div class="hd-r">
-      <a href="{{ route('login') }}" wire:navigate class="btn ghost desk sm">Sign in</a>
-      <a href="{{ route('contact') }}" wire:navigate class="btn gold desk sm">Get in touch</a>
+      @auth
+        <a href="{{ $accountUrl }}" class="btn gold desk sm"><i class="fas {{ $accountIcon }}"></i> {{ $accountLabel }}</a>
+        <form method="POST" action="{{ route('logout') }}" class="desk" style="display:contents;">
+          @csrf
+          <button type="submit" class="btn ghost desk sm">Sign out</button>
+        </form>
+      @else
+        <a href="{{ route('login') }}" wire:navigate class="btn ghost desk sm">Sign in</a>
+        <a href="{{ route('contact') }}" wire:navigate class="btn gold desk sm">Get in touch</a>
+      @endauth
       <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
     </div>
   </div>
@@ -296,8 +316,16 @@
   <a href="{{ route('portfolio.about') }}" wire:navigate>About</a>
   <a href="{{ route('portfolio.skills') }}" wire:navigate>Skills</a>
   <a href="{{ route('contact') }}" wire:navigate>Contact</a>
-  <a href="{{ route('login') }}" wire:navigate class="btn ghost">Sign in</a>
-  <a href="{{ route('contact') }}" wire:navigate class="btn gold">Get in touch</a>
+  @auth
+    <a href="{{ $accountUrl }}" class="btn gold"><i class="fas {{ $accountIcon }}"></i> {{ $accountLabel }}</a>
+    <form method="POST" action="{{ route('logout') }}">
+      @csrf
+      <button type="submit" class="btn ghost" style="width:100%;justify-content:center;">Sign out</button>
+    </form>
+  @else
+    <a href="{{ route('login') }}" wire:navigate class="btn ghost">Sign in</a>
+    <a href="{{ route('contact') }}" wire:navigate class="btn gold">Get in touch</a>
+  @endauth
 </div>
 
 <main>
@@ -332,7 +360,11 @@
         <p class="foot-h">Legal</p>
         <a href="{{ route('privacy') }}" wire:navigate>Privacy</a>
         <a href="{{ route('terms') }}" wire:navigate>Terms</a>
-        <a href="{{ route('login') }}" wire:navigate>Sign in</a>
+        @auth
+          <a href="{{ $accountUrl }}">{{ $accountLabel }}</a>
+        @else
+          <a href="{{ route('login') }}" wire:navigate>Sign in</a>
+        @endauth
       </div>
     </div>
     <div class="foot-bar">

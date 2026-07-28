@@ -44,9 +44,8 @@
     </div>
   </div>
 
-  <label class="a-check"><input type="checkbox" name="remember"> Keep me signed in</label>
-
-  <button type="submit" class="a-btn"><i class="fas fa-right-to-bracket"></i> Sign in</button>
+  {{-- No "remember me" checkbox — staying signed in until sign-out is the default policy. --}}
+  <button type="submit" class="a-btn" style="margin-top:6px;"><i class="fas fa-right-to-bracket"></i> Sign in</button>
 </form>
 
 <div class="a-alt">New student? <a href="{{ route('register', $intendedCourse ? array_filter(['intended_course' => $intendedCourse->slug, 'coupon_code' => request('coupon_code')]) : []) }}">Create an account</a></div>
