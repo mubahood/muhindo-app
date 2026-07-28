@@ -58,6 +58,7 @@
 </head>
 <body>
 @php $u = auth()->user(); @endphp
+@if(trim($__env->yieldContent('layout_mode', '')) !== 'full')
 <header class="app">
   <div class="bar">
     <a href="{{ route('dashboard') }}" class="brand"><span class="badge">MM</span> <span class="brand-name">Muhindo Mubaraka</span></a>
@@ -76,6 +77,7 @@
     </div>
   </div>
 </header>
+@endif
 
 @include('partials.toast-host')
 
