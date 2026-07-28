@@ -80,11 +80,17 @@
 @include('partials.toast-host')
 
 <main>
+  @if(trim($__env->yieldContent('layout_mode', '')) === 'full')
+    {{-- Full-bleed pages (the lesson player shell) own their entire viewport region,
+         including where flash messages render — no centered .wrap around them. --}}
+    @yield('content')
+  @else
   <div class="wrap {{ trim($__env->yieldContent('wrap_width', '')) }}">
     @if(session('success'))<div class="alert-success">{{ session('success') }}</div>@endif
     @if(session('error'))<div class="alert-success" style="background:#fbe9e9;color:#b91c1c;border-color:#b91c1c;">{{ session('error') }}</div>@endif
     @yield('content')
   </div>
+  @endif
 </main>
 @stack('scripts')
 </body>

@@ -1,73 +1,116 @@
 @extends('layouts.app')
 @section('title', $lesson->title)
-@section('wrap_width', 'wide')
+@section('layout_mode', 'full')
+
+@php
+  /* Sidebar data, computed once: per-module published lessons + completion counts,
+     overall progress, and which module holds the current lesson (open by default). */
+  $sideModules = $course->modules->map(function ($m) use ($completedLessonIds, $lesson) {
+      $published = $m->lessons->where('is_published', true)->values();
+
+      return [
+          'model' => $m,
+          'lessons' => $published,
+          'total' => $published->count(),
+          'done' => $published->pluck('id')->intersect($completedLessonIds)->count(),
+          'isCurrent' => $published->contains('id', $lesson->id),
+      ];
+  })->filter(fn ($m) => $m['total'] > 0)->values();
+  $totalLessons = $sideModules->sum('total');
+  $doneLessons = $sideModules->sum('done');
+  $progressPct = $totalLessons > 0 ? (int) round($doneLessons / $totalLessons * 100) : 0;
+@endphp
 
 @push('styles')
 <style>
-  /* Shell: no breadcrumb clutter — a single compact top strip, then straight into content. */
-  .learn-topbar{display:flex;align-items:center;gap:12px;padding:8px 0 14px;}
-  .learn-back{display:inline-flex;align-items:center;gap:6px;color:var(--tx2);font-size:12.5px;font-weight:500;flex-shrink:0;}
-  .learn-back:hover{color:var(--pri);}
-  .learn-topbar h1{font-size:16px;font-weight:600;margin:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .learn-toggle{display:none;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--tx2);
-    padding:8px 12px;font-size:12px;font-weight:500;cursor:pointer;flex-shrink:0;}
+  /* ── Full-viewport learning shell ─────────────────────────────────────────
+     The page owns everything below the app header: a fixed sidebar column on
+     the left (top → bottom, own scrollbar), an independently scrolling content
+     column, and a fixed action bar pinned to the content column's width. */
+  main{padding:0;}
+  .learn-shell{--lsw:280px;}
 
-  /* Layout: sidebar sticks and runs the full available height on desktop/tablet. */
-  .learn-layout{display:grid;grid-template-columns:264px 1fr;gap:20px;align-items:start;padding-bottom:80px;}
-  .learn-main{min-width:0;} /* lets content shrink below its intrinsic width instead of overflowing the grid track */
-
-  .learn-side{background:var(--surface);border:1px solid var(--line);position:sticky;
-    top:calc(var(--hd) + 12px);max-height:calc(100vh - var(--hd) - 24px);display:flex;flex-direction:column;overflow:hidden;}
-  .learn-side-head{display:none;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);}
-  .learn-side-course{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .learn-side-close{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:15px;padding:4px;flex-shrink:0;}
+  /* Sidebar: fixed, spans header → viewport bottom, scrolls internally. */
+  .learn-side{position:fixed;top:var(--hd);left:0;bottom:0;width:var(--lsw);z-index:45;
+    background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;}
+  .learn-side-top{padding:12px 14px 10px;border-bottom:1px solid var(--line);flex-shrink:0;}
+  .learn-side-top .row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .learn-side-course{font-size:12.5px;font-weight:600;line-height:1.35;}
+  .learn-side-close{display:none;background:none;border:none;color:var(--tx3);cursor:pointer;font-size:15px;padding:4px;flex-shrink:0;}
+  .learn-progress{margin-top:8px;}
+  .learn-progress .bar{height:4px;background:var(--surface-2);overflow:hidden;}
+  .learn-progress .bar i{display:block;height:100%;background:var(--gold);}
+  .learn-progress .label{font-size:10.5px;color:var(--tx3);margin-top:4px;}
   .learn-side-links{display:flex;border-bottom:1px solid var(--line);flex-shrink:0;}
-  .learn-side-links a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px;
+  .learn-side-links a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;
     font-size:10px;font-weight:500;color:var(--tx2);border-right:1px solid var(--line);text-align:center;}
   .learn-side-links a:last-child{border-right:none;}
   .learn-side-links a:hover{color:var(--pri);background:var(--pri-soft);}
-  .learn-side-links a i{font-size:13px;}
-  .learn-side-list{overflow-y:auto;flex:1;}
-  .learn-side .mod{padding:9px 14px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
-    color:var(--tx3);border-bottom:1px solid var(--line);background:var(--surface-2);}
-  .learn-side a.lesson-link,.learn-side span.locked{display:flex;align-items:center;gap:8px;padding:8px 14px;
-    font-size:12.5px;color:var(--tx2);border-bottom:1px solid var(--line);}
-  .learn-side a.lesson-link.on{background:var(--pri-soft);color:var(--pri);font-weight:600;}
-  .learn-side a.lesson-link .fa-circle-check{color:var(--ok);}
+  .learn-side-links a i{font-size:12px;}
+  .learn-side-list{overflow-y:auto;flex:1;overscroll-behavior:contain;}
+
+  /* Collapsible chapters — native <details>, so collapse works with zero JS. */
+  .mod-group{border-bottom:1px solid var(--line);}
+  .mod-group summary{list-style:none;display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;
+    font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx3);background:var(--surface-2);user-select:none;}
+  .mod-group summary::-webkit-details-marker{display:none;}
+  .mod-group summary .chev{font-size:9px;transition:transform .15s;flex-shrink:0;}
+  .mod-group[open] summary .chev{transform:rotate(90deg);}
+  .mod-group summary .name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .mod-group summary .count{font-size:10px;font-weight:600;flex-shrink:0;}
+  .mod-group summary .count.all-done{color:var(--ok);}
+  .lesson-link,.learn-side span.locked{display:flex;align-items:center;gap:8px;padding:7px 12px 7px 14px;
+    font-size:12.5px;color:var(--tx2);border-top:1px solid var(--line);line-height:1.35;}
+  .lesson-link .st{font-size:10px;flex-shrink:0;width:12px;text-align:center;}
+  .lesson-link .st .fa-circle-check{color:var(--ok);}
+  .lesson-link .t{flex:1;min-width:0;}
+  .lesson-link .min{font-size:10px;color:var(--tx3);flex-shrink:0;}
+  .lesson-link.on{background:var(--pri-soft);color:var(--pri);font-weight:600;box-shadow:inset 3px 0 0 var(--gold);}
   .learn-side span.locked{color:var(--tx3);cursor:not-allowed;}
-  .learn-side span.locked .fa-lock{font-size:10px;}
+  .learn-side span.locked .fa-lock{font-size:10px;width:12px;text-align:center;flex-shrink:0;}
 
   .learn-backdrop{display:none;}
 
-  /* Video + content, tightened spacing throughout. */
-  .learn-video{aspect-ratio:16/9;width:100%;background:#000;margin-bottom:10px;}
+  /* Content column: cleared past the fixed sidebar, centered for readability,
+     bottom padding clears the fixed action bar. */
+  .learn-main{margin-left:var(--lsw);padding:12px 18px 84px;}
+  .learn-content{max-width:940px;margin:0 auto;}
+  .learn-topbar{display:flex;align-items:center;gap:10px;padding:2px 0 10px;}
+  .learn-back{display:inline-flex;align-items:center;gap:6px;color:var(--tx2);font-size:12.5px;font-weight:500;flex-shrink:0;}
+  .learn-back:hover{color:var(--pri);}
+  .learn-topbar h1{font-size:15.5px;font-weight:600;margin:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .learn-toggle{display:none;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--tx2);
+    padding:8px 12px;font-size:12px;font-weight:500;cursor:pointer;flex-shrink:0;}
+
+  .learn-video{aspect-ratio:16/9;width:100%;background:#000;margin-bottom:8px;}
   .learn-video iframe{width:100%;height:100%;border:0;}
-  .learn-speed{display:flex;gap:6px;margin-bottom:14px;}
+  .learn-speed{display:flex;gap:6px;margin-bottom:12px;}
   .learn-speed button{font-size:11px;padding:4px 9px;border:1px solid var(--line);background:var(--surface);color:var(--tx2);cursor:pointer;}
   .learn-speed button.on{background:var(--pri);color:#fff;border-color:var(--pri);}
-  .learn-main .card{padding:16px;margin-bottom:14px;}
-  .learn-main .card:last-child{margin-bottom:0;}
-  .learn-main .card-title{font-weight:600;margin-bottom:10px;font-size:13.5px;}
+  .learn-content .card{padding:14px 16px;margin-bottom:12px;}
+  .learn-content .card:last-child{margin-bottom:0;}
+  .learn-content .card-title{font-weight:600;margin-bottom:8px;font-size:13px;}
+  .learn-content .alert-success{margin-bottom:12px;}
 
-  .material-row{padding:8px 0;border-bottom:1px solid var(--line);}
-  .material-row:last-child{border-bottom:none;}
+  .material-row{padding:7px 0;border-bottom:1px solid var(--line);}
+  .material-row:last-child{border-bottom:none;padding-bottom:0;}
   .material-line{display:flex;align-items:center;justify-content:space-between;gap:10px;}
   .material-name{display:flex;align-items:center;gap:8px;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .material-actions{display:flex;align-items:center;gap:10px;flex-shrink:0;font-size:12px;}
   .material-actions button{background:none;border:1px solid var(--line);color:var(--pri);cursor:pointer;padding:3px 9px;font-size:11.5px;}
   .material-actions a{color:var(--tx2);}
   .material-actions a:hover{color:var(--pri);}
-  .pdf-frame{margin-top:10px;border:1px solid var(--line);}
+  .pdf-frame{margin-top:8px;border:1px solid var(--line);}
   .pdf-frame iframe{width:100%;height:70vh;border:0;display:block;}
 
   .learn-advance{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--pri-soft);
-    border:1px solid var(--pri);padding:10px 14px;margin-bottom:12px;font-size:12.5px;}
+    border:1px solid var(--pri);padding:8px 12px;font-size:12.5px;}
   .learn-advance button{background:none;border:1px solid var(--pri);color:var(--pri);padding:5px 10px;cursor:pointer;font-size:12px;flex-shrink:0;}
 
-  /* Fixed bottom action bar — always reachable, never covers content (padding-bottom above clears it). */
-  .learn-action-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--line);
-    padding:10px 24px;z-index:45;box-shadow:0 -6px 16px rgba(0,0,0,.06);}
-  .learn-action-bar-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  /* Fixed action bar — pinned to the content column, never overlaps the sidebar. */
+  .learn-action-bar{position:fixed;bottom:0;left:var(--lsw);right:0;background:var(--surface);
+    border-top:1px solid var(--line);padding:9px 18px;z-index:44;box-shadow:0 -6px 16px rgba(0,0,0,.06);}
+  .learn-action-bar-inner{max-width:940px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;}
   .learn-action-bar .btn{padding:10px 16px;font-size:13px;}
   .learn-prev{display:inline-flex;align-items:center;gap:6px;color:var(--tx2);font-size:12.5px;font-weight:500;padding:8px 4px;}
   .learn-prev.disabled{color:var(--tx3);opacity:.5;pointer-events:none;}
@@ -81,6 +124,7 @@
   .markdown-body h1,.markdown-body h2,.markdown-body h3{margin:1.1em 0 .5em;font-weight:600;color:var(--pri);}
   .markdown-body h1:first-child,.markdown-body h2:first-child,.markdown-body h3:first-child{margin-top:0;}
   .markdown-body p{margin-bottom:.9em;}
+  .markdown-body p:last-child{margin-bottom:0;}
   .markdown-body ul,.markdown-body ol{margin:0 0 .9em 1.4em;}
   .markdown-body img{max-width:100%;height:auto;margin:.5em 0;}
   .markdown-body code{background:var(--surface-2);padding:2px 5px;font-size:.9em;}
@@ -89,22 +133,23 @@
   .markdown-body blockquote{border-left:3px solid var(--gold);padding-left:14px;color:var(--tx2);margin-bottom:.9em;}
   .markdown-body a{color:var(--pri);text-decoration:underline;}
 
-  /* Tablet (iPad) and phone: sidebar becomes an off-canvas drawer, action bar stays fixed and full-width. */
+  /* Tablet (portrait iPad) and phone: sidebar becomes an off-canvas drawer covering
+     the full viewport height; content and action bar take the full width. */
   @media(max-width:960px){
-    .learn-layout{grid-template-columns:1fr;padding-bottom:76px;}
+    .learn-main{margin-left:0;padding:10px 14px 80px;}
+    .learn-action-bar{left:0;padding:8px 14px;padding-bottom:calc(8px + env(safe-area-inset-bottom));}
     .learn-toggle{display:inline-flex;}
-    .learn-side{position:fixed;top:0;left:0;bottom:0;width:88vw;max-width:320px;max-height:none;z-index:70;
-      transform:translateX(-100%);transition:transform .22s ease;box-shadow:10px 0 28px rgba(0,0,0,.18);border:0;}
+    .learn-side{top:0;width:88vw;max-width:320px;z-index:70;transform:translateX(-100%);
+      transition:transform .22s ease;box-shadow:10px 0 28px rgba(0,0,0,.18);}
     .learn-side.open{transform:translateX(0);}
-    .learn-side-head{display:flex;}
+    .learn-side-close{display:inline-flex;}
     .learn-backdrop{display:block;position:fixed;inset:0;background:rgba(6,15,31,.5);z-index:65;opacity:0;
       pointer-events:none;transition:opacity .2s ease;}
     .learn-backdrop.open{opacity:1;pointer-events:auto;}
-    .learn-action-bar{padding:8px 14px;padding-bottom:calc(8px + env(safe-area-inset-bottom));}
     .pdf-frame iframe{height:60vh;}
   }
   @media(max-width:520px){
-    .learn-topbar h1{font-size:14.5px;}
+    .learn-topbar h1{font-size:14px;}
     .learn-prev span{display:none;} /* icon-only "previous" on very narrow phones, more room for the primary action */
     .learn-action-bar .btn{padding:9px 12px;font-size:12.5px;}
   }
@@ -113,6 +158,7 @@
 
 @section('content')
 <div
+  class="learn-shell"
   x-data="lessonPlayer({
     lessonId: {{ $lesson->id }},
     completed: {{ $completedLessonIds->contains($lesson->id) ? 'true' : 'false' }},
@@ -124,50 +170,68 @@
   })"
   x-init="init()"
 >
-  <div class="learn-topbar">
-    <a href="{{ route('learn.index') }}" class="learn-back"><i class="fas fa-arrow-left"></i> My Courses</a>
-    <h1>{{ $lesson->title }}</h1>
-    <button type="button" class="learn-toggle" @click="sidebarOpen = true"><i class="fas fa-list-ul"></i> Contents</button>
-  </div>
-
   <div class="learn-backdrop" :class="{open: sidebarOpen}" @click="sidebarOpen = false"></div>
 
-  <div class="learn-layout">
-    <aside class="learn-side" :class="{open: sidebarOpen}">
-      <div class="learn-side-head">
+  <aside class="learn-side" :class="{open: sidebarOpen}">
+    <div class="learn-side-top">
+      <div class="row">
         <span class="learn-side-course">{{ $course->title }}</span>
         <button type="button" class="learn-side-close" @click="sidebarOpen = false" aria-label="Close"><i class="fas fa-xmark"></i></button>
       </div>
-      <div class="learn-side-links">
-        <a href="{{ route('learn.quizzes.index', $course) }}"><i class="fas fa-list-check"></i><span>Quizzes</span></a>
-        <a href="{{ route('learn.announcements.index', $course) }}"><i class="fas fa-bullhorn"></i><span>News</span></a>
-        <a href="{{ route('learn.discussions.create', [$course, 'lesson_id' => $lesson->id]) }}"><i class="fas fa-circle-question"></i><span>Ask</span></a>
+      <div class="learn-progress">
+        <div class="bar"><i style="width:{{ $progressPct }}%"></i></div>
+        <div class="label">{{ $doneLessons }} of {{ $totalLessons }} lessons · {{ $progressPct }}%</div>
       </div>
-      <div class="learn-side-list">
-        @foreach($course->modules as $module)
-          <div class="mod">{{ $module->title }}</div>
-          @foreach($module->lessons->where('is_published', true) as $l)
+    </div>
+    <div class="learn-side-links">
+      <a href="{{ route('learn.quizzes.index', $course) }}"><i class="fas fa-list-check"></i><span>Quizzes</span></a>
+      <a href="{{ route('learn.announcements.index', $course) }}"><i class="fas fa-bullhorn"></i><span>News</span></a>
+      <a href="{{ route('learn.discussions.create', [$course, 'lesson_id' => $lesson->id]) }}"><i class="fas fa-circle-question"></i><span>Ask</span></a>
+    </div>
+    <div class="learn-side-list">
+      @foreach($sideModules as $sideModule)
+        <details class="mod-group" @if($sideModule['isCurrent']) open @endif>
+          <summary>
+            <i class="fas fa-chevron-right chev" aria-hidden="true"></i>
+            <span class="name">{{ $sideModule['model']->title }}</span>
+            <span class="count {{ $sideModule['done'] === $sideModule['total'] ? 'all-done' : '' }}">{{ $sideModule['done'] }}/{{ $sideModule['total'] }}</span>
+          </summary>
+          @foreach($sideModule['lessons'] as $l)
             @if($lockedLessonIds->contains($l->id))
               <span class="locked" title="Complete the previous lesson to unlock this one">
-                <i class="fas fa-lock"></i> {{ $l->title }}
+                <i class="fas fa-lock"></i> <span class="t">{{ $l->title }}</span>
+                @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
               </span>
             @elseif($l->id === $lesson->id)
               <a href="{{ route('learn.lesson', [$course, $l]) }}" class="lesson-link on">
-                <i class="fas" :class="completed ? 'fa-circle-check' : 'fa-circle'" style="font-size:10px;"></i>
-                {{ $l->title }}
+                <span class="st"><i class="fas" :class="completed ? 'fa-circle-check' : 'fa-circle'"></i></span>
+                <span class="t">{{ $l->title }}</span>
+                @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
               </a>
             @else
               <a href="{{ route('learn.lesson', [$course, $l]) }}" class="lesson-link">
-                <i class="fas {{ $completedLessonIds->contains($l->id) ? 'fa-circle-check' : 'fa-circle' }}" style="font-size:10px;"></i>
-                {{ $l->title }}
+                <span class="st"><i class="fas {{ $completedLessonIds->contains($l->id) ? 'fa-circle-check' : 'fa-circle' }}"></i></span>
+                <span class="t">{{ $l->title }}</span>
+                @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
               </a>
             @endif
           @endforeach
-        @endforeach
-      </div>
-    </aside>
+        </details>
+      @endforeach
+    </div>
+  </aside>
 
-    <div class="learn-main">
+  <div class="learn-main">
+    <div class="learn-content">
+      <div class="learn-topbar">
+        <a href="{{ route('learn.index') }}" class="learn-back"><i class="fas fa-arrow-left"></i> My Courses</a>
+        <h1>{{ $lesson->title }}</h1>
+        <button type="button" class="learn-toggle" @click="sidebarOpen = true"><i class="fas fa-list-ul"></i> Contents</button>
+      </div>
+
+      @if(session('success'))<div class="alert-success">{{ session('success') }}</div>@endif
+      @if(session('error'))<div class="alert-success" style="background:#fbe9e9;color:#b91c1c;border-color:#b91c1c;">{{ session('error') }}</div>@endif
+
       @if($lesson->hasSelfHostedVideo())
         <div
           x-data="selfHostedVideoPlayer({
@@ -272,7 +336,7 @@
       <div class="card">
         <div class="card-title">My notes</div>
         @forelse($notes as $note)
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);">
             <div>
               @if($note->formattedTime())
                 <button type="button" onclick="window.__lessonVideoPlayer?.seekTo({{ $note->seconds }}, true)"
