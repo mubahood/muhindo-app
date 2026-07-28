@@ -250,6 +250,7 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::post('{course:slug}/{lesson}/complete', [LearningController::class, 'complete'])->name('lesson.complete');
     Route::post('{course:slug}/{lesson}/heartbeat', [LearningController::class, 'heartbeat'])->middleware('throttle:20,1')->name('lesson.heartbeat');
     Route::get('{course:slug}/{lesson}/materials/{material}', [StudentLessonMaterialController::class, 'download'])->name('materials.download');
+    Route::get('{course:slug}/{lesson}/materials/{material}/preview', [StudentLessonMaterialController::class, 'preview'])->name('materials.preview');
     Route::get('{course:slug}/{lesson}/video-stream', [\App\Http\Controllers\Student\LessonVideoController::class, 'stream'])
         ->middleware('signed')->name('lesson.video-stream');
     Route::get('{course:slug}/{lesson}/content-images/{filename}', [\App\Http\Controllers\Student\LessonContentImageController::class, 'show'])->name('content-images.show');

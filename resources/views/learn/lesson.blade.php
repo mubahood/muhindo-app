@@ -4,37 +4,110 @@
 
 @push('styles')
 <style>
-  .learn-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start;}
-  .learn-layout > div{min-width:0;} /* lets the video/cards column shrink below its content's intrinsic width instead of overflowing */
-  .learn-side{background:var(--surface);border:1px solid var(--line);}
-  .learn-side .mod{padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx3);border-bottom:1px solid var(--line);}
-  .learn-side a,.learn-side span.locked{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;color:var(--tx2);border-bottom:1px solid var(--line);}
-  .learn-side a.on{background:var(--pri-soft);color:var(--pri);font-weight:600;}
-  .learn-side a .fa-circle-check{color:var(--ok);}
+  /* Shell: no breadcrumb clutter — a single compact top strip, then straight into content. */
+  .learn-topbar{display:flex;align-items:center;gap:12px;padding:8px 0 14px;}
+  .learn-back{display:inline-flex;align-items:center;gap:6px;color:var(--tx2);font-size:12.5px;font-weight:500;flex-shrink:0;}
+  .learn-back:hover{color:var(--pri);}
+  .learn-topbar h1{font-size:16px;font-weight:600;margin:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .learn-toggle{display:none;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--tx2);
+    padding:8px 12px;font-size:12px;font-weight:500;cursor:pointer;flex-shrink:0;}
+
+  /* Layout: sidebar sticks and runs the full available height on desktop/tablet. */
+  .learn-layout{display:grid;grid-template-columns:264px 1fr;gap:20px;align-items:start;padding-bottom:80px;}
+  .learn-main{min-width:0;} /* lets content shrink below its intrinsic width instead of overflowing the grid track */
+
+  .learn-side{background:var(--surface);border:1px solid var(--line);position:sticky;
+    top:calc(var(--hd) + 12px);max-height:calc(100vh - var(--hd) - 24px);display:flex;flex-direction:column;overflow:hidden;}
+  .learn-side-head{display:none;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);}
+  .learn-side-course{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .learn-side-close{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:15px;padding:4px;flex-shrink:0;}
+  .learn-side-links{display:flex;border-bottom:1px solid var(--line);flex-shrink:0;}
+  .learn-side-links a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px;
+    font-size:10px;font-weight:500;color:var(--tx2);border-right:1px solid var(--line);text-align:center;}
+  .learn-side-links a:last-child{border-right:none;}
+  .learn-side-links a:hover{color:var(--pri);background:var(--pri-soft);}
+  .learn-side-links a i{font-size:13px;}
+  .learn-side-list{overflow-y:auto;flex:1;}
+  .learn-side .mod{padding:9px 14px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--tx3);border-bottom:1px solid var(--line);background:var(--surface-2);}
+  .learn-side a.lesson-link,.learn-side span.locked{display:flex;align-items:center;gap:8px;padding:8px 14px;
+    font-size:12.5px;color:var(--tx2);border-bottom:1px solid var(--line);}
+  .learn-side a.lesson-link.on{background:var(--pri-soft);color:var(--pri);font-weight:600;}
+  .learn-side a.lesson-link .fa-circle-check{color:var(--ok);}
   .learn-side span.locked{color:var(--tx3);cursor:not-allowed;}
-  .learn-side span.locked .fa-lock{font-size:11px;}
-  .learn-video{aspect-ratio:16/9;width:100%;background:#000;margin-bottom:12px;}
+  .learn-side span.locked .fa-lock{font-size:10px;}
+
+  .learn-backdrop{display:none;}
+
+  /* Video + content, tightened spacing throughout. */
+  .learn-video{aspect-ratio:16/9;width:100%;background:#000;margin-bottom:10px;}
   .learn-video iframe{width:100%;height:100%;border:0;}
-  .learn-speed{display:flex;gap:6px;margin-bottom:20px;}
+  .learn-speed{display:flex;gap:6px;margin-bottom:14px;}
   .learn-speed button{font-size:11px;padding:4px 9px;border:1px solid var(--line);background:var(--surface);color:var(--tx2);cursor:pointer;}
   .learn-speed button.on{background:var(--pri);color:#fff;border-color:var(--pri);}
-  .learn-advance{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--pri-soft);border:1px solid var(--pri);padding:14px 18px;margin-top:16px;}
-  .learn-advance button{background:none;border:1px solid var(--pri);color:var(--pri);padding:5px 10px;cursor:pointer;font-size:12px;}
+  .learn-main .card{padding:16px;margin-bottom:14px;}
+  .learn-main .card:last-child{margin-bottom:0;}
+  .learn-main .card-title{font-weight:600;margin-bottom:10px;font-size:13.5px;}
+
+  .material-row{padding:8px 0;border-bottom:1px solid var(--line);}
+  .material-row:last-child{border-bottom:none;}
+  .material-line{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .material-name{display:flex;align-items:center;gap:8px;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .material-actions{display:flex;align-items:center;gap:10px;flex-shrink:0;font-size:12px;}
+  .material-actions button{background:none;border:1px solid var(--line);color:var(--pri);cursor:pointer;padding:3px 9px;font-size:11.5px;}
+  .material-actions a{color:var(--tx2);}
+  .material-actions a:hover{color:var(--pri);}
+  .pdf-frame{margin-top:10px;border:1px solid var(--line);}
+  .pdf-frame iframe{width:100%;height:70vh;border:0;display:block;}
+
+  .learn-advance{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--pri-soft);
+    border:1px solid var(--pri);padding:10px 14px;margin-bottom:12px;font-size:12.5px;}
+  .learn-advance button{background:none;border:1px solid var(--pri);color:var(--pri);padding:5px 10px;cursor:pointer;font-size:12px;flex-shrink:0;}
+
+  /* Fixed bottom action bar — always reachable, never covers content (padding-bottom above clears it). */
+  .learn-action-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--line);
+    padding:10px 24px;z-index:45;box-shadow:0 -6px 16px rgba(0,0,0,.06);}
+  .learn-action-bar-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .learn-action-bar .btn{padding:10px 16px;font-size:13px;}
+  .learn-prev{display:inline-flex;align-items:center;gap:6px;color:var(--tx2);font-size:12.5px;font-weight:500;padding:8px 4px;}
+  .learn-prev.disabled{color:var(--tx3);opacity:.5;pointer-events:none;}
+  .learn-prev:hover{color:var(--pri);}
+
   .learn-modal-backdrop{position:fixed;inset:0;background:rgba(6,15,31,.6);display:flex;align-items:center;justify-content:center;z-index:100;}
-  .markdown-body h1,.markdown-body h2,.markdown-body h3{margin:1.2em 0 .5em;font-weight:600;color:var(--pri);}
-  .markdown-body h1:first-child,.markdown-body h2:first-child,.markdown-body h3:first-child{margin-top:0;}
-  .markdown-body p{margin-bottom:1em;}
-  .markdown-body ul,.markdown-body ol{margin:0 0 1em 1.4em;}
-  .markdown-body img{max-width:100%;height:auto;margin:.5em 0;}
-  .markdown-body code{background:var(--surface-2);padding:2px 5px;font-size:.9em;}
-  .markdown-body pre{background:var(--pri-d);color:#eef1f6;padding:14px 16px;overflow-x:auto;margin-bottom:1em;}
-  .markdown-body pre code{background:none;padding:0;color:inherit;}
-  .markdown-body blockquote{border-left:3px solid var(--gold);padding-left:14px;color:var(--tx2);margin-bottom:1em;}
-  .markdown-body a{color:var(--pri);text-decoration:underline;}
-  .learn-modal{background:var(--surface);padding:40px;max-width:420px;text-align:center;}
+  .learn-modal{background:var(--surface);padding:36px;max-width:420px;text-align:center;}
   .learn-modal h2{font-size:20px;font-weight:400;margin-bottom:10px;}
   .confetti-piece{position:fixed;top:-10px;width:8px;height:14px;z-index:200;pointer-events:none;}
-  @media(max-width:760px){.learn-layout{grid-template-columns:1fr;}}
+
+  .markdown-body h1,.markdown-body h2,.markdown-body h3{margin:1.1em 0 .5em;font-weight:600;color:var(--pri);}
+  .markdown-body h1:first-child,.markdown-body h2:first-child,.markdown-body h3:first-child{margin-top:0;}
+  .markdown-body p{margin-bottom:.9em;}
+  .markdown-body ul,.markdown-body ol{margin:0 0 .9em 1.4em;}
+  .markdown-body img{max-width:100%;height:auto;margin:.5em 0;}
+  .markdown-body code{background:var(--surface-2);padding:2px 5px;font-size:.9em;}
+  .markdown-body pre{background:var(--pri-d);color:#eef1f6;padding:12px 14px;overflow-x:auto;margin-bottom:.9em;}
+  .markdown-body pre code{background:none;padding:0;color:inherit;}
+  .markdown-body blockquote{border-left:3px solid var(--gold);padding-left:14px;color:var(--tx2);margin-bottom:.9em;}
+  .markdown-body a{color:var(--pri);text-decoration:underline;}
+
+  /* Tablet (iPad) and phone: sidebar becomes an off-canvas drawer, action bar stays fixed and full-width. */
+  @media(max-width:960px){
+    .learn-layout{grid-template-columns:1fr;padding-bottom:76px;}
+    .learn-toggle{display:inline-flex;}
+    .learn-side{position:fixed;top:0;left:0;bottom:0;width:88vw;max-width:320px;max-height:none;z-index:70;
+      transform:translateX(-100%);transition:transform .22s ease;box-shadow:10px 0 28px rgba(0,0,0,.18);border:0;}
+    .learn-side.open{transform:translateX(0);}
+    .learn-side-head{display:flex;}
+    .learn-backdrop{display:block;position:fixed;inset:0;background:rgba(6,15,31,.5);z-index:65;opacity:0;
+      pointer-events:none;transition:opacity .2s ease;}
+    .learn-backdrop.open{opacity:1;pointer-events:auto;}
+    .learn-action-bar{padding:8px 14px;padding-bottom:calc(8px + env(safe-area-inset-bottom));}
+    .pdf-frame iframe{height:60vh;}
+  }
+  @media(max-width:520px){
+    .learn-topbar h1{font-size:14.5px;}
+    .learn-prev span{display:none;} /* icon-only "previous" on very narrow phones, more room for the primary action */
+    .learn-action-bar .btn{padding:9px 12px;font-size:12.5px;}
+  }
 </style>
 @endpush
 
@@ -51,34 +124,50 @@
   })"
   x-init="init()"
 >
-  <div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}">My Courses</a> / {{ $course->title }} / <a href="{{ route('learn.quizzes.index', $course) }}">Quizzes</a> / <a href="{{ route('learn.announcements.index', $course) }}">Announcements</a> / <a href="{{ route('learn.discussions.create', [$course, 'lesson_id' => $lesson->id]) }}">Ask a question</a></div>
-  <h1 style="font-size:20px;">{{ $lesson->title }}</h1>
+  <div class="learn-topbar">
+    <a href="{{ route('learn.index') }}" class="learn-back"><i class="fas fa-arrow-left"></i> My Courses</a>
+    <h1>{{ $lesson->title }}</h1>
+    <button type="button" class="learn-toggle" @click="sidebarOpen = true"><i class="fas fa-list-ul"></i> Contents</button>
+  </div>
+
+  <div class="learn-backdrop" :class="{open: sidebarOpen}" @click="sidebarOpen = false"></div>
 
   <div class="learn-layout">
-    <aside class="learn-side">
-      @foreach($course->modules as $module)
-        <div class="mod">{{ $module->title }}</div>
-        @foreach($module->lessons->where('is_published', true) as $l)
-          @if($lockedLessonIds->contains($l->id))
-            <span class="locked" title="Complete the previous lesson to unlock this one">
-              <i class="fas fa-lock"></i> {{ $l->title }}
-            </span>
-          @elseif($l->id === $lesson->id)
-            <a href="{{ route('learn.lesson', [$course, $l]) }}" class="on">
-              <i class="fas" :class="completed ? 'fa-circle-check' : 'fa-circle'" style="font-size:11px;"></i>
-              {{ $l->title }}
-            </a>
-          @else
-            <a href="{{ route('learn.lesson', [$course, $l]) }}">
-              <i class="fas {{ $completedLessonIds->contains($l->id) ? 'fa-circle-check' : 'fa-circle' }}" style="font-size:11px;"></i>
-              {{ $l->title }}
-            </a>
-          @endif
+    <aside class="learn-side" :class="{open: sidebarOpen}">
+      <div class="learn-side-head">
+        <span class="learn-side-course">{{ $course->title }}</span>
+        <button type="button" class="learn-side-close" @click="sidebarOpen = false" aria-label="Close"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="learn-side-links">
+        <a href="{{ route('learn.quizzes.index', $course) }}"><i class="fas fa-list-check"></i><span>Quizzes</span></a>
+        <a href="{{ route('learn.announcements.index', $course) }}"><i class="fas fa-bullhorn"></i><span>News</span></a>
+        <a href="{{ route('learn.discussions.create', [$course, 'lesson_id' => $lesson->id]) }}"><i class="fas fa-circle-question"></i><span>Ask</span></a>
+      </div>
+      <div class="learn-side-list">
+        @foreach($course->modules as $module)
+          <div class="mod">{{ $module->title }}</div>
+          @foreach($module->lessons->where('is_published', true) as $l)
+            @if($lockedLessonIds->contains($l->id))
+              <span class="locked" title="Complete the previous lesson to unlock this one">
+                <i class="fas fa-lock"></i> {{ $l->title }}
+              </span>
+            @elseif($l->id === $lesson->id)
+              <a href="{{ route('learn.lesson', [$course, $l]) }}" class="lesson-link on">
+                <i class="fas" :class="completed ? 'fa-circle-check' : 'fa-circle'" style="font-size:10px;"></i>
+                {{ $l->title }}
+              </a>
+            @else
+              <a href="{{ route('learn.lesson', [$course, $l]) }}" class="lesson-link">
+                <i class="fas {{ $completedLessonIds->contains($l->id) ? 'fa-circle-check' : 'fa-circle' }}" style="font-size:10px;"></i>
+                {{ $l->title }}
+              </a>
+            @endif
+          @endforeach
         @endforeach
-      @endforeach
+      </div>
     </aside>
 
-    <div>
+    <div class="learn-main">
       @if($lesson->hasSelfHostedVideo())
         <div
           x-data="selfHostedVideoPlayer({
@@ -120,14 +209,14 @@
       @endif
 
       @if($renderedContent)
-        <div class="card markdown-body" style="margin-bottom:20px;">{!! $renderedContent !!}</div>
+        <div class="card markdown-body">{!! $renderedContent !!}</div>
       @elseif($lesson->content)
-        <div class="card" style="margin-bottom:20px;">{!! nl2br(e($lesson->content)) !!}</div>
+        <div class="card">{!! nl2br(e($lesson->content)) !!}</div>
       @endif
 
       @if($lesson->quizzes->where('is_published', true)->count())
-        <div class="card" style="margin-bottom:20px;">
-          <div style="font-weight:600;margin-bottom:10px;">Lesson quiz</div>
+        <div class="card">
+          <div class="card-title">Lesson quiz</div>
           @foreach($lesson->quizzes->where('is_published', true) as $lessonQuiz)
             <div style="margin-bottom:6px;">
               <a href="{{ route('learn.quiz.show', [$course, $lessonQuiz]) }}"><i class="fas fa-list-check"></i> {{ $lessonQuiz->title }}</a>
@@ -137,8 +226,8 @@
       @endif
 
       @if($lesson->assignments->where('is_published', true)->count())
-        <div class="card" style="margin-bottom:20px;">
-          <div style="font-weight:600;margin-bottom:10px;">Lesson assignment</div>
+        <div class="card">
+          <div class="card-title">Lesson assignment</div>
           @foreach($lesson->assignments->where('is_published', true) as $lessonAssignment)
             <div style="margin-bottom:6px;">
               <a href="{{ route('learn.assignment.show', [$course, $lessonAssignment]) }}"><i class="fas fa-file-pen"></i> {{ $lessonAssignment->title }}</a>
@@ -148,20 +237,42 @@
       @endif
 
       @if($lesson->materials->count())
-        <div class="card" style="margin-bottom:20px;">
-          <div style="font-weight:600;margin-bottom:10px;">Materials</div>
+        <div class="card">
+          <div class="card-title">Materials</div>
           @foreach($lesson->materials as $material)
-            <div style="margin-bottom:6px;">
-              <a href="{{ route('learn.materials.download', [$course, $lesson, $material]) }}"><i class="fas fa-paperclip"></i> {{ $material->title }}</a>
+            @php
+              $isLocalPdf = $material->type === 'pdf' && ! \Illuminate\Support\Str::startsWith($material->file_path, 'http');
+              $icon = match($material->type) {
+                'pdf' => 'fa-file-pdf',
+                'zip' => 'fa-file-zipper',
+                'link' => 'fa-link',
+                default => 'fa-paperclip',
+              };
+            @endphp
+            <div class="material-row" x-data="{ open: false }">
+              <div class="material-line">
+                <span class="material-name"><i class="fas {{ $icon }}" aria-hidden="true"></i> {{ $material->title }}</span>
+                <span class="material-actions">
+                  @if($isLocalPdf)
+                    <button type="button" @click="open = !open" x-text="open ? 'Hide' : 'View'"></button>
+                  @endif
+                  <a href="{{ route('learn.materials.download', [$course, $lesson, $material]) }}" title="Download"><i class="fas fa-download"></i></a>
+                </span>
+              </div>
+              @if($isLocalPdf)
+                <div class="pdf-frame" x-show="open" x-cloak>
+                  <iframe src="{{ route('learn.materials.preview', [$course, $lesson, $material]) }}" title="{{ $material->title }}"></iframe>
+                </div>
+              @endif
             </div>
           @endforeach
         </div>
       @endif
 
-      <div class="card" style="margin-bottom:20px;">
-        <div style="font-weight:600;margin-bottom:10px;">My notes</div>
+      <div class="card">
+        <div class="card-title">My notes</div>
         @forelse($notes as $note)
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);">
             <div>
               @if($note->formattedTime())
                 <button type="button" onclick="window.__lessonVideoPlayer?.seekTo({{ $note->seconds }}, true)"
@@ -178,7 +289,7 @@
           <p class="muted" style="font-size:13px;">No notes yet — jot one down as you watch.</p>
         @endforelse
         <form method="POST" action="{{ route('learn.notes.store', [$course, $lesson]) }}"
-              style="margin-top:12px;display:flex;gap:8px;"
+              style="margin-top:10px;display:flex;gap:8px;"
               onsubmit="this.querySelector('[name=seconds]').value = Math.floor(window.__lessonVideoPlayer?.getCurrentTime?.() ?? 0) || ''">
           @csrf
           <input type="hidden" name="seconds" value="">
@@ -187,8 +298,24 @@
           <button type="submit" class="btn">Add</button>
         </form>
       </div>
+    </div>
+  </div>
 
-      <form method="POST" action="{{ route('learn.lesson.complete', [$course, $lesson]) }}" @submit.prevent="markComplete()">
+  <div class="learn-action-bar">
+    <div class="learn-action-bar-inner">
+      <template x-if="previousLessonUrl">
+        <a :href="previousLessonUrl" class="learn-prev"><i class="fas fa-chevron-left"></i> <span>Previous</span></a>
+      </template>
+      <template x-if="!previousLessonUrl">
+        <span class="learn-prev disabled"><i class="fas fa-chevron-left"></i> <span>Previous</span></span>
+      </template>
+
+      <div x-show="showAdvance" x-cloak class="learn-advance" style="flex:1;margin:0 12px;">
+        <span>Next: <strong x-text="nextLessonTitle"></strong> — <span x-text="advanceSeconds"></span>s</span>
+        <button type="button" @click="cancelAdvance()"><i class="fas fa-pause"></i> Stay</button>
+      </div>
+
+      <form method="POST" action="{{ route('learn.lesson.complete', [$course, $lesson]) }}" @submit.prevent="markComplete()" x-show="!showAdvance">
         @csrf
         <button type="submit" class="btn gold" :disabled="submitting" x-show="!(completed && !nextLessonUrl && !showAdvance)">
           <span x-show="!submitting" x-text="completed ? 'Next lesson' : 'Mark complete & continue'"></span>
@@ -196,11 +323,6 @@
           <i class="fas fa-arrow-right"></i>
         </button>
       </form>
-
-      <div class="learn-advance" x-show="showAdvance" x-cloak>
-        <span>Next: <strong x-text="nextLessonTitle"></strong> — starting in <span x-text="advanceSeconds"></span>s</span>
-        <button type="button" @click="cancelAdvance()"><i class="fas fa-pause"></i> Stay here</button>
-      </div>
     </div>
   </div>
 
@@ -361,11 +483,13 @@ function selfHostedVideoPlayer(cfg) {
 }
 
 /**
- * §7.3 "complete without reload" + keyboard shortcuts. Optimistic ✓ in the
- * sidebar, an auto-advance card with a 5s countdown (pausable), confetti +
- * a certificate modal at 100%. A failed request rolls the optimistic state
- * back and toasts — the form's real action/method still work if JS never
- * runs at all (this component simply never attaches).
+ * §7.3 "complete without reload" + keyboard shortcuts, plus the mobile
+ * sidebar drawer toggle. Optimistic ✓ in the sidebar, an auto-advance card
+ * with a 5s countdown (pausable), confetti + a certificate modal at 100%.
+ * A failed request rolls the optimistic state back and toasts — the form's
+ * real action/method still work if JS never runs at all (this component
+ * simply never attaches, and the sidebar/action-bar degrade to normal
+ * in-flow elements since sidebarOpen etc. never toggles anything without it).
  */
 function lessonPlayer(cfg) {
   return {
@@ -374,10 +498,12 @@ function lessonPlayer(cfg) {
     showAdvance: false,
     advanceSeconds: 5,
     advanceTimer: null,
+    previousLessonUrl: cfg.previousLessonUrl || null,
     nextLessonUrl: cfg.initialNextLessonUrl || null,
     nextLessonTitle: null,
     showCertificateModal: false,
     certificateUrl: null,
+    sidebarOpen: false,
     init() {
       window.addEventListener('lesson-auto-completed', () => { this.completed = true; });
       window.addEventListener('keydown', (e) => this.onKeydown(e));
@@ -395,12 +521,14 @@ function lessonPlayer(cfg) {
         player.seekTo(Math.max(0, player.getCurrentTime() - 10), true);
       } else if (e.code === 'ArrowRight' && player) {
         player.seekTo(player.getCurrentTime() + 10, true);
-      } else if (e.code === 'ArrowUp' && cfg.previousLessonUrl) {
-        window.location.href = cfg.previousLessonUrl;
+      } else if (e.code === 'ArrowUp' && this.previousLessonUrl) {
+        window.location.href = this.previousLessonUrl;
       } else if (e.code === 'ArrowDown' && this.nextLessonUrl) {
         window.location.href = this.nextLessonUrl;
       } else if (e.key === 'm' || e.key === 'M') {
         this.markComplete();
+      } else if (e.key === 'Escape' && this.sidebarOpen) {
+        this.sidebarOpen = false;
       }
     },
     async markComplete() {

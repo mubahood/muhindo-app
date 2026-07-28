@@ -39,4 +39,20 @@ class LessonMaterialController extends Controller
 
         return Storage::disk('local')->download($material->file_path, $material->title);
     }
+
+    /** Inline PDF preview for an <iframe> — same auth as download(), but never forces a save-as dialog. */
+    public function preview(Request $request, Course $course, Lesson $lesson, LessonMaterial $material): StreamedResponse
+    {
+        abort_unless($lesson->module->course_id === $course->id, 404);
+        abort_unless($material->lesson_id === $lesson->id, 404);
+        abort_unless($material->type === 'pdf' && ! Str::startsWith($material->file_path, 'http'), 404);
+
+        $enrollment = Enrollment::where('user_id', $request->user()->id)
+            ->where('course_id', $course->id)
+            ->firstOrFail();
+        $this->authorize('access', $enrollment);
+        $this->authorize('view', [$lesson, $enrollment]);
+
+        return Storage::disk('local')->response($material->file_path, $material->title, [], 'inline');
+    }
 }
