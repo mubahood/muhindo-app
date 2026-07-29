@@ -1,5 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', 'Q&A — ' . $course->title)
+@section('page_title', 'Q&A')
 
 @push('styles')
 <style>
@@ -13,8 +14,7 @@
 </style>
 @endpush
 
-@section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / <a href="{{ route('learn.course', $course) }}" wire:navigate>{{ $course->title }}</a> / Q&amp;A</div>
+@section('learn_content')
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
   <h1 style="font-size:20px;margin:0;">Q&amp;A</h1>
   <a href="{{ route('learn.discussions.create', $course) }}" wire:navigate class="btn gold"><i class="fas fa-plus"></i> Ask a question</a>

@@ -1,5 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', 'Grades — ' . $course->title)
+@section('page_title', 'Grades')
 
 @push('styles')
 <style>
@@ -12,9 +13,8 @@
 </style>
 @endpush
 
-@section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / <a href="{{ route('learn.course', $course) }}" wire:navigate>{{ $course->title }}</a> / Grades</div>
-<h1 style="font-size:20px;">Grades</h1>
+@section('learn_content')
+<h1>Grades</h1>
 
 <div class="card" style="margin-bottom:20px;">
   <div class="grade-summary">

@@ -1,9 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', $quiz->title)
+@section('page_title', $quiz->title)
 
 @push('styles')
 <style>
-  .quiz-timer{position:sticky;top:calc(var(--hd) + 12px);z-index:20;display:flex;align-items:center;justify-content:space-between;
+  .quiz-timer{position:sticky;top:8px;z-index:20;display:flex;align-items:center;justify-content:space-between;
     background:var(--pri);color:#fff;padding:10px 18px;margin-bottom:20px;font-size:13px;}
   .quiz-timer.low{background:#b91c1c;}
   .quiz-question{background:var(--surface);border:1px solid var(--line);padding:22px 24px;margin-bottom:16px;}
@@ -24,7 +25,7 @@
 </style>
 @endpush
 
-@section('content')
+@section('learn_content')
 <div class="muted" style="margin-bottom:6px;">
   <a href="{{ route('learn.quizzes.index', $course) }}">Quizzes</a> / {{ $quiz->title }}
 </div>
@@ -153,6 +154,8 @@ function quizRunner(cfg) {
     oneAtATime: cfg.oneAtATime,
     total: cfg.total,
     currentIndex: 0,
+    tickTimer: null,
+    onVis: null,
     secondsLeft: null,
     formattedTime: '',
     savedQuestionId: null,
@@ -163,9 +166,17 @@ function quizRunner(cfg) {
       if (cfg.deadline) {
         this.secondsLeft = Math.max(0, Math.floor((new Date(cfg.deadline) - new Date()) / 1000));
         this.tick();
-        setInterval(() => this.tick(), 1000);
+        this.tickTimer = setInterval(() => this.tick(), 1000);
       }
-      document.addEventListener('visibilitychange', () => this.onVisibilityChange());
+      this.onVis = () => this.onVisibilityChange();
+      document.addEventListener('visibilitychange', this.onVis);
+      // pjax-safety: wire:navigate keeps the JS context alive across body swaps,
+      // so a countdown left running would keep ticking (and could auto-submit)
+      // on an entirely different page.
+      document.addEventListener('livewire:navigating', () => {
+        if (this.tickTimer) clearInterval(this.tickTimer);
+        document.removeEventListener('visibilitychange', this.onVis);
+      }, { once: true });
     },
     tick() {
       if (this.secondsLeft === null) return;

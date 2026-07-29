@@ -189,7 +189,7 @@ class LessonCompletionRequirementsTest extends TestCase
         $response->assertSee('This lesson has 1 activity');
         $response->assertSee('1 required');
         $response->assertSee('Gate Quiz');
-        $response->assertSee('requiredPending: 1', false);
+        $response->assertSee('requiredPending\\u0022:1', false);
     }
 
     public function test_the_lesson_page_seeds_the_min_time_lock(): void
@@ -198,7 +198,7 @@ class LessonCompletionRequirementsTest extends TestCase
 
         $response = $this->actingAs($student)->get(route('learn.lesson', [$course, $lesson]));
 
-        $response->assertOk()->assertSee('minActiveSeconds: 180', false);
+        $response->assertOk()->assertSee('minActiveSeconds\\u0022:180', false);
     }
 
     public function test_admin_can_set_the_minimum_time_in_minutes(): void

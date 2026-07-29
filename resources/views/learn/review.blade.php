@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', 'Review — ' . $course->title)
+@section('page_title', 'Course review')
 
-@section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / {{ $course->title }} / Review</div>
-<h1 style="font-size:20px;">{{ $review ? 'Edit your review' : 'Rate this course' }}</h1>
+@section('learn_content')
+<h1>{{ $review ? 'Edit your review' : 'Rate this course' }}</h1>
 
 <div class="card" style="max-width:520px;">
   <form method="POST" action="{{ route('learn.review.store', $course) }}">

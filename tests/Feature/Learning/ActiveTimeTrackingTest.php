@@ -133,7 +133,8 @@ class ActiveTimeTrackingTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('12:34'); // 754s server-rendered in the header — resume works without JS
-        $response->assertSee('activeSeconds: 754', false);
+        // The shell config is embedded via Js::from(), which hex-escapes quotes.
+        $response->assertSee('activeSeconds\\u0022:754', false);
     }
 
     public function test_a_fresh_lesson_renders_a_zero_timer(): void

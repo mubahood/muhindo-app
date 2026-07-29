@@ -1,5 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', 'Quizzes — ' . $course->title)
+@section('page_title', 'Quizzes')
 
 @push('styles')
 <style>
@@ -14,9 +15,8 @@
 </style>
 @endpush
 
-@section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / <a href="{{ route('learn.course', $course) }}" wire:navigate>{{ $course->title }}</a> / Quizzes</div>
-<h1 style="font-size:20px;">Quizzes</h1>
+@section('learn_content')
+<h1>Quizzes</h1>
 
 @if($quizzes->isEmpty())
   <div class="card"><p class="muted">This course has no quizzes yet.</p></div>

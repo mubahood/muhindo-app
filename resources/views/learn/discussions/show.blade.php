@@ -1,5 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', 'Q&A — ' . $course->title)
+@section('page_title', $thread->title)
 
 @push('styles')
 <style>
@@ -10,8 +11,7 @@
 </style>
 @endpush
 
-@section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.discussions.index', $course) }}" wire:navigate>Q&amp;A</a> / Thread</div>
+@section('learn_content')
 
 <div class="thread-post {{ $discussion->is_instructor_answer ? 'instructor' : '' }}">
   <div class="meta">

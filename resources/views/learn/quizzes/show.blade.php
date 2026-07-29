@@ -1,12 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', $quiz->title)
+@section('page_title', $quiz->title)
 
-@section('content')
-<div class="muted" style="margin-bottom:6px;">
-  <a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / <a href="{{ route('learn.course', $course) }}" wire:navigate>{{ $course->title }}</a> /
-  <a href="{{ route('learn.quizzes.index', $course) }}" wire:navigate>Quizzes</a> / {{ $quiz->title }}
-</div>
-<h1 style="font-size:20px;">{{ $quiz->title }}</h1>
+@section('learn_content')
+<h1>{{ $quiz->title }}</h1>
 
 <div class="card" style="max-width:560px;">
   @if($quiz->description)

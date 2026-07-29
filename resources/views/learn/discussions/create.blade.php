@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', 'Ask a question — ' . $course->title)
+@section('page_title', 'Ask a question')
 
-@section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.discussions.index', $course) }}" wire:navigate>Q&amp;A</a> / Ask a question</div>
-<h1 style="font-size:20px;">Ask a question{{ $lesson ? ' about "'.$lesson->title.'"' : '' }}</h1>
+@section('learn_content')
+<h1>Ask a question{{ $lesson ? ' about "'.$lesson->title.'"' : '' }}</h1>
 
 <div class="card" style="max-width:640px;">
   <form method="POST" action="{{ route('learn.discussions.store', $course) }}">

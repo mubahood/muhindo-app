@@ -1,5 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', $quiz->title . ' — Review')
+@section('page_title', $quiz->title." — Review")
 
 @push('styles')
 <style>
@@ -16,11 +17,8 @@
 </style>
 @endpush
 
-@section('content')
-<div class="muted" style="margin-bottom:6px;">
-  <a href="{{ route('learn.quizzes.index', $course) }}" wire:navigate>Quizzes</a> / {{ $quiz->title }} / Review
-</div>
-<h1 style="font-size:20px;">{{ $quiz->title }} — Attempt {{ $attempt->attempt_no }}</h1>
+@section('learn_content')
+<h1>{{ $quiz->title }} — Attempt {{ $attempt->attempt_no }}</h1>
 
 @if($attempt->status->value === 'in_progress')
   <div class="card"><p class="muted">This attempt hasn't been submitted yet.</p>

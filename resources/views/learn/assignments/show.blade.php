@@ -1,5 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', $assignment->title)
+@section('page_title', $assignment->title)
 
 @push('styles')
 <style>
@@ -12,17 +13,14 @@
 </style>
 @endpush
 
-@section('content')
+@section('learn_content')
 @php
   $canEdit = ! $latest
       || $latest->status->value === 'draft'
       || ($latest->status->value === 'submitted' && $assignment->resubmit_until_graded);
 @endphp
 
-<div class="muted" style="margin-bottom:6px;">
-  <a href="{{ route('learn.assignments.index', $course) }}" wire:navigate>Assignments</a> / {{ $assignment->title }}
-</div>
-<h1 style="font-size:20px;">{{ $assignment->title }}</h1>
+<h1>{{ $assignment->title }}</h1>
 
 <div class="assign-meta">
   <span><i class="fas fa-star"></i> {{ $assignment->points }} points</span>

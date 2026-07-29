@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.learn')
 @section('title', 'Announcements — ' . $course->title)
+@section('page_title', 'Announcements')
 
-@section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('learn.index') }}" wire:navigate>My Courses</a> / <a href="{{ route('learn.course', $course) }}" wire:navigate>{{ $course->title }}</a> / Announcements</div>
-<h1 style="font-size:20px;">Announcements</h1>
+@section('learn_content')
+<h1>Announcements</h1>
 
 @if($announcements->isEmpty())
   <div class="card"><p class="muted">No announcements yet.</p></div>
