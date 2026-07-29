@@ -135,17 +135,66 @@ class DualRoleAccountTest extends TestCase
         $response->assertSee('Learning')->assertSee('Invoices')->assertSee('Start a project');
     }
 
-    public function test_a_user_can_add_client_access_from_their_profile(): void
+    public function test_a_user_can_add_client_access_from_their_account_page(): void
     {
         $user = User::factory()->create(['role' => 'student', 'is_student' => true]);
 
-        $this->actingAs($user)->postJson(route('profile.update'), [
-            'name' => $user->name, 'email' => $user->email, 'account_type' => 'both',
-        ])->assertOk()->assertJsonPath('account_type_label', 'Student & Client');
+        $this->actingAs($user)->post(route('account.type'), ['account_type' => 'both'])
+            ->assertRedirect()->assertSessionHas('success');
 
         $user->refresh();
         $this->assertTrue($user->isClient());
+        $this->assertTrue($user->isStudent());
+        $this->assertSame('Student & Client', $user->accountTypeLabel());
         $this->assertNotNull($user->client, 'granting client access should create the client profile');
+    }
+
+    public function test_the_account_page_shows_every_panel_a_student_can_act_on(): void
+    {
+        $user = User::factory()->create(['role' => 'student', 'is_student' => true]);
+
+        $this->actingAs($user)->get(route('account.edit'))
+            ->assertOk()
+            ->assertSee('Your details')
+            ->assertSee('Account type')
+            ->assertSee('Security')
+            // Every input is reachable by its label, not by placeholder alone.
+            ->assertSee('for="name"', false)
+            ->assertSee('for="current_password"', false);
+    }
+
+    public function test_an_admin_is_not_offered_an_account_type_to_change(): void
+    {
+        $admin = User::factory()->create(['role' => 'super_admin', 'is_admin' => true]);
+
+        $this->actingAs($admin)->get(route('account.edit'))
+            ->assertOk()->assertSee('Your details')->assertDontSee('Account type');
+    }
+
+    public function test_a_user_can_update_their_details(): void
+    {
+        $user = User::factory()->create(['role' => 'student', 'is_student' => true]);
+
+        $this->actingAs($user)->post(route('account.update'), [
+            'name' => 'Renamed Person', 'email' => 'renamed@example.com', 'phone' => '+256700000000',
+        ])->assertRedirect()->assertSessionHas('success');
+
+        $user->refresh();
+        $this->assertSame('Renamed Person', $user->name);
+        $this->assertSame('+256700000000', $user->phone);
+    }
+
+    public function test_details_errors_land_in_their_own_bag_so_other_panels_stay_clean(): void
+    {
+        $taken = User::factory()->create(['email' => 'taken@example.com']);
+        $user = User::factory()->create(['role' => 'student', 'is_student' => true]);
+
+        $this->actingAs($user)->post(route('account.update'), [
+            'name' => 'Someone', 'email' => $taken->email,
+        ])->assertSessionHasErrorsIn('profile', ['email'])
+            ->assertSessionDoesntHaveErrors(['current_password', 'password']);
+
+        $this->assertNotSame($taken->email, $user->refresh()->email);
     }
 
     public function test_dropping_a_capability_never_orphans_existing_work(): void
@@ -162,9 +211,45 @@ class DualRoleAccountTest extends TestCase
             'client_id' => $client->id, 'status' => 'active',
         ]);
 
-        $this->actingAs($user)->postJson(route('profile.update'), [
-            'name' => $user->name, 'email' => $user->email, 'account_type' => 'student',
-        ])->assertOk();
+        $this->actingAs($user)->post(route('account.type'), ['account_type' => 'student'])
+            ->assertRedirect()
+            // ...and they're told why, rather than silently getting something else.
+            ->assertSessionHas('warning');
+
+        $this->assertTrue($user->refresh()->isClient());
+    }
+
+    public function test_an_unused_client_profile_does_not_trap_you_in_client_access(): void
+    {
+        // Choosing "both" creates an empty client profile up front. That container
+        // is not work, so changing your mind afterwards has to actually take.
+        $user = User::factory()->create(['role' => 'student', 'is_student' => true]);
+        $this->actingAs($user)->post(route('account.type'), ['account_type' => 'both'])->assertRedirect();
+        $this->assertTrue($user->refresh()->isClient());
+
+        $this->actingAs($user)->post(route('account.type'), ['account_type' => 'student'])
+            ->assertRedirect()->assertSessionHas('success')->assertSessionMissing('warning');
+
+        $this->assertFalse($user->refresh()->isClient());
+        $this->assertSame(['student'], $user->accountTypes());
+    }
+
+    public function test_an_outstanding_invoice_also_holds_client_access_open(): void
+    {
+        $user = User::factory()->create(['role' => 'client', 'is_client' => true]);
+        $client = Client::create([
+            'uuid' => (string) Str::uuid(), 'client_number' => 'CL-TEST-3',
+            'user_id' => $user->id, 'name' => $user->name, 'email' => $user->email,
+        ]);
+        \App\Models\Invoice::create([
+            'uuid' => (string) Str::uuid(), 'invoice_no' => 'INV-TEST-1',
+            'billable_type' => Client::class, 'billable_id' => $client->id,
+            'currency' => 'UGX', 'subtotal' => '100.00', 'total' => '100.00', 'balance' => '100.00',
+            'status' => \App\Enums\InvoiceStatus::Issued->value,
+        ]);
+
+        $this->actingAs($user)->post(route('account.type'), ['account_type' => 'student'])
+            ->assertRedirect()->assertSessionHas('warning');
 
         $this->assertTrue($user->refresh()->isClient());
     }

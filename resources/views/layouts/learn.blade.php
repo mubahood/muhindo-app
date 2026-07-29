@@ -1,28 +1,60 @@
-@extends('layouts.app')
-@section('layout_mode', 'full')
+{{-- Muhindo Mubaraka — Learning shell (full-bleed course player) --}}
+{{--
+  A distraction-free shell for pages inside a course: a fixed 44px header, a
+  fixed sidebar running top → bottom with its own scrollbar, an independently
+  scrolling content column, and an optional slim action bar.
 
-@php
-  /* The shell resolves its own sidebar/progress data from the course + signed-in
-     user, so every course-context page gets identical chrome without each
-     controller passing it. $currentLesson is set only by the lesson player.
-     A child view that needs $shell inside its own sections builds it first
-     (child sections are buffered before this layout runs) — reuse it if so,
-     so the queries only ever happen once per request. */
-  $shell = $shell ?? new \App\Support\Learning\LearnShell($course, auth()->user(), $currentLesson ?? null);
-@endphp
+  It loads exactly the same stylesheets as layouts/admin — Livewire's head merge
+  appends the incoming page's assets without removing the outgoing ones, so a
+  second design system here would leave both layered on top of each other the
+  moment a student moves between My Courses and a lesson. Shared assets are what
+  make that navigation instant instead of a full reload.
+--}}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  @include('partials.sw-kill')
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{{ $title ?? $__env->yieldContent('title', 'Learning') }} · Muhindo Mubaraka</title>
+  <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon.png') }}">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="{{ asset('vendor/fonts/inter/inter.css') }}">
+  <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/td-admin.css') }}?v={{ filemtime(public_path('css/td-admin.css')) }}">
+  @livewireStyles
 
-@push('styles')
-<style>
-  /* ── Shared learning shell ────────────────────────────────────────────────
-     A fixed 44px learning header (exit, course, live progress), a fixed sidebar
-     column running top → bottom with its own scrollbar, an independently
-     scrolling content column, and an optional slim fixed action bar. Used by
-     every page inside a course so the chrome never changes between them. */
-  main{padding:0;}
-  .learn-shell{--lsw:272px;--lhd:44px;--abh:50px;}
-  .learn-shell .btn{min-height:34px;padding:6px 12px;font-size:12.5px;}
+  <style>
+  /* ── Shell tokens ─────────────────────────────────────────────────────────
+     The player's own vocabulary, mapped onto the shared design system so the
+     two never drift apart on colour. Scoped to the shell so nothing leaks. */
+  .learn-shell{
+    --lsw:272px; --lhd:44px; --abh:50px;
+    --pri:var(--br); --pri-d:var(--br-d); --pri-soft:var(--br-soft);
+    --gold:#c99a2e; --gold-d:#8a6a1c; --gold-soft:#fbf3e0;
+    --tx2:var(--mt); --tx3:var(--mt2);
+  }
 
-  .learn-hd{position:fixed;top:0;left:0;right:0;height:var(--lhd);z-index:50;background:var(--pri);color:#fff;
+  /* Classic building blocks the course pages are written against. */
+  .learn-shell .card{background:var(--surface);border:1px solid var(--line);padding:12px 14px;margin-bottom:10px;}
+  .learn-shell .card:last-child{margin-bottom:0;}
+  .learn-shell .card-title{font-weight:600;margin-bottom:8px;font-size:13px;}
+  .learn-shell .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;}
+  .learn-shell .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:var(--font);
+    font-size:12.5px;font-weight:500;min-height:34px;padding:6px 12px;cursor:pointer;
+    border:1px solid var(--pri);background:var(--pri);color:#fff;transition:background .13s,border-color .13s;}
+  .learn-shell .btn:hover{background:var(--pri-d);border-color:var(--pri-d);}
+  .learn-shell .btn.gold{border-color:var(--gold);background:var(--gold);color:#231a05;}
+  .learn-shell .btn.gold:hover{background:var(--gold-d);border-color:var(--gold-d);color:#fff;}
+  .learn-shell .btn[disabled],.learn-shell .btn.disabled{opacity:.55;pointer-events:none;}
+  .learn-shell .badge-pill{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;letter-spacing:.03em;
+    text-transform:uppercase;padding:3px 8px;background:var(--pri-soft);color:var(--pri);}
+  .learn-shell .alert-success{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);
+    padding:8px 12px;margin-bottom:10px;font-size:12.5px;}
+
+  /* ── Header ─────────────────────────────────────────────────── */
+  .learn-hd{position:fixed;top:0;left:0;right:0;height:var(--lhd);z-index:50;background:#0d2237;color:#fff;
     display:flex;align-items:center;gap:12px;padding:0 12px;}
   .learn-hd .exit{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.75);font-size:12px;
     font-weight:500;flex-shrink:0;padding:6px 4px;}
@@ -39,9 +71,11 @@
   .learn-hd .hd-progress .bar{width:110px;height:4px;background:rgba(255,255,255,.18);overflow:hidden;}
   .learn-hd .hd-progress .bar i{display:block;height:100%;background:var(--gold);transition:width .4s ease;}
   .learn-hd .hd-progress .pct{font-size:11px;font-weight:600;color:var(--gold);min-width:32px;text-align:right;}
+  .learn-hd a:focus-visible,.learn-hd button:focus-visible{outline:2px solid #fff;outline-offset:2px;}
   .learn-toggle{display:none;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.25);background:none;
     color:#fff;padding:6px 10px;font-size:11.5px;font-weight:500;cursor:pointer;flex-shrink:0;}
 
+  /* ── Sidebar ────────────────────────────────────────────────── */
   .learn-side{position:fixed;top:var(--lhd);left:0;bottom:0;width:var(--lsw);z-index:45;
     background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;}
   .learn-side-close{display:none;background:none;border:none;color:var(--tx3);cursor:pointer;font-size:15px;padding:4px;flex-shrink:0;}
@@ -78,14 +112,13 @@
 
   .learn-backdrop{display:none;}
 
+  /* ── Content column ─────────────────────────────────────────── */
   .learn-main{margin-left:var(--lsw);margin-top:var(--lhd);padding:10px 14px calc(var(--abh) + 14px);}
   .learn-main.no-bar{padding-bottom:16px;}
-  .learn-main .card{padding:12px 14px;margin-bottom:10px;}
-  .learn-main .card:last-child{margin-bottom:0;}
-  .learn-main .card-title{font-weight:600;margin-bottom:8px;font-size:13px;}
-  .learn-main .alert-success{margin-bottom:10px;padding:8px 12px;}
   .learn-main h1{font-size:17px;font-weight:600;margin-bottom:10px;}
+  .learn-main h2{font-size:15px;font-weight:600;}
   .learn-main .page-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+  .learn-main:focus{outline:none;}
 
   /* Slim fixed action bar — pinned to the content column, never overlaps the sidebar. */
   .learn-action-bar{position:fixed;bottom:0;left:var(--lsw);right:0;min-height:var(--abh);background:var(--surface);
@@ -103,10 +136,10 @@
   .markdown-body h1:first-child,.markdown-body h2:first-child,.markdown-body h3:first-child{margin-top:0;}
   .markdown-body p{margin-bottom:.9em;}
   .markdown-body p:last-child{margin-bottom:0;}
-  .markdown-body ul,.markdown-body ol{margin:0 0 .9em 1.4em;}
+  .markdown-body ul,.markdown-body ol{margin:0 0 .9em 1.4em;list-style:revert;}
   .markdown-body img{max-width:100%;height:auto;margin:.5em 0;}
   .markdown-body code{background:var(--surface-2);padding:2px 5px;font-size:.9em;}
-  .markdown-body pre{background:var(--pri-d);color:#eef1f6;padding:12px 14px;overflow-x:auto;margin-bottom:.9em;}
+  .markdown-body pre{background:#0d2237;color:#eef1f6;padding:12px 14px;overflow-x:auto;margin-bottom:.9em;}
   .markdown-body pre code{background:none;padding:0;color:inherit;}
   .markdown-body blockquote{border-left:3px solid var(--gold);padding-left:14px;color:var(--tx2);margin-bottom:.9em;}
   .markdown-body a{color:var(--pri);text-decoration:underline;}
@@ -134,40 +167,62 @@
     .learn-hd .hd-progress .bar{width:64px;}
     .learn-prev span{display:none;}
   }
-</style>
-@endpush
+  [x-cloak]{display:none!important;}
+  </style>
+  @stack('styles')
+</head>
+<body>
 
-@section('content')
+<a href="#learn-content" class="tb-skip">Skip to lesson content</a>
+
+@php
+  /* The shell resolves its own sidebar/progress data from the course + signed-in
+     user, so every course-context page gets identical chrome without each
+     controller passing it. $currentLesson is set only by the lesson player.
+     A child view that needs $shell inside its own sections builds it first
+     (child sections are buffered before this layout runs) — reuse it if so,
+     so the queries only ever happen once per request. */
+  $shell = $shell ?? new \App\Support\Learning\LearnShell($course, auth()->user(), $currentLesson ?? null);
+  $shellPaths = \App\Support\AppShell::paths();
+@endphp
+
+@include('partials.toast-host')
+
 <div class="learn-shell" x-data="@yield('shell_component', 'learnShell()')" x-init="init()">
   <header class="learn-hd">
-    <a href="{{ route('learn.index') }}" wire:navigate class="exit" title="Back to My Courses"><i class="fas fa-arrow-left"></i> <span>Exit</span></a>
-    <span class="divider"></span>
+    <a href="{{ route('learn.index') }}" wire:navigate class="exit" title="Back to My Courses">
+      <i class="fas fa-arrow-left" aria-hidden="true"></i> <span>Exit</span>
+      <span class="sr-only">Back to My Courses</span>
+    </a>
+    <span class="divider" aria-hidden="true"></span>
     <span class="course-t">{{ $course->title }}</span>
     <span class="page-t">@yield('page_title', '')</span>
     @yield('header_meta')
-    <span class="hd-progress" title="{{ $shell->doneLessons() }} of {{ $shell->totalLessons() }} lessons complete">
-      <span class="bar"><i style="width:{{ $shell->progressPercent() }}%"></i></span>
-      <span class="pct">{{ $shell->progressPercent() }}%</span>
+    <span class="hd-progress" role="img"
+          aria-label="Course progress: {{ $shell->doneLessons() }} of {{ $shell->totalLessons() }} lessons complete">
+      <span class="bar" aria-hidden="true"><i style="width:{{ $shell->progressPercent() }}%"></i></span>
+      <span class="pct" aria-hidden="true">{{ $shell->progressPercent() }}%</span>
     </span>
-    <button type="button" class="learn-toggle" @click="sidebarOpen = true"><i class="fas fa-list-ul"></i> Contents</button>
+    <button type="button" class="learn-toggle" @click="sidebarOpen = true"
+            :aria-expanded="sidebarOpen ? 'true' : 'false'" aria-controls="learn-side">
+      <i class="fas fa-list-ul" aria-hidden="true"></i> Contents
+    </button>
   </header>
 
   <div class="learn-backdrop" :class="{open: sidebarOpen}" @click="sidebarOpen = false"></div>
 
   @include('learn.partials.sidebar', ['shell' => $shell, 'course' => $course, 'currentLesson' => $currentLesson ?? null])
 
-  <div class="learn-main @yield('main_class', 'no-bar')">
-    @if(session('success'))<div class="alert-success">{{ session('success') }}</div>@endif
-    @if(session('error'))<div class="alert-success" style="background:#fbe9e9;color:#b91c1c;border-color:#b91c1c;">{{ session('error') }}</div>@endif
+  <main class="learn-main @yield('main_class', 'no-bar')" id="learn-content" tabindex="-1">
+    @if(session('success'))<div class="alert-success" role="status">{{ session('success') }}</div>@endif
+    @if(session('error'))<div class="alert-success" role="alert" style="background:var(--bad-soft);color:var(--bad);border-color:var(--bad);">{{ session('error') }}</div>@endif
     @yield('learn_content')
-  </div>
+  </main>
 
   @yield('action_bar')
   @yield('overlays')
 </div>
-@endsection
 
-@push('scripts')
 <script>
 /** Base shell behaviour: the mobile sidebar drawer. The lesson player supplies
  *  its own richer component (lessonPlayer) that includes these same keys. */
@@ -183,4 +238,10 @@ function learnShell() {
   };
 }
 </script>
-@endpush
+
+@include('partials.app-navigation', ['shellPaths' => $shellPaths])
+
+@livewireScripts
+@stack('scripts')
+</body>
+</html>

@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CourseCatalogueController;
-use App\Models\Client;
 use App\Models\Course;
 use App\Models\User;
+use App\Services\AccountService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
@@ -25,6 +24,8 @@ use Illuminate\View\View;
  */
 class StudentRegistrationController extends Controller
 {
+    public function __construct(private readonly AccountService $accounts) {}
+
     public function create(Request $request): View
     {
         return view('auth.register', [
@@ -60,7 +61,7 @@ class StudentRegistrationController extends Controller
 
         // A client needs a client record to own projects and be invoiced against.
         if ($isClient) {
-            $this->ensureClientProfile($user);
+            $this->accounts->ensureClientProfile($user);
         }
 
         event(new Registered($user));
@@ -78,26 +79,6 @@ class StudentRegistrationController extends Controller
         }
 
         return redirect()->route('dashboard')->with('success', 'Welcome! Your account has been created.');
-    }
-
-    /**
-     * Mirrors Admin\ClientController::store's numbering so both paths produce the
-     * same shape. Public so the profile screen can grant client access later
-     * through exactly this path rather than a second, divergent one.
-     */
-    public function ensureClientProfile(User $user): void
-    {
-        if ($user->client()->exists()) {
-            return;
-        }
-
-        Client::create([
-            'uuid' => (string) Str::uuid(),
-            'client_number' => 'CL-'.now()->format('Y').'-'.str_pad((string) (Client::withTrashed()->count() + 1), 4, '0', STR_PAD_LEFT),
-            'user_id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-        ]);
     }
 
     /** §3.2 — a guest arriving via "Enrol now" on a course page carries the course through registration. */

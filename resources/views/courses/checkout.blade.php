@@ -1,45 +1,71 @@
-@extends('layouts.app')
-@section('title', 'Checkout — ' . $course->title)
+@extends('layouts.admin')
+@section('title', 'Checkout')
 
 @section('content')
-<div class="muted" style="margin-bottom:6px;"><a href="{{ route('courses.show', $course) }}">{{ $course->title }}</a> / Checkout</div>
-<h1 style="font-size:20px;margin-bottom:20px;">Complete your enrollment</h1>
 
-<div class="card" style="max-width:480px;">
-  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
-    <span style="font-weight:600;">{{ $course->title }}</span>
-    <span>{{ $invoice->currency }} {{ number_format((float) $invoice->subtotal, 2) }}</span>
-  </div>
-
-  @if(bccomp((string) $invoice->discount, '0', 2) > 0)
-    <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--gold-d,#7d6228);margin-top:6px;">
-      <span>Coupon discount</span>
-      <span>&minus;{{ $invoice->currency }} {{ number_format((float) $invoice->discount, 2) }}</span>
+<div class="tb-page-header">
+  <div>
+    <h1>Complete your enrollment</h1>
+    <div class="tb-breadcrumb">
+      <a href="{{ route('learn.index') }}">My Courses</a> <span>/</span>
+      <a href="{{ route('courses.show', $course) }}">{{ $course->title }}</a> <span>/</span> Checkout
     </div>
-  @endif
+  </div>
+</div>
 
-  <div style="display:flex;justify-content:space-between;font-weight:700;font-size:16px;border-top:1px solid var(--line);margin-top:12px;padding-top:12px;">
-    <span>Total</span>
-    <span>{{ $invoice->currency }} {{ number_format((float) $invoice->total, 2) }}</span>
+<div class="tb-card" style="max-width:480px;">
+  <div class="tb-card-header">
+    <h2 class="tb-card-title">{{ $course->title }}</h2>
   </div>
 
-  <div class="muted" style="font-size:12px;margin:10px 0 20px;">Invoice {{ $invoice->invoice_no }} — {{ $invoice->status->label() }}</div>
+  <div class="tb-card-body">
+    <dl style="display:grid;grid-template-columns:1fr auto;gap:7px 12px;font-size:12.5px;">
+      <dt>Course fee</dt>
+      <dd style="text-align:right;">{{ $invoice->currency }} {{ number_format((float) $invoice->subtotal, 2) }}</dd>
+
+      @if(bccomp((string) $invoice->discount, '0', 2) > 0)
+        <dt style="color:var(--ok);">Coupon discount</dt>
+        <dd style="text-align:right;color:var(--ok);">&minus;{{ $invoice->currency }} {{ number_format((float) $invoice->discount, 2) }}</dd>
+      @endif
+
+      <dt style="border-top:1px solid var(--line);padding-top:10px;font-weight:600;font-size:14px;">Total</dt>
+      <dd style="border-top:1px solid var(--line);padding-top:10px;text-align:right;font-weight:700;font-size:14px;">
+        {{ $invoice->currency }} {{ number_format((float) $invoice->total, 2) }}
+      </dd>
+    </dl>
+
+    <p class="acct-hint" style="margin-top:12px;">
+      Invoice <span class="mono">{{ $invoice->invoice_no }}</span> — {{ $invoice->status->label() }}
+    </p>
+  </div>
 
   @if($invoice->status->isPayable())
-    <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--tx3,#706f5c);margin-bottom:16px;">
-      <span style="border:1px solid var(--line);padding:4px 8px;">MTN MoMo</span>
-      <span style="border:1px solid var(--line);padding:4px 8px;">Airtel Money</span>
-      <span style="border:1px solid var(--line);padding:4px 8px;">Visa</span>
-      <span style="border:1px solid var(--line);padding:4px 8px;">Mastercard</span>
-    </div>
+    <div class="tb-card-body" style="border-top:1px solid var(--line);">
+      <p class="tb-label" id="pay-methods">Accepted payment methods</p>
+      <ul style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;" aria-labelledby="pay-methods">
+        @foreach(['MTN MoMo', 'Airtel Money', 'Visa', 'Mastercard'] as $method)
+          <li><span class="badge-tb badge-neutral">{{ $method }}</span></li>
+        @endforeach
+      </ul>
 
-    <form method="POST" action="{{ route('portal.invoice.pay', $invoice) }}">
-      @csrf
-      <button type="submit" class="btn gold" style="width:100%;justify-content:center;"><i class="fas fa-lock"></i> Pay with Flutterwave</button>
-    </form>
-    <p class="muted" style="font-size:11px;text-align:center;margin-top:10px;">Secure payment via Flutterwave. You'll choose mobile money or card on the next screen.</p>
+      <form method="POST" action="{{ route('portal.invoice.pay', $invoice) }}">
+        @csrf
+        <button type="submit" class="btn-tb btn-tb-primary" style="width:100%;">
+          <i class="fas fa-lock"></i> Pay {{ $invoice->currency }} {{ number_format((float) $invoice->total, 2) }} with Flutterwave
+        </button>
+      </form>
+      <p class="acct-hint" style="text-align:center;margin-top:9px;">
+        You'll choose mobile money or card on the next screen.
+      </p>
+    </div>
   @else
-    <p class="muted">This invoice is {{ strtolower($invoice->status->label()) }} — refresh in a moment, or contact support if this looks wrong.</p>
+    <div class="tb-card-body" style="border-top:1px solid var(--line);">
+      <p class="muted">This invoice is {{ strtolower($invoice->status->label()) }} — refresh in a moment, or get in touch if that looks wrong.</p>
+      <a href="{{ route('learn.index') }}" class="btn-tb btn-tb-ghost btn-tb-sm" style="margin-top:12px;">
+        <i class="fas fa-arrow-left"></i> Back to My Courses
+      </a>
+    </div>
   @endif
 </div>
+
 @endsection

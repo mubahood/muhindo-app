@@ -74,8 +74,10 @@ class CourseCheckoutTest extends TestCase
         $course = Course::factory()->create(['is_published' => true, 'price' => '75.00', 'currency' => 'UGX']);
         $this->actingAs($student)->post(route('courses.enroll', $course));
 
+        // The pay button names the amount, so nobody is one click from a charge
+        // whose size they have to scroll up to confirm.
         $this->get(route('courses.checkout', $course))
-            ->assertOk()->assertSee($course->title)->assertSee('Pay with Flutterwave');
+            ->assertOk()->assertSee($course->title)->assertSee('Pay UGX 75.00 with Flutterwave');
     }
 
     public function test_the_checkout_page_redirects_away_with_no_pending_invoice(): void

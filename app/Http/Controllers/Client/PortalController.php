@@ -20,7 +20,15 @@ class PortalController extends Controller
     public function index(Request $request): View
     {
         $client = $request->user()->client;
-        $projects = $client ? Project::where('client_id', $client->id)->with('updates')->latest()->get() : collect();
+        // Task counts are aggregated in the same query — the listing shows a
+        // completion bar per project, which a lazy `tasks` relation would turn
+        // into one query per card.
+        $projects = $client
+            ? Project::where('client_id', $client->id)
+                ->with('updates')
+                ->withCount(['tasks', 'tasks as done_tasks_count' => fn ($q) => $q->where('status', 'done')])
+                ->latest()->get()
+            : collect();
 
         return view('portal.index', ['client' => $client, 'projects' => $projects]);
     }

@@ -18,16 +18,19 @@
 </head>
 <body x-data="tdAdmin()" x-cloak>
 
+<a href="#tb-content" class="tb-skip">Skip to main content</a>
+
 @php
   $u = Auth::user();
   $unread = $u->unreadNotifications()->count();
   $orgName = $u->role_label;
+  $shellPaths = \App\Support\AppShell::paths();
 @endphp
 
 <div class="tb-wrapper">
 
   {{-- ═══════ Sidebar ═══════ --}}
-  <aside class="tb-sidebar" :class="{'open':side}">
+  <aside class="tb-sidebar" :class="{'open':side}" aria-label="Main navigation">
     <a wire:navigate href="{{ route('dashboard') }}" class="tb-sidebar-brand">
       <span class="bk" style="width:30px;height:30px;background:#0b1f3a;color:#b8933f;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;">MM</span>
       <span class="btext">
@@ -37,7 +40,7 @@
       <button class="tb-sidebar-close" type="button" @click="side=false"><i class="fas fa-xmark"></i></button>
     </a>
 
-    <nav class="tb-nav" style="padding-top:8px;">
+    <nav class="tb-nav" id="tb-nav" style="padding-top:8px;">
       @include('partials.admin-nav')
     </nav>
 
@@ -56,7 +59,8 @@
   <div class="tb-main">
     <header class="tb-topbar">
       <div class="tb-topbar-left">
-        <button class="tb-topbar-toggle" type="button" @click.stop="side = !side" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+        <button class="tb-topbar-toggle" type="button" @click.stop="side = !side"
+                :aria-expanded="side ? 'true' : 'false'" aria-controls="tb-nav" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
         {{-- Dynamic page title: reads the current page's <h1> (each page provides
              one — visually-hidden on list pages, visible on detail pages) and
              mirrors it into the browser tab. Re-reads after each wire:navigate. --}}
@@ -78,15 +82,17 @@
           <i class="fas fa-bell"></i>
           @if($unread)<span class="tb-bell-badge">{{ $unread > 99 ? '99+' : $unread }}</span>@endif
         </a>
-        <div class="tb-user-menu" :class="{'open':userMenu}" @click.outside="userMenu=false">
-          <div class="tb-user-trigger" @click="userMenu=!userMenu">
-            <div class="tb-user-avatar-sm">{{ $u->initials }}</div>
+        <div class="tb-user-menu" :class="{'open':userMenu}" @click.outside="userMenu=false" @keydown.escape="userMenu=false">
+          <button type="button" class="tb-user-trigger" @click="userMenu=!userMenu"
+                  :aria-expanded="userMenu ? 'true' : 'false'" aria-haspopup="true" aria-controls="tb-user-dropdown">
+            <div class="tb-user-avatar-sm" aria-hidden="true">{{ $u->initials }}</div>
             <span class="tb-user-name">{{ $u->name }}</span>
-            <i class="fas fa-chevron-down tb-user-caret"></i>
-          </div>
-          <div class="tb-user-dropdown">
-            <a href="#" @click.prevent="profileOpen=true;userMenu=false"><i class="fas fa-user-pen"></i> My profile</a>
-            <a href="#" @click.prevent="passwordOpen=true;userMenu=false"><i class="fas fa-lock"></i> Change password</a>
+            <span class="sr-only">Account menu</span>
+            <i class="fas fa-chevron-down tb-user-caret" aria-hidden="true"></i>
+          </button>
+          <div class="tb-user-dropdown" id="tb-user-dropdown">
+            <a wire:navigate href="{{ route('account.edit') }}"><i class="fas fa-user-pen"></i> Your account</a>
+            <a wire:navigate href="{{ route('account.edit') }}#security"><i class="fas fa-lock"></i> Change password</a>
             @if($u->isSuperAdmin())<a wire:navigate href="{{ route('admin.settings.index') }}"><i class="fas fa-gear"></i> Site settings</a>@endif
             <hr>
             <form method="POST" action="{{ route('logout') }}">@csrf
@@ -109,7 +115,7 @@
 
     @include('partials.toast-host')
 
-    <main class="tb-content">
+    <main class="tb-content" id="tb-content" tabindex="-1">
       {{-- Dual-mode: traditional Blade pages fill @yield('content'); Livewire
            full-page components fill {{ $slot }}. Exactly one is ever populated. --}}
       @yield('content')
@@ -132,42 +138,6 @@
   </div>
 </div>
 
-{{-- Self-profile modal --}}
-<template x-if="profileOpen">
-  <div class="tb-overlay">
-    <div class="tb-modal">
-      <div class="tb-modal-head"><b>My profile</b><button class="tb-alert-x" @click="profileOpen=false"><i class="fas fa-xmark"></i></button></div>
-      <div class="tb-modal-body">
-        <div class="tb-form-group full" style="margin-bottom:14px;"><label class="tb-label">Full name</label><input class="tb-input" x-model="pf.name"></div>
-        <div class="tb-form-group full" style="margin-bottom:14px;"><label class="tb-label">Phone</label><input class="tb-input" x-model="pf.phone"></div>
-        <div class="tb-form-group full"><label class="tb-label">Bio</label><textarea class="tb-textarea" x-model="pf.bio"></textarea></div>
-      </div>
-      <div class="tb-modal-foot">
-        <button class="btn-tb btn-tb-ghost" @click="profileOpen=false">Cancel</button>
-        <button class="btn-tb btn-tb-primary" @click="saveProfile()">Save</button>
-      </div>
-    </div>
-  </div>
-</template>
-
-{{-- Change-password modal --}}
-<template x-if="passwordOpen">
-  <div class="tb-overlay">
-    <div class="tb-modal">
-      <div class="tb-modal-head"><b>Change password</b><button class="tb-alert-x" @click="passwordOpen=false"><i class="fas fa-xmark"></i></button></div>
-      <div class="tb-modal-body">
-        <div class="tb-form-group full" style="margin-bottom:14px;"><label class="tb-label">Current password</label><input type="password" class="tb-input" x-model="pw.current_password"></div>
-        <div class="tb-form-group full" style="margin-bottom:14px;"><label class="tb-label">New password</label><input type="password" class="tb-input" x-model="pw.password"></div>
-        <div class="tb-form-group full"><label class="tb-label">Confirm new password</label><input type="password" class="tb-input" x-model="pw.password_confirmation"></div>
-      </div>
-      <div class="tb-modal-foot">
-        <button class="btn-tb btn-tb-ghost" @click="passwordOpen=false">Cancel</button>
-        <button class="btn-tb btn-tb-primary" @click="savePassword()">Update</button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
   // Global body-scroll lock shared by every modal/slide-over (reference-counted
   // so overlapping modals don't unlock each other). Self-heals on SPA navigation.
@@ -179,34 +149,14 @@
     window.__tbLocks = 0; document.body.classList.remove('tb-scroll-lock');
   });
   function tdAdmin(){
-    return {
-      side:false, userMenu:false, profileOpen:false, passwordOpen:false,
-      pf:{ name:@json($u->name), phone:@json($u->phone), bio:@json($u->bio) },
-      pw:{ current_password:'', password:'', password_confirmation:'' },
-      _token: document.querySelector('meta[name=csrf-token]').content,
-      init(){
-        this.$watch('profileOpen', v => window.tbScrollLock(v));
-        this.$watch('passwordOpen', v => window.tbScrollLock(v));
-      },
-      async post(url, body){
-        const r = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-TOKEN':this._token,'Accept':'application/json'},body:JSON.stringify(body)});
-        return { ok:r.ok, data: await r.json().catch(()=>({})) };
-      },
-      async saveProfile(){
-        const {ok,data} = await this.post(@json(route('profile.update')), this.pf);
-        if(ok){ location.reload(); } else { alert((data.message)||'Could not save.'); }
-      },
-      async savePassword(){
-        const {ok,data} = await this.post(@json(route('profile.password')), this.pw);
-        if(ok){ this.passwordOpen=false; this.pw={current_password:'',password:'',password_confirmation:''}; alert('Password updated.'); }
-        else { alert((data.message)||'Could not update password.'); }
-      },
-    };
+    return { side:false, userMenu:false };
   }
+
   // Auto-dismiss flash after 5s
   setTimeout(function(){ document.querySelectorAll('.tb-flash-wrap .tb-alert-success').forEach(function(a){a.style.display='none';}); }, 5000);
 </script>
 <style>[x-cloak]{display:none!important;}</style>
+@include('partials.app-navigation', ['shellPaths' => $shellPaths])
 {{-- Livewire 3 (bundles Alpine — the standalone Alpine include is intentionally removed to avoid a double Alpine). --}}
 @livewireScripts
 <script defer src="{{ asset('vendor/js/chart.min.js') }}"></script>

@@ -47,6 +47,12 @@ class LearnIndexQueryCountTest extends TestCase
         $studentWithOne = User::factory()->create(['role' => 'student']);
         $this->enrollInANewCourse($studentWithOne);
 
+        // The page renders inside the app shell, whose sidebar gates items on
+        // permissions — and Spatie loads the permission table once per process.
+        // Warm it first, or the first measurement carries a one-off query the
+        // second doesn't and the comparison stops being about per-row cost.
+        $this->actingAs($studentWithOne)->get(route('learn.index'))->assertOk();
+
         DB::enableQueryLog();
         $this->actingAs($studentWithOne)->get(route('learn.index'))->assertOk();
         $queriesForOne = count(DB::getQueryLog());

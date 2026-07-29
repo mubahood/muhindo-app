@@ -109,12 +109,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/read-all', [\App\Http\Controllers\Admin\NotificationController::class, 'readAll'])->name('notifications.read-all');
 });
 
-// Self-profile drawer (JSON) — any authenticated user
-Route::prefix('api-internal')->middleware(['auth'])->name('profile.')->group(function () {
-    Route::post('profile/update', [\App\Http\Controllers\Admin\ApiController::class, 'profileUpdate'])->name('update');
-    Route::post('profile/avatar', [\App\Http\Controllers\Admin\ApiController::class, 'profileAvatarUpdate'])->name('avatar');
-    Route::delete('profile/avatar', [\App\Http\Controllers\Admin\ApiController::class, 'profileAvatarRemove'])->name('avatar.remove');
-    Route::post('profile/password', [\App\Http\Controllers\Admin\ApiController::class, 'profilePasswordChange'])->name('password');
+// Your account — profile & settings, one screen for every signed-in person
+Route::prefix('account')->middleware(['auth'])->name('account.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\AccountController::class, 'edit'])->name('edit');
+    Route::post('/', [\App\Http\Controllers\AccountController::class, 'update'])->name('update');
+    Route::post('type', [\App\Http\Controllers\AccountController::class, 'updateAccountType'])->name('type');
+    Route::post('avatar', [\App\Http\Controllers\AccountController::class, 'updateAvatar'])->name('avatar');
+    Route::delete('avatar', [\App\Http\Controllers\AccountController::class, 'removeAvatar'])->name('avatar.remove');
 });
 
 /*

@@ -14,6 +14,9 @@
   .acct-type .d{font-size:11px;line-height:1.4;color:var(--tx3);}
   .acct-type.on{border-color:var(--pri);background:var(--pri-soft);box-shadow:inset 0 0 0 1px var(--pri);}
   .acct-type.on .t i{color:var(--pri);}
+  /* The radio itself is visually hidden but still focusable, so the card has to
+     carry its focus ring — without this the keyboard focus is invisible here. */
+  .acct-type:has(input:focus-visible){outline:2px solid var(--pri);outline-offset:2px;}
   @media(max-width:560px){.acct-types{grid-template-columns:1fr;}}
 </style>
 @endpush
