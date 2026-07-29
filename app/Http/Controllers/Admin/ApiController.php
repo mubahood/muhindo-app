@@ -26,7 +26,23 @@ class ApiController extends Controller
             'email' => "required|email|unique:users,email,{$user->id}",
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:500',
+            'account_type' => 'nullable|in:student,client,both',
         ]);
+
+        // Account type is optional here (admins don't have one), and capabilities
+        // are only ever added or kept — never silently revoked in a way that would
+        // orphan existing enrollments or a client's projects.
+        if (isset($data['account_type']) && ! $user->isAdmin()) {
+            $wantsClient = in_array($data['account_type'], ['client', 'both'], true);
+            $data['is_student'] = in_array($data['account_type'], ['student', 'both'], true)
+                || $user->enrollments()->exists();
+            $data['is_client'] = $wantsClient || $user->client()->exists();
+
+            if ($data['is_client'] && ! $user->client()->exists()) {
+                app(\App\Http\Controllers\Auth\StudentRegistrationController::class)->ensureClientProfile($user);
+            }
+        }
+        unset($data['account_type']);
 
         $user->update($data);
 
@@ -36,6 +52,7 @@ class ApiController extends Controller
             'email' => $user->email,
             'avatar_url' => $user->avatar_url,
             'initials' => $user->initials,
+            'account_type_label' => $user->accountTypeLabel(),
         ]);
     }
 

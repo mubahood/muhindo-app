@@ -248,6 +248,33 @@ strong,b{font-weight:600;}
 .dash-grid{display:grid;gap:12px;}
 .dash-grid.cols-2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr));}
 .dash-grid.cols-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+/* ── Student dashboard widgets: resume card, progress bars, to-do list ────── */
+.resume-card{border-left:3px solid var(--mp,#0b1f3a);}
+.resume-body{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.resume-main{flex:1;min-width:0;}
+.resume-title{font-size:15px;font-weight:600;margin:3px 0 8px;}
+.resume-bar{height:6px;background:var(--ms2,#f0eee7);overflow:hidden;margin-bottom:6px;max-width:420px;}
+.resume-bar i{display:block;height:100%;background:var(--mg,#b8933f);transition:width .4s ease;}
+.resume-cta{flex-shrink:0;}
+.todo-list{display:flex;flex-direction:column;}
+.todo-row{display:flex;align-items:center;gap:12px;padding:11px 15px;border-bottom:1px solid var(--ml,#e7e3d8);
+  color:inherit;text-decoration:none;transition:background .12s;}
+.todo-row:last-child{border-bottom:none;}
+.todo-row:hover{background:var(--ms,#faf9f6);}
+.todo-icon{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:var(--mps,#eef1f6);color:var(--mp,#0b1f3a);font-size:12px;}
+.todo-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.todo-title{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.todo-meta{font-size:11.5px;color:var(--mt2,#706f5c);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.todo-go{flex-shrink:0;color:var(--mt2,#706f5c);font-size:12px;}
+@media(max-width:600px){
+  .resume-body{align-items:stretch;}
+  .resume-cta{width:100%;justify-content:center;}
+  .dash-root .tb-stats-grid{grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;}
+  .dash-grid.cols-2{grid-template-columns:1fr;}
+  .todo-row{padding:10px 12px;gap:10px;}
+}
+
 /* Compact dashboard cards/stats (scoped so the rest of the system is untouched) */
 .dash-root .tb-stats-grid{gap:12px;}
 .dash-root .tb-stat-card{padding:12px 14px;gap:11px;}

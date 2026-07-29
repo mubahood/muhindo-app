@@ -175,11 +175,140 @@ class DashboardService
         return $this->streaks->currentWeeklyStreak($user);
     }
 
+    /** Total focused learning time across every lesson, in seconds (the active_seconds tracker). */
+    public function studentLearningSeconds(User $user): int
+    {
+        return (int) \App\Models\LessonProgress::whereIn(
+            'enrollment_id',
+            Enrollment::where('user_id', $user->id)->select('id')
+        )->sum('active_seconds');
+    }
+
+    /** @return Collection<int, \App\Models\Certificate> Earned certificates, newest first. */
+    public function studentCertificates(User $user): Collection
+    {
+        return \App\Models\Certificate::whereIn(
+            'enrollment_id',
+            Enrollment::where('user_id', $user->id)->select('id')
+        )->with('enrollment.course')->latest('issued_at')->get();
+    }
+
+    /**
+     * Required quizzes and assignments the student still owes across every active
+     * enrollment — the "what do I need to do next" widget. Mirrors the same
+     * submitted-check ProgressService::completionBlockers uses.
+     *
+     * @return Collection<int, array<string,mixed>>
+     */
+    public function studentPendingActivities(User $user): Collection
+    {
+        // Deliberately a fixed number of queries regardless of how many courses the
+        // student is enrolled in — the per-enrollment loop this replaced was a real
+        // N+1 (StudentDashboardQueryCountTest guards this).
+        $enrollments = Enrollment::where('user_id', $user->id)
+            ->where('status', 'active')->with('course')->get();
+
+        if ($enrollments->isEmpty()) {
+            return collect();
+        }
+
+        $courseIds = $enrollments->pluck('course_id');
+        $enrollmentIds = $enrollments->pluck('id');
+        // One enrollment per course per user, so course_id maps back to its course.
+        $coursesById = $enrollments->pluck('course', 'course_id');
+
+        $submittedQuizIds = \App\Models\QuizAttempt::whereIn('enrollment_id', $enrollmentIds)
+            ->whereNotNull('submitted_at')->pluck('quiz_id')->unique();
+        $submittedAssignmentIds = \App\Models\AssignmentSubmission::whereIn('enrollment_id', $enrollmentIds)
+            ->whereNotNull('submitted_at')->pluck('assignment_id')->unique();
+
+        $pending = collect();
+
+        foreach (\App\Models\Quiz::whereIn('course_id', $courseIds)
+            ->where('is_published', true)->where('is_required', true)
+            ->whereNotIn('id', $submittedQuizIds)->get() as $quiz) {
+            $pending->push([
+                'kind' => 'quiz',
+                'title' => $quiz->title,
+                'course' => $coursesById[$quiz->course_id]->title,
+                'url' => route('learn.quiz.show', [$coursesById[$quiz->course_id], $quiz]),
+            ]);
+        }
+
+        foreach (\App\Models\Assignment::whereIn('course_id', $courseIds)
+            ->where('is_published', true)->where('is_required', true)
+            ->whereNotIn('id', $submittedAssignmentIds)->get() as $assignment) {
+            $pending->push([
+                'kind' => 'assignment',
+                'title' => $assignment->title,
+                'course' => $coursesById[$assignment->course_id]->title,
+                'due_at' => $assignment->due_at,
+                'url' => route('learn.assignment.show', [$coursesById[$assignment->course_id], $assignment]),
+            ]);
+        }
+
+        return $pending;
+    }
+
     // ── Client dashboard ─────────────────────────────────────────
 
     public function clientProjects(Client $client): Collection
     {
         return Project::where('client_id', $client->id)->with('updates')->latest()->get();
+    }
+
+    /**
+     * Project requests this account submitted that haven't become a project yet —
+     * the first step of the client journey, so it doesn't vanish after sending.
+     *
+     * @return Collection<int, \App\Models\ProjectInquiry>
+     */
+    public function clientOpenRequests(User $user): Collection
+    {
+        return \App\Models\ProjectInquiry::where('user_id', $user->id)
+            ->whereIn('status', ['new', 'contacted'])
+            ->latest()->get();
+    }
+
+    /**
+     * Task completion per project, keyed by project id — one grouped query, not one
+     * per project.
+     *
+     * @return Collection<int|string, array{done:int,total:int}>
+     */
+    public function clientTaskProgress(Collection $projects): Collection
+    {
+        if ($projects->isEmpty()) {
+            return collect();
+        }
+
+        return ProjectTask::whereIn('project_id', $projects->pluck('id'))
+            ->get(['project_id', 'status'])
+            ->groupBy('project_id')
+            ->map(fn (Collection $tasks) => $this->taskCounts($tasks));
+    }
+
+    /**
+     * @param  Collection<int,ProjectTask>  $tasks
+     * @return array{done:int,total:int}
+     */
+    private function taskCounts(Collection $tasks): array
+    {
+        return [
+            'done' => $tasks->where('status', 'done')->count(),
+            'total' => $tasks->count(),
+        ];
+    }
+
+    /** @return Collection<int, \App\Models\ProjectUpdate> Latest progress notes across all the client's projects. */
+    public function clientRecentUpdates(Collection $projects, int $limit = 5): Collection
+    {
+        if ($projects->isEmpty()) {
+            return collect();
+        }
+
+        return \App\Models\ProjectUpdate::whereIn('project_id', $projects->pluck('id'))
+            ->with('project')->latest()->limit($limit)->get();
     }
 
     public function clientOutstandingBalance(Client $client): string

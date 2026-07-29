@@ -26,6 +26,7 @@ class CourseContextRegistrationTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'terms' => '1',
+            'account_type' => 'student',
             'intended_course' => $course->slug,
         ]);
 
@@ -45,6 +46,7 @@ class CourseContextRegistrationTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'terms' => '1',
+            'account_type' => 'student',
         ]);
 
         $response->assertRedirect(route('dashboard'));
@@ -73,6 +75,7 @@ class CourseContextRegistrationTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'terms' => '1',
+            'account_type' => 'student',
             'intended_course' => $course->slug,
         ]);
 
@@ -88,6 +91,7 @@ class CourseContextRegistrationTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'terms' => '1',
+            'account_type' => 'student',
             'intended_course' => 'does-not-exist',
         ]);
 
@@ -172,6 +176,7 @@ class CourseContextRegistrationTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'terms' => '1',
+            'account_type' => 'student',
             'intended_course' => $course->slug,
             'coupon_code' => 'GUEST20',
         ]);
@@ -218,6 +223,7 @@ class CourseContextRegistrationTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'terms' => '1',
+            'account_type' => 'student',
             'intended_course' => $course->slug,
             'coupon_code' => 'DOES-NOT-EXIST',
         ]);

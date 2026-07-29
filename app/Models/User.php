@@ -32,7 +32,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
 
     protected $fillable = [
         'name', 'username', 'email', 'password', 'role',
-        'phone', 'bio', 'avatar', 'is_active', 'is_admin', 'theme', 'last_active_at',
+        'phone', 'bio', 'avatar', 'is_active', 'is_admin', 'is_student', 'is_client', 'theme', 'last_active_at',
         'password_change_required', 'onboarding_dismissed_at',
     ];
 
@@ -47,6 +47,8 @@ class User extends Authenticatable implements MustVerifyEmailContract
             'password' => 'hashed',
             'is_active' => 'boolean',
             'is_admin' => 'boolean',
+            'is_student' => 'boolean',
+            'is_client' => 'boolean',
             'last_active_at' => 'datetime',
             'password_change_required' => 'boolean',
             'onboarding_dismissed_at' => 'datetime',
@@ -68,14 +70,52 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return in_array($this->role, ['super_admin', 'admin'], true) || $this->is_admin === true;
     }
 
+    /**
+     * Account capabilities are independent of `role`: one person can learn AND
+     * hire. The flags are additive on top of the primary role (a role=client
+     * account is still a client), and admins implicitly hold both so they can
+     * use every surface they administer without a second account.
+     */
     public function isStudent(): bool
     {
-        return $this->role === 'student';
+        return $this->hasStudentAccess() || $this->isAdmin();
     }
 
     public function isClient(): bool
     {
-        return $this->role === 'client';
+        return $this->hasClientAccess() || $this->isAdmin();
+    }
+
+    private function hasStudentAccess(): bool
+    {
+        return (bool) $this->is_student || $this->role === 'student';
+    }
+
+    private function hasClientAccess(): bool
+    {
+        return (bool) $this->is_client || $this->role === 'client';
+    }
+
+    /** @return list<string> The capabilities this account actually holds (admin's implicit access excluded). */
+    public function accountTypes(): array
+    {
+        return array_values(array_filter([
+            $this->hasStudentAccess() ? 'student' : null,
+            $this->hasClientAccess() ? 'client' : null,
+        ]));
+    }
+
+    public function accountTypeLabel(): string
+    {
+        if ($this->isAdmin()) {
+            return $this->role_label;
+        }
+
+        return match (count($types = $this->accountTypes())) {
+            2 => 'Student & Client',
+            1 => $types[0] === 'client' ? 'Client' : 'Student',
+            default => $this->role_label,
+        };
     }
 
     public function canAccessAdmin(): bool

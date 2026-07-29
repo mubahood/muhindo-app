@@ -2,11 +2,13 @@
   /** @var \App\Models\User $u */
   $u = Auth::user();
 
-  // Gate helper: null = always; 'super' = super-admin; string = permission;
-  // array = "any of these permissions".
+  // Gate helper: null = always; 'super' = super-admin; 'is:student'/'is:client' =
+  // account capability; string = permission; array = "any of these permissions".
   $allow = function ($gate) use ($u) {
       if ($gate === null) return true;
       if ($gate === 'super') return $u->isSuperAdmin();
+      if ($gate === 'is:student') return $u->isStudent();
+      if ($gate === 'is:client') return $u->isClient();
       if (is_array($gate)) {
           foreach ($gate as $p) if ($u->can($p)) return true;
           return false;
@@ -15,6 +17,16 @@
   };
 
   $groups = [
+      // Capability groups first — for a student or client these ARE their menu.
+      ['key' => 'learning', 'label' => 'Learning', 'icon' => 'fa-graduation-cap', 'gate' => 'is:student', 'items' => [
+          ['label' => 'My Courses', 'icon' => 'fa-book-open', 'route' => 'learn.index', 'match' => ['learn.index']],
+          ['label' => 'Browse Courses', 'icon' => 'fa-magnifying-glass', 'route' => 'courses.index', 'match' => ['courses.index']],
+      ]],
+      ['key' => 'myprojects', 'label' => 'My Projects', 'icon' => 'fa-briefcase', 'gate' => 'is:client', 'items' => [
+          ['label' => 'Projects', 'icon' => 'fa-diagram-project', 'route' => 'portal.index', 'match' => ['portal.index', 'portal.project']],
+          ['label' => 'Invoices', 'icon' => 'fa-file-invoice-dollar', 'route' => 'portal.invoices', 'match' => ['portal.invoices']],
+          ['label' => 'Start a project', 'icon' => 'fa-plus', 'route' => 'start-a-project', 'match' => ['start-a-project']],
+      ]],
       ['key' => 'portfolio', 'label' => 'Portfolio', 'icon' => 'fa-id-card', 'gate' => 'portfolio.manage', 'items' => [
           ['label' => 'Projects', 'icon' => 'fa-diagram-project', 'route' => 'admin.portfolio-projects.index', 'match' => ['admin.portfolio-projects.*']],
           ['label' => 'Skills', 'icon' => 'fa-star', 'route' => 'admin.skills.index', 'match' => ['admin.skills.*']],

@@ -12,9 +12,15 @@ class ProjectInquiry extends Model
     use HasFactory;
 
     protected $fillable = [
-        'uuid', 'name', 'email', 'phone', 'organisation', 'project_type',
+        'uuid', 'user_id', 'name', 'email', 'phone', 'organisation', 'project_type',
         'budget_range', 'timeline', 'description', 'status',
     ];
+
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this> */
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     protected function casts(): array
     {

@@ -87,6 +87,7 @@ class PublicHeaderAuthTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'terms' => '1',
+            'account_type' => 'student',
         ]);
 
         $response->assertRedirect();

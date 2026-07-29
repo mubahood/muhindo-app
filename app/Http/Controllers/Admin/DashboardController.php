@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
- * Single dashboard entry point for every role. Picks a per-role view; each
- * view composes widgets fed by DashboardService.
+ * Single dashboard entry point for every role. Sections are composed by
+ * capability rather than picking one role view, because an account can be both
+ * a student and a client — such a person sees their learning and their projects
+ * on the same dashboard.
  */
 class DashboardController extends Controller
 {
@@ -18,17 +20,16 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        $role = match (true) {
-            $user->isAdmin() => 'admin',
-            $user->isStudent() => 'student',
-            $user->isClient() => 'client',
-            default => 'fallback',
-        };
+        $sections = array_values(array_filter([
+            $user->isAdmin() ? 'admin' : null,
+            $user->isStudent() ? 'student' : null,
+            $user->isClient() ? 'client' : null,
+        ]));
 
         return view('admin.dashboard.index', [
             'user' => $user,
             'svc' => $svc,
-            'role' => $role,
+            'sections' => $sections !== [] ? $sections : ['fallback'],
         ]);
     }
 

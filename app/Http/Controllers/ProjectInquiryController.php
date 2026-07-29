@@ -42,7 +42,12 @@ class ProjectInquiryController extends Controller
             'description' => 'required|string|max:5000',
         ]);
 
-        $inquiry = ProjectInquiry::create($data + ['uuid' => (string) Str::uuid()]);
+        // Link the request to the signed-in account so they can follow it in their
+        // portal; guests still submit anonymously exactly as before.
+        $inquiry = ProjectInquiry::create($data + [
+            'uuid' => (string) Str::uuid(),
+            'user_id' => $request->user()?->id,
+        ]);
 
         $admins = User::whereIn('role', ['super_admin', 'admin'])->get();
         Notification::send($admins, new ProjectInquiryReceivedNotification($inquiry));
