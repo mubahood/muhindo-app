@@ -38,8 +38,14 @@
         <h1 data-rise>Hi, I'm <b>{{ $identity['name'] ?? 'Muhindo Mubaraka' }}</b>.<br>{{ $identity['tagline'] ?? '' }}</h1>
         <p class="lead" data-rise>{{ $about['lead'] ?? '' }}</p>
         <div class="ctas" data-rise>
-          <a href="{{ route('courses.index') }}" wire:navigate class="btn gold lg">Explore e&#8209;Learning</a>
-          <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost lg">Start a project</a>
+          <a href="{{ route('courses.index') }}" wire:navigate class="btn gold lg cta">
+            <span class="cta-a">Explore e&#8209;Learning</span>
+            <span class="cta-b" aria-hidden="true">Browse the courses <i class="fas fa-arrow-right"></i></span>
+          </a>
+          <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost lg cta">
+            <span class="cta-a">Start a project</span>
+            <span class="cta-b" aria-hidden="true">Tell me what you need <i class="fas fa-arrow-right"></i></span>
+          </a>
         </div>
       </div>
 
@@ -132,7 +138,10 @@
     </div>
 
     <div style="text-align:center;margin-top:30px;" data-rise>
-      <a href="{{ route('portfolio.work') }}" wire:navigate class="btn ghost">View all work <i class="fas fa-arrow-right"></i></a>
+      <a href="{{ route('portfolio.work') }}" wire:navigate class="btn ghost cta">
+        <span class="cta-a">View all work</span>
+        <span class="cta-b" aria-hidden="true">See every project <i class="fas fa-arrow-right"></i></span>
+      </a>
     </div>
   </div>
 </section>
@@ -183,7 +192,10 @@
       @endforeach
     </div>
     <div style="text-align:center;margin-top:26px;" data-rise>
-      <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Start a project <i class="fas fa-arrow-right"></i></a>
+      <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold cta">
+        <span class="cta-a">Start a project</span>
+        <span class="cta-b" aria-hidden="true">Tell me what you need <i class="fas fa-arrow-right"></i></span>
+      </a>
     </div>
   </div>
 </section>
@@ -193,7 +205,10 @@
   <div class="wrap">
     <h2 data-rise>Let's build something together</h2>
     <p class="lead" style="max-width:480px;margin:12px auto 26px;" data-rise>Have a project, a role, or just a question? I'd love to hear from you.</p>
-    <div data-rise><a href="{{ route('contact') }}" wire:navigate class="btn gold lg">Get in touch</a></div>
+    <div data-rise><a href="{{ route('contact') }}" wire:navigate class="btn gold lg cta">
+      <span class="cta-a">Get in touch</span>
+      <span class="cta-b" aria-hidden="true">Send me a message <i class="fas fa-arrow-right"></i></span>
+    </a></div>
   </div>
 </section>
 

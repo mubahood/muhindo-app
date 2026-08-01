@@ -21,11 +21,13 @@ class SiteNavTest extends TestCase
         }
     }
 
-    public function test_the_menu_offers_the_four_top_level_sections(): void
+    public function test_the_menu_offers_the_top_level_sections_in_order(): void
     {
         $labels = array_column(SiteNav::items(), 'label');
 
-        $this->assertSame(['Learn', 'About Me', 'Projects', 'Consultancy'], $labels);
+        // Order is the message: learning first, then who he is, then the
+        // evidence, then the writing, then how to hire him.
+        $this->assertSame(['Learn', 'About Me', 'Projects', 'Insights', 'Consultancy'], $labels);
     }
 
     public function test_the_about_panel_carries_every_page_about_him(): void

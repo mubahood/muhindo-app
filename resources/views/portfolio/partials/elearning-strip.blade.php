@@ -26,7 +26,10 @@
       @endforeach
     </div>
     <div style="text-align:center;margin-top:30px;" data-rise>
-      <a href="{{ route('courses.index') }}" wire:navigate class="btn ghost">Browse all courses <i class="fas fa-arrow-right"></i></a>
+      <a href="{{ route('courses.index') }}" wire:navigate class="btn ghost cta">
+        <span class="cta-a">Browse all courses</span>
+        <span class="cta-b" aria-hidden="true">See the full catalogue <i class="fas fa-arrow-right"></i></span>
+      </a>
     </div>
   </div>
 </section>

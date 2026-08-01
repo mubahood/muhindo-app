@@ -68,6 +68,12 @@ class SiteNav
                 'icon' => 'fa-diagram-project',
             ],
             [
+                'label' => 'Insights',
+                'url' => route('insights.index'),
+                'match' => ['insights.*'],
+                'icon' => 'fa-pen-nib',
+            ],
+            [
                 'label' => 'Consultancy',
                 'url' => route('portfolio.services'),
                 'match' => ['portfolio.services', 'start-a-project'],

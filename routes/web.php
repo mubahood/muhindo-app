@@ -48,6 +48,10 @@ Route::get('/experience', [PortfolioController::class, 'experience'])->name('por
 Route::get('/education', [PortfolioController::class, 'education'])->name('portfolio.education');
 Route::get('/research', [PortfolioController::class, 'research'])->name('portfolio.research');
 Route::get('/cv', [PortfolioController::class, 'cv'])->name('portfolio.cv');
+
+// Insights — writing. Public reading side; authoring lives in the back office.
+Route::get('/insights', [\App\Http\Controllers\InsightController::class, 'index'])->name('insights.index');
+Route::get('/insights/{post:slug}', [\App\Http\Controllers\InsightController::class, 'show'])->name('insights.show');
 Route::get('/products', [PortfolioController::class, 'products'])->name('portfolio.products');
 Route::get('/contact', [PortfolioController::class, 'contactPage'])->name('contact');
 Route::post('/contact', [PortfolioController::class, 'contact'])->middleware('throttle:5,1')->name('contact.store');
@@ -129,6 +133,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::resource('portfolio-projects', PortfolioProjectController::class)->except('show');
     Route::resource('skills', SkillController::class)->except('show');
     Route::resource('experience', ExperienceController::class)->except('show');
+    Route::resource('posts', \App\Http\Controllers\Admin\PostController::class)->except('show');
+    Route::get('testimonials', [\App\Http\Controllers\Admin\TestimonialController::class, 'index'])->name('testimonials.index');
+    Route::post('testimonials', [\App\Http\Controllers\Admin\TestimonialController::class, 'store'])->name('testimonials.store');
+    Route::delete('testimonials/{index}', [\App\Http\Controllers\Admin\TestimonialController::class, 'destroy'])->name('testimonials.destroy');
     Route::resource('education', EducationController::class)->except('show');
     Route::resource('services', ServicePageController::class)->except('show');
     Route::get('messages', [PortfolioController::class, 'inbox'])->name('messages.index');

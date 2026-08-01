@@ -53,7 +53,10 @@
   <div class="wrap">
     <h2 data-rise>Have a similar project in mind?</h2>
     <p class="lead" style="max-width:480px;margin:12px auto 22px;" data-rise>Get in touch and let's talk about what you're building.</p>
-    <div data-rise><a href="{{ route('contact') }}" wire:navigate class="btn gold">Get in touch</a></div>
+    <div data-rise><a href="{{ route('contact') }}" wire:navigate class="btn gold cta">
+      <span class="cta-a">Get in touch</span>
+      <span class="cta-b" aria-hidden="true">Send me a message <i class="fas fa-arrow-right"></i></span>
+    </a></div>
   </div>
 </section>
 

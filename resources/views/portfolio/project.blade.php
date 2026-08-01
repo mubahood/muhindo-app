@@ -56,7 +56,10 @@
   <div class="wrap">
     <h2>Have a similar project in mind?</h2>
     <p class="lead" style="max-width:520px;margin:14px auto 26px;">Get in touch and let's talk about what you're building.</p>
-    <a href="{{ route('contact') }}" wire:navigate class="btn gold lg">Get in touch</a>
+    <a href="{{ route('contact') }}" wire:navigate class="btn gold lg cta">
+      <span class="cta-a">Get in touch</span>
+      <span class="cta-b" aria-hidden="true">Send me a message <i class="fas fa-arrow-right"></i></span>
+    </a>
   </div>
 </section>
 
