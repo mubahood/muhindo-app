@@ -20,13 +20,13 @@ class HomePageTest extends TestCase
         Settings::set('portfolio.identity', json_encode([
             'name' => 'Muhindo Mubaraka',
             'title' => 'Manager, Information Systems',
-            'tagline' => 'I build software that ships, and I teach people to build it too.',
+            'tagline' => 'I build software that lasts, and I teach people to build it too.',
         ]));
 
         $response = $this->get(route('home'));
 
         $response->assertOk();
-        $response->assertSee('I build software that ships', false);
+        $response->assertSee('I build software that lasts', false);
         // A headline that names a region caps the audience at it before anyone
         // has read a word about the work.
         $this->assertStringNotContainsStringIgnoringCase(

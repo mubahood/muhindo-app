@@ -41,7 +41,13 @@ class PortfolioContentSeeder extends Seeder
             // enrol is that the software gets finished and the teaching lands —
             // neither of which is a regional trait, and naming a region up front
             // quietly caps the audience at it.
-            'tagline' => 'I build software that ships, and I teach people to build it too.',
+            //
+            // "lasts", not "ships": the audience here includes school directors
+            // and ministry officers, and "ships" is a word that only means
+            // anything to programmers. Lasting is also the harder, more
+            // differentiating claim — and the one the rest of the page evidences,
+            // with systems still in production and the training that kept them there.
+            'tagline' => 'I build software that lasts, and I teach people to build it too.',
             'location' => 'Kampala, Uganda',
             'initials' => 'MM',
         ]));
