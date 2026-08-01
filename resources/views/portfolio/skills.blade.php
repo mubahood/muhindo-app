@@ -55,7 +55,7 @@
     <p class="lead" style="max-width:460px;margin:10px auto 20px;">Every one of these has shipped inside a system somebody depends on.</p>
     <a href="{{ route('portfolio.work') }}" wire:navigate class="btn gold cta">
       <span class="cta-a">See the work</span>
-      <span class="cta-b" aria-hidden="true">Browse the projects <i class="fas fa-arrow-right"></i></span>
+      <span class="cta-b" aria-hidden="true">See the projects <i class="fas fa-arrow-right"></i></span>
     </a>
   </div>
 </section>

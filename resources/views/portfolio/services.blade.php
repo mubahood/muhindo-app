@@ -41,7 +41,7 @@
     <p class="lead" style="max-width:480px;margin:12px auto 22px;">Let's talk about what you're building.</p>
     <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold cta">
         <span class="cta-a">Start a project</span>
-        <span class="cta-b" aria-hidden="true">Tell me what you need <i class="fas fa-arrow-right"></i></span>
+        <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
       </a>
   </div>
 </section>

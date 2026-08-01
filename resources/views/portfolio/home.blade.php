@@ -40,11 +40,11 @@
         <div class="ctas" data-rise>
           <a href="{{ route('courses.index') }}" wire:navigate class="btn gold lg cta">
             <span class="cta-a">Explore e&#8209;Learning</span>
-            <span class="cta-b" aria-hidden="true">Browse the courses <i class="fas fa-arrow-right"></i></span>
+            <span class="cta-b" aria-hidden="true">Start Learning <i class="fas fa-arrow-right"></i></span>
           </a>
           <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost lg cta">
             <span class="cta-a">Start a project</span>
-            <span class="cta-b" aria-hidden="true">Tell me what you need <i class="fas fa-arrow-right"></i></span>
+            <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
           </a>
         </div>
       </div>
@@ -140,7 +140,7 @@
     <div style="text-align:center;margin-top:30px;" data-rise>
       <a href="{{ route('portfolio.work') }}" wire:navigate class="btn ghost cta">
         <span class="cta-a">View all work</span>
-        <span class="cta-b" aria-hidden="true">See every project <i class="fas fa-arrow-right"></i></span>
+        <span class="cta-b" aria-hidden="true">See the projects <i class="fas fa-arrow-right"></i></span>
       </a>
     </div>
   </div>
@@ -194,7 +194,7 @@
     <div style="text-align:center;margin-top:26px;" data-rise>
       <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold cta">
         <span class="cta-a">Start a project</span>
-        <span class="cta-b" aria-hidden="true">Tell me what you need <i class="fas fa-arrow-right"></i></span>
+        <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
       </a>
     </div>
   </div>
