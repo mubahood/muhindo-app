@@ -38,10 +38,15 @@
     .brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;letter-spacing:.01em;}
     .brand .badge{width:25px;height:25px;background:var(--pri);color:var(--gold);display:flex;align-items:center;
       justify-content:center;font-size:10.5px;font-weight:700;letter-spacing:.02em;}
-    .nav{display:flex;align-items:center;gap:19px;font-size:13px;font-weight:400;}
-    .nav a{color:var(--tx2);transition:color .15s;}
-    .nav a:hover,.nav a.on{color:var(--tx);}
+    .nav{display:flex;align-items:center;gap:18px;font-size:13px;font-weight:600;}
+    /* The nav is now set at the same weight and ink as the body text it sits
+       above, so hover needs its own colour or it reads as dead. Active keeps
+       that colour plus a standing rule, which hover never draws — the two
+       states have to be told apart at a glance. */
+    .nav a{position:relative;color:var(--tx);transition:color .15s;padding:2px 0;}
+    .nav a:hover{color:var(--gold-d);}
     .nav a.on{color:var(--gold-d);}
+    .nav a.on::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:2px;background:var(--gold);}
     .nav .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin-left:4px;vertical-align:middle;}
     .hd-r{margin-left:auto;display:flex;align-items:center;gap:10px;}
     .burger{display:none;width:32px;height:32px;border:1px solid var(--line-2);background:var(--surface);
@@ -69,7 +74,7 @@
     h1{font-size:38px;font-weight:200;letter-spacing:-.025em;line-height:1.12;}
     h1 b{font-weight:600;color:var(--pri);}
     h2{font-size:24px;font-weight:300;letter-spacing:-.02em;line-height:1.2;}
-    .lead{font-size:15px;font-weight:300;color:var(--tx2);line-height:1.6;}
+    .lead{font-size:15px;font-weight:450;color:var(--tx2);line-height:1.6;}
 
     /* hero (home only) */
     .hero{padding:48px 0 44px;text-align:center;position:relative;overflow:hidden;}
@@ -80,7 +85,7 @@
     .stat-row{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;margin-top:36px;}
     .stat-row .stat{text-align:center;}
     .stat-row .v{font-size:23px;font-weight:600;color:var(--pri);}
-    .stat-row .l{font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+    .stat-row .l{font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
 
     /* compact "what I do" teaser row (home only — the full grid lives on /services) */
     .icon-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;}
@@ -88,13 +93,13 @@
       border:1px solid var(--line);background:var(--surface);transition:border-color .15s,transform .15s;}
     .icon-row a:hover{border-color:var(--gold);transform:translateY(-2px);}
     .icon-row .ic{width:38px;height:38px;background:var(--gold-soft);color:var(--gold-d);display:flex;align-items:center;justify-content:center;font-size:15px;}
-    .icon-row span{font-size:12.5px;font-weight:600;color:var(--tx);}
+    .icon-row span{font-size:13px;font-weight:600;color:var(--tx);}
 
     /* page hero (every sub-page) — shorter, left-aligned, no stat row */
     .page-hero{padding:34px 0 30px;border-bottom:1px solid var(--line);background:var(--surface);}
     .page-hero .eyebrow{margin-bottom:8px;}
     .page-hero h1{font-size:28px;font-weight:400;margin-bottom:6px;}
-    .page-hero p{color:var(--tx2);font-size:13.5px;max-width:560px;}
+    .page-hero p{color:var(--tx2);font-size:13.5px;font-weight:450;max-width:560px;}
 
     /* subnav — cross-links between the about-family pages */
     .subnav{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
@@ -106,7 +111,7 @@
     .band-surface{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
     .sec-head{text-align:center;max-width:620px;margin:0 auto 40px;}
     .sec-head h2{margin-bottom:10px;}
-    .sec-head p{color:var(--tx2);font-size:14px;}
+    .sec-head p{color:var(--tx2);font-size:14px;font-weight:450;}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;}
     .card{padding:22px;border:1px solid var(--line);background:var(--bg);transition:border-color .15s;}
     .card:hover{border-color:var(--line-2);}
@@ -125,7 +130,7 @@
     .tag{font-size:10.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;padding:3px 8px;background:var(--pri-soft);color:var(--pri);}
     .proj-card h3{font-size:16px;font-weight:600;}
     .proj-card .client{font-size:12px;color:var(--gold-d);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
-    .proj-card p{font-size:13px;color:var(--tx2);line-height:1.55;}
+    .proj-card p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.55;}
     .proj-card .link{margin-top:auto;font-size:12.5px;font-weight:600;color:var(--pri);}
 
     /* skills */
@@ -244,9 +249,9 @@
     /* footer */
     footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0 30px;}
     .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:26px;}
-    .foot .blurb{font-size:13px;color:var(--tx3);max-width:280px;margin-top:12px;line-height:1.6;}
+    .foot .blurb{font-size:13px;font-weight:450;color:var(--tx2);max-width:280px;margin-top:12px;line-height:1.6;}
     .foot .foot-h{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:12px;}
-    .foot a{display:block;font-size:13px;color:var(--tx2);margin:8px 0;}
+    .foot a{display:block;font-size:13px;font-weight:500;color:var(--tx2);margin:7px 0;}
     .foot a:hover{color:var(--gold-d);}
     .foot-bar{border-top:1px solid var(--line);margin-top:34px;padding-top:20px;font-size:12px;color:var(--tx3);
       display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
@@ -269,7 +274,7 @@
     .card{padding:16px 18px;}
     .card .ic{width:32px;height:32px;font-size:14px;margin-bottom:10px;}
     .card h3{font-size:14px;margin-bottom:4px;}
-    .card p{font-size:12.5px;line-height:1.5;}
+    .card p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.55;}
     .proj-card{padding:18px;gap:8px;}
     .page-hero{padding:26px 0 0;}
 
@@ -298,12 +303,23 @@
     a.link:hover i,*:hover > .link i{transform:translateX(4px);}
 
     /* Buttons get the same offset plate the cards use, so a call to action is
-       visibly the same family of object as everything else on the page. */
-    .btn{position:relative;isolation:isolate;}
-    .btn::before{content:'';position:absolute;z-index:-1;inset:0;background:var(--pri-d);
-      opacity:0;transition:opacity .2s,transform .2s;}
-    .btn.gold::before{background:var(--pri);}
-    .btn:hover::before{opacity:1;transform:translate(5px,5px);}
+       visibly the same family of object as everything else on the page.
+
+       Drawn with box-shadow, not a pseudo-element. A ::before at z-index:-1
+       paints *above* its own element's background — that is the CSS painting
+       order, negative-z-index descendants come after the background box — so
+       on a transparent ghost button the plate covered the button face and the
+       navy label vanished into it. A shadow is painted entirely outside the
+       border box and can never touch the text.
+
+       Each plate is the contrasting ink for the button it sits under, so the
+       offset stays visible whichever variant and whichever band it is on. */
+    .btn{transition:background .15s,border-color .15s,color .15s,box-shadow .2s cubic-bezier(.22,.61,.36,1);}
+    .btn:hover{box-shadow:5px 5px 0 var(--gold);}
+    .btn.gold:hover{box-shadow:5px 5px 0 var(--pri);}
+    .btn.ghost:hover{box-shadow:5px 5px 0 var(--pri);}
+    /* On the navy band a navy plate would be invisible. */
+    .band-deep .btn.gold:hover{box-shadow:5px 5px 0 rgba(255,255,255,.32);}
     .btn i{transition:transform .22s;}
     .btn:hover i{transform:translateX(3px);}
 
@@ -313,7 +329,7 @@
        rail instead, sitting on the section rule so it belongs to the content
        below rather than floating above it. */
     .subnav{display:flex;flex-wrap:wrap;gap:0;margin:14px 0 0;border-bottom:1px solid var(--line);}
-    .subnav a{position:relative;font-size:12.5px;font-weight:500;color:var(--tx3);padding:9px 14px;
+    .subnav a{position:relative;font-size:13px;font-weight:600;color:var(--tx2);padding:9px 14px;
       border:none;background:none;transition:color .16s;}
     .subnav a::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--gold);
       transform:scaleX(0);transform-origin:center;transition:transform .24s cubic-bezier(.22,.61,.36,1);}
@@ -346,7 +362,7 @@
     .skill-group h4 .n{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;color:var(--tx3);font-weight:500;}
     .skill-group h4::after{content:'';flex:1;height:1px;background:var(--line-2);}
     .skill-group ul{list-style:none;display:flex;flex-wrap:wrap;gap:4px;}
-    .skill-group li{font-size:11.5px;line-height:1.2;color:var(--tx2);background:var(--surface);
+    .skill-group li{font-size:12px;font-weight:500;line-height:1.2;color:var(--tx);background:var(--surface);
       padding:5px 8px;border:1px solid var(--line);transition:border-color .15s,color .15s,background .15s;}
     .skill-group li:hover{border-color:var(--gold);color:var(--pri);background:var(--gold-soft);}
     /* The few marked Expert in the owner's own data lead their group and carry
@@ -373,7 +389,7 @@
     .svc .no{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:700;
       color:var(--line-2);letter-spacing:.06em;}
     .svc h3{font-size:14px;font-weight:600;line-height:1.3;}
-    .svc p{font-size:12.5px;color:var(--tx2);line-height:1.5;}
+    .svc p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.55;}
 
     /* ── Timeline with a rail you can actually see ──────────────────────── */
     /* The rail position is derived from the same tokens the grid uses. Written
@@ -395,7 +411,7 @@
     .tl-row:hover .tl-what::before{background:var(--pri);}
     .tl-what h3{font-size:14.5px;font-weight:600;line-height:1.3;}
     .tl-what .org{font-size:12.5px;color:var(--pri);font-weight:500;margin:2px 0 5px;}
-    .tl-what p{font-size:12.5px;color:var(--tx2);line-height:1.55;}
+    .tl-what p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.6;}
     @media(max-width:640px){
       .tl{grid-template-columns:1fr;gap:0;}
       .tl::before{left:4px;}
@@ -520,7 +536,7 @@
       letter-spacing:.08em;padding:5px 9px;}
     .work-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1;}
     .work-body h3{font-size:15.5px;font-weight:600;line-height:1.35;}
-    .work-body p{font-size:12.5px;color:var(--tx2);line-height:1.6;}
+    .work-body p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.6;}
     .work-body .link{margin-top:auto;font-size:12.5px;font-weight:600;color:var(--pri);padding-top:4px;}
     .work-body .link i{transition:transform .22s;}
     .work-card:hover .work-body .link i{transform:translateX(4px);}
@@ -571,8 +587,8 @@
     .logo-strip .cell .ph i{font-size:14px;}
     /* Until a logo file lands, the organisation's name IS the mark — a wordmark
        reads as deliberate, where an empty grey box reads as broken. */
-    .logo-strip .wordmark{font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
-      color:var(--tx3);text-align:center;line-height:1.35;}
+    .logo-strip .wordmark{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+      color:var(--tx2);text-align:center;line-height:1.35;}
     .logo-strip img{max-height:40px;width:auto;object-fit:contain;filter:grayscale(1);opacity:.72;transition:filter .2s,opacity .2s;}
     .logo-strip .cell:hover img{filter:none;opacity:1;}
 
@@ -591,7 +607,7 @@
     .shot-shot .ph{height:100%;border:none;}
     .shot-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1;}
     .shot-body h3{font-size:15px;font-weight:600;}
-    .shot-body p{font-size:12.5px;color:var(--tx2);line-height:1.55;}
+    .shot-body p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.55;}
     .shot-body .link{margin-top:auto;font-size:12.5px;font-weight:600;color:var(--pri);padding-top:4px;}
 
     /* ── Testimonials ── */
