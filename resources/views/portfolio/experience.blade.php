@@ -5,6 +5,7 @@
 @section('content')
 
 <section class="page-hero tex-glow">
+  <span class="hero-mark" aria-hidden="true">EXPERIENCE</span>
   <div class="wrap">
     <div class="eyebrow">Career</div>
     <h1>Experience</h1>
@@ -16,13 +17,15 @@
 @if($experience->count())
 <section class="tex-grid">
   <div class="wrap">
-    <div class="timeline" style="max-width:720px;margin:0 auto;">
+    <div class="tl">
       @foreach($experience as $e)
-        <div class="tl-item">
-          <div class="period">{{ $e->start_date?->format('Y') }} – {{ $e->end_date?->format('Y') ?? 'Present' }}</div>
-          <h3>{{ $e->role }}</h3>
-          <div class="org">{{ $e->company }}</div>
-          <p>{{ $e->description }}</p>
+        <div class="tl-row">
+          <div class="tl-when">{{ $e->start_date?->format('Y') }} – {{ $e->end_date?->format('Y') ?? 'Present' }}</div>
+          <div class="tl-what">
+            <h3>{{ $e->role }}</h3>
+            <div class="org">{{ $e->company }}</div>
+            <p>{{ $e->description }}</p>
+          </div>
         </div>
       @endforeach
     </div>

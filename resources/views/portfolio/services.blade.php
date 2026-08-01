@@ -5,6 +5,7 @@
 @section('content')
 
 <section class="page-hero tex-glow">
+  <span class="hero-mark" aria-hidden="true">SERVICES</span>
   <div class="wrap">
     <div class="eyebrow">What I do</div>
     <h1>Services</h1>
@@ -16,10 +17,13 @@
 @if($services->count())
 <section class="tex-grid">
   <div class="wrap">
-    <div class="grid">
-      @foreach($services as $s)
-        <div class="card">
-          <div class="ic"><i class="fas {{ $s->icon }}"></i></div>
+    <div class="svc-grid">
+      @foreach($services as $i => $s)
+        <div class="svc" data-rise style="--d:{{ min($i, 6) * 50 }}ms;">
+          <div class="svc-top">
+            <span class="ic"><i class="fas {{ $s->icon }}"></i></span>
+            <span class="no">{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }}</span>
+          </div>
           <h3>{{ $s->title }}</h3>
           <p>{{ $s->description }}</p>
         </div>
@@ -35,7 +39,7 @@
   <div class="wrap">
     <h2>Have a project in mind?</h2>
     <p class="lead" style="max-width:480px;margin:12px auto 22px;">Let's talk about what you're building.</p>
-    <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Start a project</a>
+    <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Start a project <i class="fas fa-arrow-right"></i></a>
   </div>
 </section>
 

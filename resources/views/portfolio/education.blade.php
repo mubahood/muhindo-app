@@ -5,6 +5,7 @@
 @section('content')
 
 <section class="page-hero tex-glow">
+  <span class="hero-mark" aria-hidden="true">EDUCATION</span>
   <div class="wrap">
     <div class="eyebrow">Education</div>
     <h1>Academic background</h1>
@@ -15,13 +16,15 @@
 @if($education->count())
 <section class="tex-grid">
   <div class="wrap">
-    <div class="timeline" style="max-width:720px;margin:0 auto;">
+    <div class="tl">
       @foreach($education as $ed)
-        <div class="tl-item">
-          <div class="period">{{ $ed->start_date?->format('Y') }} – {{ $ed->end_date?->format('Y') ?? 'Present' }}</div>
-          <h3>{{ $ed->degree }}</h3>
-          <div class="org">{{ $ed->institution }}</div>
-          <p>{{ $ed->description }}</p>
+        <div class="tl-row">
+          <div class="tl-when">{{ $ed->start_date?->format('Y') }} – {{ $ed->end_date?->format('Y') ?? 'Present' }}</div>
+          <div class="tl-what">
+            <h3>{{ $ed->degree }}</h3>
+            <div class="org">{{ $ed->institution }}</div>
+            <p>{{ $ed->description }}</p>
+          </div>
         </div>
       @endforeach
     </div>

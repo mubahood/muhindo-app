@@ -5,6 +5,7 @@
 @section('content')
 
 <section class="page-hero tex-glow">
+  <span class="hero-mark" aria-hidden="true">ABOUT</span>
   <div class="wrap">
     <div class="eyebrow">About</div>
     <h1>Systems that hold up in the real world</h1>

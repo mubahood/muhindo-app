@@ -258,6 +258,153 @@
     .mmenu .btn{margin-top:16px;justify-content:center;}
 
     /* ══════════════════════════════════════════════════════════════════════
+       Density
+
+       Deliberately tight. Space is spent where it separates ideas and taken
+       back everywhere else, so a page carries more without feeling fuller.
+       ══════════════════════════════════════════════════════════════════════ */
+    section{padding:40px 0;}
+    .sec-head{margin-bottom:26px;}
+    .grid{gap:12px;}
+    .card{padding:16px 18px;}
+    .card .ic{width:32px;height:32px;font-size:14px;margin-bottom:10px;}
+    .card h3{font-size:14px;margin-bottom:4px;}
+    .card p{font-size:12.5px;line-height:1.5;}
+    .proj-card{padding:18px;gap:8px;}
+    .page-hero{padding:26px 0 0;}
+
+    /* ── Blended bands ───────────────────────────────────────────────────
+       Sections used to meet at a hard 1px rule, which chops the page into
+       stacked boxes. They now bleed into one another: the border is replaced
+       by a short gradient in the neighbouring surface colour, so the eye
+       reads one continuous page with changes of light in it. */
+    .band-surface{border-top:none;border-bottom:none;position:relative;}
+    .band-surface::before,.band-surface::after{content:'';position:absolute;left:0;right:0;height:26px;pointer-events:none;}
+    .band-surface::before{top:-26px;background:linear-gradient(to bottom,transparent,var(--surface));}
+    .band-surface::after{bottom:-26px;background:linear-gradient(to top,transparent,var(--surface));}
+    .band-deep{margin-top:26px;}
+    .band-deep::before{}
+    /* The dark band still needs a hard edge — a gradient into navy would read
+       as a printing fault rather than a transition. It gets a gold hairline
+       instead, which announces the change deliberately. */
+    .band-deep{border-top:2px solid var(--gold);}
+
+    /* ── Links that reward pointing at them ─────────────────────────────── */
+    .link,a.link{position:relative;display:inline-flex;align-items:center;gap:6px;}
+    .link::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:currentColor;
+      transform:scaleX(0);transform-origin:left;transition:transform .26s cubic-bezier(.22,.61,.36,1);}
+    a.link:hover::after,*:hover > .link::after{transform:scaleX(1);}
+    .link i{transition:transform .26s cubic-bezier(.22,.61,.36,1);}
+    a.link:hover i,*:hover > .link i{transform:translateX(4px);}
+
+    /* Buttons get the same offset plate the cards use, so a call to action is
+       visibly the same family of object as everything else on the page. */
+    .btn{position:relative;isolation:isolate;}
+    .btn::before{content:'';position:absolute;z-index:-1;inset:0;background:var(--pri-d);
+      opacity:0;transition:opacity .2s,transform .2s;}
+    .btn.gold::before{background:var(--pri);}
+    .btn:hover::before{opacity:1;transform:translate(5px,5px);}
+    .btn i{transition:transform .22s;}
+    .btn:hover i{transform:translateX(3px);}
+
+    /* ── Segmented sub-navigation ────────────────────────────────────────
+       Seven detached grey pills were the main wayfinding for the whole
+       about-family and the least designed thing on the site. One connected
+       rail instead, sitting on the section rule so it belongs to the content
+       below rather than floating above it. */
+    .subnav{display:flex;flex-wrap:wrap;gap:0;margin:14px 0 0;border-bottom:1px solid var(--line);}
+    .subnav a{position:relative;font-size:12.5px;font-weight:500;color:var(--tx3);padding:9px 14px;
+      border:none;background:none;transition:color .16s;}
+    .subnav a::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--gold);
+      transform:scaleX(0);transform-origin:center;transition:transform .24s cubic-bezier(.22,.61,.36,1);}
+    .subnav a:hover{color:var(--tx);}
+    .subnav a:hover::after{transform:scaleX(.4);}
+    .subnav a.on{color:var(--pri);font-weight:600;background:none;}
+    .subnav a.on::after{transform:scaleX(1);}
+
+    /* ── Page hero: asymmetric, with the section word set as a watermark ─── */
+    .page-hero{position:relative;overflow:hidden;}
+    .page-hero .wrap{position:relative;z-index:1;}
+    .page-hero h1{font-size:30px;font-weight:300;margin-bottom:4px;}
+    .page-hero p{max-width:520px;}
+    /* An oversized ghost of the page name, cropped by the section. Gives the
+       thin repeated header a piece of typography to hang on without adding
+       height, which is what a banner image would have cost. */
+    .hero-mark{position:absolute;right:-10px;top:50%;transform:translateY(-50%);z-index:0;pointer-events:none;
+      font-size:104px;font-weight:700;letter-spacing:-.05em;line-height:1;
+      color:var(--pri);opacity:.045;white-space:nowrap;user-select:none;}
+    @media(max-width:760px){.hero-mark{display:none;}}
+
+    /* ── Skills: a capability matrix, not a wall of chips ────────────────
+       Laid out in CSS columns so the groups pack tight and fill the whole
+       measure — the old grid stopped three quarters across and left the right
+       edge dead. */
+    .skill-cols{columns:3;column-gap:26px;}
+    .skill-group{break-inside:avoid;margin:0 0 20px;display:block;}
+    .skill-group h4{display:flex;align-items:baseline;gap:8px;font-size:10.5px;font-weight:700;
+      text-transform:uppercase;letter-spacing:.07em;color:var(--gold-d);margin-bottom:8px;}
+    .skill-group h4 .n{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;color:var(--tx3);font-weight:500;}
+    .skill-group h4::after{content:'';flex:1;height:1px;background:var(--line-2);}
+    .skill-group ul{list-style:none;display:flex;flex-wrap:wrap;gap:4px;}
+    .skill-group li{font-size:11.5px;line-height:1.2;color:var(--tx2);background:var(--surface);
+      padding:5px 8px;border:1px solid var(--line);transition:border-color .15s,color .15s,background .15s;}
+    .skill-group li:hover{border-color:var(--gold);color:var(--pri);background:var(--gold-soft);}
+    /* The few marked Expert in the owner's own data lead their group and carry
+       the accent — a skills page whose items all look identical tells a reader
+       nothing about what this person is actually best at. */
+    .skill-group li.core{background:var(--pri);border-color:var(--pri);color:#fff;font-weight:600;}
+    .skill-group li.core .lv{color:var(--gold);font-size:9.5px;font-weight:700;letter-spacing:.06em;
+      text-transform:uppercase;margin-left:5px;}
+    .skill-group li.core:hover{background:var(--pri-d);border-color:var(--pri-d);color:#fff;}
+    @media(max-width:900px){.skill-cols{columns:2;}}
+    @media(max-width:600px){.skill-cols{columns:1;}}
+
+    /* ── Numbered service cards ─────────────────────────────────────────── */
+    .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
+    .svc{position:relative;isolation:isolate;border:1px solid var(--line);background:var(--surface);
+      padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;transition:border-color .18s,transform .18s;}
+    .svc:hover{border-color:var(--gold);transform:translateY(-2px);}
+    .svc::before{content:'';position:absolute;z-index:-1;inset:0;background:var(--gold-soft);border:1px solid var(--line);
+      opacity:0;transition:opacity .2s,transform .2s;}
+    .svc:hover::before{opacity:1;transform:translate(6px,6px);}
+    .svc-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .svc .ic{width:30px;height:30px;background:var(--gold-soft);color:var(--gold-d);display:flex;
+      align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+    .svc .no{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:700;
+      color:var(--line-2);letter-spacing:.06em;}
+    .svc h3{font-size:14px;font-weight:600;line-height:1.3;}
+    .svc p{font-size:12.5px;color:var(--tx2);line-height:1.5;}
+
+    /* ── Timeline with a rail you can actually see ──────────────────────── */
+    /* The rail position is derived from the same tokens the grid uses. Written
+       as a literal it drifts the moment either column changes — which it did:
+       the dots sat 17px off the line because the rail was placed at the column
+       edge and the dots at the content edge, a gap away. */
+    .tl{--tl-w:118px;--tl-gap:22px;
+      position:relative;display:grid;grid-template-columns:var(--tl-w) 1fr;gap:0 var(--tl-gap);}
+    /* Drawn once for the whole column rather than per row, so it reads as one
+       continuous line instead of a stack of separate borders. */
+    .tl::before{content:'';position:absolute;left:calc(var(--tl-w) + var(--tl-gap));top:6px;bottom:6px;
+      width:1px;background:var(--line-2);}
+    .tl-row{display:contents;}
+    .tl-when{grid-column:1;text-align:right;padding:0 0 22px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--tx3);white-space:nowrap;padding-top:1px;}
+    .tl-what{grid-column:2;position:relative;padding:0 0 22px 20px;}
+    .tl-what::before{content:'';position:absolute;left:-4.5px;top:4px;width:9px;height:9px;background:var(--gold);
+      box-shadow:0 0 0 3px var(--bg);}
+    .tl-row:hover .tl-what::before{background:var(--pri);}
+    .tl-what h3{font-size:14.5px;font-weight:600;line-height:1.3;}
+    .tl-what .org{font-size:12.5px;color:var(--pri);font-weight:500;margin:2px 0 5px;}
+    .tl-what p{font-size:12.5px;color:var(--tx2);line-height:1.55;}
+    @media(max-width:640px){
+      .tl{grid-template-columns:1fr;gap:0;}
+      .tl::before{left:4px;}
+      .tl-when{grid-column:1;text-align:left;padding:0 0 4px 20px;}
+      .tl-what{grid-column:1;padding-left:20px;}
+      .tl-what::before{left:0;}
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════
        Surface system
 
        The site was five identical stacks of centred heading + white boxes on
