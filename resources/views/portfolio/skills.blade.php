@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="page-hero">
+<section class="page-hero tex-glow">
   <div class="wrap">
     <div class="eyebrow">Toolbox</div>
     <h1>Skills</h1>
@@ -14,7 +14,7 @@
 </section>
 
 @if($skills->count())
-<section>
+<section class="tex-grid">
   <div class="wrap">
     <div class="skill-groups">
       @foreach($skills as $category => $items)

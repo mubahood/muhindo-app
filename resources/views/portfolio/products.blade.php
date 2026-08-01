@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="page-hero">
+<section class="page-hero tex-glow">
   <div class="wrap">
     <div class="eyebrow">Products</div>
     <h1>What I've built for myself</h1>
@@ -13,7 +13,7 @@
 </section>
 
 @if(count($products))
-<section>
+<section class="tex-grid">
   <div class="wrap">
     <div class="grid">
       @foreach($products as $p)

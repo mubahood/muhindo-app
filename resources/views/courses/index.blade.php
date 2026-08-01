@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="hero" style="padding-bottom:20px;">
+<section class="hero tex-grid tex-glow" style="padding-bottom:20px;">
   <div class="wrap">
     <div class="eyebrow">e&#8209;Learning</div>
     <h1>Courses</h1>
@@ -18,7 +18,7 @@
   </div>
 </section>
 
-<section style="padding-top:0;">
+<section class="tex-grid" style="padding-top:0;">
   <div class="wrap">
     <form method="GET" action="{{ route('courses.index') }}" class="filter-bar">
       <label for="q" class="sr-only">Search courses</label>
@@ -66,7 +66,7 @@
       <h2 class="sr-only">Courses</h2>
       <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
         @foreach($courses as $course)
-          <a href="{{ route('courses.show', $course) }}" wire:navigate class="proj-card">
+          <a href="{{ route('courses.show', $course) }}" wire:navigate class="proj-card" data-rise>
             <div class="course-cover">
               @if($course->cover_image)
                 <img src="{{ $course->cover_image }}" alt="{{ $course->coverAlt() }}" loading="lazy" width="400" height="225">

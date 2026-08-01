@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="page-hero">
+<section class="page-hero tex-glow">
   <div class="wrap">
     <div class="eyebrow">Education</div>
     <h1>Academic background</h1>
@@ -13,7 +13,7 @@
 </section>
 
 @if($education->count())
-<section>
+<section class="tex-grid">
   <div class="wrap">
     <div class="timeline" style="max-width:720px;margin:0 auto;">
       @foreach($education as $ed)

@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="page-hero">
+<section class="page-hero tex-glow">
   <div class="wrap">
     <div class="eyebrow">Build with me</div>
     <h1>Have an idea? Let's build it.</h1>
@@ -40,7 +40,7 @@
 </section>
 @endif
 
-<section>
+<section class="tex-grid">
   <div class="wrap page">
     @if(session('success'))
       <div class="alert-success">{{ session('success') }}</div>

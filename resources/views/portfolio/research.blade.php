@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="page-hero">
+<section class="page-hero tex-glow">
   <div class="wrap">
     <div class="eyebrow">Research</div>
     <h1>Graduate research</h1>
@@ -13,7 +13,7 @@
 </section>
 
 @if($research)
-<section>
+<section class="tex-grid">
   <div class="wrap">
     <div class="feature-box" style="max-width:720px;margin:0 auto;">
       <div class="sub">{{ $research['institution'] ?? '' }}</div>

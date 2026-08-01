@@ -258,6 +258,127 @@
     .mmenu .btn{margin-top:16px;justify-content:center;}
 
     /* ══════════════════════════════════════════════════════════════════════
+       Surface system
+
+       The site was five identical stacks of centred heading + white boxes on
+       flat cream. The fix isn't ornament — it's giving each band its own
+       surface, and drawing them the way an engineer draws: ruled grids,
+       hairlines, indexed sections. All of it is generated in CSS, so the whole
+       system costs no image requests and stays crisp at any density.
+       ══════════════════════════════════════════════════════════════════════ */
+
+    /* Ruled paper. Two hairline grids at different scales, so the texture reads
+       as drafting rather than as a repeating tile. */
+    .tex-grid{position:relative;isolation:isolate;}
+    .tex-grid::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+      background-image:
+        linear-gradient(var(--line) 1px,transparent 1px),
+        linear-gradient(90deg,var(--line) 1px,transparent 1px),
+        linear-gradient(rgba(231,227,216,.5) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(231,227,216,.5) 1px,transparent 1px);
+      background-size:96px 96px,96px 96px,24px 24px,24px 24px;
+      background-position:-1px -1px;
+      /* Fades out at the edges so the grid never collides with the section rule. */
+      -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 45%,#000 30%,transparent 100%);
+      mask-image:radial-gradient(ellipse 80% 70% at 50% 45%,#000 30%,transparent 100%);
+      opacity:.75;}
+
+    /* A single warm light source, low and off-centre. Gives a flat band depth
+       without a gradient that announces itself. */
+    .tex-glow{position:relative;isolation:isolate;}
+    .tex-glow::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+      background:
+        radial-gradient(760px 320px at 78% 0%,rgba(184,147,63,.13),transparent 62%),
+        radial-gradient(620px 280px at 8% 100%,rgba(11,31,58,.07),transparent 60%);}
+
+    /* Deep band — used once or twice per page to break the cream monotony. */
+    .band-deep{background:var(--pri);color:#fff;border-top:none;border-bottom:none;position:relative;isolation:isolate;}
+    .band-deep::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+      background-size:56px 56px,56px 56px;
+      -webkit-mask-image:radial-gradient(ellipse 75% 80% at 50% 50%,#000 20%,transparent 100%);
+      mask-image:radial-gradient(ellipse 75% 80% at 50% 50%,#000 20%,transparent 100%);}
+    .band-deep::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+      background:radial-gradient(700px 300px at 82% 10%,rgba(184,147,63,.20),transparent 60%);}
+    .band-deep h2,.band-deep h3{color:#fff;}
+    .band-deep .lead,.band-deep p{color:rgba(255,255,255,.68);}
+    .band-deep .eyebrow{color:var(--gold);}
+    .band-deep .sec-idx{color:rgba(255,255,255,.35);}
+    .band-deep .sec-idx::after{background:rgba(255,255,255,.18);}
+
+    /* ── Indexed section headers ──────────────────────────────────────────
+       "01 —— SELECTED WORK". Numbering the sections is how a schematic or a
+       syllabus is laid out, which is exactly what this person does for a
+       living, and it gives the eye an anchor other than another centred
+       heading. */
+    .sec-idx{display:flex;align-items:center;gap:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-d);margin-bottom:12px;}
+    .sec-idx::after{content:'';flex:1;height:1px;background:var(--line-2);max-width:120px;}
+    .sec-head.left{text-align:left;margin-left:0;max-width:640px;}
+    .sec-head.left .sec-idx{justify-content:flex-start;}
+    .sec-head:not(.left) .sec-idx{justify-content:center;}
+    .sec-head:not(.left) .sec-idx::after{display:none;}
+    .sec-head:not(.left) .sec-idx::before{content:'';flex:0 0 26px;height:1px;background:var(--line-2);}
+
+    /* ── Cards: the offset-plate motif from the hero, made interactive ──── */
+    .proj-card{position:relative;isolation:isolate;}
+    .proj-card::before{content:'';position:absolute;z-index:-1;inset:0;background:var(--gold-soft);
+      border:1px solid var(--line);opacity:0;transition:opacity .22s,transform .22s;}
+    .proj-card:hover::before{opacity:1;transform:translate(7px,7px);}
+    /* The arrow leans into the direction it points on hover — a small reward
+       for pointing at the thing, and the only motion on the card that isn't
+       the plate. */
+    .proj-card .link i{transition:transform .22s;}
+    .proj-card:hover .link i{transform:translateX(4px);}
+
+    /* ── Duotone course covers ───────────────────────────────────────────
+       The uploaded cover art is loud stock rendering in reds that fight the
+       navy-and-gold palette and pull every eye on the page. Rather than
+       discard the owner's images, they're desaturated and re-tinted into the
+       brand's own light, and the full original colour returns on hover — so
+       the artwork still does its job when someone is actually looking at it. */
+    .course-cover{position:relative;overflow:hidden;}
+    .course-cover img{transition:filter .35s ease,transform .5s ease;filter:grayscale(1) contrast(1.04) brightness(1.04);}
+    .course-cover::after{content:'';position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(150deg,var(--pri) 8%,rgba(11,31,58,.5) 58%,rgba(184,147,63,.6) 100%);
+      mix-blend-mode:color;transition:opacity .35s ease;}
+    .course-cover::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+      background:linear-gradient(to top,rgba(6,15,31,.28),transparent 58%);}
+    .proj-card:hover .course-cover img{filter:none;transform:scale(1.03);}
+    .proj-card:hover .course-cover::after{opacity:0;}
+    /* The catalogue reuses a handful of stock renders, so an identical tint on
+       every card turns the grid into one repeated rectangle. Rotating the light
+       across the row gives each card its own value without touching the files. */
+    .grid > .proj-card:nth-child(3n+2) .course-cover::after{
+      background:linear-gradient(150deg,rgba(184,147,63,.55) 0%,rgba(11,31,58,.5) 45%,var(--pri) 100%);}
+    .grid > .proj-card:nth-child(3n+3) .course-cover::after{
+      background:linear-gradient(115deg,var(--pri) 20%,rgba(125,98,40,.6) 100%);}
+
+    /* ── Work cards with a visual, not just a text block ────────────────── */
+    .work-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:20px;}
+    .work-card{position:relative;isolation:isolate;border:1px solid var(--line);background:var(--surface);
+      display:flex;flex-direction:column;transition:border-color .2s,transform .2s;}
+    .work-card:hover{border-color:var(--gold);transform:translateY(-3px);}
+    .work-card::before{content:'';position:absolute;z-index:-1;inset:0;background:var(--gold-soft);
+      border:1px solid var(--line);opacity:0;transition:opacity .22s,transform .22s;}
+    .work-card:hover::before{opacity:1;transform:translate(8px,8px);}
+    .work-shot{position:relative;aspect-ratio:16/10;overflow:hidden;border-bottom:1px solid var(--line);background:var(--surface-2);}
+    .work-shot .ph{height:100%;border:none;}
+    .work-shot img{width:100%;height:100%;object-fit:cover;}
+    /* The project number sits on the artwork like a plate on a machine. */
+    .work-no{position:absolute;z-index:2;top:0;left:0;background:var(--pri);color:var(--gold);
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:700;
+      letter-spacing:.08em;padding:5px 9px;}
+    .work-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1;}
+    .work-body h3{font-size:15.5px;font-weight:600;line-height:1.35;}
+    .work-body p{font-size:12.5px;color:var(--tx2);line-height:1.6;}
+    .work-body .link{margin-top:auto;font-size:12.5px;font-weight:600;color:var(--pri);padding-top:4px;}
+    .work-body .link i{transition:transform .22s;}
+    .work-card:hover .work-body .link i{transform:translateX(4px);}
+
+    /* ══════════════════════════════════════════════════════════════════════
        Artwork slots
        A slot renders the real image once the file exists and a labelled
        drop-target until then, so the page can be reviewed and shipped before
@@ -570,6 +691,17 @@
       });
     }
 
+    /* Anything still hidden becomes visible, unconditionally. The reveal is
+       decoration; the content is the point. Printing, find-in-page and
+       deep-link anchors all reach content the observer hasn't got to yet, and
+       any failure inside wire() would otherwise leave a page of invisible
+       text. */
+    function revealAll(){
+      document.documentElement.classList.remove('js');
+      document.querySelectorAll('[data-rise]').forEach(function(el){ el.classList.add('in'); });
+    }
+    window.addEventListener('beforeprint', revealAll);
+
     function wire(){
       document.querySelectorAll('[data-rise]').forEach(function(el, i){
         // Stagger within a group, capped so a long list never crawls.
@@ -592,8 +724,12 @@
       }
     }
 
-    wire();
-    document.addEventListener('livewire:navigated', wire);
+    function safeWire(){
+      try { wire(); } catch (e) { revealAll(); }   // never trade content for an effect
+    }
+
+    safeWire();
+    document.addEventListener('livewire:navigated', safeWire);
   })();
 </script>
 @stack('scripts')

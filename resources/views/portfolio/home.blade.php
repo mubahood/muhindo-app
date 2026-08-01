@@ -10,6 +10,15 @@
 
 @section('content')
 
+@php
+    /* Section numbers are assigned as sections render, not written by hand:
+       the testimonials block is omitted entirely until real quotes exist, and a
+       hard-coded "03" there left the page counting 01, 02, 04 — which reads as
+       a section that failed to load. */
+    $n = 0;
+    $idx = function () use (&$n) { return str_pad((string) ++$n, 2, '0', STR_PAD_LEFT); };
+@endphp
+
 {{--
   The page answers four questions in order, and hands each one off to a deeper
   page rather than trying to finish it here:
@@ -20,7 +29,7 @@
     what do people say → testimonials (when real quotes exist)
 --}}
 
-<section class="hero">
+<section class="hero tex-grid tex-glow">
   <div class="wrap">
     <div class="hero-grid">
 
@@ -62,7 +71,7 @@
 @if(count($clients))
 <section class="band-surface" style="padding:34px 0;">
   <div class="wrap">
-    <p class="eyebrow" style="text-align:center;margin-bottom:18px;" data-rise>Organisations I've delivered for</p>
+    <p class="sec-idx" style="justify-content:center;margin-bottom:18px;" data-rise><span>Organisations I've delivered for</span></p>
     <div class="logo-strip" data-rise>
       @foreach($clients as $client)
         @php $slug = \Illuminate\Support\Str::slug(is_array($client) ? ($client['name'] ?? '') : $client); @endphp
@@ -88,12 +97,12 @@
 
 {{-- ═══ What I've built ═══ --}}
 @if($projects->count())
-<section>
+<section class="tex-grid">
   <div class="wrap">
-    <div class="sec-head" data-rise>
-      <div class="eyebrow">Selected work</div>
+    <div class="sec-head left" data-rise>
+      <div class="sec-idx">{{ $idx() }} <span>Selected work</span></div>
       <h2>Systems running in production</h2>
-      <p>Each one shipped end to end — requirements, build, deployment, and the training that made it stick.</p>
+      <p>Each one taken end to end — requirements, build, deployment, and the training that made it stick.</p>
     </div>
 
     <div class="shot-grid">
@@ -136,7 +145,7 @@
 <section class="band-surface">
   <div class="wrap">
     <div class="sec-head" data-rise>
-      <div class="eyebrow">References</div>
+      <div class="sec-idx">{{ $idx() }} <span>References</span></div>
       <h2>What the people I've worked with say</h2>
     </div>
     <div class="quote-grid">
@@ -164,7 +173,7 @@
 @if($services->count())
 <section @class(['band-surface' => ! count($testimonials)])>
   <div class="wrap">
-    <div class="sec-head" data-rise><div class="eyebrow">What I do</div><h2>A few of the ways I can help</h2></div>
+    <div class="sec-head" data-rise><div class="sec-idx">{{ $idx() }} <span>What I do</span></div><h2>A few of the ways I can help</h2></div>
     <div class="icon-row" data-rise>
       @foreach($services as $s)
         <a href="{{ route('portfolio.services') }}" wire:navigate>
@@ -180,7 +189,7 @@
 </section>
 @endif
 
-<section @class(['band-surface' => count($testimonials) || ! $services->count()]) style="text-align:center;">
+<section class="band-deep" style="text-align:center;">
   <div class="wrap">
     <h2 data-rise>Let's build something together</h2>
     <p class="lead" style="max-width:480px;margin:12px auto 26px;" data-rise>Have a project, a role, or just a question? I'd love to hear from you.</p>

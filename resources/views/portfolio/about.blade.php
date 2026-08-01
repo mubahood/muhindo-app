@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="page-hero">
+<section class="page-hero tex-glow">
   <div class="wrap">
     <div class="eyebrow">About</div>
     <h1>Systems that hold up in the real world</h1>
@@ -13,7 +13,7 @@
   </div>
 </section>
 
-<section>
+<section class="tex-grid">
   <div class="wrap">
     <div style="max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
       @foreach($about['paragraphs'] ?? [] as $p)

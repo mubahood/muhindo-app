@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="page-hero">
+<section class="page-hero tex-glow">
   <div class="wrap">
     <div class="eyebrow">Contact</div>
     <h1>Let's build something together</h1>
@@ -12,7 +12,7 @@
   </div>
 </section>
 
-<section>
+<section class="tex-grid">
   <div class="wrap">
 
     @if(session('success'))

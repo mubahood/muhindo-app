@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="page-hero">
+<section class="page-hero tex-glow">
   <div class="wrap">
     <div class="eyebrow">What I do</div>
     <h1>Services</h1>
@@ -14,7 +14,7 @@
 </section>
 
 @if($services->count())
-<section>
+<section class="tex-grid">
   <div class="wrap">
     <div class="grid">
       @foreach($services as $s)
@@ -31,7 +31,7 @@
 <section><div class="wrap"><p class="lead" style="text-align:center;">Services coming soon.</p></div></section>
 @endif
 
-<section class="band-surface" style="text-align:center;">
+<section class="band-deep" style="text-align:center;">
   <div class="wrap">
     <h2>Have a project in mind?</h2>
     <p class="lead" style="max-width:480px;margin:12px auto 22px;">Let's talk about what you're building.</p>

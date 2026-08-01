@@ -1,10 +1,23 @@
 @if($courses->isNotEmpty())
-<section>
+<section class="tex-glow">
   <div class="wrap">
-    <div class="sec-head"><div class="eyebrow">e&#8209;Learning</div><h2>I train computer programming and computer-related courses</h2></div>
+    <div class="sec-head left" data-rise>
+      <div class="sec-idx">{{ isset($idx) ? $idx() : "02" }} <span>e&#8209;Learning</span></div>
+      <h2>Learn to build the same things</h2>
+      <p>Practical, project-based courses in plain English — self-paced, with a verifiable certificate at the end.</p>
+    </div>
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
       @foreach($courses as $c)
-        <a href="{{ route('courses.show', $c) }}" wire:navigate class="proj-card">
+        <a href="{{ route('courses.show', $c) }}" wire:navigate class="proj-card" data-rise>
+          {{-- Same duotone cover as the catalogue, so a course looks like the
+               same object on both pages. --}}
+          <div class="course-cover">
+            @if($c->cover_image)
+              <img src="{{ $c->cover_image }}" alt="{{ $c->coverAlt() }}" loading="lazy" decoding="async" width="400" height="225">
+            @else
+              <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+            @endif
+          </div>
           <div class="tag-row"><span class="tag">{{ ucfirst($c->level) }}</span>@if($c->category)<span class="tag">{{ $c->category }}</span>@endif</div>
           <h3>{{ $c->title }}</h3>
           <p>{{ \Illuminate\Support\Str::limit($c->description, 110) }}</p>
@@ -12,7 +25,7 @@
         </a>
       @endforeach
     </div>
-    <div style="text-align:center;margin-top:30px;">
+    <div style="text-align:center;margin-top:30px;" data-rise>
       <a href="{{ route('courses.index') }}" wire:navigate class="btn ghost">Browse all courses <i class="fas fa-arrow-right"></i></a>
     </div>
   </div>
