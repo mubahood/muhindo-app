@@ -37,7 +37,11 @@ class PortfolioContentSeeder extends Seeder
         Settings::set('portfolio.identity', json_encode([
             'name' => 'Muhindo Mubaraka',
             'title' => 'Manager, Information Systems',
-            'tagline' => 'I teach programming and build software that works in the real conditions of East Africa.',
+            // The headline claims the work, not a map. What makes someone hire or
+            // enrol is that the software gets finished and the teaching lands —
+            // neither of which is a regional trait, and naming a region up front
+            // quietly caps the audience at it.
+            'tagline' => 'I build software that ships, and I teach people to build it too.',
             'location' => 'Kampala, Uganda',
             'initials' => 'MM',
         ]));
@@ -76,10 +80,27 @@ class PortfolioContentSeeder extends Seeder
             ['q' => 'What if I get stuck?', 'a' => "Use the course's discussion Q&A to ask a question — I read and answer these myself."],
         ]));
 
+        // Names only. The home page renders a logo when one exists at
+        // public/images/clients/{slug}.png and falls back to the wordmark until
+        // then, so this list never has to wait on artwork.
         Settings::set('portfolio.clients', json_encode([
             'Ministry of Agriculture', 'Uganda Wildlife Authority', 'Uganda Communications Commission',
             'NUDIPU', 'CEHURD', 'Makerere University', 'Eight Tech Consults',
         ]));
+
+        /*
+         * Testimonials are seeded EMPTY on purpose.
+         *
+         * Every other seed here is a real fact taken from the owner's CV. A
+         * quote is different: it is attributed to a named person, and inventing
+         * one — even as filler meant to be replaced — publishes words that
+         * person never said. The home page simply omits the section until real
+         * ones are added, and the admin editor accepts them in this shape:
+         *   quote, name, role, org, photo (path under public/), link
+         */
+        if (Settings::get('portfolio.testimonials') === null) {
+            Settings::set('portfolio.testimonials', json_encode([]));
+        }
 
         Settings::set('portfolio.research', json_encode([
             'title' => 'Blockchain-Secured Federated Learning for Livestock Disease Early Warning',

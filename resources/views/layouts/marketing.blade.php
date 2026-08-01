@@ -257,6 +257,115 @@
     .mmenu a{font-size:18px;font-weight:300;color:var(--tx);padding:12px 0;border-bottom:1px solid var(--line);}
     .mmenu .btn{margin-top:16px;justify-content:center;}
 
+    /* ══════════════════════════════════════════════════════════════════════
+       Artwork slots
+       A slot renders the real image once the file exists and a labelled
+       drop-target until then, so the page can be reviewed and shipped before
+       a single photo has been taken.
+       ══════════════════════════════════════════════════════════════════════ */
+    .ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;
+      padding:16px;background:
+        repeating-linear-gradient(-45deg,var(--surface-2) 0 10px,transparent 10px 20px),var(--surface);
+      border:1px dashed var(--line-2);color:var(--tx3);width:100%;}
+    .ph i{font-size:20px;opacity:.5;}
+    .ph-label{font-size:11.5px;font-weight:600;color:var(--tx2);line-height:1.35;}
+    .ph-size{font-size:10.5px;letter-spacing:.04em;opacity:.8;}
+    .ph-path{font-size:9.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;opacity:.65;word-break:break-all;}
+    .ph.round{border-radius:50%;}
+    .ph-img{width:100%;height:100%;object-fit:cover;}
+    .ph-img.round{border-radius:50%;}
+    .ph-img.contain{object-fit:contain;}
+
+    /* ── Hero: portrait beside the claim ── */
+    .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;text-align:left;}
+    .hero-grid .ctas{justify-content:flex-start;}
+    .hero-grid .hero-copy p{margin-left:0;margin-right:0;}
+    .hero-portrait{position:relative;max-width:340px;margin-left:auto;width:100%;}
+    .hero-portrait .ph,.hero-portrait .ph-img{position:relative;z-index:1;}
+    /* A soft gold plate offset behind the portrait — depth without a drop shadow,
+       which would read as a different design language from the flat squares. */
+    .hero-portrait::after{content:'';position:absolute;inset:14px -14px -14px 14px;background:var(--gold-soft);
+      border:1px solid var(--line);z-index:0;}
+    .hero-badge{position:absolute;z-index:2;left:-14px;bottom:26px;background:var(--surface);border:1px solid var(--line);
+      padding:9px 13px;display:flex;align-items:center;gap:9px;max-width:210px;}
+    .hero-badge .n{font-size:16px;font-weight:700;color:var(--pri);line-height:1;}
+    .hero-badge .t{font-size:10.5px;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;line-height:1.3;}
+
+    /* ── Trusted-by logo strip ── */
+    /* Each cell draws its own hairline instead of the grid showing a background
+       through its gaps: an odd number of logos leaves a blank cell on narrow
+       screens, and a background-based grid renders that blank as a tinted block
+       that reads like a broken image. */
+    .logo-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;}
+    .logo-strip .cell{background:var(--surface);display:flex;align-items:center;justify-content:center;
+      padding:18px 14px;min-height:78px;box-shadow:0 0 0 1px var(--line);}
+    .logo-strip .cell .ph{border:none;background:none;padding:0;gap:2px;}
+    .logo-strip .cell .ph i{font-size:14px;}
+    /* Until a logo file lands, the organisation's name IS the mark — a wordmark
+       reads as deliberate, where an empty grey box reads as broken. */
+    .logo-strip .wordmark{font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+      color:var(--tx3);text-align:center;line-height:1.35;}
+    .logo-strip img{max-height:40px;width:auto;object-fit:contain;filter:grayscale(1);opacity:.72;transition:filter .2s,opacity .2s;}
+    .logo-strip .cell:hover img{filter:none;opacity:1;}
+
+    /* ── Systems showcase ── */
+    .shot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+    .shot{border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;
+      transition:border-color .18s,transform .18s;}
+    .shot:hover{border-color:var(--gold);transform:translateY(-3px);}
+    /* A browser chrome around each screenshot: it frames a raw screengrab as a
+       product shot, and hides the fact that the shots differ in edge and crop. */
+    .shot-frame{border-bottom:1px solid var(--line);background:var(--surface-2);}
+    .shot-bar{display:flex;align-items:center;gap:5px;padding:8px 10px;border-bottom:1px solid var(--line);}
+    .shot-bar i{width:8px;height:8px;border-radius:50%;background:var(--line-2);display:block;}
+    .shot-bar .u{flex:1;margin-left:6px;height:14px;background:var(--bg);border:1px solid var(--line);}
+    .shot-shot{aspect-ratio:16/10;overflow:hidden;background:var(--bg);}
+    .shot-shot .ph{height:100%;border:none;}
+    .shot-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1;}
+    .shot-body h3{font-size:15px;font-weight:600;}
+    .shot-body p{font-size:12.5px;color:var(--tx2);line-height:1.55;}
+    .shot-body .link{margin-top:auto;font-size:12.5px;font-weight:600;color:var(--pri);padding-top:4px;}
+
+    /* ── Testimonials ── */
+    .quote-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
+    .quote{border:1px solid var(--line);background:var(--surface);padding:24px;display:flex;flex-direction:column;gap:14px;}
+    .quote blockquote{font-size:14px;line-height:1.65;color:var(--tx);font-weight:300;}
+    .quote blockquote::before{content:'\201C';display:block;font-size:38px;line-height:.7;color:var(--gold);
+      font-weight:600;margin-bottom:6px;}
+    .quote figcaption{display:flex;align-items:center;gap:11px;margin-top:auto;}
+    .quote .avatar{width:40px;height:40px;flex-shrink:0;}
+    .quote .who{min-width:0;}
+    .quote .who .nm{font-size:12.5px;font-weight:600;}
+    .quote .who .rl{font-size:11.5px;color:var(--tx3);line-height:1.35;}
+
+    /* ══════════════════════════════════════════════════════════════════════
+       Motion
+       Content is visible by default and animation only ever *removes* an
+       offset, so a failed script or a blocked observer can never leave the
+       page blank. Anyone who asked their system for less motion gets none.
+       ══════════════════════════════════════════════════════════════════════ */
+    @media(prefers-reduced-motion:no-preference){
+      .js [data-rise]{opacity:0;transform:translateY(14px);
+        transition:opacity .6s cubic-bezier(.22,.61,.36,1),transform .6s cubic-bezier(.22,.61,.36,1);
+        transition-delay:var(--d,0ms);}
+      .js [data-rise].in{opacity:1;transform:none;}
+      .hero-portrait::after{transition:transform .8s cubic-bezier(.22,.61,.36,1);}
+      .js .hero-portrait:hover::after{transform:translate(4px,4px);}
+    }
+    /* Without JS nothing is ever hidden, so no fallback rule is needed. */
+
+    @media(max-width:860px){
+      .hero-grid{grid-template-columns:1fr;gap:32px;text-align:center;}
+      .hero-grid .ctas{justify-content:center;}
+      .hero-grid .hero-copy p{margin-left:auto;margin-right:auto;}
+      .hero-portrait{margin:0 auto;max-width:300px;}
+      .hero-badge{left:auto;right:-8px;}
+    }
+    @media(max-width:560px){
+      .hero-portrait::after{inset:10px -10px -10px 10px;}
+      .hero-badge{position:static;margin-top:16px;max-width:none;justify-content:center;}
+    }
+
     @media(max-width:820px){
       .nav{display:none;} .burger{display:inline-flex;} .hd-r .btn.desk{display:none;}
       h1,.hero h1{font-size:30px;} h2{font-size:20px;} .page-hero h1{font-size:25px;}
@@ -390,6 +499,102 @@
     var m=document.getElementById('mmenu'), b=document.getElementById('burger');
     if(m && m.classList.contains('open')){ m.classList.remove('open'); document.body.style.overflow=''; if(b){ b.setAttribute('aria-expanded','false'); b.querySelector('i').className='fas fa-bars'; } }
   });
+
+  /* ── Motion ────────────────────────────────────────────────────────────
+     Sections rise into place as they're reached, and the hero's numbers
+     count up once.
+
+     The hiding is applied by JS (the .js class), never by the stylesheet, so
+     the content is visible to anyone whose script fails, whose observer is
+     unsupported, or who asked their system for reduced motion. There is no
+     state in which this can leave the page blank. */
+  (function(){
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (still.matches || !('IntersectionObserver' in window)) return;
+
+    document.documentElement.classList.add('js');
+
+    var seen = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        seen.unobserve(e.target);                 // rise once, not on every pass
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+
+    /* Counts up to whatever the number already says, so the markup stays the
+       single source of truth.
+
+       These numbers are someone's credentials, so the animation is built to be
+       incapable of leaving a wrong one on screen. requestAnimationFrame stops
+       being delivered in a background tab, in low-power mode, and under some
+       automation — and a count-up that stalls mid-flight leaves "9+ years"
+       reading "1+ years" permanently. So the true text is restored by a timer
+       that does not depend on frames arriving, and again if the tab is hidden
+       mid-count. Worst case the number simply appears without counting. */
+    function countUp(el){
+      // The real value is copied out of the node before anything writes to it,
+      // and every restore reads from there. Reading it back off the element
+      // would be reading whatever frame the animation happens to be on — which
+      // is how a second run once captured "1+" as the true value of "9+" and
+      // left it there.
+      if (el.dataset.trueValue === undefined) el.dataset.trueValue = el.textContent.trim();
+      if (el.dataset.counted) return;             // never animate the same node twice
+      el.dataset.counted = '1';
+
+      var text = el.dataset.trueValue;
+      var target = parseFloat(text.replace(/[^0-9.]/g, ''));
+      if (!isFinite(target) || target === 0) return;
+
+      var suffix = text.replace(/[0-9.,]/g, '');
+      var ms = 900, start = null, done = false;
+
+      function settle(){
+        if (done) return;
+        done = true;
+        el.textContent = el.dataset.trueValue;    // the exact original, always
+        document.removeEventListener('visibilitychange', onHide);
+      }
+      function onHide(){ if (document.hidden) settle(); }
+
+      document.addEventListener('visibilitychange', onHide);
+      setTimeout(settle, ms + 120);               // independent of rAF delivery
+
+      requestAnimationFrame(function frame(now){
+        if (done) return;
+        if (start === null) start = now;
+        var p = Math.min(1, (now - start) / ms);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))).toLocaleString() + suffix;
+        if (p < 1) requestAnimationFrame(frame);
+        else settle();
+      });
+    }
+
+    function wire(){
+      document.querySelectorAll('[data-rise]').forEach(function(el, i){
+        // Stagger within a group, capped so a long list never crawls.
+        if (!el.style.getPropertyValue('--d')) {
+          el.style.setProperty('--d', Math.min(i, 6) * 60 + 'ms');
+        }
+        seen.observe(el);
+      });
+
+      var stats = document.querySelector('[data-count]');
+      if (stats) {
+        var once = new IntersectionObserver(function(entries){
+          entries.forEach(function(e){
+            if (!e.isIntersecting) return;
+            e.target.querySelectorAll('.v').forEach(countUp);
+            once.disconnect();
+          });
+        }, { threshold: 0.4 });
+        once.observe(stats);
+      }
+    }
+
+    wire();
+    document.addEventListener('livewire:navigated', wire);
+  })();
 </script>
 @stack('scripts')
 @livewireScripts

@@ -30,6 +30,9 @@ class PortfolioController extends Controller
             'services' => Service::orderBy('sort_order')->limit(4)->get(),
             'projects' => PortfolioProject::orderBy('sort_order')->limit(3)->get(),
             'courses' => Course::where('is_published', true)->latest()->limit(3)->get(),
+            'clients' => $this->json('portfolio.clients', []),
+            // Omitted from the page entirely until real, attributable quotes exist.
+            'testimonials' => $this->json('portfolio.testimonials', []),
             'jsonLd' => $this->homeJsonLd($identity, $contact),
         ]);
     }
