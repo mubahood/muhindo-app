@@ -323,6 +323,44 @@
       .cta:hover .cta-a{transform:none;opacity:1;}
     }
 
+    /* ── Account control ──────────────────────────────────────────────────
+       Signing in used to displace the two calls to action with account links.
+       That is backwards: the actions are what the header is for, and they
+       still apply to someone who already has an account — a student can hire,
+       a client can enrol. Account navigation is secondary, so it collapses to
+       an avatar and gets out of the way.
+
+       (Phrased without quoting the button labels: this comment ships inside
+       the inline <style> block, so any label named here would appear in the
+       page source for every visitor — including logged-out ones.) */
+    .acct{position:relative;display:flex;align-items:center;}
+    .acct-trigger{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;
+      font-family:inherit;padding:3px;color:var(--tx2);transition:color .15s;}
+    .acct-trigger:hover{color:var(--tx);}
+    .acct-av{width:28px;height:28px;flex-shrink:0;background:var(--pri);color:var(--gold);
+      display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;letter-spacing:.02em;}
+    .acct-trigger .caret{font-size:9px;transition:transform .2s;}
+    .acct:hover .caret,.acct:focus-within .caret{transform:rotate(180deg);}
+    .acct-menu{position:absolute;top:calc(100% + 9px);right:0;z-index:70;min-width:210px;
+      background:var(--surface);border:1px solid var(--line);box-shadow:0 20px 44px -18px rgba(11,31,58,.28);
+      padding:5px;opacity:0;visibility:hidden;transform:translateY(-5px);
+      transition:opacity .16s,transform .16s,visibility .16s;}
+    .acct:hover > .acct-menu,.acct:focus-within > .acct-menu{opacity:1;visibility:visible;transform:none;}
+    /* Bridges the gap so the pointer can reach the menu without closing it. */
+    .acct::after{content:'';position:absolute;top:100%;right:0;width:100%;height:11px;}
+    .acct-menu a,.acct-menu button{display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;
+      font-family:inherit;font-size:12.5px;font-weight:500;color:var(--tx);background:none;border:none;
+      text-align:left;cursor:pointer;transition:background .14s;}
+    .acct-menu a:hover,.acct-menu button:hover{background:var(--gold-soft);}
+    .acct-menu i{width:14px;color:var(--tx3);font-size:11px;}
+    .acct-menu hr{border:none;border-top:1px solid var(--line);margin:4px 0;}
+    .acct-menu .danger:hover{color:var(--bad,#b91c1c);}
+    .acct-who{padding:8px 10px 6px;border-bottom:1px solid var(--line);margin-bottom:4px;}
+    .acct-who .nm{display:block;font-size:12.5px;font-weight:600;color:var(--tx);}
+    .acct-who .rl{display:block;font-size:11px;font-weight:450;color:var(--tx2);margin-top:1px;}
+    .signin{font-size:12.5px;font-weight:600;color:var(--tx2);white-space:nowrap;padding:6px 2px;}
+    .signin:hover{color:var(--gold-d);}
+
     /* ── Mobile sheet ────────────────────────────────────────────────────── */
     .mm-group{border-bottom:1px solid var(--line);}
     .mm-group > summary{display:flex;align-items:center;justify-content:space-between;gap:10px;
@@ -728,7 +766,8 @@
     }
 
     @media(max-width:820px){
-      .nav{display:none;} .burger{display:inline-flex;} .hd-r .btn.desk{display:none;}
+      .nav{display:none;} .burger{display:inline-flex;}
+      .hd-r .btn.desk,.hd-r .acct.desk,.hd-r .signin.desk{display:none;}
       h1,.hero h1{font-size:30px;} h2{font-size:20px;} .page-hero h1{font-size:25px;}
       .foot{grid-template-columns:1fr 1fr;}
       .contact-grid{grid-template-columns:1fr;}
@@ -803,23 +842,42 @@
     </nav>
 
     <div class="hd-r">
+      {{-- The two calls to action are permanent. Signing in does not remove
+           them: a student can still hire, and a client can still enrol. --}}
+      <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost desk sm cta">
+        <span class="cta-a">Hire Me</span>
+        <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
+      </a>
+      <a href="{{ route('courses.index') }}" wire:navigate class="btn gold desk sm cta">
+        <span class="cta-a">Learn</span>
+        <span class="cta-b" aria-hidden="true">Start Learning <i class="fas fa-arrow-right"></i></span>
+      </a>
+
       @auth
-        <a href="{{ $accountUrl }}" class="btn gold desk sm"><i class="fas {{ $accountIcon }}"></i> {{ $accountLabel }}</a>
-        <form method="POST" action="{{ route('logout') }}" class="desk" style="display:contents;">
-          @csrf
-          <button type="submit" class="btn ghost desk sm">Sign out</button>
-        </form>
+        <div class="acct desk">
+          <button type="button" class="acct-trigger" aria-expanded="false" aria-controls="acct-menu">
+            <span class="acct-av" aria-hidden="true">{{ $u->initials }}</span>
+            <span class="sr-only">Account menu for {{ $u->name }}</span>
+            <i class="fas fa-chevron-down caret" aria-hidden="true"></i>
+          </button>
+          <div class="acct-menu" id="acct-menu">
+            <div class="acct-who">
+              <span class="nm">{{ $u->name }}</span>
+              <span class="rl">{{ $u->accountTypeLabel() }}</span>
+            </div>
+            <a href="{{ $accountUrl }}"><i class="fas {{ $accountIcon }}"></i> {{ $accountLabel }}</a>
+            <a href="{{ route('account.edit') }}"><i class="fas fa-user-pen"></i> Your account</a>
+            <hr>
+            <form method="POST" action="{{ route('logout') }}">
+              @csrf
+              <button type="submit" class="danger"><i class="fas fa-right-from-bracket"></i> Sign out</button>
+            </form>
+          </div>
+        </div>
       @else
-        {{-- Two doors, named for what is behind them. --}}
-        <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost desk sm cta">
-          <span class="cta-a">Hire Me</span>
-          <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="{{ route('courses.index') }}" wire:navigate class="btn gold desk sm cta">
-          <span class="cta-a">Learn</span>
-          <span class="cta-b" aria-hidden="true">Start Learning <i class="fas fa-arrow-right"></i></span>
-        </a>
+        <a href="{{ route('login') }}" wire:navigate class="signin desk">Sign in</a>
       @endauth
+
       <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mmenu"><i class="fas fa-bars"></i></button>
     </div>
   </div>
@@ -847,15 +905,18 @@
   @endforeach
 
   <div class="mm-actions">
+    {{-- Same order as the desktop header: the actions, then the account. --}}
+    <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost"><i class="fas fa-handshake"></i> Hire Muhindo</a>
+    <a href="{{ route('courses.index') }}" wire:navigate class="btn gold"><i class="fas fa-graduation-cap"></i> Start Learning</a>
+
     @auth
-      <a href="{{ $accountUrl }}" class="btn gold"><i class="fas {{ $accountIcon }}"></i> {{ $accountLabel }}</a>
+      <a href="{{ $accountUrl }}" class="btn ghost"><i class="fas {{ $accountIcon }}"></i> {{ $accountLabel }}</a>
+      <a href="{{ route('account.edit') }}" wire:navigate class="btn ghost"><i class="fas fa-user-pen"></i> Your account</a>
       <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="submit" class="btn ghost" style="width:100%;justify-content:center;">Sign out</button>
       </form>
     @else
-      <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost"><i class="fas fa-handshake"></i> Hire Muhindo</a>
-      <a href="{{ route('courses.index') }}" wire:navigate class="btn gold"><i class="fas fa-graduation-cap"></i> Start Learning</a>
       <a href="{{ route('login') }}" wire:navigate class="btn ghost">Sign in</a>
     @endauth
   </div>

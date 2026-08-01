@@ -76,6 +76,48 @@ class SiteNavTest extends TestCase
         $this->assertStringContainsString('Start Learning', $html);
     }
 
+    public function test_the_action_buttons_survive_signing_in(): void
+    {
+        // Signing in used to replace them with "My Projects" and "Sign out".
+        // The actions are what the header is for, and they still apply: a
+        // student can hire, a client can enrol.
+        $user = \App\Models\User::factory()->create(['role' => 'client', 'is_client' => true]);
+
+        $header = $this->headerOf($this->actingAs($user)->get(route('home')));
+
+        $this->assertStringContainsString('>Hire Me<', $header);
+        $this->assertStringContainsString('>Learn<', $header);
+    }
+
+    public function test_account_navigation_sits_behind_the_avatar_not_beside_the_actions(): void
+    {
+        $user = \App\Models\User::factory()->create(['role' => 'client', 'is_client' => true]);
+
+        $header = $this->headerOf($this->actingAs($user)->get(route('home')));
+        $beforeMenu = substr($header, 0, strpos($header, 'class="acct') ?: strlen($header));
+
+        $this->assertStringContainsString('class="acct desk"', $header);
+        $this->assertStringNotContainsString('My Projects', $beforeMenu);
+        $this->assertStringNotContainsString('Sign out', $beforeMenu);
+    }
+
+    public function test_a_guest_is_offered_the_actions_and_a_quiet_way_in(): void
+    {
+        $header = $this->headerOf($this->get(route('home')));
+
+        $this->assertStringContainsString('>Hire Me<', $header);
+        // Sign in is a link, not a button — it must not compete with the actions.
+        $this->assertStringContainsString('class="signin desk"', $header);
+    }
+
+    private function headerOf(\Illuminate\Testing\TestResponse $response): string
+    {
+        $html = (string) $response->assertOk()->getContent();
+
+        return substr($html, strpos($html, '<div class="hd-r">') ?: 0,
+            (strpos($html, '</header>') ?: strlen($html)) - (strpos($html, '<div class="hd-r">') ?: 0));
+    }
+
     public function test_the_mega_panel_is_operable_without_a_mouse(): void
     {
         $html = (string) $this->get(route('home'))->assertOk()->getContent();
