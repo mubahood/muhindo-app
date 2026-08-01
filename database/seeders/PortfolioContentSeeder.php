@@ -42,12 +42,11 @@ class PortfolioContentSeeder extends Seeder
             // neither of which is a regional trait, and naming a region up front
             // quietly caps the audience at it.
             //
-            // "lasts", not "ships": the audience here includes school directors
-            // and ministry officers, and "ships" is a word that only means
-            // anything to programmers. Lasting is also the harder, more
-            // differentiating claim — and the one the rest of the page evidences,
-            // with systems still in production and the training that kept them there.
-            'tagline' => 'I build software that lasts, and I teach people to build it too.',
+            // "scales" over the earlier "ships": school directors and ministry
+            // officers read this line too, and "ships" is a word that only means
+            // anything to programmers. "…teach others to do the same" carries both
+            // the building and the standard without repeating the verb.
+            'tagline' => 'I build software that scales, and I teach others to do the same.',
             'location' => 'Kampala, Uganda',
             'initials' => 'MM',
         ]));
