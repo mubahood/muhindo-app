@@ -29,6 +29,7 @@ class SitemapController extends Controller
             ['loc' => route('portfolio.experience'), 'lastmod' => null],
             ['loc' => route('portfolio.education'), 'lastmod' => null],
             ['loc' => route('portfolio.research'), 'lastmod' => null],
+            ['loc' => route('portfolio.cv'), 'lastmod' => null],
             ['loc' => route('portfolio.products'), 'lastmod' => null],
             ['loc' => route('start-a-project'), 'lastmod' => null],
             ['loc' => route('contact'), 'lastmod' => null],

@@ -47,6 +47,7 @@ Route::get('/skills', [PortfolioController::class, 'skills'])->name('portfolio.s
 Route::get('/experience', [PortfolioController::class, 'experience'])->name('portfolio.experience');
 Route::get('/education', [PortfolioController::class, 'education'])->name('portfolio.education');
 Route::get('/research', [PortfolioController::class, 'research'])->name('portfolio.research');
+Route::get('/cv', [PortfolioController::class, 'cv'])->name('portfolio.cv');
 Route::get('/products', [PortfolioController::class, 'products'])->name('portfolio.products');
 Route::get('/contact', [PortfolioController::class, 'contactPage'])->name('contact');
 Route::post('/contact', [PortfolioController::class, 'contact'])->middleware('throttle:5,1')->name('contact.store');

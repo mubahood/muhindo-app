@@ -126,6 +126,31 @@ class PortfolioController extends Controller
         ]);
     }
 
+    /**
+     * The whole record on one page.
+     *
+     * Assembled from the same tables the individual pages read, so a CV is
+     * never a stale copy of the site — editing an experience entry in the admin
+     * updates the CV in the same breath. It carries print styles rather than a
+     * PDF upload for the same reason: an uploaded file goes out of date the
+     * moment anything else changes.
+     */
+    public function cv(): View
+    {
+        return view('portfolio.cv', [
+            'identity' => $this->json('portfolio.identity'),
+            'contact' => $this->json('portfolio.contact'),
+            'about' => $this->json('portfolio.about'),
+            'stats' => $this->json('portfolio.stats', []),
+            'clients' => $this->json('portfolio.clients', []),
+            'research' => $this->json('portfolio.research'),
+            'experience' => Experience::orderBy('sort_order')->get(),
+            'education' => Education::orderBy('sort_order')->get(),
+            'skills' => Skill::orderBy('sort_order')->get()->groupBy('category'),
+            'projects' => PortfolioProject::orderBy('sort_order')->limit(6)->get(),
+        ]);
+    }
+
     public function products(): View
     {
         return view('portfolio.products', [

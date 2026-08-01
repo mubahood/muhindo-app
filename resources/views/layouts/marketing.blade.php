@@ -263,6 +263,83 @@
     .mmenu .btn{margin-top:16px;justify-content:center;}
 
     /* ══════════════════════════════════════════════════════════════════════
+       Navigation
+
+       Four items, one of which opens a panel. Opening is driven by :hover and
+       :focus-within, so the panel works with a mouse, with a keyboard, and
+       with JavaScript switched off. Script only adds what CSS cannot express:
+       Escape to close, and keeping aria-expanded truthful.
+       ══════════════════════════════════════════════════════════════════════ */
+    .nav{position:relative;}
+    .nav-item{position:relative;display:flex;align-items:center;}
+    .nav-link{position:relative;display:inline-flex;align-items:center;gap:6px;color:var(--tx);
+      font-weight:600;font-size:13px;padding:2px 0;background:none;border:none;font-family:inherit;
+      cursor:pointer;transition:color .15s;}
+    .nav-link:hover{color:var(--gold-d);}
+    .nav-link.on{color:var(--gold-d);}
+    .nav-link.on::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:2px;background:var(--gold);}
+    .nav-link .caret{font-size:9px;transition:transform .22s;}
+    .nav-item:hover .caret,.nav-item:focus-within .caret{transform:rotate(180deg);}
+    .nav-link .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);vertical-align:middle;}
+
+    /* The panel is anchored to the header, not the item, so a six-entry menu
+       can be wide enough to explain itself without being dragged off-screen by
+       whichever nav item happens to open it. */
+    .mega{position:absolute;top:calc(100% + 10px);left:0;z-index:70;width:min(560px,calc(100vw - 32px));
+      background:var(--surface);border:1px solid var(--line);box-shadow:0 22px 48px -20px rgba(11,31,58,.28);
+      padding:10px;opacity:0;visibility:hidden;transform:translateY(-6px);
+      transition:opacity .18s,transform .18s,visibility .18s;}
+    .nav-item:hover > .mega,.nav-item:focus-within > .mega{opacity:1;visibility:visible;transform:none;}
+    /* Bridges the 10px gap so the pointer can travel from trigger to panel
+       without passing over dead space and closing it. */
+    .nav-item.has-menu::after{content:'';position:absolute;top:100%;left:0;right:0;height:12px;}
+    .mega-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+    .mega-link{display:flex;gap:10px;padding:9px 11px;align-items:flex-start;transition:background .14s;min-width:0;}
+    .mega-link:hover{background:var(--gold-soft);}
+    .mega-link.on{background:var(--pri-soft);}
+    .mega-link .mi{width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+      background:var(--gold-soft);color:var(--gold-d);font-size:12px;}
+    .mega-link.on .mi{background:var(--pri);color:var(--gold);}
+    .mega-link .mt{display:block;font-size:12.5px;font-weight:600;color:var(--tx);line-height:1.3;}
+    .mega-link .md{display:block;font-size:11px;font-weight:450;color:var(--tx2);line-height:1.4;margin-top:2px;}
+    .mega-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;
+      padding:9px 11px;background:var(--bg);border-top:1px solid var(--line);font-size:11.5px;
+      font-weight:500;color:var(--tx2);}
+
+    /* ── Calls to action that say what they do ─────────────────────────────
+       The resting label is short enough to scan; the hover label names the
+       actual outcome. Both live in the same grid cell so the button is sized
+       by the longer of the two and never changes width mid-interaction —
+       a button that resizes under the pointer is a button people miss. */
+    .cta{display:inline-grid;align-items:center;justify-items:center;overflow:hidden;}
+    .cta > span{grid-area:1/1;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+      transition:transform .3s cubic-bezier(.22,.61,.36,1),opacity .22s;}
+    .cta .cta-b{transform:translateY(115%);opacity:0;}
+    .cta:hover .cta-a,.cta:focus-visible .cta-a{transform:translateY(-115%);opacity:0;}
+    .cta:hover .cta-b,.cta:focus-visible .cta-b{transform:none;opacity:1;}
+    @media(prefers-reduced-motion:reduce){
+      .cta > span{transition:none;}
+      .cta .cta-b{display:none;}
+      .cta:hover .cta-a{transform:none;opacity:1;}
+    }
+
+    /* ── Mobile sheet ────────────────────────────────────────────────────── */
+    .mm-group{border-bottom:1px solid var(--line);}
+    .mm-group > summary{display:flex;align-items:center;justify-content:space-between;gap:10px;
+      font-size:17px;font-weight:600;color:var(--tx);padding:13px 0;cursor:pointer;list-style:none;}
+    .mm-group > summary::-webkit-details-marker{display:none;}
+    .mm-group > summary .chev{font-size:12px;color:var(--tx3);transition:transform .2s;}
+    .mm-group[open] > summary .chev{transform:rotate(180deg);}
+    .mm-sub{padding:0 0 10px 2px;display:flex;flex-direction:column;}
+    .mm-sub a{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:var(--tx2);
+      padding:9px 0;border:none;}
+    .mm-sub a .mi{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+      background:var(--gold-soft);color:var(--gold-d);font-size:11px;}
+    .mm-sub a.on{color:var(--pri);font-weight:600;}
+    .mmenu .mm-actions{display:flex;flex-direction:column;gap:8px;margin-top:18px;}
+    .mmenu .mm-actions .btn{width:100%;justify-content:center;}
+
+    /* ══════════════════════════════════════════════════════════════════════
        Density
 
        Deliberately tight. Space is spent where it separates ideas and taken
@@ -665,6 +742,8 @@
 
 @php
   $r = fn($n) => request()->routeIs($n) ? 'on' : '';
+  $nav = \App\Support\SiteNav::items();
+  $isOn = fn (array $item) => request()->routeIs(...($item['match'] ?? []));
   /* Role-aware account entry point: every signed-in visitor gets a direct door to
      THEIR side of the platform, from every public page. */
   $u = auth()->user();
@@ -680,13 +759,49 @@
 <header class="site">
   <div class="wrap bar">
     <a href="{{ route('home') }}" wire:navigate class="brand"><span class="badge">MM</span> Muhindo Mubaraka</a>
-    <nav class="nav">
-      <a href="{{ route('courses.index') }}" wire:navigate class="{{ $r('courses.*') }}">e&#8209;Learning<span class="dot"></span></a>
-      <a href="{{ route('portfolio.work') }}" wire:navigate class="{{ $r('portfolio.work') }} {{ $r('portfolio.project') }}">Work</a>
-      <a href="{{ route('portfolio.about') }}" wire:navigate class="{{ $r('portfolio.about') }}">About</a>
-      <a href="{{ route('portfolio.skills') }}" wire:navigate class="{{ $r('portfolio.skills') }}">Skills</a>
-      <a href="{{ route('contact') }}" wire:navigate class="{{ $r('contact') }}">Contact</a>
+
+    <nav class="nav" aria-label="Main">
+      @foreach($nav as $item)
+        @php $on = $isOn($item); @endphp
+        @if(empty($item['children']))
+          <div class="nav-item">
+            <a href="{{ $item['url'] }}" wire:navigate class="nav-link {{ $on ? 'on' : '' }}"
+               @if($on) aria-current="page" @endif>
+              {{ $item['label'] }}@if(!empty($item['flag']))<span class="dot" aria-hidden="true"></span>@endif
+            </a>
+          </div>
+        @else
+          <div class="nav-item has-menu">
+            <button type="button" class="nav-link {{ $on ? 'on' : '' }}"
+                    aria-expanded="false" aria-controls="mega-{{ Str::slug($item['label']) }}">
+              {{ $item['label'] }} <i class="fas fa-chevron-down caret" aria-hidden="true"></i>
+            </button>
+            <div class="mega" id="mega-{{ Str::slug($item['label']) }}">
+              <div class="mega-grid">
+                @foreach($item['children'] as $child)
+                  <a href="{{ $child['url'] }}" wire:navigate class="mega-link {{ $isOn($child) ? 'on' : '' }}">
+                    <span class="mi"><i class="fas {{ $child['icon'] }}" aria-hidden="true"></i></span>
+                    <span>
+                      <span class="mt">{{ $child['label'] }}</span>
+                      <span class="md">{{ $child['desc'] }}</span>
+                    </span>
+                  </a>
+                @endforeach
+              </div>
+              @if(!empty($item['blurb']))
+                <div class="mega-foot">
+                  <span>{{ $item['blurb'] }}</span>
+                  <a href="{{ route('contact') }}" wire:navigate class="link" style="color:var(--pri);font-weight:600;white-space:nowrap;">
+                    Get in touch <i class="fas fa-arrow-right"></i>
+                  </a>
+                </div>
+              @endif
+            </div>
+          </div>
+        @endif
+      @endforeach
     </nav>
+
     <div class="hd-r">
       @auth
         <a href="{{ $accountUrl }}" class="btn gold desk sm"><i class="fas {{ $accountIcon }}"></i> {{ $accountLabel }}</a>
@@ -695,30 +810,55 @@
           <button type="submit" class="btn ghost desk sm">Sign out</button>
         </form>
       @else
-        <a href="{{ route('login') }}" wire:navigate class="btn ghost desk sm">Sign in</a>
-        <a href="{{ route('contact') }}" wire:navigate class="btn gold desk sm">Get in touch</a>
+        {{-- Two doors, named for what is behind them. --}}
+        <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost desk sm cta">
+          <span class="cta-a">Hire Me</span>
+          <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
+        </a>
+        <a href="{{ route('courses.index') }}" wire:navigate class="btn gold desk sm cta">
+          <span class="cta-a">Learn</span>
+          <span class="cta-b" aria-hidden="true">Start Learning <i class="fas fa-arrow-right"></i></span>
+        </a>
       @endauth
-      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mmenu"><i class="fas fa-bars"></i></button>
     </div>
   </div>
 </header>
 
 <div class="mmenu" id="mmenu">
-  <a href="{{ route('courses.index') }}" wire:navigate>e&#8209;Learning</a>
-  <a href="{{ route('portfolio.work') }}" wire:navigate>Work</a>
-  <a href="{{ route('portfolio.about') }}" wire:navigate>About</a>
-  <a href="{{ route('portfolio.skills') }}" wire:navigate>Skills</a>
-  <a href="{{ route('contact') }}" wire:navigate>Contact</a>
-  @auth
-    <a href="{{ $accountUrl }}" class="btn gold"><i class="fas {{ $accountIcon }}"></i> {{ $accountLabel }}</a>
-    <form method="POST" action="{{ route('logout') }}">
-      @csrf
-      <button type="submit" class="btn ghost" style="width:100%;justify-content:center;">Sign out</button>
-    </form>
-  @else
-    <a href="{{ route('login') }}" wire:navigate class="btn ghost">Sign in</a>
-    <a href="{{ route('contact') }}" wire:navigate class="btn gold">Get in touch</a>
-  @endauth
+  @foreach($nav as $item)
+    @if(empty($item['children']))
+      <a href="{{ $item['url'] }}" wire:navigate class="{{ $isOn($item) ? 'on' : '' }}">{{ $item['label'] }}</a>
+    @else
+      {{-- <details> gives an accessible, keyboard-operable disclosure with no
+           script at all, and keeps the section open on the page it belongs to. --}}
+      <details class="mm-group" @if($isOn($item)) open @endif>
+        <summary>{{ $item['label'] }} <i class="fas fa-chevron-down chev" aria-hidden="true"></i></summary>
+        <div class="mm-sub">
+          @foreach($item['children'] as $child)
+            <a href="{{ $child['url'] }}" wire:navigate class="{{ $isOn($child) ? 'on' : '' }}">
+              <span class="mi"><i class="fas {{ $child['icon'] }}" aria-hidden="true"></i></span>
+              {{ $child['label'] }}
+            </a>
+          @endforeach
+        </div>
+      </details>
+    @endif
+  @endforeach
+
+  <div class="mm-actions">
+    @auth
+      <a href="{{ $accountUrl }}" class="btn gold"><i class="fas {{ $accountIcon }}"></i> {{ $accountLabel }}</a>
+      <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" class="btn ghost" style="width:100%;justify-content:center;">Sign out</button>
+      </form>
+    @else
+      <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost"><i class="fas fa-handshake"></i> Hire Muhindo</a>
+      <a href="{{ route('courses.index') }}" wire:navigate class="btn gold"><i class="fas fa-graduation-cap"></i> Start Learning</a>
+      <a href="{{ route('login') }}" wire:navigate class="btn ghost">Sign in</a>
+    @endauth
+  </div>
 </div>
 
 <main>
@@ -778,8 +918,36 @@
   // wire:navigate swaps <body> for internal links (pjax-style — no full reload, every
   // page is still a real server-rendered URL, so SEO is unaffected); re-wire the burger
   // button and close any menu left open after each swap.
+  /* CSS already opens the mega panel on hover and on focus-within, which
+     covers mouse, keyboard and no-JS. Script adds only what CSS cannot say:
+     Escape closes, and aria-expanded tells the truth about the panel's state
+     for anyone listening rather than looking. */
+  function initMegaMenus(){
+    document.querySelectorAll('.nav-item.has-menu').forEach(function(item){
+      if (item.dataset.wired) return;
+      item.dataset.wired = '1';
+      var trigger = item.querySelector('.nav-link');
+      var sync = function(open){ if (trigger) trigger.setAttribute('aria-expanded', open ? 'true' : 'false'); };
+
+      item.addEventListener('mouseenter', function(){ sync(true); });
+      item.addEventListener('mouseleave', function(){ sync(false); });
+      item.addEventListener('focusin',   function(){ sync(true); });
+      item.addEventListener('focusout',  function(){
+        // focusout fires before focus lands; check on the next tick.
+        setTimeout(function(){ if (!item.contains(document.activeElement)) sync(false); }, 0);
+      });
+      item.addEventListener('keydown', function(e){
+        if (e.key !== 'Escape') return;
+        sync(false);
+        if (trigger) trigger.blur();
+      });
+    });
+  }
+  initMegaMenus();
+
   document.addEventListener('livewire:navigated', function(){
     initBurgerMenu();
+    initMegaMenus();
     var m=document.getElementById('mmenu'), b=document.getElementById('burger');
     if(m && m.classList.contains('open')){ m.classList.remove('open'); document.body.style.overflow=''; if(b){ b.setAttribute('aria-expanded','false'); b.querySelector('i').className='fas fa-bars'; } }
   });
