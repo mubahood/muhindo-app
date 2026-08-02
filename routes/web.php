@@ -255,6 +255,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('grading-queue', \App\Livewire\Admin\GradingQueue::class)->name('grading-queue');
     Route::get('reviews', \App\Livewire\Admin\ReviewModeration::class)->name('reviews.index');
     Route::post('courses/{course}/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
+    Route::patch('enrollments/{enrollment}', [EnrollmentController::class, 'update'])->name('enrollments.update');
+    Route::post('enrollments/{enrollment}/invoice', [EnrollmentController::class, 'invoice'])->name('enrollments.invoice');
     Route::delete('enrollments/{enrollment}', [EnrollmentController::class, 'destroy'])->name('enrollments.destroy');
 
     // Clients & Projects
