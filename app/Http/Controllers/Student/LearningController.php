@@ -229,6 +229,22 @@ class LearningController extends Controller
             ->where('course_id', $course->id)
             ->firstOrFail();
 
+        // Enrolled but not paid: send them to pay rather than answering 403.
+        // A person who owes money on a course they just chose is not
+        // forbidden — they are one step short, and the step is a payment.
+        if ($enrollment->status === 'pending' && $enrollment->invoice_id !== null) {
+            $invoice = \App\Models\Invoice::find($enrollment->invoice_id);
+
+            if ($invoice !== null && $invoice->isOutstanding()) {
+                throw new \App\Exceptions\PaymentRequiredException(
+                    $invoice,
+                    $invoice->isAwaitingDirectPayment()
+                        ? 'This course unlocks once Muhindo confirms your payment. You can also pay online here — it is instant.'
+                        : 'Almost there — this course unlocks as soon as your payment goes through.'
+                );
+            }
+        }
+
         $this->authorize('access', $enrollment);
 
         return $enrollment;

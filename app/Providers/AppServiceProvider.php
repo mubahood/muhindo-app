@@ -51,9 +51,16 @@ class AppServiceProvider extends ServiceProvider
         // envelope comes from App\Support\ApiResponse, so resources stay flat.
         \Illuminate\Http\Resources\Json\JsonResource::withoutWrapping();
 
-        // Password policy enforced. Applies
-        // everywhere Password::defaults() is used (reset, forced change, API).
-        Password::defaults(fn () => Password::min(8));
+        // Six characters, no composition rules. Applies everywhere
+        // Password::defaults() is used (register, reset, forced change, API).
+        //
+        // Deliberately not Password::min(8)->mixedCase()->numbers()->symbols():
+        // forced-composition rules push people towards one predictable pattern
+        // ("Password1!") and towards writing the result down, which is why NIST
+        // 800-63B dropped them. Length is what actually helps, and the accounts
+        // that matter — anything with billing.manage — are staff accounts we
+        // can hold to a higher bar separately if we ever need to.
+        Password::defaults(fn () => Password::min(6));
 
         // Use our themed pagination view for every ->links() call,
         // instead of the default unstyled Tailwind markup.

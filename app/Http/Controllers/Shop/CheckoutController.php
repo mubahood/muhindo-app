@@ -33,20 +33,16 @@ class CheckoutController extends Controller
     }
 
     /**
-     * The payment screen for an order — the one page that exists between an
-     * invoice and Flutterwave, for shop orders, course purchases and client
-     * invoices alike.
+     * Historic URL for the shop's payment screen. There is now one payment
+     * screen for every kind of purchase; this forwards to it.
      */
-    public function pay(Request $request, \App\Models\Invoice $invoice): View|RedirectResponse
+    public function pay(Request $request, \App\Models\Invoice $invoice): RedirectResponse
     {
         $this->authorize('pay', $invoice);
 
-        if (! $invoice->status->isPayable() || bccomp((string) $invoice->balance, '0', 2) <= 0) {
-            return redirect()->route('shop.downloads')
-                ->with('success', 'That order is settled — everything on it is ready below.');
-        }
-
-        return view('shop.pay', ['invoice' => $invoice->load('items')]);
+        // Kept as a redirect rather than deleted: this URL is handed out by
+        // place() and may already be in someone's history.
+        return redirect()->route('payments.show', $invoice);
     }
 
     /**

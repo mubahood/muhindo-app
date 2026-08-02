@@ -25,6 +25,13 @@ class PasswordResetLinkController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // Answered as success. Telling a script it tripped the trap teaches it
+        // how to avoid the trap; this is also what the endpoint says for an
+        // address that has no account, so the two are indistinguishable.
+        if (\App\Support\Spam\FormShield::looksAutomated($request->all())) {
+            return back()->with('status', 'If that email has an account, a reset link is on its way.');
+        }
+
         // A reset form is an email-flood weapon pointed at other people's
         // inboxes, not just at this site.
         $request->validate([

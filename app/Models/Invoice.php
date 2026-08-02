@@ -33,6 +33,7 @@ class Invoice extends Model
         'uuid', 'invoice_no', 'billable_type', 'billable_id', 'project_id', 'currency',
         'subtotal', 'tax_total', 'discount', 'total', 'amount_paid', 'balance',
         'status', 'notes', 'issued_by', 'issued_at', 'refunded_by', 'refunded_at',
+        'direct_payment_at', 'cancelled_at',
     ];
 
     protected function casts(): array
@@ -43,6 +44,8 @@ class Invoice extends Model
             'status' => InvoiceStatus::class,
             'issued_at' => 'datetime',
             'refunded_at' => 'datetime',
+            'direct_payment_at' => 'datetime',
+            'cancelled_at' => 'datetime',
         ];
     }
 
@@ -85,5 +88,20 @@ class Invoice extends Model
     public function getRouteKeyName(): string
     {
         return 'uuid';
+    }
+
+    /** Still owed something. */
+    public function isOutstanding(): bool
+    {
+        return $this->status->isPayable() && bccomp((string) $this->balance, '0', 2) > 0;
+    }
+
+    /**
+     * The buyer said they would pay Muhindo directly. Says nothing about
+     * whether they have — an arrangement, not a payment.
+     */
+    public function isAwaitingDirectPayment(): bool
+    {
+        return $this->direct_payment_at !== null && $this->isOutstanding();
     }
 }

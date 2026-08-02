@@ -20,6 +20,14 @@ interface PaymentGateway
     /** Server-side verify a transaction by the provider's own id. */
     public function verify(string $providerTransactionId): GatewayVerification;
 
+    /**
+     * Verify by OUR reference rather than the provider's transaction id.
+     *
+     * Needed for recovery: when the browser never came back from the gateway
+     * we have no transaction id, only the tx_ref we generated.
+     */
+    public function verifyByReference(string $txRef): GatewayVerification;
+
     /** True if an inbound webhook's signature header authenticates it. */
     public function verifyWebhookSignature(?string $signatureHeader): bool;
 }

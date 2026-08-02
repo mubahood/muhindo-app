@@ -135,4 +135,38 @@ class SpamShieldTest extends TestCase
             $this->assertStringContainsString('tabindex="-1"', $html);
         }
     }
+
+    /**
+     * The markup shipped on these two before the check did, which meant a
+     * hidden field that looked like protection and was not.
+     */
+    public function test_the_honeypot_is_actually_enforced_on_login_and_password_reset(): void
+    {
+        $user = User::factory()->create(['password' => bcrypt('secret6'), 'is_active' => true]);
+
+        $this->post(route('login'), [
+            'email' => $user->email, 'password' => 'secret6',
+            FormShield::HONEYPOT => 'http://spam.example',
+        ])->assertSessionHasErrors('email');
+        $this->assertGuest();
+
+        // The same credentials without the trap tripped still work, so the
+        // check discriminates rather than simply breaking the form.
+        $this->post(route('login'), ['email' => $user->email, 'password' => 'secret6'])
+            ->assertSessionHasNoErrors();
+        $this->assertAuthenticated();
+    }
+
+    public function test_a_tripped_password_reset_sends_no_mail(): void
+    {
+        \Illuminate\Support\Facades\Notification::fake();
+        $user = User::factory()->create();
+
+        $this->post(route('password.email'), [
+            'email' => $user->email,
+            FormShield::HONEYPOT => 'http://spam.example',
+        ])->assertSessionHasNoErrors();
+
+        \Illuminate\Support\Facades\Notification::assertNothingSent();
+    }
 }

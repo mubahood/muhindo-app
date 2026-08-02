@@ -171,6 +171,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/read-all', [\App\Http\Controllers\Admin\NotificationController::class, 'readAll'])->name('notifications.read-all');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Paying for things — one screen for courses, source code and projects
+|--------------------------------------------------------------------------
+| courses/{course}/checkout and checkout/{invoice}/pay used to be two separate
+| payment screens in two different layouts. Both now land here.
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('my/orders', [\App\Http\Controllers\PaymentController::class, 'index'])->name('payments.index');
+    Route::get('pay/{invoice}', [\App\Http\Controllers\PaymentController::class, 'show'])->name('payments.show');
+    Route::post('pay/{invoice}/direct', [\App\Http\Controllers\PaymentController::class, 'direct'])->name('payments.direct');
+    Route::post('pay/{invoice}/online', [\App\Http\Controllers\PaymentController::class, 'online'])->name('payments.online');
+    Route::post('pay/{invoice}/cancel', [\App\Http\Controllers\PaymentController::class, 'cancel'])->name('payments.cancel');
+    Route::post('pay/{invoice}/recheck', [\App\Http\Controllers\PaymentController::class, 'recheck'])->name('payments.recheck');
+});
+
 // Your account — profile & settings, one screen for every signed-in person
 Route::prefix('account')->middleware(['auth'])->name('account.')->group(function () {
     Route::get('/', [\App\Http\Controllers\AccountController::class, 'edit'])->name('edit');

@@ -30,7 +30,13 @@ class FakePaymentGateway implements PaymentGateway
 
     public function verify(string $providerTransactionId): GatewayVerification
     {
-        $txRef = $providerTransactionId;
+        // Real Flutterwave gives verify_by_reference a transaction id in
+        // data.id, which is then passed to verify(). The fake mints that id as
+        // "FLW-{tx_ref}", so accept it here too or the reconcile path — which
+        // deliberately settles through verify() — could never be exercised.
+        $txRef = str_starts_with($providerTransactionId, 'FLW-')
+            ? substr($providerTransactionId, 4)
+            : $providerTransactionId;
 
         if (! isset($this->verifications[$txRef])) {
             return new GatewayVerification(successful: false, reference: '', providerRef: null, amount: '0.00', currency: 'UGX');
@@ -44,6 +50,11 @@ class FakePaymentGateway implements PaymentGateway
             currency: $this->verifications[$txRef]['currency'],
             paymentType: 'card',
         );
+    }
+
+    public function verifyByReference(string $txRef): GatewayVerification
+    {
+        return $this->verify($txRef);
     }
 
     public function verifyWebhookSignature(?string $signatureHeader): bool

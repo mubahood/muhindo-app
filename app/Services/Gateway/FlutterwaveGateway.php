@@ -64,6 +64,25 @@ class FlutterwaveGateway implements PaymentGateway
             return new GatewayVerification(false, '', null, '0.00', '', null, 'Gateway unreachable.');
         }
 
+        return $this->toVerification($res);
+    }
+
+    public function verifyByReference(string $txRef): GatewayVerification
+    {
+        try {
+            $res = $this->client()->get('/v3/transactions/verify_by_reference', ['tx_ref' => $txRef]);
+        } catch (\Throwable $e) {
+            Log::warning('Flutterwave verify_by_reference failed', ['error' => $e->getMessage()]);
+
+            return new GatewayVerification(false, '', null, '0.00', '', null, 'Gateway unreachable.');
+        }
+
+        return $this->toVerification($res);
+    }
+
+    /** Both verify endpoints return the same transaction envelope. */
+    private function toVerification(\Illuminate\Http\Client\Response $res): GatewayVerification
+    {
         $d = $res->json('data') ?? [];
         $successful = ($res->json('status') === 'success') && (($d['status'] ?? null) === 'successful');
 

@@ -24,7 +24,7 @@ class CheckoutPageTest extends TestCase
         $course = Course::factory()->create(['is_published' => true, 'price' => '150000.00', 'currency' => 'UGX']);
         $this->actingAs($student)->post(route('courses.enroll', $course));
 
-        $response = $this->get(route('courses.checkout', $course));
+        $response = $this->followingRedirects()->get(route('courses.checkout', $course));
 
         $response->assertOk();
         $response->assertSee('UGX 150,000.00');
@@ -42,10 +42,12 @@ class CheckoutPageTest extends TestCase
 
         $this->actingAs($student)->post(route('courses.enroll', $course), ['coupon_code' => 'SAVE20']);
 
-        $response = $this->get(route('courses.checkout', $course));
+        $response = $this->followingRedirects()->get(route('courses.checkout', $course));
 
         $response->assertOk();
-        $response->assertSee('Coupon discount');
+        // The one payment screen says "Discount applied" — an invoice discount
+        // is not always from a coupon.
+        $response->assertSee('Discount applied');
         $response->assertSee('UGX 30,000.00'); // 20% of 150,000
         $response->assertSee('UGX 120,000.00'); // total after discount
     }

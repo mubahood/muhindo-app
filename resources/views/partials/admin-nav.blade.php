@@ -27,6 +27,11 @@
           ['label' => 'Invoices', 'icon' => 'fa-file-invoice-dollar', 'route' => 'portal.invoices', 'match' => ['portal.invoices']],
           ['label' => 'Start a project', 'icon' => 'fa-plus', 'route' => 'start-a-project', 'match' => ['start-a-project']],
       ]],
+      // Everyone who can buy anything can owe for it, so this is ungated.
+      ['key' => 'orders', 'label' => 'Orders', 'icon' => 'fa-receipt', 'gate' => null, 'items' => [
+          ['label' => 'My orders', 'icon' => 'fa-receipt', 'route' => 'payments.index', 'match' => ['payments.index', 'payments.show']],
+          ['label' => 'My downloads', 'icon' => 'fa-download', 'route' => 'shop.downloads', 'match' => ['shop.downloads', 'shop.download']],
+      ]],
       ['key' => 'portfolio', 'label' => 'Portfolio', 'icon' => 'fa-id-card', 'gate' => 'portfolio.manage', 'items' => [
           ['label' => 'Projects', 'icon' => 'fa-diagram-project', 'route' => 'admin.portfolio-projects.index', 'match' => ['admin.portfolio-projects.*']],
           ['label' => 'Skills', 'icon' => 'fa-star', 'route' => 'admin.skills.index', 'match' => ['admin.skills.*']],

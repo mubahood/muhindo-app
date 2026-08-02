@@ -49,6 +49,20 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Honeypot only — deliberately NOT FormShield's timing check. A
+        // password manager fills and submits this form in well under a second,
+        // and refusing that would lock out exactly the people with the
+        // strongest credentials. The hidden field carries no such risk: no
+        // person can fill in something they cannot see.
+        //
+        // A trip is answered exactly as a wrong password is, so a script
+        // learns nothing about why it failed.
+        if (\App\Support\Spam\FormShield::looksAutomated($this->all())) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages(['email' => trans('auth.failed')]);
+        }
+
         try {
             // Always issue the long-lived remember cookie: a signed-in user stays
             // signed in until they explicitly log out, even after the server-side

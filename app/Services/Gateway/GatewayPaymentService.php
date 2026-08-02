@@ -53,6 +53,57 @@ class GatewayPaymentService
     }
 
     /**
+     * Recover a payment whose callback never arrived.
+     *
+     * The browser coming back from Flutterwave is the usual trigger for
+     * settlement, and it is the least reliable part of the whole flow: the
+     * payer closes the tab, the network drops, the phone dies mid-redirect.
+     * The money is taken and the site never hears about it. The webhook covers
+     * most of that, but only if it is configured and reachable.
+     *
+     * This asks the gateway about every session we opened for the invoice,
+     * keyed on the tx_ref we generated, so a stuck payment can be recovered on
+     * demand — by the payer pressing "I have paid" or by staff. It settles
+     * through exactly the same verified, idempotent path as everything else.
+     *
+     * @return string One of: settled, already_settled, nothing_pending, not_successful
+     */
+    public function reconcile(Invoice $invoice): string
+    {
+        $pending = GatewayLog::where('invoice_id', $invoice->id)
+            ->where('status', 'pending')
+            ->latest('id')
+            ->get();
+
+        if ($pending->isEmpty()) {
+            return 'nothing_pending';
+        }
+
+        $outcome = 'not_successful';
+
+        foreach ($pending as $log) {
+            $v = $this->gateway->verifyByReference((string) $log->tx_ref);
+
+            if (! $v->successful || $v->reference === '') {
+                continue;
+            }
+
+            // settle() is the only place money moves. Going through it keeps
+            // the currency, amount and idempotency checks in one place.
+            $result = $v->providerRef !== null && $v->providerRef !== ''
+                ? $this->settle($v->providerRef)
+                : 'not_successful';
+
+            if (in_array($result, ['settled', 'already_settled'], true)) {
+                $outcome = $result;
+                break;
+            }
+        }
+
+        return $outcome;
+    }
+
+    /**
      * Verify a gateway transaction and, if genuinely successful, record the
      * payment exactly once. Safe to call from both the browser callback and the
      * webhook. Returns a short status string for logging.

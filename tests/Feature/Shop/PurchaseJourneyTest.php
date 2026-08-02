@@ -234,7 +234,10 @@ class PurchaseJourneyTest extends TestCase
         $this->actingAs($buyer)->post(route('checkout.place'));
         $invoice = Invoice::firstOrFail();
 
+        // Someone else's order is still forbidden; the owner is forwarded to
+        // the one payment screen rather than a shop-only page.
         $this->actingAs($this->buyer())->get(route('checkout.pay', $invoice))->assertForbidden();
-        $this->actingAs($buyer)->get(route('checkout.pay', $invoice))->assertOk()->assertSee('Pay ');
+        $this->actingAs($buyer)->followingRedirects()->get(route('checkout.pay', $invoice))
+            ->assertOk()->assertSee('Pay ');
     }
 }
