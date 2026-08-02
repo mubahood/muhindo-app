@@ -16,12 +16,23 @@
       --bg:#f7f6f2; --surface:#fff; --surface-2:#f0eee7; --line:#e7e3d8; --line-2:#d8d2c0;
       --tx:#141a26; --tx2:#5b6270; --tx3:#706f5c; --pri:#0b1f3a; --pri-d:#060f1f; --pri-soft:#eef1f6;
       --ok:#0f6b30; --ok-soft:#e6f4ea; --bad:#b91c1c; --bad-soft:#fbe9e9;
+      --gold:#b8933f; --gold-d:#7d6228; --gold-soft:#f7f0df;
       --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     }
     body{font-family:var(--font);font-size:13px;font-weight:400;color:var(--tx);
-      background:radial-gradient(circle at 15% 8%,#eef1f6 0%,var(--bg) 42%),var(--bg);
+      background:var(--bg);position:relative;overflow-x:hidden;
       -webkit-font-smoothing:antialiased;letter-spacing:.002em;min-height:100vh;
       display:flex;align-items:center;justify-content:center;padding:24px;}
+    /* Positive z-index on purpose: a negative one would paint above body's own
+       background but below nothing else, and the card would sit under it. */
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:
+        radial-gradient(circle at 50% 0%,rgba(184,147,63,.10) 0%,transparent 46%),
+        radial-gradient(circle at 12% 92%,rgba(11,31,58,.07) 0%,transparent 44%),
+        linear-gradient(rgba(11,31,58,.032) 1px,transparent 1px) 0 0/34px 34px,
+        linear-gradient(90deg,rgba(11,31,58,.032) 1px,transparent 1px) 0 0/34px 34px;
+      -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 38%,#000 30%,transparent 78%);
+              mask-image:radial-gradient(ellipse 90% 70% at 50% 38%,#000 30%,transparent 78%);}
     a{color:inherit;text-decoration:none;}
     .ctx-sub{display:block;font-size:11.5px;font-weight:450;color:var(--tx3);margin-top:2px;line-height:1.45;}
     .a-course-ctx{display:flex;align-items:center;gap:12px;background:var(--pri-soft);border:1px solid var(--line);
@@ -31,7 +42,7 @@
     .a-course-ctx .thumb img{width:100%;height:100%;object-fit:cover;}
     .a-course-ctx p{font-size:12.5px;color:var(--tx2);line-height:1.45;}
     .a-course-ctx p b{color:var(--tx);}
-    .auth-card{width:100%;max-width:392px;}
+    .auth-card{width:100%;max-width:392px;position:relative;z-index:1;}
     .auth-card.wide{max-width:600px;}
     .a-brand{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:22px;}
     .a-brand .mk{width:32px;height:32px;object-fit:contain;display:block;}
@@ -57,18 +68,41 @@
       border:1px solid var(--line-2);padding:12px 13px 12px 38px;transition:border-color .15s,box-shadow .15s;}
     .a-input:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-soft);}
     .a-input::placeholder{color:var(--tx3);font-weight:300;}
+    .a-input.bad{border-color:var(--bad);}
+    .a-input.bad:focus{border-color:var(--bad);box-shadow:0 0 0 3px var(--bad-soft);}
     .a-eye{position:absolute;right:6px;width:34px;height:34px;border:none;background:none;color:var(--tx3);cursor:pointer;}
     .a-check{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:300;color:var(--tx2);margin:4px 0 18px;cursor:pointer;}
     .a-btn{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;
       background:var(--pri);color:#fff;border:1px solid var(--pri);font-family:var(--font);font-weight:500;
       font-size:13px;letter-spacing:.03em;padding:13px;cursor:pointer;transition:background .15s;}
     .a-btn:hover{background:var(--pri-d);border-color:var(--pri-d);}
+    /* Gold is the primary action everywhere else on the site; a navy submit
+       here made sign-in look like a secondary step in its own flow. */
+    .a-btn.gold{background:var(--gold);border-color:var(--gold);color:#231a05;font-weight:600;}
+    .a-btn.gold:hover{background:var(--gold-d);border-color:var(--gold-d);color:#fff;}
     .a-alt{text-align:center;font-size:12px;font-weight:300;color:var(--tx3);margin-top:18px;}
+    /* a{color:inherit} left these the same grey as the sentence around them,
+       so the only way to find the link was to hover and hope. */
+    .a-alt a{color:var(--pri);font-weight:600;text-underline-offset:3px;}
+    .a-alt a:hover{text-decoration:underline;}
     .a-back{display:inline-flex;align-items:center;gap:6px;color:var(--tx2);font-weight:400;font-size:12px;}
     .a-back:hover{color:var(--pri);}
     .a-secure{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
       margin-top:20px;font-size:11px;font-weight:300;color:var(--tx3);}
     .a-secure .dot{opacity:.5;}
+    /* Two genuinely different next steps, not two afterthought text links. */
+    .a-sep{display:flex;align-items:center;gap:10px;margin:22px 0 12px;color:var(--tx3);
+      font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;}
+    .a-sep::before,.a-sep::after{content:'';flex:1;height:1px;background:var(--line);}
+    .a-ways{display:grid;gap:8px;}
+    .a-way{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid var(--line-2);
+      background:var(--surface);transition:border-color .15s,background .15s,transform .15s;}
+    .a-way:hover{border-color:var(--pri);background:var(--pri-soft);transform:translateX(2px);}
+    .a-way > i{width:16px;text-align:center;color:var(--tx3);font-size:13px;flex-shrink:0;}
+    .a-way:hover > i{color:var(--pri);}
+    .a-way span{display:flex;flex-direction:column;gap:2px;font-size:11px;font-weight:400;
+      color:var(--tx3);line-height:1.4;}
+    .a-way span b{font-size:12.5px;font-weight:600;color:var(--tx);}
   </style>
   @stack('styles')
 </head>

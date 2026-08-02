@@ -233,15 +233,27 @@
         <button type="button" class="btn ghost sm" data-pv-next>Next <i class="fas fa-chevron-right"></i></button>
       </div>
 
-      <form method="POST" action="{{ route('courses.enroll', $course) }}" class="pv-cta">
-        @csrf
+      {{-- Same split as the buy box below: a signed-in visitor enrols outright,
+           a guest goes through sign-up carrying the course. Posting straight to
+           enrol would bounce a guest to login and drop the very context this
+           preview just built. --}}
+      <div class="pv-cta">
         <span class="pv-price">
           @if($course->isFree()) Free @else {{ $course->currency }} {{ number_format((float) $course->price) }} @endif
         </span>
-        <button type="submit" class="btn gold sm">
-          {{ $course->isFree() ? 'Start this course' : 'Enrol now' }} <i class="fas fa-arrow-right"></i>
-        </button>
-      </form>
+        @auth
+          <form method="POST" action="{{ route('courses.enroll', $course) }}">
+            @csrf
+            <button type="submit" class="btn gold sm">
+              {{ $course->isFree() ? 'Start this course' : 'Enrol now' }} <i class="fas fa-arrow-right"></i>
+            </button>
+          </form>
+        @else
+          <a href="{{ route('register', ['intended_course' => $course->slug]) }}" wire:navigate class="btn gold sm">
+            {{ $course->isFree() ? 'Start this course' : 'Enrol now' }} <i class="fas fa-arrow-right"></i>
+          </a>
+        @endauth
+      </div>
     </footer>
   </div>
 </div>

@@ -22,7 +22,7 @@
       <input class="a-input" id="email" type="email" name="email" value="{{ old('email') }}" placeholder="you@example.com" required autofocus autocomplete="username">
     </div>
   </div>
-  <button type="submit" class="a-btn"><i class="fas fa-paper-plane"></i> Email me a reset link</button>
+  <button type="submit" class="a-btn gold"><i class="fas fa-paper-plane"></i> Email me a reset link</button>
 </form>
 
 <div style="text-align:center;"><a href="{{ url('/admin/login') }}" class="a-back"><i class="fas fa-arrow-left"></i> Back to sign in</a></div>

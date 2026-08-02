@@ -42,6 +42,6 @@
     </div>
   </div>
 
-  <button type="submit" class="a-btn"><i class="fas fa-key"></i> Set password &amp; continue</button>
+  <button type="submit" class="a-btn gold"><i class="fas fa-key"></i> Set password &amp; continue</button>
 </form>
 @endsection

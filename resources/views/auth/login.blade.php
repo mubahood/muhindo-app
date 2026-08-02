@@ -4,7 +4,7 @@
 @section('form')
 <div class="af-eyebrow">Welcome back</div>
 <h2 class="af-title">Sign in</h2>
-<p class="af-sub">One account for owner, students and clients — sign in below.</p>
+<p class="af-sub">One account for your courses and your projects.</p>
 
 @include('auth.partials.course-context')
 
@@ -26,8 +26,9 @@
     <label class="a-label" for="email">Email address</label>
     <div class="a-inwrap">
       <i class="fas fa-envelope"></i>
-      <input class="a-input" id="email" type="email" name="email" value="{{ old('email') }}"
-             placeholder="you@example.com" required autofocus autocomplete="username">
+      <input class="a-input @error('email') bad @enderror" id="email" type="email" name="email"
+             value="{{ old('email') }}" placeholder="you@example.com" required autofocus
+             autocomplete="username" @error('email') aria-invalid="true" @enderror>
     </div>
   </div>
 
@@ -38,18 +39,31 @@
     </label>
     <div class="a-inwrap">
       <i class="fas fa-lock"></i>
-      <input class="a-input" id="password" type="password" name="password"
+      <input class="a-input @error('email') bad @enderror @error('password') bad @enderror"
+             id="password" type="password" name="password"
              placeholder="••••••••" required autocomplete="current-password" style="padding-right:44px;">
       <button type="button" class="a-eye" data-eye="password"><i class="fas fa-eye"></i></button>
     </div>
   </div>
 
   {{-- No "remember me" checkbox — staying signed in until sign-out is the default policy. --}}
-  <button type="submit" class="a-btn" style="margin-top:6px;"><i class="fas fa-right-to-bracket"></i> Sign in</button>
+  <button type="submit" class="a-btn gold" style="margin-top:6px;"><i class="fas fa-right-to-bracket"></i> Sign in</button>
 </form>
 
-<div class="a-alt">New student? <a href="{{ route('register', $intendedCourse ? array_filter(['intended_course' => $intendedCourse->slug, 'coupon_code' => request('coupon_code')]) : []) }}">Create an account</a></div>
-<div style="text-align:center;"><a href="{{ route('home') }}" class="a-back"><i class="fas fa-arrow-left"></i> Back to home</a></div>
+<div class="a-sep"><span>New here?</span></div>
+
+<div class="a-ways">
+  <a class="a-way" href="{{ route('register', $intendedCourse ? array_filter(['intended_course' => $intendedCourse->slug, 'coupon_code' => request('coupon_code')]) : []) }}">
+    <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+    <span><b>Create an account</b>{{ $intendedCourse ? 'Then continue to '.$intendedCourse->title : 'Learn from Muhindo, or hire him' }}</span>
+  </a>
+  <a class="a-way" href="{{ route('start-a-project') }}">
+    <i class="fas fa-handshake" aria-hidden="true"></i>
+    <span><b>Hire Muhindo</b>Describe your project first — no account needed</span>
+  </a>
+</div>
+
+<div style="text-align:center;margin-top:16px;"><a href="{{ route('home') }}" class="a-back"><i class="fas fa-arrow-left"></i> Back to home</a></div>
 
 <div class="a-secure">
   <span><i class="fas fa-shield-halved"></i> Encrypted</span>

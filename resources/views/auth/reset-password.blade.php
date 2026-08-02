@@ -41,7 +41,7 @@
     </div>
   </div>
 
-  <button type="submit" class="a-btn"><i class="fas fa-key"></i> Reset password</button>
+  <button type="submit" class="a-btn gold"><i class="fas fa-key"></i> Reset password</button>
 </form>
 
 <div style="text-align:center;"><a href="{{ url('/admin/login') }}" class="a-back"><i class="fas fa-arrow-left"></i> Back to sign in</a></div>

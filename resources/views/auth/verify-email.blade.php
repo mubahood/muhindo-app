@@ -16,7 +16,7 @@
 
 <form method="POST" action="{{ route('verification.send') }}">
   @csrf
-  <button type="submit" class="a-btn"><i class="fas fa-paper-plane"></i> Resend verification email</button>
+  <button type="submit" class="a-btn gold"><i class="fas fa-paper-plane"></i> Resend verification email</button>
 </form>
 
 <form method="POST" action="{{ route('logout') }}" style="margin-top:14px;text-align:center;">

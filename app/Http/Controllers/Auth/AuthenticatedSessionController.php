@@ -51,7 +51,15 @@ class AuthenticatedSessionController extends Controller
             return app(CourseCatalogueController::class)->enroll($request, $course);
         }
 
-        return redirect()->intended(route('dashboard'));
+        /* Same courtesy registration already extends: somebody who signed in
+           with a basket waiting is sent to finish paying, not dropped on a
+           dashboard to find their way back. An explicit intended URL still
+           wins — it is the stronger signal about where they were headed. */
+        $fallback = app(\App\Services\Shop\Cart::class)->isEmpty()
+            ? route('dashboard')
+            : route('checkout.review');
+
+        return redirect()->intended($fallback);
     }
 
     /** §3.2 — a guest arriving via "Enrol now" on a course page carries the course through sign-in. */

@@ -20,6 +20,6 @@
       <button type="button" class="a-eye" data-eye="password"><i class="fas fa-eye"></i></button>
     </div>
   </div>
-  <button type="submit" class="a-btn"><i class="fas fa-shield-halved"></i> Confirm</button>
+  <button type="submit" class="a-btn gold"><i class="fas fa-shield-halved"></i> Confirm</button>
 </form>
 @endsection
