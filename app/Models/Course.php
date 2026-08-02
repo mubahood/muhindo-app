@@ -128,7 +128,23 @@ class Course extends Model
     /** §2.2 — the one-line card hook; falls back to a trimmed description so an unset tagline never shows blank space. */
     public function cardTagline(): string
     {
-        return $this->tagline ?: \Illuminate\Support\Str::limit((string) $this->description, 80);
+        if ($this->tagline) {
+            return $this->tagline;
+        }
+
+        /*
+         * Descriptions are markdown — the imported catalogue is full of **bold**
+         * and *emphasis* — and a card renders plain text, so the raw asterisks
+         * were showing up on screen. Strip the inline marks rather than render
+         * HTML into a place that has no room for it.
+         */
+        $plain = (string) $this->description;
+        $plain = preg_replace('/\*\*(.+?)\*\*/u', '$1', $plain) ?? $plain;
+        $plain = preg_replace('/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/u', '$1', $plain) ?? $plain;
+        $plain = preg_replace('/`(.+?)`/u', '$1', $plain) ?? $plain;
+        $plain = preg_replace('/\s+/u', ' ', $plain) ?? $plain;
+
+        return \Illuminate\Support\Str::limit(trim($plain), 110);
     }
 
     /** §2.3/§6.5 — image alt text; falls back to the course title so a cover is never missing alt text. */

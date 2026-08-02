@@ -55,7 +55,10 @@ class CourseCatalogueController extends Controller
         match ($request->query('sort')) {
             'price_asc' => $query->orderBy('price'),
             'most_enrolled' => $query->orderByDesc('enrollments_count'),
-            default => $query->latest(),
+            // The catalogue is numbered 01…21 for a reason: it is a syllabus,
+            // not a feed. Newest-first would put the advanced capstones above
+            // the course an absolute beginner is meant to start with.
+            default => $query->orderByRaw('course_number IS NULL, course_number')->latest(),
         };
 
         return view('courses.index', [
@@ -111,6 +114,8 @@ class CourseCatalogueController extends Controller
             'course' => $course->load('modules.lessons'),
             'enrollment' => $existing && in_array($existing->status, ['active', 'completed'], true) ? $existing : null,
             'pendingCheckout' => $existing?->status === 'pending',
+            'prerequisiteCourses' => \App\Support\Catalog\Prerequisites::resolve($course),
+            'nextCourse' => \App\Support\Catalog\Prerequisites::next($course),
             'publishedReviews' => $course->reviews()->where('is_published', true)->with('enrollment.user')->latest()->get(),
             'instructor' => $identity !== [] ? array_merge($identity, ['bio' => $about['lead'] ?? null]) : null,
             'faq' => $faq,

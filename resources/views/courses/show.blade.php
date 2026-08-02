@@ -82,6 +82,26 @@
           @endforeach
         </div>
 
+        {{-- Advisory, never blocking. A student who wants to start here can;
+             this only tells them where the ground under it was laid. --}}
+        @if(($prerequisiteCourses ?? collect())->isNotEmpty())
+        <div style="margin-bottom:36px;">
+          <h2 style="font-size:19px;margin-bottom:8px;">Best taken after</h2>
+          <p class="muted" style="font-size:13.5px;margin-bottom:14px;">
+            You can start here whenever you like — these just cover the ground this course builds on.
+          </p>
+          <div class="prereqs">
+            @foreach($prerequisiteCourses as $prerequisite)
+              <a href="{{ route('courses.show', $prerequisite) }}" wire:navigate class="prereq">
+                <span class="prereq-no">{{ str_pad((string) $prerequisite->course_number, 2, '0', STR_PAD_LEFT) }}</span>
+                <span class="prereq-t">{{ $prerequisite->title }}</span>
+                <i class="fas fa-arrow-right" aria-hidden="true"></i>
+              </a>
+            @endforeach
+          </div>
+        </div>
+        @endif
+
         @if($course->requirements)
         <div style="margin-bottom:36px;">
           <h2 style="font-size:19px;margin-bottom:16px;">Requirements</h2>
@@ -199,6 +219,20 @@
     </div>
   </div>
 </section>
+
+@push('styles')
+<style>
+  .prereqs{display:grid;gap:8px;}
+  .prereq{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);
+    background:var(--surface);transition:border-color .15s,transform .15s;}
+  .prereq:hover{border-color:var(--gold);transform:translateX(2px);}
+  .prereq-no{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--gold-d);
+    background:var(--gold-soft);padding:3px 7px;flex-shrink:0;}
+  .prereq-t{flex:1;min-width:0;font-size:13.5px;font-weight:500;}
+  .prereq i{color:var(--tx3);font-size:11px;}
+  .prereq:hover i{color:var(--gold-d);}
+</style>
+@endpush
 
 @endsection
 

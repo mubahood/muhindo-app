@@ -71,7 +71,23 @@ class CourseCatalogueFieldsTest extends TestCase
         $fallback = $course->cardTagline();
 
         $this->assertNotSame('', $fallback);
-        $this->assertLessThanOrEqual(83, strlen($fallback)); // Str::limit(80) + the ellipsis
+        $this->assertLessThanOrEqual(113, strlen($fallback)); // Str::limit(110) + the ellipsis
+    }
+
+    public function test_the_card_tagline_does_not_leak_markdown_onto_the_card(): void
+    {
+        // Imported descriptions are markdown. A card renders plain text, so the
+        // raw asterisks were showing up on screen as "**and**" and "*alive*".
+        $course = Course::factory()->create([
+            'tagline' => null,
+            'description' => "HTML builds the page; JavaScript makes it *alive* **and** fast.\n\nUse `echo` here.",
+        ]);
+
+        $tagline = $course->cardTagline();
+
+        $this->assertStringNotContainsString('*', $tagline);
+        $this->assertStringNotContainsString('`', $tagline);
+        $this->assertStringContainsString('makes it alive and fast', $tagline);
     }
 
     public function test_cover_alt_falls_back_to_the_course_title_when_blank(): void
