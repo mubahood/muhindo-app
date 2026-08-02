@@ -25,9 +25,9 @@ class SiteNavTest extends TestCase
     {
         $labels = array_column(SiteNav::items(), 'label');
 
-        // Order is the message: learning first, then who he is, then the
-        // evidence, then the writing, then how to hire him.
-        $this->assertSame(['Learn', 'About Me', 'Projects', 'Shop', 'Insights', 'Consultancy'], $labels);
+        // Order is the message: learning first, then who he is, then what can
+        // be bought, then the writing.
+        $this->assertSame(['Learn', 'About Me', 'Projects for sale', 'Blog'], $labels);
     }
 
     public function test_the_about_panel_carries_every_page_about_him(): void
@@ -35,7 +35,7 @@ class SiteNavTest extends TestCase
         $about = collect(SiteNav::items())->firstWhere('label', 'About Me');
 
         $this->assertSame(
-            ['About me', 'My work', 'My CV', 'Qualifications', 'Skills & experience', 'Research', 'Gallery'],
+            ['About me', 'My work', 'My CV', 'Qualifications', 'Skills & experience', 'Research', 'Gallery', 'Consultancy'],
             array_column($about['children'], 'label')
         );
     }
@@ -108,6 +108,36 @@ class SiteNavTest extends TestCase
         $this->assertStringContainsString('>Hire Me<', $header);
         // Sign in is a link, not a button — it must not compete with the actions.
         $this->assertStringContainsString('class="signin desk"', $header);
+    }
+
+    public function test_no_destination_appears_twice_in_one_menu(): void
+    {
+        // Two links to one page in a single menu is a wayfinding smell — it was
+        // why the top-level "Projects" was folded into the About panel, where
+        // "My work" already points at the same page.
+        /* Only destinations that are actually rendered as links count. An item
+           with children renders as a <button> that opens its panel, so its own
+           url is never a link and sharing one with a child is not a duplicate. */
+        $urls = [];
+        foreach (SiteNav::items() as $item) {
+            if (empty($item['children'])) {
+                $urls[] = $item['url'];
+
+                continue;
+            }
+            foreach ($item['children'] as $child) {
+                $urls[] = $child['url'];
+            }
+        }
+
+        $this->assertSame(array_unique($urls), $urls, 'a destination is listed more than once in the menu');
+    }
+
+    public function test_the_old_section_urls_still_resolve(): void
+    {
+        // Anything already linked or indexed must not start 404ing.
+        $this->get('/shop')->assertRedirect('/projects-for-sale');
+        $this->get('/insights')->assertRedirect('/blog');
     }
 
     private function headerOf(\Illuminate\Testing\TestResponse $response): string

@@ -1,15 +1,15 @@
 @extends('layouts.marketing')
-@section('title', 'Shop — Muhindo Mubaraka')
+@section('title', 'Projects for sale — Muhindo Mubaraka')
 @section('desc', 'E-books, templates, toolkits and downloadable resources for people building software.')
 
 @section('content')
 
 <section class="page-hero tex-glow">
-  <span class="hero-mark" aria-hidden="true">SHOP</span>
+  <span class="hero-mark" aria-hidden="true">FOR SALE</span>
   <div class="wrap">
     <div class="eyebrow">Digital products</div>
-    <h1>Shop</h1>
-    <p>E-books, templates and toolkits — the things I reach for, packaged so you can too. Instant download after payment.</p>
+    <h1>Projects for sale</h1>
+    <p>Projects, templates and toolkits I have built, packaged so you can use them too. Instant download after payment.</p>
   </div>
 </section>
 

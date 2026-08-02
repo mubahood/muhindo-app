@@ -44,7 +44,7 @@
     <div class="article">
       <div class="tb-breadcrumb" style="font-size:12px;color:var(--tx3);margin-bottom:8px;">
         <a href="{{ route('insights.index') }}" wire:navigate class="link" style="color:var(--tx2);font-weight:600;">
-          <i class="fas fa-arrow-left"></i> Insights
+          <i class="fas fa-arrow-left"></i> Blog
         </a>
       </div>
       <h1 style="font-size:30px;font-weight:400;line-height:1.2;">{{ $post->title }}</h1>

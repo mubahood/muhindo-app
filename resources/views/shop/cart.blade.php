@@ -17,7 +17,7 @@
       <div class="tb-empty" style="text-align:center;padding:40px 0;">
         <p class="lead">Your basket is empty.</p>
         <div style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-          <a href="{{ route('shop.index') }}" wire:navigate class="btn gold">Browse the shop</a>
+          <a href="{{ route('shop.index') }}" wire:navigate class="btn gold">Browse projects for sale</a>
           <a href="{{ route('courses.index') }}" wire:navigate class="btn ghost">Browse courses</a>
         </div>
       </div>

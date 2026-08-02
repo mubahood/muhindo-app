@@ -1,14 +1,14 @@
 @extends('layouts.marketing')
-@section('title', 'Insights — Muhindo Mubaraka')
+@section('title', 'Blog — Muhindo Mubaraka')
 @section('desc', 'Notes on building software that lasts, teaching it, and the systems I work on.')
 
 @section('content')
 
 <section class="page-hero tex-glow">
-  <span class="hero-mark" aria-hidden="true">INSIGHTS</span>
+  <span class="hero-mark" aria-hidden="true">BLOG</span>
   <div class="wrap">
     <div class="eyebrow">Writing</div>
-    <h1>Insights</h1>
+    <h1>Blog</h1>
     <p>Notes on building software that lasts, on teaching it, and on the systems I work on day to day.</p>
 
     @if($categories->isNotEmpty())

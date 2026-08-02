@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'Insights')
+@section('title', 'Blog')
 
 @section('content')
 
 <div class="tb-page-header">
-  <div><h1>Insights</h1><div class="tb-breadcrumb"><a href="{{ route('dashboard') }}">Dashboard</a> <span>/</span> Insights</div></div>
+  <div><h1>Blog</h1><div class="tb-breadcrumb"><a href="{{ route('dashboard') }}">Dashboard</a> <span>/</span> Blog</div></div>
   <a href="{{ route('admin.posts.create') }}" class="btn-tb btn-tb-primary"><i class="fas fa-plus"></i> New post</a>
 </div>
 
@@ -21,7 +21,7 @@
           <tr>
             <th scope="row" style="font-weight:500;">
               <a href="{{ route('admin.posts.edit', $item) }}">{{ $item->title }}</a>
-              <div class="muted" style="font-size:11px;">/insights/{{ $item->slug }}</div>
+              <div class="muted" style="font-size:11px;">/blog/{{ $item->slug }}</div>
             </th>
             <td>{{ $item->category ?? '—' }}</td>
             <td>

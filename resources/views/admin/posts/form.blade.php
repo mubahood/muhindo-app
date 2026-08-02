@@ -6,7 +6,7 @@
 <div class="tb-page-header">
   <div>
     <h1>{{ $item->exists ? 'Edit post' : 'New post' }}</h1>
-    <div class="tb-breadcrumb"><a href="{{ route('admin.posts.index') }}">Insights</a> <span>/</span> {{ $item->exists ? $item->title : 'New' }}</div>
+    <div class="tb-breadcrumb"><a href="{{ route('admin.posts.index') }}">Blog</a> <span>/</span> {{ $item->exists ? $item->title : 'New' }}</div>
   </div>
 </div>
 

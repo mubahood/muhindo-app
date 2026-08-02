@@ -208,7 +208,7 @@
 <section class="band-surface">
   <div class="wrap">
     <div class="sec-head left" data-rise>
-      <div class="sec-idx">{{ $idx() }} <span>Insights</span></div>
+      <div class="sec-idx">{{ $idx() }} <span>Blog</span></div>
       <h2>Things I have written down</h2>
       <p>Notes on delivery, teaching, and the systems I work on.</p>
     </div>

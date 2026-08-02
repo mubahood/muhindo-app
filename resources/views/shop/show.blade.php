@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', $product->name.' — Shop')
+@section('title', $product->name.' — Projects for sale')
 @section('desc', $product->summary)
 @section('og_image', $product->coverUrl() ?? '')
 
@@ -9,7 +9,7 @@
   <div class="wrap">
     <div class="tb-breadcrumb" style="font-size:12px;color:var(--tx3);margin-bottom:8px;">
       <a href="{{ route('shop.index') }}" wire:navigate class="link" style="color:var(--tx2);font-weight:600;">
-        <i class="fas fa-arrow-left"></i> Shop
+        <i class="fas fa-arrow-left"></i> Projects for sale
       </a>
     </div>
     <h1 style="font-size:28px;font-weight:400;">{{ $product->name }}</h1>

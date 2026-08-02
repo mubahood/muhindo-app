@@ -36,6 +36,7 @@ class SiteNav
                 'match' => [
                     'portfolio.about', 'portfolio.cv', 'portfolio.education',
                     'portfolio.skills', 'portfolio.experience', 'portfolio.research', 'gallery.index',
+                    'portfolio.services', 'start-a-project', 'portfolio.work', 'portfolio.project',
                     'portfolio.products',
                 ],
                 'icon' => 'fa-user',
@@ -62,31 +63,22 @@ class SiteNav
                     ['label' => 'Gallery', 'url' => route('gallery.index'), 'icon' => 'fa-images',
                         'desc' => 'The work, the desk and the people behind it.',
                         'match' => ['gallery.*']],
+                    ['label' => 'Consultancy', 'url' => route('portfolio.services'), 'icon' => 'fa-handshake',
+                        'desc' => 'How I can help, and how to start a project.',
+                        'match' => ['portfolio.services', 'start-a-project']],
                 ],
             ],
             [
-                'label' => 'Projects',
-                'url' => route('portfolio.work'),
-                'match' => ['portfolio.work', 'portfolio.project'],
-                'icon' => 'fa-diagram-project',
-            ],
-            [
-                'label' => 'Shop',
+                'label' => 'Projects for sale',
                 'url' => route('shop.index'),
                 'match' => ['shop.*', 'cart.*', 'checkout.*'],
                 'icon' => 'fa-basket-shopping',
             ],
             [
-                'label' => 'Insights',
+                'label' => 'Blog',
                 'url' => route('insights.index'),
                 'match' => ['insights.*'],
                 'icon' => 'fa-pen-nib',
-            ],
-            [
-                'label' => 'Consultancy',
-                'url' => route('portfolio.services'),
-                'match' => ['portfolio.services', 'start-a-project'],
-                'icon' => 'fa-handshake',
             ],
         ];
     }

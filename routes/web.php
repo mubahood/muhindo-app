@@ -60,8 +60,10 @@ Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index']
 | have an account. Everything from the review screen on requires sign-in,
 | because an order has to belong to somebody.
 */
-Route::get('/shop', [\App\Http\Controllers\Shop\ShopController::class, 'index'])->name('shop.index');
-Route::get('/shop/{product:slug}', [\App\Http\Controllers\Shop\ShopController::class, 'show'])->name('shop.show');
+Route::get('/projects-for-sale', [\App\Http\Controllers\Shop\ShopController::class, 'index'])->name('shop.index');
+Route::get('/projects-for-sale/{product:slug}', [\App\Http\Controllers\Shop\ShopController::class, 'show'])->name('shop.show');
+Route::redirect('/shop', '/projects-for-sale', 301);
+Route::redirect('/shop/{product}', '/projects-for-sale/{product}', 301);
 
 Route::get('/cart', [\App\Http\Controllers\Shop\CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add', [\App\Http\Controllers\Shop\CartController::class, 'add'])->name('cart.add');
@@ -77,8 +79,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/my/downloads', [\App\Http\Controllers\Shop\DownloadController::class, 'index'])->name('shop.downloads');
     Route::get('/my/downloads/{product:slug}', [\App\Http\Controllers\Shop\DownloadController::class, 'download'])->name('shop.download');
 });
-Route::get('/insights', [\App\Http\Controllers\InsightController::class, 'index'])->name('insights.index');
-Route::get('/insights/{post:slug}', [\App\Http\Controllers\InsightController::class, 'show'])->name('insights.show');
+Route::get('/blog', [\App\Http\Controllers\InsightController::class, 'index'])->name('insights.index');
+Route::get('/blog/{post:slug}', [\App\Http\Controllers\InsightController::class, 'show'])->name('insights.show');
+Route::redirect('/insights', '/blog', 301);
+Route::redirect('/insights/{post}', '/blog/{post}', 301);
 Route::get('/products', [PortfolioController::class, 'products'])->name('portfolio.products');
 Route::get('/contact', [PortfolioController::class, 'contactPage'])->name('contact');
 Route::post('/contact', [PortfolioController::class, 'contact'])->middleware('throttle:5,1')->name('contact.store');
