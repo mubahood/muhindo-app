@@ -214,7 +214,7 @@
   <div class="wrap">
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ $idx() }} <span>Source code</span></div>
-      <h2>Skip the first two weeks — start from working code</h2>
+      <h2>Download the source code</h2>
       <p>The same starters, schemas and integrations I use on client work. Buy it, open it, and it is yours to build on.</p>
     </div>
 
@@ -252,7 +252,7 @@
         </ul>
 
         <p class="term-line" aria-hidden="true">
-          <span class="p">$</span> <span class="caret"></span>
+          <span class="p">$</span> <span class="term-caret"></span>
         </p>
       </div>
     </div>

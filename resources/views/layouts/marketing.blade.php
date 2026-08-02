@@ -706,10 +706,12 @@
     .term-body{padding:14px 6px 12px;}
     .term-line{font-size:12px;color:rgba(255,255,255,.5);padding:2px 12px;}
     .term-line .p{color:var(--gold);font-weight:700;margin-right:6px;}
-    .caret{display:inline-block;width:7px;height:13px;background:var(--gold);vertical-align:-2px;}
+    /* Named for the terminal, not for "a caret". Two other components already
+       use .caret for their chevron, and a bare .caret rule captured them both. */
+    .term-caret{display:inline-block;width:7px;height:13px;background:var(--gold);vertical-align:-2px;}
     @media(prefers-reduced-motion:no-preference){
-      .caret{animation:blink 1.1s steps(1) infinite;}
-      @keyframes blink{0%,50%{opacity:1;}51%,100%{opacity:0;}}
+      .term-caret{animation:term-blink 1.1s steps(1) infinite;}
+      @keyframes term-blink{0%,50%{opacity:1;}51%,100%{opacity:0;}}
     }
     .term-list{list-style:none;margin:6px 0;}
     .term-row{display:grid;grid-template-columns:96px 62px minmax(0,1fr) auto;align-items:center;gap:14px;
