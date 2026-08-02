@@ -21,6 +21,7 @@ class CallToActionConsistencyTest extends TestCase
         'courses.index' => 'Start Learning',
         'start-a-project' => 'Hire Muhindo',
         'portfolio.work' => 'See the projects',
+        'shop.index' => 'See the source code',
         // 'contact' has no call to action of its own any more — the buttons
         // that used to say "Get in touch" now say "Hire Me" and land on the
         // brief form, because a label promising hiring should not open a

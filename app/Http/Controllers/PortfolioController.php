@@ -34,6 +34,7 @@ class PortfolioController extends Controller
             'posts' => \App\Models\Post::published()->latest('published_at')->limit(3)->get(),
             'photos' => \App\Models\GalleryPhoto::published()->where('is_featured', true)
                 ->orderBy('sort_order')->limit(6)->get(),
+            'products' => \App\Models\Product::published()->orderBy('sort_order')->limit(4)->get(),
             // Omitted from the page entirely until real, attributable quotes exist.
             'testimonials' => $this->json('portfolio.testimonials', []),
             'jsonLd' => $this->homeJsonLd($identity, $contact),

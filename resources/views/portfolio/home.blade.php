@@ -208,6 +208,66 @@
 
 @include('portfolio.partials.elearning-strip')
 
+{{-- ═══ Source code ═══ --}}
+@if($products->isNotEmpty())
+<section class="band-deep code-band">
+  <div class="wrap">
+    <div class="sec-head left" data-rise>
+      <div class="sec-idx">{{ $idx() }} <span>Source code</span></div>
+      <h2>Skip the first two weeks — start from working code</h2>
+      <p>The same starters, schemas and integrations I use on client work. Buy it, open it, and it is yours to build on.</p>
+    </div>
+
+    {{-- A terminal, deliberately answering the browser frame used for the live
+         systems above: that section says "this is running", this one says "this
+         is the code behind it". Every row is a real product with its real price
+         and real file size, and clicking one opens it — the window is the
+         listing, not a picture of a listing. --}}
+    <div class="term" data-rise>
+      <div class="term-bar" aria-hidden="true">
+        <i></i><i></i><i></i>
+        <span class="path">~/muhindo/source-code</span>
+      </div>
+
+      <div class="term-body">
+        <p class="term-line" aria-hidden="true"><span class="p">$</span> ls&nbsp;-lh</p>
+
+        <ul class="term-list">
+          @foreach($products as $product)
+            <li>
+              <a href="{{ route('shop.show', $product) }}" wire:navigate class="term-row">
+                <span class="perm" aria-hidden="true">-rw-r--r--</span>
+                <span class="size">{{ $product->fileSize() ?? '—' }}</span>
+                <span class="name">{{ $product->file_name ?: $product->slug.'.zip' }}</span>
+                <span class="price">
+                  @if($product->isFree())
+                    free
+                  @else
+                    {{ $product->currency }} {{ number_format((float) $product->price) }}
+                  @endif
+                </span>
+              </a>
+            </li>
+          @endforeach
+        </ul>
+
+        <p class="term-line" aria-hidden="true">
+          <span class="p">$</span> <span class="caret"></span>
+        </p>
+      </div>
+    </div>
+
+    <div class="code-actions" data-rise>
+      <a href="{{ route('shop.index') }}" wire:navigate class="btn gold cta">
+        <span class="cta-a">Browse the code</span>
+        <span class="cta-b" aria-hidden="true">See the source code <i class="fas fa-arrow-right"></i></span>
+      </a>
+      <span class="code-note">Instant download after payment · MTN MoMo, Airtel Money, Visa or Mastercard</span>
+    </div>
+  </div>
+</section>
+@endif
+
 {{-- ═══ In pictures ═══ --}}
 @if($photos->isNotEmpty())
 <section class="tex-glow">

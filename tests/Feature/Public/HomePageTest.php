@@ -219,6 +219,34 @@ class HomePageTest extends TestCase
         );
     }
 
+    public function test_the_source_code_terminal_lists_real_products_with_real_prices(): void
+    {
+        // The window is the listing, not a picture of one — every row has to be
+        // a real product, a real size and a real link.
+        $paid = \App\Models\Product::create([
+            'name' => 'Laravel Starter', 'slug' => 'laravel-starter', 'type' => 'template',
+            'price' => '150000.00', 'currency' => 'UGX', 'file_name' => 'laravel-starter.zip',
+            'file_bytes' => 4600000, 'is_published' => true, 'sort_order' => 1,
+        ]);
+        \App\Models\Product::create([
+            'name' => 'Free Checklist', 'slug' => 'free-checklist', 'type' => 'ebook',
+            'price' => '0.00', 'currency' => 'UGX', 'file_name' => 'checklist.pdf',
+            'file_bytes' => 380000, 'is_published' => true, 'sort_order' => 2,
+        ]);
+
+        $this->get(route('home'))->assertOk()
+            ->assertSee('laravel-starter.zip')
+            ->assertSee('4.4 MB')
+            ->assertSee('UGX 150,000')
+            ->assertSee('free')
+            ->assertSee(route('shop.show', $paid), false);
+    }
+
+    public function test_the_source_code_section_is_absent_when_nothing_is_for_sale(): void
+    {
+        $this->get(route('home'))->assertOk()->assertDontSee('Skip the first two weeks');
+    }
+
     public function test_the_stat_row_publishes_the_true_figures(): void
     {
         Settings::set('portfolio.stats', json_encode([

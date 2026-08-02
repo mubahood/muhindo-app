@@ -691,6 +691,42 @@
       .rail a.on{border-left-color:transparent;border-bottom-color:var(--gold);}
     }
 
+    /* ── Source code: a terminal, answering the browser frame above ───────
+       The work section frames screenshots in browser chrome to say "this is
+       running". This frames the catalogue in a terminal to say "this is what
+       is behind it". Each row is a real product and a real link — the window
+       is the listing itself, not a picture of one. */
+    .code-band{padding:44px 0;}
+    .term{border:1px solid rgba(255,255,255,.14);background:rgba(6,15,31,.55);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden;}
+    .term-bar{display:flex;align-items:center;gap:6px;padding:9px 12px;
+      background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.12);}
+    .term-bar i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.22);display:block;}
+    .term-bar .path{margin-left:10px;font-size:11px;color:rgba(255,255,255,.42);letter-spacing:.02em;}
+    .term-body{padding:14px 6px 12px;}
+    .term-line{font-size:12px;color:rgba(255,255,255,.5);padding:2px 12px;}
+    .term-line .p{color:var(--gold);font-weight:700;margin-right:6px;}
+    .caret{display:inline-block;width:7px;height:13px;background:var(--gold);vertical-align:-2px;}
+    @media(prefers-reduced-motion:no-preference){
+      .caret{animation:blink 1.1s steps(1) infinite;}
+      @keyframes blink{0%,50%{opacity:1;}51%,100%{opacity:0;}}
+    }
+    .term-list{list-style:none;margin:6px 0;}
+    .term-row{display:grid;grid-template-columns:96px 62px minmax(0,1fr) auto;align-items:center;gap:14px;
+      padding:8px 12px;font-size:12.5px;color:rgba(255,255,255,.82);transition:background .14s,color .14s;}
+    .term-row:hover{background:rgba(184,147,63,.14);color:#fff;}
+    .term-row .perm{color:rgba(255,255,255,.3);font-size:11.5px;}
+    .term-row .size{color:rgba(255,255,255,.5);font-size:11.5px;text-align:right;}
+    .term-row .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .term-row:hover .name{text-decoration:underline;text-underline-offset:3px;}
+    .term-row .price{color:var(--gold);font-weight:700;white-space:nowrap;}
+    .code-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:20px;}
+    .code-note{font-size:11.5px;font-weight:450;color:rgba(255,255,255,.5);}
+    @media(max-width:640px){
+      .term-row{grid-template-columns:minmax(0,1fr) auto;gap:8px;}
+      .term-row .perm,.term-row .size{display:none;}   /* detail nobody reads on a phone */
+    }
+
     /* ── Logo marquee ─────────────────────────────────────────────────────
        Thirteen names in a static grid is a wall; moving slowly, it reads as a
        list that continues past the edge of the screen. Two identical tracks
