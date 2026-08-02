@@ -77,7 +77,46 @@ void main() {
 
 25. **JSON explained** — ▶ https://www.youtube.com/watch?v=x7cPa4RQ-G8 *(2025)*
 26. **JSON data format (lecture)** — ▶ https://www.youtube.com/watch?v=pA8ID0Gtqpo
-27. **HTTP requests** — call a live API. ▶ https://www.youtube.com/watch?v=pUhkQmC2PyE
+27. **What an HTTP request actually is** — the one concept every API lesson assumes.
+    A written lesson (no video: the original was made private on the channel — see
+    `_link-report.md`). Read this before lesson 28, which does exactly this in Flutter.
+
+    When your app "calls an API", it opens a connection to a server and sends a small
+    block of text. The server sends a block of text back. That is the whole mechanism —
+    everything else is convenience on top of it.
+
+    A request has four parts: a **method** (what you want done), a **path** (what you
+    want it done to), **headers** (facts about the request), and an optional **body**
+    (the data you are sending). A response has a **status code**, headers, and a body.
+
+    ```http
+    GET /api/v1/courses HTTP/1.1
+    Host: example.com
+    Accept: application/json
+    Authorization: Bearer eyJhbGciOi...
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {"data":[{"id":1,"title":"Flutter from Zero"}]}
+    ```
+
+    The four methods you will use constantly:
+
+    - **GET** — read something. Never changes data, so it is safe to repeat.
+    - **POST** — create something. Repeating it creates a second one.
+    - **PUT/PATCH** — update something.
+    - **DELETE** — remove something.
+
+    And the status codes worth memorising now, because you will debug against them:
+    **200** fine · **201** created · **401** you are not signed in · **403** you are signed
+    in but not allowed · **404** no such thing · **422** your data failed validation ·
+    **500** the server broke.
+
+    Two habits that will save you hours: an error is not a crash — check the status code
+    before you touch the body; and a request can simply never arrive, so every real app
+    handles the timeout case as well as the failure case.
+
 28. **Flutter HTTP connection** — ▶ https://www.youtube.com/watch?v=diWp11uh5Xw
 29. **Models & widgets: structure your data** — ▶ https://www.youtube.com/watch?v=JZd9LKXSoaM
 30. **Dynamic lists from data** — ▶ https://www.youtube.com/watch?v=ntSIjW6w1Ew
