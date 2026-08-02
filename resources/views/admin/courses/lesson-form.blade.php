@@ -53,18 +53,56 @@
       </div>
       <div class="tb-form-group full">
         <div style="display:flex;justify-content:space-between;align-items:center;">
-          <label class="tb-label">Content <span class="muted" x-show="contentFormat === 'markdown'">(Markdown supported)</span></label>
-          <div x-show="contentFormat === 'markdown'" style="display:flex;gap:8px;">
-            <label class="btn-tb btn-tb-ghost btn-tb-sm" x-show="imageUploadUrl" style="cursor:pointer;">
-              <i class="fas fa-image"></i> Insert image
-              <input type="file" accept="image/*" style="display:none;" @change="uploadImage($event.target.files[0]); $event.target.value = '';">
+          <label class="tb-label" for="lesson-content">Content <span class="muted" x-show="contentFormat === 'markdown'">(Markdown supported)</span></label>
+          <button type="button" class="btn-tb btn-tb-ghost btn-tb-sm" @click="togglePreview()"
+                  x-show="contentFormat === 'markdown'">
+            <i class="fas" :class="showPreview ? 'fa-pen' : 'fa-eye'"></i> <span x-text="showPreview ? 'Edit' : 'Preview'"></span>
+          </button>
+        </div>
+
+        {{-- The editor writes Markdown rather than being a WYSIWYG on purpose.
+             The preview renders through the very same server-side renderer the
+             student sees, so what is shown here cannot drift from the real
+             output — a WYSIWYG producing its own HTML would give up that
+             guarantee, and the stored content would stop being diffable. --}}
+        <div class="ed" :class="{ 'is-drop': dragging }" x-show="!showPreview">
+          <div class="ed-bar" x-show="contentFormat === 'markdown'">
+            <template x-for="tool in tools" :key="tool.key">
+              <button type="button" class="ed-btn" @click="apply(tool)"
+                      :title="tool.title" :aria-label="tool.title">
+                <i class="fas" :class="tool.icon"></i>
+              </button>
+            </template>
+
+            <span class="ed-sep" aria-hidden="true"></span>
+
+            <label class="ed-btn" :class="{ 'is-off': !imageUploadUrl }"
+                   :title="imageUploadUrl ? 'Insert an image' : 'Save the lesson once before adding images'">
+              <i class="fas fa-image"></i>
+              <input type="file" accept="image/*" multiple style="display:none;" :disabled="!imageUploadUrl"
+                     @change="uploadImages($event.target.files); $event.target.value = '';">
             </label>
-            <button type="button" class="btn-tb btn-tb-ghost btn-tb-sm" @click="togglePreview()">
-              <i class="fas" :class="showPreview ? 'fa-pen' : 'fa-eye'"></i> <span x-text="showPreview ? 'Edit' : 'Preview'"></span>
-            </button>
+
+            <span class="ed-hint" x-show="!uploading && imageUploadUrl">Drag images in, or paste them</span>
+            <span class="ed-hint" x-show="!imageUploadUrl">Save the lesson first to add images</span>
+            <span class="ed-hint is-busy" x-show="uploading" x-cloak>
+              <i class="fas fa-circle-notch fa-spin"></i> <span x-text="uploadLabel"></span>
+            </span>
+          </div>
+
+          <textarea class="tb-textarea ed-area" id="lesson-content" name="content" rows="16"
+                    x-ref="area" x-model="content"
+                    @keydown="onKeydown($event)"
+                    @paste="onPaste($event)"
+                    @dragover.prevent="dragging = true"
+                    @dragleave.prevent="dragging = false"
+                    @drop.prevent="onDrop($event)"></textarea>
+
+          <div class="ed-drop" x-show="dragging" x-cloak aria-hidden="true">
+            <div><i class="fas fa-arrow-down-to-line"></i><br>Drop to upload and insert here</div>
           </div>
         </div>
-        <textarea class="tb-textarea" name="content" rows="10" x-model="content" x-show="!showPreview"></textarea>
+
         <div class="tb-card markdown-preview-body" style="padding:16px;min-height:200px;" x-show="showPreview" x-html="previewHtml" x-cloak></div>
       </div>
       <div class="tb-form-group">
@@ -178,15 +216,61 @@
 @endif
 @endsection
 
+@push('styles')
+<style>
+  /* The toolbar and the field are one control, so they share a border rather
+     than stacking two of them. */
+  .ed{position:relative;border:1px solid var(--line-2);background:var(--surface);transition:border-color .15s;}
+  .ed:focus-within{border-color:var(--br);box-shadow:0 0 0 3px var(--br-soft);}
+
+  .ed-bar{display:flex;align-items:center;gap:2px;flex-wrap:wrap;
+    padding:6px 7px;border-bottom:1px solid var(--line);background:var(--surface-2,#f6f7f9);}
+  .ed-btn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:28px;
+    border:1px solid transparent;background:none;color:var(--mt);font-size:12.5px;cursor:pointer;
+    transition:background .12s,color .12s,border-color .12s;}
+  .ed-btn:hover{background:var(--surface);border-color:var(--line);color:var(--tx);}
+  .ed-btn:active{background:var(--br-soft);color:var(--br);}
+  .ed-btn.is-off{opacity:.4;cursor:not-allowed;}
+  .ed-btn.is-off:hover{background:none;border-color:transparent;color:var(--mt);}
+  .ed-sep{width:1px;height:18px;background:var(--line);margin:0 5px;}
+  .ed-hint{margin-left:auto;padding-right:4px;font-size:11px;color:var(--mt2);}
+  .ed-hint.is-busy{color:var(--br);}
+
+  /* Border lives on the wrapper now; a second one inside would double up. */
+  .ed-area{display:block;width:100%;border:0 !important;box-shadow:none !important;resize:vertical;
+    min-height:320px;padding:13px 14px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.65;}
+  .ed-area:focus{outline:none;}
+
+  /* Dropping is the feature, so the target says so instead of relying on the
+     cursor changing. pointer-events:none keeps the overlay from swallowing
+     the drop it is advertising. */
+  .ed.is-drop{border-color:var(--br);border-style:dashed;}
+  .ed-drop{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.88);color:var(--br);font-size:13px;font-weight:600;text-align:center;
+    pointer-events:none;}
+  .ed-drop i{font-size:22px;margin-bottom:6px;opacity:.8;}
+</style>
+@endpush
+
 @push('scripts')
 <script>
 /**
- * §7.4 — split-pane markdown editor. The preview calls the exact same
- * server-side renderer students see (admin.lessons.preview-markdown), so it
- * can never show something different from the real output. Image upload
- * inserts a markdown reference at the end of the textarea (kept simple —
- * no cursor-position tracking) pointing at the policy-gated content-image
- * route.
+ * §7.4 — split-pane markdown editor.
+ *
+ * The preview calls the exact same server-side renderer students see
+ * (admin.lessons.preview-markdown), so it can never show something different
+ * from the real output. That guarantee is the reason this stays a Markdown
+ * editor with a toolbar rather than becoming a WYSIWYG: a WYSIWYG would
+ * produce its own HTML, which would either bypass MarkdownRenderer or need a
+ * lossy conversion back, and the stored content would stop being readable and
+ * diffable.
+ *
+ * Everything the toolbar does — and every image dropped, pasted or picked —
+ * goes in at the caret and leaves the selection sensible afterwards. The
+ * previous version appended images to the very end of the field regardless of
+ * where you were working, which meant scrolling down and cutting them back to
+ * where they belonged.
  */
 function lessonEditor(cfg) {
   return {
@@ -198,6 +282,28 @@ function lessonEditor(cfg) {
     imageUploadUrl: cfg.imageUploadUrl,
     showPreview: false,
     previewHtml: '',
+    dragging: false,
+    uploading: false,
+    uploadLabel: '',
+
+    /**
+     * wrap  — puts the markers either side of the selection.
+     * line  — prefixes every selected line (lists, quotes, headings).
+     * Each carries the word to use when nothing is selected, so a bare click
+     * gives you something to type over rather than an empty pair of markers.
+     */
+    tools: [
+      { key: 'h2',     icon: 'fa-heading',        title: 'Heading  (Ctrl+H)',        type: 'line', prefix: '## ',   placeholder: 'Heading' },
+      { key: 'bold',   icon: 'fa-bold',           title: 'Bold  (Ctrl+B)',           type: 'wrap', marker: '**',    placeholder: 'bold text' },
+      { key: 'italic', icon: 'fa-italic',         title: 'Italic  (Ctrl+I)',         type: 'wrap', marker: '_',     placeholder: 'italic text' },
+      { key: 'code',   icon: 'fa-code',           title: 'Inline code',              type: 'wrap', marker: '`',     placeholder: 'code' },
+      { key: 'block',  icon: 'fa-file-code',      title: 'Code block',               type: 'fence' },
+      { key: 'link',   icon: 'fa-link',           title: 'Link  (Ctrl+K)',           type: 'link' },
+      { key: 'ul',     icon: 'fa-list-ul',        title: 'Bulleted list',            type: 'line', prefix: '- ',    placeholder: 'List item' },
+      { key: 'ol',     icon: 'fa-list-ol',        title: 'Numbered list',            type: 'line', prefix: '1. ',   placeholder: 'List item', numbered: true },
+      { key: 'quote',  icon: 'fa-quote-left',     title: 'Quote',                    type: 'line', prefix: '> ',    placeholder: 'Quoted text' },
+      { key: 'rule',   icon: 'fa-minus',          title: 'Divider',                  type: 'block', text: '\n---\n' },
+    ],
     fetchingDuration: false,
     durationFetchMessage: '',
     async fetchDuration() {
@@ -247,10 +353,153 @@ function lessonEditor(cfg) {
         this.previewHtml = '<p class="muted">Preview unavailable.</p>';
       }
     },
+    // ── Writing into the field ──────────────────────────────────────────
+
+    /**
+     * The one place text enters the document.
+     *
+     * Everything routes through here so the caret always ends up somewhere
+     * sensible and every edit stays undoable: execCommand('insertText') keeps
+     * the browser's native undo stack, which assigning to textarea.value
+     * destroys — losing a whole lesson to one mistaken Ctrl+Z is not a
+     * trade worth making for slightly simpler code.
+     */
+    insert(text, selectFrom = null, selectTo = null) {
+      const area = this.$refs.area;
+      area.focus();
+
+      const start = area.selectionStart;
+
+      if (!document.execCommand || !document.execCommand('insertText', false, text)) {
+        // Firefox dropped execCommand support; fall back to a manual splice.
+        const end = area.selectionEnd;
+        area.value = area.value.slice(0, start) + text + area.value.slice(end);
+      }
+
+      this.content = area.value;
+
+      if (selectFrom !== null) {
+        area.setSelectionRange(start + selectFrom, start + (selectTo ?? selectFrom));
+      }
+    },
+
+    apply(tool) {
+      const area = this.$refs.area;
+      const selected = area.value.slice(area.selectionStart, area.selectionEnd);
+
+      if (tool.type === 'wrap') {
+        const body = selected || tool.placeholder;
+        const m = tool.marker;
+        // With nothing selected, leave the placeholder selected so it can be
+        // typed straight over.
+        this.insert(m + body + m, m.length, selected ? m.length + body.length : m.length + body.length);
+        return;
+      }
+
+      if (tool.type === 'line') {
+        const lines = (selected || tool.placeholder).split('\n');
+        const body = lines
+          .map((line, i) => (tool.numbered ? `${i + 1}. ` : tool.prefix) + line)
+          .join('\n');
+        this.insert(this.atLineStart() ? body : '\n' + body);
+        return;
+      }
+
+      if (tool.type === 'fence') {
+        const body = selected || 'your code here';
+        this.insert('\n```\n' + body + '\n```\n');
+        return;
+      }
+
+      if (tool.type === 'link') {
+        const label = selected || 'link text';
+        const text = `[${label}](https://)`;
+        // Drop the caret inside the brackets, ready for the address.
+        this.insert(text, text.length - 1, text.length - 1);
+        return;
+      }
+
+      if (tool.type === 'block') {
+        this.insert(tool.text);
+      }
+    },
+
+    /** True when the caret already sits at the start of its own line. */
+    atLineStart() {
+      const area = this.$refs.area;
+      const before = area.value.slice(0, area.selectionStart);
+
+      return before === '' || before.endsWith('\n');
+    },
+
+    onKeydown(event) {
+      if (event.key === 'Tab') {
+        // Tab belongs to the code sample being typed, not to the next field.
+        event.preventDefault();
+        this.insert('    ');
+
+        return;
+      }
+
+      if (!(event.metaKey || event.ctrlKey)) return;
+
+      const shortcuts = { b: 'bold', i: 'italic', k: 'link', h: 'h2' };
+      const key = shortcuts[event.key.toLowerCase()];
+      if (!key) return;
+
+      event.preventDefault();
+      this.apply(this.tools.find((t) => t.key === key));
+    },
+
+    // ── Images ──────────────────────────────────────────────────────────
+
+    onDrop(event) {
+      this.dragging = false;
+      this.uploadImages(event.dataTransfer?.files);
+    },
+
+    onPaste(event) {
+      // A screenshot on the clipboard arrives as a file with no name.
+      const files = Array.from(event.clipboardData?.files ?? []);
+      if (files.length === 0) return;
+
+      event.preventDefault();
+      this.uploadImages(files);
+    },
+
+    async uploadImages(fileList) {
+      const files = Array.from(fileList ?? []).filter((f) => f.type.startsWith('image/'));
+      if (files.length === 0) return;
+
+      if (!this.imageUploadUrl) {
+        window.dispatchEvent(new CustomEvent('toast', {
+          detail: { message: 'Save the lesson once before adding images to it.', type: 'error' },
+        }));
+
+        return;
+      }
+
+      this.uploading = true;
+
+      // Sequentially, not in parallel: the markdown for each has to land in
+      // the order they were dropped, and the caret moves with each insert.
+      for (const [index, file] of files.entries()) {
+        this.uploadLabel = files.length > 1
+          ? `Uploading ${index + 1} of ${files.length}…`
+          : 'Uploading…';
+        await this.uploadImage(file);
+      }
+
+      this.uploading = false;
+      this.uploadLabel = '';
+    },
+
     async uploadImage(file) {
       if (!file || !this.imageUploadUrl) return;
+
       const body = new FormData();
       body.append('image', file);
+
       try {
         const res = await fetch(this.imageUploadUrl, {
           method: 'POST',
@@ -258,12 +507,20 @@ function lessonEditor(cfg) {
           body,
         });
         const data = await res.json();
-        if (data.url) {
-          this.content += `\n![${file.name}](${data.url})\n`;
-          window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Image inserted.', type: 'success' } }));
-        }
+
+        if (!data.url) throw new Error('no url returned');
+
+        // Alt text matters for a lesson, so seed it from the file name and
+        // leave it selected to be replaced with something meaningful.
+        const alt = (file.name || 'image').replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ');
+        const text = (this.atLineStart() ? '' : '\n') + `![${alt}](${data.url})\n`;
+        const from = text.indexOf('![') + 2;
+
+        this.insert(text, from, from + alt.length);
       } catch (e) {
-        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Image upload failed.', type: 'error' } }));
+        window.dispatchEvent(new CustomEvent('toast', {
+          detail: { message: `Could not upload ${file.name || 'that image'}.`, type: 'error' },
+        }));
       }
     },
   };
