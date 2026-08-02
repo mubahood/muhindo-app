@@ -15,6 +15,7 @@ class Lesson extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'is_external', 'is_embeddable', 'resource_url',
         'course_module_id', 'title', 'content', 'video_url', 'video_disk_path', 'captions_url',
         'duration_minutes', 'min_active_seconds', 'sort_order', 'is_published', 'is_free_preview',
         'completion_rule', 'completion_threshold', 'content_format',
@@ -23,6 +24,8 @@ class Lesson extends Model
     protected function casts(): array
     {
         return [
+            'is_external' => 'boolean',
+            'is_embeddable' => 'boolean',
             'is_published' => 'boolean',
             'is_free_preview' => 'boolean',
             'completion_rule' => CompletionRule::class,

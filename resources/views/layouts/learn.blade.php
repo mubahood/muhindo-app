@@ -126,6 +126,21 @@
   .act-link .req{flex-shrink:0;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
     color:#8a5a06;background:#fdf4e3;padding:1px 5px;}
 
+  /* A lesson whose video cannot be embedded. Deliberately looks like a real
+     piece of content rather than an error, because it is one. */
+  .watch-out{display:flex;gap:18px;align-items:center;padding:18px;margin-bottom:18px;
+    background:var(--surface);border:1px solid var(--line);border-left:3px solid #c00;}
+  .watch-out img{width:220px;aspect-ratio:16/9;object-fit:cover;flex-shrink:0;background:var(--line);}
+  .watch-out-body{flex:1;min-width:0;}
+  .watch-out-eyebrow{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;color:#c00;margin:0 0 6px;}
+  .watch-out h3{font-size:16px;font-weight:600;margin:0 0 7px;line-height:1.35;}
+  .watch-out-note{font-size:12.5px;line-height:1.6;color:var(--tx2);margin:0 0 13px;}
+  @media(max-width:640px){
+    .watch-out{flex-direction:column;align-items:stretch;}
+    .watch-out img{width:100%;}
+  }
+
   .learn-backdrop{display:none;}
 
   /* ── Content column ─────────────────────────────────────────── */

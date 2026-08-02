@@ -148,8 +148,27 @@
           </template>
         </div>
       </div>
-    @elseif($lesson->video_url)
+    @elseif($lesson->video_url && $lesson->is_embeddable)
       <div class="learn-video"><iframe src="{{ $lesson->video_url }}" title="{{ $lesson->title }}" allowfullscreen></iframe></div>
+    @elseif($lesson->resource_url)
+      {{-- Muhindo's own video, live on YouTube, but with embedding switched off
+           by its owner. Iframing it would show the student "Video unavailable"
+           and nothing else; this says where the lesson is and takes them there. --}}
+      <div class="watch-out">
+        <img src="https://i.ytimg.com/vi/{{ Str::afterLast($lesson->resource_url, 'v=') }}/hqdefault.jpg"
+             alt="" loading="lazy">
+        <div class="watch-out-body">
+          <p class="watch-out-eyebrow"><i class="fab fa-youtube" aria-hidden="true"></i> This lesson plays on YouTube</p>
+          <h3>{{ $lesson->title }}</h3>
+          <p class="watch-out-note">
+            Embedding is switched off for this video, so it cannot play here. It opens in a
+            new tab — come back and mark the lesson complete when you are done.
+          </p>
+          <a href="{{ $lesson->resource_url }}" target="_blank" rel="noopener" class="btn gold">
+            Watch on YouTube <i class="fas fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+      </div>
     @endif
 
     @php $requiredPending = $activities->where('required', true)->where('done', false)->count(); @endphp
