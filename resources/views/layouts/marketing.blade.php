@@ -695,6 +695,77 @@
       .rail a.on{border-left-color:transparent;border-bottom-color:var(--gold);}
     }
 
+    /* ── Course cards ─────────────────────────────────────────────────────
+       Level, category, length and price all sit on the cover. They are what
+       people scan by, and the artwork was already occupying that space — so
+       putting them there costs no height at all, where a row of chips under
+       the image cost a line each. */
+    .course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;}
+    .c-card{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);
+      background:var(--surface);overflow:hidden;transition:border-color .2s,transform .2s,box-shadow .2s;}
+    .c-card:hover,.c-card:focus-within{border-color:var(--gold);transform:translateY(-3px);
+      box-shadow:0 18px 34px -22px rgba(11,31,58,.4);}
+
+    .c-media{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:var(--pri);}
+    .c-media img{width:100%;height:100%;object-fit:cover;transition:transform .55s ease,filter .35s;
+      filter:grayscale(1) contrast(1.04) brightness(1.02);}
+    .c-media::after{content:'';position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(155deg,var(--pri) 5%,rgba(11,31,58,.45) 55%,rgba(184,147,63,.55) 100%);
+      mix-blend-mode:color;transition:opacity .35s;}
+    /* A scrim, so white badges stay legible over whatever the cover happens
+       to be light or dark in. */
+    .c-media::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+      background:linear-gradient(to bottom,rgba(6,15,31,.5),transparent 34%,transparent 62%,rgba(6,15,31,.62));}
+    .c-card:hover .c-media img{transform:scale(1.05);filter:none;}
+    .c-card:hover .c-media::after{opacity:0;}
+    .c-media-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      color:var(--gold);font-size:30px;}
+
+    .c-badges{position:absolute;z-index:2;top:9px;left:9px;display:flex;gap:5px;flex-wrap:wrap;max-width:calc(100% - 18px);}
+    .c-badge{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      padding:4px 7px;background:rgba(255,255,255,.94);color:var(--pri);}
+    .c-badge.level{background:var(--gold);color:#231a05;}
+    .c-facts{position:absolute;z-index:2;left:10px;bottom:9px;display:flex;gap:11px;
+      font-size:11px;font-weight:600;color:rgba(255,255,255,.94);}
+    .c-facts i{font-size:10px;opacity:.8;margin-right:3px;}
+    .c-price{position:absolute;z-index:2;right:9px;bottom:9px;font-size:12.5px;font-weight:700;
+      padding:4px 9px;background:var(--pri);color:#fff;}
+    .c-price.free{background:var(--gold);color:#231a05;}
+
+    .c-body{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1;}
+    .c-body h3{font-size:14.5px;font-weight:600;line-height:1.35;}
+    .c-body h3 a:hover{color:var(--gold-d);}
+    .c-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:11.5px;font-weight:500;color:var(--tx3);margin:5px 0 0;}
+    .c-rating{color:var(--gold-d);font-weight:700;}
+    .c-rating i{font-size:10px;}
+    .c-body > p{font-size:12.5px;font-weight:450;color:var(--tx2);line-height:1.55;margin-top:7px;}
+
+    /* 0fr to 1fr: the grid animates the row's height, so the panel opens
+       smoothly without a guessed max-height that breaks when the copy changes. */
+    .c-more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.22,.61,.36,1);}
+    .c-more-inner{overflow:hidden;min-height:0;}
+    .c-card:hover .c-more,.c-card:focus-within .c-more{grid-template-rows:1fr;}
+    .c-more-h{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--gold-d);margin:12px 0 5px;}
+    .c-outcomes{list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:11px;}
+    .c-outcomes li{position:relative;padding-left:15px;font-size:11.5px;font-weight:450;
+      color:var(--tx2);line-height:1.45;}
+    .c-outcomes li::before{content:'\2713';position:absolute;left:0;color:var(--gold-d);font-weight:700;font-size:10px;}
+    .c-cta{width:100%;justify-content:center;}
+
+    @media(hover:none){
+      /* No hover on touch, so the panel would be unreachable. It is simply
+         always open — the card is taller, but nothing is hidden behind a
+         gesture the device cannot make. */
+      .c-more{grid-template-rows:1fr;}
+      .c-outcomes{display:none;}          /* keep the card compact; the CTA is the point */
+    }
+    @media(prefers-reduced-motion:reduce){
+      .c-more{transition:none;}
+      .c-media img{transition:none;}
+    }
+    @media(max-width:420px){ .course-grid{grid-template-columns:1fr;} }
+
     /* ── Source code: a terminal, answering the browser frame above ───────
        The work section frames screenshots in browser chrome to say "this is
        running". This frames the catalogue in a terminal to say "this is what

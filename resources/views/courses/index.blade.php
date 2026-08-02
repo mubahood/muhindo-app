@@ -4,16 +4,17 @@
 
 @section('content')
 
-<section class="hero tex-grid tex-glow" style="padding-bottom:20px;">
+<section class="page-hero tex-glow">
+  <span class="hero-mark" aria-hidden="true">LEARN</span>
   <div class="wrap">
     <div class="eyebrow">e&#8209;Learning</div>
     <h1>Courses</h1>
-    <p class="lead">I teach computer programming and computer-related courses — practical, project-based, in plain English. Learn at your pace, get a verifiable certificate.</p>
+    <p>I teach the same stack I build with — practical, project-based, in plain English. Learn at your pace and finish with a certificate you can verify.</p>
     <div class="trust-chips">
-      <span>{{ $courses->total() }} {{ \Illuminate\Support\Str::plural('course', $courses->total()) }}</span>
-      <span>{{ $totalLessonCount }} {{ \Illuminate\Support\Str::plural('lesson', $totalLessonCount) }}</span>
-      <span>Certificate on completion</span>
-      <span>Pay with MTN MoMo, Airtel Money or card</span>
+      <span><i class="fas fa-graduation-cap" aria-hidden="true"></i> {{ $courses->total() }} {{ \Illuminate\Support\Str::plural('course', $courses->total()) }}</span>
+      <span><i class="fas fa-book" aria-hidden="true"></i> {{ $totalLessonCount }} {{ \Illuminate\Support\Str::plural('lesson', $totalLessonCount) }}</span>
+      <span><i class="fas fa-certificate" aria-hidden="true"></i> Certificate on completion</span>
+      <span><i class="fas fa-lock" aria-hidden="true"></i> MTN MoMo, Airtel Money or card</span>
     </div>
   </div>
 </section>
@@ -64,36 +65,81 @@
       </div>
     @else
       <h2 class="sr-only">Courses</h2>
-      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
+      <div class="course-grid">
         @foreach($courses as $course)
-          <a href="{{ route('courses.show', $course) }}" wire:navigate class="proj-card" data-rise>
-            <div class="course-cover">
+          @php
+            $hours = $course->lessons_sum_duration_minutes
+                ? round($course->lessons_sum_duration_minutes / 60, 1).'h' : null;
+            $outcomes = array_slice($course->outcomes ?? [], 0, 3);
+          @endphp
+          <article class="c-card" data-rise>
+            <a href="{{ route('courses.show', $course) }}" wire:navigate class="c-media" tabindex="-1" aria-hidden="true">
               @if($course->cover_image)
-                <img src="{{ $course->cover_image }}" alt="{{ $course->coverAlt() }}" loading="lazy" width="400" height="225">
+                <img src="{{ $course->cover_image }}" alt="" loading="lazy" width="400" height="225">
               @else
-                <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+                <span class="c-media-fallback"><i class="fas fa-graduation-cap"></i></span>
               @endif
+
+              {{-- Metadata sits on the artwork rather than under it. It is the
+                   information people scan by, and the cover was already using
+                   the vertical space it needed. --}}
+              <span class="c-badges">
+                <span class="c-badge level">{{ ucfirst($course->level) }}</span>
+                @if($course->category)<span class="c-badge">{{ $course->category }}</span>@endif
+              </span>
+
+              <span class="c-facts">
+                <span><i class="fas fa-book" aria-hidden="true"></i> {{ $course->lessons_count }}</span>
+                @if($hours)<span><i class="fas fa-clock" aria-hidden="true"></i> {{ $hours }}</span>@endif
+              </span>
+
+              <span @class(['c-price', 'free' => $course->isFree()])>
+                @if($course->isFree()) Free @else {{ $course->currency }} {{ number_format((float) $course->price) }} @endif
+              </span>
+            </a>
+
+            <div class="c-body">
+              <h3><a href="{{ route('courses.show', $course) }}" wire:navigate>{{ $course->title }}</a></h3>
+
+              <div class="c-meta">
+                @if($course->reviews_count > 0)
+                  <span class="c-rating">
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    {{ number_format($course->reviews_avg_rating, 1) }}
+                    <span class="muted">({{ $course->reviews_count }})</span>
+                  </span>
+                @endif
+                @if($course->enrollments_count > 0)
+                  <span>{{ number_format($course->enrollments_count) }} enrolled</span>
+                @endif
+              </div>
+
+              <p>{{ $course->cardTagline() }}</p>
+
+              {{-- Revealed on hover and on keyboard focus. The row animates from
+                   0fr to 1fr, so the height is transitioned by the grid rather
+                   than by a hard-coded max-height that has to be guessed and
+                   goes wrong the moment the copy changes. --}}
+              <div class="c-more">
+                <div class="c-more-inner">
+                  @if($outcomes)
+                    <p class="c-more-h">You will be able to</p>
+                    <ul class="c-outcomes">
+                      @foreach($outcomes as $outcome)
+                        <li>{{ \Illuminate\Support\Str::limit($outcome, 62) }}</li>
+                      @endforeach
+                    </ul>
+                  @endif
+                  {{-- A real anchor. It was a <span> styled as a button, which
+                       looked clickable and was not — and on touch, where the
+                       panel is always open, it is the card's main action. --}}
+                  <a href="{{ route('courses.show', $course) }}" wire:navigate class="btn gold sm c-cta">
+                    {{ $course->isFree() ? 'Start free' : 'View course' }} <i class="fas fa-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
             </div>
-            <div class="tag-row"><span class="tag">{{ ucfirst($course->level) }}</span>@if($course->category)<span class="tag">{{ $course->category }}</span>@endif</div>
-            <h3>{{ \Illuminate\Support\Str::limit($course->title, 60) }}</h3>
-            <p>{{ $course->cardTagline() }}</p>
-            <div class="course-meta">
-              <span><i class="fas fa-book" aria-hidden="true"></i> {{ $course->lessons_count }} {{ \Illuminate\Support\Str::plural('lesson', $course->lessons_count) }}</span>
-              @if($course->lessons_sum_duration_minutes)
-                <span><i class="fas fa-clock" aria-hidden="true"></i> {{ round($course->lessons_sum_duration_minutes / 60, 1) }}h</span>
-              @endif
-              @if($course->reviews_count > 0)
-                <span><i class="fas fa-star" style="color:var(--gold);"></i> {{ number_format($course->reviews_avg_rating, 1) }} ({{ $course->reviews_count }})</span>
-              @endif
-            </div>
-            <span class="course-price">
-              @if($course->isFree())
-                <span class="free">Free</span>
-              @else
-                {{ $course->currency }} {{ number_format((float) $course->price) }}
-              @endif
-            </span>
-          </a>
+          </article>
         @endforeach
       </div>
       <div class="pagination">{{ $courses->links() }}</div>
