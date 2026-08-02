@@ -107,7 +107,12 @@ class EnrollmentAccessPolicyTest extends TestCase
         $response = $this->actingAs($student)->get(route('learn.index'));
 
         $response->assertOk()->assertSee('Payment pending')->assertDontSee('Continue');
-        $response->assertSee(route('courses.checkout', $course), false);
+
+        // This enrollment carries no invoice, so the way forward is back to
+        // the course to complete enrolling. A pending enrollment that DOES
+        // have one links straight to the payment screen instead — covered in
+        // StudentNavigationTest.
+        $response->assertSee(route('courses.show', $course), false);
     }
 
     public function test_an_expired_active_enrollment_cannot_view_the_course_player(): void
