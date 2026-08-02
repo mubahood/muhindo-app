@@ -12,11 +12,7 @@
   $u = Auth::user();
 
   $due = $u === null ? collect() : \App\Models\Invoice::query()
-      ->where(function ($q) use ($u) {
-          $q->where(function ($q) use ($u) {
-              $q->where('billable_type', \App\Models\User::class)->where('billable_id', $u->id);
-          })->orWhereHas('billable', fn ($q) => $q->where('user_id', $u->id));
-      })
+      ->ownedBy($u)
       ->whereIn('status', [\App\Enums\InvoiceStatus::Issued, \App\Enums\InvoiceStatus::PartiallyPaid])
       ->where('balance', '>', 0)
       ->with('items')

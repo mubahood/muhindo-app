@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\InvoiceStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -88,6 +89,35 @@ class Invoice extends Model
     public function getRouteKeyName(): string
     {
         return 'uuid';
+    }
+
+    /**
+     * Every invoice this person is the buyer of.
+     *
+     * Two billable shapes, and they are not interchangeable: a course or a
+     * source-code order is billed to the User directly, while a project is
+     * billed to the Client record whose user_id points back at them. This
+     * mirrors InvoicePolicy::isOwner and exists so that rule is written once.
+     *
+     * whereHasMorph, not whereHas. A plain whereHas on a MorphTo applies its
+     * closure to EVERY billable type it finds, so `where user_id = ?` gets run
+     * against the users table too — which has no such column. MySQL rejects
+     * that outright; SQLite quietly accepts it, which is why the test suite
+     * did not notice.
+     *
+     * @param  Builder<Invoice>  $query
+     */
+    public function scopeOwnedBy(Builder $query, User $user): void
+    {
+        $query->where(function ($q) use ($user) {
+            $q->where(function ($q) use ($user) {
+                $q->where('billable_type', User::class)->where('billable_id', $user->id);
+            })->orWhereHasMorph(
+                'billable',
+                [Client::class],
+                fn ($q) => $q->where('user_id', $user->id)
+            );
+        });
     }
 
     /** Still owed something. */

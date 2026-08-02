@@ -336,4 +336,70 @@ class BuyerPaymentJourneyTest extends TestCase
         $this->actingAs($this->student())->get(route('payments.index'))->assertOk()
             ->assertDontSee(route('payments.show', $invoice), false);
     }
+
+    // ── Project invoices, billed to a Client rather than the User ───────────
+
+    /**
+     * The branch that shipped broken. A plain whereHas on the billable MorphTo
+     * ran "where user_id = ?" against the users table as well as the clients
+     * table; MySQL rejects that outright, and the dashboard 500'd for every
+     * signed-in person. SQLite executes the same SQL happily, so nothing in
+     * this suite noticed — hence a test that exercises the Client branch by
+     * value rather than by whether the query merely runs.
+     */
+    public function test_a_project_invoice_belongs_to_the_client_behind_it(): void
+    {
+        $owner = $this->student();
+        $client = \App\Models\Client::factory()->create(['user_id' => $owner->id]);
+        $stranger = $this->student();
+
+        $invoice = app(\App\Services\BillingService::class)->generateInvoice(
+            $client,
+            [['description' => 'Clinic management system', 'quantity' => 1, 'unit_price' => '900000.00']],
+        );
+
+        $this->assertTrue(Invoice::ownedBy($owner)->whereKey($invoice->id)->exists());
+        $this->assertFalse(Invoice::ownedBy($stranger)->whereKey($invoice->id)->exists());
+
+        // And it reaches both screens it is supposed to reach.
+        $this->actingAs($owner)->get(route('payments.index'))->assertOk()
+            ->assertSee('Clinic management system');
+        $this->actingAs($owner)->get(route('dashboard'))->assertOk()
+            ->assertSee('Clinic management system');
+        $this->actingAs($stranger)->get(route('payments.index'))->assertOk()
+            ->assertDontSee('Clinic management system');
+    }
+
+    public function test_a_course_invoice_is_not_claimed_by_an_unrelated_client_owner(): void
+    {
+        [$student, , $invoice] = $this->enrolUnpaid();
+
+        // Somebody who merely has a client record must not inherit other
+        // people's course invoices through the Client branch.
+        $other = $this->student();
+        \App\Models\Client::factory()->create(['user_id' => $other->id]);
+
+        $this->assertTrue(Invoice::ownedBy($student)->whereKey($invoice->id)->exists());
+        $this->assertFalse(Invoice::ownedBy($other)->whereKey($invoice->id)->exists());
+    }
+
+    /**
+     * A structural guard, because a behavioural one cannot do this job here.
+     *
+     * The suite runs SQLite while production runs MySQL, and SQLite executes
+     * the broken form of this query without complaint — so no amount of
+     * "does the right invoice come back" testing catches it. This asserts the
+     * shape instead: the client rule must be scoped to the clients table and
+     * must never be applied to users.
+     */
+    public function test_the_ownership_query_never_applies_the_client_rule_to_users(): void
+    {
+        $sql = Invoice::ownedBy($this->student())->toSql();
+
+        // Quoting differs between drivers, so match either.
+        $this->assertMatchesRegularExpression('/from ["`]clients["`]/', $sql,
+            'the client branch must query the clients table');
+        $this->assertDoesNotMatchRegularExpression('/from ["`]users["`]/', $sql,
+            'user_id does not exist on users — MySQL rejects this, SQLite hides it');
+    }
 }

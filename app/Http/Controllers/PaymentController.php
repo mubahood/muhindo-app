@@ -35,14 +35,7 @@ class PaymentController extends Controller
         $user = $request->user();
 
         $invoices = Invoice::query()
-            ->where(function ($q) use ($user) {
-                $q->where(function ($q) use ($user) {
-                    $q->where('billable_type', \App\Models\User::class)->where('billable_id', $user->id);
-                })->orWhereHas('billable', function ($q) use ($user) {
-                    // Project invoices are billed to the Client, not the User.
-                    $q->where('user_id', $user->id);
-                });
-            })
+            ->ownedBy($user)
             ->with('items')
             ->latest('id')
             ->get();
