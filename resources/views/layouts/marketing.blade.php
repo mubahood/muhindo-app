@@ -247,14 +247,18 @@
     .page a.link{color:var(--pri);font-weight:500;}
 
     /* footer */
-    footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0 30px;}
-    .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:26px;}
-    .foot .blurb{font-size:13px;font-weight:450;color:var(--tx2);max-width:280px;margin-top:12px;line-height:1.6;}
-    .foot .foot-h{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:12px;}
-    .foot a{display:block;font-size:13px;font-weight:500;color:var(--tx2);margin:7px 0;}
+    footer{border-top:1px solid var(--line);background:var(--surface);padding:40px 0 26px;}
+    .foot{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:30px 24px;}
+    .foot .blurb{font-size:13px;font-weight:450;color:var(--tx2);max-width:290px;margin-top:12px;line-height:1.6;}
+    .foot-place{font-size:12px;font-weight:500;color:var(--tx3);margin-top:10px;display:flex;align-items:center;gap:6px;}
+    .foot-place i{color:var(--gold-d);font-size:11px;}
+    .foot .foot-h{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);
+      margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--line);}
+    .foot a{display:block;font-size:13px;font-weight:500;color:var(--tx2);margin:6px 0;}
     .foot a:hover{color:var(--gold-d);}
-    .foot-bar{border-top:1px solid var(--line);margin-top:34px;padding-top:20px;font-size:12px;color:var(--tx3);
+    .foot-bar{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;font-size:12px;color:var(--tx3);
       display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+
 
     /* mobile menu */
     .mmenu{position:fixed;inset:var(--hd) 0 0 0;z-index:55;background:var(--bg);padding:22px 24px;display:none;flex-direction:column;gap:4px;}
@@ -1062,9 +1066,22 @@
       .hd-r .btn.desk,.hd-r .acct.desk,.hd-r .signin.desk{display:none;}
       h1,.hero h1{font-size:30px;} h2{font-size:20px;} .page-hero h1{font-size:25px;}
       .foot{grid-template-columns:1fr 1fr;}
+      .foot-brand{grid-column:1 / -1;}
+      .foot .blurb{max-width:none;}
       .contact-grid{grid-template-columns:1fr;}
     }
-    @media(max-width:520px){ .foot{grid-template-columns:1fr;} section{padding:40px 0;} }
+    @media(max-width:520px){
+      /* Stays two columns. A single column turned the footer into a screen and
+         a half of scrolling past links nobody was looking for — a footer that
+         cannot be skimmed is not doing its job. */
+      .foot{grid-template-columns:1fr 1fr;gap:20px 18px;}
+      .foot a{font-size:12.5px;margin:5px 0;}
+      .foot .foot-h{margin-bottom:8px;}
+      .foot-bar{flex-direction:column;gap:4px;margin-top:22px;}
+      section{padding:40px 0;}
+    }
+    /* Only below this does two columns start truncating link labels. */
+    @media(max-width:340px){ .foot{grid-template-columns:1fr;} }
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
   </style>
   @stack('styles')
@@ -1134,6 +1151,16 @@
     </nav>
 
     <div class="hd-r">
+      {{-- The basket leads: it is the only control here whose state the visitor
+           has changed themselves, and something waiting to be paid for should be
+           the first thing they can get back to. --}}
+      @if(app(\App\Services\Shop\Cart::class)->count() > 0)
+        <a href="{{ route('cart.show') }}" wire:navigate class="cart-link" aria-label="Basket, {{ app(\App\Services\Shop\Cart::class)->count() }} items">
+          <i class="fas fa-basket-shopping" aria-hidden="true"></i>
+          <span class="cart-count">{{ app(\App\Services\Shop\Cart::class)->count() }}</span>
+        </a>
+      @endif
+
       {{-- The two calls to action are permanent. Signing in does not remove
            them: a student can still hire, and a client can still enrol. --}}
       <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost desk sm cta">
@@ -1144,13 +1171,6 @@
         <span class="cta-a">Learn</span>
         <span class="cta-b" aria-hidden="true">Start Learning <i class="fas fa-arrow-right"></i></span>
       </a>
-
-      @if(app(\App\Services\Shop\Cart::class)->count() > 0)
-        <a href="{{ route('cart.show') }}" wire:navigate class="cart-link" aria-label="Basket, {{ app(\App\Services\Shop\Cart::class)->count() }} items">
-          <i class="fas fa-basket-shopping" aria-hidden="true"></i>
-          <span class="cart-count">{{ app(\App\Services\Shop\Cart::class)->count() }}</span>
-        </a>
-      @endif
 
       @auth
         <div class="acct desk">
@@ -1228,41 +1248,56 @@
 <footer>
   <div class="wrap">
     <div class="foot">
-      <div>
+      <div class="foot-brand">
         <a href="{{ route('home') }}" wire:navigate class="brand"><span class="badge">MM</span> Muhindo Mubaraka</a>
-        <p class="blurb">Software engineer and programming teacher based in Kampala, Uganda. I teach computer programming courses online, and I build software for anyone with a real problem — individuals, startups, schools, clinics, NGOs and enterprises.</p>
+        <p class="blurb">Software engineer and programming teacher. I build systems people depend on, and I teach the people who run them.</p>
+        <p class="foot-place"><i class="fas fa-location-dot" aria-hidden="true"></i> Kampala, Uganda</p>
       </div>
+
+      {{-- Columns come from SiteNav, so the footer cannot drift away from the
+           menu — which is exactly what had happened: it was still offering
+           "Work" and "Skills" as top-level, and had never heard of the blog,
+           the source code or the gallery. --}}
+      @foreach($nav as $item)
+        @if(!empty($item['children']))
+          <div>
+            <p class="foot-h">{{ $item['label'] }}</p>
+            @foreach($item['children'] as $child)
+              <a href="{{ $child['url'] }}" wire:navigate>{{ $child['label'] }}</a>
+            @endforeach
+          </div>
+        @endif
+      @endforeach
+
       <div>
-        <p class="foot-h">Site</p>
-        <a href="{{ route('courses.index') }}" wire:navigate>e&#8209;Learning</a>
-        <a href="{{ route('start-a-project') }}" wire:navigate>Start a project</a>
-        <a href="{{ route('portfolio.work') }}" wire:navigate>Work</a>
-        <a href="{{ route('portfolio.about') }}" wire:navigate>About</a>
-        <a href="{{ route('portfolio.skills') }}" wire:navigate>Skills</a>
+        <p class="foot-h">Explore</p>
+        @foreach($nav as $item)
+          @if(empty($item['children']))
+            <a href="{{ $item['url'] }}" wire:navigate>{{ $item['label'] }}</a>
+          @endif
+        @endforeach
         <a href="{{ route('contact') }}" wire:navigate>Contact</a>
-      </div>
-      <div>
-        <p class="foot-h">More</p>
-        <a href="{{ route('portfolio.services') }}" wire:navigate>Services</a>
-        <a href="{{ route('portfolio.experience') }}" wire:navigate>Experience</a>
-        <a href="{{ route('portfolio.education') }}" wire:navigate>Education</a>
-        <a href="{{ route('portfolio.research') }}" wire:navigate>Research</a>
         <a href="{{ route('portfolio.products') }}" wire:navigate>Products</a>
       </div>
+
       <div>
-        <p class="foot-h">Legal</p>
-        <a href="{{ route('privacy') }}" wire:navigate>Privacy</a>
-        <a href="{{ route('terms') }}" wire:navigate>Terms</a>
+        <p class="foot-h">Work with me</p>
+        <a href="{{ route('start-a-project') }}" wire:navigate>Hire me</a>
         @auth
           <a href="{{ $accountUrl }}">{{ $accountLabel }}</a>
+          <a href="{{ route('account.edit') }}" wire:navigate>Your account</a>
         @else
           <a href="{{ route('login') }}" wire:navigate>Sign in</a>
+          <a href="{{ route('register') }}" wire:navigate>Create an account</a>
         @endauth
+        <a href="{{ route('privacy') }}" wire:navigate>Privacy</a>
+        <a href="{{ route('terms') }}" wire:navigate>Terms</a>
       </div>
     </div>
+
     <div class="foot-bar">
       <span>&copy; {{ date('Y') }} Muhindo Mubaraka. All rights reserved.</span>
-      <span>Kampala, Uganda.</span>
+      <span>Built and maintained by me.</span>
     </div>
   </div>
 </footer>

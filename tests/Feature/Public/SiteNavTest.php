@@ -168,6 +168,39 @@ class SiteNavTest extends TestCase
         $this->assertStringEndsWith('/e-learning', $location);
     }
 
+    public function test_the_basket_leads_the_header_actions(): void
+    {
+        $product = \App\Models\Product::create([
+            'name' => 'A Kit', 'slug' => 'a-kit', 'type' => 'template',
+            'price' => '1000.00', 'currency' => 'UGX', 'is_published' => true,
+        ]);
+        $this->post(route('cart.add'), ['type' => 'product', 'id' => $product->id]);
+
+        $header = $this->headerOf($this->get(route('home')));
+
+        // Something waiting to be paid for should be the first control the
+        // visitor can get back to.
+        $this->assertLessThan(
+            strpos($header, 'class="btn ghost desk sm cta"'),
+            strpos($header, 'class="cart-link"'),
+            'the basket must come before the calls to action'
+        );
+    }
+
+    public function test_the_footer_lists_every_page_the_menu_offers(): void
+    {
+        /* The footer is generated from SiteNav for this reason: it had drifted
+           into offering "Work" and "Skills" as top-level sections and had never
+           heard of the blog, the source code or the gallery. */
+        $html = (string) $this->get(route('home'))->assertOk()->getContent();
+        $footer = substr($html, strpos($html, '<footer>') ?: 0);
+
+        foreach (SiteNav::urls() as $url) {
+            $this->assertStringContainsString('href="'.e($url).'"', $footer,
+                "{$url} is in the menu but missing from the footer");
+        }
+    }
+
     private function headerOf(\Illuminate\Testing\TestResponse $response): string
     {
         $html = (string) $response->assertOk()->getContent();
@@ -188,12 +221,27 @@ class SiteNavTest extends TestCase
 
     public function test_the_cv_page_is_assembled_from_live_records(): void
     {
-        $response = $this->get(route('portfolio.cv'));
+        /* Seeded deliberately. The earlier version asserted on the words
+           "Experience" and "Skills" with an empty database — and passed only
+           because the old footer happened to link to pages with those names.
+           It was testing the footer, not the CV. */
+        \App\Models\Experience::create([
+            'company' => 'Eight Tech Consults', 'role' => 'Manager, Information Systems',
+            'start_date' => '2021-01-01', 'description' => 'Led delivery of enterprise systems.',
+            'sort_order' => 0,
+        ]);
+        \App\Models\Education::create([
+            'institution' => 'Makerere University', 'degree' => 'MSc', 'field' => 'Computer Science',
+            'start_date' => '2023-01-01', 'sort_order' => 0,
+        ]);
+        \App\Models\Skill::create(['name' => 'Laravel (Expert)', 'category' => 'Backend Frameworks', 'sort_order' => 0]);
 
-        $response->assertOk()
-            ->assertSee('Experience')
-            ->assertSee('Qualifications')
-            ->assertSee('Skills')
+        $this->get(route('portfolio.cv'))
+            ->assertOk()
+            ->assertSee('Manager, Information Systems')
+            ->assertSee('Eight Tech Consults')
+            ->assertSee('MSc')
+            ->assertSee('Laravel (Expert)')
             // Printing is the delivery mechanism, so the control must be there.
             ->assertSee('window.print()', false);
     }
