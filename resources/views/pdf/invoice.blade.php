@@ -13,6 +13,12 @@
   tfoot .tot { font-weight: bold; font-size: 14px; color: #0b1f3a; border-top: 2px solid #0b1f3a; }
   .foot { margin-top: 40px; font-size: 10px; color: #93927e; border-top: 1px solid #e7e3d8; padding-top: 10px; }
   .badge { display:inline-block; font-size:10px; font-weight:bold; text-transform:uppercase; padding:3px 8px; background:#eef1f6; color:#0b1f3a; }
+  .sig-block { width: 190px; margin-left: auto; text-align: center; }
+  .sig-ink { display: block; margin: 0 auto -6px; }
+  .sig-gap { height: 34px; }
+  .sig-rule { border-top: 1px solid #0b1f3a; padding-top: 5px; }
+  .sig-name { font-size: 10.5px; font-weight: bold; color: #0b1f3a; }
+  .sig-role { font-size: 9px; color: #5b6270; }
 </style></head><body>
   @php
     $money = fn ($v) => $invoice->currency.' '.number_format((float) $v, 2);
@@ -49,5 +55,18 @@
     </tfoot>
   </table>
 
-  <div class="foot">Thank you for your business.</div>
+  {{-- An invoice is issued by the business, so it is signed for the business.
+       A receipt is deliberately NOT signed this way: it names a specific
+       "Received by" person who may not be Muhindo, and stamping his signature
+       on somebody else's act of receiving money would misstate what happened. --}}
+  <table style="width:100%; margin-top:34px; border:0;">
+    <tr>
+      <td style="border:0; padding:0; vertical-align:bottom; font-size:10px; color:#5b6270;">
+        Thank you for your business.
+      </td>
+      <td style="border:0; padding:0; width:210px;">
+        @include('pdf.partials.signature', ['role' => 'For and on behalf of the business'])
+      </td>
+    </tr>
+  </table>
 </body></html>

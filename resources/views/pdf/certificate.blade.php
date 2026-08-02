@@ -44,8 +44,14 @@
   .foot td { vertical-align: bottom; font-size: 9.5px; color: #5b6270; }
   .lbl { text-transform: uppercase; letter-spacing: 1.2px; font-size: 8px; color: #8a8f99; }
   .val { font-size: 10.5px; color: #141a26; font-weight: bold; }
-  .sigline { border-top: 1px solid #0b1f3a; padding-top: 5px; width: 190px; margin: 0 auto; }
-  .signame { font-size: 11px; font-weight: bold; color: #0b1f3a; }
+  /* The ink sits ON the rule, the way a pen would, so the image hangs below
+     its own line box rather than pushing the rule down. */
+  .sig-block { width: 190px; margin: 0 auto; text-align: center; }
+  .sig-ink { display: block; margin: 0 auto -6px; }
+  .sig-gap { height: 34px; }
+  .sig-rule { border-top: 1px solid #0b1f3a; padding-top: 5px; }
+  .sig-name { font-size: 11px; font-weight: bold; color: #0b1f3a; }
+  .sig-role { font-size: 9.5px; color: #5b6270; }
 
   .qrcell { text-align: right; }
   .qrcell img { width: 72px; height: 72px; }
@@ -90,10 +96,7 @@
           </td>
 
           <td style="width:33%; text-align:center;">
-            <div class="sigline">
-              <div class="signame">Muhindo Mubaraka</div>
-              <div>Software engineer &amp; instructor</div>
-            </div>
+            @include('pdf.partials.signature')
           </td>
 
           <td style="width:33%;" class="qrcell">

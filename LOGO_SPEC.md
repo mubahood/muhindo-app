@@ -92,3 +92,31 @@ MM monogram, navy/gold); geometry rebuilt by hand as clean SVG paths on a 512-un
 grid (mark bounds x 56–456, y 48–464; stems 72u; valley flat at y 274; nib point
 y 448). The SVGs in `public/brand/` are the canonical brand source — the original
 PNG is reference only.
+
+## Signature
+
+`resources/brand/signature.png` — Muhindo's handwritten signature, used on issued
+documents (certificates, invoices) via `resources/views/pdf/partials/signature.blade.php`.
+
+Made from the original scan with a transparent background and no surrounding
+whitespace, so it sits on a ruled line rather than in a white box:
+
+```sh
+magick muhindo-signature-1.png \
+  -fuzz 12% -transparent white \
+  -trim +repage \
+  -resize 900x -strip \
+  -colors 32 -define png:compression-level=9 \
+  PNG8:resources/brand/signature.png
+```
+
+PNG8 rather than PNG32: it is two-colour line art, and the palette version is
+17KB against 154KB with no visible difference at print size.
+
+**Kept out of `public/`.** DomPDF reads it from the filesystem, so it never needs
+to be web-reachable, and a signature at a guessable URL is one anyone can lift.
+It lives in `resources/` rather than `storage/` because `storage/app/.gitignore`
+ignores everything in it — the asset has to ship with the code.
+
+**Not on receipts.** A receipt names a specific "Received by" person who may not
+be Muhindo; his signature there would misstate who took the money.
