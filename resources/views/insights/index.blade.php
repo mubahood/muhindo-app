@@ -62,10 +62,10 @@
 <section class="band-deep" style="text-align:center;">
   <div class="wrap">
     <h2>Want this in your inbox instead?</h2>
-    <p class="lead" style="max-width:460px;margin:10px auto 20px;">Get in touch and I'll let you know when something new goes up.</p>
-    <a href="{{ route('contact') }}" wire:navigate class="btn gold cta">
-      <span class="cta-a">Get in touch</span>
-      <span class="cta-b" aria-hidden="true">Send me a message <i class="fas fa-arrow-right"></i></span>
+    <p class="lead" style="max-width:460px;margin:10px auto 20px;">Tell me what you are building and I will let you know when something relevant goes up.</p>
+    <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold cta">
+      <span class="cta-a">Hire Me</span>
+      <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
     </a>
   </div>
 </section>

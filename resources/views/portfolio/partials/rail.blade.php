@@ -20,7 +20,7 @@
 
   <div class="rail-foot">
     <a href="{{ route('contact') }}" wire:navigate class="link" style="font-size:12px;font-weight:600;color:var(--pri);padding:0;">
-      Get in touch <i class="fas fa-arrow-right"></i>
+      Hire me <i class="fas fa-arrow-right"></i>
     </a>
   </div>
 </nav>

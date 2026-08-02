@@ -68,7 +68,7 @@
     <p class="lead" style="max-width:480px;margin:12px auto 22px;">Experience, education and current research — each has its own page.</p>
     <div class="ctas">
       <a href="{{ route('portfolio.experience') }}" wire:navigate class="btn gold">Experience</a>
-      <a href="{{ route('contact') }}" wire:navigate class="btn ghost">Get in touch</a>
+      <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost">Hire me</a>
     </div>
   </div>
 </section>

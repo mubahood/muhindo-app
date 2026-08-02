@@ -81,9 +81,9 @@
           <span class="cta-a"><i class="fas fa-print"></i> Print</span>
           <span class="cta-b" aria-hidden="true"><i class="fas fa-file-pdf"></i> Save as PDF</span>
         </button>
-        <a href="{{ route('contact') }}" wire:navigate class="btn gold sm cta">
-          <span class="cta-a">Get in touch</span>
-          <span class="cta-b" aria-hidden="true">Send me a message <i class="fas fa-arrow-right"></i></span>
+        <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold sm cta">
+          <span class="cta-a">Hire Me</span>
+          <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
         </a>
       </div>
 

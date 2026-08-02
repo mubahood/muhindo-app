@@ -691,6 +691,64 @@
       .rail a.on{border-left-color:transparent;border-bottom-color:var(--gold);}
     }
 
+    /* ── Logo marquee ─────────────────────────────────────────────────────
+       Thirteen names in a static grid is a wall; moving slowly, it reads as a
+       list that continues past the edge of the screen. Two identical tracks
+       scroll as one and the animation resets after exactly one track width, so
+       the loop is seamless with no script and no cloned-node bookkeeping. */
+    .logos-band{padding:30px 0;overflow:hidden;}
+    .marquee{position:relative;display:flex;width:max-content;
+      -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+      mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);}
+    .marquee-track{display:flex;align-items:center;list-style:none;flex-shrink:0;}
+    .marquee-item{display:flex;align-items:center;justify-content:center;
+      padding:0 26px;height:56px;flex-shrink:0;}
+    .marquee-item img{max-height:34px;width:auto;object-fit:contain;
+      filter:grayscale(1);opacity:.62;transition:filter .2s,opacity .2s;}
+    .marquee-item:hover img{filter:none;opacity:1;}
+    .marquee-item .wordmark{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+      color:var(--tx3);white-space:nowrap;transition:color .2s;}
+    .marquee-item:hover .wordmark{color:var(--pri);}
+    @media(prefers-reduced-motion:no-preference){
+      .marquee-track{animation:marquee 46s linear infinite;}
+      /* Pausing on hover is what makes it usable rather than decorative —
+         a name you want to read stops moving when you point at it. */
+      .marquee:hover .marquee-track{animation-play-state:paused;}
+    }
+    @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-100%);}}
+
+    /* ── Photo mosaic ─────────────────────────────────────────────────────
+       One frame given real size so the section has a subject, the rest packed
+       around it. Six equal thumbnails read as filler. */
+    .mosaic{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,138px);gap:8px;}
+    .mosaic-cell{position:relative;overflow:hidden;border:1px solid var(--line);
+      background:var(--surface-2);display:block;}
+    .mosaic-cell.lead{grid-column:span 2;grid-row:span 2;}
+    .mosaic-cell img{width:100%;height:100%;object-fit:cover;transition:transform .55s ease;}
+    .mosaic-cell:hover img{transform:scale(1.05);}
+    .mosaic-cap{position:absolute;left:0;right:0;bottom:0;padding:20px 11px 9px;
+      background:linear-gradient(to top,rgba(6,15,31,.88),transparent);
+      opacity:0;transform:translateY(6px);transition:opacity .22s,transform .22s;}
+    .mosaic-cell:hover .mosaic-cap,.mosaic-cell:focus-visible .mosaic-cap{opacity:1;transform:none;}
+    .mosaic-cap .t{display:block;font-size:12px;font-weight:600;color:#fff;line-height:1.3;}
+    .mosaic-cap .c{display:none;font-size:10.5px;font-weight:450;color:rgba(255,255,255,.72);line-height:1.4;margin-top:2px;}
+    .mosaic-cell.lead .mosaic-cap .c{display:block;}
+    .mosaic-cell.lead .mosaic-cap .t{font-size:14px;}
+    /* The closing tile is a door, not a photograph — it says how much more
+       there is and where to go, which a seventh thumbnail would not. */
+    .mosaic-more{display:flex;flex-direction:column;align-items:flex-start;
+      justify-content:center;gap:2px;padding:16px 18px;border:1px solid var(--line);
+      background:var(--surface);transition:border-color .18s,background .18s;}
+    .mosaic-more:hover{border-color:var(--gold);background:var(--gold-soft);}
+    .mosaic-more .n{font-size:26px;font-weight:200;color:var(--pri);line-height:1;}
+    .mosaic-more .l{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);}
+    .mosaic-more .link{margin-top:8px;font-size:12.5px;font-weight:600;color:var(--pri);}
+    @media(max-width:820px){
+      .mosaic{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(3,120px);}
+      .mosaic-cell.lead{grid-column:span 2;grid-row:span 2;}
+      .mosaic-more{grid-column:span 2;}
+    }
+
     /* ── About, on the home page ──────────────────────────────────────────
        Two columns of prose at a comfortable measure. Long-form lives on
        /about; this is the ten-second version. */
@@ -1027,7 +1085,7 @@
                 <div class="mega-foot">
                   <span>{{ $item['blurb'] }}</span>
                   <a href="{{ route('contact') }}" wire:navigate class="link" style="color:var(--pri);font-weight:600;white-space:nowrap;">
-                    Get in touch <i class="fas fa-arrow-right"></i>
+                    Hire me <i class="fas fa-arrow-right"></i>
                   </a>
                 </div>
               @endif
@@ -1304,6 +1362,17 @@
           el.style.setProperty('--d', Math.min(i, 6) * 60 + 'ms');
         }
         seen.observe(el);
+      });
+
+      /* Anything already on screen is revealed straight away rather than left
+         to the observer. The observer's negative bottom margin creates a dead
+         band at the foot of the viewport, and on a screen tall enough to show
+         the whole page there is no scroll to move anything out of it — so that
+         content would stay invisible for good. */
+      requestAnimationFrame(function () {
+        document.querySelectorAll('[data-rise]:not(.in)').forEach(function (el) {
+          if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in');
+        });
       });
 
       var stats = document.querySelector('[data-count]');

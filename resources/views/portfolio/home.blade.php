@@ -210,25 +210,37 @@
 
 {{-- ═══ In pictures ═══ --}}
 @if($photos->isNotEmpty())
-<section class="tex-glow" style="padding-top:0;">
+<section class="tex-glow">
   <div class="wrap">
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ $idx() }} <span>In pictures</span></div>
       <h2>See who you would actually be working with</h2>
+      <p>No stock photography and no agency in between — this is the desk, the rooms and the people the work happens in.</p>
     </div>
-    <div class="photo-strip" data-rise>
-      @foreach($photos as $photo)
-        <a href="{{ route('gallery.index') }}" wire:navigate title="{{ $photo->title }}">
+
+    {{-- A mosaic rather than a row of equal squares: the first frame is given
+         real size so the section has a subject, and the rest fill in around it.
+         Six identical thumbnails read as a filler strip. --}}
+    <div class="mosaic" data-rise>
+      @foreach($photos->take(4) as $i => $photo)
+        <a href="{{ route('gallery.index') }}" wire:navigate
+           class="mosaic-cell {{ $i === 0 ? 'lead' : '' }}"
+           aria-label="{{ $photo->title }} — open the gallery">
           <img src="{{ $photo->thumbUrl() }}" alt="{{ $photo->altText() }}"
                width="{{ $photo->width }}" height="{{ $photo->height }}" loading="lazy" decoding="async">
+          <span class="mosaic-cap">
+            <span class="t">{{ $photo->title }}</span>
+            @if($photo->caption)<span class="c">{{ \Illuminate\Support\Str::limit($photo->caption, 70) }}</span>@endif
+          </span>
         </a>
       @endforeach
-    </div>
-    <p style="text-align:center;margin-top:14px;">
-      <a href="{{ route('gallery.index') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
-        See the gallery <i class="fas fa-arrow-right"></i>
+
+      <a href="{{ route('gallery.index') }}" wire:navigate class="mosaic-more" data-rise>
+        <span class="n">{{ max(0, \App\Models\GalleryPhoto::published()->count() - 4) }}+</span>
+        <span class="l">more photographs</span>
+        <span class="link">See the gallery <i class="fas fa-arrow-right"></i></span>
       </a>
-    </p>
+    </div>
   </div>
 </section>
 @endif
@@ -289,26 +301,42 @@
 
 {{-- ═══ Who trusts the work ═══ --}}
 @if(count($clients))
-<section class="band-surface" style="padding:34px 0;">
+<section class="band-surface logos-band">
   <div class="wrap">
-    <p class="sec-idx" style="justify-content:center;margin-bottom:18px;" data-rise><span>Organisations I've delivered for</span></p>
-    <div class="logo-strip" data-rise>
-      @foreach($clients as $client)
-        @php $slug = \Illuminate\Support\Str::slug(is_array($client) ? ($client['name'] ?? '') : $client); @endphp
-        <div class="cell">
-          @if(is_file(public_path("images/clients/{$slug}.png")))
-            <img src="{{ asset("images/clients/{$slug}.png") }}" alt="{{ is_array($client) ? ($client['name'] ?? '') : $client }}" loading="lazy" decoding="async">
-          @else
-            {{-- The name is a real mark until a logo file exists at
-                 public/images/clients/{{ $slug }}.png --}}
-            <span class="wordmark">{{ is_array($client) ? ($client['name'] ?? '') : $client }}</span>
-          @endif
-        </div>
-      @endforeach
-    </div>
-    <p style="text-align:center;margin-top:16px;">
-      <a href="{{ route('portfolio.about') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
-        More about how I work <i class="fas fa-arrow-right"></i>
+    <p class="sec-idx" style="justify-content:center;margin-bottom:16px;" data-rise><span>Organisations I have delivered for</span></p>
+  </div>
+
+  {{-- Full-bleed on purpose: the row runs off both edges, which is what makes
+       it read as a continuing list rather than a boxed-in set of thirteen. --}}
+  <div class="marquee" aria-label="Organisations I have delivered for">
+    {{-- The list is rendered twice. The track scrolls exactly one copy's width
+         and resets, so the loop has no visible seam and no JavaScript. The
+         duplicate is hidden from assistive tech, which should hear the list
+         once. --}}
+    @foreach([false, true] as $duplicate)
+      <ul class="marquee-track" @if($duplicate) aria-hidden="true" @endif>
+        @foreach($clients as $client)
+          @php
+            $name = is_array($client) ? ($client['name'] ?? '') : $client;
+            $slug = \Illuminate\Support\Str::slug($name);
+            $logo = "images/clients/{$slug}.png";
+          @endphp
+          <li class="marquee-item">
+            @if(is_file(public_path($logo)))
+              <img src="{{ asset($logo) }}" alt="{{ $name }}" loading="lazy" decoding="async">
+            @else
+              <span class="wordmark">{{ $name }}</span>
+            @endif
+          </li>
+        @endforeach
+      </ul>
+    @endforeach
+  </div>
+
+  <div class="wrap">
+    <p style="text-align:center;margin-top:14px;">
+      <a href="{{ route('portfolio.work') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
+        See what I built for them <i class="fas fa-arrow-right"></i>
       </a>
     </p>
   </div>
@@ -319,9 +347,9 @@
   <div class="wrap">
     <h2 data-rise>Let's build something together</h2>
     <p class="lead" style="max-width:480px;margin:12px auto 26px;" data-rise>Tell me what the problem is and I will tell you honestly whether I am the right person for it.</p>
-    <div data-rise><a href="{{ route('contact') }}" wire:navigate class="btn gold lg cta">
-      <span class="cta-a">Get in touch</span>
-      <span class="cta-b" aria-hidden="true">Send me a message <i class="fas fa-arrow-right"></i></span>
+    <div data-rise><a href="{{ route('start-a-project') }}" wire:navigate class="btn gold lg cta">
+      <span class="cta-a">Hire Me</span>
+      <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
     </a></div>
   </div>
 </section>

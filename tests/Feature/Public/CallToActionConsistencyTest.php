@@ -21,7 +21,11 @@ class CallToActionConsistencyTest extends TestCase
         'courses.index' => 'Start Learning',
         'start-a-project' => 'Hire Muhindo',
         'portfolio.work' => 'See the projects',
-        'contact' => 'Send me a message',
+        // 'contact' has no call to action of its own any more — the buttons
+        // that used to say "Get in touch" now say "Hire Me" and land on the
+        // brief form, because a label promising hiring should not open a
+        // generic contact box.
+
     ];
 
     public function test_each_destination_uses_a_single_hover_label_across_the_site(): void
