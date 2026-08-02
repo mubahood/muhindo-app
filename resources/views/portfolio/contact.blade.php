@@ -47,7 +47,7 @@
 
       <form class="contact-form" method="POST" action="{{ route('contact.store') }}">
         @csrf
-        <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off">
+      <x-form-shield />
         <div>
           <label for="name">Name</label>
           <input type="text" id="name" name="name" value="{{ old('name') }}" required>

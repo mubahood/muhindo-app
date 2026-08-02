@@ -22,14 +22,14 @@ class DualRoleAccountTest extends TestCase
 
     private function register(string $accountType, string $email = 'new@example.com'): \Illuminate\Testing\TestResponse
     {
-        return $this->post(route('register'), [
+        return $this->post(route('register'), $this->shielded([
             'name' => 'New Person',
             'email' => $email,
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'terms' => '1',
             'account_type' => $accountType,
-        ]);
+        ]));
     }
 
     public function test_registering_as_a_student_grants_only_learning_access(): void
@@ -71,10 +71,10 @@ class DualRoleAccountTest extends TestCase
 
     public function test_the_account_type_is_required(): void
     {
-        $this->post(route('register'), [
+        $this->post(route('register'), $this->shielded([
             'name' => 'No Type', 'email' => 'notype@example.com',
             'password' => 'password123', 'password_confirmation' => 'password123', 'terms' => '1',
-        ])->assertSessionHasErrors('account_type');
+        ]))->assertSessionHasErrors('account_type');
     }
 
     public function test_the_register_form_preselects_client_when_coming_from_start_a_project(): void
@@ -258,11 +258,11 @@ class DualRoleAccountTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'client', 'is_client' => true]);
 
-        $this->actingAs($user)->post(route('start-a-project.store'), [
+        $this->actingAs($user)->post(route('start-a-project.store'), $this->shielded([
             'name' => $user->name, 'email' => $user->email,
             'project_type' => 'website',
             'description' => 'A marketing site for my shop.',
-        ])->assertRedirect();
+        ]))->assertRedirect();
 
         $inquiry = ProjectInquiry::where('email', $user->email)->firstOrFail();
         $this->assertSame($user->id, $inquiry->user_id);
@@ -281,10 +281,10 @@ class DualRoleAccountTest extends TestCase
 
     public function test_a_guest_request_stays_unlinked(): void
     {
-        $this->post(route('start-a-project.store'), [
+        $this->post(route('start-a-project.store'), $this->shielded([
             'name' => 'Guest', 'email' => 'guest@example.com',
             'project_type' => 'website', 'description' => 'Something small.',
-        ])->assertRedirect();
+        ]))->assertRedirect();
 
         $this->assertNull(ProjectInquiry::where('email', 'guest@example.com')->firstOrFail()->user_id);
     }

@@ -81,14 +81,14 @@ class PublicHeaderAuthTest extends TestCase
 
     public function test_registering_also_issues_the_remember_cookie(): void
     {
-        $response = $this->post(route('register'), [
+        $response = $this->post(route('register'), $this->shielded([
             'name' => 'Sticky Session',
             'email' => 'sticky@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'terms' => '1',
             'account_type' => 'student',
-        ]);
+        ]));
 
         $response->assertRedirect();
         $response->assertCookie(Auth::guard('web')->getRecallerName());

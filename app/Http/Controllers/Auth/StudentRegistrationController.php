@@ -36,6 +36,14 @@ class StudentRegistrationController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        // Registration is the most valuable public form on the site to a
+        // spammer, so it carries the same shield as the contact forms.
+        if (\App\Support\Spam\FormShield::looksAutomated($request->all())) {
+            return redirect()->route('register')->with('success', 'Check your inbox to continue.');
+        }
+
+        \App\Support\Spam\FormShield::assertHumanTiming($request->all());
+
         $data = $request->validate([
             'name' => 'required|string|max:150',
             'email' => 'required|string|email|max:150|unique:users,email',
@@ -73,12 +81,21 @@ class StudentRegistrationController extends Controller
             return app(CourseCatalogueController::class)->enroll($request, $course);
         }
 
+        /* A basket survives registration, so somebody who signed up at
+           checkout is sent back to finish paying rather than dropped on a
+           dashboard to find their way back. */
+        if (! app(\App\Services\Shop\Cart::class)->isEmpty()) {
+            return redirect()->route('checkout.review')
+                ->with('success', 'Welcome! Your basket is still here — finish when you are ready.');
+        }
+
         if (! $isStudent) {
             return redirect()->route('portal.index')
                 ->with('success', "Welcome! Tell me about your project and I'll be in touch.");
         }
 
-        return redirect()->route('dashboard')->with('success', 'Welcome! Your account has been created.');
+        return redirect()->intended(route('dashboard'))
+            ->with('success', 'Welcome! Your account has been created.');
     }
 
     /** §3.2 — a guest arriving via "Enrol now" on a course page carries the course through registration. */

@@ -24,12 +24,13 @@ class ProjectInquiryController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // Checked before validation — a `max:0` rule on the honeypot would otherwise
-        // reject a bot's non-empty value with a validation error before this branch
-        // is ever reached, tipping the bot off instead of silently pretending success.
-        if ($request->filled('website')) {
+        // A bot told it failed simply retries with the field cleared, so a
+        // caught submission is answered exactly as a real one would be.
+        if (\App\Support\Spam\FormShield::looksAutomated($request->all())) {
             return redirect()->route('start-a-project')->with('success', "Got it — I'll reply within 24 hours.");
         }
+
+        \App\Support\Spam\FormShield::assertHumanTiming($request->all());
 
         $data = $request->validate([
             'name' => 'required|string|max:150',

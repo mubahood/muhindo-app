@@ -23,6 +23,7 @@
       -webkit-font-smoothing:antialiased;letter-spacing:.002em;min-height:100vh;
       display:flex;align-items:center;justify-content:center;padding:24px;}
     a{color:inherit;text-decoration:none;}
+    .ctx-sub{display:block;font-size:11.5px;font-weight:450;color:var(--tx3);margin-top:2px;line-height:1.45;}
     .a-course-ctx{display:flex;align-items:center;gap:12px;background:var(--pri-soft);border:1px solid var(--line);
       padding:12px 14px;margin-bottom:20px;}
     .a-course-ctx .thumb{width:44px;height:44px;flex-shrink:0;background:var(--pri);color:#b8933f;

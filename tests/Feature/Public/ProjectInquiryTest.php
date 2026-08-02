@@ -16,7 +16,7 @@ class ProjectInquiryTest extends TestCase
 
     private function validPayload(array $overrides = []): array
     {
-        return array_merge([
+        return $this->shielded(array_merge([
             'name' => 'Grace Nakato',
             'email' => 'grace@example.com',
             'phone' => '+256700000000',
@@ -25,7 +25,7 @@ class ProjectInquiryTest extends TestCase
             'budget_range' => '2m_5m',
             'timeline' => '1_3_months',
             'description' => 'We need a patient records system for our clinic.',
-        ], $overrides);
+        ], $overrides));
     }
 
     public function test_the_page_renders(): void

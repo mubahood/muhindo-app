@@ -723,6 +723,60 @@
       .rail a.on{border-left-color:transparent;border-bottom-color:var(--gold);}
     }
 
+    /* ── Curriculum rows ──────────────────────────────────────────────────
+       A previewable lesson looks openable; a locked one looks locked. That is
+       the whole job of this list before someone has paid. */
+    .lesson-row{gap:12px;}
+    .lesson-name{display:flex;align-items:center;gap:9px;min-width:0;}
+    .lesson-ico{font-size:12px;color:var(--tx3);flex-shrink:0;}
+    .lesson-side{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .lesson-row.previewable{cursor:pointer;transition:background .14s;}
+    .lesson-row.previewable:hover{background:var(--gold-soft);}
+    .lesson-row.previewable .lesson-ico{color:var(--gold-d);}
+    .preview-open{display:inline-flex;align-items:center;gap:5px;background:var(--pri);color:#fff;
+      cursor:pointer;transition:background .14s;}
+    .preview-open i{font-size:9px;}
+    .preview-open:hover{background:var(--gold);color:#231a05;}
+
+    /* ── Preview player ───────────────────────────────────────────────────── */
+    .pv{position:fixed;inset:0;z-index:200;background:rgba(6,15,31,.9);
+      display:flex;align-items:center;justify-content:center;padding:24px;}
+    .pv[hidden]{display:none;}
+    .pv-panel{width:min(940px,100%);max-height:calc(100vh - 48px);background:var(--surface);
+      border:1px solid var(--line-2);display:flex;flex-direction:column;overflow:hidden;}
+    .pv-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
+      padding:14px 18px;border-bottom:1px solid var(--line);}
+    .pv-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);}
+    .pv-title{font-size:16px;font-weight:600;margin-top:3px;line-height:1.3;}
+    .pv-x{border:none;background:none;color:var(--tx2);cursor:pointer;font-size:17px;
+      width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .pv-x:hover{color:var(--pri);background:var(--surface-2);}
+    .pv-body{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;}
+    .pv-stage{background:#0b1f3a;aspect-ratio:16/9;width:100%;}
+    .pv-stage iframe,.pv-stage video{width:100%;height:100%;border:0;display:block;}
+    .pv-text{padding:18px;font-size:13.5px;font-weight:450;color:var(--tx);line-height:1.7;}
+    .pv-text h2{font-size:17px;font-weight:600;margin:1.2em 0 .4em;color:var(--pri);}
+    .pv-text h3{font-size:14.5px;font-weight:600;margin:1em 0 .3em;}
+    .pv-text p{margin-bottom:.85em;}
+    .pv-text ul,.pv-text ol{margin:0 0 .85em 1.3em;list-style:revert;}
+    .pv-text code{background:var(--surface-2);padding:2px 5px;font-size:.9em;
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+    .pv-text pre{background:#0d2237;color:#eef1f6;padding:12px 14px;overflow-x:auto;margin-bottom:.85em;}
+    .pv-text pre code{background:none;padding:0;color:inherit;}
+    .pv-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+      padding:12px 18px;border-top:1px solid var(--line);background:var(--bg);}
+    .pv-nav{display:flex;align-items:center;gap:10px;}
+    .pv-count{font-size:11.5px;font-weight:600;color:var(--tx3);white-space:nowrap;}
+    .pv-cta{display:flex;align-items:center;gap:12px;}
+    .pv-price{font-size:15px;font-weight:700;color:var(--pri);}
+    @media(max-width:640px){
+      .pv{padding:0;}
+      .pv-panel{max-height:100vh;height:100%;border:none;}
+      .pv-foot{flex-direction:column;align-items:stretch;gap:10px;}
+      .pv-nav{justify-content:space-between;}
+      .pv-cta{justify-content:space-between;}
+    }
+
     /* ── Course cards ─────────────────────────────────────────────────────
        Level, category, length and price all sit on the cover. They are what
        people scan by, and the artwork was already occupying that space — so

@@ -85,7 +85,29 @@ class CourseCatalogueController extends Controller
         $about = $this->settingsJson('portfolio.about');
         $faq = $this->settingsJson('courses.faq');
 
+        /* Every free-preview lesson, rendered up front and handed to the page as
+           data. The modal then opens instantly with no request in flight — a
+           preview that spins before it plays is a preview people abandon. Only
+           lessons explicitly marked as free previews are included, so nothing
+           paid can leak through the same channel. */
+        $previews = $course->modules->flatMap->lessons
+            ->filter(fn (Lesson $lesson) => $lesson->is_free_preview && $lesson->is_published)
+            ->values()
+            ->map(fn (Lesson $lesson) => [
+                'id' => $lesson->id,
+                'title' => $lesson->title,
+                'minutes' => $lesson->duration_minutes,
+                'youtube' => $lesson->youtubeVideoId(),
+                'video' => $lesson->video_disk_path ? asset('storage/'.$lesson->video_disk_path) : null,
+                'captions' => $lesson->captions_url,
+                'html' => $lesson->content && $lesson->content_format === ContentFormat::Markdown
+                    ? $this->markdown->toHtml($lesson->content)
+                    : ($lesson->content ? '<p>'.e($lesson->content).'</p>' : null),
+                'url' => route('courses.preview', [$course, $lesson]),
+            ]);
+
         return view('courses.show', [
+            'previews' => $previews,
             'course' => $course->load('modules.lessons'),
             'enrollment' => $existing && in_array($existing->status, ['active', 'completed'], true) ? $existing : null,
             'pendingCheckout' => $existing?->status === 'pending',

@@ -57,11 +57,11 @@ class PortfolioPagesTest extends TestCase
 
     public function test_submitting_the_contact_form_redirects_back_to_the_dedicated_contact_page(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/contact', $this->shielded([
             'name' => 'Jane Client',
             'email' => 'jane@example.com',
             'message' => 'Hello.',
-        ]);
+        ]));
 
         $response->assertRedirect(route('contact'));
     }

@@ -60,11 +60,19 @@
             <details class="accordion-mod" @if($loop->first) open @endif>
               <summary>{{ $module->title }} <span class="n">{{ $module->lessons->count() }} {{ \Illuminate\Support\Str::plural('lesson', $module->lessons->count()) }}</span></summary>
               @foreach($module->lessons as $lesson)
-                <div class="lesson-row">
-                  <span><i class="fas fa-play-circle" style="color:var(--tx3);margin-right:8px;"></i>{{ $lesson->title }}</span>
-                  <span>
-                    @if($lesson->is_free_preview)
-                      <a href="{{ route('courses.preview', [$course, $lesson]) }}" wire:navigate class="tag">Free preview</a>
+                @php $previewIndex = $previews->search(fn ($p) => $p['id'] === $lesson->id); @endphp
+                <div class="lesson-row @if($previewIndex !== false) previewable @endif">
+                  <span class="lesson-name">
+                    <i class="fas {{ $previewIndex !== false ? 'fa-circle-play' : 'fa-lock' }} lesson-ico" aria-hidden="true"></i>{{ $lesson->title }}
+                  </span>
+                  <span class="lesson-side">
+                    @if($previewIndex !== false)
+                      {{-- Opens in place. Falls back to the standalone preview page
+                           if the script has not loaded, so the link is never dead. --}}
+                      <a href="{{ route('courses.preview', [$course, $lesson]) }}"
+                         class="tag preview-open" data-preview="{{ $previewIndex }}">
+                        <i class="fas fa-play" aria-hidden="true"></i> Preview
+                      </a>
                     @endif
                     @if($lesson->duration_minutes)<span class="muted">{{ $lesson->duration_minutes }} min</span>@endif
                   </span>
@@ -193,3 +201,139 @@
 </section>
 
 @endsection
+
+{{-- ═══════════════════════════════════════════════════════════════════════
+     Free-preview player.
+
+     Every preview lesson is already on the page as data, so opening one costs
+     no request and starts immediately. It is a dialog: focus moves in, Tab is
+     trapped, Escape closes, and focus returns to the row that opened it. Arrow
+     keys move between previews without closing.
+     ═══════════════════════════════════════════════════════════════════════ --}}
+@if($previews->isNotEmpty())
+<div class="pv" id="preview-modal" hidden role="dialog" aria-modal="true" aria-labelledby="pv-title">
+  <div class="pv-panel">
+    <header class="pv-head">
+      <div>
+        <p class="pv-eyebrow">Free preview · {{ $course->title }}</p>
+        <h2 id="pv-title" class="pv-title"></h2>
+      </div>
+      <button type="button" class="pv-x" data-pv-close aria-label="Close preview"><i class="fas fa-xmark"></i></button>
+    </header>
+
+    <div class="pv-body">
+      <div class="pv-stage" id="pv-stage"></div>
+      <div class="pv-text" id="pv-text"></div>
+    </div>
+
+    <footer class="pv-foot">
+      <div class="pv-nav">
+        <button type="button" class="btn ghost sm" data-pv-prev><i class="fas fa-chevron-left"></i> Previous</button>
+        <span class="pv-count" id="pv-count"></span>
+        <button type="button" class="btn ghost sm" data-pv-next>Next <i class="fas fa-chevron-right"></i></button>
+      </div>
+
+      <form method="POST" action="{{ route('courses.enroll', $course) }}" class="pv-cta">
+        @csrf
+        <span class="pv-price">
+          @if($course->isFree()) Free @else {{ $course->currency }} {{ number_format((float) $course->price) }} @endif
+        </span>
+        <button type="submit" class="btn gold sm">
+          {{ $course->isFree() ? 'Start this course' : 'Enrol now' }} <i class="fas fa-arrow-right"></i>
+        </button>
+      </form>
+    </footer>
+  </div>
+</div>
+
+@push('scripts')
+<script>
+(function () {
+  var previews = @js($previews);
+  var box = document.getElementById('preview-modal');
+  if (!box || !previews.length) return;
+
+  var stage  = document.getElementById('pv-stage');
+  var text   = document.getElementById('pv-text');
+  var title  = document.getElementById('pv-title');
+  var count  = document.getElementById('pv-count');
+  var current = 0, opener = null;
+
+  function render(i) {
+    current = (i + previews.length) % previews.length;
+    var p = previews[current];
+
+    title.textContent = p.title;
+    count.textContent = (current + 1) + ' of ' + previews.length;
+    text.innerHTML = p.html || '';
+    text.hidden = !p.html;
+
+    // Rebuilt rather than reused, so the previous video stops the moment the
+    // next one opens — swapping a src leaves audio playing in some browsers.
+    stage.innerHTML = '';
+    if (p.youtube) {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + p.youtube + '?rel=0&modestbranding=1&cc_load_policy=1';
+      f.title = p.title;
+      f.allow = 'accelerometer; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      f.loading = 'lazy';
+      stage.appendChild(f);
+    } else if (p.video) {
+      var v = document.createElement('video');
+      v.src = p.video; v.controls = true; v.preload = 'metadata'; v.playsInline = true;
+      if (p.captions) {
+        var t = document.createElement('track');
+        t.kind = 'captions'; t.src = p.captions; t.default = true; t.label = 'Captions';
+        v.appendChild(t);
+      }
+      stage.appendChild(v);
+    }
+    stage.hidden = !(p.youtube || p.video);
+  }
+
+  function open(i, trigger) {
+    opener = trigger || null;
+    box.hidden = false;
+    document.body.style.overflow = 'hidden';
+    render(i);
+    box.querySelector('[data-pv-close]').focus();
+  }
+
+  function close() {
+    box.hidden = true;
+    document.body.style.overflow = '';
+    stage.innerHTML = '';                       // stops playback on the way out
+    if (opener) opener.focus();
+  }
+
+  document.addEventListener('click', function (e) {
+    var trigger = e.target.closest('[data-preview]');
+    if (trigger) { e.preventDefault(); open(Number(trigger.dataset.preview), trigger); return; }
+    if (box.hidden) return;
+    if (e.target.closest('[data-pv-close]') || e.target === box) return close();
+    if (e.target.closest('[data-pv-prev]')) return render(current - 1);
+    if (e.target.closest('[data-pv-next]')) return render(current + 1);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (box.hidden) return;
+    if (e.key === 'Escape')     { e.preventDefault(); return close(); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); return render(current - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); return render(current + 1); }
+    if (e.key === 'Tab') {
+      var f = box.querySelectorAll('button, [href], iframe, video, input');
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  document.addEventListener('livewire:navigating', function () {
+    document.body.style.overflow = '';
+  }, { once: true });
+})();
+</script>
+@endpush
+@endif

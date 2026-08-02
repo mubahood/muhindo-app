@@ -11,12 +11,12 @@
   $panels = array_values(array_filter($panels, fn ($p) => ! ($p['skip'] ?? false)));
 
   $types = [
-      ['value' => 'student', 'icon' => 'fa-graduation-cap', 'title' => 'Learn',
-       'desc' => 'Enrol in courses, track progress and earn certificates.'],
-      ['value' => 'client', 'icon' => 'fa-briefcase', 'title' => 'Hire me',
-       'desc' => 'Request projects, follow their progress and settle invoices.'],
+      ['value' => 'student', 'icon' => 'fa-graduation-cap', 'title' => 'Learn from Muhindo',
+       'desc' => 'Take his courses, track your progress and earn a verifiable certificate.'],
+      ['value' => 'client', 'icon' => 'fa-handshake', 'title' => 'Hire Muhindo for a project',
+       'desc' => 'Send him a brief, then follow the build in your own client portal.'],
       ['value' => 'both', 'icon' => 'fa-layer-group', 'title' => 'Both',
-       'desc' => 'One account for learning and for the work you commission.'],
+       'desc' => 'One account for learning and for the work you commission. Switch any time.'],
   ];
 @endphp
 

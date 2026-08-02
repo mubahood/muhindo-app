@@ -20,12 +20,12 @@ class ContactFormTest extends TestCase
     {
         Mail::fake();
 
-        $response = $this->post('/contact', [
+        $response = $this->post('/contact', $this->shielded([
             'name' => 'Jane Client',
             'email' => 'jane@example.com',
             'subject' => 'Project inquiry',
             'message' => 'I would like to discuss a project.',
-        ]);
+        ]));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('contact_messages', [
@@ -39,12 +39,12 @@ class ContactFormTest extends TestCase
     {
         Mail::fake();
 
-        $response = $this->post('/contact', [
+        $response = $this->post('/contact', $this->shielded([
             'name' => 'Bot',
             'email' => 'bot@example.com',
             'message' => 'spam',
             'website' => 'http://spam.example.com',
-        ]);
+        ]));
 
         // The bot must see an ordinary success redirect, not a validation error — a
         // validation error would tip it off that it was caught by the honeypot.
@@ -56,7 +56,7 @@ class ContactFormTest extends TestCase
 
     public function test_a_missing_required_field_fails_validation(): void
     {
-        $response = $this->post('/contact', ['name' => 'Jane']);
+        $response = $this->post('/contact', $this->shielded(['name' => 'Jane']));
 
         $response->assertSessionHasErrors(['email', 'message']);
     }

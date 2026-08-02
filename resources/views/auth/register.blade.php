@@ -24,7 +24,7 @@
 @section('form')
 <div class="af-eyebrow">Create an account</div>
 <h2 class="af-title">Join Muhindo Mubaraka</h2>
-<p class="af-sub">One account for learning and for building — pick what you're here for.</p>
+<p class="af-sub">One account for both sides. Pick what brings you here — you can add the other later.</p>
 
 @include('auth.partials.course-context')
 
@@ -34,6 +34,7 @@
 
 <form method="POST" action="{{ route('register') }}">
   @csrf
+  <x-form-shield id="register" />
   @if($intendedCourse)
     <input type="hidden" name="intended_course" value="{{ $intendedCourse->slug }}">
     @if(request('coupon_code'))<input type="hidden" name="coupon_code" value="{{ request('coupon_code') }}">@endif
@@ -43,9 +44,12 @@
     <label class="a-label">I'm here to</label>
     <div class="acct-types">
       @foreach([
-        ['v' => 'student', 'i' => 'fa-graduation-cap', 't' => 'Learn', 'd' => 'Take courses, track progress and earn certificates.'],
-        ['v' => 'client',  'i' => 'fa-diagram-project', 't' => 'Hire me', 'd' => 'Request a project and follow it in your client portal.'],
-        ['v' => 'both',    'i' => 'fa-layer-group', 't' => 'Both', 'd' => 'Learn and hire from the same account — switch any time.'],
+        ['v' => 'student', 'i' => 'fa-graduation-cap', 't' => 'Learn from Muhindo',
+         'd' => 'Take his courses, track your progress and earn a verifiable certificate.'],
+        ['v' => 'client',  'i' => 'fa-handshake', 't' => 'Hire Muhindo for a project',
+         'd' => 'Send him a brief, then follow the build in your own client portal.'],
+        ['v' => 'both',    'i' => 'fa-layer-group', 't' => 'Both',
+         'd' => 'One account for learning and for the work you commission. Switch any time.'],
       ] as $opt)
         <label class="acct-type" :class="{ on: type === @js($opt['v']) }">
           <input type="radio" name="account_type" value="{{ $opt['v'] }}" x-model="type" required>

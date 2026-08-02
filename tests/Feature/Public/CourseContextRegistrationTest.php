@@ -20,7 +20,7 @@ class CourseContextRegistrationTest extends TestCase
     {
         $course = Course::factory()->create(['is_published' => true, 'price' => 0]);
 
-        $response = $this->post(route('register'), [
+        $response = $this->post(route('register'), $this->shielded([
             'name' => 'Jane Student',
             'email' => 'jane@example.com',
             'password' => 'password123',
@@ -28,7 +28,7 @@ class CourseContextRegistrationTest extends TestCase
             'terms' => '1',
             'account_type' => 'student',
             'intended_course' => $course->slug,
-        ]);
+        ]));
 
         $response->assertRedirect(route('learn.course', $course));
         $this->assertAuthenticated();
@@ -40,26 +40,26 @@ class CourseContextRegistrationTest extends TestCase
 
     public function test_registering_with_no_intended_course_still_goes_to_the_dashboard(): void
     {
-        $response = $this->post(route('register'), [
+        $response = $this->post(route('register'), $this->shielded([
             'name' => 'Jane Student',
             'email' => 'jane@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'terms' => '1',
             'account_type' => 'student',
-        ]);
+        ]));
 
         $response->assertRedirect(route('dashboard'));
     }
 
     public function test_registration_requires_accepting_the_terms(): void
     {
-        $response = $this->post(route('register'), [
+        $response = $this->post(route('register'), $this->shielded([
             'name' => 'Jane Student',
             'email' => 'jane@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
-        ]);
+        ]));
 
         $response->assertSessionHasErrors('terms');
         $this->assertGuest();
@@ -69,7 +69,7 @@ class CourseContextRegistrationTest extends TestCase
     {
         $course = Course::factory()->create(['is_published' => false, 'price' => 0]);
 
-        $response = $this->post(route('register'), [
+        $response = $this->post(route('register'), $this->shielded([
             'name' => 'Jane Student',
             'email' => 'jane@example.com',
             'password' => 'password123',
@@ -77,7 +77,7 @@ class CourseContextRegistrationTest extends TestCase
             'terms' => '1',
             'account_type' => 'student',
             'intended_course' => $course->slug,
-        ]);
+        ]));
 
         $response->assertRedirect(route('dashboard'));
         $this->assertDatabaseMissing('enrollments', ['course_id' => $course->id]);
@@ -85,7 +85,7 @@ class CourseContextRegistrationTest extends TestCase
 
     public function test_a_nonexistent_intended_course_slug_is_ignored_not_500(): void
     {
-        $response = $this->post(route('register'), [
+        $response = $this->post(route('register'), $this->shielded([
             'name' => 'Jane Student',
             'email' => 'jane@example.com',
             'password' => 'password123',
@@ -93,7 +93,7 @@ class CourseContextRegistrationTest extends TestCase
             'terms' => '1',
             'account_type' => 'student',
             'intended_course' => 'does-not-exist',
-        ]);
+        ]));
 
         $response->assertRedirect(route('dashboard'));
     }
@@ -170,7 +170,7 @@ class CourseContextRegistrationTest extends TestCase
             'max_uses' => 10, 'used_count' => 0, 'is_active' => true,
         ]);
 
-        $response = $this->post(route('register'), [
+        $response = $this->post(route('register'), $this->shielded([
             'name' => 'Coupon Guest',
             'email' => 'coupon.guest@example.com',
             'password' => 'password123',
@@ -179,7 +179,7 @@ class CourseContextRegistrationTest extends TestCase
             'account_type' => 'student',
             'intended_course' => $course->slug,
             'coupon_code' => 'GUEST20',
-        ]);
+        ]));
 
         $response->assertRedirect(route('courses.checkout', $course));
 
@@ -217,7 +217,7 @@ class CourseContextRegistrationTest extends TestCase
     {
         $course = Course::factory()->create(['is_published' => true, 'price' => 100000]);
 
-        $response = $this->post(route('register'), [
+        $response = $this->post(route('register'), $this->shielded([
             'name' => 'Bad Coupon Guest',
             'email' => 'badcoupon.guest@example.com',
             'password' => 'password123',
@@ -226,7 +226,7 @@ class CourseContextRegistrationTest extends TestCase
             'account_type' => 'student',
             'intended_course' => $course->slug,
             'coupon_code' => 'DOES-NOT-EXIST',
-        ]);
+        ]));
 
         // The account is created and the guest is authenticated regardless — an invalid
         // coupon must never block registration itself, only fail to discount the invoice.
