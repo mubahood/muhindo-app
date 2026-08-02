@@ -14,6 +14,11 @@
         @unless($m->isRead())
           <form method="POST" action="{{ route('admin.messages.read', $m) }}">@csrf<button class="btn-tb btn-tb-sm btn-tb-ghost">Mark read</button></form>
         @endunless
+        <form method="POST" action="{{ route('admin.messages.destroy', $m) }}"
+              onsubmit="return confirm('Delete this message? This cannot be undone.');">
+          @csrf @method('DELETE')
+          <button class="btn-tb btn-tb-sm btn-tb-danger"><i class="fas fa-trash"></i> Delete</button>
+        </form>
       </div>
     </div>
   @empty

@@ -227,6 +227,20 @@ class PortfolioController extends Controller
         return back()->with('success', 'Marked as read.');
     }
 
+    /**
+     * Delete a message from the inbox.
+     *
+     * The inbox could only ever grow: a message could be marked read and
+     * nothing else, so every piece of spam that got past the shield stayed
+     * there permanently.
+     */
+    public function destroyMessage(ContactMessage $contactMessage): RedirectResponse
+    {
+        $contactMessage->delete();
+
+        return back()->with('success', 'Message deleted.');
+    }
+
     /** @return array<string,mixed> */
     private function json(string $key, mixed $default = []): array
     {

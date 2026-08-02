@@ -37,4 +37,12 @@ class ProjectInquiryController extends Controller
 
         return back()->with('success', 'Status updated.');
     }
+
+    /** Delete an inquiry — spam gets through, and it had nowhere to go. */
+    public function destroy(\App\Models\ProjectInquiry $projectInquiry): \Illuminate\Http\RedirectResponse
+    {
+        $projectInquiry->delete();
+
+        return redirect()->route('admin.project-inquiries.index')->with('success', 'Inquiry deleted.');
+    }
 }

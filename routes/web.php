@@ -211,11 +211,13 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except('show');
     Route::get('testimonials', [\App\Http\Controllers\Admin\TestimonialController::class, 'index'])->name('testimonials.index');
     Route::post('testimonials', [\App\Http\Controllers\Admin\TestimonialController::class, 'store'])->name('testimonials.store');
+    Route::post('testimonials/{index}', [\App\Http\Controllers\Admin\TestimonialController::class, 'update'])->name('testimonials.update');
     Route::delete('testimonials/{index}', [\App\Http\Controllers\Admin\TestimonialController::class, 'destroy'])->name('testimonials.destroy');
     Route::resource('education', EducationController::class)->except('show');
     Route::resource('services', ServicePageController::class)->except('show');
     Route::get('messages', [PortfolioController::class, 'inbox'])->name('messages.index');
     Route::post('messages/{contactMessage}/read', [PortfolioController::class, 'markRead'])->name('messages.read');
+    Route::delete('messages/{contactMessage}', [PortfolioController::class, 'destroyMessage'])->name('messages.destroy');
 
     // Courses / LMS
     Route::resource('courses', AdminCourseController::class);
@@ -265,6 +267,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('project-inquiries', [\App\Http\Controllers\Admin\ProjectInquiryController::class, 'index'])->name('project-inquiries.index');
     Route::get('project-inquiries/{projectInquiry}', [\App\Http\Controllers\Admin\ProjectInquiryController::class, 'show'])->name('project-inquiries.show');
     Route::patch('project-inquiries/{projectInquiry}/status', [\App\Http\Controllers\Admin\ProjectInquiryController::class, 'updateStatus'])->name('project-inquiries.status');
+    Route::delete('project-inquiries/{projectInquiry}', [\App\Http\Controllers\Admin\ProjectInquiryController::class, 'destroy'])->name('project-inquiries.destroy');
     Route::post('projects/{project}/tasks', [ProjectTaskController::class, 'store'])->name('projects.tasks.store');
     Route::put('projects/{project}/tasks/{task}', [ProjectTaskController::class, 'update'])->name('projects.tasks.update');
     Route::delete('projects/{project}/tasks/{task}', [ProjectTaskController::class, 'destroy'])->name('projects.tasks.destroy');

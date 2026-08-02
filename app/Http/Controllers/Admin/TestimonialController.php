@@ -36,7 +36,7 @@ class TestimonialController extends Controller
         ]);
 
         $entry = [
-            'quote' => $data['quote'],
+            'quote' => $data['quote'] ?? null,
             'name' => $data['name'],
             'role' => $data['role'] ?? '',
             'org' => $data['org'] ?? '',
@@ -49,6 +49,63 @@ class TestimonialController extends Controller
         $this->save([...$this->all(), $entry]);
 
         return back()->with('success', 'Testimonial added.');
+    }
+
+    /**
+     * Edit one in place.
+     *
+     * Without this the only way to fix a typo in somebody's name or title was
+     * to delete the entry and retype it — which also destroyed their photo,
+     * for a spelling mistake. The photo is kept unless a new file is supplied.
+     */
+    public function update(Request $request, int $index): RedirectResponse
+    {
+        $items = $this->all();
+
+        if (! array_key_exists($index, $items)) {
+            return back()->with('error', 'That testimonial no longer exists.');
+        }
+
+        $data = $request->validate([
+            'quote' => 'nullable|string|max:600',
+            'name' => 'required|string|max:120',
+            'role' => 'nullable|string|max:120',
+            'org' => 'nullable|string|max:120',
+            'link' => 'nullable|url|max:300',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'remove_photo' => 'nullable|boolean',
+        ]);
+
+        $existing = $items[$index];
+        $photo = $existing['photo'] ?? null;
+
+        if ($request->boolean('remove_photo') || $request->hasFile('photo')) {
+            // Only delete what we put there. A path outside storage/ was
+            // committed to the repo by hand and is not ours to remove.
+            if ($photo && str_starts_with($photo, 'storage/')) {
+                Storage::disk('public')->delete(substr($photo, strlen('storage/')));
+            }
+            $photo = null;
+        }
+
+        if ($request->hasFile('photo')) {
+            $photo = 'storage/'.$request->file('photo')->store('testimonials', 'public');
+        }
+
+        $items[$index] = [
+            'quote' => $data['quote'] ?? null,
+            'name' => $data['name'],
+            'role' => $data['role'] ?? '',
+            'org' => $data['org'] ?? '',
+            'link' => $data['link'] ?? null,
+            'photo' => $photo,
+        ];
+
+        // No array_values here: replacing an element leaves the list intact.
+        // destroy() needs it because unset() punches a hole in the keys.
+        $this->save($items);
+
+        return back()->with('success', 'Testimonial updated.');
     }
 
     public function destroy(int $index): RedirectResponse

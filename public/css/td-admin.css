@@ -281,6 +281,33 @@ strong,b{font-weight:600;}
 .dash-root .tb-stat-icon{width:36px;height:36px;font-size:15px;}
 .dash-root .tb-card-header{padding:11px 15px;}
 .dash-root .tb-card-body{padding:12px 15px;}
+
+/* auto-fit collapsed the last row onto whatever space was left, so nine stats
+   laid out as seven then a stranded two. auto-fill keeps the track count
+   stable, and the tiles stay the same width whether the row is full or not. */
+.dash-root .tb-stats-grid{grid-template-columns:repeat(auto-fill,minmax(178px,1fr));}
+
+/* Long labels ("Revenue this month", "Students at risk") broke to three lines
+   and pushed the tiles to different heights. */
+.dash-root .tb-stat-card{align-items:flex-start;min-height:74px;}
+.dash-root .tb-stat-label{line-height:1.35;text-wrap:balance;}
+.dash-root .tb-stat-icon{margin-top:2px;}
+
+/* Cards in a row stretched to match their tallest neighbour, so an empty
+   "Recent projects" became a wall of nothing beside a full enrollments list. */
+.dash-grid.cols-2,.dash-grid.cols-3{align-items:start;}
+
+/* An empty panel should take the room it needs and no more. */
+.dash-root .tb-empty{padding:22px 14px;}
+.dash-root .tb-empty i{font-size:20px;margin-bottom:7px;}
+.dash-root .tb-empty p{font-size:12px;margin:0;}
+
+/* A figure that is money owed is the one number here worth chasing, so it
+   reads as a link and says so on hover. */
+a.tb-stat-card{position:relative;}
+a.tb-stat-card::after{content:'\2192';position:absolute;top:10px;right:12px;font-size:12px;
+  color:var(--mt2);opacity:0;transform:translateX(-3px);transition:opacity .15s,transform .15s;}
+a.tb-stat-card:hover::after{opacity:1;transform:translateX(0);}
 /* stat card: clickable + tone + sub-line */
 a.tb-stat-card{text-decoration:none;color:inherit;}
 a.tb-stat-card:hover{border-color:var(--br);}

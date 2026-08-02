@@ -40,6 +40,13 @@
       </select>
       <button type="submit" class="btn-tb btn-tb-primary btn-tb-sm">Update status</button>
     </form>
+
+    <form method="POST" action="{{ route('admin.project-inquiries.destroy', $inquiry) }}"
+          style="margin-top:12px;"
+          onsubmit="return confirm('Delete this inquiry? This cannot be undone.');">
+      @csrf @method('DELETE')
+      <button type="submit" class="btn-tb btn-tb-danger btn-tb-sm"><i class="fas fa-trash"></i> Delete inquiry</button>
+    </form>
   </div>
 </div>
 
