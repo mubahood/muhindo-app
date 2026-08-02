@@ -904,7 +904,22 @@
     .shot-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1;}
     .shot-body h3{font-size:15px;font-weight:600;}
     .shot-body p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.55;}
-    .shot-body .link{margin-top:auto;font-size:12.5px;font-weight:600;color:var(--pri);padding-top:4px;}
+    .shot-body .link{font-size:12.5px;font-weight:600;color:var(--pri);}
+    /* The address bar shows the project's real domain rather than an empty
+       grey pill — the frame stops being decoration and starts carrying a fact. */
+    .shot-bar .u{display:flex;align-items:center;padding:0 8px;height:16px;background:var(--bg);
+      border:1px solid var(--line);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:9px;color:var(--tx3);letter-spacing:.02em;overflow:hidden;white-space:nowrap;}
+    .shot-shot{display:block;}
+    .shot-points{list-style:none;margin:2px 0 0;display:flex;flex-direction:column;gap:3px;}
+    .shot-points li{position:relative;padding-left:14px;font-size:11.5px;font-weight:450;
+      color:var(--tx2);line-height:1.45;}
+    .shot-points li::before{content:'';position:absolute;left:2px;top:6px;width:4px;height:4px;background:var(--gold);}
+    .shot-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;
+      flex-wrap:wrap;margin-top:auto;padding-top:10px;border-top:1px solid var(--line);}
+    .shot-live{font-size:11.5px;font-weight:600;color:var(--gold-d);white-space:nowrap;}
+    .shot-live:hover{color:var(--pri);}
+    .shot-body h3 a:hover{color:var(--gold-d);}
 
     /* ── Testimonials ── */
     .quote-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}

@@ -169,6 +169,35 @@ class HomePageTest extends TestCase
             ->assertSee('He delivered the system and trained the team to run it.');
     }
 
+    public function test_a_project_card_carries_its_live_address_and_a_way_to_open_it(): void
+    {
+        // The strongest thing these cards can say is "this is running, go look".
+        // The domain and the link were already in the data, unused.
+        PortfolioProject::create([
+            'title' => 'A Live System', 'slug' => 'a-live-system',
+            'description' => 'Delivered end to end.',
+            'external_link' => 'https://u-lits.com',
+            'highlights' => ['Offline-first for low-connectivity districts.'],
+            'sort_order' => 0,
+        ]);
+
+        $this->get(route('home'))->assertOk()
+            ->assertSee('u-lits.com')
+            ->assertSee('Open it live')
+            ->assertSee('Offline-first for low-connectivity districts.');
+    }
+
+    public function test_a_project_without_a_live_link_simply_omits_it(): void
+    {
+        PortfolioProject::create([
+            'title' => 'Internal Tool', 'slug' => 'internal-tool',
+            'description' => 'Not publicly reachable.', 'sort_order' => 0,
+        ]);
+
+        $this->get(route('home'))->assertOk()
+            ->assertSee('Internal Tool')->assertDontSee('Open it live');
+    }
+
     public function test_the_stat_row_publishes_the_true_figures(): void
     {
         Settings::set('portfolio.stats', json_encode([

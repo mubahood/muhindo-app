@@ -106,8 +106,8 @@
   <div class="wrap">
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ $idx() }} <span>References</span></div>
-      <h2>People who can speak to the work</h2>
-      <p>Academics and practitioners I have worked under, alongside and for. Their pages are linked — ask them.</p>
+      <h2>Don't take my word for it — ask them about me</h2>
+      <p>I have worked under, alongside and for each of these people. Their pages are linked, so look them up and ask what I was actually like to work with.</p>
     </div>
 
     <div class="ref-grid">
@@ -127,7 +127,7 @@
           </figcaption>
           @if(!empty($t['link']))
             <a href="{{ $t['link'] }}" target="_blank" rel="noopener" data-no-navigate class="ref-link link">
-              Their profile <i class="fas fa-arrow-up-right-from-square"></i>
+              Look them up <i class="fas fa-arrow-up-right-from-square"></i>
             </a>
           @endif
         </figure>
@@ -143,33 +143,56 @@
   <div class="wrap">
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ $idx() }} <span>Selected work</span></div>
-      <h2>Systems running in production</h2>
-      <p>Each one taken end to end — requirements, build, deployment, and the training that made it stick.</p>
+      <h2>These are live right now, with real people using them</h2>
+      <p>Not prototypes or coursework. Each of these was taken from a first conversation through to a team running it
+         on their own — and you can open every one of them yourself.</p>
     </div>
 
     <div class="shot-grid">
       @foreach($projects as $i => $p)
-        <a href="{{ route('portfolio.project', $p) }}" wire:navigate class="shot" data-rise style="--d:{{ $i * 80 }}ms;">
+        <article class="shot" data-rise style="--d:{{ $i * 80 }}ms;">
           <div class="shot-frame">
-            <div class="shot-bar" aria-hidden="true"><i></i><i></i><i></i><span class="u"></span></div>
-            <div class="shot-shot">
+            {{-- The address bar carries the project's real domain. It is doing
+                 the same job the whole card is: this is a running site, not a
+                 mock-up, and here is where to find it. --}}
+            <div class="shot-bar" aria-hidden="true">
+              <i></i><i></i><i></i>
+              <span class="u">{{ $p->external_link ? parse_url($p->external_link, PHP_URL_HOST) : '' }}</span>
+            </div>
+            <a href="{{ route('portfolio.project', $p) }}" wire:navigate class="shot-shot"
+               aria-label="{{ $p->title }} case study">
               <x-ph :src="$p->cover_image ? 'storage/'.$p->cover_image : 'images/systems/'.$p->slug.'.png'"
                     :alt="$p->title.' — screenshot'"
-                    label="Screenshot"
-                    size="1600 × 1000px"
-                    ratio="16 / 10"
-                    icon="fa-desktop" />
-            </div>
+                    label="Screenshot" size="1600 × 1000px" ratio="16 / 10" icon="fa-desktop" />
+            </a>
           </div>
           <div class="shot-body">
             <div class="tag-row">
-              @foreach(array_slice($p->tags ?? [], 0, 2) as $t)<span class="tag">{{ $t }}</span>@endforeach
+              @foreach(array_slice($p->tags ?? [], 0, 3) as $t)<span class="tag">{{ $t }}</span>@endforeach
             </div>
-            <h3>{{ $p->title }}</h3>
-            <p>{{ \Illuminate\Support\Str::limit($p->description, 105) }}</p>
-            <span class="link">View case study <i class="fas fa-arrow-right"></i></span>
+            <h3><a href="{{ route('portfolio.project', $p) }}" wire:navigate>{{ $p->title }}</a></h3>
+            <p>{{ \Illuminate\Support\Str::limit($p->description, 100) }}</p>
+
+            @if(!empty($p->highlights))
+              <ul class="shot-points">
+                @foreach(array_slice($p->highlights, 0, 2) as $point)
+                  <li>{{ \Illuminate\Support\Str::limit($point, 72) }}</li>
+                @endforeach
+              </ul>
+            @endif
+
+            <div class="shot-actions">
+              <a href="{{ route('portfolio.project', $p) }}" wire:navigate class="link">
+                Read the case study <i class="fas fa-arrow-right"></i>
+              </a>
+              @if($p->external_link)
+                <a href="{{ $p->external_link }}" target="_blank" rel="noopener" data-no-navigate class="shot-live">
+                  <i class="fas fa-arrow-up-right-from-square"></i> Open it live
+                </a>
+              @endif
+            </div>
           </div>
-        </a>
+        </article>
       @endforeach
     </div>
 
@@ -191,7 +214,7 @@
   <div class="wrap">
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ $idx() }} <span>In pictures</span></div>
-      <h2>The work, and the people it gets built with</h2>
+      <h2>See who you would actually be working with</h2>
     </div>
     <div class="photo-strip" data-rise>
       @foreach($photos as $photo)
@@ -216,8 +239,8 @@
   <div class="wrap">
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ $idx() }} <span>Blog</span></div>
-      <h2>Things I have written down</h2>
-      <p>Notes on delivery, teaching, and the systems I work on.</p>
+      <h2>What I have been writing about</h2>
+      <p>What I have learned delivering systems and teaching people to build them — written down so you can use it too.</p>
     </div>
     <div class="work-grid">
       @foreach($posts as $i => $post)
@@ -245,7 +268,7 @@
 @if($services->count())
 <section>
   <div class="wrap">
-    <div class="sec-head" data-rise><div class="sec-idx">{{ $idx() }} <span>What I do</span></div><h2>A few of the ways I can help</h2></div>
+    <div class="sec-head" data-rise><div class="sec-idx">{{ $idx() }} <span>What I do</span></div><h2>Tell me what you need built</h2></div>
     <div class="icon-row" data-rise>
       @foreach($services as $s)
         <a href="{{ route('portfolio.services') }}" wire:navigate>
@@ -295,7 +318,7 @@
 <section class="band-deep" style="text-align:center;">
   <div class="wrap">
     <h2 data-rise>Let's build something together</h2>
-    <p class="lead" style="max-width:480px;margin:12px auto 26px;" data-rise>Have a project, a role, or just a question? I'd love to hear from you.</p>
+    <p class="lead" style="max-width:480px;margin:12px auto 26px;" data-rise>Tell me what the problem is and I will tell you honestly whether I am the right person for it.</p>
     <div data-rise><a href="{{ route('contact') }}" wire:navigate class="btn gold lg cta">
       <span class="cta-a">Get in touch</span>
       <span class="cta-b" aria-hidden="true">Send me a message <i class="fas fa-arrow-right"></i></span>
