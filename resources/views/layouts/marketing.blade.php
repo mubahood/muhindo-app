@@ -96,10 +96,40 @@
     .icon-row span{font-size:13px;font-weight:600;color:var(--tx);}
 
     /* page hero (every sub-page) — shorter, left-aligned, no stat row */
-    .page-hero{padding:34px 0 30px;border-bottom:1px solid var(--line);background:var(--surface);}
-    .page-hero .eyebrow{margin-bottom:8px;}
-    .page-hero h1{font-size:28px;font-weight:400;margin-bottom:6px;}
-    .page-hero p{color:var(--tx2);font-size:13.5px;font-weight:450;max-width:560px;}
+    /* ── Page header ──────────────────────────────────────────────────────
+       One definition. This had fragmented into three rules in different parts
+       of the sheet, and the last of them set `padding:26px 0 0` — which is why
+       every page header sat with its content pressed against whatever came
+       next.
+
+       The ruled paper and the warm light are built in rather than asked for
+       per page, so every header carries the pattern and none of them can be
+       forgotten. Both are masked so they fade out before the section rule,
+       which is what stops a texture reading as a box. */
+    .page-hero{position:relative;overflow:hidden;padding:30px 0 26px;
+      border-bottom:1px solid var(--line);background:var(--surface);}
+    .page-hero .wrap{position:relative;z-index:1;}
+    .page-hero::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+      background-image:
+        linear-gradient(var(--line) 1px,transparent 1px),
+        linear-gradient(90deg,var(--line) 1px,transparent 1px),
+        linear-gradient(rgba(231,227,216,.55) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(231,227,216,.55) 1px,transparent 1px);
+      background-size:96px 96px,96px 96px,24px 24px,24px 24px;
+      background-position:-1px -1px;
+      -webkit-mask-image:linear-gradient(105deg,#000 0%,rgba(0,0,0,.35) 46%,transparent 78%);
+      mask-image:linear-gradient(105deg,#000 0%,rgba(0,0,0,.35) 46%,transparent 78%);
+      opacity:.85;}
+    .page-hero::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+      background:
+        radial-gradient(680px 260px at 88% 8%,rgba(184,147,63,.16),transparent 64%),
+        radial-gradient(520px 220px at 4% 96%,rgba(11,31,58,.06),transparent 62%);}
+
+    /* A consistent rhythm: label, title, one line of air, the sentence. */
+    .page-hero .eyebrow{margin-bottom:9px;}
+    .page-hero h1{font-size:30px;font-weight:300;margin-bottom:7px;letter-spacing:-.02em;}
+    .page-hero p{color:var(--tx2);font-size:13.5px;font-weight:450;line-height:1.6;max-width:560px;margin-bottom:0;}
+    .page-hero .subnav,.page-hero .trust-chips{margin-top:16px;}
 
     /* subnav — cross-links between the about-family pages */
     .subnav{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
@@ -189,7 +219,10 @@
       padding:9px 12px;font-family:var(--font);font-size:13px;color:var(--tx);}
     .filter-bar input[type=text]{flex:1;min-width:180px;}
     .filter-bar select:focus,.filter-bar input[type=text]:focus{outline:2px solid var(--gold);outline-offset:-1px;}
-    .trust-chips{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:center;margin-top:16px;font-size:12.5px;color:var(--tx2);}
+    .trust-chips{display:flex;flex-wrap:wrap;gap:7px 9px;font-size:11.5px;font-weight:500;color:var(--tx2);}
+    .trust-chips span{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;
+      padding:5px 10px;background:var(--bg);border:1px solid var(--line);}
+    .trust-chips i{font-size:10.5px;color:var(--gold-d);}
     .trust-chips span{white-space:nowrap;}
     .course-cover{width:calc(100% + 48px);aspect-ratio:16/9;background:linear-gradient(135deg,var(--pri),var(--pri-d));
       display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:26px;margin:-24px -24px 14px;}
@@ -395,7 +428,6 @@
     .card h3{font-size:14px;margin-bottom:4px;}
     .card p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.55;}
     .proj-card{padding:18px;gap:8px;}
-    .page-hero{padding:26px 0 0;}
 
     /* ── Blended bands ───────────────────────────────────────────────────
        Sections used to meet at a hard 1px rule, which chops the page into
@@ -458,10 +490,6 @@
     .subnav a.on::after{transform:scaleX(1);}
 
     /* ── Page hero: asymmetric, with the section word set as a watermark ─── */
-    .page-hero{position:relative;overflow:hidden;}
-    .page-hero .wrap{position:relative;z-index:1;}
-    .page-hero h1{font-size:30px;font-weight:300;margin-bottom:4px;}
-    .page-hero p{max-width:520px;}
     /* An oversized ghost of the page name, cropped by the section. Gives the
        thin repeated header a piece of typography to hang on without adding
        height, which is what a banner image would have cost. */

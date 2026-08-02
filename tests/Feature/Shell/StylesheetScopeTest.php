@@ -40,6 +40,19 @@ class StylesheetScopeTest extends TestCase
         $this->assertStringContainsString('.acct-trigger .caret{', $css);
     }
 
+    public function test_the_page_header_is_defined_once(): void
+    {
+        /* It had fragmented into three rules in different parts of the sheet,
+           and the last one set `padding:26px 0 0` — so every page header on the
+           site sat with its content pressed against whatever came next. Rules
+           for one component belong in one place, or the last edit silently
+           wins. */
+        $css = $this->layoutCss();
+
+        $this->assertSame(1, preg_match_all('/(?:^|[,}])\s*\.page-hero\s*\{/m', $css),
+            '.page-hero must be defined in exactly one rule');
+    }
+
     private function layoutCss(): string
     {
         $blade = (string) file_get_contents(resource_path('views/layouts/marketing.blade.php'));
