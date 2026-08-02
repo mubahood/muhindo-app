@@ -191,7 +191,9 @@ class PortfolioController extends Controller
             'email' => 'required|email|max:150',
             'subject' => 'nullable|string|max:200',
             'message' => 'required|string|max:5000',
-        ]);
+        ] + \App\Support\Spam\Captcha::rules(), \App\Support\Spam\Captcha::messages());
+
+        unset($data[\App\Support\Spam\Captcha::FIELD]);
 
         $message = ContactMessage::create([
             'name' => $data['name'],

@@ -67,6 +67,7 @@
           <textarea id="message" name="message" required>{{ old('message') }}</textarea>
           @error('message')<div class="field-error">{{ $message }}</div>@enderror
         </div>
+        <x-captcha />
         <button type="submit" class="btn gold lg">Send message</button>
       </form>
     </div>

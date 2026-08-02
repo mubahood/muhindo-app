@@ -50,7 +50,7 @@ class StudentRegistrationController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
             'account_type' => 'required|in:student,client,both',
             'terms' => 'accepted',
-        ]);
+        ] + \App\Support\Spam\Captcha::rules(), \App\Support\Spam\Captcha::messages());
 
         $isStudent = in_array($data['account_type'], ['student', 'both'], true);
         $isClient = in_array($data['account_type'], ['client', 'both'], true);

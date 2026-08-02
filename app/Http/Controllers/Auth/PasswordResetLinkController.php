@@ -25,9 +25,11 @@ class PasswordResetLinkController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // A reset form is an email-flood weapon pointed at other people's
+        // inboxes, not just at this site.
         $request->validate([
             'email' => ['required', 'email'],
-        ]);
+        ] + \App\Support\Spam\Captcha::rules(), \App\Support\Spam\Captcha::messages());
 
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we

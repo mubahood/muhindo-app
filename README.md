@@ -43,6 +43,33 @@ npm run build                # or `npm run dev` while developing
 php artisan serve
 ```
 
+## Spam protection on public forms
+
+Every public form — contact, project brief, register, sign in, password reset —
+runs two independent layers.
+
+1. **Honeypot + timing** (`App\Support\Spam\FormShield`). Always on, needs no
+   keys and no JavaScript. Catches the scripted POST that never loads the page.
+2. **Google reCAPTCHA v2** (`anhskohbo/no-captcha`, gated by
+   `App\Support\Spam\Captcha`). **Off until you add keys.**
+
+To switch reCAPTCHA on, get a v2 "I'm not a robot" pair at
+<https://www.google.com/recaptcha/admin>, add your domains, then set both in
+`.env`:
+
+```
+NOCAPTCHA_SITEKEY=your-site-key
+NOCAPTCHA_SECRET=your-secret
+```
+
+Then `php artisan config:clear`. Every form picks the widget up at once; no code
+changes. Leaving either value empty keeps it off — deliberately, so that
+installing the package cannot start rejecting every submission on a site that
+has never been to the Google console. Layer 1 covers the forms either way.
+
+Note that reCAPTCHA is a call to Google on every submission, so a visitor with
+Google blocked cannot submit while it is on.
+
 ## Tests
 
 ```bash

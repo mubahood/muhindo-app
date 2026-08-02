@@ -29,7 +29,15 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
-        ];
+        ] + \App\Support\Spam\Captcha::rules();
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return \App\Support\Spam\Captcha::messages();
     }
 
     /**

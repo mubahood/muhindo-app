@@ -115,6 +115,7 @@
         @error('description')<div class="field-error">{{ $message }}</div>@enderror
       </div>
 
+      <x-captcha />
       <button type="submit" class="btn gold lg">Send project details</button>
     </form>
   </div>

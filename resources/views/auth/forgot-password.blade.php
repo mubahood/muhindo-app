@@ -15,6 +15,7 @@
 
 <form method="POST" action="{{ route('password.email') }}">
   @csrf
+  <x-form-shield id="forgot-password" />
   <div class="a-field">
     <label class="a-label" for="email">Email address</label>
     <div class="a-inwrap">
@@ -22,6 +23,7 @@
       <input class="a-input" id="email" type="email" name="email" value="{{ old('email') }}" placeholder="you@example.com" required autofocus autocomplete="username">
     </div>
   </div>
+  <x-captcha />
   <button type="submit" class="a-btn gold"><i class="fas fa-paper-plane"></i> Email me a reset link</button>
 </form>
 

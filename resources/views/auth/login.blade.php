@@ -18,6 +18,7 @@
 
 <form method="POST" action="{{ route('login') }}">
   @csrf
+  <x-form-shield id="login" />
   @if($intendedCourse)
     <input type="hidden" name="intended_course" value="{{ $intendedCourse->slug }}">
     @if(request('coupon_code'))<input type="hidden" name="coupon_code" value="{{ request('coupon_code') }}">@endif
@@ -47,6 +48,7 @@
   </div>
 
   {{-- No "remember me" checkbox — staying signed in until sign-out is the default policy. --}}
+  <x-captcha />
   <button type="submit" class="a-btn gold" style="margin-top:6px;"><i class="fas fa-right-to-bracket"></i> Sign in</button>
 </form>
 

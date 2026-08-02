@@ -41,7 +41,11 @@ class ProjectInquiryController extends Controller
             'budget_range' => 'nullable|in:under_2m,2m_5m,5m_10m,over_10m,not_sure',
             'timeline' => 'nullable|in:asap,1_3_months,3_6_months,not_sure',
             'description' => 'required|string|max:5000',
-        ]);
+        ] + \App\Support\Spam\Captcha::rules(), \App\Support\Spam\Captcha::messages());
+
+        // Never let the captcha token reach the model — ProjectInquiry is
+        // created straight from $data and has no such column.
+        unset($data[\App\Support\Spam\Captcha::FIELD]);
 
         // Link the request to the signed-in account so they can follow it in their
         // portal; guests still submit anonymously exactly as before.

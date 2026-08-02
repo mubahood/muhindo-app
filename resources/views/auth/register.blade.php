@@ -107,6 +107,7 @@
 
   <label class="a-check"><input type="checkbox" name="terms" value="1" required> I agree to the <a href="{{ route('terms') }}" target="_blank">Terms</a> and <a href="{{ route('privacy') }}" target="_blank">Privacy Policy</a></label>
 
+  <x-captcha />
   <button type="submit" class="a-btn gold"><i class="fas fa-user-plus"></i> Create account</button>
 </form>
 
