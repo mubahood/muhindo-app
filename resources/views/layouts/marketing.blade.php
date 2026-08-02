@@ -705,7 +705,10 @@
       font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden;}
     .term-bar{display:flex;align-items:center;gap:6px;padding:9px 12px;
       background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.12);}
-    .term-bar i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.22);display:block;}
+    .term-bar i{width:9px;height:9px;border-radius:50%;display:block;background:rgba(255,255,255,.22);}
+    .term-bar i:nth-child(1){background:#ff5f57;}
+    .term-bar i:nth-child(2){background:#febc2e;}
+    .term-bar i:nth-child(3){background:#28c840;}
     .term-bar .path{margin-left:10px;font-size:11px;color:rgba(255,255,255,.42);letter-spacing:.02em;}
     .term-body{padding:14px 6px 12px;}
     .term-line{font-size:12px;color:rgba(255,255,255,.5);padding:2px 12px;}
@@ -997,7 +1000,13 @@
        product shot, and hides the fact that the shots differ in edge and crop. */
     .shot-frame{border-bottom:1px solid var(--line);background:var(--surface-2);}
     .shot-bar{display:flex;align-items:center;gap:5px;padding:8px 10px;border-bottom:1px solid var(--line);}
-    .shot-bar i{width:8px;height:8px;border-radius:50%;background:var(--line-2);display:block;}
+    /* macOS traffic lights. Eight pixels of colour is all it takes for the
+       frame to read as a real window rather than a decorative border — and the
+       three positions are so familiar that getting them wrong is noticed. */
+    .shot-bar i{width:8px;height:8px;border-radius:50%;display:block;background:var(--line-2);}
+    .shot-bar i:nth-child(1){background:#ff5f57;}
+    .shot-bar i:nth-child(2){background:#febc2e;}
+    .shot-bar i:nth-child(3){background:#28c840;}
     .shot-bar .u{flex:1;margin-left:6px;height:14px;background:var(--bg);border:1px solid var(--line);}
     .shot-shot{aspect-ratio:16/10;overflow:hidden;background:var(--bg);}
     .shot-shot .ph{height:100%;border:none;}
