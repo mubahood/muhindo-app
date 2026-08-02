@@ -30,7 +30,7 @@ class CourseCompletedNotification extends Notification implements ShouldQueue
             ->line("You've finished \"{$course->title}\" — nice work.");
 
         if ($this->enrollment->certificate) {
-            $mail->action('View your certificate', route('learn.certificate', $this->enrollment->certificate));
+            $mail->action('View your certificate', route('learn.certificate.download', $this->enrollment->certificate));
         }
 
         return $mail;

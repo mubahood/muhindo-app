@@ -11,7 +11,7 @@
     <a href="{{ route('learn.quizzes.index', $course) }}" wire:navigate class="{{ request()->routeIs('learn.quiz*') ? 'on' : '' }}"><i class="fas fa-list-check"></i><span>Quizzes</span></a>
     <a href="{{ route('learn.assignments.index', $course) }}" wire:navigate class="{{ request()->routeIs('learn.assignment*') ? 'on' : '' }}"><i class="fas fa-file-pen"></i><span>Tasks</span></a>
     <a href="{{ route('learn.grades', $course) }}" wire:navigate class="{{ request()->routeIs('learn.grades') ? 'on' : '' }}"><i class="fas fa-chart-simple"></i><span>Grades</span></a>
-    <a href="{{ route('learn.announcements.index', $course) }}" wire:navigate class="{{ request()->routeIs('learn.announcements.*') ? 'on' : '' }}"><i class="fas fa-bullhorn"></i><span>News</span></a>
+    <a href="{{ route('learn.certificate', $course) }}" wire:navigate class="{{ request()->routeIs('learn.certificate') ? 'on' : '' }}"><i class="fas fa-award"></i><span>Certificate</span></a>
     <a href="{{ route('learn.discussions.index', $course) }}" wire:navigate class="{{ request()->routeIs('learn.discussions.*') ? 'on' : '' }}"><i class="fas fa-circle-question"></i><span>Q&amp;A</span></a>
   </div>
 

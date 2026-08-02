@@ -82,7 +82,7 @@
           @if($expired)
             <span class="badge-tb badge-danger">Access expired</span>
             @if($enrollment->certificate)
-              <a href="{{ route('learn.certificate', $enrollment->certificate) }}" target="_blank" rel="noopener"
+              <a href="{{ route('learn.certificate.download', $enrollment->certificate) }}" target="_blank" rel="noopener"
                  class="btn-tb btn-tb-ghost btn-tb-sm"><i class="fas fa-award"></i> Certificate</a>
             @endif
           @elseif($enrollment->status === 'pending')
@@ -104,7 +104,7 @@
               <span class="sr-only">— {{ $course->title }}</span>
             </a>
             @if($enrollment->certificate)
-              <a href="{{ route('learn.certificate', $enrollment->certificate) }}" target="_blank" rel="noopener"
+              <a href="{{ route('learn.certificate.download', $enrollment->certificate) }}" target="_blank" rel="noopener"
                  class="btn-tb btn-tb-ghost btn-tb-sm"><i class="fas fa-award"></i> Certificate</a>
             @endif
           @else

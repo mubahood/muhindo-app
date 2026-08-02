@@ -167,7 +167,7 @@ class LearningController extends Controller
                 'course_completed' => $enrollment->status === 'completed',
                 'next_lesson_url' => $next ? route('learn.lesson', [$course, $next]) : null,
                 'next_lesson_title' => $next?->title,
-                'certificate_url' => $certificate ? route('learn.certificate', $certificate) : null,
+                'certificate_url' => $certificate ? route('learn.certificate.download', $certificate) : null,
             ]);
         }
 
@@ -214,6 +214,26 @@ class LearningController extends Controller
         return response()->json([
             'success' => true,
             'active_seconds' => $progress->active_seconds,
+        ]);
+    }
+
+    /**
+     * The certificate, inside the course.
+     *
+     * Reachable whether or not it has been earned. A student who has not
+     * finished needs somewhere that says what is left far more than a student
+     * who has finished needs somewhere to download from, and hiding the page
+     * until then answers the question "where is my certificate?" with silence.
+     */
+    public function certificatePage(Request $request, Course $course): View
+    {
+        $enrollment = $this->enrollmentFor($request, $course);
+
+        return view('learn.certificate', [
+            'course' => $course,
+            'enrollment' => $enrollment,
+            'shell' => new \App\Support\Learning\LearnShell($course, $request->user()),
+            'report' => $this->certificates->progressReport($enrollment),
         ]);
     }
 

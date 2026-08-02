@@ -301,7 +301,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 */
 Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () {
     Route::get('/', [LearningController::class, 'index'])->name('index');
-    Route::get('certificates/{certificate}', [LearningController::class, 'certificate'])->name('certificate');
+    // The page a student visits; the stream is what the button on it points at.
+    Route::get('{course}/certificate', [LearningController::class, 'certificatePage'])->name('certificate');
+    Route::get('certificates/{certificate}', [LearningController::class, 'certificate'])->name('certificate.download');
     Route::get('{course:slug}', [LearningController::class, 'show'])->name('course');
 
     // These literal-prefix routes (GET {course:slug}/quizzes, {course:slug}/assignments) MUST be

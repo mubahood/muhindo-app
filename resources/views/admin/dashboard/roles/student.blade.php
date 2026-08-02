@@ -147,7 +147,7 @@
   <div class="tb-card">
     <div class="todo-list">
       @foreach($certificates as $certificate)
-        <a href="{{ route('learn.certificate', $certificate) }}" target="_blank" class="todo-row">
+        <a href="{{ route('learn.certificate.download', $certificate) }}" target="_blank" class="todo-row">
           <span class="todo-icon"><i class="fas fa-award"></i></span>
           <span class="todo-main">
             <span class="todo-title">{{ $certificate->enrollment->course->title }}</span>

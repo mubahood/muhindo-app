@@ -48,6 +48,48 @@ class CertificateService
         return $this->issue($enrollment);
     }
 
+    /**
+     * What stands between this student and their certificate.
+     *
+     * Built from the same two checks issueIfEligible() makes, so the page can
+     * never tell somebody they are finished while issuance disagrees — or
+     * leave them staring at a locked certificate with no idea what is missing,
+     * which is the whole reason this exists.
+     *
+     * @return array{
+     *   certificate: Certificate|null, eligible: bool, percent: int,
+     *   lessonsRemaining: \Illuminate\Support\Collection<int,\App\Models\Lesson>,
+     *   quizRequirementMet: bool, gatingQuizzes: \Illuminate\Support\Collection<int,\App\Models\Quiz>
+     * }
+     */
+    public function progressReport(Enrollment $enrollment): array
+    {
+        $enrollment->loadMissing('course.modules.lessons');
+
+        $completedLessonIds = $enrollment->progressRecords()
+            ->whereNotNull('completed_at')->pluck('lesson_id');
+
+        $lessonsRemaining = $enrollment->course->modules
+            ->flatMap->lessons
+            ->where('is_published', true)
+            ->reject(fn ($lesson) => $completedLessonIds->contains($lesson->id))
+            ->values();
+
+        $quizRequirementMet = $this->gradebook->meetsCertificateQuizRequirement($enrollment);
+
+        return [
+            'certificate' => $enrollment->certificate,
+            'eligible' => $lessonsRemaining->isEmpty() && $quizRequirementMet,
+            'percent' => $enrollment->progressPercent(),
+            'lessonsRemaining' => $lessonsRemaining,
+            'quizRequirementMet' => $quizRequirementMet,
+            'gatingQuizzes' => $enrollment->course->quizzes()
+                ->where('is_published', true)
+                ->where('counts_toward_certificate', true)
+                ->get(),
+        ];
+    }
+
     public function issue(Enrollment $enrollment): Certificate
     {
         try {

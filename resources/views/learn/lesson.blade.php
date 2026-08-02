@@ -269,6 +269,14 @@
           <i class="fas fa-arrow-right"></i>
         </button>
       </form>
+
+      {{-- The end of the course. Once the last topic is done the button above
+           hides itself, which used to leave the bar empty and the student with
+           nowhere to go — the one moment they most want their certificate. --}}
+      <a href="{{ route('learn.certificate', $course) }}" wire:navigate class="btn gold"
+         x-show="completed && !nextLessonUrl && !showAdvance" x-cloak>
+        <i class="fas fa-award"></i> Get your certificate
+      </a>
     </div>
   </div>
 @endsection
