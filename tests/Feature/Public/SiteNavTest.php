@@ -35,7 +35,7 @@ class SiteNavTest extends TestCase
         $about = collect(SiteNav::items())->firstWhere('label', 'About Me');
 
         $this->assertSame(
-            ['About me', 'My work', 'My CV', 'Qualifications', 'Skills & experience', 'Research'],
+            ['About me', 'My work', 'My CV', 'Qualifications', 'Skills & experience', 'Research', 'Gallery'],
             array_column($about['children'], 'label')
         );
     }

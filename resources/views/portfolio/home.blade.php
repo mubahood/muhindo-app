@@ -178,6 +178,62 @@
 </section>
 @endif
 
+{{-- ═══ In pictures ═══ --}}
+@if($photos->isNotEmpty())
+<section class="tex-glow" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head left" data-rise>
+      <div class="sec-idx">{{ $idx() }} <span>In pictures</span></div>
+      <h2>The work, and the people it gets built with</h2>
+    </div>
+    <div class="photo-strip" data-rise>
+      @foreach($photos as $photo)
+        <a href="{{ route('gallery.index') }}" wire:navigate title="{{ $photo->title }}">
+          <img src="{{ $photo->thumbUrl() }}" alt="{{ $photo->altText() }}"
+               width="{{ $photo->width }}" height="{{ $photo->height }}" loading="lazy" decoding="async">
+        </a>
+      @endforeach
+    </div>
+    <p style="text-align:center;margin-top:14px;">
+      <a href="{{ route('gallery.index') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
+        See the gallery <i class="fas fa-arrow-right"></i>
+      </a>
+    </p>
+  </div>
+</section>
+@endif
+
+{{-- ═══ Writing ═══ --}}
+@if($posts->isNotEmpty())
+<section class="band-surface">
+  <div class="wrap">
+    <div class="sec-head left" data-rise>
+      <div class="sec-idx">{{ $idx() }} <span>Insights</span></div>
+      <h2>Things I have written down</h2>
+      <p>Notes on delivery, teaching, and the systems I work on.</p>
+    </div>
+    <div class="work-grid">
+      @foreach($posts as $i => $post)
+        <a href="{{ route('insights.show', $post) }}" wire:navigate class="work-card" data-rise style="--d:{{ $i * 60 }}ms;">
+          <div class="work-body">
+            <div class="tag-row">
+              @if($post->category)<span class="tag">{{ $post->category }}</span>@endif
+              <span class="tag" style="background:var(--gold-soft);color:var(--gold-d);">{{ $post->read_minutes }} min read</span>
+            </div>
+            <h3>{{ $post->title }}</h3>
+            <p>{{ \Illuminate\Support\Str::limit($post->excerpt, 110) }}</p>
+            <span class="link">Read article <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+      @endforeach
+    </div>
+    <div style="text-align:center;margin-top:24px;" data-rise>
+      <a href="{{ route('insights.index') }}" wire:navigate class="btn ghost">All articles <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+@endif
+
 {{-- ═══ What I can help with ═══ --}}
 @if($services->count())
 <section @class(['band-surface' => ! count($testimonials)])>

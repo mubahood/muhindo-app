@@ -9,13 +9,15 @@
   <div class="wrap">
     <div class="eyebrow">Products</div>
     <h1>What I've built for myself</h1>
-    @include('portfolio.partials.subnav')
   </div>
 </section>
 
 @if(count($products))
 <section class="tex-grid">
   <div class="wrap">
+    <div class="rail-layout">
+      @include('portfolio.partials.rail')
+      <div>
     <div class="grid">
       @foreach($products as $p)
         <div class="card">
@@ -26,6 +28,8 @@
           @if(!empty($p['link']))<a href="{{ $p['link'] }}" target="_blank" rel="noopener" class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);display:block;margin-top:10px;">Visit <i class="fas fa-arrow-up-right-from-square"></i></a>@endif
         </div>
       @endforeach
+    </div>
+      </div>
     </div>
   </div>
 </section>

@@ -31,6 +31,9 @@ class PortfolioController extends Controller
             'projects' => PortfolioProject::orderBy('sort_order')->limit(3)->get(),
             'courses' => Course::where('is_published', true)->latest()->limit(3)->get(),
             'clients' => $this->json('portfolio.clients', []),
+            'posts' => \App\Models\Post::published()->latest('published_at')->limit(3)->get(),
+            'photos' => \App\Models\GalleryPhoto::published()->where('is_featured', true)
+                ->orderBy('sort_order')->limit(6)->get(),
             // Omitted from the page entirely until real, attributable quotes exist.
             'testimonials' => $this->json('portfolio.testimonials', []),
             'jsonLd' => $this->homeJsonLd($identity, $contact),
@@ -88,6 +91,9 @@ class PortfolioController extends Controller
         return view('portfolio.about', [
             'about' => $this->json('portfolio.about'),
             'clients' => $this->json('portfolio.clients', []),
+            'posts' => \App\Models\Post::published()->latest('published_at')->limit(3)->get(),
+            'photos' => \App\Models\GalleryPhoto::published()->where('is_featured', true)
+                ->orderBy('sort_order')->limit(6)->get(),
         ]);
     }
 
@@ -143,6 +149,9 @@ class PortfolioController extends Controller
             'about' => $this->json('portfolio.about'),
             'stats' => $this->json('portfolio.stats', []),
             'clients' => $this->json('portfolio.clients', []),
+            'posts' => \App\Models\Post::published()->latest('published_at')->limit(3)->get(),
+            'photos' => \App\Models\GalleryPhoto::published()->where('is_featured', true)
+                ->orderBy('sort_order')->limit(6)->get(),
             'research' => $this->json('portfolio.research'),
             'experience' => Experience::orderBy('sort_order')->get(),
             'education' => Education::orderBy('sort_order')->get(),

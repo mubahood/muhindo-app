@@ -66,12 +66,14 @@
     <div class="eyebrow">Curriculum vitae</div>
     <h1>The full record</h1>
     <p>Everything on one page — assembled from the same records the rest of this site reads, so it is never out of date.</p>
-    @include('portfolio.partials.subnav')
   </div>
 </section>
 
 <section class="tex-grid">
   <div class="wrap">
+    <div class="rail-layout">
+      @include('portfolio.partials.rail')
+      <div>
     <div class="cv">
 
       <div class="cv-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:18px;flex-wrap:wrap;">
@@ -192,6 +194,8 @@
         </section>
       @endif
 
+    </div>
+      </div>
     </div>
   </div>
 </section>

@@ -10,19 +10,46 @@
     <div class="eyebrow">About</div>
     <h1>Systems that hold up in the real world</h1>
     <p>{{ $about['lead'] ?? '' }}</p>
-    @include('portfolio.partials.subnav')
   </div>
 </section>
 
 <section class="tex-grid">
   <div class="wrap">
+    <div class="rail-layout">
+      @include('portfolio.partials.rail')
+      <div>
     <div style="max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
       @foreach($about['paragraphs'] ?? [] as $p)
         <p class="lead">{{ $p }}</p>
       @endforeach
     </div>
+      </div>
+    </div>
   </div>
 </section>
+
+@if($photos->isNotEmpty())
+<section class="tex-glow" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head left" data-rise>
+      <div class="sec-idx">In pictures</div>
+      <h2>What the work actually looks like</h2>
+    </div>
+    <div class="photo-strip" data-rise>
+      @foreach($photos as $photo)
+        <a href="{{ route('gallery.index') }}" wire:navigate title="{{ $photo->title }}">
+          <img src="{{ $photo->thumbUrl() }}" alt="{{ $photo->altText() }}" loading="lazy" decoding="async">
+        </a>
+      @endforeach
+    </div>
+    <p style="text-align:center;margin-top:14px;">
+      <a href="{{ route('gallery.index') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
+        See the gallery <i class="fas fa-arrow-right"></i>
+      </a>
+    </p>
+  </div>
+</section>
+@endif
 
 @if(count($clients))
 <section class="band-surface">

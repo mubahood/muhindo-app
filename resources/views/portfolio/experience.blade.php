@@ -10,13 +10,15 @@
     <div class="eyebrow">Career</div>
     <h1>Experience</h1>
     <p>Where I've delivered systems and led teams.</p>
-    @include('portfolio.partials.subnav')
   </div>
 </section>
 
 @if($experience->count())
 <section class="tex-grid">
   <div class="wrap">
+    <div class="rail-layout">
+      @include('portfolio.partials.rail')
+      <div>
     <div class="tl">
       @foreach($experience as $e)
         <div class="tl-row">
@@ -28,6 +30,8 @@
           </div>
         </div>
       @endforeach
+    </div>
+      </div>
     </div>
   </div>
 </section>

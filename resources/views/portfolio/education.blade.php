@@ -9,13 +9,15 @@
   <div class="wrap">
     <div class="eyebrow">Education</div>
     <h1>Academic background</h1>
-    @include('portfolio.partials.subnav')
   </div>
 </section>
 
 @if($education->count())
 <section class="tex-grid">
   <div class="wrap">
+    <div class="rail-layout">
+      @include('portfolio.partials.rail')
+      <div>
     <div class="tl">
       @foreach($education as $ed)
         <div class="tl-row">
@@ -27,6 +29,8 @@
           </div>
         </div>
       @endforeach
+    </div>
+      </div>
     </div>
   </div>
 </section>

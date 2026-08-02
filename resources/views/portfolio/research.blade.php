@@ -9,13 +9,15 @@
   <div class="wrap">
     <div class="eyebrow">Research</div>
     <h1>Graduate research</h1>
-    @include('portfolio.partials.subnav')
   </div>
 </section>
 
 @if($research)
 <section class="tex-grid">
   <div class="wrap">
+    <div class="rail-layout">
+      @include('portfolio.partials.rail')
+      <div>
     <div class="feature-box" style="max-width:720px;margin:0 auto;">
       <div class="sub">{{ $research['institution'] ?? '' }}</div>
       <h3>{{ $research['title'] ?? '' }}</h3>
@@ -35,6 +37,8 @@
 
       <div class="pill-row">
         @foreach($research['areas'] ?? [] as $a)<span class="pill">{{ $a }}</span>@endforeach
+      </div>
+    </div>
       </div>
     </div>
   </div>

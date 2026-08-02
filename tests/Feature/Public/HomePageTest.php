@@ -5,6 +5,7 @@ namespace Tests\Feature\Public;
 use App\Models\PortfolioProject;
 use App\Support\Settings;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
@@ -38,29 +39,49 @@ class HomePageTest extends TestCase
 
     public function test_a_missing_image_renders_a_labelled_slot_instead_of_a_broken_page(): void
     {
-        $this->assertFileDoesNotExist(public_path('images/portrait.jpg'));
+        // The portrait slot has since been filled, so the mechanism is asserted
+        // against the project screenshots, which are still to come.
+        $project = PortfolioProject::create([
+            'title' => 'A System', 'slug' => 'a-system',
+            'description' => 'Delivered end to end.', 'sort_order' => 0,
+        ]);
+
+        $this->assertFileDoesNotExist(public_path("images/systems/{$project->slug}.png"));
 
         $this->get(route('home'))
             ->assertOk()
-            ->assertSee('Your professional portrait')
+            ->assertSee('Screenshot')
             // The slot names the exact file it is waiting for.
-            ->assertSee('public/images/portrait.jpg');
+            ->assertSee("public/images/systems/{$project->slug}.png");
     }
 
     public function test_a_supplied_image_replaces_its_slot(): void
     {
-        $path = public_path('images/portrait.jpg');
+        /* The slot resolves against public_path, so proving it picks a real file
+           up means writing one there. The name is randomised and namespaced so
+           this can never collide with a genuine asset — an earlier version of
+           this test used images/portrait.jpg and its cleanup deleted the site's
+           actual portrait. A test may not be able to destroy production files. */
+        $slug = 'zz-test-'.Str::random(8);
+        $path = public_path("images/systems/{$slug}.png");
         @mkdir(dirname($path), 0755, true);
         file_put_contents($path, 'not-a-real-jpeg-but-a-real-file');
+
+        PortfolioProject::create([
+            'title' => 'Supplied System', 'slug' => $slug,
+            'description' => 'Has a screenshot.', 'sort_order' => 0,
+        ]);
 
         try {
             $this->get(route('home'))
                 ->assertOk()
-                ->assertSee('images/portrait.jpg')
-                ->assertDontSee('Your professional portrait');
+                ->assertSee("images/systems/{$slug}.png")
+                ->assertDontSee("public/images/systems/{$slug}.png");
         } finally {
             @unlink($path);
         }
+
+        $this->assertFileDoesNotExist($path, 'the test must leave nothing behind in public/');
     }
 
     public function test_a_client_without_a_logo_file_still_shows_as_a_wordmark(): void

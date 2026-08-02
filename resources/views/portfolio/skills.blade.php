@@ -10,13 +10,15 @@
     <div class="eyebrow">Toolbox</div>
     <h1>Skills</h1>
     <p>What I reach for, grouped by category — {{ $skills->flatten()->count() }} across {{ $skills->count() }} areas.</p>
-    @include('portfolio.partials.subnav')
   </div>
 </section>
 
 @if($skills->count())
 <section class="tex-grid">
   <div class="wrap">
+    <div class="rail-layout">
+      @include('portfolio.partials.rail')
+      <div>
     <div class="skill-cols">
       @foreach($skills as $category => $items)
         @php
@@ -42,6 +44,8 @@
           </ul>
         </div>
       @endforeach
+    </div>
+      </div>
     </div>
   </div>
 </section>

@@ -656,6 +656,111 @@
     .work-body .link i{transition:transform .22s;}
     .work-card:hover .work-body .link i{transform:translateX(4px);}
 
+    /* ── Vertical section rail (the about-family) ─────────────────────────
+       The horizontal tab strip only showed where you were; every other section
+       was a word you had to read and click to find out about. As a rail down
+       the side, all of them stay on screen beside the content — you can see
+       what is next without going there, which is the whole point of a
+       sub-navigation. It sticks, so it is still there after scrolling. */
+    .rail-layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:34px;align-items:start;}
+    .rail{position:sticky;top:calc(var(--hd) + 14px);display:flex;flex-direction:column;}
+    .rail-h{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tx3);
+      padding:0 0 8px;border-bottom:1px solid var(--line);margin-bottom:4px;}
+    .rail a{position:relative;display:flex;align-items:center;gap:10px;padding:8px 10px;
+      font-size:13px;font-weight:500;color:var(--tx2);border-left:2px solid transparent;transition:.15s;}
+    .rail a .ri{width:16px;text-align:center;font-size:11.5px;color:var(--tx3);transition:color .15s;}
+    .rail a:hover{background:var(--surface);color:var(--tx);}
+    .rail a:hover .ri{color:var(--gold-d);}
+    .rail a.on{background:var(--surface);border-left-color:var(--gold);color:var(--pri);font-weight:600;}
+    .rail a.on .ri{color:var(--gold-d);}
+    /* A one-line description of each destination, so the rail answers "what is
+       in there" rather than only "what is it called". Hidden on the active
+       item, where the page itself is already the answer. */
+    .rail a .rd{display:block;font-size:10.5px;font-weight:450;color:var(--tx3);line-height:1.35;margin-top:1px;}
+    .rail a.on .rd{display:none;}
+    .rail-foot{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);}
+
+    @media(max-width:900px){
+      /* Below the rail's width it becomes a scrolling strip, still showing the
+         neighbouring sections rather than hiding them behind a menu. */
+      .rail-layout{grid-template-columns:1fr;gap:16px;}
+      .rail{position:static;flex-direction:row;overflow-x:auto;gap:2px;padding-bottom:2px;
+        border-bottom:1px solid var(--line);-webkit-overflow-scrolling:touch;}
+      .rail-h,.rail a .rd,.rail-foot{display:none;}
+      .rail a{border-left:none;border-bottom:2px solid transparent;white-space:nowrap;padding:9px 12px;}
+      .rail a.on{border-left-color:transparent;border-bottom-color:var(--gold);}
+    }
+
+    /* ── Gallery ──────────────────────────────────────────────────────────
+       A column masonry rather than a grid of equal boxes: these photographs
+       are a mix of portrait, landscape and square, and forcing them all into
+       one crop throws away the framing of every shot that is not that shape. */
+    .gal-filters{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line);margin-bottom:16px;}
+    .gal-filters a{position:relative;font-size:12.5px;font-weight:600;color:var(--tx2);padding:9px 14px;}
+    .gal-filters a::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--gold);
+      transform:scaleX(0);transition:transform .24s cubic-bezier(.22,.61,.36,1);}
+    .gal-filters a:hover{color:var(--tx);} .gal-filters a:hover::after{transform:scaleX(.4);}
+    .gal-filters a.on{color:var(--pri);} .gal-filters a.on::after{transform:scaleX(1);}
+    .gal-filters .n{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;color:var(--tx3);margin-left:4px;}
+
+    .gal-grid{columns:4;column-gap:10px;}
+    .gal-item{break-inside:avoid;position:relative;display:block;width:100%;margin:0 0 10px;padding:0;
+      border:1px solid var(--line);background:var(--surface-2);cursor:zoom-in;overflow:hidden;font-family:inherit;
+      transition:border-color .18s,transform .18s;}
+    .gal-item:hover{border-color:var(--gold);transform:translateY(-2px);}
+    .gal-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease,filter .3s;}
+    .gal-item:hover img{transform:scale(1.04);}
+    .gal-cap{position:absolute;left:0;right:0;bottom:0;padding:22px 12px 10px;text-align:left;
+      background:linear-gradient(to top,rgba(6,15,31,.86),transparent);
+      opacity:0;transform:translateY(6px);transition:opacity .22s,transform .22s;}
+    .gal-item:hover .gal-cap,.gal-item:focus-visible .gal-cap{opacity:1;transform:none;}
+    .gal-t{display:block;font-size:12.5px;font-weight:600;color:#fff;line-height:1.3;}
+    .gal-c{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--gold);margin-top:2px;}
+    .gal-zoom{position:absolute;top:8px;right:8px;width:26px;height:26px;display:flex;align-items:center;
+      justify-content:center;background:rgba(255,255,255,.92);color:var(--pri);font-size:10px;
+      opacity:0;transform:scale(.85);transition:opacity .2s,transform .2s;}
+    .gal-item:hover .gal-zoom,.gal-item:focus-visible .gal-zoom{opacity:1;transform:none;}
+    @media(max-width:1000px){.gal-grid{columns:3;}}
+    @media(max-width:700px){.gal-grid{columns:2;}}
+    @media(max-width:420px){.gal-grid{columns:1;}}
+
+    /* ── Lightbox ─────────────────────────────────────────────────────────── */
+    .lb{position:fixed;inset:0;z-index:200;background:rgba(6,15,31,.94);
+      display:flex;align-items:center;justify-content:center;padding:40px 56px;}
+    .lb[hidden]{display:none;}
+    .lb-stage{max-width:min(1100px,100%);max-height:100%;display:flex;flex-direction:column;
+      align-items:center;gap:12px;margin:0;}
+    .lb-img{max-width:100%;max-height:calc(100vh - 150px);width:auto;height:auto;object-fit:contain;
+      border:1px solid rgba(255,255,255,.12);background:#0b1f3a;}
+    .lb-meta{text-align:center;max-width:620px;}
+    .lb-count{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;
+      letter-spacing:.1em;color:var(--gold);margin-bottom:4px;}
+    .lb-title{display:block;font-size:15px;font-weight:600;color:#fff;}
+    .lb-caption{display:block;font-size:12.5px;font-weight:450;color:rgba(255,255,255,.66);line-height:1.55;margin-top:3px;}
+    .lb button{position:absolute;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+      color:#fff;cursor:pointer;width:42px;height:42px;display:flex;align-items:center;justify-content:center;
+      font-size:15px;transition:background .16s,border-color .16s;}
+    .lb button:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);}
+    .lb button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+    .lb-close{top:18px;right:18px;}
+    .lb-nav.prev{left:12px;top:50%;transform:translateY(-50%);}
+    .lb-nav.next{right:12px;top:50%;transform:translateY(-50%);}
+    @media(max-width:640px){
+      .lb{padding:52px 10px 20px;}
+      .lb-nav.prev{left:6px;} .lb-nav.next{right:6px;}
+      .lb button{width:38px;height:38px;}
+      .lb-img{max-height:calc(100vh - 200px);}
+    }
+
+    /* ── Photo strips embedded in other pages ─────────────────────────────── */
+    .photo-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;}
+    .photo-strip a{position:relative;display:block;overflow:hidden;border:1px solid var(--line);aspect-ratio:1;}
+    .photo-strip img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+    .photo-strip a:hover img{transform:scale(1.05);}
+    .photo-strip a::after{content:'';position:absolute;inset:0;background:var(--pri);opacity:0;transition:opacity .2s;}
+    .photo-strip a:hover::after{opacity:.12;}
+
     /* ══════════════════════════════════════════════════════════════════════
        Artwork slots
        A slot renders the real image once the file exists and a labelled

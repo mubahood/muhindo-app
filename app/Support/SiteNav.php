@@ -35,7 +35,7 @@ class SiteNav
                 'url' => route('portfolio.about'),
                 'match' => [
                     'portfolio.about', 'portfolio.cv', 'portfolio.education',
-                    'portfolio.skills', 'portfolio.experience', 'portfolio.research',
+                    'portfolio.skills', 'portfolio.experience', 'portfolio.research', 'gallery.index',
                     'portfolio.products',
                 ],
                 'icon' => 'fa-user',
@@ -59,6 +59,9 @@ class SiteNav
                     ['label' => 'Research', 'url' => route('portfolio.research'), 'icon' => 'fa-flask',
                         'desc' => 'Current MSc work on distributed systems and ML.',
                         'match' => ['portfolio.research']],
+                    ['label' => 'Gallery', 'url' => route('gallery.index'), 'icon' => 'fa-images',
+                        'desc' => 'The work, the desk and the people behind it.',
+                        'match' => ['gallery.*']],
                 ],
             ],
             [

@@ -50,6 +50,7 @@ Route::get('/research', [PortfolioController::class, 'research'])->name('portfol
 Route::get('/cv', [PortfolioController::class, 'cv'])->name('portfolio.cv');
 
 // Insights — writing. Public reading side; authoring lives in the back office.
+Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/insights', [\App\Http\Controllers\InsightController::class, 'index'])->name('insights.index');
 Route::get('/insights/{post:slug}', [\App\Http\Controllers\InsightController::class, 'show'])->name('insights.show');
 Route::get('/products', [PortfolioController::class, 'products'])->name('portfolio.products');
@@ -134,6 +135,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::resource('skills', SkillController::class)->except('show');
     Route::resource('experience', ExperienceController::class)->except('show');
     Route::resource('posts', \App\Http\Controllers\Admin\PostController::class)->except('show');
+    Route::resource('gallery', \App\Http\Controllers\Admin\GalleryPhotoController::class)->except('show')->parameters(['gallery' => 'photo']);
     Route::get('testimonials', [\App\Http\Controllers\Admin\TestimonialController::class, 'index'])->name('testimonials.index');
     Route::post('testimonials', [\App\Http\Controllers\Admin\TestimonialController::class, 'store'])->name('testimonials.store');
     Route::delete('testimonials/{index}', [\App\Http\Controllers\Admin\TestimonialController::class, 'destroy'])->name('testimonials.destroy');
