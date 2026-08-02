@@ -168,7 +168,15 @@
     .learn-prev span{display:none;}
   }
   [x-cloak]{display:none!important;}
-  </style>
+    /* Course-wide debug mode. Deliberately loud: while it is on, everyone on
+     the course can finish it without doing the work, so nobody should be able
+     to miss that it is on. */
+  .dbg-strip{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;margin-bottom:14px;
+    background:#fdf6e6;border:1px solid #e8c98a;border-left:3px solid #b45309;
+    font-size:12.5px;line-height:1.55;color:#7a5f2a;}
+  .dbg-strip i{color:#b45309;font-size:14px;margin-top:1px;}
+  .dbg-strip b{color:#8a5a06;}
+</style>
   @stack('styles')
 </head>
 <body>
@@ -214,6 +222,7 @@
   @include('learn.partials.sidebar', ['shell' => $shell, 'course' => $course, 'currentLesson' => $currentLesson ?? null])
 
   <main class="learn-main @yield('main_class', 'no-bar')" id="learn-content" tabindex="-1">
+    @yield('banner')
     @if(session('success'))<div class="alert-success" role="status">{{ session('success') }}</div>@endif
     @if(session('error'))<div class="alert-success" role="alert" style="background:var(--bad-soft);color:var(--bad);border-color:var(--bad);">{{ session('error') }}</div>@endif
     @yield('learn_content')

@@ -23,7 +23,7 @@ class Course extends Model
     protected $fillable = [
         'uuid', 'title', 'slug', 'description', 'tagline', 'outcomes', 'requirements',
         'cover_image', 'cover_alt', 'price',
-        'currency', 'level', 'category', 'is_published', 'created_by', 'progression',
+        'currency', 'level', 'category', 'is_published', 'created_by', 'progression', 'debug_mode',
         'access_duration_days',
     ];
 
@@ -33,6 +33,7 @@ class Course extends Model
             'price' => 'decimal:2',
             'is_published' => 'boolean',
             'progression' => CourseProgression::class,
+            'debug_mode' => 'boolean',
             'outcomes' => 'array',
             'requirements' => 'array',
         ];

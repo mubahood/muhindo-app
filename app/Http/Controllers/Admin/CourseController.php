@@ -80,11 +80,13 @@ class CourseController extends Controller
             'is_published' => 'nullable|boolean',
             'progression' => ['nullable', Rule::in(array_column(CourseProgression::cases(), 'value'))],
             'access_duration_days' => 'nullable|integer|min:1',
+            'debug_mode' => 'nullable|boolean',
         ]);
 
         $data['slug'] = ($data['slug'] ?? null) ?: Str::slug($data['title']);
         $data['currency'] = ($data['currency'] ?? null) ?: 'UGX';
         $data['is_published'] = $request->boolean('is_published');
+        $data['debug_mode'] = $request->boolean('debug_mode');
         $data['progression'] = $data['progression'] ?? CourseProgression::Free->value;
         $data['outcomes'] = $this->linesToArray($data['outcomes'] ?? null);
         $data['requirements'] = $this->linesToArray($data['requirements'] ?? null);

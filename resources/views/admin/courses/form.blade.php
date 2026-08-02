@@ -84,6 +84,24 @@
           <span>Published (visible on the public site)</span>
         </label>
       </div>
+
+      {{-- Set apart on purpose. This is not a content setting: while it is on,
+           every student on the course is affected, not just whoever turned it
+           on, so it must never read as one more checkbox in a list. --}}
+      <div class="tb-form-group dbg-box">
+        <label class="tb-check-group">
+          <input type="checkbox" name="debug_mode" value="1" {{ old('debug_mode', $course->debug_mode) ? 'checked' : '' }}>
+          <span><b>Debug mode — skip the pacing gates</b></span>
+        </label>
+        <p class="dbg-note">
+          Lets you move to the next topic immediately: no minimum screen time, and no
+          required quiz or assignment to submit first. Meant for walking through a course
+          while you build it.
+          <b>This applies to everyone taking the course, not just you</b> — anyone enrolled
+          can finish it, and earn its certificate, without doing the work. Turn it off
+          before students use the course.
+        </p>
+      </div>
     </div>
   </div>
   <div class="tb-card-footer" style="display:flex;gap:10px;justify-content:flex-end;">
@@ -92,4 +110,13 @@
   </div>
 </div>
 </form>
+@push('styles')
+<style>
+  .dbg-box{border:1px solid #e8c98a;background:#fdf6e6;padding:12px 13px;margin-top:4px;}
+  .dbg-box .tb-check-group span b{color:#8a5a06;}
+  .dbg-note{font-size:11.5px;line-height:1.55;color:#7a5f2a;margin:7px 0 0;}
+  .dbg-note b{color:#8a5a06;}
+</style>
+@endpush
+
 @endsection

@@ -9,6 +9,7 @@
   $currentLesson = $lesson;
   $shell = new \App\Support\Learning\LearnShell($course, auth()->user(), $lesson);
   $activeSeconds = (int) ($enrollment->progressRecords()->where('lesson_id', $lesson->id)->value('active_seconds') ?? 0);
+  $debugMode = (bool) $course->debug_mode;
   $activeSecondsLabel = $activeSeconds >= 3600
       ? sprintf('%d:%02d:%02d', intdiv($activeSeconds, 3600), intdiv($activeSeconds % 3600, 60), $activeSeconds % 60)
       : sprintf('%d:%02d', intdiv($activeSeconds, 60), $activeSeconds % 60);
@@ -27,9 +28,19 @@
     'notesStoreUrl' => route('learn.notes.store', [$course, $lesson]),
     'activeSeconds' => $activeSeconds,
     'timeUrl' => route('learn.lesson.time', [$course, $lesson]),
-    'minActiveSeconds' => (int) ($lesson->min_active_seconds ?? 0),
-    'requiredPending' => $activities->where('required', true)->where('done', false)->count(),
+    'minActiveSeconds' => $debugMode ? 0 : (int) ($lesson->min_active_seconds ?? 0),
+    'requiredPending' => $debugMode ? 0 : $activities->where('required', true)->where('done', false)->count(),
 ]).')')
+
+@section('banner')
+  @if($debugMode)
+    <div class="dbg-strip" role="status">
+      <i class="fas fa-flask" aria-hidden="true"></i>
+      <span><b>Debug mode is on for this course.</b> Minimum screen time and required
+      activities are switched off, so you can move straight to the next topic.</span>
+    </div>
+  @endif
+@endsection
 
 @section('header_meta')
   <span class="pos">Lesson {{ $shell->lessonPosition() }} of {{ $shell->totalLessons() }}</span>

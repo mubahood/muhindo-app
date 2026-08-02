@@ -151,6 +151,19 @@ class ProgressService
      */
     public function completionBlockers(Enrollment $enrollment, Lesson $lesson): array
     {
+        /*
+         * Debug mode lifts every pacing gate on this course at once.
+         *
+         * Enforced here rather than at each call site because this method is
+         * the single authority on whether a lesson may be completed — the
+         * complete endpoint, the auto-complete path and the lesson page all
+         * ask it. A bypass added anywhere else would be a second answer to the
+         * same question, and the two would drift.
+         */
+        if ($lesson->course()?->debug_mode) {
+            return [];
+        }
+
         $blockers = [];
 
         if ($lesson->min_active_seconds) {
