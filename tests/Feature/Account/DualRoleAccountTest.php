@@ -32,6 +32,20 @@ class DualRoleAccountTest extends TestCase
         ]));
     }
 
+    /** Exactly one account-type radio is checked, and it is the expected one. */
+    private function assertRadioChecked(string $html, string $expected): void
+    {
+        preg_match_all('/<input[^>]*name="account_type"[^>]*>/', $html, $inputs);
+
+        $checked = array_values(array_filter(
+            $inputs[0],
+            fn (string $input) => str_contains($input, 'checked')
+        ));
+
+        $this->assertCount(1, $checked, 'exactly one account type must be preselected');
+        $this->assertStringContainsString('value="'.$expected.'"', $checked[0]);
+    }
+
     public function test_registering_as_a_student_grants_only_learning_access(): void
     {
         $this->register('student');
@@ -82,22 +96,29 @@ class DualRoleAccountTest extends TestCase
         $response = $this->get(route('register'), ['HTTP_REFERER' => route('start-a-project')]);
 
         $response->assertOk();
-        // The selected radio is the one Alpine initialises `type` to.
-        $response->assertSee("{ type: 'client' }", false);
+        /* Assert the radio itself is checked. The previous version looked for
+           an Alpine attribute — which was present in the HTML but never ran,
+           because the auth layout loads no Alpine. It passed for months while
+           no option was ever actually selected. */
+        $this->assertRadioChecked($response->getContent(), 'client');
     }
 
     public function test_the_register_form_preselects_student_for_a_course_context(): void
     {
         $course = Course::factory()->create(['is_published' => true]);
 
-        $this->get(route('register', ['intended_course' => $course->slug]))
-            ->assertOk()->assertSee("{ type: 'student' }", false);
+        $this->assertRadioChecked(
+            $this->get(route('register', ['intended_course' => $course->slug]))->assertOk()->getContent(),
+            'student'
+        );
     }
 
     public function test_an_explicit_account_type_query_param_wins(): void
     {
-        $this->get(route('register', ['account_type' => 'both']))
-            ->assertOk()->assertSee("{ type: 'both' }", false);
+        $this->assertRadioChecked(
+            $this->get(route('register', ['account_type' => 'both']))->assertOk()->getContent(),
+            'both'
+        );
     }
 
     public function test_a_dual_role_dashboard_shows_both_learning_and_project_sections(): void

@@ -12,8 +12,8 @@
   .acct-type .t{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--tx);}
   .acct-type .t i{color:var(--tx3);font-size:12px;}
   .acct-type .d{font-size:11px;line-height:1.4;color:var(--tx3);}
-  .acct-type.on{border-color:var(--pri);background:var(--pri-soft);box-shadow:inset 0 0 0 1px var(--pri);}
-  .acct-type.on .t i{color:var(--pri);}
+  .acct-type:has(input:checked){border-color:var(--pri);background:var(--pri-soft);box-shadow:inset 0 0 0 1px var(--pri);}
+  .acct-type:has(input:checked) .t i{color:var(--pri);}
   /* The radio itself is visually hidden but still focusable, so the card has to
      carry its focus ring — without this the keyboard focus is invisible here. */
   .acct-type:has(input:focus-visible){outline:2px solid var(--pri);outline-offset:2px;}
@@ -40,7 +40,11 @@
     @if(request('coupon_code'))<input type="hidden" name="coupon_code" value="{{ request('coupon_code') }}">@endif
   @endif
   @php $selected = old('account_type', $defaultAccountType); @endphp
-  <div class="a-field" x-data="{ type: @js($selected) }">
+  {{-- No Alpine here on purpose. The auth layout ships no JavaScript framework,
+       and a sign-up form should not be the reason to load one. The selection is
+       rendered by the server and styled with :has(input:checked), so it is
+       correct on first paint and keeps working with scripting off. --}}
+  <div class="a-field">
     <label class="a-label">I'm here to</label>
     <div class="acct-types">
       @foreach([
@@ -51,8 +55,9 @@
         ['v' => 'both',    'i' => 'fa-layer-group', 't' => 'Both',
          'd' => 'One account for learning and for the work you commission. Switch any time.'],
       ] as $opt)
-        <label class="acct-type" :class="{ on: type === @js($opt['v']) }">
-          <input type="radio" name="account_type" value="{{ $opt['v'] }}" x-model="type" required>
+        <label class="acct-type">
+          <input type="radio" name="account_type" value="{{ $opt['v'] }}"
+                 @checked($selected === $opt['v']) required>
           <span class="t"><i class="fas {{ $opt['i'] }}"></i> {{ $opt['t'] }}</span>
           <span class="d">{{ $opt['d'] }}</span>
         </label>

@@ -123,11 +123,16 @@ class SpamShieldTest extends TestCase
 
     public function test_the_honeypot_is_hidden_from_assistive_tech(): void
     {
-        // Off-screen rather than display:none — some bots skip display:none —
-        // but it must still be unreachable by screen reader or keyboard.
-        $html = (string) $this->get(route('contact'))->assertOk()->getContent();
+        /* Hidden by inline style rather than a class. It used to rely on
+           `.hp-field` from the marketing layout, so on the auth pages — which
+           use a different layout — the honeypot rendered fully visible, label
+           and all. Anyone who typed in it would have been silently discarded. */
+        foreach ([route('contact'), route('register')] as $url) {
+            $html = (string) $this->get($url)->assertOk()->getContent();
 
-        $this->assertMatchesRegularExpression('/<div class="hp-field" aria-hidden="true">/', $html);
-        $this->assertStringContainsString('tabindex="-1"', $html);
+            $this->assertMatchesRegularExpression('/aria-hidden="true"\s+style="[^"]*left:-9999px/s', $html,
+                "{$url} must hide the honeypot without depending on a layout's stylesheet");
+            $this->assertStringContainsString('tabindex="-1"', $html);
+        }
     }
 }
