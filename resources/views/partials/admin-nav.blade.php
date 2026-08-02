@@ -32,6 +32,13 @@
           ['label' => 'My orders', 'icon' => 'fa-receipt', 'route' => 'payments.index', 'match' => ['payments.index', 'payments.show']],
           ['label' => 'My downloads', 'icon' => 'fa-download', 'route' => 'shop.downloads', 'match' => ['shop.downloads', 'shop.download']],
       ]],
+      // Both of these were reachable only from the top-right dropdown and the
+      // bell — fine once you know they are there, invisible if you do not.
+      // A student's menu was two groups; this is the rest of their account.
+      ['key' => 'account', 'label' => 'My account', 'icon' => 'fa-user-gear', 'gate' => null, 'items' => [
+          ['label' => 'Profile & settings', 'icon' => 'fa-id-badge', 'route' => 'account.edit', 'match' => ['account.edit']],
+          ['label' => 'Notifications', 'icon' => 'fa-bell', 'route' => 'notifications.index', 'match' => ['notifications.index']],
+      ]],
       ['key' => 'portfolio', 'label' => 'Portfolio', 'icon' => 'fa-id-card', 'gate' => 'portfolio.manage', 'items' => [
           ['label' => 'Projects', 'icon' => 'fa-diagram-project', 'route' => 'admin.portfolio-projects.index', 'match' => ['admin.portfolio-projects.*']],
           ['label' => 'Skills', 'icon' => 'fa-star', 'route' => 'admin.skills.index', 'match' => ['admin.skills.*']],

@@ -33,7 +33,9 @@ class LearningController extends Controller
             ->with(['course' => fn ($query) => $query->withCount('lessons')
                 ->withCount(['quizzes as published_quizzes_count' => fn ($q) => $q->where('is_published', true)])
                 ->withCount(['assignments as published_assignments_count' => fn ($q) => $q->where('is_published', true)]),
-                'certificate', 'lastLesson', 'review'])
+                // The card names the amount still owed on a pending course,
+                // so the invoice comes with it rather than one query per row.
+                'certificate', 'lastLesson', 'review', 'invoice'])
             ->withCount(['progressRecords as completed_lessons_count' => fn ($query) => $query->whereNotNull('completed_at')])
             ->latest()->get();
 

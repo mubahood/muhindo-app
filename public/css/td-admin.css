@@ -128,12 +128,21 @@ strong,b{font-weight:600;}
 .tb-search-wrap input:focus{outline:none;border-color:var(--br);box-shadow:0 0 0 3px var(--br-soft);}
 
 .tb-user-menu{position:relative;}
+/* colour is NOT optional here. A <button> does not inherit colour, so with
+   none declared this fell through to the UA's `buttontext`, which resolves to
+   white under a dark system appearance — white on a near-white bar, the name
+   invisible. Every other bare button in this file already sets one. */
 .tb-user-trigger{display:flex;align-items:center;gap:9px;cursor:pointer;padding:5px 8px;border:none;background:none;
-  transition:background .12s;}
+  color:var(--tx);font-family:inherit;transition:background .12s;}
 .tb-user-trigger:hover{background:var(--surface-2);}
 .tb-user-avatar-sm{width:28px;height:28px;background:var(--br-soft);color:var(--br);display:flex;align-items:center;
   justify-content:center;font-size:10px;font-weight:600;}
-.tb-user-name{font-size:13px;font-weight:500;} .tb-user-caret{font-size:10px;color:var(--mt2);}
+.tb-user-name{display:flex;flex-direction:column;line-height:1.25;text-align:left;
+  font-size:13px;font-weight:500;color:var(--tx);}
+.tb-user-role{font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--mt2);}
+.tb-user-head{padding:9px 11px 8px;border-bottom:1px solid var(--line);margin-bottom:4px;}
+.tb-user-head b{display:block;font-size:12.5px;font-weight:600;color:var(--tx);}
+.tb-user-head span{display:block;font-size:11px;color:var(--mt2);overflow:hidden;text-overflow:ellipsis;} .tb-user-caret{font-size:10px;color:var(--mt2);}
 .tb-user-dropdown{position:absolute;right:0;top:calc(100% + 6px);min-width:210px;background:var(--surface);
   border:1px solid var(--line);box-shadow:0 12px 34px -18px rgba(17,28,46,.3);padding:5px;display:none;z-index:40;}
 .tb-user-menu.open .tb-user-dropdown{display:block;}

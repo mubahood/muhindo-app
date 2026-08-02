@@ -48,7 +48,15 @@
               @elseif($enrollment->status === 'completed')
                 Completed{{ $enrollment->completed_at ? ' on '.$enrollment->completed_at->format('d M Y') : '' }}
               @elseif($enrollment->status === 'pending')
-                Payment pending
+                @php $due = $enrollment->invoice; @endphp
+                @if($due && $due->isOutstanding())
+                  {{ $due->currency }} {{ number_format((float) $due->balance, 2) }} to pay
+                  @if($due->direct_payment_at)
+                    <br><span class="muted">You are paying Muhindo directly — it opens once he confirms.</span>
+                  @endif
+                @else
+                  Payment pending
+                @endif
               @elseif($enrollment->status === 'active')
                 {{ $lessonsLeft > 0 ? $lessonsLeft.' '.Str::plural('lesson', $lessonsLeft).' left' : 'All lessons done' }}
                 @if($enrollment->expires_at) · until {{ $enrollment->expires_at->format('d M Y') }}@endif
@@ -78,8 +86,17 @@
                  class="btn-tb btn-tb-ghost btn-tb-sm"><i class="fas fa-award"></i> Certificate</a>
             @endif
           @elseif($enrollment->status === 'pending')
-            <span class="badge-tb badge-warn">Payment pending</span>
-            <a href="{{ route('courses.checkout', $course) }}" class="btn-tb btn-tb-primary btn-tb-sm">Complete checkout</a>
+            @php $due = $enrollment->invoice; @endphp
+            <span class="badge-tb badge-pending">{{ $due && $due->direct_payment_at ? 'Awaiting confirmation' : 'Payment pending' }}</span>
+            @if($due && $due->isOutstanding())
+              {{-- Straight to the one payment screen, where paying, arranging
+                   to pay Muhindo directly and cancelling all live together. --}}
+              <a href="{{ route('payments.show', $due) }}" class="btn-tb btn-tb-primary btn-tb-sm">
+                <i class="fas fa-credit-card"></i> Pay {{ $due->currency }} {{ number_format((float) $due->balance, 2) }}
+              </a>
+            @else
+              <a href="{{ route('courses.show', $course) }}" class="btn-tb btn-tb-primary btn-tb-sm">Complete enrolment</a>
+            @endif
           @elseif($open)
             <a href="{{ route('learn.course', $course) }}" class="btn-tb btn-tb-primary btn-tb-sm">
               <i class="fas {{ $enrollment->status === 'completed' ? 'fa-rotate-right' : 'fa-play' }}"></i>

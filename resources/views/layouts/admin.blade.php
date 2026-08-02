@@ -23,7 +23,7 @@
 @php
   $u = Auth::user();
   $unread = $u->unreadNotifications()->count();
-  $orgName = $u->role_label;
+  $roleLabel = $u->role_label;
   $shellPaths = \App\Support\AppShell::paths();
 @endphp
 
@@ -35,7 +35,7 @@
       <span class="bk" style="width:30px;height:30px;background:#0b1f3a;color:#b8933f;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;">MM</span>
       <span class="btext">
         <span class="bt">Muhindo Mubaraka</span>
-        <span class="bs" title="{{ $orgName }}">{{ $orgName }}</span>
+        <span class="bs">e‑Learning &amp; Projects</span>
       </span>
       <button class="tb-sidebar-close" type="button" @click="side=false"><i class="fas fa-xmark"></i></button>
     </a>
@@ -86,12 +86,20 @@
           <button type="button" class="tb-user-trigger" @click="userMenu=!userMenu"
                   :aria-expanded="userMenu ? 'true' : 'false'" aria-haspopup="true" aria-controls="tb-user-dropdown">
             <div class="tb-user-avatar-sm" aria-hidden="true">{{ $u->initials }}</div>
-            <span class="tb-user-name">{{ $u->name }}</span>
+            <span class="tb-user-name">
+              {{ $u->name }}
+              <small class="tb-user-role">{{ $roleLabel }}</small>
+            </span>
             <span class="sr-only">Account menu</span>
             <i class="fas fa-chevron-down tb-user-caret" aria-hidden="true"></i>
           </button>
           <div class="tb-user-dropdown" id="tb-user-dropdown">
+            <div class="tb-user-head">
+              <b>{{ $u->name }}</b>
+              <span>{{ $u->email }}</span>
+            </div>
             <a wire:navigate href="{{ route('account.edit') }}"><i class="fas fa-user-pen"></i> Your account</a>
+            <a wire:navigate href="{{ route('notifications.index') }}"><i class="fas fa-bell"></i> Notifications</a>
             <a wire:navigate href="{{ route('account.edit') }}#security"><i class="fas fa-lock"></i> Change password</a>
             @if($u->isSuperAdmin())<a wire:navigate href="{{ route('admin.settings.index') }}"><i class="fas fa-gear"></i> Site settings</a>@endif
             <hr>
