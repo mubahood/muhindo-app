@@ -21,8 +21,12 @@
       <div class="tb-card-body">
         <div class="tb-form-grid">
           <div class="tb-form-group full">
-            <label class="tb-label" for="quote">What they said</label>
-            <textarea class="tb-textarea" id="quote" name="quote" rows="4" required maxlength="600">{{ old('quote') }}</textarea>
+            <label class="tb-label" for="quote">What they said <span style="text-transform:none;letter-spacing:0;">(optional)</span></label>
+            <textarea class="tb-textarea" id="quote" name="quote" rows="4" maxlength="600"
+                      aria-describedby="quote-help">{{ old('quote') }}</textarea>
+            <p class="tb-field-error" style="color:var(--mt);" id="quote-help">
+              Paste their words exactly. Leave blank to list them as a reference with a link, until they send a quote.
+            </p>
             @error('quote')<p class="tb-field-error">{{ $message }}</p>@enderror
           </div>
           <div class="tb-form-group">
@@ -38,6 +42,13 @@
             <label class="tb-label" for="org">Organisation</label>
             <input class="tb-input" type="text" id="org" name="org" maxlength="120" value="{{ old('org') }}">
           </div>
+          <div class="tb-form-group">
+            <label class="tb-label" for="link">Profile link</label>
+            <input class="tb-input" type="url" id="link" name="link" maxlength="300" value="{{ old('link') }}"
+                   placeholder="https://">
+            @error('link')<p class="tb-field-error">{{ $message }}</p>@enderror
+          </div>
+
           <div class="tb-form-group">
             <label class="tb-label" for="photo">Photo <span style="text-transform:none;letter-spacing:0;">(optional)</span></label>
             <input class="tb-input" type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp">

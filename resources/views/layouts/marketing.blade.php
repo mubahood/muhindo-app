@@ -691,6 +691,44 @@
       .rail a.on{border-left-color:transparent;border-bottom-color:var(--gold);}
     }
 
+    /* ── About, on the home page ──────────────────────────────────────────
+       Two columns of prose at a comfortable measure. Long-form lives on
+       /about; this is the ten-second version. */
+    .about-lead{max-width:900px;}
+    .about-cols{columns:2;column-gap:34px;}
+    .about-cols p{font-size:14px;font-weight:450;color:var(--tx2);line-height:1.7;margin-bottom:1em;
+      break-inside:avoid;}
+    .about-cols p:last-child{margin-bottom:0;}
+    .about-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:18px;}
+    @media(max-width:720px){.about-cols{columns:1;}}
+
+    /* ── References ───────────────────────────────────────────────────────
+       Named people with links out, rather than anonymous praise. A card works
+       with or without a quote: until someone's own words are in hand, who they
+       are and where to check is the substance. */
+    .ref-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
+    .ref{border:1px solid var(--line);background:var(--surface);padding:18px;margin:0;
+      display:flex;flex-direction:column;gap:12px;transition:border-color .18s,transform .18s;}
+    .ref:hover{border-color:var(--gold);transform:translateY(-2px);}
+    .ref blockquote{font-size:13.5px;font-weight:450;line-height:1.65;color:var(--tx);}
+    .ref blockquote::before{content:'\201C';display:block;font-size:32px;line-height:.7;color:var(--gold);font-weight:600;margin-bottom:4px;}
+    .ref figcaption{display:flex;align-items:center;gap:11px;margin-top:auto;}
+    /* Two classes deep on purpose: the .ph slot sets width:100% and is defined
+       later in this sheet, so a single-class rule here loses and the avatar
+       stretches the whole card. */
+    .ref figcaption .ref-avatar{width:42px;height:42px;flex:0 0 42px;padding:6px;gap:0;}
+    /* At 42px there is no room for the slot's guidance text — the icon alone
+       reads as "a photo goes here", the words just become noise. */
+    .ref figcaption .ref-avatar .ph-label,
+    .ref figcaption .ref-avatar .ph-size,
+    .ref figcaption .ref-avatar .ph-path{display:none;}
+    .ref figcaption .ref-avatar i{font-size:14px;}
+    .ref-who{min-width:0;flex:1;}
+    .ref-who .nm{display:block;font-size:13px;font-weight:600;color:var(--tx);line-height:1.3;}
+    .ref-who .rl{display:block;font-size:11.5px;font-weight:450;color:var(--tx2);line-height:1.4;margin-top:1px;}
+    .ref-who .og{display:block;font-size:11px;font-weight:500;color:var(--gold-d);line-height:1.35;margin-top:1px;}
+    .ref-link{font-size:12px;font-weight:600;color:var(--pri);align-self:flex-start;}
+
     /* ── Shop ─────────────────────────────────────────────────────────────── */
     .shop-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px;}
     .shop-filters .tb-input{width:auto;min-width:150px;border:1px solid var(--line-2);background:var(--surface);
@@ -1267,6 +1305,17 @@
     }
 
     function safeWire(){
+      /* Arriving on a deep link jumps straight past everything above the
+         target, and those sections never come back into view for the observer
+         to notice — so the visitor lands on a page of invisible text. Anyone
+         who followed a link to a specific section gets the whole page revealed
+         at once instead. */
+      if (location.hash && document.getElementById(location.hash.slice(1))) {
+        revealAll();
+
+        return;
+      }
+
       try { wire(); } catch (e) { revealAll(); }   // never trade content for an effect
     }
 

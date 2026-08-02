@@ -25,10 +25,13 @@ class TestimonialController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'quote' => 'required|string|max:600',
+            // A reference is useful with just a name and a verifiable link; the
+            // quote arrives whenever that person actually sends their words.
+            'quote' => 'nullable|string|max:600',
             'name' => 'required|string|max:120',
             'role' => 'nullable|string|max:120',
             'org' => 'nullable|string|max:120',
+            'link' => 'nullable|url|max:300',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
         ]);
 
@@ -37,6 +40,7 @@ class TestimonialController extends Controller
             'name' => $data['name'],
             'role' => $data['role'] ?? '',
             'org' => $data['org'] ?? '',
+            'link' => $data['link'] ?? null,
             'photo' => $request->hasFile('photo')
                 ? 'storage/'.$request->file('photo')->store('testimonials', 'public')
                 : null,

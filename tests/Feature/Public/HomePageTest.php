@@ -120,6 +120,55 @@ class HomePageTest extends TestCase
             ->assertSee('Director');
     }
 
+    public function test_the_about_section_leads_with_a_summary_and_a_way_deeper(): void
+    {
+        Settings::set('portfolio.about', json_encode([
+            'lead' => 'Lead line.',
+            'heading' => 'I build the systems, then teach the people who run them',
+            'home' => ['First paragraph about the work.', 'Second paragraph about teaching.'],
+        ]));
+
+        $this->get(route('home'))->assertOk()
+            ->assertSee('I build the systems, then teach the people who run them')
+            ->assertSee('First paragraph about the work.')
+            ->assertSee('Read more about me')
+            ->assertSee(route('portfolio.cv'), false);
+    }
+
+    public function test_a_reference_without_a_quote_still_shows_who_they_are_and_where_to_check(): void
+    {
+        /* Three named academics were supplied with links but no words. Their
+           credibility is the name and the verifiable link; inventing what a
+           sitting Vice Chancellor said would be putting words in a real,
+           findable person's mouth. */
+        Settings::set('portfolio.testimonials', json_encode([[
+            'quote' => '',
+            'name' => 'Prof. Jude T. Lubega',
+            'role' => 'Vice Chancellor',
+            'org' => 'Nkumba University',
+            'link' => 'https://nkumbauniversity.ac.ug/staff/prof-jude-t-lubega/',
+        ]]));
+
+        $response = $this->get(route('home'))->assertOk();
+
+        $response->assertSee('Prof. Jude T. Lubega');
+        $response->assertSee('Vice Chancellor');
+        $response->assertSee('https://nkumbauniversity.ac.ug/staff/prof-jude-t-lubega/', false);
+        // No empty quotation marks where a quote would be.
+        $response->assertDontSee('<blockquote></blockquote>', false);
+    }
+
+    public function test_a_reference_shows_its_quote_once_one_is_supplied(): void
+    {
+        Settings::set('portfolio.testimonials', json_encode([[
+            'quote' => 'He delivered the system and trained the team to run it.',
+            'name' => 'A Real Person', 'role' => 'Director',
+        ]]));
+
+        $this->get(route('home'))->assertOk()
+            ->assertSee('He delivered the system and trained the team to run it.');
+    }
+
     public function test_the_stat_row_publishes_the_true_figures(): void
     {
         Settings::set('portfolio.stats', json_encode([

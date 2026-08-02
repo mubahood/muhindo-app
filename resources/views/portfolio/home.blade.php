@@ -73,30 +73,66 @@
   </div>
 </section>
 
-{{-- ═══ Who trusts the work ═══ --}}
-@if(count($clients))
-<section class="band-surface" style="padding:34px 0;">
+{{-- ═══ Who I am ═══ --}}
+<section class="tex-glow" id="about">
   <div class="wrap">
-    <p class="sec-idx" style="justify-content:center;margin-bottom:18px;" data-rise><span>Organisations I've delivered for</span></p>
-    <div class="logo-strip" data-rise>
-      @foreach($clients as $client)
-        @php $slug = \Illuminate\Support\Str::slug(is_array($client) ? ($client['name'] ?? '') : $client); @endphp
-        <div class="cell">
-          @if(is_file(public_path("images/clients/{$slug}.png")))
-            <img src="{{ asset("images/clients/{$slug}.png") }}" alt="{{ is_array($client) ? ($client['name'] ?? '') : $client }}" loading="lazy" decoding="async">
-          @else
-            {{-- The name is a real mark until a logo file exists at
-                 public/images/clients/{{ $slug }}.png --}}
-            <span class="wordmark">{{ is_array($client) ? ($client['name'] ?? '') : $client }}</span>
+    <div class="about-lead">
+      <div class="sec-head left" style="margin-bottom:16px;" data-rise>
+        <div class="sec-idx">{{ $idx() }} <span>About me</span></div>
+        <h2>{{ $about['heading'] ?? 'Nine years of building the systems people depend on' }}</h2>
+      </div>
+
+      <div class="about-cols" data-rise>
+        @foreach($about['home'] ?? array_slice($about['paragraphs'] ?? [], 0, 2) as $paragraph)
+          <p>{{ $paragraph }}</p>
+        @endforeach
+      </div>
+
+      <div class="about-actions" data-rise>
+        <a href="{{ route('portfolio.about') }}" wire:navigate class="btn ghost sm">
+          Read more about me <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="{{ route('portfolio.cv') }}" wire:navigate class="link" style="font-weight:600;color:var(--pri);">
+          Or read the full CV <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{-- ═══ References ═══ --}}
+@if(count($testimonials))
+<section class="band-surface" id="references">
+  <div class="wrap">
+    <div class="sec-head left" data-rise>
+      <div class="sec-idx">{{ $idx() }} <span>References</span></div>
+      <h2>People who can speak to the work</h2>
+      <p>Academics and practitioners I have worked under, alongside and for. Their pages are linked — ask them.</p>
+    </div>
+
+    <div class="ref-grid">
+      @foreach($testimonials as $i => $t)
+        <figure class="ref" data-rise style="--d:{{ $i * 70 }}ms;">
+          @if(!empty($t['quote']))
+            <blockquote>{{ $t['quote'] }}</blockquote>
           @endif
-        </div>
+          <figcaption>
+            <x-ph :src="$t['photo'] ?? null" :alt="$t['name'] ?? ''" :label="$t['name'] ?? 'Photo'"
+                  ratio="1 / 1" round icon="fa-user" class="ref-avatar" />
+            <span class="ref-who">
+              <span class="nm">{{ $t['name'] ?? '' }}</span>
+              <span class="rl">{{ $t['role'] ?? '' }}</span>
+              @if(!empty($t['org']))<span class="og">{{ $t['org'] }}</span>@endif
+            </span>
+          </figcaption>
+          @if(!empty($t['link']))
+            <a href="{{ $t['link'] }}" target="_blank" rel="noopener" data-no-navigate class="ref-link link">
+              Their profile <i class="fas fa-arrow-up-right-from-square"></i>
+            </a>
+          @endif
+        </figure>
       @endforeach
     </div>
-    <p style="text-align:center;margin-top:16px;">
-      <a href="{{ route('portfolio.about') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
-        More about how I work <i class="fas fa-arrow-right"></i>
-      </a>
-    </p>
   </div>
 </section>
 @endif
@@ -148,35 +184,6 @@
 @endif
 
 @include('portfolio.partials.elearning-strip')
-
-{{-- ═══ What people say ═══ --}}
-@if(count($testimonials))
-<section class="band-surface">
-  <div class="wrap">
-    <div class="sec-head" data-rise>
-      <div class="sec-idx">{{ $idx() }} <span>References</span></div>
-      <h2>What the people I've worked with say</h2>
-    </div>
-    <div class="quote-grid">
-      @foreach($testimonials as $i => $t)
-        <figure class="quote" data-rise style="--d:{{ $i * 80 }}ms;">
-          <blockquote>{{ $t['quote'] ?? '' }}</blockquote>
-          <figcaption>
-            <x-ph :src="$t['photo'] ?? null"
-                  :alt="$t['name'] ?? ''"
-                  :label="$t['name'] ?? 'Photo'"
-                  ratio="1 / 1" round icon="fa-user" class="avatar" />
-            <span class="who">
-              <span class="nm">{{ $t['name'] ?? '' }}</span>
-              <span class="rl">{{ $t['role'] ?? '' }}@if(!empty($t['org'])) · {{ $t['org'] }}@endif</span>
-            </span>
-          </figcaption>
-        </figure>
-      @endforeach
-    </div>
-  </div>
-</section>
-@endif
 
 {{-- ═══ In pictures ═══ --}}
 @if($photos->isNotEmpty())
@@ -236,7 +243,7 @@
 
 {{-- ═══ What I can help with ═══ --}}
 @if($services->count())
-<section @class(['band-surface' => ! count($testimonials)])>
+<section>
   <div class="wrap">
     <div class="sec-head" data-rise><div class="sec-idx">{{ $idx() }} <span>What I do</span></div><h2>A few of the ways I can help</h2></div>
     <div class="icon-row" data-rise>
@@ -253,6 +260,34 @@
         <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
       </a>
     </div>
+  </div>
+</section>
+@endif
+
+{{-- ═══ Who trusts the work ═══ --}}
+@if(count($clients))
+<section class="band-surface" style="padding:34px 0;">
+  <div class="wrap">
+    <p class="sec-idx" style="justify-content:center;margin-bottom:18px;" data-rise><span>Organisations I've delivered for</span></p>
+    <div class="logo-strip" data-rise>
+      @foreach($clients as $client)
+        @php $slug = \Illuminate\Support\Str::slug(is_array($client) ? ($client['name'] ?? '') : $client); @endphp
+        <div class="cell">
+          @if(is_file(public_path("images/clients/{$slug}.png")))
+            <img src="{{ asset("images/clients/{$slug}.png") }}" alt="{{ is_array($client) ? ($client['name'] ?? '') : $client }}" loading="lazy" decoding="async">
+          @else
+            {{-- The name is a real mark until a logo file exists at
+                 public/images/clients/{{ $slug }}.png --}}
+            <span class="wordmark">{{ is_array($client) ? ($client['name'] ?? '') : $client }}</span>
+          @endif
+        </div>
+      @endforeach
+    </div>
+    <p style="text-align:center;margin-top:16px;">
+      <a href="{{ route('portfolio.about') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
+        More about how I work <i class="fas fa-arrow-right"></i>
+      </a>
+    </p>
   </div>
 </section>
 @endif
