@@ -116,6 +116,9 @@ Route::get('/start-a-project', [\App\Http\Controllers\ProjectInquiryController::
 Route::post('/start-a-project', [\App\Http\Controllers\ProjectInquiryController::class, 'store'])->middleware('throttle:5,1')->name('start-a-project.store');
 Route::view('/privacy', 'marketing.privacy')->name('privacy');
 Route::view('/terms', 'marketing.terms')->name('terms');
+// The lookup form must be declared before /verify/{certificate}, or "verify"
+// itself would be captured as a certificate identifier and 404.
+Route::get('/verify', [CertificateVerificationController::class, 'lookup'])->name('certificates.lookup');
 Route::get('/verify/{certificate}', [CertificateVerificationController::class, 'show'])->name('certificates.verify');
 
 /*

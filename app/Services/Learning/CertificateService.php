@@ -82,9 +82,17 @@ class CertificateService
         }
 
         $certificate->loadMissing('enrollment.user', 'enrollment.course');
-        $qrDataUri = $this->qr->pngDataUri(route('certificates.verify', $certificate));
 
-        $pdf = Pdf::loadView('pdf.certificate', ['certificate' => $certificate, 'qrDataUri' => $qrDataUri]);
+        // The QR encodes the public verification page, and the same address is
+        // printed beneath it so a paper copy is checkable without a scanner.
+        $verifyUrl = route('certificates.verify', $certificate);
+
+        $pdf = Pdf::loadView('pdf.certificate', [
+            'certificate' => $certificate,
+            'qrDataUri' => $this->qr->pngDataUri($verifyUrl),
+            'verifyUrl' => $verifyUrl,
+            'lookupUrl' => route('certificates.lookup'),
+        ])->setPaper('a4', 'landscape');
         $path = "certificates/{$certificate->uuid}.pdf";
         $this->disk()->put($path, $pdf->output());
 

@@ -1440,6 +1440,10 @@
         @endforeach
         <a href="{{ route('contact') }}" wire:navigate>Contact</a>
         <a href="{{ route('portfolio.products') }}" wire:navigate>Products</a>
+        {{-- An employer checking a certificate has no account and no reason to
+             guess the URL; the address is printed on the document, but this is
+             where somebody looks for it. --}}
+        <a href="{{ route('certificates.lookup') }}" wire:navigate>Verify a certificate</a>
       </div>
 
       <div>
