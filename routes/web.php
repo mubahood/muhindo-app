@@ -36,6 +36,30 @@ use Illuminate\Support\Facades\Route;
 | Public — portfolio
 |--------------------------------------------------------------------------
 */
+/**
+ * A permanent redirect that survives a sub-directory install.
+ *
+ * Route::redirect() emits its target verbatim, so a root-relative path like
+ * "/e-learning" gets resolved by the browser against the domain root — which
+ * drops the /muhindo-app base this app is served from and lands the visitor on
+ * a 404. Every legacy URL on the site was doing precisely that, including the
+ * /courses redirects that have been in place since the e-learning rename.
+ *
+ * url() builds the target against the app's real base, so the redirect goes
+ * where it says it does wherever the app is mounted.
+ */
+$movedPermanently = function (string $from, string $to): void {
+    Route::get($from, function (Illuminate\Http\Request $request) use ($to) {
+        $target = $to;
+
+        foreach ($request->route()?->parameters() ?? [] as $name => $value) {
+            $target = str_replace('{'.$name.'}', (string) $value, $target);
+        }
+
+        return redirect()->to(url($target), 301);
+    });
+};
+
 Route::get('/', [PortfolioController::class, 'home'])->name('home');
 Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
@@ -60,10 +84,12 @@ Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index']
 | have an account. Everything from the review screen on requires sign-in,
 | because an order has to belong to somebody.
 */
-Route::get('/projects-for-sale', [\App\Http\Controllers\Shop\ShopController::class, 'index'])->name('shop.index');
-Route::get('/projects-for-sale/{product:slug}', [\App\Http\Controllers\Shop\ShopController::class, 'show'])->name('shop.show');
-Route::redirect('/shop', '/projects-for-sale', 301);
-Route::redirect('/shop/{product}', '/projects-for-sale/{product}', 301);
+Route::get('/source-code', [\App\Http\Controllers\Shop\ShopController::class, 'index'])->name('shop.index');
+Route::get('/source-code/{product:slug}', [\App\Http\Controllers\Shop\ShopController::class, 'show'])->name('shop.show');
+$movedPermanently('/projects-for-sale', '/source-code');
+$movedPermanently('/projects-for-sale/{product}', '/source-code/{product}');
+$movedPermanently('/shop', '/source-code');
+$movedPermanently('/shop/{product}', '/source-code/{product}');
 
 Route::get('/cart', [\App\Http\Controllers\Shop\CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add', [\App\Http\Controllers\Shop\CartController::class, 'add'])->name('cart.add');
@@ -81,8 +107,8 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/blog', [\App\Http\Controllers\InsightController::class, 'index'])->name('insights.index');
 Route::get('/blog/{post:slug}', [\App\Http\Controllers\InsightController::class, 'show'])->name('insights.show');
-Route::redirect('/insights', '/blog', 301);
-Route::redirect('/insights/{post}', '/blog/{post}', 301);
+$movedPermanently('/insights', '/blog');
+$movedPermanently('/insights/{post}', '/blog/{post}');
 Route::get('/products', [PortfolioController::class, 'products'])->name('portfolio.products');
 Route::get('/contact', [PortfolioController::class, 'contactPage'])->name('contact');
 Route::post('/contact', [PortfolioController::class, 'contact'])->middleware('throttle:5,1')->name('contact.store');
@@ -112,10 +138,10 @@ Route::post('/e-learning/{course:slug}/enroll', [CourseCatalogueController::clas
 Route::get('/e-learning/{course:slug}/checkout', [CourseCatalogueController::class, 'checkout'])
     ->middleware('auth')->name('courses.checkout');
 
-Route::redirect('/courses', '/e-learning', 301);
-Route::redirect('/courses/{course}/preview/{lesson}', '/e-learning/{course}/preview/{lesson}', 301);
-Route::redirect('/courses/{course}/checkout', '/e-learning/{course}/checkout', 301);
-Route::redirect('/courses/{course}', '/e-learning/{course}', 301);
+$movedPermanently('/courses', '/e-learning');
+$movedPermanently('/courses/{course}/preview/{lesson}', '/e-learning/{course}/preview/{lesson}');
+$movedPermanently('/courses/{course}/checkout', '/e-learning/{course}/checkout');
+$movedPermanently('/courses/{course}', '/e-learning/{course}');
 
 /*
 |--------------------------------------------------------------------------

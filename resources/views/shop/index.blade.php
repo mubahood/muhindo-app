@@ -1,15 +1,15 @@
 @extends('layouts.marketing')
-@section('title', 'Projects for sale — Muhindo Mubaraka')
-@section('desc', 'E-books, templates, toolkits and downloadable resources for people building software.')
+@section('title', 'Source code for sale — Muhindo Mubaraka')
+@section('desc', 'Source code, templates and toolkits from systems I have built — buy it, open it, ship faster.')
 
 @section('content')
 
 <section class="page-hero tex-glow">
-  <span class="hero-mark" aria-hidden="true">FOR SALE</span>
+  <span class="hero-mark" aria-hidden="true">SOURCE</span>
   <div class="wrap">
-    <div class="eyebrow">Digital products</div>
-    <h1>Projects for sale</h1>
-    <p>Projects, templates and toolkits I have built, packaged so you can use them too. Instant download after payment.</p>
+    <div class="eyebrow">Buy and build on it</div>
+    <h1>Source code for sale</h1>
+    <p>Working code from systems I have actually delivered, packaged so you can open it and build on it. Instant download after payment.</p>
   </div>
 </section>
 

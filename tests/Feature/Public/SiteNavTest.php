@@ -27,7 +27,7 @@ class SiteNavTest extends TestCase
 
         // Order is the message: learning first, then who he is, then what can
         // be bought, then the writing.
-        $this->assertSame(['Learn', 'About Me', 'Projects for sale', 'Blog'], $labels);
+        $this->assertSame(['Learn', 'About Me', 'Source code', 'Blog'], $labels);
     }
 
     public function test_the_about_panel_carries_every_page_about_him(): void
@@ -133,11 +133,39 @@ class SiteNavTest extends TestCase
         $this->assertSame(array_unique($urls), $urls, 'a destination is listed more than once in the menu');
     }
 
-    public function test_the_old_section_urls_still_resolve(): void
+    public function test_every_old_section_url_redirects_to_a_page_that_exists(): void
     {
-        // Anything already linked or indexed must not start 404ing.
-        $this->get('/shop')->assertRedirect('/projects-for-sale');
-        $this->get('/insights')->assertRedirect('/blog');
+        // Anything already linked or indexed must not start 404ing — and a
+        // redirect is only useful if what it points at actually resolves, which
+        // is the part the original assertions never checked.
+        $moved = [
+            '/shop' => '/source-code',
+            '/projects-for-sale' => '/source-code',
+            '/insights' => '/blog',
+            '/courses' => '/e-learning',
+        ];
+
+        foreach ($moved as $from => $to) {
+            $response = $this->get($from);
+            $response->assertStatus(301);
+            $response->assertRedirect($to);
+
+            $this->get($to)->assertOk();
+        }
+    }
+
+    public function test_a_moved_url_redirects_to_an_absolute_address(): void
+    {
+        /* The bug this pins: Route::redirect emits its target verbatim, so a
+           root-relative "/e-learning" is resolved by the browser against the
+           domain root. Under a sub-directory install that drops the base path
+           and every legacy URL 301s straight to a 404 — which is exactly what
+           was happening, unnoticed, because asserting the redirect target
+           string says nothing about where a browser would actually land. */
+        $location = (string) $this->get('/courses')->headers->get('Location');
+
+        $this->assertStringStartsWith(url('/'), $location);
+        $this->assertStringEndsWith('/e-learning', $location);
     }
 
     private function headerOf(\Illuminate\Testing\TestResponse $response): string

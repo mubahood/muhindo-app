@@ -69,7 +69,7 @@ class SiteNav
                 ],
             ],
             [
-                'label' => 'Projects for sale',
+                'label' => 'Source code',
                 'url' => route('shop.index'),
                 'match' => ['shop.*', 'cart.*', 'checkout.*'],
                 'icon' => 'fa-basket-shopping',

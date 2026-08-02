@@ -19,7 +19,7 @@
     @if($licenses->isEmpty())
       <div class="tb-empty" style="padding:24px 0;">
         <p class="lead">Nothing here yet.</p>
-        <a href="{{ route('shop.index') }}" wire:navigate class="btn ghost" style="margin-top:12px;">Browse projects for sale</a>
+        <a href="{{ route('shop.index') }}" wire:navigate class="btn ghost" style="margin-top:12px;">Browse source code</a>
       </div>
     @else
       <div class="work-grid">

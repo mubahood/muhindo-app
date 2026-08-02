@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'Shop products')
+@section('title', 'Source code')
 
 @section('content')
 
 <div class="tb-page-header">
-  <div><h1>Shop products</h1><div class="tb-breadcrumb"><a href="{{ route('dashboard') }}">Dashboard</a> <span>/</span> Products</div></div>
+  <div><h1>Source code</h1><div class="tb-breadcrumb"><a href="{{ route('dashboard') }}">Dashboard</a> <span>/</span> Source code</div></div>
   <a href="{{ route('admin.products.create') }}" class="btn-tb btn-tb-primary"><i class="fas fa-plus"></i> New product</a>
 </div>
 
@@ -22,7 +22,7 @@
           <tr>
             <th scope="row" style="font-weight:500;">
               <a href="{{ route('admin.products.edit', $item) }}">{{ $item->name }}</a>
-              <div class="muted" style="font-size:11px;">/shop/{{ $item->slug }}</div>
+              <div class="muted" style="font-size:11px;">/source-code/{{ $item->slug }}</div>
             </th>
             <td>{{ $item->typeLabel() }}</td>
             <td>
