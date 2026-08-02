@@ -76,7 +76,7 @@
       </div>
       <div class="tb-form-group">
         <label class="tb-check-group">
-          <input type="checkbox" name="is_required" value="1" {{ old('is_required', $assignment->is_required ?? false) ? 'checked' : '' }}>
+          <input type="checkbox" name="is_required" value="1" {{ old('is_required', $assignment->exists ? $assignment->is_required : true) ? 'checked' : '' }}>
           <span>Compulsory — students cannot complete the attached lesson until they submit this assignment</span>
         </label>
       </div>

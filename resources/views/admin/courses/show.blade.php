@@ -85,6 +85,36 @@
             </form>
           </div>
         </div>
+
+        {{-- The work hanging off this topic, shown where it lives rather than
+             only in the flat Quizzes and Assignments lists further down. An
+             author building a course needs to see what a student will meet
+             after this topic, and how many topics still have none. --}}
+        @foreach($lesson->quizzes as $quiz)
+          <div class="act-row">
+            <i class="fas fa-list-check" aria-hidden="true"></i>
+            <a href="{{ route('admin.quizzes.edit', $quiz) }}">{{ $quiz->title }}</a>
+            <span class="badge-tb {{ $quiz->is_published ? 'badge-active' : 'badge-neutral' }}">{{ $quiz->is_published ? 'Published' : 'Draft' }}</span>
+            @if($quiz->is_required)
+              <span class="badge-tb badge-pending">Must be done to finish the topic</span>
+            @else
+              <span class="muted act-optional">Optional — does not block the topic</span>
+            @endif
+          </div>
+        @endforeach
+
+        @foreach($lesson->assignments as $assignment)
+          <div class="act-row">
+            <i class="fas fa-file-pen" aria-hidden="true"></i>
+            <a href="{{ route('admin.assignments.edit', $assignment) }}">{{ $assignment->title }}</a>
+            <span class="badge-tb {{ $assignment->is_published ? 'badge-active' : 'badge-neutral' }}">{{ $assignment->is_published ? 'Published' : 'Draft' }}</span>
+            @if($assignment->is_required)
+              <span class="badge-tb badge-pending">Must be done to finish the topic</span>
+            @else
+              <span class="muted act-optional">Optional — does not block the topic</span>
+            @endif
+          </div>
+        @endforeach
       @empty
         <div class="tb-empty" style="padding:20px;"><p>No lessons in this module yet.</p></div>
       @endforelse
@@ -250,5 +280,20 @@ function curriculumBuilder(cfg) {
     @endforelse
   </div>
 </div>
+
+@push('styles')
+<style>
+  /* Indented under the lesson it belongs to, and quieter than it, so the
+     curriculum reads as topics-with-their-work rather than a flat list. */
+  .act-row{display:flex;align-items:center;gap:9px;padding:8px 18px 8px 50px;
+    border-bottom:1px solid var(--bd,var(--line));background:var(--surface-2,#f6f7f9);
+    font-size:12.5px;position:relative;}
+  .act-row::before{content:'';position:absolute;left:33px;top:0;bottom:0;width:1px;background:var(--line-2);}
+  .act-row > i{color:var(--mt2);font-size:11px;width:14px;text-align:center;flex-shrink:0;}
+  .act-row > a{font-weight:500;color:var(--tx);}
+  .act-row > a:hover{color:var(--br);}
+  .act-optional{font-size:11px;}
+</style>
+@endpush
 
 @endsection

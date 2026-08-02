@@ -29,7 +29,9 @@
           @endif
         </summary>
         @foreach($sideModule['lessons'] as $l)
-          @if($shell->lockedLessonIds->contains($l->id))
+          @php $locked = $shell->lockedLessonIds->contains($l->id); @endphp
+
+          @if($locked)
             <span class="locked" title="Complete the previous lesson to unlock this one">
               <i class="fas fa-lock"></i> <span class="t">{{ $l->title }}</span>
               @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
@@ -47,6 +49,31 @@
               @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
             </a>
           @endif
+
+          {{-- The work belonging to this topic, in the order it is met: the
+               topic, then its questions, then its task. A topic may have none,
+               one, or several. Listing them here rather than only in a separate
+               "Quizzes" tab is what makes them part of the lesson instead of a
+               parallel list a student never opens. --}}
+          @foreach($shell->activitiesFor($l) as $activity)
+            @if($locked)
+              <span class="act-link is-locked" title="Complete the previous lesson first">
+                <span class="st"><i class="fas fa-lock"></i></span>
+                <span class="t">{{ $activity['title'] }}</span>
+              </span>
+            @else
+              <a href="{{ $activity['url'] }}" wire:navigate
+                 class="act-link {{ $activity['done'] ? 'is-done' : '' }}">
+                <span class="st">
+                  <i class="fas {{ $activity['done'] ? 'fa-circle-check' : ($activity['type'] === 'quiz' ? 'fa-list-check' : 'fa-file-pen') }}"></i>
+                </span>
+                <span class="t">{{ $activity['title'] }}</span>
+                @if($activity['required'] && ! $activity['done'])
+                  <span class="req" title="Required before this topic can be completed">Required</span>
+                @endif
+              </a>
+            @endif
+          @endforeach
         @endforeach
       </details>
     @endforeach

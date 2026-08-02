@@ -110,6 +110,22 @@
   .learn-side span.locked{color:var(--tx3);cursor:not-allowed;}
   .learn-side span.locked .fa-lock{font-size:10px;width:12px;text-align:center;flex-shrink:0;}
 
+  /* A topic's quiz or task. Indented and quieter than the lesson it belongs
+     to, so the curriculum still reads as a list of topics with their work
+     hanging off each one rather than a flat run of equal items. */
+  .act-link{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 30px;
+    font-size:11.5px;color:var(--tx3);border-top:1px solid var(--line);line-height:1.35;
+    position:relative;}
+  .act-link::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:1px;background:var(--line-2);}
+  .act-link:hover{color:var(--tx);background:var(--surface-2,#f6f7f9);}
+  .act-link .st{font-size:9.5px;flex-shrink:0;width:12px;text-align:center;}
+  .act-link .t{flex:1;min-width:0;}
+  .act-link.is-done{color:var(--tx2);}
+  .act-link.is-done .fa-circle-check{color:var(--ok);}
+  .act-link.is-locked{cursor:not-allowed;}
+  .act-link .req{flex-shrink:0;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+    color:#8a5a06;background:#fdf4e3;padding:1px 5px;}
+
   .learn-backdrop{display:none;}
 
   /* ── Content column ─────────────────────────────────────────── */

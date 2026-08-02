@@ -33,6 +33,12 @@ class LearnShell
     /** @var Collection<int,int> */
     public readonly Collection $lockedLessonIds;
 
+    /** @var Collection<int,int> */
+    public readonly Collection $submittedQuizIds;
+
+    /** @var Collection<int,int> */
+    public readonly Collection $submittedAssignmentIds;
+
     public function __construct(
         public readonly Course $course,
         ?User $user = null,
@@ -42,7 +48,13 @@ class LearnShell
             ? Enrollment::where('user_id', $user->id)->where('course_id', $course->id)->first()
             : null;
 
-        $course->loadMissing('modules.lessons');
+        // Quizzes and tasks belong to the topic they hang off, so they travel
+        // with it. Loaded here rather than per-row in the sidebar, which would
+        // be two queries for every lesson in the course.
+        $course->loadMissing([
+            'modules.lessons.quizzes' => fn ($q) => $q->where('is_published', true)->orderBy('id'),
+            'modules.lessons.assignments' => fn ($q) => $q->where('is_published', true)->orderBy('id'),
+        ]);
 
         $this->completedLessonIds = $this->enrollment
             ? $this->enrollment->progressRecords()->whereNotNull('completed_at')->pluck('lesson_id')
@@ -66,6 +78,49 @@ class LearnShell
                 ->filter(fn (Lesson $l) => $course->isLessonLocked($this->enrollment, $l))
                 ->pluck('id')
             : collect();
+
+        $this->submittedQuizIds = $this->enrollment
+            ? $this->enrollment->quizAttempts()->whereNotNull('submitted_at')->pluck('quiz_id')->unique()
+            : collect();
+
+        $this->submittedAssignmentIds = $this->enrollment
+            ? $this->enrollment->assignmentSubmissions()->whereNotNull('submitted_at')->pluck('assignment_id')->unique()
+            : collect();
+    }
+
+    /**
+     * The quizzes and tasks that sit under one lesson, in the order a student
+     * meets them: the topic, then its questions, then its work.
+     *
+     * @return list<array{type: string, model: object, title: string, required: bool, done: bool, url: string}>
+     */
+    public function activitiesFor(Lesson $lesson): array
+    {
+        $out = [];
+
+        foreach ($lesson->quizzes as $quiz) {
+            $out[] = [
+                'type' => 'quiz',
+                'model' => $quiz,
+                'title' => $quiz->title,
+                'required' => (bool) $quiz->is_required,
+                'done' => $this->submittedQuizIds->contains($quiz->id),
+                'url' => route('learn.quiz.show', [$this->course, $quiz]),
+            ];
+        }
+
+        foreach ($lesson->assignments as $assignment) {
+            $out[] = [
+                'type' => 'task',
+                'model' => $assignment,
+                'title' => $assignment->title,
+                'required' => (bool) $assignment->is_required,
+                'done' => $this->submittedAssignmentIds->contains($assignment->id),
+                'url' => route('learn.assignment.show', [$this->course, $assignment]),
+            ];
+        }
+
+        return $out;
     }
 
     /** @return array{model: \App\Models\CourseModule, lessons: Collection<int,Lesson>, total: int, done: int, isCurrent: bool} */
