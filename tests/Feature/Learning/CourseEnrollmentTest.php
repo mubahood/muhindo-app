@@ -82,7 +82,7 @@ class CourseEnrollmentTest extends TestCase
             'certificate_no' => 'CRT-TEST-1', 'issued_at' => now(),
         ]);
 
-        $response = $this->actingAs($student)->get(route('learn.certificate', $certificate));
+        $response = $this->actingAs($student)->get(route('learn.certificate.download', $certificate));
 
         $response->assertOk();
         $this->assertSame('application/pdf', $response->headers->get('Content-Type'));
@@ -102,6 +102,6 @@ class CourseEnrollmentTest extends TestCase
             'certificate_no' => 'CRT-TEST-2', 'issued_at' => now(),
         ]);
 
-        $this->actingAs($stranger)->get(route('learn.certificate', $certificate))->assertForbidden();
+        $this->actingAs($stranger)->get(route('learn.certificate.download', $certificate))->assertForbidden();
     }
 }
