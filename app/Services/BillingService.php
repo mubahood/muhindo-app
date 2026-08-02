@@ -167,6 +167,36 @@ class BillingService
     }
 
     /**
+     * Settle an invoice that costs nothing.
+     *
+     * A free order still needs an invoice — it is the record of what was taken
+     * and the thing fulfilment listens to — but recordPayment rightly refuses a
+     * zero payment, and inventing a 0.00 Payment row would put a payment in the
+     * ledger that never happened. This moves the invoice to Paid and fires the
+     * same event, so free and paid orders are fulfilled by one code path.
+     */
+    public function settleFreeInvoice(Invoice $invoice): Invoice
+    {
+        if (bccomp((string) $invoice->total, '0', 2) !== 0) {
+            throw new RuntimeException('Only a zero-total invoice can be settled without a payment.');
+        }
+
+        return DB::transaction(function () use ($invoice) {
+            /** @var Invoice $locked */
+            $locked = Invoice::whereKey($invoice->id)->lockForUpdate()->firstOrFail();
+
+            if ($locked->status === InvoiceStatus::Paid) {
+                return $locked;                        // idempotent
+            }
+
+            $locked->update(['amount_paid' => '0.00', 'balance' => '0.00', 'status' => InvoiceStatus::Paid]);
+            InvoicePaid::dispatch($locked->fresh());
+
+            return $locked->fresh();
+        });
+    }
+
+    /**
      * §7.1 — credits an invoice that money was actually collected against (Paid or
      * PartiallyPaid only — nothing to credit on one that was never paid). Distinct from
      * void(): void means "this charge should never have existed"; refunded means "money was

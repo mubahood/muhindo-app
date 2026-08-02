@@ -51,6 +51,32 @@ Route::get('/cv', [PortfolioController::class, 'cv'])->name('portfolio.cv');
 
 // Insights — writing. Public reading side; authoring lives in the back office.
 Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
+
+/*
+|--------------------------------------------------------------------------
+| Shop — digital products, one basket, one checkout
+|--------------------------------------------------------------------------
+| Browsing and the basket are public: someone can fill a basket before they
+| have an account. Everything from the review screen on requires sign-in,
+| because an order has to belong to somebody.
+*/
+Route::get('/shop', [\App\Http\Controllers\Shop\ShopController::class, 'index'])->name('shop.index');
+Route::get('/shop/{product:slug}', [\App\Http\Controllers\Shop\ShopController::class, 'show'])->name('shop.show');
+
+Route::get('/cart', [\App\Http\Controllers\Shop\CartController::class, 'show'])->name('cart.show');
+Route::post('/cart/add', [\App\Http\Controllers\Shop\CartController::class, 'add'])->name('cart.add');
+Route::patch('/cart', [\App\Http\Controllers\Shop\CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart', [\App\Http\Controllers\Shop\CartController::class, 'remove'])->name('cart.remove');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [\App\Http\Controllers\Shop\CheckoutController::class, 'review'])->name('checkout.review');
+    Route::post('/checkout', [\App\Http\Controllers\Shop\CheckoutController::class, 'place'])
+        ->middleware('throttle:10,1')->name('checkout.place');
+    Route::get('/checkout/{invoice:uuid}/pay', [\App\Http\Controllers\Shop\CheckoutController::class, 'pay'])->name('checkout.pay');
+
+    Route::get('/my/downloads', [\App\Http\Controllers\Shop\DownloadController::class, 'index'])->name('shop.downloads');
+    Route::get('/my/downloads/{product:slug}', [\App\Http\Controllers\Shop\DownloadController::class, 'download'])->name('shop.download');
+});
 Route::get('/insights', [\App\Http\Controllers\InsightController::class, 'index'])->name('insights.index');
 Route::get('/insights/{post:slug}', [\App\Http\Controllers\InsightController::class, 'show'])->name('insights.show');
 Route::get('/products', [PortfolioController::class, 'products'])->name('portfolio.products');
@@ -136,6 +162,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::resource('experience', ExperienceController::class)->except('show');
     Route::resource('posts', \App\Http\Controllers\Admin\PostController::class)->except('show');
     Route::resource('gallery', \App\Http\Controllers\Admin\GalleryPhotoController::class)->except('show')->parameters(['gallery' => 'photo']);
+    Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except('show');
     Route::get('testimonials', [\App\Http\Controllers\Admin\TestimonialController::class, 'index'])->name('testimonials.index');
     Route::post('testimonials', [\App\Http\Controllers\Admin\TestimonialController::class, 'store'])->name('testimonials.store');
     Route::delete('testimonials/{index}', [\App\Http\Controllers\Admin\TestimonialController::class, 'destroy'])->name('testimonials.destroy');

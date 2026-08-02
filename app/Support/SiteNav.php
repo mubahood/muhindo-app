@@ -71,6 +71,12 @@ class SiteNav
                 'icon' => 'fa-diagram-project',
             ],
             [
+                'label' => 'Shop',
+                'url' => route('shop.index'),
+                'match' => ['shop.*', 'cart.*', 'checkout.*'],
+                'icon' => 'fa-basket-shopping',
+            ],
+            [
                 'label' => 'Insights',
                 'url' => route('insights.index'),
                 'match' => ['insights.*'],

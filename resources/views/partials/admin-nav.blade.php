@@ -35,6 +35,7 @@
           ['label' => 'Services', 'icon' => 'fa-list-check', 'route' => 'admin.services.index', 'match' => ['admin.services.*']],
           ['label' => 'Insights', 'icon' => 'fa-pen-nib', 'route' => 'admin.posts.index', 'match' => ['admin.posts.*']],
           ['label' => 'Gallery', 'icon' => 'fa-images', 'route' => 'admin.gallery.index', 'match' => ['admin.gallery.*']],
+          ['label' => 'Shop products', 'icon' => 'fa-box-open', 'route' => 'admin.products.index', 'match' => ['admin.products.*']],
           ['label' => 'Testimonials', 'icon' => 'fa-quote-left', 'route' => 'admin.testimonials.index', 'match' => ['admin.testimonials.*']],
           ['label' => 'Messages', 'icon' => 'fa-envelope', 'route' => 'admin.messages.index', 'match' => ['admin.messages.*']],
       ]],

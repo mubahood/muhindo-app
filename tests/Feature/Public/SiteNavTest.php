@@ -27,7 +27,7 @@ class SiteNavTest extends TestCase
 
         // Order is the message: learning first, then who he is, then the
         // evidence, then the writing, then how to hire him.
-        $this->assertSame(['Learn', 'About Me', 'Projects', 'Insights', 'Consultancy'], $labels);
+        $this->assertSame(['Learn', 'About Me', 'Projects', 'Shop', 'Insights', 'Consultancy'], $labels);
     }
 
     public function test_the_about_panel_carries_every_page_about_him(): void

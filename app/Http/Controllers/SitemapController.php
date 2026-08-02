@@ -32,12 +32,17 @@ class SitemapController extends Controller
             ['loc' => route('portfolio.cv'), 'lastmod' => null],
             ['loc' => route('insights.index'), 'lastmod' => null],
             ['loc' => route('gallery.index'), 'lastmod' => null],
+            ['loc' => route('shop.index'), 'lastmod' => null],
             ['loc' => route('portfolio.products'), 'lastmod' => null],
             ['loc' => route('start-a-project'), 'lastmod' => null],
             ['loc' => route('contact'), 'lastmod' => null],
             ['loc' => route('privacy'), 'lastmod' => null],
             ['loc' => route('terms'), 'lastmod' => null],
         ];
+
+        foreach (\App\Models\Product::published()->get(['slug', 'updated_at']) as $product) {
+            $urls[] = ['loc' => route('shop.show', $product), 'lastmod' => $product->updated_at];
+        }
 
         foreach (\App\Models\Post::published()->get(['slug', 'updated_at']) as $post) {
             $urls[] = ['loc' => route('insights.show', $post), 'lastmod' => $post->updated_at];

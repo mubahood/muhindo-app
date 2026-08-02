@@ -691,6 +691,44 @@
       .rail a.on{border-left-color:transparent;border-bottom-color:var(--gold);}
     }
 
+    /* ── Shop ─────────────────────────────────────────────────────────────── */
+    .shop-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px;}
+    .shop-filters .tb-input{width:auto;min-width:150px;border:1px solid var(--line-2);background:var(--surface);
+      padding:9px 11px;font-family:var(--font);font-size:13px;color:var(--tx);}
+    .shop-filters input[type=search]{flex:1;min-width:190px;}
+    .shop-filters .tb-input:focus{outline:2px solid var(--gold);outline-offset:-1px;}
+
+    .price-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:2px;}
+    .price{font-size:16px;font-weight:700;color:var(--pri);}
+    .price.free{color:var(--gold-d);}
+    .price-row .was{font-size:12.5px;color:var(--tx3);text-decoration:line-through;}
+    .price-row .meta{font-size:11px;color:var(--tx3);margin-left:auto;}
+    .buy-row{display:flex;gap:6px;margin-top:auto;padding-top:10px;}
+    .buy-row .btn{flex:1;justify-content:center;}
+
+    .product-layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:34px;align-items:start;}
+    .cart-layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:24px;align-items:start;}
+    .buy-box{border:1px solid var(--line);background:var(--surface);padding:20px;position:sticky;top:calc(var(--hd) + 14px);}
+    .buy-box .includes{list-style:none;margin:0 0 16px;}
+    .buy-box .includes li{position:relative;font-size:12.5px;font-weight:450;color:var(--tx2);padding:5px 0 5px 20px;}
+    .buy-box .includes li::before{content:'\2713';position:absolute;left:0;color:var(--gold-d);font-weight:700;}
+    .pay-icons{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 8px;}
+    .pay-icons span{font-size:10.5px;color:var(--tx3);border:1px solid var(--line-2);padding:4px 8px;}
+    .money-comfort{font-size:11px;color:var(--tx3);text-align:center;line-height:1.5;}
+    @media(max-width:900px){
+      .product-layout,.cart-layout{grid-template-columns:1fr;}
+      .buy-box{position:static;order:-1;}
+    }
+
+    /* Basket indicator — only shown when there is something in it, so an empty
+       basket never adds noise to the header. */
+    .cart-link{position:relative;display:inline-flex;align-items:center;justify-content:center;
+      width:34px;height:34px;color:var(--tx2);transition:color .15s;}
+    .cart-link:hover{color:var(--gold-d);}
+    .cart-count{position:absolute;top:-2px;right:-3px;min-width:16px;height:16px;padding:0 4px;
+      background:var(--gold);color:var(--pri-d);font-size:9.5px;font-weight:700;
+      display:flex;align-items:center;justify-content:center;}
+
     /* ── Gallery ──────────────────────────────────────────────────────────
        A column masonry rather than a grid of equal boxes: these photographs
        are a mix of portrait, landscape and square, and forcing them all into
@@ -957,6 +995,13 @@
         <span class="cta-a">Learn</span>
         <span class="cta-b" aria-hidden="true">Start Learning <i class="fas fa-arrow-right"></i></span>
       </a>
+
+      @if(app(\App\Services\Shop\Cart::class)->count() > 0)
+        <a href="{{ route('cart.show') }}" wire:navigate class="cart-link" aria-label="Basket, {{ app(\App\Services\Shop\Cart::class)->count() }} items">
+          <i class="fas fa-basket-shopping" aria-hidden="true"></i>
+          <span class="cart-count">{{ app(\App\Services\Shop\Cart::class)->count() }}</span>
+        </a>
+      @endif
 
       @auth
         <div class="acct desk">

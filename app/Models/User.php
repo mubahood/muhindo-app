@@ -151,6 +151,12 @@ class User extends Authenticatable implements MustVerifyEmailContract
      *
      * @return HasMany<Enrollment, $this>
      */
+    /** @return HasMany<\App\Models\ProductLicense, $this> */
+    public function productLicenses(): HasMany
+    {
+        return $this->hasMany(\App\Models\ProductLicense::class);
+    }
+
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
