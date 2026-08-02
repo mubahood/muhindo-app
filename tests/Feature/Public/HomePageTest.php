@@ -208,8 +208,15 @@ class HomePageTest extends TestCase
         // exactly one track width, which is what removes the seam.
         $this->assertSame(2, substr_count($html, 'class="marquee-track"'));
         $this->assertSame(2, substr_count($html, 'Muteesa I Royal University'));
-        // The duplicate must not be read out a second time.
-        $this->assertStringContainsString('class="marquee-track" aria-hidden="true"', $html);
+        /* The duplicate must not be read out a second time. Matched on a
+           pattern rather than an exact string: Blade leaves a second space
+           where the conditional attribute is emitted, and asserting on
+           whitespace makes a passing test a matter of luck. */
+        $this->assertMatchesRegularExpression(
+            '/class="marquee-track"\s+aria-hidden="true"/',
+            $html,
+            'the duplicated track must be hidden from assistive tech'
+        );
     }
 
     public function test_the_stat_row_publishes_the_true_figures(): void
