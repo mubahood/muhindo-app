@@ -29,9 +29,15 @@
   @media(max-width:620px){.ab-work{grid-template-columns:1fr;}}
 
   .ab-shots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-  .ab-shots a{display:block;aspect-ratio:1;overflow:hidden;background:var(--line);}
-  .ab-shots img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
-  .ab-shots a:hover img{transform:scale(1.05);}
+  .ab-shot{position:relative;display:block;aspect-ratio:1;overflow:hidden;background:var(--line);
+    padding:0;border:0;cursor:zoom-in;}
+  .ab-shot img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .ab-shot:hover img,.ab-shot:focus-visible img{transform:scale(1.05);}
+  /* Says it opens rather than navigates, before the visitor has to find out. */
+  .ab-shot-zoom{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(11,31,58,.42);color:#fff;font-size:15px;opacity:0;transition:opacity .2s;}
+  .ab-shot:hover .ab-shot-zoom,.ab-shot:focus-visible .ab-shot-zoom{opacity:1;}
+  .ab-shot:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
   @media(max-width:620px){.ab-shots{grid-template-columns:repeat(3,1fr);}}
 
   .ab-orgs{display:flex;flex-wrap:wrap;gap:6px;}
@@ -99,11 +105,16 @@
         @if($photos->isNotEmpty())
           <div class="ab-sec">
             <h2 class="ab-h">In pictures</h2>
-            <div class="ab-shots">
-              @foreach($photos->take(4) as $photo)
-                <a href="{{ route('gallery.index') }}" wire:navigate title="{{ $photo->title }}">
+            @php $strip = $photos->take(4)->values(); @endphp
+            <div class="ab-shots" id="ab-shots">
+              @foreach($strip as $index => $photo)
+                {{-- A button, not a link: this opens the photograph in place.
+                     Only "See the gallery" leaves the page. --}}
+                <button type="button" class="ab-shot" data-index="{{ $index }}"
+                        aria-label="View: {{ $photo->title }}">
                   <img src="{{ $photo->thumbUrl() }}" alt="{{ $photo->altText() }}" loading="lazy" decoding="async">
-                </a>
+                  <span class="ab-shot-zoom" aria-hidden="true"><i class="fas fa-expand"></i></span>
+                </button>
               @endforeach
             </div>
             <p style="margin-top:11px;">
@@ -139,5 +150,7 @@
     </div>
   </div>
 </section>
+
+@include('portfolio.partials.lightbox', ['photos' => $photos->take(4), 'grid' => '#ab-shots', 'item' => '.ab-shot'])
 
 @endsection
