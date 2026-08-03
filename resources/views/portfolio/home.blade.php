@@ -152,18 +152,11 @@
       @foreach($projects as $i => $p)
         <article class="shot" data-rise style="--d:{{ $i * 80 }}ms;">
           <div class="shot-frame">
-            {{-- The address bar carries the project's real domain. It is doing
-                 the same job the whole card is: this is a running site, not a
-                 mock-up, and here is where to find it. --}}
-            <div class="shot-bar" aria-hidden="true">
-              <i></i><i></i><i></i>
-              <span class="u">{{ $p->external_link ? parse_url($p->external_link, PHP_URL_HOST) : '' }}</span>
-            </div>
+            {{-- The screenshot carries its own window bar, so the card no
+                 longer draws a second one over the top of it. --}}
             <a href="{{ route('portfolio.project', $p) }}" wire:navigate class="shot-shot"
                aria-label="{{ $p->title }} case study">
-              <x-ph :src="$p->cover_image ? 'storage/'.$p->cover_image : 'images/systems/'.$p->slug.'.png'"
-                    :alt="$p->title.' — screenshot'"
-                    label="Screenshot" size="1600 × 1000px" ratio="16 / 10" icon="fa-desktop" />
+              @include('portfolio.partials.shot', ['project' => $p])
             </a>
           </div>
           <div class="shot-body">
@@ -197,7 +190,7 @@
     </div>
 
     <div style="text-align:center;margin-top:30px;" data-rise>
-      <a href="{{ route('portfolio.work') }}" wire:navigate class="btn ghost cta">
+      <a href="{{ route('portfolio.projects.index') }}" wire:navigate class="btn ghost cta">
         <span class="cta-a">View all work</span>
         <span class="cta-b" aria-hidden="true">See the projects <i class="fas fa-arrow-right"></i></span>
       </a>
@@ -395,7 +388,7 @@
 
   <div class="wrap">
     <p style="text-align:center;margin-top:14px;">
-      <a href="{{ route('portfolio.work') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
+      <a href="{{ route('portfolio.projects.index') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
         See what I built for them <i class="fas fa-arrow-right"></i>
       </a>
     </p>

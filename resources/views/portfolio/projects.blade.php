@@ -23,16 +23,7 @@
         <a href="{{ route('portfolio.project', $p) }}" wire:navigate class="work-card" data-rise style="--d:{{ min($i, 6) * 60 }}ms;">
           <div class="work-shot">
             <span class="work-no">{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }}</span>
-            @if($p->cover_image)
-              <img src="{{ asset('storage/'.$p->cover_image) }}" alt="{{ $p->title }}" loading="lazy" decoding="async">
-            @else
-              <x-ph :src="'images/systems/'.$p->slug.'.png'"
-                    :alt="$p->title.' — screenshot'"
-                    label="Screenshot"
-                    size="1600 × 1000px"
-                    ratio="16 / 10"
-                    icon="fa-desktop" />
-            @endif
+            @include('portfolio.partials.shot', ['project' => $p])
           </div>
           <div class="work-body">
             <div class="tag-row">

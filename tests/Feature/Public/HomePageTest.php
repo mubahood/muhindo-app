@@ -39,20 +39,20 @@ class HomePageTest extends TestCase
 
     public function test_a_missing_image_renders_a_labelled_slot_instead_of_a_broken_page(): void
     {
-        // The portrait slot has since been filled, so the mechanism is asserted
-        // against the project screenshots, which are still to come.
+        // Asserted against a project with no drawn screenshot: the eight real
+        // ones each have an SVG, so the empty state needs a ninth to show up in.
         $project = PortfolioProject::create([
             'title' => 'A System', 'slug' => 'a-system',
             'description' => 'Delivered end to end.', 'sort_order' => 0,
         ]);
 
-        $this->assertFileDoesNotExist(public_path("images/systems/{$project->slug}.png"));
+        $this->assertFileDoesNotExist(public_path("images/systems/{$project->slug}.svg"));
 
         $this->get(route('home'))
             ->assertOk()
             ->assertSee('Screenshot')
             // The slot names the exact file it is waiting for.
-            ->assertSee("public/images/systems/{$project->slug}.png");
+            ->assertSee("public/images/systems/{$project->slug}.svg");
     }
 
     public function test_a_supplied_image_replaces_its_slot(): void
@@ -63,7 +63,7 @@ class HomePageTest extends TestCase
            this test used images/portrait.jpg and its cleanup deleted the site's
            actual portrait. A test may not be able to destroy production files. */
         $slug = 'zz-test-'.Str::random(8);
-        $path = public_path("images/systems/{$slug}.png");
+        $path = public_path("images/systems/{$slug}.svg");
         @mkdir(dirname($path), 0755, true);
         file_put_contents($path, 'not-a-real-jpeg-but-a-real-file');
 
@@ -75,8 +75,8 @@ class HomePageTest extends TestCase
         try {
             $this->get(route('home'))
                 ->assertOk()
-                ->assertSee("images/systems/{$slug}.png")
-                ->assertDontSee("public/images/systems/{$slug}.png");
+                ->assertSee("images/systems/{$slug}.svg")
+                ->assertDontSee("public/images/systems/{$slug}.svg");
         } finally {
             @unlink($path);
         }

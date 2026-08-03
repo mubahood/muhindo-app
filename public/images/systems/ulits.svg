@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img">
+  <rect x="0" y="0" width="1600" height="1000" fill="#F5F2EA"/>
+  <rect x="0" y="0" width="1600" height="52" fill="#0B1F3A"/>
+  <circle cx="28" cy="26.0" r="5" fill="#FFFFFF" opacity="0.22"/>
+  <circle cx="50" cy="26.0" r="5" fill="#FFFFFF" opacity="0.3"/>
+  <circle cx="72" cy="26.0" r="5" fill="#FFFFFF" opacity="0.38"/>
+  <text x="800.0" y="31" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.55">u-lits.com — Uganda Livestock Information Tracking System</text>
+  <circle cx="1560" cy="26.0" r="13" fill="#B8933F" opacity="0.9"/>
+  <text x="1560" y="30.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#0B1F3A" text-anchor="middle">MA</text>
+  <rect x="0" y="52" width="288" height="948" fill="#152B4C"/>
+  <rect x="28" y="84" width="38" height="38" fill="#B8933F" rx="8"/>
+  <path d="M 40 100 q 0 -8 7 -8 q 7 0 7 8 M 40 100 h 14 M 47 92 v -6" fill="none" stroke="#0B1F3A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="78" y="100" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="start">ULITS</text>
+  <text x="78" y="118" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#FFFFFF" text-anchor="start" letter-spacing="0.6" opacity="0.45">MAAIF · Livestock</text>
+  <line x1="28" y1="150" x2="260" y2="150" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.12"/>
+  <rect x="32" y="181" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
+  <text x="64" y="195" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Dashboard</text>
+  <rect x="32" y="233" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
+  <text x="64" y="247" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Animal registry</text>
+  <rect x="16" y="276" width="256" height="40" fill="#FFFFFF" rx="6" opacity="0.09"/>
+  <rect x="0" y="276" width="4" height="40" fill="#B8933F"/>
+  <rect x="32" y="285" width="18" height="18" fill="#B8933F" rx="4" opacity="1"/>
+  <text x="64" y="299" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#FFFFFF" text-anchor="start" opacity="0.95">Movements</text>
+  <rect x="32" y="337" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
+  <text x="64" y="351" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Vaccination</text>
+  <rect x="32" y="389" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
+  <text x="64" y="403" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Disease alerts</text>
+  <rect x="32" y="441" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
+  <text x="64" y="455" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Districts</text>
+  <line x1="28" y1="904" x2="260" y2="904" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.12"/>
+  <circle cx="46" cy="942" r="15" fill="#FFFFFF" opacity="0.16"/>
+  <text x="46" y="946.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" opacity="0.7">MM</text>
+  <rect x="72" y="934" width="104" height="9" fill="#FFFFFF" rx="4.5" opacity="0.4"/>
+  <rect x="72" y="950" width="68" height="7" fill="#FFFFFF" rx="3.5" opacity="0.2"/>
+  <text x="336" y="112" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="33" font-weight="700" fill="#0B1F3A" text-anchor="start">Livestock movement tracking</text>
+  <text x="336" y="141" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#8A8375" text-anchor="start">Live registry across 146 districts · last sync 4 minutes ago</text>
+  <rect x="1436.0" y="88" width="116.0" height="42" fill="#B8933F" rx="4"/>
+  <text x="1494.0" y="113.86" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">New permit</text>
+  <rect x="1338.8" y="88" width="83.19999999999999" height="42" fill="#FFFFFF" rx="4"/>
+  <text x="1380.3999999999999" y="113.86" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Export</text>
+  <rect x="1338.8" y="88" width="83.19999999999999" height="42" fill="none" rx="4" stroke="#E4DFD3" stroke-width="1"/>
+  <rect x="1338.8" y="88" width="0" height="0" fill="none" rx="4"/>
+  <text x="1380.3999999999999" y="113.9" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Export</text>
+  <rect x="336.0" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="358.0" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">ANIMALS REGISTERED</text>
+  <text x="358.0" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B1F3A" text-anchor="start">48,120</text>
+  <text x="358.0" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">ear-tagged nationally</text>
+  <rect x="749.3333333333333" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="771.3333333333333" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">MOVEMENT PERMITS</text>
+  <text x="771.3333333333333" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B1F3A" text-anchor="start">3,402</text>
+  <text x="771.3333333333333" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">issued this quarter</text>
+  <rect x="1162.6666666666665" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="1184.6666666666665" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">DISTRICTS LIVE</text>
+  <text x="1184.6666666666665" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#B8933F" text-anchor="start">146 / 146</text>
+  <text x="1184.6666666666665" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">full national coverage</text>
+  <rect x="336" y="324" width="800" height="616" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="360" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">NATIONAL HERD MOVEMENT</text>
+  <text x="1112" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#B8933F" text-anchor="end">LAST 30 DAYS</text>
+  <path d="M 595.1 421.8 L 611.7 401.3 L 640.9 395.5 L 689.7 394.5 L 738.4 401.3 L 779.4 394.5 L 816.4 396.4 L 855.4 402.3 L 894.4 406.2 L 913.9 391.6 L 938.3 403.2 L 957.8 437.4 L 980.2 469.6 L 974.4 510.5 L 962.7 559.2 L 951.0 598.2 L 936.4 639.2 L 923.7 656.8 L 909.1 671.4 L 902.2 693.8 L 910.0 717.2 L 902.2 749.4 L 897.4 778.6 L 894.4 817.6 L 845.7 832.2 L 796.9 859.6 L 728.7 863.4 L 660.4 863.4 L 601.9 865.4 L 558.1 867.4 L 519.1 890.8 L 504.4 907.3 L 486.9 894.6 L 480.1 866.4 L 475.2 834.2 L 486.9 806.9 L 494.7 773.8 L 485.9 748.4 L 492.7 717.2 L 509.3 693.8 L 528.8 664.5 L 548.3 649.0 L 574.6 627.5 L 592.2 598.2 L 613.6 571.0 L 639.0 541.7 L 642.9 510.5 L 629.2 479.3 L 613.6 455.9 L 601.9 436.4 Z" fill="#F0E4C6" stroke="#B8933F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 687.7 863.4 L 767.7 861.5 L 835.9 834.2 L 894.4 817.6 L 890.5 783.5 L 876.9 762.0 L 840.8 736.7 L 801.8 728.9 L 762.8 742.5 L 730.6 764.0 L 707.2 797.1 L 693.6 832.2 Z" fill="#9DB4C4" stroke="#0B1F3A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+  <path d="M 555.1 647.0 L 580.5 615.8 L 609.7 582.6 L 635.1 555.4 L 625.3 545.6 L 598.0 571.0 L 568.8 606.0 L 543.4 637.2 Z" fill="#9DB4C4" stroke="#0B1F3A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+  <path d="M 709.2 658.7 L 736.5 660.6 L 765.7 652.9 L 795.0 633.4 L 822.3 621.6 L 857.4 617.8 L 867.1 606.0 L 835.9 596.3 L 804.7 608.0 L 775.5 613.9 L 752.1 623.6 L 738.4 610.0 L 717.0 604.1 L 703.3 619.7 L 715.0 639.2 Z" fill="#9DB4C4" stroke="#0B1F3A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+  <path d="M 577.6 700.6 L 652.6 635.3 L 765.7 707.5 L 867.1 571.0" fill="none" stroke="#0B1F3A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 7" opacity="0.6"/>
+  <circle cx="765.7374999999998" cy="707.45" r="15" fill="#B8933F" opacity="0.25"/>
+  <path d="M 765.7 687.5 c -7 0 -12 5 -12 11 c 0 8 12 20 12 20 s 12 -12 12 -20 c 0 -6 -5 -11 -12 -11 z" fill="#0B1F3A"/>
+  <circle cx="765.7374999999998" cy="698.45" r="4.4" fill="#B8933F"/>
+  <circle cx="577.5624999999999" cy="700.625" r="6" fill="#0B1F3A" opacity="0.8"/>
+  <circle cx="577.5624999999999" cy="700.625" r="11" fill="#0B1F3A" opacity="0.18"/>
+  <circle cx="867.1374999999998" cy="570.95" r="6" fill="#0B1F3A" opacity="0.8"/>
+  <circle cx="867.1374999999998" cy="570.95" r="11" fill="#0B1F3A" opacity="0.18"/>
+  <circle cx="652.6375000000002" cy="537.8" r="6" fill="#0B1F3A" opacity="0.8"/>
+  <circle cx="652.6375000000002" cy="537.8" r="11" fill="#0B1F3A" opacity="0.18"/>
+  <circle cx="921.7375" cy="661.625" r="6" fill="#0B1F3A" opacity="0.8"/>
+  <circle cx="921.7375" cy="661.625" r="11" fill="#0B1F3A" opacity="0.18"/>
+  <circle cx="548.3125000000001" cy="824.45" r="6" fill="#0B1F3A" opacity="0.8"/>
+  <circle cx="548.3125000000001" cy="824.45" r="11" fill="#0B1F3A" opacity="0.18"/>
+  <circle cx="796.9374999999998" cy="494.90000000000003" r="6" fill="#0B1F3A" opacity="0.8"/>
+  <circle cx="796.9374999999998" cy="494.90000000000003" r="11" fill="#0B1F3A" opacity="0.18"/>
+  <circle cx="616.5625" cy="726.95" r="6" fill="#0B1F3A" opacity="0.8"/>
+  <circle cx="616.5625" cy="726.95" r="11" fill="#0B1F3A" opacity="0.18"/>
+  <text x="792.0625000000001" y="783.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#0B1F3A" text-anchor="middle" letter-spacing="1.0" opacity="0.55">LAKE VICTORIA</text>
+  <text x="777.4375000000002" y="629.45" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#0B1F3A" text-anchor="middle" letter-spacing="1.0" opacity="0.55">LAKE KYOGA</text>
+  <circle cx="384" cy="908" r="6" fill="#0B1F3A" opacity="0.75"/>
+  <text x="400" y="912" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#8A8375" text-anchor="start">Holding</text>
+  <line x1="468" y1="908" x2="500" y2="908" stroke="#0B1F3A" stroke-width="2.4" stroke-linecap="butt" stroke-dasharray="7 6" opacity="0.55"/>
+  <text x="510" y="912" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#8A8375" text-anchor="start">Permitted route</text>
+  <text x="1164" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">RECENT REGISTRATIONS</text>
+  <rect x="1164" y="374" width="388" height="288" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <rect x="1165" y="380" width="386" height="46" fill="#F5F2EA"/>
+  <text x="1186" y="407.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1">TAG</text>
+  <text x="1334" y="407.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1">DISTRICT</text>
+  <text x="1442" y="407.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1"></text>
+  <text x="1186" y="453.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#0B1F3A" text-anchor="start">UG-0442-118</text>
+  <text x="1334" y="453.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#8A8375" text-anchor="start">Mbarara</text>
+  <rect x="1442" y="438.0" width="58.92" height="22" fill="#E4EFE8" rx="3"/>
+  <text x="1471.46" y="453.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#3F7D58" text-anchor="middle" letter-spacing="0.4">SYNCED</text>
+  <line x1="1180" y1="472" x2="1536" y2="472" stroke="#E4DFD3" stroke-width="1" stroke-linecap="butt"/>
+  <text x="1186" y="499.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#0B1F3A" text-anchor="start">UG-0442-119</text>
+  <text x="1334" y="499.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#8A8375" text-anchor="start">Mbarara</text>
+  <rect x="1442" y="484.0" width="58.92" height="22" fill="#E4EFE8" rx="3"/>
+  <text x="1471.46" y="499.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#3F7D58" text-anchor="middle" letter-spacing="0.4">SYNCED</text>
+  <line x1="1180" y1="518" x2="1536" y2="518" stroke="#E4DFD3" stroke-width="1" stroke-linecap="butt"/>
+  <text x="1186" y="545.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#0B1F3A" text-anchor="start">UG-0873-004</text>
+  <text x="1334" y="545.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#8A8375" text-anchor="start">Gulu</text>
+  <rect x="1442" y="530.0" width="58.92" height="22" fill="#E4EFE8" rx="3"/>
+  <text x="1471.46" y="545.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#3F7D58" text-anchor="middle" letter-spacing="0.4">SYNCED</text>
+  <line x1="1180" y1="564" x2="1536" y2="564" stroke="#E4DFD3" stroke-width="1" stroke-linecap="butt"/>
+  <text x="1186" y="591.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#0B1F3A" text-anchor="start">UG-1120-771</text>
+  <text x="1334" y="591.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#8A8375" text-anchor="start">Soroti</text>
+  <rect x="1442" y="576.0" width="58.92" height="22" fill="#F0E4C6" rx="3"/>
+  <text x="1471.46" y="591.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#B8933F" text-anchor="middle" letter-spacing="0.4">QUEUED</text>
+  <line x1="1180" y1="610" x2="1536" y2="610" stroke="#E4DFD3" stroke-width="1" stroke-linecap="butt"/>
+  <text x="1186" y="637.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#0B1F3A" text-anchor="start">UG-1120-772</text>
+  <text x="1334" y="637.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#8A8375" text-anchor="start">Soroti</text>
+  <rect x="1442" y="622.0" width="58.92" height="22" fill="#F0E4C6" rx="3"/>
+  <text x="1471.46" y="637.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#B8933F" text-anchor="middle" letter-spacing="0.4">QUEUED</text>
+  <rect x="1164" y="674" width="388" height="118" fill="#0B1F3A" rx="6"/>
+  <path d="M 1190 726 a 30 30 0 0 1 44 0" fill="none" stroke="#B8933F" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 1200 714 a 18 18 0 0 1 24 0" fill="none" stroke="#B8933F" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <circle cx="1212" cy="704" r="3.6" fill="#B8933F" opacity="0.35"/>
+  <text x="1252" y="714" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="start">Offline capture on</text>
+  <text x="1252" y="734" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.6">212 records held on device,</text>
+  <text x="1252" y="752" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.6">syncing when signal returns</text>
+  <text x="1164" y="838" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">VACCINATION COVERAGE</text>
+  <rect x="1164.0" y="873.4468085106383" width="66.4" height="50.5531914893617" fill="#0B1F3A" rx="3" opacity="0.78"/>
+  <text x="1197.2" y="944" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#8A8375" text-anchor="middle">JAN</text>
+  <rect x="1244.4" y="862.2127659574468" width="66.4" height="61.787234042553195" fill="#0B1F3A" rx="3" opacity="0.78"/>
+  <text x="1277.6000000000001" y="944" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#8A8375" text-anchor="middle">FEB</text>
+  <rect x="1324.8" y="881.1702127659574" width="66.4" height="42.829787234042556" fill="#0B1F3A" rx="3" opacity="0.78"/>
+  <text x="1358.0" y="944" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#8A8375" text-anchor="middle">MAR</text>
+  <rect x="1405.2" y="858.0" width="66.4" height="66.0" fill="#B8933F" rx="3" opacity="1"/>
+  <text x="1438.4" y="944" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#8A8375" text-anchor="middle">APR</text>
+  <rect x="1485.6" y="867.8297872340426" width="66.4" height="56.170212765957444" fill="#0B1F3A" rx="3" opacity="0.78"/>
+  <text x="1518.8" y="944" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#8A8375" text-anchor="middle">MAY</text>
+</svg>

@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img">
+  <rect x="0" y="0" width="1600" height="1000" fill="#F5F2EA"/>
+  <rect x="0" y="0" width="1600" height="52" fill="#0B1F3A"/>
+  <circle cx="28" cy="26.0" r="5" fill="#FFFFFF" opacity="0.22"/>
+  <circle cx="50" cy="26.0" r="5" fill="#FFFFFF" opacity="0.3"/>
+  <circle cx="72" cy="26.0" r="5" fill="#FFFFFF" opacity="0.38"/>
+  <text x="800.0" y="31" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.55">schooldynamics.ug — School Management Information System</text>
+  <circle cx="1560" cy="26.0" r="13" fill="#B8933F" opacity="0.9"/>
+  <text x="1560" y="30.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#0B1F3A" text-anchor="middle">SD</text>
+  <rect x="0" y="52" width="288" height="948" fill="#152B4C"/>
+  <rect x="28" y="84" width="38" height="38" fill="#B8933F" rx="8"/>
+  <path d="M 36 103 l 11 -6 l 11 6 l -11 6 z M 47 109 v 8" fill="none" stroke="#0B1F3A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="78" y="100" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="start">School Dynamics</text>
+  <text x="78" y="118" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#FFFFFF" text-anchor="start" letter-spacing="0.6" opacity="0.45">Term II · 2026</text>
+  <line x1="28" y1="150" x2="260" y2="150" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.12"/>
+  <rect x="32" y="181" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
+  <text x="64" y="195" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Overview</text>
+  <rect x="32" y="233" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
+  <text x="64" y="247" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Students</text>
+  <rect x="16" y="276" width="256" height="40" fill="#FFFFFF" rx="6" opacity="0.09"/>
+  <rect x="0" y="276" width="4" height="40" fill="#B8933F"/>
+  <rect x="32" y="285" width="18" height="18" fill="#B8933F" rx="4" opacity="1"/>
+  <text x="64" y="299" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#FFFFFF" text-anchor="start" opacity="0.95">Timetable</text>
+  <rect x="32" y="337" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
+  <text x="64" y="351" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Examinations</text>
+  <rect x="32" y="389" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
+  <text x="64" y="403" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Fees</text>
+  <rect x="32" y="441" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
+  <text x="64" y="455" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Library</text>
+  <line x1="28" y1="904" x2="260" y2="904" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.12"/>
+  <circle cx="46" cy="942" r="15" fill="#FFFFFF" opacity="0.16"/>
+  <text x="46" y="946.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" opacity="0.7">MM</text>
+  <rect x="72" y="934" width="104" height="9" fill="#FFFFFF" rx="4.5" opacity="0.4"/>
+  <rect x="72" y="950" width="68" height="7" fill="#FFFFFF" rx="3.5" opacity="0.2"/>
+  <text x="336" y="112" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="33" font-weight="700" fill="#0B1F3A" text-anchor="start">Timetable &amp; attendance</text>
+  <text x="336" y="141" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#8A8375" text-anchor="start">St. Kizito Secondary · 2,140 students across 38 streams</text>
+  <rect x="1419.6" y="88" width="132.39999999999998" height="42" fill="#B8933F" rx="4"/>
+  <text x="1485.8" y="113.86" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Publish term</text>
+  <rect x="1330.6" y="88" width="75.0" height="42" fill="#FFFFFF" rx="4"/>
+  <text x="1368.1" y="113.86" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Print</text>
+  <rect x="1330.6" y="88" width="75.0" height="42" fill="none" rx="4" stroke="#E4DFD3" stroke-width="1"/>
+  <rect x="1330.6" y="88" width="0" height="0" fill="none" rx="4"/>
+  <text x="1368.1" y="113.9" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Print</text>
+  <rect x="336.0" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="358.0" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">ENROLLED STUDENTS</text>
+  <text x="358.0" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B1F3A" text-anchor="start">2,140</text>
+  <text x="358.0" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">across 38 streams</text>
+  <rect x="749.3333333333333" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="771.3333333333333" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">ATTENDANCE TODAY</text>
+  <text x="771.3333333333333" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B1F3A" text-anchor="start">94.2%</text>
+  <text x="771.3333333333333" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">124 absences logged</text>
+  <rect x="1162.6666666666665" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="1184.6666666666665" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">FEES COLLECTED</text>
+  <text x="1184.6666666666665" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#B8933F" text-anchor="start">UGX 38.4M</text>
+  <text x="1184.6666666666665" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">81% of term target</text>
+  <rect x="336" y="324" width="828" height="616" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="360" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">S.3 EAST — WEEK 7</text>
+  <text x="1140" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#B8933F" text-anchor="end">AUTO-GENERATED</text>
+  <text x="502.0" y="396" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="middle" letter-spacing="1">MON</text>
+  <text x="642.0" y="396" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="middle" letter-spacing="1">TUE</text>
+  <text x="782.0" y="396" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="middle" letter-spacing="1">WED</text>
+  <text x="922.0" y="396" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="middle" letter-spacing="1">THU</text>
+  <text x="1062.0" y="396" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="middle" letter-spacing="1">FRI</text>
+  <text x="412" y="453.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#B8B2A4" text-anchor="end">08:00</text>
+  <rect x="436.0" y="416" width="132.0" height="66" fill="#0B1F3A" rx="4" opacity="0.9"/>
+  <rect x="450.0" y="439.0" width="92.0" height="8" fill="#FFFFFF" rx="4.0" opacity="0.72"/>
+  <rect x="450.0" y="453.0" width="66.0" height="7" fill="#FFFFFF" rx="3.5" opacity="0.32"/>
+  <rect x="576.0" y="416" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="590.0" y="439.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="590.0" y="453.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="716.0" y="416" width="132.0" height="66" fill="#B8933F" rx="4" opacity="0.9"/>
+  <rect x="730.0" y="439.0" width="92.0" height="8" fill="#0B1F3A" rx="4.0" opacity="0.75"/>
+  <rect x="730.0" y="453.0" width="66.0" height="7" fill="#0B1F3A" rx="3.5" opacity="0.35"/>
+  <rect x="856.0" y="416" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="870.0" y="439.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="870.0" y="453.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="996.0" y="416" width="132.0" height="66" fill="#0B1F3A" rx="4" opacity="0.9"/>
+  <rect x="1010.0" y="439.0" width="92.0" height="8" fill="#FFFFFF" rx="4.0" opacity="0.72"/>
+  <rect x="1010.0" y="453.0" width="66.0" height="7" fill="#FFFFFF" rx="3.5" opacity="0.32"/>
+  <text x="412" y="531.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#B8B2A4" text-anchor="end">09:20</text>
+  <rect x="436.0" y="494" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="450.0" y="517.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="450.0" y="531.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="576.0" y="494" width="132.0" height="66" fill="#B8933F" rx="4" opacity="0.9"/>
+  <rect x="590.0" y="517.0" width="92.0" height="8" fill="#0B1F3A" rx="4.0" opacity="0.75"/>
+  <rect x="590.0" y="531.0" width="66.0" height="7" fill="#0B1F3A" rx="3.5" opacity="0.35"/>
+  <rect x="716.0" y="494" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="730.0" y="517.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="730.0" y="531.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="856.0" y="494" width="132.0" height="66" fill="#0B1F3A" rx="4" opacity="0.9"/>
+  <rect x="870.0" y="517.0" width="92.0" height="8" fill="#FFFFFF" rx="4.0" opacity="0.72"/>
+  <rect x="870.0" y="531.0" width="66.0" height="7" fill="#FFFFFF" rx="3.5" opacity="0.32"/>
+  <rect x="996.0" y="494" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="1010.0" y="517.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="1010.0" y="531.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <text x="412" y="609.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#B8B2A4" text-anchor="end">10:40</text>
+  <rect x="436.0" y="572" width="132.0" height="66" fill="#B8933F" rx="4" opacity="0.9"/>
+  <rect x="450.0" y="595.0" width="92.0" height="8" fill="#0B1F3A" rx="4.0" opacity="0.75"/>
+  <rect x="450.0" y="609.0" width="66.0" height="7" fill="#0B1F3A" rx="3.5" opacity="0.35"/>
+  <rect x="576.0" y="572" width="132.0" height="66" fill="#0B1F3A" rx="4" opacity="0.9"/>
+  <rect x="590.0" y="595.0" width="92.0" height="8" fill="#FFFFFF" rx="4.0" opacity="0.72"/>
+  <rect x="590.0" y="609.0" width="66.0" height="7" fill="#FFFFFF" rx="3.5" opacity="0.32"/>
+  <rect x="716.0" y="572" width="132.0" height="66" fill="#0B1F3A" rx="4" opacity="0.9"/>
+  <rect x="730.0" y="595.0" width="92.0" height="8" fill="#FFFFFF" rx="4.0" opacity="0.72"/>
+  <rect x="730.0" y="609.0" width="66.0" height="7" fill="#FFFFFF" rx="3.5" opacity="0.32"/>
+  <rect x="856.0" y="572" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="870.0" y="595.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="870.0" y="609.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="996.0" y="572" width="132.0" height="66" fill="#B8933F" rx="4" opacity="0.9"/>
+  <rect x="1010.0" y="595.0" width="92.0" height="8" fill="#0B1F3A" rx="4.0" opacity="0.75"/>
+  <rect x="1010.0" y="609.0" width="66.0" height="7" fill="#0B1F3A" rx="3.5" opacity="0.35"/>
+  <text x="412" y="687.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#B8B2A4" text-anchor="end">12:00</text>
+  <rect x="436.0" y="650" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="450.0" y="673.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="450.0" y="687.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="576.0" y="650" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="590.0" y="673.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="590.0" y="687.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="716.0" y="650" width="132.0" height="66" fill="#0B1F3A" rx="4" opacity="0.9"/>
+  <rect x="730.0" y="673.0" width="92.0" height="8" fill="#FFFFFF" rx="4.0" opacity="0.72"/>
+  <rect x="730.0" y="687.0" width="66.0" height="7" fill="#FFFFFF" rx="3.5" opacity="0.32"/>
+  <rect x="856.0" y="650" width="132.0" height="66" fill="#B8933F" rx="4" opacity="0.9"/>
+  <rect x="870.0" y="673.0" width="92.0" height="8" fill="#0B1F3A" rx="4.0" opacity="0.75"/>
+  <rect x="870.0" y="687.0" width="66.0" height="7" fill="#0B1F3A" rx="3.5" opacity="0.35"/>
+  <rect x="996.0" y="650" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="1010.0" y="673.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="1010.0" y="687.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <text x="412" y="765.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#B8B2A4" text-anchor="end">14:00</text>
+  <rect x="436.0" y="728" width="132.0" height="66" fill="#0B1F3A" rx="4" opacity="0.9"/>
+  <rect x="450.0" y="751.0" width="92.0" height="8" fill="#FFFFFF" rx="4.0" opacity="0.72"/>
+  <rect x="450.0" y="765.0" width="66.0" height="7" fill="#FFFFFF" rx="3.5" opacity="0.32"/>
+  <rect x="576.0" y="728" width="132.0" height="66" fill="#B8933F" rx="4" opacity="0.9"/>
+  <rect x="590.0" y="751.0" width="92.0" height="8" fill="#0B1F3A" rx="4.0" opacity="0.75"/>
+  <rect x="590.0" y="765.0" width="66.0" height="7" fill="#0B1F3A" rx="3.5" opacity="0.35"/>
+  <rect x="716.0" y="728" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="730.0" y="751.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="730.0" y="765.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="856.0" y="728" width="132.0" height="66" fill="#0B1F3A" rx="4" opacity="0.9"/>
+  <rect x="870.0" y="751.0" width="92.0" height="8" fill="#FFFFFF" rx="4.0" opacity="0.72"/>
+  <rect x="870.0" y="765.0" width="66.0" height="7" fill="#FFFFFF" rx="3.5" opacity="0.32"/>
+  <rect x="996.0" y="728" width="132.0" height="66" fill="#0B1F3A" rx="4" opacity="0.9"/>
+  <rect x="1010.0" y="751.0" width="92.0" height="8" fill="#FFFFFF" rx="4.0" opacity="0.72"/>
+  <rect x="1010.0" y="765.0" width="66.0" height="7" fill="#FFFFFF" rx="3.5" opacity="0.32"/>
+  <text x="412" y="843.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#B8B2A4" text-anchor="end">15:20</text>
+  <rect x="436.0" y="806" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="450.0" y="829.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="450.0" y="843.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="576.0" y="806" width="132.0" height="66" fill="#0B1F3A" rx="4" opacity="0.9"/>
+  <rect x="590.0" y="829.0" width="92.0" height="8" fill="#FFFFFF" rx="4.0" opacity="0.72"/>
+  <rect x="590.0" y="843.0" width="66.0" height="7" fill="#FFFFFF" rx="3.5" opacity="0.32"/>
+  <rect x="716.0" y="806" width="132.0" height="66" fill="#B8933F" rx="4" opacity="0.9"/>
+  <rect x="730.0" y="829.0" width="92.0" height="8" fill="#0B1F3A" rx="4.0" opacity="0.75"/>
+  <rect x="730.0" y="843.0" width="66.0" height="7" fill="#0B1F3A" rx="3.5" opacity="0.35"/>
+  <rect x="856.0" y="806" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="870.0" y="829.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="870.0" y="843.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="996.0" y="806" width="132.0" height="66" fill="#F5F2EA" rx="4"/>
+  <rect x="1010.0" y="829.0" width="88.0" height="8" fill="#8A8375" rx="4.0" opacity="0.22"/>
+  <rect x="1010.0" y="843.0" width="64.0" height="7" fill="#8A8375" rx="3.5" opacity="0.14"/>
+  <rect x="360" y="906" width="12" height="12" fill="#0B1F3A" rx="2" opacity="0.9"/>
+  <text x="382" y="916" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#8A8375" text-anchor="start">Core subject</text>
+  <rect x="492" y="906" width="12" height="12" fill="#B8933F" rx="2" opacity="0.9"/>
+  <text x="514" y="916" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#8A8375" text-anchor="start">Practical / lab</text>
+  <rect x="646" y="906" width="12" height="12" fill="#F5F2EA" rx="2" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="668" y="916" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#8A8375" text-anchor="start">Free period</text>
+  <rect x="1192" y="324" width="360" height="300" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="1214" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">FEE COLLECTION</text>
+  <path d="M 1372.0 396.0 A 74 74 0 1 1 1303.2 442.8" fill="none" stroke="#B8933F" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"/>
+  <path d="M 1303.2 442.8 A 74 74 0 0 1 1344.8 401.2" fill="none" stroke="#0B1F3A" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"/>
+  <path d="M 1344.8 401.2 A 74 74 0 0 1 1372.0 396.0" fill="none" stroke="#E4DFD3" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"/>
+  <text x="1372.0" y="466" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#0B1F3A" text-anchor="middle">81%</text>
+  <text x="1372.0" y="488" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#8A8375" text-anchor="middle">of target</text>
+  <rect x="1216" y="551" width="11" height="11" fill="#B8933F" rx="2"/>
+  <text x="1236" y="560" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="500" fill="#8A8375" text-anchor="start">Mobile Money</text>
+  <text x="1528" y="560" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="end">62%</text>
+  <rect x="1216" y="573" width="11" height="11" fill="#0B1F3A" rx="2"/>
+  <text x="1236" y="582" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="500" fill="#8A8375" text-anchor="start">Bank / Visa</text>
+  <text x="1528" y="582" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="end">19%</text>
+  <rect x="1216" y="595" width="11" height="11" fill="#E4DFD3" rx="2"/>
+  <text x="1236" y="604" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="500" fill="#8A8375" text-anchor="start">Outstanding</text>
+  <text x="1528" y="604" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="end">19%</text>
+  <rect x="1192" y="646" width="360" height="294" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
+  <text x="1214" y="678" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">PORTALS</text>
+  <rect x="1214" y="706" width="316" height="62" fill="#F5F2EA" rx="5"/>
+  <circle cx="1246" cy="737" r="17" fill="#B8933F" opacity="0.18"/>
+  <circle cx="1246" cy="732" r="6" fill="#0B1F3A" opacity="0.55"/>
+  <path d="M 1234 748 a 12 12 0 0 1 24 0" fill="none" stroke="#0B1F3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <text x="1276" y="734" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#0B1F3A" text-anchor="start">Parents</text>
+  <text x="1276" y="752" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8A8375" text-anchor="start">1,884 active</text>
+  <rect x="1214" y="782" width="316" height="62" fill="#F5F2EA" rx="5"/>
+  <circle cx="1246" cy="813" r="17" fill="#B8933F" opacity="0.18"/>
+  <circle cx="1246" cy="808" r="6" fill="#0B1F3A" opacity="0.55"/>
+  <path d="M 1234 824 a 12 12 0 0 1 24 0" fill="none" stroke="#0B1F3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <text x="1276" y="810" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#0B1F3A" text-anchor="start">Teachers</text>
+  <text x="1276" y="828" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8A8375" text-anchor="start">96 active</text>
+  <rect x="1214" y="858" width="316" height="62" fill="#F5F2EA" rx="5"/>
+  <circle cx="1246" cy="889" r="17" fill="#B8933F" opacity="0.18"/>
+  <circle cx="1246" cy="884" r="6" fill="#0B1F3A" opacity="0.55"/>
+  <path d="M 1234 900 a 12 12 0 0 1 24 0" fill="none" stroke="#0B1F3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <text x="1276" y="886" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#0B1F3A" text-anchor="start">Administrators</text>
+  <text x="1276" y="904" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8A8375" text-anchor="start">12 active</text>
+</svg>

@@ -83,10 +83,9 @@
           <div class="ch-sec">
             <h2 class="ch-h">The one I would show you first</h2>
             <article class="wk-lead">
-              @if($headline->cover_image)
+              @if($headline->screenshotUrl())
                 <div class="wk-shot">
-                  <img src="{{ asset('storage/'.$headline->cover_image) }}"
-                       alt="{{ $headline->title }}" loading="lazy" decoding="async">
+                  @include('portfolio.partials.shot', ['project' => $headline])
                 </div>
               @endif
               <div class="wk-lead-body">

@@ -1233,29 +1233,17 @@
     .shot{border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;
       transition:border-color .18s,transform .18s;}
     .shot:hover{border-color:var(--gold);transform:translateY(-3px);}
-    /* A browser chrome around each screenshot: it frames a raw screengrab as a
-       product shot, and hides the fact that the shots differ in edge and crop. */
+    /* The card around each screenshot. The window chrome that used to live
+       here is now drawn inside the screenshot itself, where it belongs — one
+       window bar per picture instead of one drawn over another. */
     .shot-frame{border-bottom:1px solid var(--line);background:var(--surface-2);}
-    .shot-bar{display:flex;align-items:center;gap:5px;padding:8px 10px;border-bottom:1px solid var(--line);}
-    /* macOS traffic lights. Eight pixels of colour is all it takes for the
-       frame to read as a real window rather than a decorative border — and the
-       three positions are so familiar that getting them wrong is noticed. */
-    .shot-bar i{width:8px;height:8px;border-radius:50%;display:block;background:var(--line-2);}
-    .shot-bar i:nth-child(1){background:#ff5f57;}
-    .shot-bar i:nth-child(2){background:#febc2e;}
-    .shot-bar i:nth-child(3){background:#28c840;}
-    .shot-bar .u{flex:1;margin-left:6px;height:14px;background:var(--bg);border:1px solid var(--line);}
     .shot-shot{aspect-ratio:16/10;overflow:hidden;background:var(--bg);}
     .shot-shot .ph{height:100%;border:none;}
+    .shot-shot img{width:100%;height:100%;object-fit:cover;display:block;}
     .shot-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1;}
     .shot-body h3{font-size:15px;font-weight:600;}
     .shot-body p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.55;}
     .shot-body .link{font-size:12.5px;font-weight:600;color:var(--pri);}
-    /* The address bar shows the project's real domain rather than an empty
-       grey pill — the frame stops being decoration and starts carrying a fact. */
-    .shot-bar .u{display:flex;align-items:center;padding:0 8px;height:16px;background:var(--bg);
-      border:1px solid var(--line);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-      font-size:9px;color:var(--tx3);letter-spacing:.02em;overflow:hidden;white-space:nowrap;}
     .shot-shot{display:block;}
     .shot-points{list-style:none;margin:2px 0 0;display:flex;flex-direction:column;gap:3px;}
     .shot-points li{position:relative;padding-left:14px;font-size:11.5px;font-weight:450;

@@ -2,6 +2,17 @@
 @section('title', $project->title.' — '.($identity['name'] ?? 'Muhindo Mubaraka'))
 @section('desc', $project->description)
 
+@push('styles')
+<style>
+  /* The case study led with three paragraphs of prose about a system nobody
+     reading it had seen. Now it opens with the thing itself. */
+  .pj-shot{margin:0 0 30px;border:1px solid var(--line);background:var(--surface);}
+  .pj-shot img{width:100%;height:auto;display:block;}
+  .pj-shot figcaption{font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--tx3);padding:11px 14px;border-top:1px solid var(--line);}
+</style>
+@endpush
+
 @section('content')
 
 <section class="hero" style="padding-bottom:20px;">
@@ -16,6 +27,13 @@
 
 <section style="padding-top:0;">
   <div class="wrap page">
+    @if($project->screenshotUrl())
+      <figure class="pj-shot">
+        @include('portfolio.partials.shot', ['project' => $project])
+        <figcaption>{{ $project->title }}@if($project->client) · {{ $project->client }}@endif</figcaption>
+      </figure>
+    @endif
+
     <p class="lead" style="margin-bottom:26px;">{{ $project->description }}</p>
 
     @if($project->highlights)
