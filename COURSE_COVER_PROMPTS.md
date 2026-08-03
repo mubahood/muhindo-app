@@ -1,5 +1,55 @@
 # Course cover art — 21 generation prompts
 
+> **REVISION 2 — read this first.** The first version of this brief produced
+> covers with an empty left half and a small diagram crammed into the right.
+> That was the brief's fault, not the generator's: it asked for emptiness
+> twelve separate times. Block A has been rewritten to demand the opposite.
+> If you already generated from Revision 1, regenerate — or paste the
+> rejection below.
+
+## Rejecting a Revision-1 cover
+
+Paste this with the image attached. It is written as a working art director
+would write it: what is wrong, why it is wrong, and what to do instead.
+
+```
+This does not work. Specific problems, in order of seriousness:
+
+1. COMPOSITION IS BROKEN. Over half the canvas — the entire left side —
+   is empty paper, and the whole subject is crammed into the right
+   third. This is not "generous negative space", it is an unbalanced
+   image with a hole in it. The artwork must fill the frame edge to
+   edge. Negative space belongs BETWEEN and AROUND elements as
+   breathing room, distributed across the whole canvas — never pooled
+   into one dead half.
+
+2. IT DIES AT REAL SIZE. This is a course card on a website, displayed
+   about 320 pixels wide. At that size these hairline strokes vanish
+   and the whole thing turns to grey mush. Line weights must be heavy
+   and confident — think 3-4pt strokes at full size, not 0.5pt. Squint
+   at it: if the shape does not survive squinting, it is too fine.
+
+3. TOO LITTLE INK. A two-colour screen print is bold by nature —
+   opaque ink laid down in real coverage. This is 90% bare paper with
+   some thin outlines. I want large areas of solid flat navy and solid
+   flat gold. Fill shapes. Commit.
+
+4. NO FOCAL POINT. Five near-identical floating planes with equal
+   visual weight, so the eye has nowhere to land. One element must
+   dominate — bigger, or solid-filled, or gold against navy — and the
+   rest must clearly support it.
+
+5. TOO MANY PARTS. Five stacked layers plus leader lines plus a
+   cylinder is a technical figure, not a cover. Three major elements
+   maximum.
+
+Redo it as a bold, poster-like composition that fills the entire
+frame, with heavy line weights, large areas of solid ink, one clear
+focal point, and no more than three major elements. Keep the two-ink
+navy-and-gold screen print treatment and the flat geometric style —
+those parts were right. Make it read from across a room.
+```
+
 Art direction and one ready-to-paste prompt per course, for generating the
 1280×720 cover of every course in the catalogue.
 
@@ -54,15 +104,23 @@ Craft rules, obey strictly:
   as on a real hand-pulled print.
 - Subtle ink grain and a few honest imperfections in the coverage.
 - Overprint where navy and gold cross: the overlap goes darker.
-- Composition on a strict 12-column grid, deliberately asymmetric,
-  with generous empty paper. Silence is part of the design.
+- Composition FILLS THE FRAME edge to edge. Breathing room sits
+  between and around elements, distributed — never pooled into one
+  empty half. No dead quadrants.
+- Bold poster, not a technical figure. Three major elements at most,
+  one clearly dominant, and it must read from across a room.
+- Large areas of SOLID FLAT INK — filled shapes, not just outlines.
+  Roughly half the surface carries ink.
+- Heavy confident line weights, equivalent to 3–4pt at full size.
+  This is displayed 320px wide on a card: anything hairline disappears.
 - Geometric construction: compass arcs, ruled lines, isometric
   projection, hand-drafted diagram logic.
 - Absolutely no text, no letterforms, no numerals, no fake UI, no
   logos or brand marks of any company.
 
-Mood: quiet, confident, engineered. A specialist print shop made this
-for an engineering faculty. It is a diagram that happens to be beautiful.
+Mood: bold, confident, engineered. A specialist print shop made this
+as a poster for an engineering faculty — meant to be seen from the far
+end of a corridor, not studied at arm's length.
 ```
 
 ## BLOCK B — the negative prompt
@@ -125,7 +183,7 @@ wireframe skeleton of boxes (structure), a plane of solid gold shapes
 (styling), a plane of arrows flowing left and right (the server
 conversation), and at the base a horizontally-banded cylinder drawn in
 navy line-work (the database). Thin gold leader lines connect the layers
-like an assembly drawing. Bottom-left third of the paper left empty.
+like an assembly drawing. The stack fills the frame, tilted to run corner to corner.
 ```
 
 ---
@@ -145,7 +203,7 @@ Both meet at the centre on one continuous gold stroke that neither
 started alone. The gold line continues past them and resolves into a
 simple rectangular page layout. Draw the hands as a 1950s engineering
 manual would: contour lines, no shading, no fingers rendered in detail.
-Wide empty margin at the top.
+The two arms fill the width, meeting slightly left of centre.
 ```
 
 ---
@@ -164,7 +222,7 @@ right. Each block is a different size, the smallest at the bottom — small
 lessons, big foundations. Two blocks near the top are gold; the rest
 navy. A single continuous gold line loops back from a higher step to a
 lower one and returns, drawn as a clean geometric arc: the loop. The
-staircase does not reach the top edge; it ends in open paper.
+staircase spans corner to corner, its top step touching the upper right.
 ```
 
 ---
@@ -183,8 +241,7 @@ lines ending in real crow's-foot notation — the three-pronged fork and
 the small perpendicular bar. One relationship line is gold and travels
 further than the others, crossing behind a rectangle and overprinting
 darker where it passes. The rectangles are empty ruled rows, never
-filled with text. Composition weighted to the right, large empty area
-on the left.
+filled with text. The four tables fill the frame in a loose asymmetric cluster.
 ```
 
 ---
@@ -221,7 +278,7 @@ right-angle joints, drawn in isometric projection, standing around and
 supporting a single simple gold rectangle. The frame is conspicuously
 light — few members, generous gaps, nothing structural that is not
 needed. Small circular joint details where struts meet, drawn as a
-drafting manual would. Bottom half of the paper mostly empty.
+drafting manual would. The scaffold fills the frame, seen from slightly below.
 ```
 
 ---
@@ -239,7 +296,7 @@ side-elevation in navy line-work — a platen, a lever arm, a bed. Below
 its bed, instead of paper, three identical gold rectangles emerge in a
 neat overlapping stack, each one a published page. The lever arm is
 gold. Draw it the way a Victorian patent illustration would: pure
-outline, no texture, every part diagrammatic. Off-centre to the left.
+outline, no texture, every part diagrammatic. The press fills the height of the frame, weighted left of centre.
 ```
 
 ---
@@ -258,8 +315,7 @@ Inside the rectangle the gold line meets a series of geometric baffles —
 angled plates set in the channel, like a maze or a labyrinth seal — that
 turn it back on itself. Below, drawn faintly in navy, the same channel
 without baffles and the line passing straight through. Two states of one
-system: unguarded, and guarded. Strict horizontal composition, wide
-empty band across the top.
+system: unguarded, and guarded. The cross-section runs the full width, filling the frame.
 ```
 
 ---
@@ -296,8 +352,7 @@ enter from the left edge at different heights, run horizontally, and pass
 through a set of geometric junction points — small circles and switch
 symbols borrowed from railway signalling diagrams — before converging
 into one thick gold line that exits right. Each junction is labelled only
-by a distinct geometric glyph, never a word. Generous empty paper above
-and below the track band.
+by a distinct geometric glyph, never a word. The track band fills the full height of the frame.
 ```
 
 ---
@@ -316,8 +371,8 @@ two lines that terminate in two simple rounded rectangles of different
 proportions, drawn in navy outline, standing side by side — one taller
 and narrow, one shorter and wide. The split is a precise geometric fork,
 compass-drawn, not organic. Inside each rectangle, three plain navy bars
-in identical arrangement: the same layout, two shapes. Empty paper at
-the bottom third.
+in identical arrangement: the same layout, two shapes. The fork and both
+devices fill the frame vertically.
 ```
 
 ---
@@ -356,7 +411,7 @@ pill button, a slider track, a checkbox square, a dialog box, a tab bar,
 a grid tile — laid out in a strict 3×3 arrangement with generous gutters,
 each drawn in flat navy outline as a spec drawing, each with fine gold
 dimension lines and arrowheads indicating its padding and height. No
-text on any dimension line. The bottom-right cell is empty paper.
+text on any dimension line. The nine cells fill the frame with tight gutters.
 ```
 
 ---
@@ -375,7 +430,7 @@ running clockwise, with two shorter gold arrows cutting back across the
 middle of the ring — the paths a screen takes when it is paused and
 resumed. Each state circle contains only a simple geometric glyph, never
 a word. Drawn exactly as a control-systems textbook would draw it.
-Composition sits low and right; open paper top-left.
+The ring fills most of the frame, sitting slightly low and right.
 ```
 
 ---
@@ -394,7 +449,7 @@ simple geometric UI glyph — a bar, a circle, a stack of lines, a
 triangle, a ring. The squares fill progressively: the early ones are
 completely filled with solid gold ink, the middle ones are outline only,
 and the last few in the bottom row are empty paper. A challenge in
-progress, honestly unfinished. Strict grid, wide margin all round.
+progress, honestly unfinished. The grid fills the frame edge to edge, margins tight.
 ```
 
 ---
@@ -491,8 +546,7 @@ cloud form built from three overlapping circles and a flat base, also
 navy. Between them, five parallel gold lines of differing lengths run
 both directions at once, with small arrowheads at both ends and short
 tick marks along them like a timing chart. The lines pass behind the
-device and overprint darker. No brand logos of any kind. Diagonal
-composition, corners left empty.
+device and overprint darker. No brand logos of any kind. Strong diagonal composition filling all four corners.
 ```
 
 ---
