@@ -98,6 +98,33 @@ class AboutChapterSequenceTest extends TestCase
             "{$chapter} should hand off to {$next}.");
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('chapters')]
+    public function test_each_chapter_pins_the_same_two_actions_for_a_phone(string $chapter, string $next): void
+    {
+        $html = (string) $this->get(route($chapter))->assertOk()->getContent();
+
+        $this->assertSame(1, substr_count($html, '<div class="ch-bar">'),
+            "{$chapter} should have exactly one phone bar.");
+
+        $bar = substr($html, (int) strpos($html, '<div class="ch-bar">'));
+
+        // The same destinations as the inline ending, so a reader is never
+        // offered a different next chapter depending on their screen width.
+        $this->assertStringContainsString(route('start-a-project'), $bar);
+        $this->assertStringContainsString(route($next), $bar);
+    }
+
+    public function test_the_cv_keeps_its_download_in_the_phone_bar(): void
+    {
+        $bar = (string) $this->get(route('portfolio.cv'))->assertOk()->getContent();
+        $bar = substr($bar, (int) strpos($bar, '<div class="ch-bar">'));
+
+        $this->assertStringContainsString('muhindo-mubaraka-cv.pdf', $bar);
+
+        // And only once — it used to have a bar of its own alongside this one.
+        $this->assertSame(1, substr_count($bar, '<div class="ch-bar">'));
+    }
+
     public function test_the_last_chapter_offers_the_catalogue_rather_than_a_dead_arrow(): void
     {
         $html = (string) $this->get(route('portfolio.services'))->assertOk()->getContent();

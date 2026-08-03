@@ -723,15 +723,38 @@
 
     .rail-foot{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);}
 
+    /* The same two actions, pinned to the bottom of every chapter on a phone.
+       Reading is one long scroll there, so "hire" and "what is next" have to
+       be permanently in reach rather than waiting at the end. Hidden on
+       desktop, where .ch-end already sits in the flow. */
+    .ch-bar{display:none;}
+
     @media(max-width:900px){
-      /* Below the rail's width it becomes a scrolling strip, still showing the
-         neighbouring sections rather than hiding them behind a menu. */
-      .rail-layout{grid-template-columns:1fr;gap:16px;}
-      .rail{position:static;flex-direction:row;overflow-x:auto;gap:2px;padding-bottom:2px;
-        border-bottom:1px solid var(--line);-webkit-overflow-scrolling:touch;}
-      .rail-h,.rail a .rd,.rail-foot{display:none;}
-      .rail a{border-left:none;border-bottom:2px solid transparent;white-space:nowrap;padding:9px 12px;}
-      .rail a.on{border-left-color:transparent;border-bottom-color:var(--gold);}
+      .rail-layout{grid-template-columns:1fr;gap:0;}
+
+      /* The rail is gone here, not turned into a scrolling strip. A strip
+         that has to be dragged sideways to reveal half its items is a control
+         you have to work out before it tells you anything — and the bar below
+         already answers the only question it was answering. Every chapter is
+         still one tap away in the header menu and the footer. */
+      .rail{display:none;}
+
+      .ch-bar{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:60;
+        padding:9px 12px calc(9px + env(safe-area-inset-bottom, 0px));
+        background:var(--surface);border-top:1px solid var(--line);
+        box-shadow:0 -6px 20px rgba(11,31,58,.10);}
+      .ch-bar .btn{flex:1 1 0;min-width:0;justify-content:center;font-size:13px;padding:12px 10px;
+        white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+      /* The CV's download sits beside them as a square, so the two actions
+         every chapter has stay the same size on every chapter. */
+      .ch-bar .btn.sq{flex:0 0 46px;padding:12px 0;}
+      body.has-ch-bar,body:has(.ch-bar){padding-bottom:78px;}
+
+      /* One set of buttons, not two. The line above them stays — it is the
+         only place that says what the next chapter actually contains. */
+      .ch-end .btn{display:none;}
+      .ch-end{margin-top:26px;padding-top:14px;}
+      .ch-lead{min-width:0;}
     }
 
     /* ── Curriculum rows ──────────────────────────────────────────────────
@@ -1542,9 +1565,22 @@
   }
   initMegaMenus();
 
+  /* Reserves room under the fixed chapter bar so it never covers the last
+     line of the page. Paired with a :has() rule for anyone whose script does
+     not run; the class is what keeps it correct across wire:navigate, where a
+     one-shot per-page script would leave the padding behind on the next
+     page. */
+  function syncChapterBar(){
+    document.body.classList.toggle('has-ch-bar', !!document.querySelector('.ch-bar'));
+    // Same reasoning for the CV, which hides this footer on a phone.
+    document.body.classList.toggle('cv-page', !!document.querySelector('.cv'));
+  }
+  syncChapterBar();
+
   document.addEventListener('livewire:navigated', function(){
     initBurgerMenu();
     initMegaMenus();
+    syncChapterBar();
     var m=document.getElementById('mmenu'), b=document.getElementById('burger');
     if(m && m.classList.contains('open')){ m.classList.remove('open'); document.body.style.overflow=''; if(b){ b.setAttribute('aria-expanded','false'); b.querySelector('i').className='fas fa-bars'; } }
   });

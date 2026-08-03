@@ -70,22 +70,14 @@
     .cv-row{grid-template-columns:1fr;gap:2px;}
     .cv-contact{text-align:left;}
     .cv-skills,.cv-list{grid-template-columns:1fr;}
-    .cv-actions{display:none;}   /* replaced by the fixed bar below */
-
-    /* On a phone the two things somebody wants are always in reach, instead
-       of being a scroll away at the top or the bottom of a long document. */
-    .cv-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;
-      padding:10px 12px calc(10px + env(safe-area-inset-bottom));
-      background:rgba(247,246,242,.97);backdrop-filter:blur(10px);
-      border-top:1px solid var(--line-2);box-shadow:0 -6px 20px -12px rgba(11,31,58,.4);}
-    .cv-bar .btn{flex:1;justify-content:center;font-size:13px;padding:13px 10px;}
-    /* Clear the bar so the last line of the CV is never hidden under it. */
-    .cv{padding-bottom:78px;}
     /* The footer is a site-wide index; on a CV it buries the one action that
        matters under six columns of links. */
     body.cv-page footer{display:none;}
   }
-  @media(min-width:641px){ .cv-bar{display:none;} }
+
+  /* Wherever the shared phone bar carries the download, the inline copy of it
+     would be the same button twice. */
+  @media(max-width:900px){ .cv-actions{display:none;} }
 
   /* Print: strip the site and leave the document. Saving as PDF from the
      browser is how most people will actually take this away, so it has to be
@@ -272,28 +264,10 @@
 
     </div>
 
-    @include('portfolio.partials.chapter-end')
+    @include('portfolio.partials.chapter-end', ['barExtra' => 'portfolio.partials.cv-download'])
       </div>
     </div>
   </div>
 </section>
-
-{{-- Phone only. Two things somebody on a CV wants — the file, and to get in
-     touch — kept permanently in reach instead of a scroll away at either end
-     of a three-page document. --}}
-<div class="cv-bar">
-  <a href="{{ asset('files/muhindo-mubaraka-cv.pdf') }}" download class="btn ghost">
-    <i class="fas fa-file-arrow-down"></i> Download CV
-  </a>
-  <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Hire Me</a>
-</div>
-
-@push('scripts')
-<script>
-  // Marks the page so the layout's footer can be hidden on a phone without
-  // the CV stylesheet reaching outside its own page to do it.
-  document.body.classList.add('cv-page');
-</script>
-@endpush
 
 @endsection

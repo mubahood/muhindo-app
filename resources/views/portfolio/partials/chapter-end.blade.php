@@ -14,9 +14,15 @@
   next would skip straight past the second of them. Those pages pass $to and
   $toLabel to hand off to each other explicitly.
 
-  @param  string|null  $lead     One line on what comes next.
-  @param  string|null  $to       Override the next chapter's URL.
-  @param  string|null  $toLabel  Override the next chapter's label.
+  On a phone the same two actions are also pinned to the bottom of the window,
+  because reading a chapter there is one long scroll and neither "hire" nor
+  "what is next" should be waiting at the end of it. The layout hides one set
+  or the other, so a reader only ever sees two buttons.
+
+  @param  string|null  $lead      One line on what comes next.
+  @param  string|null  $to        Override the next chapter's URL.
+  @param  string|null  $toLabel   Override the next chapter's label.
+  @param  string|null  $barExtra  A view rendered first in the phone bar.
 --}}
 @php
   $chapters = collect(\App\Support\SiteNav::items())->firstWhere('label', 'About Me')['children'] ?? [];
@@ -30,6 +36,10 @@
   if (isset($to, $toLabel)) {
       $next = ['url' => $to, 'label' => $toLabel, 'desc' => $next['desc'] ?? ''];
   }
+
+  // Where the second button goes when this is the last chapter: the catalogue,
+  // rather than a dead arrow.
+  $onward = $next ?? ['url' => route('courses.index'), 'label' => 'Start Learning'];
 @endphp
 
 <div class="ch-end">
@@ -42,13 +52,20 @@
     <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
   </a>
 
-  @if($next)
-    <a href="{{ $next['url'] }}" wire:navigate class="btn ghost sm">
-      {{ $next['label'] }} <i class="fas fa-arrow-right" aria-hidden="true"></i>
-    </a>
-  @else
-    <a href="{{ route('courses.index') }}" wire:navigate class="btn ghost sm">
-      Start Learning <i class="fas fa-arrow-right" aria-hidden="true"></i>
-    </a>
-  @endif
+  <a href="{{ $onward['url'] }}" wire:navigate class="btn ghost sm">
+    {{ $onward['label'] }} <i class="fas fa-arrow-right" aria-hidden="true"></i>
+  </a>
+</div>
+
+{{-- Phone only. --}}
+<div class="ch-bar">
+  @isset($barExtra)
+    @include($barExtra)
+  @endisset
+
+  <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Hire Me</a>
+
+  <a href="{{ $onward['url'] }}" wire:navigate class="btn ghost">
+    {{ $onward['label'] }} <i class="fas fa-arrow-right" aria-hidden="true"></i>
+  </a>
 </div>
