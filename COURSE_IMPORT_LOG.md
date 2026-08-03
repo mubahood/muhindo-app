@@ -4,9 +4,11 @@ The real catalogue, imported from `course-content/` into the platform.
 
 ---
 
-## NEEDS OWNER APPROVAL BEFORE PUBLISHING
+## PRICES ARE LIVE AND STILL UNAPPROVED
 
-**13 courses are imported but unpublished, waiting on a price you have agreed.**
+**All 21 courses are public at the owner's instruction. Tiers 2 and 3 went live
+carrying the SUGGESTED prices below — figures I proposed, not ones you chose.
+A student can be charged them today.**
 Every figure lives in `config/catalog.php`. Edit it, run
 `php artisan courses:apply-pricing`, and the catalogue follows — you never edit
 21 database rows by hand.
@@ -14,11 +16,13 @@ Every figure lives in `config/catalog.php`. Edit it, run
 The suggested figures are a starting point I cannot stand behind: I do not know
 your market, what your students earn, or what you already charge privately.
 
-| Tier | Courses | Suggested | Status |
-|------|---------|-----------|--------|
-| 1 — Foundations | 01–08 | **Free** | ✅ published |
-| 2 — Frameworks & Mobile | 09–15 (7 courses) | UGX 120,000 | ⏸ draft — needs your price |
-| 3 — Capstone Systems | 16–21 (6 courses) | UGX 250,000 | ⏸ draft — needs your price |
+| Tier | Courses | Price now live | Approved? |
+|------|---------|----------------|-----------|
+| 1 — Foundations | 01–08 | **Free** | ✅ yes — free was the agreed strategy |
+| 2 — Frameworks & Mobile | 09–15 (7 courses) | UGX 120,000 | ⚠️ **no — my suggestion** |
+| 3 — Capstone Systems | 16–21 (6 courses) | UGX 250,000 | ⚠️ **no — my suggestion** |
+
+To change them: edit `config/catalog.php`, then `php artisan courses:apply-pricing`.
 
 Worth a thought before you set Tier 3: course 16 (InvetoTrack) is 47 lessons
 across a Laravel back office, a REST API and a Flutter app. That is not the same

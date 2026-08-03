@@ -27,12 +27,11 @@ return [
     /*
     | What each tier costs, and whether importing publishes it.
     |
-    | Tier 1 publishes as free: it is the on-ramp, and a catalogue with nothing
-    | visible in it cannot bring anybody in.
+    | Tier 1 is free: it is the on-ramp.
     |
-    | Tiers 2 and 3 stay unpublished drafts until you have set a price and read
-    | the course. They are listed at the top of COURSE_IMPORT_LOG.md under
-    | "NEEDS OWNER APPROVAL BEFORE PUBLISHING".
+    | All three tiers are public at the owner's instruction. NOTE that the Tier
+    | 2 and 3 figures below are still the suggested ones — they are live prices
+    | a student can be charged, so they want a decision rather than a default.
     */
     'tiers' => [
         1 => [
@@ -42,13 +41,13 @@ return [
         ],
         2 => [
             'label' => 'Frameworks & Mobile',
-            'price' => 120_000,     // SUGGESTED — review
-            'publish' => false,
+            'price' => 120_000,     // SUGGESTED — the owner has not set this yet
+            'publish' => true,      // owner asked for the whole catalogue to be public
         ],
         3 => [
             'label' => 'Capstone Systems',
-            'price' => 250_000,     // SUGGESTED — review
-            'publish' => false,
+            'price' => 250_000,     // SUGGESTED — the owner has not set this yet
+            'publish' => true,
         ],
     ],
 
