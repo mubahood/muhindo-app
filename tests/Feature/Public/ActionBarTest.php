@@ -128,8 +128,11 @@ class ActionBarTest extends TestCase
 
         $bar = $this->bar(route('portfolio.project', $project));
 
+        // Hire, and a walkthrough of this system. Most of these are internal,
+        // so "request a demo" is the honest offer — and it carries the slug so
+        // the brief already knows which system.
         $this->assertStringContainsString(route('start-a-project'), $bar);
-        $this->assertStringContainsString(route('portfolio.projects.index'), $bar);
+        $this->assertStringContainsString('demo='.$project->slug, $bar);
     }
 
     public function test_a_listing_page_has_no_bar_because_it_has_no_single_action(): void

@@ -9,6 +9,7 @@ class PortfolioProject extends Model
     protected $fillable = ['client',
         'title', 'slug', 'description', 'tags', 'highlights',
         'cover_image', 'external_link', 'is_featured', 'sort_order',
+        'problem', 'approach', 'mechanics', 'stack', 'constraints', 'role', 'period',
     ];
 
     /**
@@ -38,6 +39,9 @@ class PortfolioProject extends Model
         return [
             'tags' => 'array',
             'highlights' => 'array',
+            'mechanics' => 'array',
+            'stack' => 'array',
+            'constraints' => 'array',
             'is_featured' => 'boolean',
         ];
     }

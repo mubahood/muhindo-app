@@ -1,252 +1,426 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img">
-  <rect x="0" y="0" width="1600" height="1000" fill="#F5F2EA"/>
-  <rect x="0" y="0" width="1600" height="52" fill="#0B1F3A"/>
-  <circle cx="28" cy="26.0" r="5" fill="#FFFFFF" opacity="0.22"/>
-  <circle cx="50" cy="26.0" r="5" fill="#FFFFFF" opacity="0.3"/>
-  <circle cx="72" cy="26.0" r="5" fill="#FFFFFF" opacity="0.38"/>
-  <text x="800.0" y="31" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.55">National Seed Tracking &amp; Tracing System</text>
-  <circle cx="1560" cy="26.0" r="13" fill="#B8933F" opacity="0.9"/>
-  <text x="1560" y="30.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#0B1F3A" text-anchor="middle">MA</text>
-  <rect x="0" y="52" width="288" height="948" fill="#152B4C"/>
-  <rect x="28" y="84" width="38" height="38" fill="#B8933F" rx="8"/>
-  <path d="M 47 110 c -12 0 -12 -20 0 -20 c 12 0 12 20 0 20 z M 47 90 v -4" fill="none" stroke="#0B1F3A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="78" y="100" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="start">Seed Trace</text>
-  <text x="78" y="118" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#FFFFFF" text-anchor="start" letter-spacing="0.6" opacity="0.45">MAAIF · Crop Insp.</text>
-  <line x1="28" y1="150" x2="260" y2="150" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.12"/>
-  <rect x="32" y="181" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="195" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Batches</text>
-  <rect x="16" y="224" width="256" height="40" fill="#FFFFFF" rx="6" opacity="0.09"/>
-  <rect x="0" y="224" width="4" height="40" fill="#B8933F"/>
-  <rect x="32" y="233" width="18" height="18" fill="#B8933F" rx="4" opacity="1"/>
-  <text x="64" y="247" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#FFFFFF" text-anchor="start" opacity="0.95">Verification</text>
-  <rect x="32" y="285" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="299" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Vouchers</text>
-  <rect x="32" y="337" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="351" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Agro-dealers</text>
-  <rect x="32" y="389" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="403" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Quality</text>
-  <rect x="32" y="441" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="455" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Exchange</text>
-  <line x1="28" y1="904" x2="260" y2="904" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.12"/>
-  <circle cx="46" cy="942" r="15" fill="#FFFFFF" opacity="0.16"/>
-  <text x="46" y="946.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" opacity="0.7">MM</text>
-  <rect x="72" y="934" width="104" height="9" fill="#FFFFFF" rx="4.5" opacity="0.4"/>
-  <rect x="72" y="950" width="68" height="7" fill="#FFFFFF" rx="3.5" opacity="0.2"/>
-  <text x="336" y="112" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="33" font-weight="700" fill="#0B1F3A" text-anchor="start">Field verification</text>
-  <text x="336" y="141" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#8A8375" text-anchor="start">Batch NSC-2026-04471 · scanned at Kapchorwa agro-dealer</text>
-  <rect x="1411.4" y="88" width="140.6" height="42" fill="#B8933F" rx="4"/>
-  <text x="1481.7" y="113.86" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Certify batch</text>
-  <rect x="1265.0" y="88" width="132.39999999999998" height="42" fill="#FFFFFF" rx="4"/>
-  <text x="1331.2" y="113.86" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Scan history</text>
-  <rect x="1265.0" y="88" width="132.39999999999998" height="42" fill="none" rx="4" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="1265.0" y="88" width="0" height="0" fill="none" rx="4"/>
-  <text x="1331.2" y="113.9" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Scan history</text>
-  <rect x="336.0" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="358.0" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">BATCHES TRACKED</text>
-  <text x="358.0" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B1F3A" text-anchor="start">9,850</text>
-  <text x="358.0" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">certified this season</text>
-  <rect x="749.3333333333333" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="771.3333333333333" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">FIELD SCANS</text>
-  <text x="771.3333333333333" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B1F3A" text-anchor="start">1.24M</text>
-  <text x="771.3333333333333" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">by 3,100 inspectors</text>
-  <rect x="1162.6666666666665" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="1184.6666666666665" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">COUNTERFEIT FLAGGED</text>
-  <text x="1184.6666666666665" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#B8933F" text-anchor="start">412</text>
-  <text x="1184.6666666666665" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">removed from market</text>
-  <rect x="336" y="324" width="392" height="616" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="360" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">SCANNED CODE</text>
-  <rect x="392" y="378" width="328" height="328" fill="#FFFFFF" rx="4" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="415.42857142857144" y="401.42857142857144" width="93.71428571428572" height="93.71428571428572" fill="#0B1F3A" rx="3"/>
-  <rect x="428.8163265306123" y="414.8163265306123" width="66.9387755102041" height="66.9387755102041" fill="#FFFFFF" rx="2"/>
-  <rect x="442.2040816326531" y="428.2040816326531" width="40.163265306122454" height="40.163265306122454" fill="#0B1F3A" rx="1"/>
-  <rect x="602.8571428571429" y="401.42857142857144" width="93.71428571428572" height="93.71428571428572" fill="#0B1F3A" rx="3"/>
-  <rect x="616.2448979591837" y="414.8163265306123" width="66.9387755102041" height="66.9387755102041" fill="#FFFFFF" rx="2"/>
-  <rect x="629.6326530612246" y="428.2040816326531" width="40.163265306122454" height="40.163265306122454" fill="#0B1F3A" rx="1"/>
-  <rect x="415.42857142857144" y="588.8571428571429" width="93.71428571428572" height="93.71428571428572" fill="#0B1F3A" rx="3"/>
-  <rect x="428.8163265306123" y="602.2448979591837" width="66.9387755102041" height="66.9387755102041" fill="#FFFFFF" rx="2"/>
-  <rect x="442.2040816326531" y="615.6326530612246" width="40.163265306122454" height="40.163265306122454" fill="#0B1F3A" rx="1"/>
-  <rect x="522.530612244898" y="401.42857142857144" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="535.9183673469388" y="401.42857142857144" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="401.42857142857144" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="401.42857142857144" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="549.3061224489796" y="414.8163265306123" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="414.8163265306123" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="522.530612244898" y="428.2040816326531" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="535.9183673469388" y="428.2040816326531" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="428.2040816326531" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="428.2040816326531" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="535.9183673469388" y="441.5918367346939" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="549.3061224489796" y="441.5918367346939" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="441.5918367346939" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="522.530612244898" y="454.9795918367347" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="535.9183673469388" y="468.36734693877554" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="468.36734693877554" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="468.36734693877554" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="522.530612244898" y="481.7551020408164" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="481.7551020408164" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="535.9183673469388" y="495.14285714285717" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="549.3061224489796" y="495.14285714285717" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="495.14285714285717" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="415.42857142857144" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="468.9795918367347" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="482.36734693877554" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="509.14285714285717" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="522.530612244898" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="549.3061224489796" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="589.469387755102" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="616.2448979591837" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="629.6326530612246" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="656.4081632653061" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="683.1836734693877" y="508.53061224489795" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="428.8163265306123" y="521.9183673469388" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="442.2040816326531" y="521.9183673469388" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="468.9795918367347" y="521.9183673469388" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="535.9183673469388" y="521.9183673469388" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="549.3061224489796" y="521.9183673469388" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="521.9183673469388" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="521.9183673469388" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="589.469387755102" y="521.9183673469388" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="629.6326530612246" y="521.9183673469388" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="643.0204081632653" y="521.9183673469388" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="415.42857142857144" y="535.3061224489796" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="428.8163265306123" y="535.3061224489796" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="442.2040816326531" y="535.3061224489796" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="455.5918367346939" y="535.3061224489796" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="535.3061224489796" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="589.469387755102" y="535.3061224489796" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="602.8571428571429" y="535.3061224489796" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="669.795918367347" y="535.3061224489796" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="428.8163265306123" y="548.6938775510205" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="509.14285714285717" y="548.6938775510205" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="549.3061224489796" y="548.6938775510205" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="548.6938775510205" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="548.6938775510205" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="616.2448979591837" y="548.6938775510205" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="683.1836734693877" y="548.6938775510205" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="442.2040816326531" y="562.0816326530612" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="455.5918367346939" y="562.0816326530612" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="468.9795918367347" y="562.0816326530612" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="509.14285714285717" y="562.0816326530612" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="522.530612244898" y="562.0816326530612" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="562.0816326530612" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="643.0204081632653" y="562.0816326530612" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="656.4081632653061" y="562.0816326530612" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="683.1836734693877" y="562.0816326530612" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="522.530612244898" y="575.469387755102" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="549.3061224489796" y="575.469387755102" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="575.469387755102" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="589.469387755102" y="575.469387755102" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="602.8571428571429" y="575.469387755102" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="643.0204081632653" y="575.469387755102" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="656.4081632653061" y="575.469387755102" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="683.1836734693877" y="575.469387755102" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="522.530612244898" y="588.8571428571429" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="549.3061224489796" y="588.8571428571429" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="588.8571428571429" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="602.8571428571429" y="588.8571428571429" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="616.2448979591837" y="588.8571428571429" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="629.6326530612246" y="588.8571428571429" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="643.0204081632653" y="588.8571428571429" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="669.795918367347" y="588.8571428571429" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="535.9183673469388" y="602.2448979591837" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="602.2448979591837" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="602.2448979591837" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="616.2448979591837" y="602.2448979591837" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="656.4081632653061" y="602.2448979591837" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="522.530612244898" y="615.6326530612246" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="615.6326530612246" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="602.8571428571429" y="615.6326530612246" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="629.6326530612246" y="615.6326530612246" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="643.0204081632653" y="615.6326530612246" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="522.530612244898" y="629.0204081632653" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="535.9183673469388" y="629.0204081632653" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="549.3061224489796" y="629.0204081632653" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="629.0204081632653" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="629.0204081632653" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="616.2448979591837" y="629.0204081632653" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="643.0204081632653" y="629.0204081632653" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="656.4081632653061" y="629.0204081632653" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="683.1836734693877" y="629.0204081632653" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="535.9183673469388" y="642.4081632653061" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="589.469387755102" y="642.4081632653061" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="656.4081632653061" y="642.4081632653061" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="669.795918367347" y="642.4081632653061" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="655.795918367347" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="655.795918367347" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="616.2448979591837" y="655.795918367347" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="643.0204081632653" y="655.795918367347" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="683.1836734693877" y="655.795918367347" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="522.530612244898" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="549.3061224489796" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="562.6938775510205" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="576.0816326530612" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="589.469387755102" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="616.2448979591837" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="629.6326530612246" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="643.0204081632653" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="656.4081632653061" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="669.795918367347" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="683.1836734693877" y="669.1836734693877" width="12.316734693877553" height="12.316734693877553" fill="#0B1F3A" rx="0.5"/>
-  <rect x="392" y="726" width="151.92" height="22" fill="#E4EFE8" rx="3"/>
-  <text x="467.96" y="741.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#3F7D58" text-anchor="middle" letter-spacing="0.4">VERIFIED AUTHENTIC</text>
-  <text x="360" y="786" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#0B1F3A" text-anchor="start">NSC-2026-04471</text>
-  <text x="360" y="810" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#8A8375" text-anchor="start">Maize · Longe 10H · 2kg</text>
-  <text x="360" y="846" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#8A8375" text-anchor="start">Certified</text>
-  <text x="704" y="846" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#0B1F3A" text-anchor="end">14 Jan 2026</text>
-  <text x="360" y="876" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#8A8375" text-anchor="start">Germination</text>
-  <text x="704" y="876" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#0B1F3A" text-anchor="end">94% · pass</text>
-  <text x="360" y="906" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#8A8375" text-anchor="start">Lot origin</text>
-  <text x="704" y="906" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#0B1F3A" text-anchor="end">Masindi multiplication</text>
-  <rect x="756" y="324" width="796" height="292" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="780" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">CHAIN OF CUSTODY</text>
-  <line x1="800" y1="452" x2="1508.0" y2="452" stroke="#E4DFD3" stroke-width="4" stroke-linecap="round"/>
-  <line x1="800" y1="452" x2="1331.0" y2="452" stroke="#B8933F" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="800.0" cy="452" r="13" fill="#0B1F3A"/>
-  <path d="M 795.0 452 l 4 4 l 7 -8" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="800.0" y="500" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="middle">Breeder</text>
-  <text x="800.0" y="518" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="middle">NARO Namulonge</text>
-  <circle cx="977.0" cy="452" r="13" fill="#0B1F3A"/>
-  <path d="M 972.0 452 l 4 4 l 7 -8" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="977.0" y="500" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="middle">Multiplier</text>
-  <text x="977.0" y="518" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="middle">Masindi farm</text>
-  <circle cx="1154.0" cy="452" r="13" fill="#0B1F3A"/>
-  <path d="M 1149.0 452 l 4 4 l 7 -8" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="1154.0" y="500" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="middle">Processor</text>
-  <text x="1154.0" y="518" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="middle">NSC Kampala</text>
-  <circle cx="1331.0" cy="452" r="22" fill="#B8933F" opacity="0.2"/>
-  <circle cx="1331.0" cy="452" r="13" fill="#B8933F"/>
-  <path d="M 1326.0 452 l 4 4 l 7 -8" fill="none" stroke="#0B1F3A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="1331.0" y="500" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="middle">Agro-dealer</text>
-  <text x="1331.0" y="518" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="middle">Kapchorwa</text>
-  <circle cx="1508.0" cy="452" r="13" fill="#FFFFFF" stroke="#E4DFD3" stroke-width="3"/>
-  <text x="1508.0" y="500" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#B8B2A4" text-anchor="middle">Farmer</text>
-  <text x="1508.0" y="518" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#B8B2A4" text-anchor="middle">awaiting scan</text>
-  <text x="780" y="578" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#8A8375" text-anchor="start">Every hand-off is signed and timestamped. A bag that skips a stage cannot be sold.</text>
-  <rect x="756" y="640" width="386.0" height="300" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="780" y="672" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">VOUCHER REDEMPTION</text>
-  <path d="M 949.0 720.0 A 70 70 0 1 1 885.7 819.8" fill="none" stroke="#B8933F" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"/>
-  <path d="M 885.7 819.8 A 70 70 0 0 1 907.9 733.4" fill="none" stroke="#0B1F3A" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"/>
-  <path d="M 907.9 733.4 A 70 70 0 0 1 949.0 720.0" fill="none" stroke="#E4DFD3" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"/>
-  <text x="949.0" y="786" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#0B1F3A" text-anchor="middle">68%</text>
-  <text x="949.0" y="808" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#8A8375" text-anchor="middle">redeemed</text>
-  <text x="780" y="900" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8A8375" text-anchor="start">842,000 of 1.24M vouchers claimed</text>
-  <rect x="1166.0" y="640" width="386.0" height="300" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="1190.0" y="672" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">FLAGGED THIS WEEK</text>
-  <rect x="1190.0" y="694" width="338.0" height="46" fill="#F5F2EA" rx="5"/>
-  <rect x="1190.0" y="694" width="4" height="46" fill="#B4483C" rx="2"/>
-  <text x="1208.0" y="714" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#0B1F3A" text-anchor="start">NSC-2026-03318</text>
-  <text x="1208.0" y="730" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="start">duplicate scan · Mbale</text>
-  <rect x="1190.0" y="750" width="338.0" height="46" fill="#F5F2EA" rx="5"/>
-  <rect x="1190.0" y="750" width="4" height="46" fill="#B4483C" rx="2"/>
-  <text x="1208.0" y="770" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#0B1F3A" text-anchor="start">NSC-2025-99120</text>
-  <text x="1208.0" y="786" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="start">expired certificate</text>
-  <rect x="1190.0" y="806" width="338.0" height="46" fill="#F5F2EA" rx="5"/>
-  <rect x="1190.0" y="806" width="4" height="46" fill="#B4483C" rx="2"/>
-  <text x="1208.0" y="826" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#0B1F3A" text-anchor="start">NSC-2026-04102</text>
-  <text x="1208.0" y="842" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="start">unregistered dealer</text>
-  <rect x="1190.0" y="862" width="338.0" height="46" fill="#F5F2EA" rx="5"/>
-  <rect x="1190.0" y="862" width="4" height="46" fill="#B4483C" rx="2"/>
-  <text x="1208.0" y="882" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#0B1F3A" text-anchor="start">NSC-2026-01877</text>
-  <text x="1208.0" y="898" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="start">germination below 80%</text>
+  <rect x="0.0" y="0.0" width="1600.0" height="1000.0" fill="#F8F7EE"/>
+  <rect x="0.0" y="0.0" width="1600.0" height="44.0" fill="#33520F"/>
+  <circle cx="24.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.28"/>
+  <circle cx="44.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.38"/>
+  <circle cx="64.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.48"/>
+  <text x="800.0" y="26.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.3" opacity="0.62">National Seed Tracking &amp; Tracing System</text>
+  <rect x="0.0" y="44.0" width="268.0" height="956.0" fill="#33520F"/>
+  <rect x="24.0" y="70.0" width="34.0" height="34.0" fill="#CA8A04" rx="8"/>
+  <path d="M 49 79 c -12 0 -16 6 -16 11 a 5 5 0 0 0 10 0 c 0 -5 6 -8 6 -11 z" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+  <line x1="33.0" y1="95.0" x2="43.0" y2="85.0" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="butt" opacity="1"/>
+  <text x="68.0" y="86.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="start">Seed Trace</text>
+  <text x="68.0" y="102.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="500" fill="#FFFFFF" text-anchor="start" letter-spacing="0.5" opacity="0.5">MAAIF · Crop Inspection</text>
+  <line x1="24.0" y1="128.0" x2="244.0" y2="128.0" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.14"/>
+  <path d="M 32 157 l 8 4 v 9 l -8 4 l -8 -4 v -9 z" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+  <path d="M 24 161 l 8 4 l 8 -4" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+  <text x="58.0" y="170.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.55">Batches</text>
+  <rect x="14.0" y="195.0" width="240.0" height="40.0" fill="#CA8A04" rx="6" opacity="0.18"/>
+  <rect x="0.0" y="195.0" width="3.0" height="40.0" fill="#CA8A04"/>
+  <rect x="24.0" y="206.0" width="6.0" height="6.0" fill="none" rx="1" stroke="#CA8A04" stroke-width="1.7" opacity="1"/>
+  <rect x="34.0" y="206.0" width="6.0" height="6.0" fill="none" rx="1" stroke="#CA8A04" stroke-width="1.7" opacity="1"/>
+  <rect x="24.0" y="216.0" width="6.0" height="6.0" fill="none" rx="1" stroke="#CA8A04" stroke-width="1.7" opacity="1"/>
+  <rect x="35.0" y="217.0" width="4.0" height="4.0" fill="#CA8A04" opacity="1"/>
+  <text x="58.0" y="218.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="start" opacity="0.98">Field verification</text>
+  <rect x="23.0" y="256.0" width="18.0" height="13.0" fill="none" rx="2" stroke="#FFFFFF" stroke-width="1.8" opacity="0.45"/>
+  <line x1="23.0" y1="260.0" x2="41.0" y2="260.0" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="butt" opacity="0.45"/>
+  <text x="58.0" y="266.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.55">Vouchers</text>
+  <rect x="23.0" y="305.0" width="11.0" height="9.0" fill="none" rx="1.5" stroke="#FFFFFF" stroke-width="1.7" opacity="0.45"/>
+  <path d="M 34 308 h 4 l 3 4 v 2 h -7 z" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+  <circle cx="27.0" cy="316.0" r="2.0" fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="37.0" cy="316.0" r="2.0" fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.45"/>
+  <text x="58.0" y="314.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.55">Agro-dealers</text>
+  <path d="M 29 349 v 6 l -5 9 a 2 2 0 0 0 2 3 h 12 a 2 2 0 0 0 2 -3 l -5 -9 v -6" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+  <line x1="28.0" y1="349.0" x2="36.0" y2="349.0" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" opacity="0.45"/>
+  <text x="58.0" y="362.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.55">Quality control</text>
+  <rect x="24.0" y="398.0" width="7.0" height="7.0" fill="#FFFFFF" rx="1.5" opacity="0.45"/>
+  <rect x="33.0" y="398.0" width="7.0" height="7.0" fill="#FFFFFF" rx="1.5" opacity="0.45"/>
+  <rect x="24.0" y="407.0" width="7.0" height="7.0" fill="#FFFFFF" rx="1.5" opacity="0.45"/>
+  <rect x="33.0" y="407.0" width="7.0" height="7.0" fill="#FFFFFF" rx="1.5" opacity="0.45"/>
+  <text x="58.0" y="410.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.55">Data exchange</text>
+  <line x1="24.0" y1="920.0" x2="244.0" y2="920.0" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.14"/>
+  <circle cx="40.0" cy="952.0" r="14.0" fill="#CA8A04"/>
+  <text x="40.0" y="956.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">JC</text>
+  <text x="64.0" y="948.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#FFFFFF" text-anchor="start" opacity="0.9">J. Chelangat</text>
+  <text x="64.0" y="963.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.45">Crop inspector</text>
+  <text x="312.0" y="96.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#1C2410" text-anchor="start">Field verification</text>
+  <text x="312.0" y="123.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4F5B3B" text-anchor="start">Batch NSC-2026-04471 · scanned at a Kapchorwa agro-dealer at 11:04</text>
+  <rect x="1442.9" y="78.0" width="113.1" height="38.0" fill="#CA8A04" rx="5"/>
+  <text x="1499.4" y="101.6" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Certify batch</text>
+  <rect x="1320.1" y="78.0" width="110.8" height="38.0" fill="#FFFFFF" rx="5" stroke="#E5E4D2" stroke-width="1.4"/>
+  <text x="1375.5" y="101.6" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#4F5B3B" text-anchor="middle">Scan history</text>
+  <rect x="312.0" y="156.0" width="400.0" height="108.0" fill="#FFFFFF" rx="8" stroke="#E5E4D2" stroke-width="1.4"/>
+  <text x="332.0" y="185.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#9AA383" text-anchor="start" letter-spacing="1.1">BATCHES CERTIFIED</text>
+  <text x="332.0" y="226.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#1C2410" text-anchor="start">9,850</text>
+  <text x="332.0" y="247.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#9AA383" text-anchor="start">this planting season</text>
+  <rect x="734.0" y="156.0" width="400.0" height="108.0" fill="#FFFFFF" rx="8" stroke="#E5E4D2" stroke-width="1.4"/>
+  <text x="754.0" y="185.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#9AA383" text-anchor="start" letter-spacing="1.1">FIELD SCANS</text>
+  <text x="754.0" y="226.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#1C2410" text-anchor="start">1.24M</text>
+  <text x="754.0" y="247.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#9AA383" text-anchor="start">by 3,100 inspectors and dealers</text>
+  <rect x="1156.0" y="156.0" width="400.0" height="108.0" fill="#FFFFFF" rx="8" stroke="#E5E4D2" stroke-width="1.4"/>
+  <text x="1176.0" y="185.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#9AA383" text-anchor="start" letter-spacing="1.1">COUNTERFEITS STOPPED</text>
+  <text x="1176.0" y="226.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#CA8A04" text-anchor="start">412</text>
+  <text x="1176.0" y="247.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#9AA383" text-anchor="start">pulled from sale this season</text>
+  <rect x="312.0" y="290.0" width="366.0" height="620.0" fill="#FFFFFF" rx="8" stroke="#E5E4D2" stroke-width="1.4"/>
+  <text x="332.0" y="324.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#9AA383" text-anchor="start" letter-spacing="1.2">CODE ON THE BAG</text>
+  <rect x="358.0" y="340.0" width="274.0" height="274.0" fill="#FFFFFF" rx="6" stroke="#E5E4D2" stroke-width="1.4"/>
+  <rect x="377.2" y="359.2" width="78.5" height="78.5" fill="#3F6212" rx="3"/>
+  <rect x="388.4" y="370.4" width="56.1" height="56.1" fill="#FFFFFF" rx="2"/>
+  <rect x="399.6" y="381.6" width="33.7" height="33.7" fill="#3F6212" rx="1"/>
+  <rect x="534.3" y="359.2" width="78.5" height="78.5" fill="#3F6212" rx="3"/>
+  <rect x="545.5" y="370.4" width="56.1" height="56.1" fill="#FFFFFF" rx="2"/>
+  <rect x="556.7" y="381.6" width="33.7" height="33.7" fill="#3F6212" rx="1"/>
+  <rect x="377.2" y="516.3" width="78.5" height="78.5" fill="#3F6212" rx="3"/>
+  <rect x="388.4" y="527.5" width="56.1" height="56.1" fill="#FFFFFF" rx="2"/>
+  <rect x="399.6" y="538.7" width="33.7" height="33.7" fill="#3F6212" rx="1"/>
+  <rect x="466.9" y="359.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="478.2" y="359.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="359.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="359.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="489.4" y="370.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="370.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="466.9" y="381.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="478.2" y="381.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="381.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="381.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="478.2" y="392.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="489.4" y="392.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="392.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="466.9" y="404.1" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="478.2" y="415.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="415.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="415.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="466.9" y="426.5" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="426.5" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="478.2" y="437.7" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="489.4" y="437.7" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="437.7" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="377.2" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="422.1" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="433.3" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="455.7" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="466.9" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="489.4" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="523.1" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="545.5" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="556.7" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="579.2" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="601.6" y="448.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="388.4" y="460.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="399.6" y="460.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="422.1" y="460.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="478.2" y="460.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="489.4" y="460.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="460.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="460.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="523.1" y="460.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="556.7" y="460.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="567.9" y="460.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="377.2" y="471.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="388.4" y="471.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="399.6" y="471.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="410.8" y="471.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="471.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="523.1" y="471.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="534.3" y="471.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="590.4" y="471.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="388.4" y="482.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="455.7" y="482.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="489.4" y="482.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="482.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="482.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="545.5" y="482.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="601.6" y="482.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="399.6" y="493.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="410.8" y="493.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="422.1" y="493.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="455.7" y="493.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="466.9" y="493.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="493.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="567.9" y="493.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="579.2" y="493.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="601.6" y="493.8" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="466.9" y="505.1" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="489.4" y="505.1" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="505.1" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="523.1" y="505.1" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="534.3" y="505.1" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="567.9" y="505.1" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="579.2" y="505.1" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="601.6" y="505.1" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="466.9" y="516.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="489.4" y="516.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="516.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="534.3" y="516.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="545.5" y="516.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="556.7" y="516.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="567.9" y="516.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="590.4" y="516.3" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="478.2" y="527.5" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="527.5" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="527.5" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="545.5" y="527.5" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="579.2" y="527.5" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="466.9" y="538.7" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="538.7" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="534.3" y="538.7" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="556.7" y="538.7" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="567.9" y="538.7" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="466.9" y="549.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="478.2" y="549.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="489.4" y="549.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="549.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="549.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="545.5" y="549.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="567.9" y="549.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="579.2" y="549.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="601.6" y="549.9" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="478.2" y="561.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="523.1" y="561.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="579.2" y="561.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="590.4" y="561.2" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="572.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="572.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="545.5" y="572.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="567.9" y="572.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="601.6" y="572.4" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="466.9" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="489.4" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="500.6" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="511.8" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="523.1" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="545.5" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="556.7" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="567.9" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="579.2" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="590.4" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="601.6" y="583.6" width="10.3" height="10.3" fill="#3F6212" rx="0.5"/>
+  <rect x="358.0" y="632.0" width="148.7" height="26.0" fill="#E7EFD8" rx="4"/>
+  <text x="432.4" y="649.1" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#15803D" text-anchor="middle" letter-spacing="0.3">VERIFIED AUTHENTIC</text>
+  <text x="332.0" y="700.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="22" font-weight="700" fill="#1C2410" text-anchor="start">NSC-2026-04471</text>
+  <text x="332.0" y="724.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#4F5B3B" text-anchor="start">Maize · Longe 10H · 2 kg bag</text>
+  <text x="332.0" y="760.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#9AA383" text-anchor="start">Certified</text>
+  <text x="658.0" y="760.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1C2410" text-anchor="end">14 Jan 2026</text>
+  <text x="332.0" y="788.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#9AA383" text-anchor="start">Germination</text>
+  <text x="658.0" y="788.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1C2410" text-anchor="end">94% · pass</text>
+  <text x="332.0" y="816.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#9AA383" text-anchor="start">Moisture</text>
+  <text x="658.0" y="816.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1C2410" text-anchor="end">11.2% · pass</text>
+  <text x="332.0" y="844.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#9AA383" text-anchor="start">Multiplied at</text>
+  <text x="658.0" y="844.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1C2410" text-anchor="end">Masindi, NARO</text>
+  <text x="332.0" y="872.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#9AA383" text-anchor="start">Expires</text>
+  <text x="658.0" y="872.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1C2410" text-anchor="end">30 Sep 2026</text>
+  <rect x="702.0" y="290.0" width="618.0" height="292.0" fill="#FFFFFF" rx="8" stroke="#E5E4D2" stroke-width="1.4"/>
+  <text x="724.0" y="324.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#9AA383" text-anchor="start" letter-spacing="1.2">CHAIN OF CUSTODY</text>
+  <text x="1298.0" y="324.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#CA8A04" text-anchor="end" letter-spacing="1">EVERY HAND-OFF SIGNED</text>
+  <line x1="760.0" y1="414.0" x2="1262.0" y2="414.0" stroke="#E5E4D2" stroke-width="4" stroke-linecap="round"/>
+  <line x1="760.0" y1="414.0" x2="1136.5" y2="414.0" stroke="#3F6212" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="760.0" cy="414.0" r="12.0" fill="#3F6212"/>
+  <path d="M 755.0 414 l 4 4 l 7 -8" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="760.0" y="456.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1C2410" text-anchor="middle">Breeder</text>
+  <text x="760.0" y="473.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#4F5B3B" text-anchor="middle">NARO Namulonge</text>
+  <text x="760.0" y="490.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#9AA383" text-anchor="middle">02 Nov</text>
+  <circle cx="885.5" cy="414.0" r="12.0" fill="#3F6212"/>
+  <path d="M 880.5 414 l 4 4 l 7 -8" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="885.5" y="456.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1C2410" text-anchor="middle">Multiplier</text>
+  <text x="885.5" y="473.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#4F5B3B" text-anchor="middle">Masindi farm</text>
+  <text x="885.5" y="490.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#9AA383" text-anchor="middle">18 Dec</text>
+  <circle cx="1011.0" cy="414.0" r="12.0" fill="#3F6212"/>
+  <path d="M 1006.0 414 l 4 4 l 7 -8" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1011.0" y="456.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1C2410" text-anchor="middle">Processor</text>
+  <text x="1011.0" y="473.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#4F5B3B" text-anchor="middle">NSC Kampala</text>
+  <text x="1011.0" y="490.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#9AA383" text-anchor="middle">14 Jan</text>
+  <circle cx="1136.5" cy="414.0" r="21.0" fill="#CA8A04" opacity="0.24"/>
+  <circle cx="1136.5" cy="414.0" r="12.0" fill="#CA8A04"/>
+  <path d="M 1131.5 414 l 4 4 l 7 -8" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1136.5" y="456.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1C2410" text-anchor="middle">Agro-dealer</text>
+  <text x="1136.5" y="473.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#4F5B3B" text-anchor="middle">Kapchorwa</text>
+  <text x="1136.5" y="490.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#9AA383" text-anchor="middle">today</text>
+  <circle cx="1262.0" cy="414.0" r="12.0" fill="#FFFFFF" stroke="#E5E4D2" stroke-width="3"/>
+  <text x="1262.0" y="456.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#9AA383" text-anchor="middle">Farmer</text>
+  <text x="1262.0" y="473.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#9AA383" text-anchor="middle">not yet scanned</text>
+  <text x="1262.0" y="490.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#9AA383" text-anchor="middle">—</text>
+  <text x="724.0" y="542.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#9AA383" text-anchor="start">A bag that skips a stage cannot be sold: the scan fails and the dealer is flagged for inspection.</text>
+  <rect x="702.0" y="606.0" width="298.0" height="304.0" fill="#FFFFFF" rx="8" stroke="#E5E4D2" stroke-width="1.4"/>
+  <text x="724.0" y="640.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#9AA383" text-anchor="start" letter-spacing="1.2">VOUCHERS REDEEMED</text>
+  <path d="M 851.0 686.0 A 62 62 0 1 1 794.9 774.4" fill="none" stroke="#3F6212" stroke-width="24" stroke-linecap="butt" stroke-linejoin="round"/>
+  <path d="M 794.9 774.4 A 62 62 0 0 1 851.0 686.0" fill="none" stroke="#E5E4D2" stroke-width="24" stroke-linecap="butt" stroke-linejoin="round"/>
+  <text x="851.0" y="744.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="27" font-weight="700" fill="#1C2410" text-anchor="middle">68%</text>
+  <text x="851.0" y="765.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="500" fill="#9AA383" text-anchor="middle">of 1.24M</text>
+  <text x="724.0" y="844.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#4F5B3B" text-anchor="start">842,000 subsidised bags claimed</text>
+  <text x="724.0" y="866.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#9AA383" text-anchor="start">by 611,000 registered farmers</text>
+  <rect x="1022.0" y="606.0" width="298.0" height="304.0" fill="#FFFFFF" rx="8" stroke="#E5E4D2" stroke-width="1.4"/>
+  <text x="1044.0" y="640.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#9AA383" text-anchor="start" letter-spacing="1.2">FLAGGED THIS WEEK</text>
+  <rect x="1042.0" y="662.0" width="258.0" height="48.0" fill="#F8F7EE" rx="6"/>
+  <rect x="1042.0" y="662.0" width="4.0" height="48.0" fill="#B91C1C" rx="2"/>
+  <text x="1060.0" y="683.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#1C2410" text-anchor="start">NSC-2026-03318</text>
+  <text x="1060.0" y="699.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#9AA383" text-anchor="start">scanned twice · Mbale</text>
+  <rect x="1042.0" y="720.0" width="258.0" height="48.0" fill="#F8F7EE" rx="6"/>
+  <rect x="1042.0" y="720.0" width="4.0" height="48.0" fill="#B91C1C" rx="2"/>
+  <text x="1060.0" y="741.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#1C2410" text-anchor="start">NSC-2025-99120</text>
+  <text x="1060.0" y="757.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#9AA383" text-anchor="start">certificate expired</text>
+  <rect x="1042.0" y="778.0" width="258.0" height="48.0" fill="#F8F7EE" rx="6"/>
+  <rect x="1042.0" y="778.0" width="4.0" height="48.0" fill="#B91C1C" rx="2"/>
+  <text x="1060.0" y="799.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#1C2410" text-anchor="start">NSC-2026-04102</text>
+  <text x="1060.0" y="815.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#9AA383" text-anchor="start">unregistered dealer</text>
+  <rect x="1042.0" y="836.0" width="258.0" height="48.0" fill="#F8F7EE" rx="6"/>
+  <rect x="1042.0" y="836.0" width="4.0" height="48.0" fill="#B91C1C" rx="2"/>
+  <text x="1060.0" y="857.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#1C2410" text-anchor="start">NSC-2026-01877</text>
+  <text x="1060.0" y="873.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#9AA383" text-anchor="start">germination below 80%</text>
+  <rect x="1338.0" y="304.0" width="218.0" height="430.1" fill="#1B1B1B" rx="32"/>
+  <rect x="1338.0" y="304.0" width="218.0" height="430.1" fill="none" rx="32" stroke="#000000" stroke-width="1.4" opacity="0.3"/>
+  <rect x="1346.0" y="312.0" width="202.0" height="414.1" fill="#F8F7EE" rx="25"/>
+  <rect x="1346.0" y="312.0" width="202.0" height="78.0" fill="#3F6212"/>
+  <rect x="1346.0" y="312.0" width="202.0" height="25.0" fill="#3F6212" rx="25"/>
+  <text x="1366.0" y="354.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="start">Verify a bag</text>
+  <text x="1366.0" y="373.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.6">Kapchorwa · online</text>
+  <rect x="1360.0" y="406.0" width="174.0" height="170.0" fill="#33520F" rx="10"/>
+  <line x1="1378.0" y1="424.0" x2="1400.0" y2="424.0" stroke="#CA8A04" stroke-width="3.4" stroke-linecap="round"/>
+  <line x1="1378.0" y1="424.0" x2="1378.0" y2="446.0" stroke="#CA8A04" stroke-width="3.4" stroke-linecap="round"/>
+  <line x1="1516.0" y1="424.0" x2="1494.0" y2="424.0" stroke="#CA8A04" stroke-width="3.4" stroke-linecap="round"/>
+  <line x1="1516.0" y1="424.0" x2="1516.0" y2="446.0" stroke="#CA8A04" stroke-width="3.4" stroke-linecap="round"/>
+  <line x1="1378.0" y1="556.0" x2="1400.0" y2="556.0" stroke="#CA8A04" stroke-width="3.4" stroke-linecap="round"/>
+  <line x1="1378.0" y1="556.0" x2="1378.0" y2="534.0" stroke="#CA8A04" stroke-width="3.4" stroke-linecap="round"/>
+  <line x1="1516.0" y1="556.0" x2="1494.0" y2="556.0" stroke="#CA8A04" stroke-width="3.4" stroke-linecap="round"/>
+  <line x1="1516.0" y1="556.0" x2="1516.0" y2="534.0" stroke="#CA8A04" stroke-width="3.4" stroke-linecap="round"/>
+  <rect x="1403.0" y="446.0" width="88.0" height="88.0" fill="#FFFFFF" rx="6" stroke="#E5E4D2" stroke-width="1.4"/>
+  <rect x="1409.2" y="452.2" width="25.2" height="25.2" fill="#3F6212" rx="3"/>
+  <rect x="1412.8" y="455.8" width="18.0" height="18.0" fill="#FFFFFF" rx="2"/>
+  <rect x="1416.4" y="459.4" width="10.8" height="10.8" fill="#3F6212" rx="1"/>
+  <rect x="1459.6" y="452.2" width="25.2" height="25.2" fill="#3F6212" rx="3"/>
+  <rect x="1463.2" y="455.8" width="18.0" height="18.0" fill="#FFFFFF" rx="2"/>
+  <rect x="1466.8" y="459.4" width="10.8" height="10.8" fill="#3F6212" rx="1"/>
+  <rect x="1409.2" y="502.6" width="25.2" height="25.2" fill="#3F6212" rx="3"/>
+  <rect x="1412.8" y="506.2" width="18.0" height="18.0" fill="#FFFFFF" rx="2"/>
+  <rect x="1416.4" y="509.8" width="10.8" height="10.8" fill="#3F6212" rx="1"/>
+  <rect x="1438.0" y="452.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="452.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1441.6" y="455.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="455.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1438.0" y="459.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1445.2" y="459.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="459.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="459.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1438.0" y="463.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1441.6" y="463.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1445.2" y="463.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="463.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1438.0" y="466.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="466.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1445.2" y="470.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="470.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1438.0" y="473.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1441.6" y="473.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1445.2" y="477.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="477.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1409.2" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1412.8" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1416.4" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1430.8" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1438.0" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1445.2" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1459.6" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1463.2" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1466.8" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1481.2" y="481.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1412.8" y="484.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1416.4" y="484.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1427.2" y="484.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1430.8" y="484.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1438.0" y="484.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1441.6" y="484.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="484.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="484.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1463.2" y="484.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1470.4" y="484.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1416.4" y="488.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1420.0" y="488.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1423.6" y="488.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1441.6" y="488.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1459.6" y="488.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1463.2" y="488.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1481.2" y="488.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1416.4" y="491.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1427.2" y="491.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1438.0" y="491.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="491.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1456.0" y="491.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1466.8" y="491.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1474.0" y="491.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1477.6" y="491.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1412.8" y="495.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1420.0" y="495.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1423.6" y="495.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1430.8" y="495.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1434.4" y="495.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1441.6" y="495.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="495.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1474.0" y="495.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1441.6" y="499.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1456.0" y="499.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1466.8" y="499.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1474.0" y="499.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1477.6" y="499.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1481.2" y="499.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1438.0" y="502.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1445.2" y="502.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="502.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="502.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1456.0" y="502.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1459.6" y="502.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1463.2" y="502.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1470.4" y="502.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1474.0" y="502.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1481.2" y="502.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1441.6" y="506.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1445.2" y="506.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="506.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1459.6" y="506.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1463.2" y="506.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1466.8" y="506.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1477.6" y="506.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1481.2" y="506.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="509.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="509.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1456.0" y="509.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1459.6" y="509.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1470.4" y="509.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1474.0" y="509.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1481.2" y="509.8" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1438.0" y="513.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1441.6" y="513.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1445.2" y="513.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="513.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="513.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1470.4" y="513.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1481.2" y="513.4" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="517.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="517.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1456.0" y="517.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1477.6" y="517.0" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1441.6" y="520.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1445.2" y="520.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1452.4" y="520.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1456.0" y="520.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1459.6" y="520.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1466.8" y="520.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1470.4" y="520.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1474.0" y="520.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1477.6" y="520.6" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1438.0" y="524.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1448.8" y="524.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1463.2" y="524.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1470.4" y="524.2" width="3.3" height="3.3" fill="#3F6212" rx="0.5"/>
+  <rect x="1378.0" y="490.0" width="138.0" height="3.0" fill="#CA8A04" rx="2" opacity="0.9"/>
+  <rect x="1360.0" y="592.0" width="174.0" height="52.0" fill="#E7EFD8" rx="8"/>
+  <circle cx="1390.0" cy="618.0" r="13.0" fill="#15803D"/>
+  <path d="M 1384 618 l 4 5 l 9 -10" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1412.0" y="614.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#15803D" text-anchor="start">Authentic</text>
+  <text x="1412.0" y="630.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="400" fill="#4F5B3B" text-anchor="start">Longe 10H · 2 kg</text>
+  <text x="1364.0" y="668.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="500" fill="#9AA383" text-anchor="start">Batch</text>
+  <text x="1530.0" y="668.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#1C2410" text-anchor="end">NSC-…4471</text>
+  <rect x="1360.0" y="688.0" width="174.0" height="44.0" fill="#CA8A04" rx="8"/>
+  <text x="1447.0" y="716.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Redeem voucher</text>
+  <rect x="1421.0" y="320.0" width="52.0" height="9.0" fill="#1B1B1B" rx="5"/>
 </svg>

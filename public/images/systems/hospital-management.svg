@@ -1,139 +1,143 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img">
-  <rect x="0" y="0" width="1600" height="1000" fill="#F5F2EA"/>
-  <rect x="0" y="0" width="1600" height="52" fill="#0B1F3A"/>
-  <circle cx="28" cy="26.0" r="5" fill="#FFFFFF" opacity="0.22"/>
-  <circle cx="50" cy="26.0" r="5" fill="#FFFFFF" opacity="0.3"/>
-  <circle cx="72" cy="26.0" r="5" fill="#FFFFFF" opacity="0.38"/>
-  <text x="800.0" y="31" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.55">globalhealthrescue.com — Hospital Management System</text>
-  <circle cx="1560" cy="26.0" r="13" fill="#B8933F" opacity="0.9"/>
-  <text x="1560" y="30.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#0B1F3A" text-anchor="middle">GH</text>
-  <rect x="0" y="52" width="288" height="948" fill="#152B4C"/>
-  <rect x="28" y="84" width="38" height="38" fill="#B8933F" rx="8"/>
-  <path d="M 47 90 v 20 M 37 100 h 20" fill="none" stroke="#0B1F3A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="78" y="100" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="start">Global Health</text>
-  <text x="78" y="118" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#FFFFFF" text-anchor="start" letter-spacing="0.6" opacity="0.45">Rescue · EHR</text>
-  <line x1="28" y1="150" x2="260" y2="150" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.12"/>
-  <rect x="32" y="181" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="195" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Ward board</text>
-  <rect x="16" y="224" width="256" height="40" fill="#FFFFFF" rx="6" opacity="0.09"/>
-  <rect x="0" y="224" width="4" height="40" fill="#B8933F"/>
-  <rect x="32" y="233" width="18" height="18" fill="#B8933F" rx="4" opacity="1"/>
-  <text x="64" y="247" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#FFFFFF" text-anchor="start" opacity="0.95">Patients</text>
-  <rect x="32" y="285" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="299" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Appointments</text>
-  <rect x="32" y="337" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="351" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Laboratory</text>
-  <rect x="32" y="389" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="403" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Pharmacy</text>
-  <rect x="32" y="441" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="455" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Claims</text>
-  <line x1="28" y1="904" x2="260" y2="904" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.12"/>
-  <circle cx="46" cy="942" r="15" fill="#FFFFFF" opacity="0.16"/>
-  <text x="46" y="946.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" opacity="0.7">MM</text>
-  <rect x="72" y="934" width="104" height="9" fill="#FFFFFF" rx="4.5" opacity="0.4"/>
-  <rect x="72" y="950" width="68" height="7" fill="#FFFFFF" rx="3.5" opacity="0.2"/>
-  <text x="336" y="112" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="33" font-weight="700" fill="#0B1F3A" text-anchor="start">Patient record</text>
-  <text x="336" y="141" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#8A8375" text-anchor="start">Ward B · admitted 14 Feb · consultant Dr. A. Nsubuga</text>
-  <rect x="1444.2" y="88" width="107.8" height="42" fill="#B8933F" rx="4"/>
-  <text x="1498.1000000000001" y="113.86" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">New order</text>
-  <rect x="1306.0" y="88" width="124.19999999999999" height="42" fill="#FFFFFF" rx="4"/>
-  <text x="1368.1" y="113.86" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Print chart</text>
-  <rect x="1306.0" y="88" width="124.19999999999999" height="42" fill="none" rx="4" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="1306.0" y="88" width="0" height="0" fill="none" rx="4"/>
-  <text x="1368.1" y="113.9" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Print chart</text>
-  <rect x="336.0" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="358.0" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">PATIENTS TODAY</text>
-  <text x="358.0" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B1F3A" text-anchor="start">312</text>
-  <text x="358.0" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">48 admitted overnight</text>
-  <rect x="749.3333333333333" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="771.3333333333333" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">BED OCCUPANCY</text>
-  <text x="771.3333333333333" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B1F3A" text-anchor="start">87%</text>
-  <text x="771.3333333333333" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">18 wards reporting</text>
-  <rect x="1162.6666666666665" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="1184.6666666666665" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">CLAIMS CLEARED</text>
-  <text x="1184.6666666666665" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#B8933F" text-anchor="start">97.4%</text>
-  <text x="1184.6666666666665" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">insurance reconciliation</text>
-  <rect x="336" y="324" width="560" height="616" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="337" y="325" width="558" height="128" fill="#F5F2EA" rx="6"/>
-  <circle cx="402" cy="388" r="34" fill="#0B1F3A" opacity="0.1"/>
-  <circle cx="402" cy="376" r="12" fill="#0B1F3A" opacity="0.4"/>
-  <path d="M 380 404 a 22 22 0 0 1 44 0" fill="none" stroke="#0B1F3A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
-  <text x="454" y="372" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#0B1F3A" text-anchor="start">Nakato, Sarah</text>
-  <text x="454" y="396" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#8A8375" text-anchor="start">F · 34 · PID 0084-2261</text>
-  <rect x="454" y="410" width="72.56" height="22" fill="#E5E9EF" rx="3"/>
-  <text x="490.28" y="425.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#0B1F3A" text-anchor="middle" letter-spacing="0.4">BLOOD O+</text>
-  <rect x="534.56" y="410" width="140.76" height="22" fill="#E4EFE8" rx="3"/>
-  <text x="604.9399999999999" y="425.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#3F7D58" text-anchor="middle" letter-spacing="0.4">NO KNOWN ALLERGIES</text>
-  <text x="360" y="494" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">VITALS · LAST 12 HOURS</text>
-  <rect x="360" y="508" width="512" height="150" fill="#F5F2EA" rx="5"/>
-  <line x1="360" y1="545.5" x2="872" y2="545.5" stroke="#E4DFD3" stroke-width="1" stroke-linecap="butt"/>
-  <line x1="360" y1="583.0" x2="872" y2="583.0" stroke="#E4DFD3" stroke-width="1" stroke-linecap="butt"/>
-  <line x1="360" y1="620.5" x2="872" y2="620.5" stroke="#E4DFD3" stroke-width="1" stroke-linecap="butt"/>
-  <path d="M 380.0 638.0 L 439.0 599.9 L 498.0 612.6 L 557.0 555.4 L 616.0 584.0 L 675.0 542.7 L 734.0 568.1 L 793.0 530.0 L 852.0 549.1 L 852.0 638.0 L 380.0 638.0 Z" fill="#B8933F" opacity="0.12"/>
-  <path d="M 380.0 638.0 L 439.0 599.9 L 498.0 612.6 L 557.0 555.4 L 616.0 584.0 L 675.0 542.7 L 734.0 568.1 L 793.0 530.0 L 852.0 549.1" fill="none" stroke="#B8933F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="852.0" cy="549.0588235294117" r="5.5" fill="#B8933F"/>
-  <circle cx="852.0" cy="549.0588235294117" r="10" fill="#B8933F" opacity="0.22"/>
-  <path d="M 380.0 638.0 L 439.0 602.0 L 498.0 620.0 L 557.0 548.0 L 616.0 584.0 L 675.0 530.0 L 734.0 566.0 L 793.0 584.0 L 852.0 602.0" fill="none" stroke="#0B1F3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="852.0" cy="602.0" r="5.5" fill="#0B1F3A"/>
-  <circle cx="852.0" cy="602.0" r="10" fill="#0B1F3A" opacity="0.22"/>
-  <rect x="360" y="674" width="11" height="11" fill="#B8933F" rx="2"/>
-  <text x="380" y="684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#8A8375" text-anchor="start">Pulse</text>
-  <rect x="458" y="674" width="11" height="11" fill="#0B1F3A" rx="2"/>
-  <text x="478" y="684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#8A8375" text-anchor="start">Temperature</text>
-  <text x="360" y="730" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">ACTIVE ORDERS</text>
-  <rect x="360" y="748" width="512" height="54" fill="#F5F2EA" rx="5"/>
-  <rect x="360" y="748" width="4" height="54" fill="#3F7D58" rx="2"/>
-  <text x="380" y="771" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="start">Full blood count</text>
-  <text x="380" y="789" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8A8375" text-anchor="start">Laboratory · 09:20</text>
-  <rect x="768.62" y="764" width="79.38" height="22" fill="#E4EFE8" rx="3"/>
-  <text x="808.31" y="779.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#3F7D58" text-anchor="middle" letter-spacing="0.4">RESULT IN</text>
-  <rect x="360" y="812" width="512" height="54" fill="#F5F2EA" rx="5"/>
-  <rect x="360" y="812" width="4" height="54" fill="#0B1F3A" rx="2"/>
-  <text x="380" y="835" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="start">Amoxicillin 500mg</text>
-  <text x="380" y="853" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8A8375" text-anchor="start">Pharmacy · t.d.s 5 days</text>
-  <rect x="768.62" y="828" width="79.38" height="22" fill="#E5E9EF" rx="3"/>
-  <text x="808.31" y="843.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#0B1F3A" text-anchor="middle" letter-spacing="0.4">DISPENSED</text>
-  <rect x="360" y="876" width="512" height="54" fill="#F5F2EA" rx="5"/>
-  <rect x="360" y="876" width="4" height="54" fill="#B8933F" rx="2"/>
-  <text x="380" y="899" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="start">Chest X-ray</text>
-  <text x="380" y="917" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8A8375" text-anchor="start">Radiology · requested 11:05</text>
-  <rect x="782.26" y="892" width="65.74000000000001" height="22" fill="#F0E4C6" rx="3"/>
-  <text x="815.13" y="907.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#B8933F" text-anchor="middle" letter-spacing="0.4">WAITING</text>
-  <rect x="924" y="324" width="628" height="616" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="946" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">TODAY'S CLINIC</text>
-  <text x="1530" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#B8933F" text-anchor="end">18 SLOTS</text>
-  <text x="946" y="408" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#8A8375" text-anchor="start">08:00</text>
-  <rect x="1002" y="382" width="528" height="48" fill="#0B1F3A" rx="5" opacity="0.95"/>
-  <text x="1018" y="403" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="start">Ssentongo, J.</text>
-  <text x="1018" y="420" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.62">Review</text>
-  <text x="946" y="468" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#8A8375" text-anchor="start">08:30</text>
-  <rect x="1002" y="442" width="528" height="48" fill="#FFFFFF" rx="5" stroke="#E4DFD3" stroke-width="1" opacity="0.95"/>
-  <text x="1018" y="463" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#0B1F3A" text-anchor="start">Achieng, P.</text>
-  <text x="1018" y="480" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#0B1F3A" text-anchor="start" opacity="0.62">New</text>
-  <text x="946" y="528" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#8A8375" text-anchor="start">09:00</text>
-  <rect x="1002" y="502" width="528" height="48" fill="#B8933F" rx="5" opacity="0.95"/>
-  <text x="1018" y="523" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#0B1F3A" text-anchor="start">Nakato, S.</text>
-  <text x="1018" y="540" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#0B1F3A" text-anchor="start" opacity="0.62">Ward round</text>
-  <text x="946" y="588" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#8A8375" text-anchor="start">09:30</text>
-  <rect x="1002" y="562" width="528" height="48" fill="#F5F2EA" rx="5"/>
-  <text x="1266.0" y="591" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#B8B2A4" text-anchor="middle">available</text>
-  <text x="946" y="648" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#8A8375" text-anchor="start">10:00</text>
-  <rect x="1002" y="622" width="528" height="48" fill="#FFFFFF" rx="5" stroke="#E4DFD3" stroke-width="1" opacity="0.95"/>
-  <text x="1018" y="643" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#0B1F3A" text-anchor="start">Okot, D.</text>
-  <text x="1018" y="660" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#0B1F3A" text-anchor="start" opacity="0.62">Post-op</text>
-  <text x="946" y="708" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#8A8375" text-anchor="start">10:30</text>
-  <rect x="1002" y="682" width="528" height="48" fill="#0B1F3A" rx="5" opacity="0.95"/>
-  <text x="1018" y="703" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="start">Birungi, M.</text>
-  <text x="1018" y="720" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.62">Antenatal</text>
-  <text x="946" y="768" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#8A8375" text-anchor="start">11:00</text>
-  <rect x="1002" y="742" width="528" height="48" fill="#F5F2EA" rx="5"/>
-  <text x="1266.0" y="771" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#B8B2A4" text-anchor="middle">available</text>
-  <text x="946" y="828" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#8A8375" text-anchor="start">11:30</text>
-  <rect x="1002" y="802" width="528" height="48" fill="#FFFFFF" rx="5" stroke="#E4DFD3" stroke-width="1" opacity="0.95"/>
-  <text x="1018" y="823" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#0B1F3A" text-anchor="start">Kayondo, T.</text>
-  <text x="1018" y="840" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#0B1F3A" text-anchor="start" opacity="0.62">Follow-up</text>
-  <text x="946" y="888" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#8A8375" text-anchor="start">12:00</text>
-  <rect x="1002" y="862" width="528" height="48" fill="#0B1F3A" rx="5" opacity="0.95"/>
-  <text x="1018" y="883" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="start">Amuge, R.</text>
-  <text x="1018" y="900" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.62">Referral</text>
+  <rect x="0.0" y="0.0" width="1600.0" height="1000.0" fill="#F3F8F7"/>
+  <rect x="0.0" y="0.0" width="1600.0" height="44.0" fill="#115E59"/>
+  <circle cx="24.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.28"/>
+  <circle cx="44.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.38"/>
+  <circle cx="64.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.48"/>
+  <text x="800.0" y="26.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.3" opacity="0.62">globalhealthrescue.com — Hospital Management System</text>
+  <rect x="0.0" y="44.0" width="92.0" height="956.0" fill="#115E59"/>
+  <rect x="29.0" y="70.0" width="34.0" height="34.0" fill="#E11D48" rx="8"/>
+  <path d="M 46.0 78 v 18 M 37.0 87 h 18" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+  <rect x="38.0" y="152.0" width="7.0" height="7.0" fill="#FFFFFF" rx="1.5" opacity="0.5"/>
+  <rect x="47.0" y="152.0" width="7.0" height="7.0" fill="#FFFFFF" rx="1.5" opacity="0.5"/>
+  <rect x="38.0" y="161.0" width="7.0" height="7.0" fill="#FFFFFF" rx="1.5" opacity="0.5"/>
+  <rect x="47.0" y="161.0" width="7.0" height="7.0" fill="#FFFFFF" rx="1.5" opacity="0.5"/>
+  <text x="46.0" y="183.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="8.5" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.45">WARDS</text>
+  <rect x="10.0" y="216.0" width="72.0" height="58.0" fill="#E11D48" rx="8" opacity="0.2"/>
+  <circle cx="46.0" cy="234.0" r="3.6" fill="none" stroke="#E11D48" stroke-width="1.8" opacity="1"/>
+  <path d="M 39.0 246 a 7 7 0 0 1 14 0" fill="none" stroke="#E11D48" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+  <text x="46.0" y="261.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="8.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.95">PATIENTS</text>
+  <rect x="38.0" y="310.0" width="16.0" height="14.0" fill="none" rx="2" stroke="#FFFFFF" stroke-width="1.8" opacity="0.5"/>
+  <line x1="38.0" y1="315.0" x2="54.0" y2="315.0" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="butt" opacity="0.5"/>
+  <line x1="42.0" y1="307.0" x2="42.0" y2="311.0" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
+  <line x1="50.0" y1="307.0" x2="50.0" y2="311.0" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
+  <text x="46.0" y="339.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="8.5" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.45">CLINIC</text>
+  <path d="M 43.0 385 v 6 l -5 9 a 2 2 0 0 0 2 3 h 12 a 2 2 0 0 0 2 -3 l -5 -9 v -6" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+  <line x1="42.0" y1="385.0" x2="50.0" y2="385.0" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
+  <text x="46.0" y="417.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="8.5" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.45">LAB</text>
+  <rect x="37.0" y="468.0" width="18.0" height="9.0" fill="none" rx="4.5" stroke="#FFFFFF" stroke-width="1.8" opacity="0.5"/>
+  <line x1="46.0" y1="468.0" x2="46.0" y2="477.0" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="butt" opacity="0.5"/>
+  <text x="46.0" y="495.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="8.5" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.45">PHARMACY</text>
+  <rect x="37.0" y="544.0" width="18.0" height="13.0" fill="none" rx="2" stroke="#FFFFFF" stroke-width="1.8" opacity="0.5"/>
+  <line x1="37.0" y1="548.0" x2="55.0" y2="548.0" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="butt" opacity="0.5"/>
+  <text x="46.0" y="573.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="8.5" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.45">CLAIMS</text>
+  <circle cx="46.0" cy="952.0" r="15.0" fill="#E11D48"/>
+  <text x="46.0" y="956.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">AN</text>
+  <text x="136.0" y="96.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#10231F" text-anchor="start">Sarah Nakato · PID 0084-2261</text>
+  <text x="136.0" y="123.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#456460" text-anchor="start">Ward B, bed 12 · admitted 14 Feb 2026 · under Dr A. Nsubuga</text>
+  <rect x="1463.3" y="78.0" width="92.7" height="38.0" fill="#E11D48" rx="5"/>
+  <text x="1509.6" y="101.6" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">New order</text>
+  <rect x="1352.7" y="78.0" width="98.6" height="38.0" fill="#FFFFFF" rx="5" stroke="#DCE9E7" stroke-width="1.4"/>
+  <text x="1402.0" y="101.6" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#456460" text-anchor="middle">Print chart</text>
+  <rect x="136.0" y="156.0" width="458.7" height="108.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <text x="156.0" y="185.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#93AEAB" text-anchor="start" letter-spacing="1.1">PATIENTS SEEN TODAY</text>
+  <text x="156.0" y="226.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#10231F" text-anchor="start">312</text>
+  <text x="156.0" y="247.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#93AEAB" text-anchor="start">48 admitted overnight</text>
+  <rect x="616.7" y="156.0" width="458.7" height="108.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <text x="636.7" y="185.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#93AEAB" text-anchor="start" letter-spacing="1.1">BEDS OCCUPIED</text>
+  <text x="636.7" y="226.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#10231F" text-anchor="start">87%</text>
+  <text x="636.7" y="247.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#93AEAB" text-anchor="start">212 of 244, across 18 wards</text>
+  <rect x="1097.3" y="156.0" width="458.7" height="108.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <text x="1117.3" y="185.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#93AEAB" text-anchor="start" letter-spacing="1.1">CLAIMS CLEARED</text>
+  <text x="1117.3" y="226.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#E11D48" text-anchor="start">97.4%</text>
+  <text x="1117.3" y="247.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#93AEAB" text-anchor="start">reconciled with six insurers</text>
+  <rect x="136.0" y="290.0" width="556.0" height="172.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <circle cx="196.0" cy="364.0" r="31.0" fill="#0F766E" opacity="0.1"/>
+  <circle cx="196.0" cy="360.0" r="3.6" fill="none" stroke="#0F766E" stroke-width="1.8" opacity="0.5"/>
+  <path d="M 189 372 a 7 7 0 0 1 14 0" fill="none" stroke="#0F766E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+  <text x="248.0" y="344.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#10231F" text-anchor="start">Sarah Nakato</text>
+  <text x="248.0" y="365.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#456460" text-anchor="start">Female · 34 years · 62 kg · next of kin on file</text>
+  <rect x="248.0" y="378.0" width="70.9" height="22.0" fill="#DCEDEB" rx="4"/>
+  <text x="283.4" y="392.6" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#0F766E" text-anchor="middle" letter-spacing="0.3">BLOOD O+</text>
+  <rect x="326.9" y="378.0" width="133.1" height="22.0" fill="#E4F0E7" rx="4"/>
+  <text x="393.4" y="392.6" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#15803D" text-anchor="middle" letter-spacing="0.3">NO KNOWN ALLERGIES</text>
+  <rect x="468.0" y="378.0" width="97.2" height="22.0" fill="#FBE4E9" rx="4"/>
+  <text x="516.6" y="392.6" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#E11D48" text-anchor="middle" letter-spacing="0.3">NHIF · ACTIVE</text>
+  <rect x="136.0" y="478.0" width="556.0" height="250.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <text x="156.0" y="510.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#93AEAB" text-anchor="start" letter-spacing="1.2">OBSERVATIONS · LAST 12 HOURS</text>
+  <text x="672.0" y="510.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#E11D48" text-anchor="end" letter-spacing="1">RECORDED 4-HOURLY</text>
+  <rect x="156.0" y="526.0" width="516.0" height="152.0" fill="#F3F8F7" rx="6"/>
+  <line x1="156.0" y1="564.0" x2="672.0" y2="564.0" stroke="#DCE9E7" stroke-width="1" stroke-linecap="butt"/>
+  <line x1="156.0" y1="602.0" x2="672.0" y2="602.0" stroke="#DCE9E7" stroke-width="1" stroke-linecap="butt"/>
+  <line x1="156.0" y1="640.0" x2="672.0" y2="640.0" stroke="#DCE9E7" stroke-width="1" stroke-linecap="butt"/>
+  <path d="M 174.0 662.0 L 234.0 627.7 L 294.0 644.9 L 354.0 582.0 L 414.0 604.9 L 474.0 559.1 L 534.0 593.4 L 594.0 542.0 L 654.0 570.6 L 654.0 662.0 L 174.0 662.0 Z" fill="#E11D48" opacity="0.12"/>
+  <path d="M 174.0 662.0 L 234.0 627.7 L 294.0 644.9 L 354.0 582.0 L 414.0 604.9 L 474.0 559.1 L 534.0 593.4 L 594.0 542.0 L 654.0 570.6" fill="none" stroke="#E11D48" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="654.0" cy="570.6" r="5.0" fill="#E11D48"/>
+  <circle cx="654.0" cy="570.6" r="10.0" fill="#E11D48" opacity="0.22"/>
+  <path d="M 174.0 662.0 L 234.0 602.0 L 294.0 662.0 L 354.0 542.0 L 414.0 602.0 L 474.0 542.0 L 534.0 602.0 L 594.0 602.0 L 654.0 662.0" fill="none" stroke="#0F766E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="654.0" cy="662.0" r="5.0" fill="#0F766E"/>
+  <circle cx="654.0" cy="662.0" r="10.0" fill="#0F766E" opacity="0.22"/>
+  <rect x="156.0" y="696.0" width="11.0" height="11.0" fill="#E11D48" rx="2"/>
+  <text x="174.0" y="706.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#456460" text-anchor="start">Pulse</text>
+  <text x="264.0" y="706.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#10231F" text-anchor="start">94 bpm</text>
+  <rect x="366.0" y="696.0" width="11.0" height="11.0" fill="#0F766E" rx="2"/>
+  <text x="384.0" y="706.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#456460" text-anchor="start">Temperature</text>
+  <text x="474.0" y="706.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#10231F" text-anchor="start">37.4 °C</text>
+  <text x="136.0" y="768.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#93AEAB" text-anchor="start" letter-spacing="1.2">ACTIVE ORDERS</text>
+  <text x="692.0" y="768.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#E11D48" text-anchor="end" letter-spacing="1">3 OPEN</text>
+  <rect x="136.0" y="786.0" width="556.0" height="52.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <rect x="136.0" y="786.0" width="4.0" height="52.0" fill="#15803D" rx="2"/>
+  <text x="156.0" y="808.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#10231F" text-anchor="start">Full blood count</text>
+  <text x="156.0" y="826.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#93AEAB" text-anchor="start">Laboratory · requested 09:20</text>
+  <rect x="594.7" y="801.0" width="79.3" height="22.0" fill="#E4F0E7" rx="4"/>
+  <text x="634.3" y="815.8" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#15803D" text-anchor="middle" letter-spacing="0.3">RESULT IN</text>
+  <rect x="136.0" y="848.0" width="556.0" height="52.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <rect x="136.0" y="848.0" width="4.0" height="52.0" fill="#0F766E" rx="2"/>
+  <text x="156.0" y="870.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#10231F" text-anchor="start">Amoxicillin 500 mg</text>
+  <text x="156.0" y="888.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#93AEAB" text-anchor="start">Pharmacy · t.d.s. for 5 days</text>
+  <rect x="591.6" y="863.0" width="82.4" height="22.0" fill="#DCEDEB" rx="4"/>
+  <text x="632.8" y="877.8" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#0F766E" text-anchor="middle" letter-spacing="0.3">DISPENSED</text>
+  <rect x="136.0" y="910.0" width="556.0" height="52.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <rect x="136.0" y="910.0" width="4.0" height="52.0" fill="#B45309" rx="2"/>
+  <text x="156.0" y="932.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#10231F" text-anchor="start">Chest X-ray</text>
+  <text x="156.0" y="950.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#93AEAB" text-anchor="start">Radiology · requested 11:05</text>
+  <rect x="607.5" y="925.0" width="66.5" height="22.0" fill="#FBF0DC" rx="4"/>
+  <text x="640.7" y="939.8" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#B45309" text-anchor="middle" letter-spacing="0.3">WAITING</text>
+  <rect x="718.0" y="290.0" width="838.0" height="620.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <text x="738.0" y="324.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#93AEAB" text-anchor="start" letter-spacing="1.2">TODAY'S CLINIC</text>
+  <text x="1536.0" y="324.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#E11D48" text-anchor="end" letter-spacing="1">18 SLOTS · 4 FREE</text>
+  <text x="738.0" y="372.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#93AEAB" text-anchor="start">08:00</text>
+  <rect x="794.0" y="344.0" width="742.0" height="48.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <text x="810.0" y="365.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#10231F" text-anchor="start">Ssentongo, J.</text>
+  <text x="810.0" y="382.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#10231F" text-anchor="start" opacity="0.68">Review · hypertension</text>
+  <text x="738.0" y="434.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#93AEAB" text-anchor="start">08:30</text>
+  <rect x="794.0" y="406.0" width="742.0" height="48.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <text x="810.0" y="427.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#10231F" text-anchor="start">Achieng, P.</text>
+  <text x="810.0" y="444.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#10231F" text-anchor="start" opacity="0.68">New patient</text>
+  <text x="738.0" y="496.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#93AEAB" text-anchor="start">09:00</text>
+  <rect x="794.0" y="468.0" width="742.0" height="48.0" fill="#E11D48" rx="8"/>
+  <text x="810.0" y="489.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="start">Nakato, S.</text>
+  <text x="810.0" y="506.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.68">Ward round</text>
+  <text x="738.0" y="558.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#93AEAB" text-anchor="start">09:30</text>
+  <rect x="794.0" y="530.0" width="742.0" height="48.0" fill="#F3F8F7" rx="8"/>
+  <text x="1165.0" y="559.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#93AEAB" text-anchor="middle">available</text>
+  <text x="738.0" y="620.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#93AEAB" text-anchor="start">10:00</text>
+  <rect x="794.0" y="592.0" width="742.0" height="48.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <text x="810.0" y="613.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#10231F" text-anchor="start">Okot, D.</text>
+  <text x="810.0" y="630.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#10231F" text-anchor="start" opacity="0.68">Post-operative check</text>
+  <text x="738.0" y="682.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#93AEAB" text-anchor="start">10:30</text>
+  <rect x="794.0" y="654.0" width="742.0" height="48.0" fill="#0F766E" rx="8"/>
+  <text x="810.0" y="675.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="start">Birungi, M.</text>
+  <text x="810.0" y="692.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.68">Antenatal · 28 weeks</text>
+  <text x="738.0" y="744.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#93AEAB" text-anchor="start">11:00</text>
+  <rect x="794.0" y="716.0" width="742.0" height="48.0" fill="#F3F8F7" rx="8"/>
+  <text x="1165.0" y="745.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="500" fill="#93AEAB" text-anchor="middle">available</text>
+  <text x="738.0" y="806.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#93AEAB" text-anchor="start">11:30</text>
+  <rect x="794.0" y="778.0" width="742.0" height="48.0" fill="#FFFFFF" rx="8" stroke="#DCE9E7" stroke-width="1.4"/>
+  <text x="810.0" y="799.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#10231F" text-anchor="start">Kayondo, T.</text>
+  <text x="810.0" y="816.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#10231F" text-anchor="start" opacity="0.68">Follow-up · diabetes</text>
+  <text x="738.0" y="868.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="600" fill="#93AEAB" text-anchor="start">12:00</text>
+  <rect x="794.0" y="840.0" width="742.0" height="48.0" fill="#0F766E" rx="8"/>
+  <text x="810.0" y="861.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="start">Amuge, R.</text>
+  <text x="810.0" y="878.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.68">Referral from Mulago</text>
 </svg>

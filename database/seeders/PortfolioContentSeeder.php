@@ -23,6 +23,9 @@ class PortfolioContentSeeder extends Seeder
         $this->seedSettings();
         $this->seedServices();
         $this->seedProjects();
+        // The long-form half, kept in its own file because prose is edited
+        // far more often than a slug or a sort order.
+        $this->call(CaseStudySeeder::class);
         $this->seedSkills();
         $this->seedExperience();
         $this->seedEducation();

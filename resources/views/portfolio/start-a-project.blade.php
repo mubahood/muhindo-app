@@ -47,7 +47,28 @@
       <div class="alert-success">{{ session('success') }}</div>
     @endif
 
-    <h2 style="margin-top:0;">Tell me about your project</h2>
+    @isset($demo)
+      @if($demo)
+        {{-- Arrived from a case study. Say so, so it is obvious the form
+             already knows which system and nobody retypes it. --}}
+        <div class="alert-note" style="display:flex;gap:12px;align-items:flex-start;
+             border:1px solid var(--line);border-left:3px solid var(--gold);
+             background:var(--surface);padding:14px 16px;margin-bottom:22px;">
+          <i class="fas fa-desktop" style="color:var(--gold-d);margin-top:2px;" aria-hidden="true"></i>
+          <div>
+            <div style="font-size:13.5px;font-weight:600;color:var(--tx);">
+              A walkthrough of {{ $demo->title }}
+            </div>
+            <div style="font-size:12.5px;color:var(--tx3);margin-top:3px;">
+              Send this and I will set up a call to show you the real system.
+              Add anything you especially want to see.
+            </div>
+          </div>
+        </div>
+      @endif
+    @endisset
+
+    <h2 style="margin-top:0;">{{ ($demo ?? null) ? 'Ask for the walkthrough' : 'Tell me about your project' }}</h2>
 
     <form class="contact-form" method="POST" action="{{ route('start-a-project.store') }}" style="max-width:640px;">
       @csrf
@@ -82,7 +103,7 @@
         <select id="project_type" name="project_type" required>
           <option value="">Choose one…</option>
           @foreach(['website' => 'Website', 'web_system' => 'Web system', 'mobile_app' => 'Mobile app', 'ecommerce' => 'E-commerce', 'school_clinic_system' => 'School / clinic system', 'other' => 'Other'] as $v => $label)
-            <option value="{{ $v }}" {{ old('project_type') === $v ? 'selected' : '' }}>{{ $label }}</option>
+            <option value="{{ $v }}" {{ old('project_type', ($demo ?? null) ? 'web_system' : '') === $v ? 'selected' : '' }}>{{ $label }}</option>
           @endforeach
         </select>
         @error('project_type')<div class="field-error">{{ $message }}</div>@enderror
@@ -111,7 +132,7 @@
 
       <div>
         <label for="description">Describe it in your own words</label>
-        <textarea id="description" name="description" required placeholder="Plain language is perfect — what problem are you solving, and for who?">{{ old('description') }}</textarea>
+        <textarea id="description" name="description" required placeholder="Plain language is perfect — what problem are you solving, and for who?">{{ old('description', ($demo ?? null) ? 'I would like a walkthrough of '.$demo->title.'. ' : '') }}</textarea>
         @error('description')<div class="field-error">{{ $message }}</div>@enderror
       </div>
 

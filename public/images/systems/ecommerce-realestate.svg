@@ -1,150 +1,159 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img">
-  <rect x="0" y="0" width="1600" height="1000" fill="#F5F2EA"/>
-  <rect x="0" y="0" width="1600" height="52" fill="#0B1F3A"/>
-  <circle cx="28" cy="26.0" r="5" fill="#FFFFFF" opacity="0.22"/>
-  <circle cx="50" cy="26.0" r="5" fill="#FFFFFF" opacity="0.3"/>
-  <circle cx="72" cy="26.0" r="5" fill="#FFFFFF" opacity="0.38"/>
-  <text x="800.0" y="31" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.55">afriinventions.com — commerce &amp; estates back office</text>
-  <circle cx="1560" cy="26.0" r="13" fill="#B8933F" opacity="0.9"/>
-  <text x="1560" y="30.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#0B1F3A" text-anchor="middle">AI</text>
-  <rect x="0" y="52" width="288" height="948" fill="#152B4C"/>
-  <rect x="28" y="84" width="38" height="38" fill="#B8933F" rx="8"/>
-  <path d="M 38 96 h 18 l -3 14 h -12 z M 42 96 v -4 a 5 5 0 0 1 10 0 v 4" fill="none" stroke="#0B1F3A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="78" y="100" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="start">AfriInventions</text>
-  <text x="78" y="118" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#FFFFFF" text-anchor="start" letter-spacing="0.6" opacity="0.45">Commerce · Estates</text>
-  <line x1="28" y1="150" x2="260" y2="150" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.12"/>
-  <rect x="32" y="181" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="195" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Storefront</text>
-  <rect x="16" y="224" width="256" height="40" fill="#FFFFFF" rx="6" opacity="0.09"/>
-  <rect x="0" y="224" width="4" height="40" fill="#B8933F"/>
-  <rect x="32" y="233" width="18" height="18" fill="#B8933F" rx="4" opacity="1"/>
-  <text x="64" y="247" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#FFFFFF" text-anchor="start" opacity="0.95">Listings</text>
-  <rect x="32" y="285" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="299" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Orders</text>
-  <rect x="32" y="337" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="351" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Inventory</text>
-  <rect x="32" y="389" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="403" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Customers</text>
-  <rect x="32" y="441" width="18" height="18" fill="#FFFFFF" rx="4" opacity="0.32"/>
-  <text x="64" y="455" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.5">Payouts</text>
-  <line x1="28" y1="904" x2="260" y2="904" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.12"/>
-  <circle cx="46" cy="942" r="15" fill="#FFFFFF" opacity="0.16"/>
-  <text x="46" y="946.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" opacity="0.7">MM</text>
-  <rect x="72" y="934" width="104" height="9" fill="#FFFFFF" rx="4.5" opacity="0.4"/>
-  <rect x="72" y="950" width="68" height="7" fill="#FFFFFF" rx="3.5" opacity="0.2"/>
-  <text x="336" y="112" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="33" font-weight="700" fill="#0B1F3A" text-anchor="start">Listings &amp; orders</text>
-  <text x="336" y="141" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#8A8375" text-anchor="start">Two storefronts on one back office · 1,860 live listings</text>
-  <rect x="1427.8" y="88" width="124.19999999999999" height="42" fill="#B8933F" rx="4"/>
-  <text x="1489.8999999999999" y="113.86" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Add listing</text>
-  <rect x="1322.3999999999999" y="88" width="91.39999999999999" height="42" fill="#FFFFFF" rx="4"/>
-  <text x="1368.1" y="113.86" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Reports</text>
-  <rect x="1322.3999999999999" y="88" width="91.39999999999999" height="42" fill="none" rx="4" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="1322.3999999999999" y="88" width="0" height="0" fill="none" rx="4"/>
-  <text x="1368.1" y="113.9" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0B1F3A" text-anchor="middle">Reports</text>
-  <rect x="336.0" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="358.0" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">REVENUE THIS MONTH</text>
-  <text x="358.0" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B1F3A" text-anchor="start">UGX 214M</text>
-  <text x="358.0" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">across both platforms</text>
-  <rect x="749.3333333333333" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="771.3333333333333" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">LIVE LISTINGS</text>
-  <text x="771.3333333333333" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#0B1F3A" text-anchor="start">1,860</text>
-  <text x="771.3333333333333" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">412 properties · 1,448 goods</text>
-  <rect x="1162.6666666666665" y="178" width="389.3333333333333" height="116" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="1184.6666666666665" y="208" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.1">CHECKOUT SUCCESS</text>
-  <text x="1184.6666666666665" y="252" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#B8933F" text-anchor="start">96.8%</text>
-  <text x="1184.6666666666665" y="274" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#B8B2A4" text-anchor="start">Mobile Money &amp; Visa</text>
-  <text x="336" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">RECENTLY LISTED</text>
-  <text x="1162" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#B8933F" text-anchor="end">VIEW ALL 1,860</text>
-  <rect x="336" y="374" width="262" height="268" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="337" y="375" width="260" height="150" fill="#F5F2EA" rx="5"/>
-  <path d="M 414 470 l 53 -40 l 53 40 v 44 h -106 z" fill="#B8933F" opacity="0.9"/>
-  <rect x="454" y="482" width="26" height="32" fill="#0B1F3A" rx="2"/>
-  <path d="M 406 474 l 61 -46 l 61 46" fill="none" stroke="#0B1F3A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="356" y="560" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#0B1F3A" text-anchor="start">Kololo · 4 bed</text>
-  <text x="356" y="586" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#B8933F" text-anchor="start">UGX 780M</text>
-  <rect x="356" y="600" width="67.6" height="22" fill="#F5F2EA" rx="3"/>
-  <text x="389.8" y="615.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="600" fill="#8A8375" text-anchor="middle" letter-spacing="0.4">PROPERTY</text>
-  <rect x="618" y="374" width="262" height="268" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="619" y="375" width="260" height="150" fill="#F5F2EA" rx="5"/>
-  <path d="M 706 448 l 43 -20 l 43 20 v 50 l -43 20 l -43 -20 z" fill="#0B1F3A" opacity="0.88"/>
-  <path d="M 706 448 l 43 20 l 43 -20" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
-  <line x1="749" y1="468" x2="749" y2="518" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="butt" opacity="0.4"/>
-  <rect x="734" y="420" width="30" height="20" fill="#B8933F" rx="2"/>
-  <text x="638" y="560" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#0B1F3A" text-anchor="start">Solar home kit</text>
-  <text x="638" y="586" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#B8933F" text-anchor="start">UGX 1.2M</text>
-  <rect x="638" y="600" width="67.6" height="22" fill="#F5F2EA" rx="3"/>
-  <text x="671.8" y="615.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="600" fill="#8A8375" text-anchor="middle" letter-spacing="0.4">STOCK 34</text>
-  <rect x="900" y="374" width="262" height="268" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="901" y="375" width="260" height="150" fill="#F5F2EA" rx="5"/>
-  <path d="M 980 492 l 22 -60 l 82 12 l -18 60 z" fill="#B8933F" stroke="#B8933F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
-  <line x1="991" y1="462" x2="1065" y2="474" stroke="#0B1F3A" stroke-width="1.4" stroke-linecap="butt" stroke-dasharray="6 5" opacity="0.4"/>
-  <path d="M 1031 448 c -8 0 -14 6 -14 14 c 0 10 14 24 14 24 s 14 -14 14 -24 c 0 -8 -6 -14 -14 -14 z" fill="#0B1F3A"/>
-  <circle cx="1031" cy="462" r="5" fill="#B8933F"/>
-  <text x="920" y="560" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#0B1F3A" text-anchor="start">Naguru · plot</text>
-  <text x="920" y="586" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#B8933F" text-anchor="start">UGX 240M</text>
-  <rect x="920" y="600" width="42.8" height="22" fill="#F5F2EA" rx="3"/>
-  <text x="941.4" y="615.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="600" fill="#8A8375" text-anchor="middle" letter-spacing="0.4">LAND</text>
-  <rect x="336" y="662" width="262" height="268" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="337" y="663" width="260" height="150" fill="#F5F2EA" rx="5"/>
-  <path d="M 424 736 l 43 -20 l 43 20 v 50 l -43 20 l -43 -20 z" fill="#0B1F3A" opacity="0.88"/>
-  <path d="M 424 736 l 43 20 l 43 -20" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
-  <line x1="467" y1="756" x2="467" y2="806" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="butt" opacity="0.4"/>
-  <rect x="452" y="708" width="30" height="20" fill="#B8933F" rx="2"/>
-  <text x="356" y="848" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#0B1F3A" text-anchor="start">Water pump, 2HP</text>
-  <text x="356" y="874" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#B8933F" text-anchor="start">UGX 640K</text>
-  <rect x="356" y="888" width="61.4" height="22" fill="#F5F2EA" rx="3"/>
-  <text x="386.7" y="903.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="600" fill="#8A8375" text-anchor="middle" letter-spacing="0.4">STOCK 8</text>
-  <rect x="618" y="662" width="262" height="268" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="619" y="663" width="260" height="150" fill="#F5F2EA" rx="5"/>
-  <path d="M 696 758 l 53 -40 l 53 40 v 44 h -106 z" fill="#B8933F" opacity="0.9"/>
-  <rect x="736" y="770" width="26" height="32" fill="#0B1F3A" rx="2"/>
-  <path d="M 688 762 l 61 -46 l 61 46" fill="none" stroke="#0B1F3A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="638" y="848" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#0B1F3A" text-anchor="start">Ntinda · 2 bed</text>
-  <text x="638" y="874" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#B8933F" text-anchor="start">UGX 320M</text>
-  <rect x="638" y="888" width="67.6" height="22" fill="#F5F2EA" rx="3"/>
-  <text x="671.8" y="903.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="600" fill="#8A8375" text-anchor="middle" letter-spacing="0.4">PROPERTY</text>
-  <rect x="900" y="662" width="262" height="268" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <rect x="901" y="663" width="260" height="150" fill="#F5F2EA" rx="5"/>
-  <path d="M 988 736 l 43 -20 l 43 20 v 50 l -43 20 l -43 -20 z" fill="#0B1F3A" opacity="0.88"/>
-  <path d="M 988 736 l 43 20 l 43 -20" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
-  <line x1="1031" y1="756" x2="1031" y2="806" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="butt" opacity="0.4"/>
-  <rect x="1016" y="708" width="30" height="20" fill="#B8933F" rx="2"/>
-  <text x="920" y="848" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#0B1F3A" text-anchor="start">Irrigation set</text>
-  <text x="920" y="874" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#B8933F" text-anchor="start">UGX 2.4M</text>
-  <rect x="920" y="888" width="67.6" height="22" fill="#F5F2EA" rx="3"/>
-  <text x="953.8" y="903.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" font-weight="600" fill="#8A8375" text-anchor="middle" letter-spacing="0.4">STOCK 12</text>
-  <rect x="1190" y="324" width="362" height="300" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="1212" y="356" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">REVENUE, LAST 12 MONTHS</text>
-  <path d="M 1224.0 538.0 L 1250.7 532.2 L 1277.5 535.1 L 1304.2 517.5 L 1330.9 510.7 L 1357.6 522.4 L 1384.4 499.0 L 1411.1 485.4 L 1437.8 493.2 L 1464.5 460.1 L 1491.3 446.4 L 1518.0 386.0 L 1518.0 538.0 L 1224.0 538.0 Z" fill="#B8933F" opacity="0.12"/>
-  <path d="M 1224.0 538.0 L 1250.7 532.2 L 1277.5 535.1 L 1304.2 517.5 L 1330.9 510.7 L 1357.6 522.4 L 1384.4 499.0 L 1411.1 485.4 L 1437.8 493.2 L 1464.5 460.1 L 1491.3 446.4 L 1518.0 386.0" fill="none" stroke="#B8933F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="1518.0" cy="386.0" r="5.5" fill="#B8933F"/>
-  <circle cx="1518.0" cy="386.0" r="10" fill="#B8933F" opacity="0.22"/>
-  <text x="1212" y="578" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#0B1F3A" text-anchor="start">UGX 214M</text>
-  <text x="1212" y="600" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#3F7D58" text-anchor="start">+41% on the same month last year</text>
-  <rect x="1190" y="646" width="362" height="294" fill="#FFFFFF" rx="6" stroke="#E4DFD3" stroke-width="1"/>
-  <text x="1212" y="678" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#8A8375" text-anchor="start" letter-spacing="1.2">ORDERS TODAY</text>
-  <rect x="1212" y="700" width="318" height="48" fill="#F5F2EA" rx="5"/>
-  <text x="1228" y="721" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="start">#48210</text>
-  <text x="1228" y="737" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="start">MTN MoMo</text>
-  <text x="1514" y="721" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#0B1F3A" text-anchor="end">UGX 1.2M</text>
-  <rect x="1440" y="726" width="41.56" height="22" fill="#E4EFE8" rx="3"/>
-  <text x="1460.78" y="741.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#3F7D58" text-anchor="middle" letter-spacing="0.4">PAID</text>
-  <rect x="1212" y="758" width="318" height="48" fill="#F5F2EA" rx="5"/>
-  <text x="1228" y="779" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="start">#48209</text>
-  <text x="1228" y="795" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="start">Visa</text>
-  <text x="1514" y="779" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#0B1F3A" text-anchor="end">UGX 640K</text>
-  <rect x="1440" y="784" width="41.56" height="22" fill="#E4EFE8" rx="3"/>
-  <text x="1460.78" y="799.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#3F7D58" text-anchor="middle" letter-spacing="0.4">PAID</text>
-  <rect x="1212" y="816" width="318" height="48" fill="#F5F2EA" rx="5"/>
-  <text x="1228" y="837" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="start">#48208</text>
-  <text x="1228" y="853" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="start">Airtel Money</text>
-  <text x="1514" y="837" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#0B1F3A" text-anchor="end">UGX 2.4M</text>
-  <rect x="1440" y="842" width="59.23" height="22" fill="#F0E4C6" rx="3"/>
-  <text x="1469.615" y="857.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#B8933F" text-anchor="middle" letter-spacing="0.4">PENDING</text>
-  <rect x="1212" y="874" width="318" height="48" fill="#F5F2EA" rx="5"/>
-  <text x="1228" y="895" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#0B1F3A" text-anchor="start">#48207</text>
-  <text x="1228" y="911" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#8A8375" text-anchor="start">MTN MoMo</text>
-  <text x="1514" y="895" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#0B1F3A" text-anchor="end">UGX 320K</text>
-  <rect x="1440" y="900" width="41.56" height="22" fill="#E4EFE8" rx="3"/>
-  <text x="1460.78" y="915.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#3F7D58" text-anchor="middle" letter-spacing="0.4">PAID</text>
+  <rect x="0.0" y="0.0" width="1600.0" height="1000.0" fill="#FAF7F4"/>
+  <rect x="0.0" y="0.0" width="1600.0" height="44.0" fill="#7C2D12"/>
+  <circle cx="24.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.28"/>
+  <circle cx="44.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.38"/>
+  <circle cx="64.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.48"/>
+  <text x="800.0" y="26.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.3" opacity="0.62">afriinventions.com — commerce &amp; estates back office</text>
+  <rect x="0.0" y="44.0" width="268.0" height="956.0" fill="#7C2D12"/>
+  <rect x="24.0" y="70.0" width="34.0" height="34.0" fill="#EA580C" rx="8"/>
+  <path d="M 33 84 h 16 l -1.5 11 h -13 z" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+  <path d="M 37 84 v -3 a 4 4 0 0 1 8 0 v 3" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+  <text x="68.0" y="86.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="start">AfriInventions</text>
+  <text x="68.0" y="102.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="500" fill="#FFFFFF" text-anchor="start" letter-spacing="0.5" opacity="0.5">Commerce · Estates</text>
+  <line x1="24.0" y1="128.0" x2="244.0" y2="128.0" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.14"/>
+  <path d="M 23 167 l 9 -8 l 9 8 v 8 h -18 z" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+  <text x="58.0" y="170.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.55">Storefront</text>
+  <rect x="14.0" y="195.0" width="240.0" height="40.0" fill="#EA580C" rx="6" opacity="0.18"/>
+  <rect x="0.0" y="195.0" width="3.0" height="40.0" fill="#EA580C"/>
+  <path d="M 24 211 h 16 l -1.5 11 h -13 z" fill="none" stroke="#EA580C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+  <path d="M 28 211 v -3 a 4 4 0 0 1 8 0 v 3" fill="none" stroke="#EA580C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+  <text x="58.0" y="218.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="start" opacity="0.98">Listings</text>
+  <rect x="24.0" y="255.0" width="16.0" height="2.4" fill="#FFFFFF" rx="1.2" opacity="0.45"/>
+  <rect x="24.0" y="261.0" width="16.0" height="2.4" fill="#FFFFFF" rx="1.2" opacity="0.45"/>
+  <rect x="24.0" y="267.0" width="11.0" height="2.4" fill="#FFFFFF" rx="1.2" opacity="0.45"/>
+  <text x="58.0" y="266.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.55">Orders</text>
+  <path d="M 32 301 l 8 4 v 9 l -8 4 l -8 -4 v -9 z" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+  <path d="M 24 305 l 8 4 l 8 -4" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+  <text x="58.0" y="314.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.55">Inventory</text>
+  <circle cx="32.0" cy="354.0" r="3.6" fill="none" stroke="#FFFFFF" stroke-width="1.8" opacity="0.45"/>
+  <path d="M 25 366 a 7 7 0 0 1 14 0" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+  <text x="58.0" y="362.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.55">Customers</text>
+  <rect x="23.0" y="400.0" width="18.0" height="13.0" fill="none" rx="2" stroke="#FFFFFF" stroke-width="1.8" opacity="0.45"/>
+  <line x1="23.0" y1="404.0" x2="41.0" y2="404.0" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="butt" opacity="0.45"/>
+  <text x="58.0" y="410.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.55">Payouts</text>
+  <line x1="24.0" y1="920.0" x2="244.0" y2="920.0" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.14"/>
+  <circle cx="40.0" cy="952.0" r="14.0" fill="#EA580C"/>
+  <text x="40.0" y="956.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">BN</text>
+  <text x="64.0" y="948.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#FFFFFF" text-anchor="start" opacity="0.9">B. Nakimuli</text>
+  <text x="64.0" y="963.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.45">Store manager</text>
+  <text x="312.0" y="96.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#231610" text-anchor="start">Listings &amp; orders</text>
+  <text x="312.0" y="123.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#5B4A42" text-anchor="start">Two storefronts on one back office · 1,860 live listings · 14 orders today</text>
+  <rect x="1455.0" y="78.0" width="101.0" height="38.0" fill="#EA580C" rx="5"/>
+  <text x="1505.5" y="101.6" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Add listing</text>
+  <rect x="1363.7" y="78.0" width="79.3" height="38.0" fill="#FFFFFF" rx="5" stroke="#EDE4DE" stroke-width="1.4"/>
+  <text x="1403.3" y="101.6" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#5B4A42" text-anchor="middle">Reports</text>
+  <rect x="312.0" y="156.0" width="400.0" height="108.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <text x="332.0" y="185.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#A79A93" text-anchor="start" letter-spacing="1.1">REVENUE THIS MONTH</text>
+  <text x="332.0" y="226.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#231610" text-anchor="start">UGX 214M</text>
+  <text x="332.0" y="247.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#A79A93" text-anchor="start">across both storefronts</text>
+  <rect x="734.0" y="156.0" width="400.0" height="108.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <text x="754.0" y="185.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#A79A93" text-anchor="start" letter-spacing="1.1">LIVE LISTINGS</text>
+  <text x="754.0" y="226.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#231610" text-anchor="start">1,860</text>
+  <text x="754.0" y="247.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#A79A93" text-anchor="start">412 properties · 1,448 goods</text>
+  <rect x="1156.0" y="156.0" width="400.0" height="108.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <text x="1176.0" y="185.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#A79A93" text-anchor="start" letter-spacing="1.1">CHECKOUT COMPLETION</text>
+  <text x="1176.0" y="226.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#EA580C" text-anchor="start">96.8%</text>
+  <text x="1176.0" y="247.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#A79A93" text-anchor="start">Mobile Money, Visa, Mastercard</text>
+  <text x="312.0" y="322.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#A79A93" text-anchor="start" letter-spacing="1.2">RECENTLY LISTED</text>
+  <text x="1138.0" y="322.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#EA580C" text-anchor="end" letter-spacing="1">VIEW ALL 1,860</text>
+  <rect x="312.0" y="338.0" width="260.7" height="286.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <rect x="313.4" y="339.4" width="257.9" height="154.0" fill="#FAF7F4" rx="8"/>
+  <path d="M 390.33333333333337 442 l 52 -40 l 52 40 v 44 h -104 z" fill="#EA580C" opacity="0.92"/>
+  <rect x="429.3" y="454.0" width="26.0" height="32.0" fill="#9A3412" rx="2"/>
+  <path d="M 382.33333333333337 446 l 60 -46 l 60 46" fill="none" stroke="#9A3412" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="330.0" y="530.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#231610" text-anchor="start">Kololo · 4 bedroom house</text>
+  <text x="330.0" y="549.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#A79A93" text-anchor="start">Agent: Nakasero office</text>
+  <text x="330.0" y="580.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#EA580C" text-anchor="start">UGX 780M</text>
+  <rect x="330.0" y="592.0" width="72.2" height="20.0" fill="#FAF7F4" rx="4"/>
+  <text x="366.1" y="605.4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#5B4A42" text-anchor="middle" letter-spacing="0.3">PROPERTY</text>
+  <rect x="594.7" y="338.0" width="260.7" height="286.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <rect x="596.1" y="339.4" width="257.9" height="154.0" fill="#FAF7F4" rx="8"/>
+  <path d="M 725.0000000000001 396 l 42 21 v 44 l -42 21 l -42 -21 v -44 z" fill="#9A3412" opacity="0.92"/>
+  <path d="M 683.0000000000001 417 l 42 21 l 42 -21" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.42"/>
+  <line x1="725.0" y1="438.0" x2="725.0" y2="482.0" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="butt" opacity="0.42"/>
+  <rect x="709.0" y="382.0" width="32.0" height="20.0" fill="#EA580C" rx="3"/>
+  <text x="612.7" y="530.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#231610" text-anchor="start">Solar home kit, 200W</text>
+  <text x="612.7" y="549.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#A79A93" text-anchor="start">Ships in 2 days</text>
+  <text x="612.7" y="580.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#EA580C" text-anchor="start">UGX 1.2M</text>
+  <rect x="612.7" y="592.0" width="81.8" height="20.0" fill="#FAF7F4" rx="4"/>
+  <text x="653.5" y="605.4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#5B4A42" text-anchor="middle" letter-spacing="0.3">34 IN STOCK</text>
+  <rect x="877.3" y="338.0" width="260.7" height="286.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <rect x="878.7" y="339.4" width="257.9" height="154.0" fill="#FAF7F4" rx="8"/>
+  <path d="M 957.6666666666667 462 l 22 -60 l 80 12 l -18 60 z" fill="#EA580C" stroke="#EA580C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.42"/>
+  <line x1="968.7" y1="434.0" x2="1038.7" y2="446.0" stroke="#9A3412" stroke-width="1.4" stroke-linecap="butt" stroke-dasharray="6 5" opacity="0.45"/>
+  <path d="M 1007.6666666666667 418 c -8 0 -14 6 -14 14 c 0 10 14 24 14 24 s 14 -14 14 -24 c 0 -8 -6 -14 -14 -14 z" fill="#9A3412"/>
+  <circle cx="1007.7" cy="432.0" r="5.0" fill="#EA580C"/>
+  <text x="895.3" y="530.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#231610" text-anchor="start">Naguru · 25 decimal plot</text>
+  <text x="895.3" y="549.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#A79A93" text-anchor="start">Title verified</text>
+  <text x="895.3" y="580.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#EA580C" text-anchor="start">UGX 240M</text>
+  <rect x="895.3" y="592.0" width="47.1" height="20.0" fill="#FAF7F4" rx="4"/>
+  <text x="918.9" y="605.4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#5B4A42" text-anchor="middle" letter-spacing="0.3">LAND</text>
+  <rect x="312.0" y="646.0" width="260.7" height="286.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <rect x="313.4" y="647.4" width="257.9" height="154.0" fill="#FAF7F4" rx="8"/>
+  <path d="M 442.33333333333337 704 l 42 21 v 44 l -42 21 l -42 -21 v -44 z" fill="#9A3412" opacity="0.92"/>
+  <path d="M 400.33333333333337 725 l 42 21 l 42 -21" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.42"/>
+  <line x1="442.3" y1="746.0" x2="442.3" y2="790.0" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="butt" opacity="0.42"/>
+  <rect x="426.3" y="690.0" width="32.0" height="20.0" fill="#EA580C" rx="3"/>
+  <text x="330.0" y="838.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#231610" text-anchor="start">Water pump, 2HP</text>
+  <text x="330.0" y="857.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#A79A93" text-anchor="start">Ships in 2 days</text>
+  <text x="330.0" y="888.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#EA580C" text-anchor="start">UGX 640K</text>
+  <rect x="330.0" y="900.0" width="76.4" height="20.0" fill="#FAF7F4" rx="4"/>
+  <text x="368.2" y="913.4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#5B4A42" text-anchor="middle" letter-spacing="0.3">8 IN STOCK</text>
+  <rect x="594.7" y="646.0" width="260.7" height="286.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <rect x="596.1" y="647.4" width="257.9" height="154.0" fill="#FAF7F4" rx="8"/>
+  <path d="M 673.0000000000001 750 l 52 -40 l 52 40 v 44 h -104 z" fill="#EA580C" opacity="0.92"/>
+  <rect x="712.0" y="762.0" width="26.0" height="32.0" fill="#9A3412" rx="2"/>
+  <path d="M 665.0000000000001 754 l 60 -46 l 60 46" fill="none" stroke="#9A3412" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="612.7" y="838.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#231610" text-anchor="start">Ntinda · 2 bedroom flat</text>
+  <text x="612.7" y="857.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#A79A93" text-anchor="start">Available now</text>
+  <text x="612.7" y="888.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#EA580C" text-anchor="start">UGX 320M</text>
+  <rect x="612.7" y="900.0" width="72.2" height="20.0" fill="#FAF7F4" rx="4"/>
+  <text x="648.7" y="913.4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#5B4A42" text-anchor="middle" letter-spacing="0.3">PROPERTY</text>
+  <rect x="877.3" y="646.0" width="260.7" height="286.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <rect x="878.7" y="647.4" width="257.9" height="154.0" fill="#FAF7F4" rx="8"/>
+  <path d="M 1007.6666666666667 704 l 42 21 v 44 l -42 21 l -42 -21 v -44 z" fill="#9A3412" opacity="0.92"/>
+  <path d="M 965.6666666666667 725 l 42 21 l 42 -21" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.42"/>
+  <line x1="1007.7" y1="746.0" x2="1007.7" y2="790.0" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="butt" opacity="0.42"/>
+  <rect x="991.7" y="690.0" width="32.0" height="20.0" fill="#EA580C" rx="3"/>
+  <text x="895.3" y="838.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#231610" text-anchor="start">Drip irrigation set</text>
+  <text x="895.3" y="857.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#A79A93" text-anchor="start">Ships in 5 days</text>
+  <text x="895.3" y="888.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#EA580C" text-anchor="start">UGX 2.4M</text>
+  <rect x="895.3" y="900.0" width="81.8" height="20.0" fill="#FAF7F4" rx="4"/>
+  <text x="936.2" y="913.4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#5B4A42" text-anchor="middle" letter-spacing="0.3">12 IN STOCK</text>
+  <rect x="1162.0" y="290.0" width="394.0" height="292.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <text x="1182.0" y="324.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#A79A93" text-anchor="start" letter-spacing="1.2">REVENUE, LAST 12 MONTHS</text>
+  <path d="M 1194.0 494.0 L 1224.0 488.4 L 1254.0 491.2 L 1284.0 474.3 L 1314.0 467.8 L 1344.0 479.0 L 1374.0 456.6 L 1404.0 443.5 L 1434.0 450.9 L 1464.0 419.1 L 1494.0 406.0 L 1524.0 348.0 L 1524.0 494.0 L 1194.0 494.0 Z" fill="#EA580C" opacity="0.12"/>
+  <path d="M 1194.0 494.0 L 1224.0 488.4 L 1254.0 491.2 L 1284.0 474.3 L 1314.0 467.8 L 1344.0 479.0 L 1374.0 456.6 L 1404.0 443.5 L 1434.0 450.9 L 1464.0 419.1 L 1494.0 406.0 L 1524.0 348.0" fill="none" stroke="#EA580C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="1524.0" cy="348.0" r="5.0" fill="#EA580C"/>
+  <circle cx="1524.0" cy="348.0" r="10.0" fill="#EA580C" opacity="0.22"/>
+  <text x="1182.0" y="538.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="25" font-weight="700" fill="#231610" text-anchor="start">UGX 214M</text>
+  <text x="1182.0" y="560.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#15803D" text-anchor="start">+41% on the same month last year</text>
+  <rect x="1162.0" y="606.0" width="394.0" height="304.0" fill="#FFFFFF" rx="8" stroke="#EDE4DE" stroke-width="1.4"/>
+  <text x="1182.0" y="640.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#A79A93" text-anchor="start" letter-spacing="1.2">ORDERS TODAY</text>
+  <text x="1536.0" y="640.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#EA580C" text-anchor="end" letter-spacing="1">14 · UGX 6.1M</text>
+  <rect x="1182.0" y="662.0" width="354.0" height="50.0" fill="#FAF7F4" rx="6"/>
+  <text x="1198.0" y="683.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" font-weight="700" fill="#231610" text-anchor="start">#48210</text>
+  <text x="1198.0" y="700.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#A79A93" text-anchor="start">MTN MoMo · Kampala</text>
+  <text x="1520.0" y="683.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#231610" text-anchor="end">UGX 1.2M</text>
+  <rect x="1476.0" y="688.0" width="44.1" height="22.0" fill="#E4F0E7" rx="4"/>
+  <text x="1498.0" y="702.2" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9" font-weight="700" fill="#15803D" text-anchor="middle" letter-spacing="0.3">PAID</text>
+  <rect x="1182.0" y="722.0" width="354.0" height="50.0" fill="#FAF7F4" rx="6"/>
+  <text x="1198.0" y="743.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" font-weight="700" fill="#231610" text-anchor="start">#48209</text>
+  <text x="1198.0" y="760.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#A79A93" text-anchor="start">Visa · Entebbe</text>
+  <text x="1520.0" y="743.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#231610" text-anchor="end">UGX 640K</text>
+  <rect x="1476.0" y="748.0" width="44.1" height="22.0" fill="#E4F0E7" rx="4"/>
+  <text x="1498.0" y="762.2" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9" font-weight="700" fill="#15803D" text-anchor="middle" letter-spacing="0.3">PAID</text>
+  <rect x="1182.0" y="782.0" width="354.0" height="50.0" fill="#FAF7F4" rx="6"/>
+  <text x="1198.0" y="803.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" font-weight="700" fill="#231610" text-anchor="start">#48208</text>
+  <text x="1198.0" y="820.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#A79A93" text-anchor="start">Airtel Money · Gulu</text>
+  <text x="1520.0" y="803.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#231610" text-anchor="end">UGX 2.4M</text>
+  <rect x="1458.1" y="808.0" width="61.9" height="22.0" fill="#FBF0DC" rx="4"/>
+  <text x="1489.1" y="822.2" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9" font-weight="700" fill="#B45309" text-anchor="middle" letter-spacing="0.3">PENDING</text>
+  <rect x="1182.0" y="842.0" width="354.0" height="50.0" fill="#FAF7F4" rx="6"/>
+  <text x="1198.0" y="863.0" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" font-weight="700" fill="#231610" text-anchor="start">#48207</text>
+  <text x="1198.0" y="880.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#A79A93" text-anchor="start">MTN MoMo · Jinja</text>
+  <text x="1520.0" y="863.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#231610" text-anchor="end">UGX 320K</text>
+  <rect x="1476.0" y="868.0" width="44.1" height="22.0" fill="#E4F0E7" rx="4"/>
+  <text x="1498.0" y="882.2" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9" font-weight="700" fill="#15803D" text-anchor="middle" letter-spacing="0.3">PAID</text>
 </svg>

@@ -15,10 +15,18 @@ use Illuminate\View\View;
 /** §4 — the "Start a project" client funnel: a public page + lead form, distinct from the contact form. */
 class ProjectInquiryController extends Controller
 {
-    public function create(): View
+    public function create(Request $request): View
     {
+        // A case study's "request a walkthrough" arrives with the system's
+        // slug, so the brief opens already saying which one — the alternative
+        // is a first reply spent asking which system they meant.
+        $demo = $request->filled('demo')
+            ? PortfolioProject::where('slug', $request->string('demo'))->first()
+            : null;
+
         return view('portfolio.start-a-project', [
             'projects' => PortfolioProject::orderBy('sort_order')->limit(3)->get(),
+            'demo' => $demo,
         ]);
     }
 

@@ -78,6 +78,65 @@ class SystemScreenshotTest extends TestCase
         }
     }
 
+    public function test_every_case_study_actually_explains_the_system(): void
+    {
+        // A case study with a one-line description and a bullet list answers
+        // "what is it called" and nothing else. These four fields are what
+        // somebody deciding whether to hire is reading for.
+        foreach (PortfolioProject::all() as $project) {
+            $this->assertNotEmpty($project->problem, "{$project->slug}: no problem statement");
+            $this->assertNotEmpty($project->approach, "{$project->slug}: no description of what was built");
+            $this->assertGreaterThanOrEqual(4, count($project->mechanics ?? []),
+                "{$project->slug}: how it works needs more than a gesture");
+            $this->assertNotEmpty($project->constraints, "{$project->slug}: no constraints");
+            $this->assertNotEmpty($project->stack, "{$project->slug}: nothing recorded about the build");
+        }
+    }
+
+    public function test_a_case_study_offers_a_walkthrough_rather_than_a_dead_link(): void
+    {
+        // Four of these are internal government systems with no public URL,
+        // so "visit site" would be a broken promise. Asking for a walkthrough
+        // works for all eight, and carries which system into the brief.
+        $project = PortfolioProject::where('slug', 'wildlife-offenders')->firstOrFail();
+
+        $this->assertNull($project->external_link);
+
+        $this->get(route('portfolio.project', $project))->assertOk()
+            ->assertSee(route('start-a-project', ['demo' => $project->slug]), false)
+            ->assertSee('Request a walkthrough');
+
+        $this->get(route('start-a-project', ['demo' => $project->slug]))->assertOk()
+            ->assertSee('A walkthrough of '.$project->title, false)
+            ->assertSee('I would like a walkthrough of '.$project->title, false);
+    }
+
+    public function test_the_screenshots_are_eight_products_not_one(): void
+    {
+        // Every system in one palette read as eight pages of a single product.
+        // Each one now carries its own brand colour; if two ever collide, the
+        // set has quietly gone back to looking like a template.
+        $primaries = [];
+
+        foreach (PortfolioProject::pluck('slug') as $slug) {
+            $file = public_path("images/systems/{$slug}.svg");
+            if (! is_file($file)) {
+                continue;
+            }
+
+            // The window bar is painted in the system's darkest brand step.
+            preg_match('/<rect x="0.0" y="0.0" width="1600.0" height="44.0" fill="(#[0-9A-F]{6})"/i',
+                (string) file_get_contents($file), $m);
+
+            $this->assertNotEmpty($m, "{$slug} has no window bar to read a brand colour from");
+            $primaries[$slug] = strtoupper($m[1]);
+        }
+
+        $this->assertGreaterThanOrEqual(8, count($primaries));
+        $this->assertSame(count($primaries), count(array_unique($primaries)),
+            'two systems share a brand colour: '.json_encode($primaries));
+    }
+
     public function test_an_uploaded_cover_beats_the_drawn_one(): void
     {
         // If somebody ever does get clearance to publish a real screengrab,
