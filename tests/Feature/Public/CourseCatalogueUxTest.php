@@ -28,15 +28,19 @@ class CourseCatalogueUxTest extends TestCase
         return $course;
     }
 
-    public function test_the_card_carries_level_category_length_and_price(): void
+    public function test_the_card_carries_only_its_length_and_price(): void
     {
         $this->course();
 
+        // Level and category badges used to float over the artwork. Once the
+        // covers became commissioned two-ink illustrations they were competing
+        // with the thing the card exists to show, and the owner asked for them
+        // gone. Length and price are what people actually scan by; both stay,
+        // and both are still on the detail page.
         $this->get(route('courses.index'))->assertOk()
-            ->assertSee('Intermediate')
-            ->assertSee('Web Development')
             ->assertSee('UGX 150,000')
-            ->assertSee('c-badge level', false);
+            ->assertSee('c-facts', false)
+            ->assertDontSee('c-badge', false);
     }
 
     public function test_a_free_course_says_free_rather_than_a_price(): void

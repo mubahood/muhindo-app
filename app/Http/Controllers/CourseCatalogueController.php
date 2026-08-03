@@ -149,7 +149,20 @@ class CourseCatalogueController extends Controller
                 '@context' => 'https://schema.org',
                 '@type' => 'Course',
                 'name' => $course->title,
-                'description' => $course->cardTagline(),
+                // The full description, not the card's truncated one. A
+                // schema description ending in "..." is what Google indexes.
+                'description' => $course->seoDescription(),
+                'url' => route('courses.show', $course),
+                'courseCode' => $course->course_number
+                    ? sprintf('%02d', $course->course_number)
+                    : null,
+                'inLanguage' => 'en',
+                'image' => $course->cover_image ?: null,
+                // Google reads `teaches` for the "what you'll learn" surface,
+                // and the authored outcomes are exactly that list.
+                'teaches' => $course->outcomes ?: null,
+                'educationalLevel' => $course->level,
+                'isAccessibleForFree' => $course->isFree(),
                 'provider' => [
                     '@type' => 'Person',
                     'name' => 'Muhindo Mubaraka',
@@ -161,6 +174,19 @@ class CourseCatalogueController extends Controller
                     'courseWorkload' => $course->lessons_sum_duration_minutes
                         ? 'PT'.$course->lessons_sum_duration_minutes.'M' : null,
                 ]),
+                /*
+                 * Only when reviews genuinely exist. Emitting a rating node
+                 * with no reviews behind it is exactly what Google penalises
+                 * as fabricated structured data, and it would be a lie about
+                 * a course nobody has taken yet.
+                 */
+                'aggregateRating' => $course->reviews_count > 0 ? [
+                    '@type' => 'AggregateRating',
+                    'ratingValue' => round((float) $course->getAttribute('reviews_avg_rating'), 1),
+                    'reviewCount' => $course->reviews_count,
+                    'bestRating' => 5,
+                    'worstRating' => 1,
+                ] : null,
                 'offers' => [
                     '@type' => 'Offer',
                     'price' => (string) $course->price,
@@ -191,7 +217,12 @@ class CourseCatalogueController extends Controller
             ];
         }
 
-        return $nodes;
+        // A null value in JSON-LD is not the same as an absent key: it is
+        // invalid and validators flag it. Anything unset is dropped instead.
+        return array_map(
+            fn (array $node) => array_filter($node, fn ($value) => $value !== null),
+            $nodes,
+        );
     }
 
     /** §7.2 — free preview: a guest (no enrollment) can view an is_free_preview lesson, closing L5. */

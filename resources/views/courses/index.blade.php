@@ -80,14 +80,6 @@
                 <span class="c-media-fallback"><i class="fas fa-graduation-cap"></i></span>
               @endif
 
-              {{-- Metadata sits on the artwork rather than under it. It is the
-                   information people scan by, and the cover was already using
-                   the vertical space it needed. --}}
-              <span class="c-badges">
-                <span class="c-badge level">{{ ucfirst($course->level) }}</span>
-                @if($course->category)<span class="c-badge">{{ $course->category }}</span>@endif
-              </span>
-
               <span class="c-facts">
                 <span><i class="fas fa-book" aria-hidden="true"></i> {{ $course->lessons_count }}</span>
                 @if($hours)<span><i class="fas fa-clock" aria-hidden="true"></i> {{ $hours }}</span>@endif

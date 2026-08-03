@@ -789,24 +789,19 @@
       box-shadow:0 18px 34px -22px rgba(11,31,58,.4);}
 
     .c-media{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:var(--pri);}
-    .c-media img{width:100%;height:100%;object-fit:cover;transition:transform .55s ease,filter .35s;
-      filter:grayscale(1) contrast(1.04) brightness(1.02);}
-    .c-media::after{content:'';position:absolute;inset:0;pointer-events:none;
-      background:linear-gradient(155deg,var(--pri) 5%,rgba(11,31,58,.45) 55%,rgba(184,147,63,.55) 100%);
-      mix-blend-mode:color;transition:opacity .35s;}
-    /* A scrim, so white badges stay legible over whatever the cover happens
-       to be light or dark in. */
-    .c-media::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-      background:linear-gradient(to bottom,rgba(6,15,31,.5),transparent 34%,transparent 62%,rgba(6,15,31,.62));}
-    .c-card:hover .c-media img{transform:scale(1.05);filter:none;}
-    .c-card:hover .c-media::after{opacity:0;}
+    /* The covers are commissioned two-ink artwork in the brand's own navy and
+       gold. Desaturating them at rest and restoring colour on hover made the
+       card's own art look like a rollover effect, and hid the thing the
+       artwork was made to show. They now read as drawn, always. */
+    .c-media img{width:100%;height:100%;object-fit:cover;transition:transform .55s ease;}
+    /* A scrim at the foot only, so the lesson count and price stay legible
+       over a light cover. No tint over the artwork itself. */
+    .c-media::before{content:'';position:absolute;inset:auto 0 0 0;height:46%;z-index:1;pointer-events:none;
+      background:linear-gradient(to bottom,transparent,rgba(6,15,31,.58));}
+    .c-card:hover .c-media img{transform:scale(1.04);}
     .c-media-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
       color:var(--gold);font-size:30px;}
 
-    .c-badges{position:absolute;z-index:2;top:9px;left:9px;display:flex;gap:5px;flex-wrap:wrap;max-width:calc(100% - 18px);}
-    .c-badge{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-      padding:4px 7px;background:rgba(255,255,255,.94);color:var(--pri);}
-    .c-badge.level{background:var(--gold);color:#231a05;}
     .c-facts{position:absolute;z-index:2;left:10px;bottom:9px;display:flex;gap:11px;
       font-size:11px;font-weight:600;color:rgba(255,255,255,.94);}
     .c-facts i{font-size:10px;opacity:.8;margin-right:3px;}

@@ -126,6 +126,25 @@ class Course extends Model
     }
 
     /** §2.2 — the one-line card hook; falls back to a trimmed description so an unset tagline never shows blank space. */
+    /**
+     * The description a search engine should index: the whole thing, with
+     * markdown stripped but nothing truncated.
+     *
+     * cardTagline() cuts at 110 characters for a card, and a schema
+     * description ending in "..." is what Google would show. These are two
+     * different jobs and were sharing one method.
+     */
+    public function seoDescription(): string
+    {
+        $plain = $this->tagline ?: (string) $this->description;
+        $plain = preg_replace('/\*\*(.+?)\*\*/u', '$1', $plain) ?? $plain;
+        $plain = preg_replace('/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/u', '$1', $plain) ?? $plain;
+        $plain = preg_replace('/`(.+?)`/u', '$1', $plain) ?? $plain;
+        $plain = preg_replace('/\s+/u', ' ', $plain) ?? $plain;
+
+        return trim($plain);
+    }
+
     public function cardTagline(): string
     {
         if ($this->tagline) {
