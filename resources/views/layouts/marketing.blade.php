@@ -802,6 +802,36 @@
     .c-media-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
       color:var(--gold);font-size:30px;}
 
+    /* Currency switch. Two states, one visibly chosen — a segmented control
+       rather than a dropdown, because there are only ever two answers. */
+    .cur-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+    .cur-switch{display:inline-flex;border:1px solid var(--line-2);background:var(--surface);margin:0;}
+    .cur-opt{padding:7px 14px;border:0;background:none;cursor:pointer;
+      font-family:var(--font);font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--tx3);
+      transition:background .15s,color .15s;}
+    .cur-opt:hover{color:var(--tx);background:var(--surface-2,#f2f0ea);}
+    .cur-opt.on{background:var(--pri);color:#fff;}
+    .cur-opt.on:hover{background:var(--pri);color:#fff;}
+    .cur-note{font-size:11.5px;color:var(--tx3);}
+
+    /* Pagination that states where you are before offering to move you. */
+    .pager{margin-top:30px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+    .pager-where{font-size:12.5px;color:var(--tx3);margin:0;}
+    .pager-where b{color:var(--tx);font-weight:600;}
+    .pager-sep{opacity:.5;margin:0 4px;}
+
+    .pg{display:flex;align-items:center;gap:6px;}
+    .pg-n,.pg-step{display:inline-flex;align-items:center;justify-content:center;
+      min-width:36px;height:36px;padding:0 10px;border:1px solid var(--line);background:var(--surface);
+      font-size:12.5px;font-weight:600;color:var(--tx2);transition:border-color .15s,color .15s,background .15s;}
+    .pg-n:hover,.pg-step:hover{border-color:var(--gold);color:var(--gold-d);}
+    .pg-n.is-on{background:var(--pri);border-color:var(--pri);color:#fff;}
+    .pg-n.is-on:hover{background:var(--pri);color:#fff;}
+    .pg-step.is-off{opacity:.34;cursor:not-allowed;}
+    .pg-step.is-off:hover{border-color:var(--line);color:var(--tx2);}
+    .pg-gap{padding:0 2px;color:var(--tx3);}
+    .pg-step i{font-size:11px;}
+
     .c-facts{position:absolute;z-index:2;left:10px;bottom:9px;display:flex;gap:11px;
       font-size:11px;font-weight:600;color:rgba(255,255,255,.94);}
     .c-facts i{font-size:10px;opacity:.8;margin-right:3px;}

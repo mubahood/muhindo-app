@@ -60,6 +60,14 @@ $movedPermanently = function (string $from, string $to): void {
     });
 };
 
+// Switching currency is a preference, not a resource — POST so it is never
+// cached, never prefetched, and never fired by a crawler following a link.
+Route::post('/currency', function (Illuminate\Http\Request $request) {
+    \App\Support\Catalog\Currency::set((string) $request->input('currency'));
+
+    return back();
+})->name('currency.switch');
+
 Route::get('/', [PortfolioController::class, 'home'])->name('home');
 Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');

@@ -87,20 +87,19 @@ class ELearningListingTest extends TestCase
         $response->assertSee(route('contact'), false);
     }
 
-    public function test_the_whole_catalogue_fits_on_one_page_and_still_paginates_beyond_it(): void
+    public function test_the_catalogue_is_paged_six_at_a_time(): void
     {
-        // 24 per page, not 9. The real catalogue is a numbered syllabus of 21
-        // courses; splitting it over three pages hid two thirds of it behind a
-        // pager, and somebody deciding whether to start needs the whole path.
+        /*
+         * Six, deliberately small. Twenty-one courses on one page is a wall,
+         * and a wall is a decision a visitor postpones — the owner asked for
+         * the catalogue broken into groups small enough to actually finish
+         * looking at.
+         */
         Course::factory()->count(21)->create(['is_published' => true]);
 
-        $this->assertCount(21, $this->get(route('courses.index'))->assertOk()->viewData('courses'));
-
-        // It still pages once it outgrows that.
-        Course::factory()->count(5)->create(['is_published' => true]);
-
-        $this->assertCount(24, $this->get(route('courses.index'))->assertOk()->viewData('courses'));
-        $this->assertCount(2, $this->get(route('courses.index', ['page' => 2]))->assertOk()->viewData('courses'));
+        $this->assertCount(6, $this->get(route('courses.index'))->assertOk()->viewData('courses'));
+        $this->assertCount(6, $this->get(route('courses.index', ['page' => 2]))->assertOk()->viewData('courses'));
+        $this->assertCount(3, $this->get(route('courses.index', ['page' => 4]))->assertOk()->viewData('courses'));
     }
 
     public function test_trust_chips_reflect_real_counts(): void

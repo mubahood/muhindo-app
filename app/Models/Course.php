@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property numeric-string $price
+ * @property numeric-string|null $price_usd
  * @property-read int|null $lessons_count present only when loaded via withCount('lessons')
  * @property-read int|null $lessons_sum_duration_minutes present only when loaded via withSum('lessons', 'duration_minutes')
  */
@@ -24,7 +25,7 @@ class Course extends Model
         'uuid', 'title', 'slug', 'description', 'tagline', 'outcomes', 'requirements',
         'cover_image', 'cover_alt', 'price',
         'currency', 'level', 'category', 'is_published', 'created_by', 'progression', 'debug_mode',
-        'course_number', 'tier', 'is_featured', 'prerequisites_note', 'playlist_url', 'source_file', 'synced_at',
+        'price_usd', 'course_number', 'tier', 'is_featured', 'prerequisites_note', 'playlist_url', 'source_file', 'synced_at',
         'access_duration_days',
     ];
 
@@ -36,6 +37,7 @@ class Course extends Model
             'progression' => CourseProgression::class,
             'debug_mode' => 'boolean',
             'is_featured' => 'boolean',
+            'price_usd' => 'decimal:2',
             'synced_at' => 'datetime',
             'outcomes' => 'array',
             'requirements' => 'array',

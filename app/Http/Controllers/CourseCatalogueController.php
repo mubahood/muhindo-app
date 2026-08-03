@@ -62,11 +62,13 @@ class CourseCatalogueController extends Controller
         };
 
         return view('courses.index', [
-            // 24, not 9. This catalogue is a numbered syllabus of 21 courses, and
-            // splitting it over three pages hid two thirds of it behind a pager
-            // most people never click — somebody deciding whether to start needs
-            // to see the whole path. Pagination stays for when it outgrows this.
-            'courses' => $query->paginate(24)->withQueryString(),
+            /*
+             * Six. Twenty-one courses on one page is a wall, and a wall is a
+             * decision a visitor postpones — the catalogue reads as a syllabus
+             * best in small, finishable groups. Paged clearly, with the tier
+             * each page belongs to named above it.
+             */
+            'courses' => $query->paginate(6)->withQueryString(),
             'categories' => Course::where('is_published', true)->whereNotNull('category')->distinct()->orderBy('category')->pluck('category'),
             'totalLessonCount' => Lesson::where('is_published', true)
                 ->whereHas('module', fn ($q) => $q->whereNull('deleted_at')->whereHas('course', fn ($c) => $c->where('is_published', true)))

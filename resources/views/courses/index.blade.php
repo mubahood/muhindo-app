@@ -21,6 +21,25 @@
 
 <section class="tex-grid" style="padding-top:0;">
   <div class="wrap">
+    {{-- Sits with the filters, because choosing a currency is the same kind of
+         act as choosing a level: narrowing the page to what you want to see. --}}
+    @php $cur = \App\Support\Catalog\Currency::current(); @endphp
+    <div class="cur-row">
+      <form method="POST" action="{{ route('currency.switch') }}" class="cur-switch"
+            aria-label="Show prices in">
+        @csrf
+        @foreach(config('catalog.currencies') as $code => $meta)
+          <button type="submit" name="currency" value="{{ $code }}"
+                  class="cur-opt {{ $cur === $code ? 'on' : '' }}"
+                  aria-pressed="{{ $cur === $code ? 'true' : 'false' }}"
+                  title="Show prices in {{ $meta['label'] }}">{{ $code }}</button>
+        @endforeach
+      </form>
+      @unless(\App\Support\Catalog\Currency::wasChosen())
+        <span class="cur-note">Prices in {{ config('catalog.currencies')[$cur]['label'] }} — switch any time</span>
+      @endunless
+    </div>
+
     <form method="GET" action="{{ route('courses.index') }}" class="filter-bar">
       <label for="q" class="sr-only">Search courses</label>
       <input type="text" id="q" name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Search courses…">
@@ -85,8 +104,13 @@
                 @if($hours)<span><i class="fas fa-clock" aria-hidden="true"></i> {{ $hours }}</span>@endif
               </span>
 
-              <span @class(['c-price', 'free' => $course->isFree()])>
-                @if($course->isFree()) Free @else {{ $course->currency }} {{ number_format((float) $course->price) }} @endif
+              @php $cur = \App\Support\Catalog\Currency::current(); @endphp
+              <span @class(['c-price', 'free' => \App\Support\Catalog\Currency::isFreeIn($course, $cur)])>
+                @if(\App\Support\Catalog\Currency::isFreeIn($course, $cur))
+                  Free
+                @else
+                  {{ \App\Support\Catalog\Currency::format(\App\Support\Catalog\Currency::priceOf($course, $cur), $cur) }}
+                @endif
               </span>
             </a>
 
@@ -134,7 +158,17 @@
           </article>
         @endforeach
       </div>
-      <div class="pagination">{{ $courses->links() }}</div>
+      {{-- Named, not just numbered. "Page 2 of 4" tells somebody how much
+           catalogue is left; a row of bare numbers does not. --}}
+      <div class="pager">
+        <p class="pager-where">
+          Showing <b>{{ $courses->firstItem() }}–{{ $courses->lastItem() }}</b>
+          of <b>{{ $courses->total() }}</b> courses
+          <span class="pager-sep">·</span>
+          page {{ $courses->currentPage() }} of {{ $courses->lastPage() }}
+        </p>
+        {{ $courses->links('pagination::catalog') }}
+      </div>
     @endif
   </div>
 </section>

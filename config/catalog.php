@@ -2,70 +2,81 @@
 
 /*
 |--------------------------------------------------------------------------
-| Course catalogue — pricing and publication
+| Course catalogue — pricing, currency and publication
 |--------------------------------------------------------------------------
 |
-| OWNER: review these before publishing. Nothing here was decided for you.
+| OWNER: review these. Every price in the catalogue comes from this one file.
+| Change a number, run `php artisan courses:apply-pricing`, and the catalogue
+| follows — you never edit 21 database rows by hand.
 |
-| Every price in the catalogue comes from this one file. Change a number,
-| run `php artisan courses:apply-pricing`, and the catalogue follows — you
-| never edit 21 database rows by hand.
+| Two currencies, both set by hand. Deliberately NOT a live conversion: an FX
+| API makes the price on the page depend on a third party being up, and can
+| move what a student is charged between reading it and paying it. The USD
+| figures below sit near the UGX ones at roughly 3,800/USD, rounded to prices
+| that read like prices rather than conversions ($15, not $13.16).
 |
-| The suggested figures below are a starting point, not a recommendation I can
-| stand behind: I do not know your market, what your students earn, or what you
-| already charge people privately. They are anchored on Tier 1 being free —
-| which is a deliberate and defensible strategy (the foundations bring people
-| in, the capstones are what they pay for) — and on the capstones being real
-| portfolio systems that take weeks of work.
-|
-| UGX. Change freely.
+| Only Course 02 (AI-Powered Web Development) is free — it is the shop window.
+| Everything else is paid.
 |
 */
 
 return [
 
-    /*
-    | What each tier costs, and whether importing publishes it.
-    |
-    | Tier 1 is free: it is the on-ramp.
-    |
-    | All three tiers are public at the owner's instruction. NOTE that the Tier
-    | 2 and 3 figures below are still the suggested ones — they are live prices
-    | a student can be charged, so they want a decision rather than a default.
-    */
     'tiers' => [
         1 => [
             'label' => 'Foundations',
-            'price' => 0,           // free — the on-ramp
+            'price' => 60_000,      // ~USD 16
+            'price_usd' => 15,
             'publish' => true,
         ],
         2 => [
             'label' => 'Frameworks & Mobile',
-            'price' => 120_000,     // SUGGESTED — the owner has not set this yet
-            'publish' => true,      // owner asked for the whole catalogue to be public
+            'price' => 140_000,     // ~USD 37
+            'price_usd' => 35,
+            'publish' => true,
         ],
         3 => [
             'label' => 'Capstone Systems',
-            'price' => 250_000,     // SUGGESTED — the owner has not set this yet
+            'price' => 280_000,     // ~USD 74
+            'price_usd' => 70,
             'publish' => true,
         ],
     ],
 
     /*
-    | Per-course overrides, by course number. Anything set here wins over its
-    | tier. Use this for a course that is longer, deeper or more in demand than
-    | its tier suggests.
-    |
-    | Example — the flagship capstone is 47 lessons across a Laravel back
-    | office, a REST API and a Flutter app, which is not the same job as the
-    | other Tier 3 courses:
-    |
-    |   16 => ['price' => 350_000],
+    | Per-course overrides, by course number. Anything here beats its tier.
     */
     'overrides' => [
-        // 16 => ['price' => 350_000, 'publish' => false],
+        // The free one. It is the most-featured course in the catalogue and
+        // the best possible advert for the rest: somebody who finishes it has
+        // already learned how this instructor teaches.
+        2 => ['price' => 0, 'price_usd' => 0],
+
+        // 47 lessons across a Laravel back office, a REST API and a Flutter
+        // app. That is materially more than the other capstones and priced
+        // accordingly.
+        16 => ['price' => 350_000, 'price_usd' => 90],
+
+        // The shortest course in the catalogue at 6 lessons — a crash course,
+        // and priced as one rather than as a full Tier 1.
+        6 => ['price' => 40_000, 'price_usd' => 10],
     ],
 
-    'currency' => 'UGX',
+    /*
+    | Currency
+    |
+    | 'UGX' is home. A visitor is shown USD when we can tell they are outside
+    | Uganda, and either way they can switch with the toggle in the header —
+    | an explicit choice always wins over a guess about where somebody is.
+    */
+    'currencies' => [
+        'UGX' => ['symbol' => 'UGX', 'label' => 'Ugandan shilling', 'decimals' => 0],
+        'USD' => ['symbol' => '$', 'label' => 'US dollar', 'decimals' => 0],
+    ],
+
+    'default_currency' => 'UGX',
+
+    // Countries billed in shillings. Everywhere else defaults to USD.
+    'ugx_countries' => ['UG'],
 
 ];
