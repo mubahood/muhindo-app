@@ -39,6 +39,8 @@
         @foreach($research['areas'] ?? [] as $a)<span class="pill">{{ $a }}</span>@endforeach
       </div>
     </div>
+
+    @include('portfolio.partials.chapter-end')
       </div>
     </div>
   </div>

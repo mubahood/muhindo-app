@@ -710,6 +710,17 @@
        item, where the page itself is already the answer. */
     .rail a .rd{display:block;font-size:10.5px;font-weight:450;color:var(--tx3);line-height:1.35;margin-top:1px;}
     .rail a.on .rd{display:none;}
+    /* Chapter scaffolding, shared by every page in the About rail so they
+       cannot drift apart the way work/ and services/ did. */
+    .ch-sec{margin-top:34px;}
+    .ch-sec:first-child{margin-top:0;}
+    .ch-h{display:flex;align-items:center;gap:11px;font-size:11px;font-weight:700;letter-spacing:.14em;
+      text-transform:uppercase;color:var(--pri);margin-bottom:14px;}
+    .ch-h::after{content:'';flex:1;height:1px;background:var(--line-2);}
+    .ch-end{display:flex;gap:9px;flex-wrap:wrap;align-items:center;
+      margin-top:34px;padding-top:20px;border-top:2px solid var(--pri);}
+    .ch-lead{flex:1;min-width:170px;font-size:12.5px;color:var(--tx3);}
+
     .rail-foot{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);}
 
     @media(max-width:900px){

@@ -76,6 +76,14 @@ class PortfolioController extends Controller
         ]);
     }
 
+    /** The full grid, handed off to from the /work chapter. */
+    public function projects(): View
+    {
+        return view('portfolio.projects', [
+            'projects' => PortfolioProject::orderBy('sort_order')->get(),
+        ]);
+    }
+
     public function project(PortfolioProject $portfolioProject): View
     {
         return view('portfolio.project', [

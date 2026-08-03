@@ -43,16 +43,20 @@ class PortfolioPagesTest extends TestCase
             ->assertSee(route('contact'), false);
     }
 
-    public function test_the_about_family_subnav_cross_links_every_page(): void
+    public function test_the_about_rail_cross_links_every_chapter(): void
     {
         $response = $this->get('/about');
 
+        // The rail, not a subnav strip: /experience and /products are reached
+        // through their chapters rather than being listed here.
         $response->assertOk()
             ->assertSee(route('portfolio.services'), false)
-            ->assertSee(route('portfolio.experience'), false)
+            ->assertSee(route('portfolio.work'), false)
+            ->assertSee(route('portfolio.cv'), false)
             ->assertSee(route('portfolio.education'), false)
+            ->assertSee(route('portfolio.skills'), false)
             ->assertSee(route('portfolio.research'), false)
-            ->assertSee(route('portfolio.products'), false);
+            ->assertSee(route('gallery.index'), false);
     }
 
     public function test_submitting_the_contact_form_redirects_back_to_the_dedicated_contact_page(): void

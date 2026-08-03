@@ -36,7 +36,7 @@ class SiteNav
                 'match' => [
                     'portfolio.about', 'portfolio.cv', 'portfolio.education',
                     'portfolio.skills', 'portfolio.experience', 'portfolio.research', 'gallery.index',
-                    'portfolio.services', 'start-a-project', 'portfolio.work', 'portfolio.project',
+                    'portfolio.services', 'start-a-project', 'portfolio.work', 'portfolio.projects.index', 'portfolio.project',
                     'portfolio.products',
                 ],
                 'icon' => 'fa-user',
@@ -47,7 +47,7 @@ class SiteNav
                         'match' => ['portfolio.about']],
                     ['label' => 'My work', 'url' => route('portfolio.work'), 'icon' => 'fa-diagram-project',
                         'desc' => 'Systems I have delivered, with case studies.',
-                        'match' => ['portfolio.work', 'portfolio.project']],
+                        'match' => ['portfolio.work', 'portfolio.projects.index', 'portfolio.project']],
                     ['label' => 'My CV', 'url' => route('portfolio.cv'), 'icon' => 'fa-file-lines',
                         'desc' => 'The full record on one page. Print or save as PDF.',
                         'match' => ['portfolio.cv']],

@@ -72,6 +72,10 @@ Route::get('/', [PortfolioController::class, 'home'])->name('home');
 Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 Route::get('/work', [PortfolioController::class, 'work'])->name('portfolio.work');
+// The full grid. /work is the chapter in the About rail; this is the listing
+// it hands off to, and it must be declared before the {slug} route or "all"
+// would be read as a project slug.
+Route::get('/work/all', [PortfolioController::class, 'projects'])->name('portfolio.projects.index');
 Route::get('/work/{portfolioProject:slug}', [PortfolioController::class, 'project'])->name('portfolio.project');
 Route::get('/about', [PortfolioController::class, 'about'])->name('portfolio.about');
 Route::get('/services', [PortfolioController::class, 'services'])->name('portfolio.services');

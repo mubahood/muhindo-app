@@ -45,6 +45,18 @@
         </div>
       @endforeach
     </div>
+    <p style="font-size:12.5px;line-height:1.7;color:var(--tx3);margin-top:16px;">
+      Nothing on this list is here because it looks good on a list. Every one of them has
+      shipped inside a system somebody depends on — the next chapter is where.
+    </p>
+
+    {{-- "Skills & experience" is one entry in the rail but two pages, so this
+         hands off to the second rather than letting the derived next skip it. --}}
+    @include('portfolio.partials.chapter-end', [
+      'lead' => 'Next: where each of these has actually been used.',
+      'to' => route('portfolio.experience'),
+      'toLabel' => 'Experience',
+    ])
       </div>
     </div>
   </div>
@@ -52,16 +64,5 @@
 @else
 <section><div class="wrap"><p class="lead" style="text-align:center;">Skills coming soon.</p></div></section>
 @endif
-
-<section class="band-deep" style="text-align:center;">
-  <div class="wrap">
-    <h2>Used in production, not just listed</h2>
-    <p class="lead" style="max-width:460px;margin:10px auto 20px;">Every one of these has shipped inside a system somebody depends on.</p>
-    <a href="{{ route('portfolio.work') }}" wire:navigate class="btn gold cta">
-      <span class="cta-a">See the work</span>
-      <span class="cta-b" aria-hidden="true">See the projects <i class="fas fa-arrow-right"></i></span>
-    </a>
-  </div>
-</section>
 
 @endsection

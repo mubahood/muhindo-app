@@ -44,11 +44,6 @@
   .ab-orgs span{font-size:11.5px;font-weight:500;color:var(--tx2);
     background:var(--surface);border:1px solid var(--line);padding:6px 11px;}
 
-  /* Every section of the About story ends the same way: hire, or read on.
-     Never a dead end, and never a page that just stops. */
-  .ab-end{display:flex;gap:9px;flex-wrap:wrap;align-items:center;
-    margin-top:34px;padding-top:20px;border-top:2px solid var(--pri);}
-  .ab-end .ab-next-lbl{flex:1;min-width:170px;font-size:12.5px;color:var(--tx3);}
 </style>
 @endpush
 
@@ -135,17 +130,7 @@
           </div>
         @endif
 
-        {{-- Hire, or read on. Two buttons, the same pair on every chapter. --}}
-        <div class="ab-end">
-          <span class="ab-next-lbl">Next: how nine years of this actually went.</span>
-          <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold sm cta">
-            <span class="cta-a">Hire Me</span>
-            <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
-          </a>
-          <a href="{{ route('portfolio.experience') }}" wire:navigate class="btn ghost sm">
-            Experience <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
+        @include('portfolio.partials.chapter-end')
       </div>
     </div>
   </div>

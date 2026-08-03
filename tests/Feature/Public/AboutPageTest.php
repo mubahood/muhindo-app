@@ -86,12 +86,14 @@ class AboutPageTest extends TestCase
             ->assertSee('Uganda Wildlife Authority');
     }
 
-    public function test_every_chapter_ends_with_hire_and_the_next_one(): void
+    public function test_the_chapter_ends_with_hire_and_the_next_one(): void
     {
+        // Where it points is AboutChapterSequenceTest's job; that it ends at
+        // all, and inside the column rather than as a full-width band, is this
+        // page's.
         $this->get(route('portfolio.about'))->assertOk()
             ->assertSee('Hire Me')
-            ->assertSee(route('portfolio.experience'), false)
-            ->assertSee('ab-end', false);
+            ->assertSee('ch-end', false);
     }
 
     public function test_the_gallery_still_uses_the_same_viewer(): void

@@ -57,6 +57,8 @@
         @endforeach
       </div>
     @endif
+
+    @include('portfolio.partials.chapter-end')
       </div>
     </div>
   </div>
