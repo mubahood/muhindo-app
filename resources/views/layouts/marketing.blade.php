@@ -723,11 +723,15 @@
 
     .rail-foot{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);}
 
-    /* The same two actions, pinned to the bottom of every chapter on a phone.
-       Reading is one long scroll there, so "hire" and "what is next" have to
-       be permanently in reach rather than waiting at the end. Hidden on
-       desktop, where .ch-end already sits in the flow. */
-    .ch-bar{display:none;}
+    /* ── The action bar ───────────────────────────────────────────────────
+       On a phone, every page worth acting on is a long scroll, and the thing
+       you would act on sits at one end of it. This pins that action to the
+       bottom of the window so it is never more than a thumb away: hire and
+       the next chapter on the About story, the price and the buy button on a
+       course or a product, the total on a basket.
+
+       Never on desktop, where those controls are already on screen. */
+    .act-bar{display:none;}
 
     @media(max-width:900px){
       .rail-layout{grid-template-columns:1fr;gap:0;}
@@ -739,22 +743,43 @@
          still one tap away in the header menu and the footer. */
       .rail{display:none;}
 
-      .ch-bar{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:60;
+      /* Under the menu (55) and the header (60), so an open menu covers it
+         rather than having a stray pair of buttons floating over the top. */
+      .act-bar{display:flex;align-items:center;gap:8px;
+        position:fixed;left:0;right:0;bottom:0;z-index:50;
         padding:9px 12px calc(9px + env(safe-area-inset-bottom, 0px));
         background:var(--surface);border-top:1px solid var(--line);
         box-shadow:0 -6px 20px rgba(11,31,58,.10);}
-      .ch-bar .btn{flex:1 1 0;min-width:0;justify-content:center;font-size:13px;padding:12px 10px;
+      .act-bar .btn{flex:1 1 0;min-width:0;justify-content:center;font-size:13px;padding:12px 10px;
         white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-      /* The CV's download sits beside them as a square, so the two actions
-         every chapter has stay the same size on every chapter. */
-      .ch-bar .btn.sq{flex:0 0 46px;padding:12px 0;}
-      body.has-ch-bar,body:has(.ch-bar){padding-bottom:78px;}
+      /* A POST action is a form, and a form has to stretch the way a link
+         does or the buttons beside it come out different sizes. */
+      .act-bar form{flex:1 1 0;min-width:0;display:flex;margin:0;}
+      .act-bar form .btn{flex:1 1 auto;}
+      /* A secondary action that is an icon: the CV's download, a basket. */
+      .act-bar .btn.sq{flex:0 0 46px;padding:12px 0;}
+
+      /* What the action costs, or what it is worth, beside the button that
+         does it. A price a thumb away from Buy is the whole point. */
+      .act-note{flex:0 0 auto;min-width:0;line-height:1.2;padding-left:2px;}
+      .act-note strong{display:block;font-size:14.5px;font-weight:700;color:var(--pri);white-space:nowrap;}
+      .act-note strong.free{color:var(--gold-d);}
+      .act-note span{display:block;font-size:9px;font-weight:600;letter-spacing:.04em;
+        text-transform:uppercase;color:var(--tx3);white-space:nowrap;}
+
+      body.has-act-bar,body:has(.act-bar){padding-bottom:78px;}
 
       /* One set of buttons, not two. The line above them stays — it is the
          only place that says what the next chapter actually contains. */
       .ch-end .btn{display:none;}
       .ch-end{margin-top:26px;padding-top:14px;}
       .ch-lead{min-width:0;}
+
+      /* The footer is a site-wide index. At the end of a chapter it buries
+         the two actions that chapter was leading to under six columns of
+         links — and those two are already pinned to the bottom of the
+         window. Chapters only; everywhere else it still belongs. */
+      body.about-chapter footer{display:none;}
     }
 
     /* ── Curriculum rows ──────────────────────────────────────────────────
@@ -1570,17 +1595,20 @@
      not run; the class is what keeps it correct across wire:navigate, where a
      one-shot per-page script would leave the padding behind on the next
      page. */
-  function syncChapterBar(){
-    document.body.classList.toggle('has-ch-bar', !!document.querySelector('.ch-bar'));
-    // Same reasoning for the CV, which hides this footer on a phone.
-    document.body.classList.toggle('cv-page', !!document.querySelector('.cv'));
+  /* Two body classes derived from what the page actually contains, rather
+     than from a per-page script. Re-run on every wire:navigate, because a
+     one-shot script would leave the padding — or a hidden footer — behind on
+     the next page. */
+  function syncPageChrome(){
+    document.body.classList.toggle('has-act-bar', !!document.querySelector('.act-bar'));
+    document.body.classList.toggle('about-chapter', !!document.querySelector('.rail'));
   }
-  syncChapterBar();
+  syncPageChrome();
 
   document.addEventListener('livewire:navigated', function(){
     initBurgerMenu();
     initMegaMenus();
-    syncChapterBar();
+    syncPageChrome();
     var m=document.getElementById('mmenu'), b=document.getElementById('burger');
     if(m && m.classList.contains('open')){ m.classList.remove('open'); document.body.style.overflow=''; if(b){ b.setAttribute('aria-expanded','false'); b.querySelector('i').className='fas fa-bars'; } }
   });

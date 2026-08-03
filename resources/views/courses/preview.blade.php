@@ -51,4 +51,25 @@
     <a href="{{ route('register', ['intended_course' => $course->slug]) }}" wire:navigate class="btn gold">Sign up to enrol</a>
   @endauth
 </div>
+
+{{-- Phone only. Somebody who has just watched a free lesson is as close to
+     enrolling as they will get; the way in should not be a scroll away. --}}
+<x-action-bar>
+  <span class="act-note">
+    <strong @class(['free' => $course->isFree()])>
+      {{ $course->isFree() ? 'Free' : $course->currency.' '.number_format((float) $course->price) }}
+    </strong>
+    <span>Full course</span>
+  </span>
+  @auth
+    <form method="POST" action="{{ route('courses.enroll', $course) }}">
+      @csrf
+      <button type="submit" class="btn gold">{{ $course->isFree() ? 'Enrol for free' : 'Enrol now' }}</button>
+    </form>
+  @else
+    <a href="{{ route('register', ['intended_course' => $course->slug]) }}" wire:navigate class="btn gold">
+      Sign up to enrol
+    </a>
+  @endauth
+</x-action-bar>
 @endsection

@@ -97,4 +97,30 @@
   </div>
 </section>
 
+{{-- Phone only. No coupon field on this page, so the bar can do the thing
+     itself rather than jumping to a box that does it. --}}
+<x-action-bar>
+  <span class="act-note">
+    <strong @class(['free' => $product->isFree()])>
+      {{ $product->isFree() ? 'Free' : $product->currency.' '.number_format((float) $product->price) }}
+    </strong>
+    <span>{{ $product->typeLabel() }}</span>
+  </span>
+
+  @if($owned)
+    <a href="{{ route('shop.downloads') }}" wire:navigate class="btn gold">
+      <i class="fas fa-circle-check" aria-hidden="true"></i> Download
+    </a>
+  @else
+    <form method="POST" action="{{ route('cart.add') }}">
+      @csrf
+      <input type="hidden" name="type" value="product">
+      <input type="hidden" name="id" value="{{ $product->id }}">
+      <button type="submit" name="buy_now" value="1" class="btn gold">
+        <i class="fas fa-bolt" aria-hidden="true"></i> Buy now
+      </button>
+    </form>
+  @endif
+</x-action-bar>
+
 @endsection

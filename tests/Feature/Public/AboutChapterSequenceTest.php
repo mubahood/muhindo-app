@@ -103,10 +103,10 @@ class AboutChapterSequenceTest extends TestCase
     {
         $html = (string) $this->get(route($chapter))->assertOk()->getContent();
 
-        $this->assertSame(1, substr_count($html, '<div class="ch-bar">'),
-            "{$chapter} should have exactly one phone bar.");
+        $this->assertSame(1, substr_count($html, '<div class="act-bar">'),
+            "{$chapter} should have exactly one action bar.");
 
-        $bar = substr($html, (int) strpos($html, '<div class="ch-bar">'));
+        $bar = substr($html, (int) strpos($html, '<div class="act-bar">'));
 
         // The same destinations as the inline ending, so a reader is never
         // offered a different next chapter depending on their screen width.
@@ -117,12 +117,12 @@ class AboutChapterSequenceTest extends TestCase
     public function test_the_cv_keeps_its_download_in_the_phone_bar(): void
     {
         $bar = (string) $this->get(route('portfolio.cv'))->assertOk()->getContent();
-        $bar = substr($bar, (int) strpos($bar, '<div class="ch-bar">'));
+        $bar = substr($bar, (int) strpos($bar, '<div class="act-bar">'));
 
         $this->assertStringContainsString('muhindo-mubaraka-cv.pdf', $bar);
 
         // And only once — it used to have a bar of its own alongside this one.
-        $this->assertSame(1, substr_count($bar, '<div class="ch-bar">'));
+        $this->assertSame(1, substr_count($bar, '<div class="act-bar">'));
     }
 
     public function test_the_last_chapter_offers_the_catalogue_rather_than_a_dead_arrow(): void

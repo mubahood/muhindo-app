@@ -70,9 +70,6 @@
     .cv-row{grid-template-columns:1fr;gap:2px;}
     .cv-contact{text-align:left;}
     .cv-skills,.cv-list{grid-template-columns:1fr;}
-    /* The footer is a site-wide index; on a CV it buries the one action that
-       matters under six columns of links. */
-    body.cv-page footer{display:none;}
   }
 
   /* Wherever the shared phone bar carries the download, the inline copy of it

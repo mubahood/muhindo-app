@@ -158,7 +158,7 @@
 
       </div>
 
-      <aside class="buy-box">
+      <aside class="buy-box" id="buy">
         <div class="thumb">
           @if($course->cover_image)
             <img src="{{ $course->cover_image }}" alt="{{ $course->coverAlt() }}" loading="lazy">
@@ -233,6 +233,41 @@
   .prereq:hover i{color:var(--gold-d);}
 </style>
 @endpush
+
+{{-- Phone only. The buy box stacks below the whole curriculum on a phone, so
+     the price and the way in follow you down the page instead of waiting at
+     the bottom of it.
+
+     A paid course jumps to the box rather than enrolling outright: the coupon
+     field lives there, and a button that silently charged full price to
+     somebody who had typed a code would be the worst kind of shortcut. --}}
+<x-action-bar>
+  <span class="act-note">
+    <strong @class(['free' => $course->isFree()])>
+      {{ $course->isFree() ? 'Free' : $course->currency.' '.number_format((float) $course->price) }}
+    </strong>
+    <span>{{ $course->lessons_count }} {{ \Illuminate\Support\Str::plural('lesson', $course->lessons_count) }}</span>
+  </span>
+
+  @if($enrollment)
+    <a href="{{ route('learn.course', $course) }}" class="btn gold">Continue learning</a>
+  @elseif($pendingCheckout ?? false)
+    <a href="{{ route('courses.checkout', $course) }}" class="btn gold">Complete checkout</a>
+  @elseif($course->isFree())
+    @auth
+      <form method="POST" action="{{ route('courses.enroll', $course) }}">
+        @csrf
+        <button type="submit" class="btn gold">Enrol for free</button>
+      </form>
+    @else
+      <a href="{{ route('register', ['intended_course' => $course->slug]) }}" wire:navigate class="btn gold">
+        Start this course
+      </a>
+    @endauth
+  @else
+    <a href="#buy" class="btn gold">Enrol now <i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+  @endif
+</x-action-bar>
 
 @endsection
 

@@ -91,4 +91,18 @@
   </div>
 </section>
 
+@if($lines->isNotEmpty())
+  {{-- Phone only. The total is what somebody is deciding about, so it travels
+       with the button that acts on it rather than sitting under the table. --}}
+  <x-action-bar>
+    <span class="act-note">
+      <strong>{{ $currency }} {{ number_format((float) $subtotal) }}</strong>
+      <span>{{ $lines->count() }} {{ \Illuminate\Support\Str::plural('item', $lines->count()) }}</span>
+    </span>
+    <a href="{{ route('checkout.review') }}" wire:navigate class="btn gold">
+      Checkout <i class="fas fa-arrow-right" aria-hidden="true"></i>
+    </a>
+  </x-action-bar>
+@endif
+
 @endsection

@@ -57,8 +57,8 @@
   </a>
 </div>
 
-{{-- Phone only. --}}
-<div class="ch-bar">
+{{-- Phone only: the same two, kept in reach through the scroll. --}}
+<x-action-bar>
   @isset($barExtra)
     @include($barExtra)
   @endisset
@@ -68,4 +68,4 @@
   <a href="{{ $onward['url'] }}" wire:navigate class="btn ghost">
     {{ $onward['label'] }} <i class="fas fa-arrow-right" aria-hidden="true"></i>
   </a>
-</div>
+</x-action-bar>

@@ -414,4 +414,13 @@
   </div>
 </section>
 
+{{-- Phone only. The home page is a long scroll past nine sections, and the
+     two things this site is for sit at the very bottom of it. --}}
+<x-action-bar>
+  <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Hire Me</a>
+  <a href="{{ route('courses.index') }}" wire:navigate class="btn ghost">
+    Start Learning <i class="fas fa-arrow-right" aria-hidden="true"></i>
+  </a>
+</x-action-bar>
+
 @endsection

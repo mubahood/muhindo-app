@@ -63,4 +63,13 @@
   </div>
 </section>
 
+{{-- Phone only. A case study is read to answer one question — can he build
+     mine — so the answer to it stays on screen. --}}
+<x-action-bar>
+  <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Hire Me</a>
+  <a href="{{ route('portfolio.projects.index') }}" wire:navigate class="btn ghost">
+    All projects <i class="fas fa-arrow-right" aria-hidden="true"></i>
+  </a>
+</x-action-bar>
+
 @endsection
