@@ -106,7 +106,11 @@ class CourseCatalogueController extends Controller
                 'id' => $lesson->id,
                 'title' => $lesson->title,
                 'minutes' => $lesson->duration_minutes,
-                'youtube' => $lesson->youtubeVideoId(),
+                // Same reason as the lesson player: a video whose owner
+                // disabled embedding shows "Video unavailable" in an iframe,
+                // so the preview links out instead of framing a dead player.
+                'youtube' => $lesson->is_embeddable ? $lesson->youtubeVideoId() : null,
+                'watchUrl' => $lesson->is_embeddable ? null : $lesson->resource_url,
                 'video' => $lesson->video_disk_path ? asset('storage/'.$lesson->video_disk_path) : null,
                 'captions' => $lesson->captions_url,
                 'html' => $lesson->content && $lesson->content_format === ContentFormat::Markdown

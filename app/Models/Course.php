@@ -147,6 +147,32 @@ class Course extends Model
         return trim($plain);
     }
 
+    /**
+     * The description, rendered.
+     *
+     * cardTagline() and seoDescription() both strip markdown because their
+     * destinations are plain text. The detail page is the one place with room
+     * to show it as written, and it was printing the asterisks instead — the
+     * author's **bold** arriving on screen as literal punctuation.
+     */
+    public function descriptionHtml(): string
+    {
+        if (! $this->description) {
+            return '';
+        }
+
+        /*
+         * The import hard-wrapped these at about 85 characters and left blank
+         * lines at the wrap points, so markdown reads one sentence as three
+         * paragraphs. A break whose next line starts lower-case is a wrap, not
+         * a paragraph — joined back. A break after a full stop is left alone.
+         */
+        $text = preg_replace('/\n\s*\n(?=\p{Ll})/u', ' ', (string) $this->description);
+        $text = preg_replace('/(?<!\n)\n(?!\n)/u', ' ', (string) $text);
+
+        return app(\App\Services\Learning\MarkdownRenderer::class)->toHtml((string) $text);
+    }
+
     public function cardTagline(): string
     {
         if ($this->tagline) {

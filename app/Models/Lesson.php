@@ -51,14 +51,21 @@ class Lesson extends Model
         return $this->video_url ? self::extractYoutubeId($this->video_url) : null;
     }
 
-    /** Static so the admin curriculum builder can resolve a pasted URL before any Lesson exists. */
+    /**
+     * Static so the admin curriculum builder can resolve a pasted URL before
+     * any Lesson exists.
+     *
+     * youtube-nocookie.com has to match: it is what the privacy-preserving
+     * embed uses, and it is what the whole imported catalogue is written in.
+     * Without it every one of those lessons fell back to a plain iframe, so
+     * the IFrame API never loaded and no watch progress was ever recorded.
+     */
     public static function extractYoutubeId(string $url): ?string
     {
-        if (preg_match('~(?:youtube\.com/(?:embed/|watch\?v=)|youtu\.be/)([A-Za-z0-9_-]{6,})~', $url, $matches)) {
-            return $matches[1];
-        }
+        $pattern = '~(?:youtube(?:-nocookie)?\.com/(?:embed/|v/|shorts/|watch\?(?:.*&)?v=)'
+            .'|youtu\.be/)([A-Za-z0-9_-]{6,})~';
 
-        return null;
+        return preg_match($pattern, $url, $matches) ? $matches[1] : null;
     }
 
     /** @return BelongsTo<CourseModule, $this> */

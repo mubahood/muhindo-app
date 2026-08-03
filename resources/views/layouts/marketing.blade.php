@@ -251,12 +251,49 @@
     .pay-icons span{border:1px solid var(--line-2);padding:4px 8px;}
     .buy-box .coupon-field{width:100%;border:1px solid var(--line-2);padding:9px 12px;font-family:var(--font);font-size:13px;margin-bottom:10px;}
     .buy-box .money-comfort{font-size:11px;color:var(--tx3);margin-top:12px;text-align:center;}
-    .accordion-mod{border:1px solid var(--line);margin-bottom:10px;}
-    .accordion-mod summary{padding:14px 18px;font-weight:600;font-size:14px;cursor:pointer;list-style:none;
-      display:flex;justify-content:space-between;align-items:center;background:var(--surface);}
+    /* ── Curriculum accordion ──────────────────────────────────────────────
+       These opened and closed with no sign that they could. A <summary> with
+       its default marker suppressed and nothing put back is a heading that
+       happens to be clickable, which nobody discovers — so the chevron is
+       explicit, it turns, and the whole header is obviously a control. */
+    .accordion-mod{border:1px solid var(--line);margin-bottom:10px;background:var(--surface);}
+    .accordion-mod summary{padding:14px 16px;font-weight:600;font-size:14px;cursor:pointer;list-style:none;
+      display:flex;align-items:center;gap:12px;background:var(--surface);transition:background .14s;}
     .accordion-mod summary::-webkit-details-marker{display:none;}
-    .accordion-mod summary .n{font-size:11.5px;color:var(--tx3);font-weight:400;}
-    .lesson-row{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--tx2);}
+    .accordion-mod summary:hover{background:var(--gold-soft);}
+    .accordion-mod summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+    .mod-caret{flex-shrink:0;width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+      border:1px solid var(--line-2);color:var(--pri);font-size:10px;transition:transform .2s ease,
+      background .14s,border-color .14s;}
+    .accordion-mod[open] .mod-caret{transform:rotate(90deg);background:var(--pri);color:#fff;
+      border-color:var(--pri);}
+    .accordion-mod summary:hover .mod-caret{border-color:var(--gold);}
+    .mod-no{flex-shrink:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
+      font-weight:700;color:var(--gold-d);}
+    .mod-title{flex:1;min-width:0;line-height:1.35;}
+    .accordion-mod summary .n{flex-shrink:0;font-size:11.5px;color:var(--tx3);font-weight:500;
+      white-space:nowrap;}
+    /* Said once, on the closed header, so a visitor scanning modules can see
+       where the free lesson is without opening anything. */
+    .mod-free{flex-shrink:0;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--gold-d);background:var(--gold-soft);padding:3px 7px;}
+    @media(max-width:560px){
+      .accordion-mod summary{flex-wrap:wrap;gap:8px 10px;}
+      .mod-title{flex:1 1 100%;order:3;}
+    }
+
+    .lesson-row{display:flex;justify-content:space-between;align-items:center;gap:12px;
+      padding:11px 16px 11px 50px;border-top:1px solid var(--line);font-size:13px;color:var(--tx2);}
+
+    /* Expand / collapse everything, for somebody who wants the whole shape
+       of the course at once rather than one module at a time. */
+    .cur-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+      flex-wrap:wrap;margin-bottom:14px;}
+    .cur-meta{font-size:12.5px;color:var(--tx3);}
+    .cur-toggle{font-size:12.5px;font-weight:600;color:var(--pri);background:none;border:0;padding:0;
+      cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+    .cur-toggle:hover{color:var(--gold-d);}
+    .cur-toggle i{font-size:10px;}
     .outcomes-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 20px;}
     .outcomes-list li{padding-left:24px;position:relative;font-size:13.5px;color:var(--tx2);}
     .outcomes-list li::before{content:'\2713';position:absolute;left:0;color:var(--gold-d);font-weight:700;}

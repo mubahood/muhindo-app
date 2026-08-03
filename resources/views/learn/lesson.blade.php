@@ -130,7 +130,11 @@
           </video>
         </div>
       </div>
-    @elseif($lesson->youtubeVideoId())
+    {{-- is_embeddable matters here, not only in the plain-iframe branch below.
+         A video whose owner switched embedding off cannot play in the IFrame
+         API either — it would show "Video unavailable" inside our own chrome,
+         which is worse than saying so and linking out. --}}
+    @elseif($lesson->youtubeVideoId() && $lesson->is_embeddable)
       <div
         x-data="youtubePlayer({
           videoId: @js($lesson->youtubeVideoId()),

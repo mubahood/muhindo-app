@@ -54,16 +54,58 @@
         </div>
         @endif
 
-        <div style="margin-bottom:36px;">
-          <h2 style="font-size:19px;margin-bottom:16px;">Curriculum</h2>
+        <div style="margin-bottom:36px;" id="curriculum">
+          <div class="cur-head">
+            <h2 style="font-size:19px;margin:0;">Curriculum</h2>
+            <span class="cur-meta">
+              {{ $course->modules->count() }} {{ \Illuminate\Support\Str::plural('module', $course->modules->count()) }}
+              · {{ $course->lessons_count }} {{ \Illuminate\Support\Str::plural('lesson', $course->lessons_count) }}
+              @if($course->lessons_sum_duration_minutes)
+                · {{ round($course->lessons_sum_duration_minutes / 60, 1) }} hours
+              @endif
+            </span>
+            {{-- Progressively enhanced: with no script the modules still open
+                 one at a time, so this only ever adds. --}}
+            <button type="button" class="cur-toggle" id="cur-toggle" hidden
+                    data-expand="Expand all" data-collapse="Collapse all">
+              <i class="fas fa-chevron-down" aria-hidden="true"></i> <span>Expand all</span>
+            </button>
+          </div>
+
+          @if($previews->isNotEmpty())
+            {{-- The strongest thing this page can say to somebody deciding
+                 whether to spend money: watch a lesson first. --}}
+            <button type="button" class="cur-free" data-preview="0">
+              <span class="cf-ic"><i class="fas fa-play" aria-hidden="true"></i></span>
+              <span class="cf-b">
+                <strong>Watch the first lesson free</strong>
+                <span>{{ $previews->first()['title'] }} — no account needed</span>
+              </span>
+              <i class="fas fa-arrow-right cf-go" aria-hidden="true"></i>
+            </button>
+          @endif
+
           @foreach($course->modules as $module)
+            @php
+              $moduleMinutes = $module->lessons->sum('duration_minutes');
+              $moduleFree = $module->lessons->contains(fn ($l) => $l->is_free_preview && $l->is_published);
+            @endphp
             <details class="accordion-mod" @if($loop->first) open @endif>
-              <summary>{{ $module->title }} <span class="n">{{ $module->lessons->count() }} {{ \Illuminate\Support\Str::plural('lesson', $module->lessons->count()) }}</span></summary>
+              <summary>
+                <span class="mod-caret" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                <span class="mod-no">{{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                <span class="mod-title">{{ $module->title }}</span>
+                @if($moduleFree)<span class="mod-free">Free lesson</span>@endif
+                <span class="n">
+                  {{ $module->lessons->count() }} {{ \Illuminate\Support\Str::plural('lesson', $module->lessons->count()) }}@if($moduleMinutes) · {{ $moduleMinutes }} min @endif
+                </span>
+              </summary>
               @foreach($module->lessons as $lesson)
                 @php $previewIndex = $previews->search(fn ($p) => $p['id'] === $lesson->id); @endphp
                 <div class="lesson-row @if($previewIndex !== false) previewable @endif">
                   <span class="lesson-name">
-                    <i class="fas {{ $previewIndex !== false ? 'fa-circle-play' : 'fa-lock' }} lesson-ico" aria-hidden="true"></i>{{ $lesson->title }}
+                    <i class="fas {{ $previewIndex !== false ? 'fa-circle-play' : 'fa-lock' }} lesson-ico"
+                       aria-hidden="true"></i>{{ $lesson->title }}
                   </span>
                   <span class="lesson-side">
                     @if($previewIndex !== false)
@@ -114,7 +156,9 @@
         @if($course->description)
         <div style="margin-bottom:36px;">
           <h2 style="font-size:19px;margin-bottom:16px;">Description</h2>
-          <p class="lead" style="font-size:14.5px;">{{ $course->description }}</p>
+          {{-- Rendered, not printed: these were authored in markdown and the
+               page was showing the asterisks. --}}
+          <div class="lead course-desc" style="font-size:14.5px;">{!! $course->descriptionHtml() !!}</div>
         </div>
         @endif
 
@@ -222,6 +266,20 @@
 
 @push('styles')
 <style>
+  /* The free lesson, offered as a thing you press rather than a fact you
+     read. It is the single most persuasive element on a paid course page. */
+  .cur-free{display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+    border:1px solid var(--gold);background:var(--gold-soft);padding:13px 16px;margin-bottom:14px;
+    cursor:pointer;font-family:inherit;transition:background .14s,transform .14s;}
+  .cur-free:hover{background:var(--surface);transform:translateY(-1px);}
+  .cur-free:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .cf-ic{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--pri);color:var(--gold);
+    display:flex;align-items:center;justify-content:center;font-size:13px;padding-left:2px;}
+  .cf-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+  .cf-b strong{font-size:14px;font-weight:600;color:var(--pri);}
+  .cf-b span{font-size:12.5px;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .cur-free .cf-go{flex-shrink:0;color:var(--gold-d);font-size:12px;}
+
   .prereqs{display:grid;gap:8px;}
   .prereq{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);
     background:var(--surface);transition:border-color .15s,transform .15s;}
@@ -268,6 +326,31 @@
     <a href="#buy" class="btn gold">Enrol now <i class="fas fa-arrow-down" aria-hidden="true"></i></a>
   @endif
 </x-action-bar>
+
+@push('scripts')
+<script>
+(function () {
+  /* Expand all / collapse all. Added by script and hidden without it, so a
+     page with no JS still has working one-at-a-time accordions rather than a
+     button that does nothing. */
+  var toggle = document.getElementById('cur-toggle');
+  if (toggle) {
+    var mods = Array.prototype.slice.call(document.querySelectorAll('.accordion-mod'));
+    if (mods.length > 1) {
+      toggle.hidden = false;
+      toggle.addEventListener('click', function () {
+        var opening = mods.some(function (m) { return !m.open; });
+        mods.forEach(function (m) { m.open = opening; });
+        toggle.querySelector('span').textContent =
+          toggle.dataset[opening ? 'collapse' : 'expand'];
+        toggle.querySelector('i').className =
+          'fas fa-chevron-' + (opening ? 'up' : 'down');
+      });
+    }
+  }
+})();
+</script>
+@endpush
 
 @endsection
 
@@ -360,6 +443,17 @@
       f.allowFullscreen = true;
       f.loading = 'lazy';
       stage.appendChild(f);
+    } else if (p.watchUrl) {
+      // Embedding switched off by the video's owner. Say where it plays
+      // rather than framing a player that will refuse.
+      var a = document.createElement('a');
+      a.href = p.watchUrl; a.target = '_blank'; a.rel = 'noopener';
+      a.className = 'btn gold';
+      a.innerHTML = 'Watch this lesson on YouTube';
+      var wrap = document.createElement('div');
+      wrap.className = 'pv-out';
+      wrap.appendChild(a);
+      stage.appendChild(wrap);
     } else if (p.video) {
       var v = document.createElement('video');
       v.src = p.video; v.controls = true; v.preload = 'metadata'; v.playsInline = true;
@@ -370,7 +464,7 @@
       }
       stage.appendChild(v);
     }
-    stage.hidden = !(p.youtube || p.video);
+    stage.hidden = !(p.youtube || p.video || p.watchUrl);
   }
 
   function open(i, trigger) {
