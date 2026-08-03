@@ -36,7 +36,7 @@ class PortfolioContentSeeder extends Seeder
     {
         Settings::set('portfolio.identity', json_encode([
             'name' => 'Muhindo Mubaraka',
-            'title' => 'Manager, Information Systems',
+            'title' => 'Full-Stack Developer & Software Engineer',
             // The headline claims the work, not a map. What makes someone hire or
             // enrol is that the software gets finished and the teaching lands —
             // neither of which is a regional trait, and naming a region up front
@@ -245,7 +245,7 @@ class PortfolioContentSeeder extends Seeder
     private function seedExperience(): void
     {
         $rows = [
-            ['company' => 'Eight Tech Consults Ltd', 'role' => 'Manager, Information Systems / Full-Stack Developer & Application Engineer', 'start_date' => '2021-01-01', 'end_date' => null,
+            ['company' => 'Eight Tech Consults Ltd', 'role' => 'Full-Stack Developer & Application Engineer', 'start_date' => '2021-01-01', 'end_date' => null,
                 'description' => 'Lead technical architect designing, developing, deploying and maintaining complex enterprise information systems for government agencies, NGOs and private clients. Manage the full software development lifecycle — requirements, architecture, development, testing, deployment, training and support.'],
             ['company' => 'M-Omulimisa Uganda Limited', 'role' => 'Lead Developer — Agrihub Mobile Application', 'start_date' => '2023-01-01', 'end_date' => '2024-12-31',
                 'description' => 'Led development of an agricultural information platform integrating weather APIs, marketplace functionality and mobile payment systems. Conducted user training across multiple districts.'],

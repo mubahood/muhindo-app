@@ -243,6 +243,11 @@ class SiteNavTest extends TestCase
             ->assertSee('MSc')
             ->assertSee('Laravel (Expert)')
             // Printing is the delivery mechanism, so the control must be there.
-            ->assertSee('window.print()', false);
+            // The print button is gone. Somebody who wants this CV wants a
+            // file to attach to an email, not a browser-rendered approximation
+            // of the page — so it offers the real PDF instead.
+            ->assertDontSee('window.print()', false)
+            ->assertSee('files/muhindo-mubaraka-cv.pdf', false)
+            ->assertSee('Download CV');
     }
 }

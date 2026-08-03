@@ -30,7 +30,7 @@ class GalleryCaptionSeeder extends Seeder
     private const PHOTOS = [
         'gallery/proffesional-photo-mubaraka-muhindo.jpg' => [
             'Portrait', 'Muhindo Mubaraka',
-            'Manager, Information Systems — software engineer and programming teacher.',
+            'Full-stack developer, software engineer and programming teacher.',
             'Muhindo Mubaraka, arms folded, wearing a white Eight Tech Consults shirt', 1, true,
         ],
         'gallery/4-img-1311.jpg' => [

@@ -36,11 +36,56 @@
   .cv-list li{position:relative;list-style:none;padding-left:13px;font-size:12.5px;font-weight:450;color:var(--tx2);line-height:1.5;}
   .cv-list li::before{content:'';position:absolute;left:2px;top:7px;width:4px;height:4px;background:var(--gold);}
 
+  /* The subtitle under the name: what he specialises in, which is the thing
+     a ministry or an NGO is actually searching for. */
+  .cv-head .spec{font-size:12.5px;font-weight:450;color:var(--tx2);margin-top:3px;}
+
+  .cv-actions{display:flex;gap:8px;justify-content:flex-end;margin-bottom:18px;flex-wrap:wrap;}
+
+  /* Systems I have built. Each entry leads with the organisation, because
+     "Ministry of Agriculture" is the credential and the stack is the footnote. */
+  .cv-projects{margin-top:26px;}
+  .pj{padding:13px 0;border-bottom:1px solid var(--line);}
+  .pj:last-of-type{border-bottom:0;}
+  .pj-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .pj-top h3{font-size:14px;font-weight:600;line-height:1.35;margin:0;}
+  .pj-top h3 a{color:var(--pri);}
+  .pj-top h3 a:hover{color:var(--gold-d);}
+  .pj-top h3 i{font-size:9px;margin-left:5px;opacity:.55;}
+  .pj-for{font-size:11.5px;font-weight:500;color:var(--gold-d);}
+  .pj-what{font-size:12.5px;font-weight:450;color:var(--tx2);line-height:1.6;margin:5px 0 0;}
+  .pj-stack{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;}
+  .pj-stack span{font-size:10px;font-weight:600;letter-spacing:.03em;color:var(--tx3);
+    background:var(--surface-2,#f2f0ea);padding:3px 7px;}
+  .pj-more{display:inline-flex;align-items:center;gap:7px;margin-top:12px;
+    font-size:12px;font-weight:600;color:var(--pri);}
+  .pj-more:hover{color:var(--gold-d);}
+
+  /* Where each section hands you on: hire, or keep reading. Never a dead end. */
+  .sec-cta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+    margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
+  .sec-cta .lead-in{flex:1;min-width:180px;font-size:12px;color:var(--tx3);}
+
   @media(max-width:640px){
     .cv-row{grid-template-columns:1fr;gap:2px;}
     .cv-contact{text-align:left;}
     .cv-skills,.cv-list{grid-template-columns:1fr;}
+    .cv-actions{display:none;}   /* replaced by the fixed bar below */
+
+    /* On a phone the two things somebody wants are always in reach, instead
+       of being a scroll away at the top or the bottom of a long document. */
+    .cv-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;
+      padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+      background:rgba(247,246,242,.97);backdrop-filter:blur(10px);
+      border-top:1px solid var(--line-2);box-shadow:0 -6px 20px -12px rgba(11,31,58,.4);}
+    .cv-bar .btn{flex:1;justify-content:center;font-size:13px;padding:13px 10px;}
+    /* Clear the bar so the last line of the CV is never hidden under it. */
+    .cv{padding-bottom:78px;}
+    /* The footer is a site-wide index; on a CV it buries the one action that
+       matters under six columns of links. */
+    body.cv-page footer{display:none;}
   }
+  @media(min-width:641px){ .cv-bar{display:none;} }
 
   /* Print: strip the site and leave the document. Saving as PDF from the
      browser is how most people will actually take this away, so it has to be
@@ -76,11 +121,14 @@
       <div>
     <div class="cv">
 
-      <div class="cv-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:18px;flex-wrap:wrap;">
-        <button type="button" class="btn ghost sm cta" onclick="window.print()">
-          <span class="cta-a"><i class="fas fa-print"></i> Print</span>
-          <span class="cta-b" aria-hidden="true"><i class="fas fa-file-pdf"></i> Save as PDF</span>
-        </button>
+      {{-- The real document, not a print dialogue. Somebody who wants this CV
+           wants a file they can attach to an email, and window.print() gives
+           them a browser-rendered approximation of the page instead. --}}
+      <div class="cv-actions">
+        <a href="{{ asset('files/muhindo-mubaraka-cv.pdf') }}" download class="btn ghost sm cta">
+          <span class="cta-a"><i class="fas fa-file-arrow-down"></i> Download CV</span>
+          <span class="cta-b" aria-hidden="true">PDF, 3 pages <i class="fas fa-arrow-down"></i></span>
+        </a>
         <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold sm cta">
           <span class="cta-a">Hire Me</span>
           <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
@@ -91,6 +139,9 @@
         <div>
           <h1>{{ $identity['name'] ?? 'Muhindo Mubaraka' }}</h1>
           <div class="role">{{ $identity['title'] ?? '' }}</div>
+          @if(!empty($identity['subtitle']))
+            <div class="spec">{{ $identity['subtitle'] }}</div>
+          @endif
         </div>
         <div class="cv-contact">
           @foreach(($contact['emails'] ?? []) as $email)
@@ -158,17 +209,42 @@
       @endif
 
       @if($projects->count())
-        <section class="cv-sec">
-          <h2>Selected systems delivered</h2>
-          @foreach($projects as $p)
-            <div class="cv-row">
-              <div class="cv-when">{{ collect($p->tags ?? [])->take(1)->implode('') }}</div>
-              <div class="cv-what">
-                <h3>{{ $p->title }}</h3>
-                <p>{{ $p->description }}</p>
+        {{-- The section a client reads first, so it earns real space. Each
+             entry leads with who it was for and what it does, because "Laravel,
+             Flutter, MySQL" tells a ministry nothing and "every animal in
+             Uganda, identified and tracked" tells them everything. Only the
+             strongest few — a CV that lists thirty projects lists none. --}}
+        <section class="cv-sec cv-projects">
+          <h2>Systems I have built</h2>
+
+          @foreach($projects->take(6) as $p)
+            <article class="pj">
+              <div class="pj-top">
+                <h3>
+                  @if($p->external_link)
+                    <a href="{{ $p->external_link }}" target="_blank" rel="noopener">{{ $p->title }}<i class="fas fa-arrow-up-right-from-square"></i></a>
+                  @else
+                    {{ $p->title }}
+                  @endif
+                </h3>
+                @if($p->client)<span class="pj-for">{{ $p->client }}</span>@endif
               </div>
-            </div>
+
+              <p class="pj-what">{{ \Illuminate\Support\Str::limit($p->description, 190) }}</p>
+
+              @if($p->tags)
+                <div class="pj-stack">
+                  @foreach(collect($p->tags)->take(5) as $tag)<span>{{ $tag }}</span>@endforeach
+                </div>
+              @endif
+            </article>
           @endforeach
+
+          @if($projects->count() > 6)
+            <a href="{{ route('portfolio.work') }}" wire:navigate class="pj-more">
+              {{ $projects->count() - 6 }} more systems in the full portfolio <i class="fas fa-arrow-right"></i>
+            </a>
+          @endif
         </section>
       @endif
 
@@ -210,5 +286,23 @@
     </a>
   </div>
 </section>
+
+{{-- Phone only. Two things somebody on a CV wants — the file, and to get in
+     touch — kept permanently in reach instead of a scroll away at either end
+     of a three-page document. --}}
+<div class="cv-bar">
+  <a href="{{ asset('files/muhindo-mubaraka-cv.pdf') }}" download class="btn ghost">
+    <i class="fas fa-file-arrow-down"></i> Download CV
+  </a>
+  <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Hire Me</a>
+</div>
+
+@push('scripts')
+<script>
+  // Marks the page so the layout's footer can be hidden on a phone without
+  // the CV stylesheet reaching outside its own page to do it.
+  document.body.classList.add('cv-page');
+</script>
+@endpush
 
 @endsection
