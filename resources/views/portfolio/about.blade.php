@@ -2,13 +2,57 @@
 @section('title', 'About — Muhindo Mubaraka')
 @section('desc', $about['lead'] ?? '')
 
+@push('styles')
+<style>
+  /* One column, one spine. Everything on this page sits inside the rail
+     layout — the previous version dropped out of it halfway down, so the
+     sidebar simply stopped and the page turned into a run of unrelated
+     full-width bands with a generic call to action at the end. */
+  .ab-sec{margin-top:34px;}
+  .ab-sec:first-child{margin-top:0;}
+  .ab-h{display:flex;align-items:center;gap:11px;font-size:11px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--pri);margin-bottom:14px;}
+  .ab-h::after{content:'';flex:1;height:1px;background:var(--line-2);}
+
+  .ab-story{display:flex;flex-direction:column;gap:15px;}
+  .ab-story p{font-size:14.5px;font-weight:400;line-height:1.75;color:var(--tx2);}
+  .ab-story p:first-child{font-size:16px;color:var(--tx);}
+
+  /* What the work actually is, in four lines rather than a paragraph nobody
+     finishes. Drawn from the CV, not invented. */
+  .ab-work{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+    border:1px solid var(--line);}
+  .ab-work div{background:var(--surface);padding:15px 16px;}
+  .ab-work h3{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;margin:0 0 5px;}
+  .ab-work h3 i{color:var(--gold-d);font-size:12px;width:15px;text-align:center;}
+  .ab-work p{font-size:12.5px;line-height:1.6;color:var(--tx3);margin:0;}
+  @media(max-width:620px){.ab-work{grid-template-columns:1fr;}}
+
+  .ab-shots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+  .ab-shots a{display:block;aspect-ratio:1;overflow:hidden;background:var(--line);}
+  .ab-shots img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .ab-shots a:hover img{transform:scale(1.05);}
+  @media(max-width:620px){.ab-shots{grid-template-columns:repeat(3,1fr);}}
+
+  .ab-orgs{display:flex;flex-wrap:wrap;gap:6px;}
+  .ab-orgs span{font-size:11.5px;font-weight:500;color:var(--tx2);
+    background:var(--surface);border:1px solid var(--line);padding:6px 11px;}
+
+  /* Every section of the About story ends the same way: hire, or read on.
+     Never a dead end, and never a page that just stops. */
+  .ab-end{display:flex;gap:9px;flex-wrap:wrap;align-items:center;
+    margin-top:34px;padding-top:20px;border-top:2px solid var(--pri);}
+  .ab-end .ab-next-lbl{flex:1;min-width:170px;font-size:12.5px;color:var(--tx3);}
+</style>
+@endpush
+
 @section('content')
 
 <section class="page-hero tex-glow">
   <span class="hero-mark" aria-hidden="true">ABOUT</span>
   <div class="wrap">
     <div class="eyebrow">About</div>
-    <h1>Systems that hold up in the real world</h1>
+    <h1>{{ $about['heading'] ?? 'Systems that hold up in the real world' }}</h1>
     <p>{{ $about['lead'] ?? '' }}</p>
   </div>
 </section>
@@ -17,58 +61,81 @@
   <div class="wrap">
     <div class="rail-layout">
       @include('portfolio.partials.rail')
+
       <div>
-    <div style="max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
-      @foreach($about['paragraphs'] ?? [] as $p)
-        <p class="lead">{{ $p }}</p>
-      @endforeach
-    </div>
+        {{-- The story ------------------------------------------------- --}}
+        <div class="ab-sec">
+          <div class="ab-story">
+            @foreach($about['paragraphs'] ?? [] as $paragraph)
+              <p>{{ $paragraph }}</p>
+            @endforeach
+          </div>
+        </div>
+
+        {{-- What the work is. Four things, taken from the CV. --------- --}}
+        <div class="ab-sec">
+          <h2 class="ab-h">What I actually do</h2>
+          <div class="ab-work">
+            <div>
+              <h3><i class="fas fa-landmark"></i> Government systems</h3>
+              <p>National platforms for ministries and agencies — livestock traceability, seed tracking, wildlife enforcement — built to survive audit and staff turnover.</p>
+            </div>
+            <div>
+              <h3><i class="fas fa-signal"></i> Works without signal</h3>
+              <p>Field apps that capture data offline and sync when a connection returns, because the places this work matters most are the places the network is worst.</p>
+            </div>
+            <div>
+              <h3><i class="fas fa-diagram-project"></i> The whole lifecycle</h3>
+              <p>Requirements, architecture, build, deployment — then the staff training that decides whether any of it is still running a year later.</p>
+            </div>
+            <div>
+              <h3><i class="fas fa-chalkboard-user"></i> Teaching it</h3>
+              <p>200+ tutorials and 23,000 subscribers, plus the courses on this site that take somebody from their first HTML tag to a deployed application.</p>
+            </div>
+          </div>
+        </div>
+
+        {{-- In pictures. A strip inside the column, not a full-width band. --}}
+        @if($photos->isNotEmpty())
+          <div class="ab-sec">
+            <h2 class="ab-h">In pictures</h2>
+            <div class="ab-shots">
+              @foreach($photos->take(4) as $photo)
+                <a href="{{ route('gallery.index') }}" wire:navigate title="{{ $photo->title }}">
+                  <img src="{{ $photo->thumbUrl() }}" alt="{{ $photo->altText() }}" loading="lazy" decoding="async">
+                </a>
+              @endforeach
+            </div>
+            <p style="margin-top:11px;">
+              <a href="{{ route('gallery.index') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
+                See the gallery <i class="fas fa-arrow-right"></i>
+              </a>
+            </p>
+          </div>
+        @endif
+
+        {{-- Who the work was for. --------------------------------------- --}}
+        @if(count($clients))
+          <div class="ab-sec">
+            <h2 class="ab-h">Organisations I've delivered for</h2>
+            <div class="ab-orgs">
+              @foreach($clients as $client)<span>{{ $client }}</span>@endforeach
+            </div>
+          </div>
+        @endif
+
+        {{-- Hire, or read on. Two buttons, the same pair on every chapter. --}}
+        <div class="ab-end">
+          <span class="ab-next-lbl">Next: how nine years of this actually went.</span>
+          <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold sm cta">
+            <span class="cta-a">Hire Me</span>
+            <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
+          </a>
+          <a href="{{ route('portfolio.experience') }}" wire:navigate class="btn ghost sm">
+            Experience <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
-
-@if($photos->isNotEmpty())
-<section class="tex-glow" style="padding-top:0;">
-  <div class="wrap">
-    <div class="sec-head left" data-rise>
-      <div class="sec-idx">In pictures</div>
-      <h2>What the work actually looks like</h2>
-    </div>
-    <div class="photo-strip" data-rise>
-      @foreach($photos as $photo)
-        <a href="{{ route('gallery.index') }}" wire:navigate title="{{ $photo->title }}">
-          <img src="{{ $photo->thumbUrl() }}" alt="{{ $photo->altText() }}" loading="lazy" decoding="async">
-        </a>
-      @endforeach
-    </div>
-    <p style="text-align:center;margin-top:14px;">
-      <a href="{{ route('gallery.index') }}" wire:navigate class="link" style="font-size:12.5px;font-weight:600;color:var(--pri);">
-        See the gallery <i class="fas fa-arrow-right"></i>
-      </a>
-    </p>
-  </div>
-</section>
-@endif
-
-@if(count($clients))
-<section class="band-surface">
-  <div class="wrap">
-    <div class="sec-head"><div class="eyebrow">Trusted by</div><h2>Organisations I've worked with</h2></div>
-    <div class="clients-strip">
-      @foreach($clients as $c)<span>{{ $c }}</span>@endforeach
-    </div>
-  </div>
-</section>
-@endif
-
-<section style="text-align:center;">
-  <div class="wrap">
-    <h2>Want the details?</h2>
-    <p class="lead" style="max-width:480px;margin:12px auto 22px;">Experience, education and current research — each has its own page.</p>
-    <div class="ctas">
-      <a href="{{ route('portfolio.experience') }}" wire:navigate class="btn gold">Experience</a>
-      <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost">Hire me</a>
     </div>
   </div>
 </section>
