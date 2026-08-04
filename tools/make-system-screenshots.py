@@ -356,7 +356,25 @@ def window_bar(t, title):
     for i, op in enumerate((0.28, 0.38, 0.48)):
         o.append(circle(24 + i * 20, t.top / 2, 4.5, '#FFFFFF', op=op))
     o.append(text(W / 2, t.top / 2 + 4, title, 12, '#FFFFFF', '500', 'middle', 0.3, op=0.62))
+
+    # A search field and an alert count. Every system anybody actually uses
+    # has both, and a chrome without them is the tell.
+    o.append(rect(W - 292, 9, 168, 26, '#FFFFFF', rx=13, op=0.1))
+    o += _ic_search_small(W - 276, 22, '#FFFFFF', 0.5)
+    o.append(text(W - 262, 26, 'Search', 11, '#FFFFFF', '400', op=0.42))
+    o.append(path(f'M {W - 100} {26} v -5 a 6 6 0 0 1 12 0 v 5 z', stroke='#FFFFFF', sw=1.6, op=0.55))
+    o.append(line(W - 103, 26, W - 85, 26, '#FFFFFF', 1.6, cap='round', op=0.55))
+    o.append(circle(W - 88, 15, 5, '#EF4444'))
+    o.append(text(W - 88, 18.5, '3', 8, '#FFFFFF', '700', 'middle'))
+    o.append(circle(W - 62, t.top / 2, 4, '#FFFFFF', op=0.35))
+    o.append(circle(W - 52, t.top / 2, 4, '#FFFFFF', op=0.35))
+    o.append(circle(W - 42, t.top / 2, 4, '#FFFFFF', op=0.35))
     return o
+
+
+def _ic_search_small(x, y, c, o):
+    return [circle(x, y - 1, 4.4, 'none', stroke=c, sw=1.5, op=o),
+            line(x + 3.2, y + 2.2, x + 6.4, y + 5.4, c, 1.7, cap='round', op=o)]
 
 
 def sidebar(t, brand, org, nav, active, mark, user):
@@ -501,20 +519,31 @@ def table(x, y, w, cols, rows, t, rh=44, head=True):
     return o
 
 
-def bars(x, y, w, h, values, labels, t, hi=None):
+def bars(x, y, w, h, values, labels, t, hi=None, axis=False):
     o = []
     n = len(values)
-    gap = max(8, w / n * 0.3)
-    bw = (w - gap * (n - 1)) / n
     top = max(values)
-    # On a dark shell the brand colour is barely lighter than the background,
-    # so the unhighlighted bars have to come from the text ramp instead.
+    ax = 26 if axis else 0
+
+    # Bars floating on nothing read as decoration. A gridline and a number
+    # turn the same shapes into a chart.
+    if axis:
+        for i in range(3):
+            gy = y + h - i * (h / 2)
+            o.append(line(x + ax, gy, x + w, gy, t.line, 1))
+            o.append(text(x + ax - 6, gy + 3.5, str(int(top / 2 * i)), 9, t.mute, '500', 'end'))
+
+    gap = max(8, (w - ax) / n * 0.3)
+    bw = (w - ax - gap * (n - 1)) / n
     base = t.sub if t.dark else t.primary
     for i, v in enumerate(values):
         bh = max(3, v / top * h)
-        bx = x + i * (bw + gap)
+        bx = x + ax + i * (bw + gap)
         o.append(rect(bx, y + h - bh, bw, bh, t.accent if i == hi else base,
                       rx=3, op=1 if i == hi else (0.55 if t.dark else 0.82)))
+        if axis:
+            o.append(text(bx + bw / 2, y + h - bh - 7, str(v), 9.5,
+                          t.accent if i == hi else t.mute, '700', 'middle'))
         o.append(text(bx + bw / 2, y + h + 19, labels[i], 10.5, t.mute, '600', 'middle'))
     return o
 
@@ -634,21 +663,128 @@ def poly(points, box):
             + ' '.join(f'L {a:.1f} {b:.1f}' for a, b in pts[1:]) + ' Z')
 
 
-def uganda(box, t, pins=(), route=(), land=None, water='#A9C3D4', labels=(), lakes=True,
-           border=None):
-    land = land or t.bg
-    o = [path(poly(UGANDA, box), fill=land, stroke=border or t.primary, sw=2.4, op=0.95)]
+# Places, so the map has names on it. Real coordinates.
+TOWNS = [
+    ('Kampala', 32.58, 0.32, 1), ('Mbarara', 30.66, -0.61, 1), ('Gulu', 32.30, 2.77, 1),
+    ('Soroti', 33.61, 1.71, 1), ('Mbale', 34.18, 1.08, 1), ('Arua', 30.91, 3.02, 1),
+    ('Fort Portal', 30.27, 0.65, 0), ('Masaka', 31.73, -0.34, 0), ('Jinja', 33.20, 0.44, 0),
+    ('Lira', 32.90, 2.25, 0), ('Hoima', 31.35, 1.43, 0), ('Kabale', 29.99, -1.25, 0),
+    ('Moroto', 34.66, 2.53, 0), ('Kasese', 30.09, 0.18, 0),
+]
+
+# The trunk roads, by the towns they run through.
+ROADS = [
+    ['Kampala', 'Masaka', 'Mbarara', 'Kabale'],
+    ['Kampala', 'Jinja', 'Mbale', 'Soroti'],
+    ['Kampala', 'Hoima', 'Gulu', 'Arua'],
+    ['Gulu', 'Lira', 'Soroti'],
+    ['Mbarara', 'Kasese', 'Fort Portal', 'Hoima'],
+    ['Soroti', 'Moroto'],
+]
+
+_TOWN = {name: (lon, lat) for name, lon, lat, _ in TOWNS}
+
+
+def _lcg(seed):
+    """Deterministic noise. The picture must not change between runs."""
+    v = seed
+    while True:
+        v = (v * 1103515245 + 12345) & 0x7FFFFFFF
+        yield (v >> 8) / 0x7FFFFF
+
+
+def district_lines(seed=41):
+    """
+    Boundaries, as lon/lat polylines.
+
+    Uganda has 146 districts and drawing them from a real shapefile is not
+    something a 700px panel would show anyway. What a map at this zoom shows
+    is *that* the country is subdivided — so these are irregular lines across
+    the whole bounding box, clipped to the border. Deterministic, so the
+    picture is the same every run.
+    """
+    rnd = _lcg(seed)
+    lines = []
+
+    # Roughly north-south, then roughly east-west, so they cross into cells.
+    for i in range(7):
+        lon = 29.7 + i * 0.75 + next(rnd) * 0.3
+        pts = []
+        for j in range(9):
+            lat = -1.7 + j * 0.75
+            pts.append((lon + (next(rnd) - 0.5) * 0.55, lat))
+        lines.append(pts)
+
+    for i in range(6):
+        lat = -1.3 + i * 0.95 + next(rnd) * 0.3
+        pts = []
+        for j in range(10):
+            lon = 29.4 + j * 0.65
+            pts.append((lon, lat + (next(rnd) - 0.5) * 0.5))
+        lines.append(pts)
+
+    return lines
+
+
+def uganda(box, t, pins=(), route=(), land=None, water='#AFC7D6', labels=(), lakes=True,
+           border=None, chrome=True, uid='map', towns=True, roads=True, dense=True):
+    """
+    A map panel, not a silhouette.
+
+    The first version drew the country as a flat shape floating in white,
+    which is a logo. What makes a map read as a map is everything around the
+    outline: subdivision, roads, place names, and the controls that say it can
+    be panned and zoomed. Those are what this adds.
+    """
+    x0, y0, bw, bh = box
+    land = land or '#EDE8DA'
+    ink = border or t.primary
+    o = []
+
+    # Everything inside the country is drawn once and clipped, so the roads
+    # and boundaries stop at the border without any per-line geometry.
+    o.append(f'<clipPath id="{uid}-clip"><path d="{poly(UGANDA, box)}"/></clipPath>')
+
+    # Outside the border is water and neighbours, not the page.
+    o.append(rect(x0, y0, bw, bh, water, op=0.32))
+    o.append(f'<g clip-path="url(#{uid}-clip)">')
+    o.append(rect(x0, y0, bw, bh, land))
+
+    if dense:
+        for pts in district_lines():
+            proj = [project(a, b, box) for a, b in pts]
+            d = f'M {proj[0][0]:.1f} {proj[0][1]:.1f} ' + ' '.join(
+                f'L {a:.1f} {b:.1f}' for a, b in proj[1:])
+            o.append(path(d, stroke=ink, sw=0.9, op=0.16))
+
     if lakes:
         for shape in (VICTORIA, ALBERT, KYOGA):
-            o.append(path(poly(shape, box), fill=water, op=0.92,
-                          stroke=border or t.primary, sw=1.2))
-    if route:
-        pts = [project(a, b, box) for a, b in route]
-        d = f'M {pts[0][0]:.1f} {pts[0][1]:.1f} ' + ' '.join(f'L {a:.1f} {b:.1f}' for a, b in pts[1:])
-        o.append(path(d, stroke=t.accent, sw=2.8, dash='9 7'))
+            o.append(path(poly(shape, box), fill=water))
+
+    if roads:
+        for route_names in ROADS:
+            proj = [project(*_TOWN[n], box) for n in route_names]
+            d = f'M {proj[0][0]:.1f} {proj[0][1]:.1f} ' + ' '.join(
+                f'L {a:.1f} {b:.1f}' for a, b in proj[1:])
+            o.append(path(d, stroke='#FFFFFF', sw=3.4, op=0.75))
+            o.append(path(d, stroke='#C9A227', sw=1.6, op=0.55))
+
+    o.append('</g>')
+
+    # The border itself, over the top of everything it contains.
+    o.append(path(poly(UGANDA, box), fill='none', stroke=ink, sw=2.2, op=0.85))
+
     for lon, lat, name in labels:
         x, y = project(lon, lat, box)
-        o.append(text(x, y, name, 9.5, border or t.primary, '700', 'middle', 0.9, op=0.6))
+        o.append(text(x, y, name, 9, ink, '700', 'middle', 0.9, op=0.55))
+
+    if route:
+        proj = [project(a, b, box) for a, b in route]
+        d = f'M {proj[0][0]:.1f} {proj[0][1]:.1f} ' + ' '.join(
+            f'L {a:.1f} {b:.1f}' for a, b in proj[1:])
+        o.append(path(d, stroke='#FFFFFF', sw=6, op=0.85))
+        o.append(path(d, stroke=t.accent, sw=3, dash='10 7'))
+
     for lon, lat, big in pins:
         x, y = project(lon, lat, box)
         if big:
@@ -657,8 +793,45 @@ def uganda(box, t, pins=(), route=(), land=None, water='#A9C3D4', labels=(), lak
                           f's 12 -12 12 -20 c 0 -6 -5 -11 -12 -11 z', fill=t.accent))
             o.append(circle(x, y - 9, 4.2, '#FFFFFF'))
         else:
-            o.append(circle(x, y, 5.5, border or t.primary, op=0.9))
-            o.append(circle(x, y, 10, border or t.primary, op=0.18))
+            o.append(circle(x, y, 5, '#FFFFFF', stroke=t.accent, sw=2.4))
+
+    if towns:
+        marked = [project(a, b, box) for a, b, big in pins if big]
+        small = [project(a, b, box) for a, b, big in pins if not big]
+        for name, lon, lat, major in TOWNS:
+            x, y = project(lon, lat, box)
+            # A pin already names the place it is standing on.
+            if any(abs(x - mx) < 22 and abs(y - my) < 26 for mx, my in marked):
+                continue
+            pinned = any(abs(x - px) < 3 and abs(y - py) < 3 for px, py in small)
+            if major:
+                if not pinned:
+                    o.append(circle(x, y, 3.6, '#FFFFFF', stroke=ink, sw=1.6))
+                o.append(text(x + (13 if pinned else 7), y + 3.4, name, 9.5, ink, '600', op=0.8))
+            else:
+                if not pinned:
+                    o.append(circle(x, y, 2, ink, op=0.5))
+                o.append(text(x + (13 if pinned else 5.5), y + 2.8, name, 8, ink, '500', op=0.5))
+
+    if chrome:
+        # Zoom, scale and a coordinate readout. A map you cannot move is a
+        # picture of a map, and the controls are what say otherwise.
+        zx, zy = x0 + bw - 34, y0 + 12
+        o.append(rect(zx + 1, zy + 2, 26, 52, '#000000', rx=4, op=0.12))
+        o.append(rect(zx, zy, 26, 52, '#FFFFFF', rx=4, stroke='#00000022', sw=1))
+        o.append(line(zx + 5, zy + 26, zx + 21, zy + 26, '#00000018', 1))
+        o.append(text(zx + 13, zy + 18, '+', 15, ink, '600', 'middle'))
+        o.append(text(zx + 13, zy + 44, '\u2212', 15, ink, '600', 'middle'))
+
+        o.append(rect(x0, y0 + bh - 24, bw, 24, '#FFFFFF', op=0.82))
+        sx, sy = x0 + 14, y0 + bh - 9
+        o.append(line(sx, sy, sx + 58, sy, ink, 2, op=0.7))
+        o.append(line(sx, sy - 4, sx, sy, ink, 2, op=0.7))
+        o.append(line(sx + 58, sy - 4, sx + 58, sy, ink, 2, op=0.7))
+        o.append(text(sx + 64, sy + 3, '100 km', 9, ink, '600', op=0.6))
+        o.append(text(x0 + bw - 12, sy + 3, '0.3476\u00b0 N, 32.5825\u00b0 E',
+                      8.5, ink, '500', 'end', op=0.45, mono=True))
+
     return o
 
 
@@ -683,21 +856,44 @@ def ulits(t):
 
     hy = t.head
     mw = 700
-    o.append(card(t.mx, hy + 246, mw, 620, t))
-    o += sec(t.mx + 22, hy + 280, 'ROUTE AND CHECKPOINTS', t, 'LIVE GPS', mw - 44)
-    o += uganda((t.mx + 26, hy + 296, mw - 52, 496), t, land='#EEE9DB', water='#A9C3D4',
-                pins=[(30.65, -0.61, False), (31.42, 1.32, False), (32.58, 0.58, True),
-                      (33.62, 1.98, False), (34.18, 1.05, False), (31.05, 2.32, False)],
-                route=[(30.65, -0.61), (31.42, 1.32), (32.58, 0.58), (33.62, 1.98)],
+    my, mh = hy + 246, 620
+    o.append(card(t.mx, my, mw, mh, t))
+
+    # The map fills its panel. Floating a country in the middle of a white
+    # card is a logo; a map runs to the edges of the thing that holds it.
+    o.append(rect(t.mx + 1.4, my + 1.4, mw - 2.8, 40, t.bg))
+    o.append(line(t.mx, my + 41, t.mx + mw, my + 41, t.line, 1.4))
+    o.append(text(t.mx + 16, my + 26, 'ROUTE AND CHECKPOINTS', 10.5, t.mute, '700', ls=1.1))
+    o.append(circle(t.mx + mw - 84, my + 21, 3.4, t.accent))
+    o.append(text(t.mx + mw - 16, my + 25, 'LIVE GPS', 10.5, t.accent, '700', 'end', 1))
+
+    # Layer chips, over the map rather than beside it, the way every map UI
+    # puts them.
+    o += uganda((t.mx + 1.4, my + 42, mw - 2.8, mh - 84), t, uid='ulits',
+                pins=[(30.66, -0.61, False), (31.35, 1.43, False), (32.58, 0.32, True),
+                      (33.61, 1.71, False), (34.18, 1.08, False), (30.91, 3.02, False)],
+                route=[(30.66, -0.61), (31.73, -0.34), (32.58, 0.32), (33.20, 0.44),
+                       (34.18, 1.08), (33.61, 1.71)],
                 labels=[(32.85, -0.20, 'LAKE VICTORIA'), (32.70, 1.38, 'LAKE KYOGA')])
-    ly = hy + 820
-    o.append(circle(t.mx + 30, ly - 4, 5.5, t.primary, op=0.9))
-    o.append(text(t.mx + 44, ly, 'Registered holding', 11.5, t.sub, '500'))
-    o.append(line(t.mx + 176, ly - 4, t.mx + 206, ly - 4, t.accent, 2.8, dash='9 7'))
-    o.append(text(t.mx + 216, ly, 'Permitted route', 11.5, t.sub, '500'))
-    o.append(text(t.mx + 22, ly + 26, 'Every tag is re-scanned at each district boundary. '
-                                      'A mismatch stops the consignment there.',
-                  11.5, t.mute, '400'))
+
+    cx = t.mx + 16
+    for label, on in (('Districts', True), ('Roads', True), ('Holdings', True), ('Markets', False)):
+        w = tw(label, 10, '600') + 22
+        o.append(rect(cx, my + 54, w, 24, '#FFFFFF' if on else '#FFFFFFCC', rx=4,
+                      stroke=t.accent if on else '#00000022', sw=1.4 if on else 1))
+        o.append(text(cx + w / 2, my + 70, label, 10, t.primary if on else t.mute,
+                      '700' if on else '500', 'middle', 0.3))
+        cx += w + 6
+
+    # Legend, on the map's own footer strip.
+    ly = my + mh - 42
+    o.append(rect(t.mx + 1.4, ly, mw - 2.8, 40, t.surface))
+    o.append(line(t.mx, ly, t.mx + mw, ly, t.line, 1.4))
+    o.append(circle(t.mx + 22, ly + 20, 5, '#FFFFFF', stroke=t.accent, sw=2.4))
+    o.append(text(t.mx + 34, ly + 24, 'Registered holding', 11, t.sub, '500'))
+    o.append(line(t.mx + 156, ly + 20, t.mx + 184, ly + 20, t.accent, 3, dash='9 6'))
+    o.append(text(t.mx + 192, ly + 24, 'Permitted route', 11, t.sub, '500'))
+    o.append(text(t.mx + mw - 16, ly + 24, '6 checkpoints on this route', 11, t.mute, '500', 'end'))
 
     rx = t.mx + mw + 24
     rw = t.mr - rx - 236
@@ -721,9 +917,9 @@ def ulits(t):
     o.append(text(rx + 86, oy + 84, 'They upload themselves the moment', 11.5, '#FFFFFF', '400', op=0.62))
     o.append(text(rx + 86, oy + 102, 'a signal comes back.', 11.5, '#FFFFFF', '400', op=0.62))
 
-    o += sec(rx, hy + 764, 'VACCINATION COVERAGE, MBARARA', t)
-    o += bars(rx, hy + 784, rw, 58, [72, 88, 61, 94, 80],
-              ['JAN', 'FEB', 'MAR', 'APR', 'MAY'], t, hi=3)
+    o += sec(rx, hy + 758, 'VACCINATION COVERAGE', t, 'MBARARA \u00b7 %', rw)
+    o += bars(rx, hy + 778, rw, 66, [72, 88, 61, 94, 80],
+              ['JAN', 'FEB', 'MAR', 'APR', 'MAY'], t, hi=3, axis=True)
 
     def field_app(px, py, pw, ph):
         s = [rect(px, py, pw, 78, t.primary, rx=0)]
@@ -735,11 +931,15 @@ def ulits(t):
 
         s.append(rect(px + 14, py + 94, pw - 28, 148, '#FFFFFF', rx=10, stroke=t.line, sw=1.4))
         cx2, cy2 = px + pw / 2, py + 152
-        widths = [4, 2, 5, 2, 3, 6, 2, 4, 2, 5, 3, 2]
-        bx2 = cx2 - 46
-        for wdt in widths:
-            s.append(rect(bx2, cy2 - 28, wdt, 54, t.primary, rx=0.5))
-            bx2 += wdt + 4
+        # Bar, gap, bar, gap — with the widths a real symbology actually uses,
+        # because an even picket fence is the tell on every fake barcode.
+        pattern = [3, 1, 1, 2, 4, 1, 2, 1, 1, 3, 1, 4, 2, 1, 3, 1, 1, 2, 1, 5,
+                   2, 1, 1, 3, 1, 2, 4, 1, 1, 2]
+        bx2 = cx2 - 47
+        for k, wdt in enumerate(pattern):
+            if k % 2 == 0:
+                s.append(rect(bx2, cy2 - 28, wdt * 1.6, 54, t.primary))
+            bx2 += wdt * 1.6
         s.append(text(cx2, py + 208, 'UG-1120-772', 13, t.ink, '700', 'middle'))
         s.append(text(cx2, py + 226, 'read in 0.3 seconds', 10, t.mute, '400', 'middle'))
 
@@ -984,8 +1184,9 @@ def wildlife(t):
 
     o.append(card(t.mx, hy + 658, lw, 208, t))
     o += sec(t.mx + 20, hy + 692, 'WHERE THIS IS HAPPENING', t)
-    o += uganda((t.mx + 234, hy + 696, 136, 154), t, land=t.primary_d, lakes=False,
-                border=t.sub,
+    o += uganda((t.mx + 234, hy + 696, 136, 154), t, uid='uwa', land=t.primary_d,
+                water=t.bg, border=t.sub, lakes=False, chrome=False, towns=False,
+                roads=False, dense=False,
                 pins=[(31.72, 2.28, True), (31.35, 0.32, False), (33.95, 0.72, False),
                       (30.05, -0.35, False)])
     for i, (park, n, share) in enumerate([('Murchison Falls', '412', 1.0),

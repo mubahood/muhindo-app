@@ -5,6 +5,17 @@
   <circle cx="44.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.38"/>
   <circle cx="64.0" cy="22.0" r="4.5" fill="#FFFFFF" opacity="0.48"/>
   <text x="800.0" y="26.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.3" opacity="0.62">CEHURD — Human Rights Reporting System</text>
+  <rect x="1308.0" y="9.0" width="168.0" height="26.0" fill="#FFFFFF" rx="13" opacity="0.1"/>
+  <circle cx="1324.0" cy="21.0" r="4.4" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.5"/>
+  <line x1="1327.2" y1="24.2" x2="1330.4" y2="27.4" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" opacity="0.5"/>
+  <text x="1338.0" y="26.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.42">Search</text>
+  <path d="M 1500 26 v -5 a 6 6 0 0 1 12 0 v 5 z" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <line x1="1497.0" y1="26.0" x2="1515.0" y2="26.0" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity="0.55"/>
+  <circle cx="1512.0" cy="15.0" r="5.0" fill="#EF4444"/>
+  <text x="1512.0" y="18.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="8" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+  <circle cx="1538.0" cy="22.0" r="4.0" fill="#FFFFFF" opacity="0.35"/>
+  <circle cx="1548.0" cy="22.0" r="4.0" fill="#FFFFFF" opacity="0.35"/>
+  <circle cx="1558.0" cy="22.0" r="4.0" fill="#FFFFFF" opacity="0.35"/>
   <rect x="0.0" y="44.0" width="252.0" height="956.0" fill="#0F172A"/>
   <rect x="24.0" y="70.0" width="34.0" height="34.0" fill="#E11D48" rx="8"/>
   <rect x="34.0" y="86.0" width="14.0" height="10.0" fill="none" rx="2" stroke="#FFFFFF" stroke-width="1.8" opacity="1"/>
