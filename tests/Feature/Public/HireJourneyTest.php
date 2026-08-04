@@ -40,6 +40,7 @@ class HireJourneyTest extends TestCase
             'budget_amount' => '12000000',
             'organisation' => 'Kampala Hardware',
             'phone' => '+256 700 111 222',
+            'country' => 'Uganda',
         ];
     }
 
@@ -116,11 +117,15 @@ class HireJourneyTest extends TestCase
     {
         $this->actingAs($this->client())->get(route('propose'))->assertOk()
             ->assertSee('What are you building?')
-            ->assertSee('Who will actually use it?')
             ->assertSee('When, and what can you spend?')
+            ->assertSee('How do I reach you?')
+            ->assertSee('WhatsApp number')
+            ->assertSee('Where are you?')
             ->assertSee('UGX')
             ->assertSee('USD')
-            ->assertSee('What happens next');
+            ->assertSee('What happens next')
+            // Everything optional is folded away, so the form looks finishable.
+            ->assertSee('Add more detail');
     }
 
     public function test_sending_one_files_it_and_shows_it_in_the_portal(): void
@@ -190,6 +195,36 @@ class HireJourneyTest extends TestCase
 
         $this->assertTrue($student->fresh()->is_client);
         $this->assertNotNull($student->fresh()->client);
+    }
+
+    public function test_any_budget_figure_is_accepted_not_just_round_thousands(): void
+    {
+        /* The number field shipped step="1000", so a browser refused 89 with
+           "the two nearest valid values are 0 and 1000" — the form rejecting a
+           perfectly good answer before it ever reached the server. */
+        $html = (string) $this->actingAs($this->client())->get(route('propose'))
+            ->assertOk()->getContent();
+
+        $this->assertMatchesRegularExpression('/name="budget_amount"[^>]*step="any"/', $html);
+        $this->assertStringNotContainsString('step="1000"', $html);
+
+        $this->actingAs($this->client())
+            ->post(route('propose.store'), ['budget_amount' => '89'] + $this->proposal())
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('UGX 89', ProjectInquiry::firstOrFail()->budgetLabel());
+    }
+
+    public function test_the_form_keeps_a_draft_so_an_interruption_costs_nothing(): void
+    {
+        // Half a brief lost to a phone call is a client lost. Kept on their
+        // own device, so it never travels with a request or sits in a log.
+        $html = (string) $this->actingAs($this->client())->get(route('propose'))
+            ->assertOk()->getContent();
+
+        $this->assertStringContainsString('muhindo.proposal.draft', $html);
+        $this->assertStringContainsString('localStorage', $html);
+        $this->assertStringContainsString('Draft saved on this device', $html);
     }
 
     public function test_a_guest_cannot_reach_the_proposal_form(): void

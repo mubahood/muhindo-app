@@ -289,6 +289,7 @@ class DualRoleAccountTest extends TestCase
             'timeline' => 'asap',
             'budget_currency' => 'UGX',
             'phone' => '+256700000000',
+            'country' => 'Uganda',
         ])->assertRedirect();
 
         $inquiry = ProjectInquiry::where('email', $user->email)->firstOrFail();

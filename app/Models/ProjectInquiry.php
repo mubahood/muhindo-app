@@ -15,7 +15,21 @@ class ProjectInquiry extends Model
         'uuid', 'user_id', 'name', 'email', 'phone', 'organisation', 'project_type',
         'budget_range', 'timeline', 'description', 'status',
         'title', 'category', 'budget_amount', 'budget_currency',
-        'who_uses_it', 'success_looks_like', 'submitted_at',
+        'who_uses_it', 'success_looks_like', 'submitted_at', 'country',
+    ];
+
+    /**
+     * Where clients actually are.
+     *
+     * A free-text country field gets "UG", "Uganda", "uganda" and "Kampala"
+     * in the same column. A short list of the places work has come from,
+     * plus a way out, keeps it answerable in one tap on a phone.
+     */
+    public const COUNTRIES = [
+        'Uganda', 'Kenya', 'Tanzania', 'Rwanda', 'Burundi', 'South Sudan',
+        'DR Congo', 'Ethiopia', 'Nigeria', 'Ghana', 'South Africa',
+        'United Kingdom', 'United States', 'Canada', 'United Arab Emirates',
+        'Somewhere else',
     ];
 
     /** What somebody can pick from, and what each one means in plain words. */

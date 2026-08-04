@@ -61,6 +61,7 @@ class ProjectInquiryController extends Controller
             'demo' => $demo,
             'categories' => ProjectInquiry::CATEGORIES,
             'timelines' => ProjectInquiry::TIMELINES,
+            'countries' => ProjectInquiry::COUNTRIES,
         ]);
     }
 
@@ -82,10 +83,11 @@ class ProjectInquiryController extends Controller
             'budget_amount' => 'nullable|numeric|min:0|max:99999999999',
             'organisation' => 'nullable|string|max:150',
             'phone' => 'required|string|max:40',
+            'country' => 'required|string|max:80',
         ], [
             'title.required' => 'Give it a name, even a rough one.',
             'description.min' => 'A few more words, please — I price from what this has to do.',
-            'phone.required' => 'A phone number, so I can call rather than write.',
+            'phone.required' => 'A WhatsApp number — it is how most of this gets discussed.',
         ]);
 
         $inquiry = ProjectInquiry::create($data + [
