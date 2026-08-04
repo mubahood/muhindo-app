@@ -128,9 +128,26 @@ class Product extends Model
         return self::TYPES[$this->type] ?? Str::headline((string) $this->type);
     }
 
+    /**
+     * The item thumbnail.
+     *
+     * Drawn rather than photographed, for the same reason the case-study
+     * screenshots are: what a buyer needs to see in one second is the
+     * wordmark, the promise, the stack and the interface — and a real
+     * screengrab of an admin panel delivers none of them at card size.
+     *
+     * An uploaded cover always wins, so replacing one of these is an upload
+     * and nothing else.
+     */
     public function coverUrl(): ?string
     {
-        return $this->cover_image ? asset('storage/'.$this->cover_image) : null;
+        if ($this->cover_image) {
+            return asset('storage/'.$this->cover_image);
+        }
+
+        $drawn = "images/products/{$this->slug}.svg";
+
+        return is_file(public_path($drawn)) ? asset($drawn) : null;
     }
 
     /** Human file size for the buyer, so "what am I actually getting" is answered before paying. */

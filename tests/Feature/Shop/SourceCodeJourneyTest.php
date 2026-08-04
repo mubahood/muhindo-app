@@ -114,6 +114,52 @@ class SourceCodeJourneyTest extends TestCase
 
     // ── the journey ──────────────────────────────────────────────────────
 
+    public function test_every_product_in_the_catalogue_has_a_thumbnail(): void
+    {
+        $this->seed(\Database\Seeders\SourceCodeSeeder::class);
+
+        foreach (Product::all() as $product) {
+            $this->assertNotNull($product->coverUrl(),
+                "{$product->slug} has no thumbnail — draw one into "
+                    ."public/images/products/{$product->slug}.svg");
+        }
+    }
+
+    public function test_the_thumbnails_are_the_shape_the_cards_are_cut_for(): void
+    {
+        $this->seed(\Database\Seeders\SourceCodeSeeder::class);
+        $seen = [];
+
+        foreach (Product::pluck('slug') as $slug) {
+            $file = public_path("images/products/{$slug}.svg");
+            if (! is_file($file)) {
+                continue;
+            }
+
+            $svg = (string) file_get_contents($file);
+            $this->assertStringContainsString('viewBox="0 0 1600 1000"', $svg,
+                "{$slug} is not 16:10 and will be cropped in the card");
+            $this->assertStringNotContainsString('<image', $svg,
+                "{$slug} embeds a raster; these are drawn, not pasted");
+
+            // The brand colour is the first stop of the background gradient.
+            preg_match('/<stop offset="0" stop-color="(#[0-9A-F]{6})"/i', $svg, $m);
+            $this->assertNotEmpty($m, "{$slug} has no background gradient");
+            $seen[$slug] = strtoupper($m[1]);
+        }
+
+        // Six items in one palette would be six colourways of one product.
+        $this->assertSame(count($seen), count(array_unique($seen)),
+            'two items share a brand colour: '.json_encode($seen));
+    }
+
+    public function test_an_uploaded_cover_beats_the_drawn_one(): void
+    {
+        $product = Product::factory()->create(['cover_image' => 'products/real-shot.png']);
+
+        $this->assertStringContainsString('products/real-shot.png', (string) $product->coverUrl());
+    }
+
     public function test_a_stranger_can_go_from_the_listing_to_the_file(): void
     {
         $product = $this->sellable();

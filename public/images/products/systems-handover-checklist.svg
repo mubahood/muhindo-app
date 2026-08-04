@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img">
+  <defs><linearGradient id="systems-handov-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0F3B52"/><stop offset="1" stop-color="#04161F"/></linearGradient></defs>
+  <rect x="0.0" y="0.0" width="1600.0" height="1000.0" fill="url(#systems-handov-bg)"/>
+  <path d="M 1600 780 A 220 220 0 0 0 1380 1000" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.06"/>
+  <path d="M 1600 660 A 340 340 0 0 0 1260 1000" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.06"/>
+  <path d="M 1600 540 A 460 460 0 0 0 1140 1000" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.06"/>
+  <path d="M 1600 420 A 580 580 0 0 0 1020 1000" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.06"/>
+  <path d="M 1600 300 A 700 700 0 0 0 900 1000" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.06"/>
+  <path d="M 1600 180 A 820 820 0 0 0 780 1000" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.06"/>
+  <path d="M 1600 60 A 940 940 0 0 0 660 1000" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.06"/>
+  <rect x="0.0" y="0.0" width="820.0" height="1000.0" fill="#000000" opacity="0.18"/>
+  <rect x="78.0" y="132.0" width="62.0" height="62.0" fill="#38BDF8" rx="15"/>
+  <rect x="96.0" y="151.0" width="26.0" height="24.0" fill="none" rx="4" stroke="#04202B" stroke-width="2.4"/>
+  <line x1="106.0" y1="151.0" x2="106.0" y2="175.0" stroke="#04202B" stroke-width="2.4" stroke-linecap="butt"/>
+  <line x1="106.0" y1="161.0" x2="122.0" y2="161.0" stroke="#04202B" stroke-width="2.4" stroke-linecap="butt"/>
+  <text x="158.0" y="159.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="25" font-weight="800" fill="#FFFFFF" text-anchor="start" letter-spacing="-0.3">Handover Checklist</text>
+  <text x="158.0" y="182.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="start" letter-spacing="1.6" opacity="0.62">BEFORE YOU CALL IT DELIVERED</text>
+  <text x="78.0" y="312.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="53" font-weight="800" fill="#FFFFFF" text-anchor="start" letter-spacing="-1.3">The checklist I run</text>
+  <text x="78.0" y="374.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="53" font-weight="800" fill="#FFFFFF" text-anchor="start" letter-spacing="-1.3">before I walk away</text>
+  <text x="78.0" y="444.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="18.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.74">Everything a client team needs so the system</text>
+  <text x="78.0" y="473.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="18.5" font-weight="400" fill="#FFFFFF" text-anchor="start" opacity="0.74">survives without the person who built it.</text>
+  <circle cx="89.0" cy="550.0" r="12.0" fill="#38BDF8" opacity="0.22"/>
+  <path d="M 84.05 550 l 3.52 3.96 l 7.48 -7.92" fill="none" stroke="#38BDF8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="112.0" y="556.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17.5" font-weight="500" fill="#FFFFFF" text-anchor="start" opacity="0.94">Access, credentials and who holds the keys</text>
+  <circle cx="89.0" cy="592.0" r="12.0" fill="#38BDF8" opacity="0.22"/>
+  <path d="M 84.05 592 l 3.52 3.96 l 7.48 -7.92" fill="none" stroke="#38BDF8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="112.0" y="598.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17.5" font-weight="500" fill="#FFFFFF" text-anchor="start" opacity="0.94">Backups — taken, tested and restorable</text>
+  <circle cx="89.0" cy="634.0" r="12.0" fill="#38BDF8" opacity="0.22"/>
+  <path d="M 84.05 634 l 3.52 3.96 l 7.48 -7.92" fill="none" stroke="#38BDF8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="112.0" y="640.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17.5" font-weight="500" fill="#FFFFFF" text-anchor="start" opacity="0.94">Documentation the next developer can follow</text>
+  <circle cx="89.0" cy="676.0" r="12.0" fill="#38BDF8" opacity="0.22"/>
+  <path d="M 84.05 676 l 3.52 3.96 l 7.48 -7.92" fill="none" stroke="#38BDF8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="112.0" y="682.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17.5" font-weight="500" fill="#FFFFFF" text-anchor="start" opacity="0.94">Training signed off by the people who use it</text>
+  <line x1="78.0" y1="842.0" x2="378.0" y2="842.0" stroke="#FFFFFF" stroke-width="1" stroke-linecap="butt" opacity="0.18"/>
+  <text x="78.0" y="872.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="800" fill="#38BDF8" text-anchor="start" letter-spacing="1.4" opacity="0.95">FULL SOURCE  ·  INSTALL GUIDE  ·  LIFETIME RE-DOWNLOAD</text>
+  <rect x="78.0" y="896.0" width="58.1" height="34.0" fill="#FFFFFF" rx="17" opacity="0.14"/>
+  <rect x="78.0" y="896.0" width="58.1" height="34.0" fill="none" rx="17" stroke="#FFFFFF" stroke-width="1" opacity="0.22"/>
+  <text x="107.1" y="918.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.92">PDF</text>
+  <rect x="146.1" y="896.0" width="88.8" height="34.0" fill="#FFFFFF" rx="17" opacity="0.14"/>
+  <rect x="146.1" y="896.0" width="88.8" height="34.0" fill="none" rx="17" stroke="#FFFFFF" stroke-width="1" opacity="0.22"/>
+  <text x="190.5" y="918.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.92">18 pages</text>
+  <rect x="244.9" y="896.0" width="60.5" height="34.0" fill="#FFFFFF" rx="17" opacity="0.14"/>
+  <rect x="244.9" y="896.0" width="60.5" height="34.0" fill="none" rx="17" stroke="#FFFFFF" stroke-width="1" opacity="0.22"/>
+  <text x="275.2" y="918.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.4" opacity="0.92">Free</text>
+  <g transform="translate(1002 220) rotate(6 240 317)" opacity="0.35">
+  <rect x="9.0" y="14.0" width="480.0" height="633.6" fill="#000000" rx="8" opacity="0.25"/>
+  <rect x="0.0" y="0.0" width="480.0" height="633.6" fill="#FFFFFF" rx="8"/>
+  </g>
+  <g transform="translate(980 205) rotate(3 240 317)" opacity="0.6">
+  <rect x="9.0" y="14.0" width="480.0" height="633.6" fill="#000000" rx="8" opacity="0.25"/>
+  <rect x="0.0" y="0.0" width="480.0" height="633.6" fill="#FFFFFF" rx="8"/>
+  </g>
+  <g transform="translate(958 190) rotate(0 240 317)" opacity="1">
+  <rect x="9.0" y="14.0" width="480.0" height="633.6" fill="#000000" rx="8" opacity="0.25"/>
+  <rect x="0.0" y="0.0" width="480.0" height="633.6" fill="#FFFFFF" rx="8"/>
+  <rect x="0.0" y="0.0" width="480.0" height="633.6" fill="#FFFFFF"/>
+  <rect x="0.0" y="0.0" width="480.0" height="8.0" fill="#38BDF8"/>
+  <rect x="46.0" y="44.0" width="240.0" height="15.0" fill="#1B2430" rx="7" opacity="0.82"/>
+  <rect x="46.0" y="68.0" width="144.0" height="8.0" fill="#38BDF8" rx="4"/>
+  <rect x="46.0" y="100.0" width="14.0" height="14.0" fill="#38BDF8" rx="3" opacity="0.85"/>
+  <rect x="68.0" y="103.0" width="153.6" height="8.0" fill="#1B2430" rx="4" opacity="0.6"/>
+  <rect x="68.0" y="122.0" width="240.0" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="68.0" y="135.0" width="211.2" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="68.0" y="148.0" width="182.4" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="46.0" y="174.0" width="14.0" height="14.0" fill="#38BDF8" rx="3" opacity="0.85"/>
+  <rect x="68.0" y="177.0" width="153.6" height="8.0" fill="#1B2430" rx="4" opacity="0.6"/>
+  <rect x="68.0" y="196.0" width="240.0" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="68.0" y="209.0" width="211.2" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="68.0" y="222.0" width="182.4" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="46.0" y="248.0" width="14.0" height="14.0" fill="#38BDF8" rx="3" opacity="0.85"/>
+  <rect x="68.0" y="251.0" width="153.6" height="8.0" fill="#1B2430" rx="4" opacity="0.6"/>
+  <rect x="68.0" y="270.0" width="240.0" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="68.0" y="283.0" width="211.2" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="68.0" y="296.0" width="182.4" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="46.0" y="322.0" width="14.0" height="14.0" fill="#38BDF8" rx="3" opacity="0.85"/>
+  <rect x="68.0" y="325.0" width="153.6" height="8.0" fill="#1B2430" rx="4" opacity="0.6"/>
+  <rect x="68.0" y="344.0" width="240.0" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="68.0" y="357.0" width="211.2" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="68.0" y="370.0" width="182.4" height="6.0" fill="#9AA1AC" rx="3" opacity="0.45"/>
+  <rect x="0.0" y="0.0" width="480.0" height="633.6" fill="none" rx="8" stroke="#00000012" stroke-width="1"/>
+  </g>
+  <path d="M 1600 0 L 1600 92 L 1478.65 92 L 1518.65 0 Z" fill="#000000" opacity="0.2"/>
+  <path d="M 1600 0 L 1600 84 L 1486.65 84 L 1524.65 0 Z" fill="#38BDF8"/>
+  <text x="1550.3" y="52.0" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="800" fill="#04202B" text-anchor="middle" letter-spacing="0.5">v2.0</text>
+</svg>
