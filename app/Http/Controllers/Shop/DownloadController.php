@@ -23,6 +23,29 @@ class DownloadController extends Controller
     }
 
     /**
+     * How to get this running.
+     *
+     * A zip of somebody else's codebase is where most source-code sales turn
+     * into support requests: it runs on the author's machine and nowhere
+     * else. This is the page that closes that gap, and it is behind the
+     * licence check because it is part of what was bought.
+     */
+    public function install(Request $request, Product $product): View
+    {
+        $license = $request->user()->productLicenses()
+            ->where('product_id', $product->id)->first();
+
+        abort_if($license === null, 403, 'You do not own this item.');
+        abort_unless($product->hasInstallGuide(), 404, 'This item has no install guide.');
+
+        return view('shop.install', [
+            'product' => $product,
+            'license' => $license,
+            'guide' => app(\App\Services\Learning\MarkdownRenderer::class)->toHtml($product->install_guide),
+        ]);
+    }
+
+    /**
      * Serve a purchased file.
      *
      * The licence is looked up from the signed-in user rather than taken from

@@ -115,6 +115,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/{invoice:uuid}/pay', [\App\Http\Controllers\Shop\CheckoutController::class, 'pay'])->name('checkout.pay');
 
     Route::get('/my/downloads', [\App\Http\Controllers\Shop\DownloadController::class, 'index'])->name('shop.downloads');
+    // Declared before the download route so "install" is not read as a slug.
+    Route::get('/my/downloads/{product:slug}/install', [\App\Http\Controllers\Shop\DownloadController::class, 'install'])->name('shop.install');
     Route::get('/my/downloads/{product:slug}', [\App\Http\Controllers\Shop\DownloadController::class, 'download'])->name('shop.download');
 });
 Route::get('/blog', [\App\Http\Controllers\InsightController::class, 'index'])->name('insights.index');

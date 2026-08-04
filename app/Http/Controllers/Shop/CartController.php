@@ -41,6 +41,15 @@ class CartController extends Controller
             return back()->with('error', 'That item is no longer available.');
         }
 
+        /* The first of three checks on the same fact, at the three points
+           money can start moving. Taking payment for a file that is not there
+           is the single most damaging thing this shop could do, so the answer
+           is not trusted from one place. */
+        if ($item instanceof Product && ! $item->isDeliverable()) {
+            return back()->with('error',
+                'That download is not ready yet — it has not been added to the basket.');
+        }
+
         $this->cart->add($item, (int) ($data['quantity'] ?? 1));
 
         if ($request->boolean('buy_now')) {

@@ -48,6 +48,17 @@ class CheckoutService
         $owned = [];
         $items = [];
 
+        /* Second check. A basket can sit in a session for days, and a product
+           that was deliverable when it went in may have had its file removed
+           since — so the invoice is never raised on a stale answer. */
+        foreach ($contents as $line) {
+            if ($line['model'] instanceof Product && ! $line['model']->isDeliverable()) {
+                throw new RuntimeException(
+                    "\"{$line['name']}\" is not ready to download yet. Remove it to continue."
+                );
+            }
+        }
+
         foreach ($contents as $line) {
             if ($this->alreadyOwns($user, $line)) {
                 $owned[] = $line['name'];
