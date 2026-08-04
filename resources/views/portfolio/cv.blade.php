@@ -118,7 +118,7 @@
           <span class="cta-a"><i class="fas fa-file-arrow-down"></i> Download CV</span>
           <span class="cta-b" aria-hidden="true">PDF, 3 pages <i class="fas fa-arrow-down"></i></span>
         </a>
-        <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold sm cta">
+        <a href="{{ route('hire') }}" wire:navigate class="btn gold sm cta">
           <span class="cta-a">Hire Me</span>
           <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
         </a>

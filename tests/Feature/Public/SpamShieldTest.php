@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Public;
 
-use App\Models\ContactMessage;
 use App\Models\ProjectInquiry;
 use App\Models\User;
 use App\Support\Spam\FormShield;
@@ -24,47 +23,59 @@ class SpamShieldTest extends TestCase
         return Crypt::encryptString((string) now()->subSeconds($secondsAgo)->getTimestamp());
     }
 
+    /**
+     * Registration is what the shield guards now. The contact form it was
+     * written against is gone — "get in touch" produced messages nobody could
+     * act on, and hiring goes through an account instead.
+     */
     private function contactPayload(array $overrides = []): array
     {
+        static $n = 0;
+        $n++;
+
         return array_merge([
-            'name' => 'A Person', 'email' => 'person@example.com',
-            'message' => 'I would like to talk about a project.',
+            'name' => 'A Person',
+            'email' => "person{$n}@example.com",
+            'password' => 'secret123',
+            'password_confirmation' => 'secret123',
+            'terms' => '1',
+            'account_type' => 'student',
             FormShield::TIMESTAMP => $this->humanStamp(),
         ], $overrides);
     }
 
-    public function test_a_person_can_send_the_contact_form(): void
+    public function test_a_person_can_send_a_public_form(): void
     {
-        $this->post(route('contact.store'), $this->contactPayload())->assertRedirect();
+        $this->post(route('register'), $this->contactPayload())->assertRedirect();
 
-        $this->assertSame(1, ContactMessage::count());
+        $this->assertSame(1, \App\Models\User::count());
     }
 
     public function test_a_filled_honeypot_is_silently_dropped(): void
     {
         // Answered exactly as a real submission would be. A bot told it failed
         // just retries with the field cleared.
-        $this->post(route('contact.store'), $this->contactPayload([FormShield::HONEYPOT => 'http://spam.example']))
+        $this->post(route('register'), $this->contactPayload([FormShield::HONEYPOT => 'http://spam.example']))
             ->assertRedirect()
             ->assertSessionHas('success');
 
-        $this->assertSame(0, ContactMessage::count());
+        $this->assertSame(0, \App\Models\User::count());
     }
 
     public function test_an_instant_submission_is_refused(): void
     {
         // Nobody reads a form and completes it in under three seconds.
-        $this->post(route('contact.store'), $this->contactPayload([FormShield::TIMESTAMP => $this->humanStamp(0)]))
+        $this->post(route('register'), $this->contactPayload([FormShield::TIMESTAMP => $this->humanStamp(0)]))
             ->assertSessionHasErrors(FormShield::TIMESTAMP);
 
-        $this->assertSame(0, ContactMessage::count());
+        $this->assertSame(0, \App\Models\User::count());
     }
 
     public function test_a_stale_form_is_refused_with_an_explanation(): void
     {
         // A real person can trip this by leaving a tab open, so unlike the
         // honeypot they are told what happened.
-        $this->post(route('contact.store'), $this->contactPayload([FormShield::TIMESTAMP => $this->humanStamp(60 * 60 * 5)]))
+        $this->post(route('register'), $this->contactPayload([FormShield::TIMESTAMP => $this->humanStamp(60 * 60 * 5)]))
             ->assertSessionHasErrors(FormShield::TIMESTAMP);
     }
 
@@ -72,10 +83,10 @@ class SpamShieldTest extends TestCase
     {
         // Plain text would let a bot post any value it liked; the stamp is
         // encrypted with the app key, so an edited one cannot be decrypted.
-        $this->post(route('contact.store'), $this->contactPayload([FormShield::TIMESTAMP => '1700000000']))
+        $this->post(route('register'), $this->contactPayload([FormShield::TIMESTAMP => '1700000000']))
             ->assertSessionHasErrors(FormShield::TIMESTAMP);
 
-        $this->assertSame(0, ContactMessage::count());
+        $this->assertSame(0, \App\Models\User::count());
     }
 
     public function test_a_missing_stamp_is_refused(): void
@@ -83,17 +94,21 @@ class SpamShieldTest extends TestCase
         $payload = $this->contactPayload();
         unset($payload[FormShield::TIMESTAMP]);
 
-        $this->post(route('contact.store'), $payload)->assertSessionHasErrors(FormShield::TIMESTAMP);
+        $this->post(route('register'), $payload)->assertSessionHasErrors(FormShield::TIMESTAMP);
     }
 
-    public function test_the_project_form_is_shielded_too(): void
+    /**
+     * The public lead form is gone. Proposing a project now needs an account,
+     * which is a harder wall than a honeypot — a bot has to get through
+     * registration, and registration is shielded.
+     */
+    public function test_proposing_a_project_needs_an_account(): void
     {
-        $this->post(route('start-a-project.store'), [
-            'name' => 'A Person', 'email' => 'p@example.com',
-            'project_type' => 'website', 'description' => 'A shop for my business.',
-            FormShield::HONEYPOT => 'bot',
-            FormShield::TIMESTAMP => $this->humanStamp(),
-        ])->assertRedirect();
+        $this->post(route('propose.store'), [
+            'title' => 'Spam', 'category' => 'website',
+            'description' => str_repeat('buy cheap things ', 5),
+            'timeline' => 'asap', 'budget_currency' => 'UGX', 'phone' => '0700000000',
+        ])->assertRedirect(route('login'));
 
         $this->assertSame(0, ProjectInquiry::count());
     }
@@ -113,7 +128,7 @@ class SpamShieldTest extends TestCase
 
     public function test_every_public_form_ships_the_shield(): void
     {
-        foreach ([route('contact'), route('start-a-project'), route('register')] as $url) {
+        foreach ([route('register'), route('login'), route('password.request')] as $url) {
             $html = (string) $this->get($url)->assertOk()->getContent();
 
             $this->assertStringContainsString('name="'.FormShield::HONEYPOT.'"', $html, "{$url} is missing the honeypot");
@@ -127,7 +142,7 @@ class SpamShieldTest extends TestCase
            `.hp-field` from the marketing layout, so on the auth pages — which
            use a different layout — the honeypot rendered fully visible, label
            and all. Anyone who typed in it would have been silently discarded. */
-        foreach ([route('contact'), route('register')] as $url) {
+        foreach ([route('register'), route('login')] as $url) {
             $html = (string) $this->get($url)->assertOk()->getContent();
 
             $this->assertMatchesRegularExpression('/aria-hidden="true"\s+style="[^"]*left:-9999px/s', $html,

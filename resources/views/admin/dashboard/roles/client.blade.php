@@ -105,5 +105,5 @@
 
 <div class="dash-section">
   <a href="{{ route('portal.invoices') }}" class="btn-tb btn-tb-ghost"><i class="fas fa-file-invoice-dollar"></i> Invoices</a>
-  <a href="{{ route('start-a-project') }}" class="btn-tb btn-tb-ghost"><i class="fas fa-plus"></i> Start a project</a>
+  <a href="{{ route('hire') }}" class="btn-tb btn-tb-ghost"><i class="fas fa-plus"></i> Start a project</a>
 </div>

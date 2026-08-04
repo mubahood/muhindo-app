@@ -35,8 +35,6 @@ class SitemapController extends Controller
             ['loc' => route('gallery.index'), 'lastmod' => null],
             ['loc' => route('shop.index'), 'lastmod' => null],
             ['loc' => route('portfolio.products'), 'lastmod' => null],
-            ['loc' => route('start-a-project'), 'lastmod' => null],
-            ['loc' => route('contact'), 'lastmod' => null],
             ['loc' => route('privacy'), 'lastmod' => null],
             ['loc' => route('terms'), 'lastmod' => null],
         ];

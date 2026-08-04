@@ -89,9 +89,12 @@ class StudentRegistrationController extends Controller
                 ->with('success', 'Welcome! Your basket is still here — finish when you are ready.');
         }
 
-        if (! $isStudent) {
-            return redirect()->route('portal.index')
-                ->with('success', "Welcome! Tell me about your project and I'll be in touch.");
+        /* A client goes straight to the proposal. They pressed "Hire Me" a
+           minute ago; asking them to find the form on a dashboard is how that
+           intention gets lost. */
+        if ($isClient) {
+            return redirect()->route('propose')->with('success',
+                'Account created. Now tell me what you want built — it takes about three minutes.');
         }
 
         return redirect()->intended(route('dashboard'))
@@ -124,6 +127,6 @@ class StudentRegistrationController extends Controller
 
         $referer = (string) $request->headers->get('referer');
 
-        return $referer !== '' && str_contains($referer, 'start-a-project') ? 'client' : 'student';
+        return $referer !== '' && str_contains($referer, '/hire') ? 'client' : 'student';
     }
 }

@@ -11,8 +11,6 @@ use App\Models\Service;
 use App\Models\Skill;
 use App\Support\Settings;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class PortfolioController extends Controller
@@ -174,51 +172,6 @@ class PortfolioController extends Controller
         return view('portfolio.products', [
             'products' => $this->json('portfolio.products', []),
         ]);
-    }
-
-    public function contactPage(): View
-    {
-        return view('portfolio.contact', [
-            'contact' => $this->json('portfolio.contact'),
-            'languages' => $this->json('portfolio.languages', []),
-        ]);
-    }
-
-    public function contact(Request $request): RedirectResponse
-    {
-        // A bot told it failed simply retries with the field cleared, so a
-        // caught submission is answered exactly as a real one would be.
-        if (\App\Support\Spam\FormShield::looksAutomated($request->all())) {
-            return redirect()->route('contact')->with('success', 'Thanks — I\'ll be in touch shortly.');
-        }
-
-        \App\Support\Spam\FormShield::assertHumanTiming($request->all());
-
-        $data = $request->validate([
-            'name' => 'required|string|max:150',
-            'email' => 'required|email|max:150',
-            'subject' => 'nullable|string|max:200',
-            'message' => 'required|string|max:5000',
-        ] + \App\Support\Spam\Captcha::rules(), \App\Support\Spam\Captcha::messages());
-
-        unset($data[\App\Support\Spam\Captcha::FIELD]);
-
-        $message = ContactMessage::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'subject' => $data['subject'] ?? null,
-            'message' => $data['message'],
-        ]);
-
-        $notifyTo = ($this->json('portfolio.contact')['emails'] ?? [])[0] ?? config('mail.from.address');
-        if ($notifyTo) {
-            Mail::raw(
-                "New contact message from {$message->name} <{$message->email}>\n\n{$message->message}",
-                fn ($mail) => $mail->to($notifyTo)->subject('New portfolio contact: '.($message->subject ?: 'No subject'))
-            );
-        }
-
-        return redirect()->route('contact')->with('success', 'Thanks for reaching out — I\'ll reply as soon as I can.');
     }
 
     public function inbox()

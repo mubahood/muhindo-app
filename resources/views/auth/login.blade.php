@@ -59,7 +59,7 @@
     <i class="fas fa-graduation-cap" aria-hidden="true"></i>
     <span><b>Create an account</b>{{ $intendedCourse ? 'Then continue to '.$intendedCourse->title : 'Learn from Muhindo, or hire him' }}</span>
   </a>
-  <a class="a-way" href="{{ route('start-a-project') }}">
+  <a class="a-way" href="{{ route('hire') }}">
     <i class="fas fa-handshake" aria-hidden="true"></i>
     <span><b>Hire Muhindo</b>Describe your project first — no account needed</span>
   </a>

@@ -30,7 +30,17 @@ class PortalController extends Controller
                 ->latest()->get()
             : collect();
 
-        return view('portal.index', ['client' => $client, 'projects' => $projects]);
+        /* A proposal is stage one. Until it becomes a project it is the only
+           thing this person has here, and hiding it would make the portal
+           look like their submission went nowhere. */
+        $proposals = \App\Models\ProjectInquiry::where('user_id', $request->user()->id)
+            ->latest('id')->get();
+
+        return view('portal.index', [
+            'client' => $client,
+            'projects' => $projects,
+            'proposals' => $proposals,
+        ]);
     }
 
     public function project(Request $request, Project $project): View

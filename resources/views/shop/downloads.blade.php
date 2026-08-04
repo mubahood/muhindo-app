@@ -113,7 +113,7 @@
                   <div>
                     The file for this is temporarily unavailable. You still own it — tell me and
                     I will send it directly.
-                    <a href="{{ route('contact', ['about' => $product->slug]) }}" wire:navigate
+                    <a href="{{ route('hire') }}" wire:navigate
                        style="color:var(--pri);font-weight:600;">Ask for it</a>
                   </div>
                 </div>

@@ -19,7 +19,6 @@ class SitemapTest extends TestCase
         $this->assertStringStartsWith('application/xml', $response->headers->get('Content-Type'));
         $response->assertSee(route('home'), false);
         $response->assertSee(route('courses.index'), false);
-        $response->assertSee(route('start-a-project'), false);
     }
 
     public function test_the_sitemap_lists_only_published_courses(): void

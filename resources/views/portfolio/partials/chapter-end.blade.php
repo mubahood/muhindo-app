@@ -47,7 +47,7 @@
     {{ $lead ?? ($next ? 'Next: '.$next['desc'] : 'That is the whole story.') }}
   </span>
 
-  <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold sm cta">
+  <a href="{{ route('hire') }}" wire:navigate class="btn gold sm cta">
     <span class="cta-a">Hire Me</span>
     <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
   </a>
@@ -63,7 +63,7 @@
     @include($barExtra)
   @endisset
 
-  <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Hire Me</a>
+  <a href="{{ route('hire') }}" wire:navigate class="btn gold">Hire Me</a>
 
   <a href="{{ $onward['url'] }}" wire:navigate class="btn ghost">
     {{ $onward['label'] }} <i class="fas fa-arrow-right" aria-hidden="true"></i>

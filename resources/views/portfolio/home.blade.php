@@ -42,7 +42,7 @@
             <span class="cta-a">Explore e&#8209;Learning</span>
             <span class="cta-b" aria-hidden="true">Start Learning <i class="fas fa-arrow-right"></i></span>
           </a>
-          <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost lg cta">
+          <a href="{{ route('hire') }}" wire:navigate class="btn ghost lg cta">
             <span class="cta-a">Start a project</span>
             <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
           </a>
@@ -343,7 +343,7 @@
       @endforeach
     </div>
     <div style="text-align:center;margin-top:26px;" data-rise>
-      <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold cta">
+      <a href="{{ route('hire') }}" wire:navigate class="btn gold cta">
         <span class="cta-a">Start a project</span>
         <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
       </a>
@@ -400,7 +400,7 @@
   <div class="wrap">
     <h2 data-rise>Let's build something together</h2>
     <p class="lead" style="max-width:480px;margin:12px auto 26px;" data-rise>Tell me what the problem is and I will tell you honestly whether I am the right person for it.</p>
-    <div data-rise><a href="{{ route('start-a-project') }}" wire:navigate class="btn gold lg cta">
+    <div data-rise><a href="{{ route('hire') }}" wire:navigate class="btn gold lg cta">
       <span class="cta-a">Hire Me</span>
       <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
     </a></div>
@@ -410,7 +410,7 @@
 {{-- Phone only. The home page is a long scroll past nine sections, and the
      two things this site is for sit at the very bottom of it. --}}
 <x-action-bar>
-  <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold">Hire Me</a>
+  <a href="{{ route('hire') }}" wire:navigate class="btn gold">Hire Me</a>
   <a href="{{ route('courses.index') }}" wire:navigate class="btn ghost">
     Start Learning <i class="fas fa-arrow-right" aria-hidden="true"></i>
   </a>

@@ -67,7 +67,9 @@ class DualRoleAccountTest extends TestCase
         // A client needs a client record to own projects and be invoiced against.
         $this->assertNotNull($user->client);
         $this->assertSame('New Person', $user->client->name);
-        $response->assertRedirect(route('portal.index'));
+        /* Straight to the proposal, not the portal. They pressed "Hire Me" a
+           minute ago, and the portal has nothing in it yet. */
+        $response->assertRedirect(route('propose'));
     }
 
     public function test_registering_as_both_grants_both_and_lands_on_the_dashboard(): void
@@ -80,7 +82,8 @@ class DualRoleAccountTest extends TestCase
         $this->assertSame(['student', 'client'], $user->accountTypes());
         $this->assertNotNull($user->client);
         $this->assertSame('Student & Client', $user->accountTypeLabel());
-        $response->assertRedirect(route('dashboard'));
+        // Both roles, but still a client who has not said what they want built.
+        $response->assertRedirect(route('propose'));
     }
 
     public function test_the_account_type_is_required(): void
@@ -93,7 +96,7 @@ class DualRoleAccountTest extends TestCase
 
     public function test_the_register_form_preselects_client_when_coming_from_start_a_project(): void
     {
-        $response = $this->get(route('register'), ['HTTP_REFERER' => route('start-a-project')]);
+        $response = $this->get(route('register'), ['HTTP_REFERER' => route('hire')]);
 
         $response->assertOk();
         /* Assert the radio itself is checked. The previous version looked for
@@ -279,11 +282,14 @@ class DualRoleAccountTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'client', 'is_client' => true]);
 
-        $this->actingAs($user)->post(route('start-a-project.store'), $this->shielded([
-            'name' => $user->name, 'email' => $user->email,
-            'project_type' => 'website',
-            'description' => 'A marketing site for my shop.',
-        ]))->assertRedirect();
+        $this->actingAs($user)->post(route('propose.store'), [
+            'title' => 'Marketing site',
+            'category' => 'website',
+            'description' => 'A marketing site for my shop, with a page per product and a contact number.',
+            'timeline' => 'asap',
+            'budget_currency' => 'UGX',
+            'phone' => '+256700000000',
+        ])->assertRedirect();
 
         $inquiry = ProjectInquiry::where('email', $user->email)->firstOrFail();
         $this->assertSame($user->id, $inquiry->user_id);
@@ -300,14 +306,20 @@ class DualRoleAccountTest extends TestCase
             ->assertOk()->assertSee('Your requests')->assertSee('Mobile app');
     }
 
-    public function test_a_guest_request_stays_unlinked(): void
+    /**
+     * There is no such thing as a guest request any more. A proposal needs an
+     * account, so every one of them has an owner who can come back to it —
+     * which is the whole reason the public lead form was retired.
+     */
+    public function test_a_guest_cannot_leave_an_unowned_request(): void
     {
-        $this->post(route('start-a-project.store'), $this->shielded([
-            'name' => 'Guest', 'email' => 'guest@example.com',
-            'project_type' => 'website', 'description' => 'Something small.',
-        ]))->assertRedirect();
+        $this->post(route('propose.store'), [
+            'title' => 'Something small', 'category' => 'website',
+            'description' => 'Something small but described at enough length to be priced.',
+            'timeline' => 'asap', 'budget_currency' => 'UGX', 'phone' => '0700000000',
+        ])->assertRedirect(route('login'));
 
-        $this->assertNull(ProjectInquiry::where('email', 'guest@example.com')->firstOrFail()->user_id);
+        $this->assertSame(0, ProjectInquiry::count());
     }
 
     public function test_an_admin_implicitly_reaches_both_surfaces(): void

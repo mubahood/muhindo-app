@@ -25,7 +25,7 @@
       ['key' => 'myprojects', 'label' => 'My Projects', 'icon' => 'fa-briefcase', 'gate' => 'is:client', 'items' => [
           ['label' => 'Projects', 'icon' => 'fa-diagram-project', 'route' => 'portal.index', 'match' => ['portal.index', 'portal.project']],
           ['label' => 'Invoices', 'icon' => 'fa-file-invoice-dollar', 'route' => 'portal.invoices', 'match' => ['portal.invoices']],
-          ['label' => 'Start a project', 'icon' => 'fa-plus', 'route' => 'start-a-project', 'match' => ['start-a-project']],
+          ['label' => 'Start a project', 'icon' => 'fa-plus', 'route' => 'hire', 'match' => ['hire', 'propose']],
       ]],
       // Everyone who can buy anything can owe for it, so this is ungated.
       ['key' => 'orders', 'label' => 'Orders', 'icon' => 'fa-receipt', 'gate' => null, 'items' => [

@@ -237,7 +237,7 @@
               <strong>Still being packaged</strong>
               <p>This one is written up but the archive is not ready to hand over yet, so it cannot be
                  bought. Ask me to send it the moment it is.</p>
-              <a href="{{ route('contact', ['about' => $product->slug]) }}" wire:navigate
+              <a href="{{ route('hire') }}" wire:navigate
                  class="btn ghost sm" style="width:100%;justify-content:center;">
                 Tell me when it is ready
               </a>
@@ -287,7 +287,7 @@
       </button>
     </form>
   @else
-    <a href="{{ route('contact', ['about' => $product->slug]) }}" wire:navigate class="btn ghost">
+    <a href="{{ route('hire') }}" wire:navigate class="btn ghost">
       Tell me when it is ready
     </a>
   @endif

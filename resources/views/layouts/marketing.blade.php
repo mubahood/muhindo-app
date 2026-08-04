@@ -1410,7 +1410,7 @@
               @if(!empty($item['blurb']))
                 <div class="mega-foot">
                   <span>{{ $item['blurb'] }}</span>
-                  <a href="{{ route('contact') }}" wire:navigate class="link" style="color:var(--pri);font-weight:600;white-space:nowrap;">
+                  <a href="{{ route('hire') }}" wire:navigate class="link" style="color:var(--pri);font-weight:600;white-space:nowrap;">
                     Hire me <i class="fas fa-arrow-right"></i>
                   </a>
                 </div>
@@ -1434,7 +1434,7 @@
 
       {{-- The two calls to action are permanent. Signing in does not remove
            them: a student can still hire, and a client can still enrol. --}}
-      <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost desk sm cta">
+      <a href="{{ route('hire') }}" wire:navigate class="btn ghost desk sm cta">
         <span class="cta-a">Hire Me</span>
         <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
       </a>
@@ -1496,7 +1496,7 @@
 
   <div class="mm-actions">
     {{-- Same order as the desktop header: the actions, then the account. --}}
-    <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost"><i class="fas fa-handshake"></i> Hire Muhindo</a>
+    <a href="{{ route('hire') }}" wire:navigate class="btn ghost"><i class="fas fa-handshake"></i> Hire Muhindo</a>
     <a href="{{ route('courses.index') }}" wire:navigate class="btn gold"><i class="fas fa-graduation-cap"></i> Start Learning</a>
 
     @auth
@@ -1547,7 +1547,6 @@
             <a href="{{ $item['url'] }}" wire:navigate>{{ $item['label'] }}</a>
           @endif
         @endforeach
-        <a href="{{ route('contact') }}" wire:navigate>Contact</a>
         <a href="{{ route('portfolio.products') }}" wire:navigate>Products</a>
         {{-- An employer checking a certificate has no account and no reason to
              guess the URL; the address is printed on the document, but this is
@@ -1557,7 +1556,7 @@
 
       <div>
         <p class="foot-h">Work with me</p>
-        <a href="{{ route('start-a-project') }}" wire:navigate>Hire me</a>
+        <a href="{{ route('hire') }}" wire:navigate>Hire me</a>
         @auth
           <a href="{{ $accountUrl }}">{{ $accountLabel }}</a>
           <a href="{{ route('account.edit') }}" wire:navigate>Your account</a>

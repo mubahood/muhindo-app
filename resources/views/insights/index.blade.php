@@ -63,7 +63,7 @@
   <div class="wrap">
     <h2>Want this in your inbox instead?</h2>
     <p class="lead" style="max-width:460px;margin:10px auto 20px;">Tell me what you are building and I will let you know when something relevant goes up.</p>
-    <a href="{{ route('start-a-project') }}" wire:navigate class="btn gold cta">
+    <a href="{{ route('hire') }}" wire:navigate class="btn gold cta">
       <span class="cta-a">Hire Me</span>
       <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
     </a>

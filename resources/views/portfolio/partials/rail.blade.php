@@ -19,7 +19,7 @@
   @endforeach
 
   <div class="rail-foot">
-    <a href="{{ route('contact') }}" wire:navigate class="link" style="font-size:12px;font-weight:600;color:var(--pri);padding:0;">
+    <a href="{{ route('hire') }}" wire:navigate class="link" style="font-size:12px;font-weight:600;color:var(--pri);padding:0;">
       Hire me <i class="fas fa-arrow-right"></i>
     </a>
   </div>

@@ -94,7 +94,7 @@
       <h2>Still stuck?</h2>
       <p>Send me what you tried and the exact error — the message matters more than the description
          of it. I answer setup questions on things I have sold.</p>
-      <a href="{{ route('contact', ['about' => $product->slug]) }}" wire:navigate class="btn ghost sm">
+      <a href="{{ route('hire') }}" wire:navigate class="btn ghost sm">
         Ask about this install
       </a>
     </div>

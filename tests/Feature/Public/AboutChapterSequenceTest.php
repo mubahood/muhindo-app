@@ -110,7 +110,7 @@ class AboutChapterSequenceTest extends TestCase
 
         // The same destinations as the inline ending, so a reader is never
         // offered a different next chapter depending on their screen width.
-        $this->assertStringContainsString(route('start-a-project'), $bar);
+        $this->assertStringContainsString(route('hire'), $bar);
         $this->assertStringContainsString(route($next), $bar);
     }
 

@@ -2,69 +2,113 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ProjectInquiryStatus;
 use App\Models\PortfolioProject;
 use App\Models\ProjectInquiry;
 use App\Models\User;
 use App\Notifications\ProjectInquiryReceivedNotification;
+use App\Services\AccountService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-/** §4 — the "Start a project" client funnel: a public page + lead form, distinct from the contact form. */
+/**
+ * The proposal.
+ *
+ * This replaced two things that were not working: a contact form producing
+ * messages nobody could act on, and a lead form asking for a name, an email
+ * and a paragraph — enough to start a conversation, not enough to price
+ * anything.
+ *
+ * It sits behind sign-in on purpose. A proposal with an owner can be returned
+ * to, added to and answered inside the portal; a proposal from an email
+ * address is a thread. Registration is one screen, and it is the step that
+ * turns somebody into a client rather than a message.
+ */
 class ProjectInquiryController extends Controller
 {
-    public function create(Request $request): View
+    public function __construct(private readonly AccountService $accounts) {}
+
+    public function create(Request $request): View|RedirectResponse
     {
+        $user = $request->user();
+
+        // Somebody who has already told me about a project does not need to be
+        // asked again — the portal is where the answer will appear.
+        if ($existing = ProjectInquiry::where('user_id', $user->id)->latest('id')->first()) {
+            return redirect()->route('portal.index')->with('success',
+                'You have already told me about "'.($existing->title ?: 'your project')
+                .'". I will come back to you on it.');
+        }
+
+        // Hiring makes somebody a client. Doing it here, rather than asking
+        // them to choose a second time, means the account they made a minute
+        // ago is already the right kind.
+        if (! $user->is_client) {
+            $user->forceFill(['is_client' => true])->save();
+            $this->accounts->ensureClientProfile($user);
+        }
+
         // A case study's "request a walkthrough" arrives with the system's
-        // slug, so the brief opens already saying which one — the alternative
-        // is a first reply spent asking which system they meant.
+        // slug, so the form opens already saying which one.
         $demo = $request->filled('demo')
             ? PortfolioProject::where('slug', $request->string('demo'))->first()
             : null;
 
-        return view('portfolio.start-a-project', [
-            'projects' => PortfolioProject::orderBy('sort_order')->limit(3)->get(),
+        return view('portfolio.propose', [
             'demo' => $demo,
+            'categories' => ProjectInquiry::CATEGORIES,
+            'timelines' => ProjectInquiry::TIMELINES,
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        // A bot told it failed simply retries with the field cleared, so a
-        // caught submission is answered exactly as a real one would be.
-        if (\App\Support\Spam\FormShield::looksAutomated($request->all())) {
-            return redirect()->route('start-a-project')->with('success', "Got it — I'll reply within 24 hours.");
-        }
-
-        \App\Support\Spam\FormShield::assertHumanTiming($request->all());
+        $user = $request->user();
 
         $data = $request->validate([
-            'name' => 'required|string|max:150',
-            'email' => 'required|email|max:150',
-            'phone' => 'nullable|string|max:32',
+            'title' => 'required|string|min:4|max:150',
+            'category' => 'required|in:'.implode(',', array_keys(ProjectInquiry::CATEGORIES)),
+            'description' => 'required|string|min:40|max:5000',
+            'who_uses_it' => 'nullable|string|max:1000',
+            'success_looks_like' => 'nullable|string|max:1000',
+            'timeline' => 'required|in:'.implode(',', array_keys(ProjectInquiry::TIMELINES)),
+            'budget_currency' => 'required|in:UGX,USD',
+            /* Deliberately optional. A number somebody has not worked out yet
+               is worse than no number, and refusing the proposal without one
+               loses the conversation entirely. */
+            'budget_amount' => 'nullable|numeric|min:0|max:99999999999',
             'organisation' => 'nullable|string|max:150',
-            'project_type' => 'required|in:website,web_system,mobile_app,ecommerce,school_clinic_system,other',
-            'budget_range' => 'nullable|in:under_2m,2m_5m,5m_10m,over_10m,not_sure',
-            'timeline' => 'nullable|in:asap,1_3_months,3_6_months,not_sure',
-            'description' => 'required|string|max:5000',
-        ] + \App\Support\Spam\Captcha::rules(), \App\Support\Spam\Captcha::messages());
-
-        // Never let the captcha token reach the model — ProjectInquiry is
-        // created straight from $data and has no such column.
-        unset($data[\App\Support\Spam\Captcha::FIELD]);
-
-        // Link the request to the signed-in account so they can follow it in their
-        // portal; guests still submit anonymously exactly as before.
-        $inquiry = ProjectInquiry::create($data + [
-            'uuid' => (string) Str::uuid(),
-            'user_id' => $request->user()?->id,
+            'phone' => 'required|string|max:40',
+        ], [
+            'title.required' => 'Give it a name, even a rough one.',
+            'description.min' => 'A few more words, please — I price from what this has to do.',
+            'phone.required' => 'A phone number, so I can call rather than write.',
         ]);
 
-        $admins = User::whereIn('role', ['super_admin', 'admin'])->get();
-        Notification::send($admins, new ProjectInquiryReceivedNotification($inquiry));
+        $inquiry = ProjectInquiry::create($data + [
+            'uuid' => (string) Str::uuid(),
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'project_type' => $data['category'],
+            'status' => ProjectInquiryStatus::New,
+            'submitted_at' => now(),
+        ]);
 
-        return redirect()->route('start-a-project')->with('success', "Got it — I'll reply within 24 hours. Prefer a faster reply? Message me on WhatsApp.");
+        if (! $user->phone) {
+            $user->forceFill(['phone' => $data['phone']])->save();
+        }
+
+        Notification::send(
+            User::whereIn('role', ['super_admin', 'admin'])->get(),
+            new ProjectInquiryReceivedNotification($inquiry)
+        );
+
+        return redirect()->route('portal.index')->with('success',
+            'Got it — "'.$inquiry->title.'" is with me. I read every one myself and reply '
+            .'within one working day, usually sooner.');
     }
 }

@@ -189,10 +189,10 @@
       <p>Most of these run inside a ministry, a hospital or an NGO and are not open to the public.
          I can walk you through the real thing on a call and answer whatever you want to poke at.</p>
       <div class="pj-acts">
-        <a href="{{ route('start-a-project', ['demo' => $project->slug]) }}" wire:navigate class="btn gold">
+        <a href="{{ route('hire', ['demo' => $project->slug]) }}" wire:navigate class="btn gold">
           Request a walkthrough <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </a>
-        <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost cta">
+        <a href="{{ route('hire') }}" wire:navigate class="btn ghost cta">
           <span class="cta-a">Hire Me</span>
           <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>
         </a>
@@ -225,10 +225,10 @@
 {{-- Phone only. A case study is read to answer one question — can he build
      mine — so the answer to it stays on screen. --}}
 <x-action-bar>
-  <a href="{{ route('start-a-project', ['demo' => $project->slug]) }}" wire:navigate class="btn gold">
+  <a href="{{ route('hire', ['demo' => $project->slug]) }}" wire:navigate class="btn gold">
     Request a demo
   </a>
-  <a href="{{ route('start-a-project') }}" wire:navigate class="btn ghost">
+  <a href="{{ route('hire') }}" wire:navigate class="btn ghost">
     Hire Me <i class="fas fa-arrow-right" aria-hidden="true"></i>
   </a>
 </x-action-bar>

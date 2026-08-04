@@ -22,9 +22,24 @@
 @endpush
 
 @section('form')
-<div class="af-eyebrow">Create an account</div>
-<h2 class="af-title">Join Muhindo Mubaraka</h2>
-<p class="af-sub">One account for both sides. Pick what brings you here — you can add the other later.</p>
+@php $hiring = request('account_type') === 'client'; @endphp
+
+@if($hiring)
+  <div class="af-eyebrow">Step 1 of 2</div>
+  <h2 class="af-title">First, an account</h2>
+  <p class="af-sub">It takes thirty seconds, and it is what lets you follow the project afterwards —
+     the brief, the price, the progress and the invoices all live in your own portal.
+     Next screen: tell me what you want built.</p>
+
+  <div class="a-alert" style="background:var(--pri-soft);border-color:var(--pri);">
+    <i class="fas fa-route" style="color:var(--pri);"></i>
+    <span><strong>Account</strong> &rarr; tell me about the project &rarr; I reply within a working day</span>
+  </div>
+@else
+  <div class="af-eyebrow">Create an account</div>
+  <h2 class="af-title">Join Muhindo Mubaraka</h2>
+  <p class="af-sub">One account for both sides. Pick what brings you here — you can add the other later.</p>
+@endif
 
 @include('auth.partials.course-context')
 
@@ -51,7 +66,7 @@
         ['v' => 'student', 'i' => 'fa-graduation-cap', 't' => 'Learn from Muhindo',
          'd' => 'Take his courses, track your progress and earn a verifiable certificate.'],
         ['v' => 'client',  'i' => 'fa-handshake', 't' => 'Hire Muhindo for a project',
-         'd' => 'Send him a brief, then follow the build in your own client portal.'],
+         'd' => 'Tell him what you need on the next screen, then follow the build in your own portal.'],
         ['v' => 'both',    'i' => 'fa-layer-group', 't' => 'Both',
          'd' => 'One account for learning and for the work you commission. Switch any time.'],
       ] as $opt)
@@ -112,6 +127,6 @@
 </form>
 
 <div class="a-alt">Already have an account? <a href="{{ route('login', $intendedCourse ? array_filter(['intended_course' => $intendedCourse->slug, 'coupon_code' => request('coupon_code')]) : []) }}">Sign in</a></div>
-<div class="a-alt">Just want to describe a project first? <a href="{{ route('start-a-project') }}">Start a project →</a></div>
+
 <div style="text-align:center;"><a href="{{ route('home') }}" class="a-back"><i class="fas fa-arrow-left"></i> Back to home</a></div>
 @endsection

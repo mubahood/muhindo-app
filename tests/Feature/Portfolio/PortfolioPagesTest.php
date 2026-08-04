@@ -23,7 +23,6 @@ class PortfolioPagesTest extends TestCase
             'education' => ['/education'],
             'research' => ['/research'],
             'products' => ['/products'],
-            'contact' => ['/contact'],
         ];
     }
 
@@ -40,7 +39,7 @@ class PortfolioPagesTest extends TestCase
             ->assertSee(route('portfolio.work'), false)
             ->assertSee(route('portfolio.about'), false)
             ->assertSee(route('portfolio.skills'), false)
-            ->assertSee(route('contact'), false);
+            ->assertSee(route('hire'), false);
     }
 
     public function test_the_about_rail_cross_links_every_chapter(): void
@@ -59,14 +58,14 @@ class PortfolioPagesTest extends TestCase
             ->assertSee(route('gallery.index'), false);
     }
 
-    public function test_submitting_the_contact_form_redirects_back_to_the_dedicated_contact_page(): void
+    /**
+     * The generic contact form is gone: "get in touch" produced messages
+     * nobody could act on, and hiring goes through an account now. Its URL
+     * still resolves, onto the journey that replaced it, because it was
+     * linked from every page for months.
+     */
+    public function test_the_old_contact_url_leads_to_hiring(): void
     {
-        $response = $this->post('/contact', $this->shielded([
-            'name' => 'Jane Client',
-            'email' => 'jane@example.com',
-            'message' => 'Hello.',
-        ]));
-
-        $response->assertRedirect(route('contact'));
+        $this->get('/contact')->assertRedirect(route('hire'));
     }
 }

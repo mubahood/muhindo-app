@@ -36,7 +36,7 @@ class SiteNav
                 'match' => [
                     'portfolio.about', 'portfolio.cv', 'portfolio.education',
                     'portfolio.skills', 'portfolio.experience', 'portfolio.research', 'gallery.index',
-                    'portfolio.services', 'start-a-project', 'portfolio.work', 'portfolio.projects.index', 'portfolio.project',
+                    'portfolio.services', 'hire', 'propose', 'portfolio.work', 'portfolio.projects.index', 'portfolio.project',
                     'portfolio.products',
                 ],
                 'icon' => 'fa-user',
@@ -65,7 +65,7 @@ class SiteNav
                         'match' => ['gallery.*']],
                     ['label' => 'Consultancy', 'url' => route('portfolio.services'), 'icon' => 'fa-handshake',
                         'desc' => 'How I can help, and how to start a project.',
-                        'match' => ['portfolio.services', 'start-a-project']],
+                        'match' => ['portfolio.services', 'hire', 'propose']],
                 ],
             ],
             [

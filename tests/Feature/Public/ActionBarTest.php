@@ -46,7 +46,7 @@ class ActionBarTest extends TestCase
     {
         $bar = $this->bar(route('home'));
 
-        $this->assertStringContainsString(route('start-a-project'), $bar);
+        $this->assertStringContainsString(route('hire'), $bar);
         $this->assertStringContainsString(route('courses.index'), $bar);
     }
 
@@ -131,7 +131,7 @@ class ActionBarTest extends TestCase
         // Hire, and a walkthrough of this system. Most of these are internal,
         // so "request a demo" is the honest offer — and it carries the slug so
         // the brief already knows which system.
-        $this->assertStringContainsString(route('start-a-project'), $bar);
+        $this->assertStringContainsString(route('hire'), $bar);
         $this->assertStringContainsString('demo='.$project->slug, $bar);
     }
 

@@ -103,12 +103,13 @@ class SystemScreenshotTest extends TestCase
         $this->assertNull($project->external_link);
 
         $this->get(route('portfolio.project', $project))->assertOk()
-            ->assertSee(route('start-a-project', ['demo' => $project->slug]), false)
+            ->assertSee(route('hire'), false)
             ->assertSee('Request a walkthrough');
 
-        $this->get(route('start-a-project', ['demo' => $project->slug]))->assertOk()
-            ->assertSee('A walkthrough of '.$project->title, false)
-            ->assertSee('I would like a walkthrough of '.$project->title, false);
+        // Asking for one goes through the same door as hiring: an account
+        // first, so the request has an owner and somewhere to be answered.
+        $this->get(route('hire'))
+            ->assertRedirect(route('register', ['account_type' => 'client']));
     }
 
     public function test_the_screenshots_are_eight_products_not_one(): void

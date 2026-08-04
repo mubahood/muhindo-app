@@ -79,7 +79,7 @@
         <p style="margin-top:8px;">
           <a href="{{ route('courses.index') }}" wire:navigate style="color:var(--pri);font-weight:600;">Clear filters</a>
           or want me to teach something specific?
-          <a href="{{ route('contact') }}" wire:navigate style="color:var(--pri);font-weight:600;">Tell me</a>.
+          <a href="{{ route('hire') }}" wire:navigate style="color:var(--pri);font-weight:600;">Tell me</a>.
         </p>
       </div>
     @else

@@ -63,6 +63,15 @@ class AppShellConsistencyTest extends TestCase
         $user = $this->dualRoleUser();
         $project = Project::firstOrFail();
 
+        /* A client who has proposed nothing is sent to the proposal form, so
+           the portal pages below would 302. This one has already asked. */
+        \App\Models\ProjectInquiry::create([
+            'uuid' => (string) \Illuminate\Support\Str::uuid(),
+            'user_id' => $user->id, 'name' => $user->name, 'email' => $user->email,
+            'title' => 'Already asked', 'category' => 'website', 'project_type' => 'website',
+            'description' => 'Already asked about this one.', 'status' => 'new',
+        ]);
+
         $pages = [
             route('dashboard'),
             route('learn.index'),

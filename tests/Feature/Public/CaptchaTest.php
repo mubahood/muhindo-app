@@ -45,14 +45,22 @@ class CaptchaTest extends TestCase
         });
     }
 
-    /** @return array<string, string> */
+    /**
+     * Registration, which is the public form the captcha guards now — the
+     * contact form it was written against is gone.
+     *
+     * @return array<string, string>
+     */
     private function contactPayload(array $overrides = []): array
     {
-        return $this->shielded([
+        return $this->shielded($overrides + [
             'name' => 'Grace Nakato',
             'email' => 'grace@example.com',
-            'message' => 'I would like to discuss a school management system.',
-        ] + $overrides);
+            'password' => 'Str0ng!Passw0rd',
+            'password_confirmation' => 'Str0ng!Passw0rd',
+            'account_type' => 'student',
+            'terms' => '1',
+        ]);
     }
 
     // ── With no keys configured: the site as it runs today ──────────────────
@@ -72,15 +80,15 @@ class CaptchaTest extends TestCase
     {
         config(['captcha.sitekey' => '', 'captcha.secret' => '']);
 
-        $this->post(route('contact.store'), $this->contactPayload())->assertSessionHasNoErrors();
-        $this->assertDatabaseHas('contact_messages', ['email' => 'grace@example.com']);
+        $this->post(route('register'), $this->contactPayload())->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('users', ['email' => 'grace@example.com']);
     }
 
     public function test_no_widget_is_rendered_with_no_keys(): void
     {
         config(['captcha.sitekey' => '', 'captcha.secret' => '']);
 
-        $this->get(route('contact'))->assertOk()->assertDontSee('g-recaptcha', false);
+        $this->get(route('register'))->assertOk()->assertDontSee('g-recaptcha', false);
     }
 
     // ── With keys configured: the site once it is switched on ───────────────
@@ -89,7 +97,7 @@ class CaptchaTest extends TestCase
     {
         $this->withCaptcha();
 
-        foreach (['contact', 'start-a-project', 'register', 'login', 'password.request'] as $route) {
+        foreach (['register', 'login', 'password.request'] as $route) {
             $html = (string) $this->get(route($route))->assertOk()->getContent();
 
             $this->assertStringContainsString('g-recaptcha', $html, "{$route} renders no widget");
@@ -103,45 +111,42 @@ class CaptchaTest extends TestCase
 
         // The bypass worth guarding: omitting the field entirely rather than
         // sending a wrong one. Without `required` this would sail through.
-        $this->post(route('contact.store'), $this->contactPayload())
+        $this->post(route('register'), $this->contactPayload())
             ->assertSessionHasErrors(Captcha::FIELD);
 
-        $this->assertDatabaseMissing('contact_messages', ['email' => 'grace@example.com']);
+        $this->assertDatabaseMissing('users', ['email' => 'grace@example.com']);
     }
 
     public function test_a_submission_google_rejects_is_refused(): void
     {
         $this->withCaptcha(verifies: false);
 
-        $this->post(route('contact.store'), $this->contactPayload() + [Captcha::FIELD => 'replayed-token'])
+        $this->post(route('register'), $this->contactPayload() + [Captcha::FIELD => 'replayed-token'])
             ->assertSessionHasErrors(Captcha::FIELD);
 
-        $this->assertDatabaseMissing('contact_messages', ['email' => 'grace@example.com']);
+        $this->assertDatabaseMissing('users', ['email' => 'grace@example.com']);
     }
 
     public function test_a_verified_submission_goes_through(): void
     {
         $this->withCaptcha();
 
-        $this->post(route('contact.store'), $this->contactPayload() + [Captcha::FIELD => 'valid-token'])
+        $this->post(route('register'), $this->contactPayload() + [Captcha::FIELD => 'valid-token'])
             ->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('contact_messages', ['email' => 'grace@example.com']);
+        $this->assertDatabaseHas('users', ['email' => 'grace@example.com']);
     }
 
     public function test_the_token_never_reaches_the_model(): void
     {
+        // User has no such column; a token that survives validation into the
+        // create() call is a 500 on the happy path.
         $this->withCaptcha();
 
-        $this->post(route('start-a-project.store'), $this->shielded([
-            'name' => 'Grace Nakato',
-            'email' => 'grace@example.com',
-            'project_type' => 'website',
-            'description' => 'A site for our clinic.',
-            Captcha::FIELD => 'valid-token',
-        ]))->assertSessionHasNoErrors();
+        $this->post(route('register'), $this->contactPayload([Captcha::FIELD => 'valid-token']))
+            ->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('project_inquiries', ['email' => 'grace@example.com']);
+        $this->assertDatabaseHas('users', ['email' => 'grace@example.com']);
     }
 
     public function test_every_public_form_is_guarded(): void
@@ -151,8 +156,6 @@ class CaptchaTest extends TestCase
         // Each of these creates a record or sends mail on behalf of a stranger,
         // which is precisely what makes them worth automating against.
         $cases = [
-            ['contact.store', ['name' => 'A', 'email' => 'a@example.com', 'message' => 'Hello there friend']],
-            ['start-a-project.store', ['name' => 'A', 'email' => 'a@example.com', 'project_type' => 'website', 'description' => 'A site.']],
             ['register', ['name' => 'A', 'email' => 'a@example.com', 'password' => 'Str0ng!Passw0rd', 'password_confirmation' => 'Str0ng!Passw0rd', 'account_type' => 'student', 'terms' => '1']],
             ['login', ['email' => 'a@example.com', 'password' => 'Str0ng!Passw0rd']],
             ['password.email', ['email' => 'a@example.com']],
@@ -169,7 +172,7 @@ class CaptchaTest extends TestCase
     {
         $this->withCaptcha();
 
-        $this->post(route('contact.store'), $this->contactPayload())
+        $this->post(route('register'), $this->contactPayload())
             ->assertSessionHasErrors([Captcha::FIELD => 'Please confirm you are not a robot.']);
     }
 }

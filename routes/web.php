@@ -124,10 +124,28 @@ Route::get('/blog/{post:slug}', [\App\Http\Controllers\InsightController::class,
 $movedPermanently('/insights', '/blog');
 $movedPermanently('/insights/{post}', '/blog/{post}');
 Route::get('/products', [PortfolioController::class, 'products'])->name('portfolio.products');
-Route::get('/contact', [PortfolioController::class, 'contactPage'])->name('contact');
-Route::post('/contact', [PortfolioController::class, 'contact'])->middleware('throttle:5,1')->name('contact.store');
-Route::get('/start-a-project', [\App\Http\Controllers\ProjectInquiryController::class, 'create'])->name('start-a-project');
-Route::post('/start-a-project', [\App\Http\Controllers\ProjectInquiryController::class, 'store'])->middleware('throttle:5,1')->name('start-a-project.store');
+/*
+ * Hiring.
+ *
+ * One entry point. Every hire button on the site points at /hire and the
+ * controller decides where that person should actually land — a stranger at
+ * registration, a client at the proposal form, a client who has already
+ * proposed at their portal. A button cannot get this wrong because a button
+ * does not decide it.
+ */
+Route::get('/hire', \App\Http\Controllers\HireController::class)->name('hire');
+
+// The generic contact form is gone: "get in touch" produced messages nobody
+// could act on, while a proposal can be priced. Old links land on the journey
+// that replaced it rather than on a 404.
+$movedPermanently('/contact', '/hire');
+$movedPermanently('/start-a-project', '/hire');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/propose', [\App\Http\Controllers\ProjectInquiryController::class, 'create'])->name('propose');
+    Route::post('/propose', [\App\Http\Controllers\ProjectInquiryController::class, 'store'])
+        ->middleware('throttle:10,1')->name('propose.store');
+});
 Route::view('/privacy', 'marketing.privacy')->name('privacy');
 Route::view('/terms', 'marketing.terms')->name('terms');
 // The lookup form must be declared before /verify/{certificate}, or "verify"
@@ -373,7 +391,7 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
 | Client portal
 |--------------------------------------------------------------------------
 */
-Route::prefix('portal')->middleware(['auth'])->name('portal.')->group(function () {
+Route::prefix('portal')->middleware(['auth', \App\Http\Middleware\ClientMustPropose::class])->name('portal.')->group(function () {
     Route::get('/', [PortalController::class, 'index'])->name('index');
     Route::get('projects/{project}', [PortalController::class, 'project'])->name('project');
     Route::get('projects/{project}/documents/{document}', [PortalController::class, 'downloadDocument'])->name('project.document');

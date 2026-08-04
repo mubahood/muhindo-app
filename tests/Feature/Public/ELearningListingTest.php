@@ -84,7 +84,7 @@ class ELearningListingTest extends TestCase
         $response->assertOk();
         $response->assertSee('No courses match those filters');
         $response->assertSee(route('courses.index'), false);
-        $response->assertSee(route('contact'), false);
+        $response->assertSee(route('hire'), false);
     }
 
     public function test_the_catalogue_is_paged_six_at_a_time(): void
