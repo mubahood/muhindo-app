@@ -620,37 +620,52 @@ def qr_block(x, y, size, t, seed=19, ink=None):
 
 # ── the map of Uganda ─────────────────────────────────────────────────────
 
+# The border, traced closely enough to be recognised rather than guessed at:
+# the West Nile shoulder, the spike to 4.2°N in Karamoja, the Elgon bulge, the
+# point at Kisoro, and the long smooth western run past Albert and Edward.
 UGANDA = [
-    (30.83, 3.51), (31.00, 3.72), (31.30, 3.78), (31.80, 3.79), (32.30, 3.72),
-    (32.72, 3.79), (33.10, 3.77), (33.50, 3.71), (33.90, 3.67), (34.10, 3.82),
-    (34.35, 3.70), (34.55, 3.35), (34.78, 3.02), (34.72, 2.60), (34.60, 2.10),
-    (34.48, 1.70), (34.33, 1.28), (34.20, 1.10), (34.05, 0.95), (33.98, 0.72),
-    (34.06, 0.48), (33.98, 0.15), (33.93, -0.15), (33.90, -0.55), (33.40, -0.70),
-    (32.90, -0.98), (32.20, -1.02), (31.50, -1.02), (30.90, -1.04), (30.45, -1.06),
-    (30.05, -1.30), (29.90, -1.47), (29.72, -1.34), (29.65, -1.05), (29.60, -0.72),
-    (29.72, -0.44), (29.80, -0.10), (29.71, 0.16), (29.78, 0.48), (29.95, 0.72),
-    (30.15, 1.02), (30.35, 1.18), (30.62, 1.40), (30.80, 1.70), (31.02, 1.98),
-    (31.28, 2.28), (31.32, 2.60), (31.18, 2.92), (31.02, 3.16), (30.90, 3.36),
+    (30.83, 3.41), (31.15, 3.62), (31.55, 3.72), (31.95, 3.62), (32.25, 3.72),
+    (32.60, 3.80), (32.95, 3.92), (33.25, 4.05), (33.60, 4.22), (33.95, 4.15),
+    (34.15, 3.87), (34.35, 3.72), (34.55, 3.55), (34.72, 3.30), (34.85, 3.10),
+    (34.98, 2.85), (34.90, 2.40), (34.78, 2.00), (34.65, 1.70), (34.50, 1.45),
+    (34.35, 1.20), (34.20, 1.10), (34.08, 0.95), (33.98, 0.78), (34.02, 0.60),
+    (34.12, 0.42), (34.05, 0.22), (33.98, 0.02), (33.93, -0.20), (33.90, -0.42),
+    (33.60, -0.55), (33.20, -0.72), (32.85, -0.95), (32.40, -1.00), (31.90, -1.02),
+    (31.40, -1.02), (30.90, -1.05), (30.55, -1.07), (30.35, -1.06), (30.10, -1.22),
+    (29.93, -1.47), (29.78, -1.38), (29.68, -1.20), (29.62, -0.95), (29.58, -0.72),
+    (29.65, -0.50), (29.72, -0.28), (29.78, -0.05), (29.72, 0.18), (29.75, 0.42),
+    (29.88, 0.65), (30.02, 0.85), (30.20, 1.05), (30.38, 1.22), (30.55, 1.38),
+    (30.75, 1.58), (30.95, 1.78), (31.10, 1.98), (31.25, 2.18), (31.30, 2.42),
+    (31.22, 2.65), (31.15, 2.88), (31.05, 3.08), (30.95, 3.25),
 ]
+
+# Uganda's water is most of what makes its outline legible.
 VICTORIA = [
-    (31.78, -1.02), (32.60, -1.00), (33.30, -0.72), (33.90, -0.55), (33.86, -0.20),
-    (33.72, 0.02), (33.35, 0.28), (32.95, 0.36), (32.55, 0.22), (32.22, 0.00),
-    (31.98, -0.34), (31.84, -0.70),
+    (31.90, -1.02), (32.40, -1.00), (32.85, -0.95), (33.20, -0.72), (33.60, -0.55),
+    (33.90, -0.42), (33.85, -0.10), (33.70, 0.12), (33.45, 0.28), (33.15, 0.38),
+    (32.80, 0.40), (32.50, 0.32), (32.25, 0.12), (32.05, -0.15), (31.92, -0.45),
+    (31.88, -0.75),
 ]
 ALBERT = [
-    (30.42, 1.20), (30.68, 1.52), (30.98, 1.86), (31.24, 2.14), (31.14, 2.24),
-    (30.86, 1.98), (30.56, 1.62), (30.30, 1.30),
+    (30.48, 1.28), (30.72, 1.55), (31.00, 1.85), (31.22, 2.10), (31.30, 2.22),
+    (31.16, 2.20), (30.92, 1.94), (30.62, 1.60), (30.38, 1.34),
 ]
 KYOGA = [
-    (32.00, 1.08), (32.28, 1.06), (32.58, 1.14), (32.88, 1.34), (33.16, 1.46),
-    (33.52, 1.50), (33.62, 1.62), (33.30, 1.72), (32.98, 1.60), (32.68, 1.54),
-    (32.44, 1.44), (32.30, 1.58), (32.08, 1.64), (31.94, 1.48), (32.06, 1.28),
+    (32.15, 1.05), (32.45, 1.02), (32.72, 1.12), (32.95, 1.30), (33.20, 1.42),
+    (33.48, 1.48), (33.62, 1.58), (33.70, 1.72), (33.45, 1.78), (33.15, 1.66),
+    (32.90, 1.55), (32.65, 1.48), (32.48, 1.55), (32.30, 1.68), (32.12, 1.60),
+    (32.02, 1.42), (32.05, 1.20),
 ]
+EDWARD = [
+    (29.62, -0.62), (29.80, -0.55), (29.92, -0.35), (29.88, -0.15), (29.72, -0.12),
+    (29.60, -0.30),
+]
+LAKES = (VICTORIA, ALBERT, KYOGA, EDWARD)
 
 
 def project(lon, lat, box):
     x0, y0, bw, bh = box
-    lon0, lon1, lat0, lat1 = 29.55, 35.00, -1.60, 4.00
+    lon0, lon1, lat0, lat1 = 29.42, 35.14, -1.66, 4.36
     s = min(bw / (lon1 - lon0), bh / (lat1 - lat0))
     ox = x0 + (bw - (lon1 - lon0) * s) / 2
     oy = y0 + (bh - (lat1 - lat0) * s) / 2
@@ -727,7 +742,8 @@ def district_lines(seed=41):
 
 
 def uganda(box, t, pins=(), route=(), land=None, water='#AFC7D6', labels=(), lakes=True,
-           border=None, chrome=True, uid='map', towns=True, roads=True, dense=True):
+           border=None, chrome=True, uid='map', towns=True, roads=True, dense=True,
+           inset=None):
     """
     A map panel, not a silhouette.
 
@@ -737,7 +753,10 @@ def uganda(box, t, pins=(), route=(), land=None, water='#AFC7D6', labels=(), lak
     be panned and zoomed. Those are what this adds.
     """
     x0, y0, bw, bh = box
-    land = land or '#EDE8DA'
+    # Everything on the old map was one value of beige, which is why it read
+    # as a shape rather than a surface. Land, water, roads and boundaries now
+    # sit at genuinely different values.
+    land = land or '#EFEADC'
     ink = border or t.primary
     o = []
 
@@ -746,7 +765,7 @@ def uganda(box, t, pins=(), route=(), land=None, water='#AFC7D6', labels=(), lak
     o.append(f'<clipPath id="{uid}-clip"><path d="{poly(UGANDA, box)}"/></clipPath>')
 
     # Outside the border is water and neighbours, not the page.
-    o.append(rect(x0, y0, bw, bh, water, op=0.32))
+    o.append(rect(x0, y0, bw, bh, water, op=0.55))
     o.append(f'<g clip-path="url(#{uid}-clip)">')
     o.append(rect(x0, y0, bw, bh, land))
 
@@ -755,19 +774,22 @@ def uganda(box, t, pins=(), route=(), land=None, water='#AFC7D6', labels=(), lak
             proj = [project(a, b, box) for a, b in pts]
             d = f'M {proj[0][0]:.1f} {proj[0][1]:.1f} ' + ' '.join(
                 f'L {a:.1f} {b:.1f}' for a, b in proj[1:])
-            o.append(path(d, stroke=ink, sw=0.9, op=0.16))
+            o.append(path(d, stroke=ink, sw=1, op=0.3))
 
     if lakes:
-        for shape in (VICTORIA, ALBERT, KYOGA):
+        for shape in LAKES:
             o.append(path(poly(shape, box), fill=water))
+            o.append(path(poly(shape, box), fill='none', stroke='#5E8098', sw=1, op=0.5))
 
     if roads:
         for route_names in ROADS:
             proj = [project(*_TOWN[n], box) for n in route_names]
             d = f'M {proj[0][0]:.1f} {proj[0][1]:.1f} ' + ' '.join(
                 f'L {a:.1f} {b:.1f}' for a, b in proj[1:])
-            o.append(path(d, stroke='#FFFFFF', sw=3.4, op=0.75))
-            o.append(path(d, stroke='#C9A227', sw=1.6, op=0.55))
+            # White casing under a warm core, which is how every road on
+            # every map is drawn and why they read at a glance.
+            o.append(path(d, stroke='#FFFFFF', sw=5, op=0.9))
+            o.append(path(d, stroke='#B07C2A', sw=2.2, op=0.85))
 
     o.append('</g>')
 
@@ -776,7 +798,7 @@ def uganda(box, t, pins=(), route=(), land=None, water='#AFC7D6', labels=(), lak
 
     for lon, lat, name in labels:
         x, y = project(lon, lat, box)
-        o.append(text(x, y, name, 9, ink, '700', 'middle', 0.9, op=0.55))
+        o.append(text(x, y, name, 9, '#3D5A6C', '700', 'middle', 0.9, op=0.9))
 
     if route:
         proj = [project(a, b, box) for a, b in route]
@@ -807,11 +829,41 @@ def uganda(box, t, pins=(), route=(), land=None, water='#AFC7D6', labels=(), lak
             if major:
                 if not pinned:
                     o.append(circle(x, y, 3.6, '#FFFFFF', stroke=ink, sw=1.6))
-                o.append(text(x + (13 if pinned else 7), y + 3.4, name, 9.5, ink, '600', op=0.8))
+                o.append(text(x + (13 if pinned else 7), y + 3.4, name, 10, ink, '700', op=0.95))
             else:
                 if not pinned:
                     o.append(circle(x, y, 2, ink, op=0.5))
-                o.append(text(x + (13 if pinned else 5.5), y + 2.8, name, 8, ink, '500', op=0.5))
+                o.append(text(x + (13 if pinned else 5.5), y + 2.8, name, 8.5, ink, '600', op=0.7))
+
+    if inset:
+        # The country is taller than it is wide, so fitting it to a landscape
+        # panel leaves a column of water on either side. A real map UI puts
+        # something in that column — here, the consignment the screen is
+        # about, with where it has actually been.
+        ix, iy, iw = x0 + 14, y0 + 96, 214
+        rows = inset['stops']
+        ih = 74 + len(rows) * 40
+        o.append(rect(ix + 2, iy + 3, iw, ih, '#000000', rx=6, op=0.13))
+        o.append(rect(ix, iy, iw, ih, '#FFFFFF', rx=6, stroke='#00000018', sw=1))
+        o.append(text(ix + 14, iy + 24, inset['title'], 10, '#6B7280', '700', ls=1.1))
+        o.append(text(ix + 14, iy + 45, inset['subject'], 14.5, t.ink, '700', mono=True))
+        o.append(line(ix + 14, iy + 58, ix + iw - 14, iy + 58, '#00000012', 1))
+
+        for i, (when, place, state) in enumerate(rows):
+            ry = iy + 82 + i * 40
+            done = state != 'next'
+            o.append(line(ix + 24, ry - 12, ix + 24, ry + 28, '#00000015', 1.6)
+                     if i < len(rows) - 1 else '')
+            if state == 'now':
+                o.append(circle(ix + 24, ry, 9, t.accent, op=0.25))
+                o.append(circle(ix + 24, ry, 5, t.accent))
+            elif done:
+                o.append(circle(ix + 24, ry, 5, t.primary))
+                o.append(path(f'M {ix + 21} {ry} l 2.4 2.4 l 4.4 -5', stroke='#FFFFFF', sw=1.8))
+            else:
+                o.append(circle(ix + 24, ry, 5, '#FFFFFF', stroke='#00000025', sw=2))
+            o.append(text(ix + 40, ry - 1, place, 12, t.ink if done else '#9CA3AF', '600'))
+            o.append(text(ix + iw - 14, ry - 1, when, 10.5, '#9CA3AF', '600', 'end', mono=True))
 
     if chrome:
         # Zoom, scale and a coordinate readout. A map you cannot move is a
@@ -874,7 +926,18 @@ def ulits(t):
                       (33.61, 1.71, False), (34.18, 1.08, False), (30.91, 3.02, False)],
                 route=[(30.66, -0.61), (31.73, -0.34), (32.58, 0.32), (33.20, 0.44),
                        (34.18, 1.08), (33.61, 1.71)],
-                labels=[(32.85, -0.20, 'LAKE VICTORIA'), (32.70, 1.38, 'LAKE KYOGA')])
+                labels=[(32.90, -0.15, 'LAKE VICTORIA'), (32.85, 1.38, 'LAKE KYOGA')],
+                inset={
+                    'title': 'THIS CONSIGNMENT',
+                    'subject': 'UG-MP-11284',
+                    'stops': [
+                        ('09:14', 'Mbarara — departed', 'done'),
+                        ('10:52', 'Masaka checkpoint', 'done'),
+                        ('12:07', 'Kampala checkpoint', 'now'),
+                        ('—', 'Jinja checkpoint', 'next'),
+                        ('—', 'Soroti — arrival', 'next'),
+                    ],
+                })
 
     cx = t.mx + 16
     for label, on in (('Districts', True), ('Roads', True), ('Holdings', True), ('Markets', False)):
