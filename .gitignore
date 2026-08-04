@@ -26,3 +26,5 @@ Thumbs.db
 ssh.txt
 # oEmbed verdicts for courses:verify-links — a rebuildable cache, not a source
 course-content/_link-cache.json
+.env
+credentials.txt
