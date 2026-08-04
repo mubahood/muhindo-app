@@ -33,6 +33,25 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Trust the proxy in front of us. On this shared host the load balancer
+        // terminates TLS, so %{HTTPS} reads "off" by the time Apache sees the
+        // request and Laravel decides it is on plain HTTP — which is what makes
+        // secure-cookie and is-this-request-secure checks answer wrongly.
+        //
+        // X_FORWARDED_HOST is deliberately NOT trusted. The proxy list has to be
+        // 0.0.0.0/0 because shared hosting gives no fixed address to name, and a
+        // trusted-everyone list plus a trusted Host header means anybody can set
+        // X-Forwarded-Host and have the app repeat their domain back — which is
+        // how password-reset links get poisoned. Nothing here needs it: every
+        // generated URL comes from URL::forceRootUrl(config('app.url')) below,
+        // which reads APP_URL and never the request.
+        app('request')->setTrustedProxies(
+            ['127.0.0.1', '::1', '0.0.0.0/0'],
+            \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR |
+            \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT |
+            \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO
+        );
+
         // Cap indexed string columns at 191 chars so utf8mb4 indexes stay within
         // the 1000-byte key limit on older MySQL/MariaDB builds.
         Schema::defaultStringLength(191);

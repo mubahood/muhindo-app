@@ -5,6 +5,16 @@
 
     RewriteEngine On
 
+    # Force HTTPS (works behind shared-hosting reverse proxies), except on a
+    # development machine, which has none — this fired after the root .htaccess
+    # had already rewritten the request, so the local site redirected to
+    # https://localhost:8888/muhindo-app/public/index.php and died there.
+    RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|\[::1\])(:[0-9]+)?$ [NC]
+    RewriteCond %{HTTP_HOST} !\.(test|local|localhost)(:[0-9]+)?$ [NC]
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

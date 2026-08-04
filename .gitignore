@@ -28,3 +28,10 @@ ssh.txt
 course-content/_link-cache.json
 .env
 credentials.txt
+# One-off deploy/repair scripts written against the live server. They are kept
+# out of the repo root because that root IS the document root on cPanel: a copy
+# of seed_remote.php sitting there was reachable at
+# https://muhindomubaraka.com/seed_remote.php and re-ran a database seeder for
+# anyone who asked. remote_env.txt holds production secrets. Neither belongs in
+# anything that gets pushed or scp'd.
+_deploy-oneoffs/

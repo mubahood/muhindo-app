@@ -1,3 +1,33 @@
+# Front controller for hosting where the document root is the application root
+# rather than public/ — which is how muhindomubaraka.com is set up, and how
+# most cPanel accounts are, because the document root of a primary domain
+# usually cannot be moved.
+#
+# That arrangement asks this file to do the two jobs public/ would otherwise do
+# for free, and the site was getting both wrong.
+#
+#   1. Serving static files. A request for /images/portrait.jpg was looked for
+#      at the APP root, not found, and passed to the front controller — so
+#      every stylesheet, font and image on the live site returned Laravel's 404
+#      page. The files were always deployed; nothing could reach them.
+#
+#   2. Keeping everything else out. The previous rule served any real file
+#      directly, and at the app root that includes real files: /artisan,
+#      /storage/logs/laravel.log and a stray /seed_remote.php — an
+#      unauthenticated endpoint that re-ran a database seeder — were all being
+#      handed to anyone who asked.
+#
+# The order of those two matters more than it looks, because two names mean
+# different things depending on which side of public/ you are on:
+#
+#      /vendor   → Composer's packages (must never be reachable)
+#      public/vendor   → Font Awesome and the Inter font (must be)
+#      /storage  → the private disk, logs, cached views (must never)
+#      public/storage  → the symlink to uploaded files (must be)
+#
+# Resolving public/ FIRST settles it without special cases: what exists under
+# public/ is web content by definition, and everything else is the application.
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
@@ -5,26 +35,73 @@
 
     RewriteEngine On
 
-    # 0. Pass the Authorization header through — Apache/mod_fastcgi doesn't expose it to PHP by
-    # default, which silently breaks every Sanctum bearer-token API request (they 401 as if
-    # unauthenticated, with no error pointing at the real cause). public/.htaccess already had
-    # this rule, but requests never reach it as bearer-token requests: rule 4 below proxies into
-    # public/ internally, and by then this rewrite must have already run against the original
-    # request in *this* .htaccess — the header doesn't automatically carry over.
+    # Pass the Authorization header through. Apache/mod_fastcgi does not expose
+    # it to PHP by default, which silently breaks every Sanctum bearer-token
+    # request — they 401 as if unauthenticated, with nothing pointing at the
+    # real cause. public/.htaccess carries the same rule, but it has to run
+    # here too: by the time a request is proxied into public/ it is gone.
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # 1. Leave index.php alone
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # HTTPS — but not on a development machine, which has none. Without the
+    # first condition this file sends localhost to https://localhost and the
+    # local site stops loading entirely. X-Forwarded-Proto is checked as well,
+    # because the shared-hosting proxy terminates TLS and %{HTTPS} reads "off"
+    # behind it.
+    RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|\[::1\])(:[0-9]+)?$ [NC]
+    RewriteCond %{HTTP_HOST} !\.(test|local|localhost)(:[0-9]+)?$ [NC]
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Certificate renewal has to keep working.
+    RewriteRule ^\.well-known/ - [L]
+
+    # The front controller, left alone. This is also the loop guard: rule 3
+    # rewrites here, per-directory rules then run again on the result, and
+    # without this rule 1 would find public/index.php and rewrite a second
+    # time — which is the thing that must not happen. index.php at the app
+    # root require()s public/index.php while keeping SCRIPT_NAME at the mount
+    # point, so Laravel strips "/muhindo-app" locally and "" live; targeting
+    # public/index.php directly instead makes SCRIPT_NAME disagree with
+    # REQUEST_URI and every page 404s in a subdirectory install.
     RewriteRule ^index\.php$ - [L]
 
-    # 2. Root directory request → serve index.php directly (LiteSpeed compatible)
-    RewriteRule ^$ index.php [L]
+    # Work out where this file is mounted, as a URL prefix. It is "/" live and
+    # "/muhindo-app/" on the development machine, and the difference is why the
+    # obvious %{DOCUMENT_ROOT}/public%{REQUEST_URI} test cannot be used: in a
+    # subdirectory install it resolves to htdocs/public/muhindo-app/… and
+    # matches nothing, so every asset 404s locally. Subtracting the rule-local
+    # path from the request URI leaves the prefix, whatever it is.
+    RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
+    RewriteRule ^(.*)$ - [E=APPBASE:%1]
 
-    # 3. Serve real files / directories directly (no rewrite needed)
-    RewriteCond %{REQUEST_FILENAME} -f [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^ - [L]
-
-    # 4. Everything else → proxy into public/
+    # ── 1. Anything that exists under public/ is served from public/ ─────────
+    RewriteCond %{DOCUMENT_ROOT}%{ENV:APPBASE}public/$1 -f
     RewriteRule ^(.*)$ public/$1 [L]
+
+    # ── 2. A request already resolved into public/ is finished ──────────────
+    RewriteRule ^public/ - [L]
+
+    # ── 3. Everything else is the application ───────────────────────────────
+    # Deliberately unconditional. The usual !-f/!-d guard is what exposed
+    # /artisan: at the app root those files really do exist, so the guard fails
+    # and Apache serves them — along with anything else that lands there, which
+    # on this server included a stray seed_remote.php. Nothing outside public/
+    # is web content here, so there is nothing to make an exception for. An
+    # unknown path gets Laravel's 404, which is also the answer that gives
+    # least away.
+    RewriteRule ^ index.php [L]
 </IfModule>
+
+# Belt and braces for the case that matters most: if mod_rewrite is ever
+# missing or disabled, the rules above vanish and every file below becomes
+# directly fetchable. These do not depend on it.
+Options -Indexes
+
+<FilesMatch "^(\.|artisan$|composer\.|package(-lock)?\.json$|phpunit\.xml$|.*\.(env|log|sql|sqlite|bak|sh|pem|key)$)">
+    Require all denied
+</FilesMatch>
