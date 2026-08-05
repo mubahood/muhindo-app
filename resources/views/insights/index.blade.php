@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Blog — Muhindo Mubaraka')
+@section('title', 'Blog | Muhindo Mubaraka')
 @section('desc', 'Notes on building software that lasts, teaching it, and the systems I work on.')
 
 @section('content')
@@ -27,7 +27,7 @@
   <div class="wrap">
     @if($posts->isEmpty())
       <div class="tb-empty" style="text-align:center;padding:40px 0;">
-        <p class="lead">No articles published yet — the first one is being written.</p>
+        <p class="lead">No articles published yet. The first one is being written.</p>
       </div>
     @else
       <div class="work-grid">

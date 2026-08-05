@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-/** §4.5 — fired by IssueCertificateOnCourseCompletion when a student finishes a course. */
+/** Fired by IssueCertificateOnCourseCompletion when a student finishes a course. */
 class CourseCompletedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -27,7 +27,7 @@ class CourseCompletedNotification extends Notification implements ShouldQueue
         $mail = (new MailMessage)
             ->subject("You completed {$course->title}!")
             ->greeting("Congratulations, {$notifiable->name}!")
-            ->line("You've finished \"{$course->title}\" — nice work.");
+            ->line("You've finished \"{$course->title}\" nice work.");
 
         if ($this->enrollment->certificate) {
             $mail->action('View your certificate', route('learn.certificate.download', $this->enrollment->certificate));

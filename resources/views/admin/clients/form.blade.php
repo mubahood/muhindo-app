@@ -38,7 +38,7 @@
       <div class="tb-form-group">
         <label class="tb-label">District</label>
         <select class="tb-select" name="district_id">
-          <option value="">—</option>
+          <option value="">, </option>
           @foreach($districts as $d)
             <option value="{{ $d->id }}" {{ old('district_id', $client->district_id) == $d->id ? 'selected' : '' }}>{{ $d->name }}</option>
           @endforeach
@@ -52,7 +52,7 @@
       <div class="tb-form-group full">
         <label class="tb-check-group">
           <input type="checkbox" name="create_portal_account" value="1">
-          <span>Create a portal login for this client (requires email) — a temporary password will be generated</span>
+          <span>Create a portal login for this client (requires email). A temporary password will be generated</span>
         </label>
       </div>
       @endif

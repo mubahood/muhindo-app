@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §4.4/§6.4 — optional per-course access window (days) applied to `enrollments.expires_at` at enrollment/activation time. Null = lifetime access, the default (no behavior change for existing courses). */
+/** Optional per-course access window (days) applied to `enrollments.expires_at` at enrollment/activation time. Null = lifetime access, the default (no behavior change for existing courses). */
 return new class extends Migration
 {
     public function up(): void

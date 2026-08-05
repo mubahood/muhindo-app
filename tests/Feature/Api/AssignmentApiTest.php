@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** P5.4 — API v1 parity: the assignment turn-in flow, routed through the same AssignmentService the web controller uses. */
+/** P5.4, API v1 parity: the assignment turn-in flow, routed through the same AssignmentService the web controller uses. */
 class AssignmentApiTest extends TestCase
 {
     use RefreshDatabase;

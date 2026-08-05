@@ -29,7 +29,7 @@ class AdminModuleGapsTest extends TestCase
         return $admin;
     }
 
-    // ── Testimonials could be added and deleted, never edited ───────────────
+    // Testimonials could be added and deleted, never edited
 
     public function test_a_testimonial_can_be_edited_without_losing_its_photo(): void
     {
@@ -113,7 +113,7 @@ class AdminModuleGapsTest extends TestCase
             ->assertSessionHas('error');
     }
 
-    // ── The inbox could only ever grow ──────────────────────────────────────
+    // The inbox could only ever grow
 
     public function test_a_contact_message_can_be_deleted(): void
     {
@@ -143,7 +143,7 @@ class AdminModuleGapsTest extends TestCase
         $this->assertSame(0, ProjectInquiry::count());
     }
 
-    // ── None of it is reachable without staff credentials ───────────────────
+    // None of it is reachable without staff credentials
 
     public function test_none_of_this_is_open_to_a_student(): void
     {

@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 /**
  * Confirms the 'api' rate limiter is actually registered (Laravel's slimmed
- * skeleton leaves the `api` group unthrottled unless asked — see
+ * skeleton leaves the `api` group unthrottled unless asked, see
  * bootstrap/app.php's throttleApi()) and CORS defaults closed.
  */
 class ApiHardeningConfigTest extends TestCase

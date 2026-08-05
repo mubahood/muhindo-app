@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Page not found — Muhindo Mubaraka')
+@section('title', 'Page not found | Muhindo Mubaraka')
 @section('desc', 'That page wandered off.')
 
 @section('content')

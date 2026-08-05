@@ -6,7 +6,7 @@ use App\Models\Course;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** public-w6 — §6.2 of PUBLIC_SITE_PLAN.md: structured data on the landing page and course detail pages. */
+/** public-w6, of PUBLIC_SITE_PLAN.md: structured data on the landing page and course detail pages. */
 class JsonLdTest extends TestCase
 {
     use RefreshDatabase;

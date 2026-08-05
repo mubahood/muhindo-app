@@ -9,7 +9,7 @@ use App\Services\Learning\GradebookService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-/** §5.4 — the student's "Grades" tab: every quiz/assignment's counted grade + current course grade. */
+/** The student's "Grades" tab: every quiz/assignment's counted grade + current course grade. */
 class GradesController extends Controller
 {
     public function __construct(private readonly GradebookService $gradebook) {}

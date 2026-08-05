@@ -1,5 +1,5 @@
 @extends('layouts.learn')
-@section('title', 'Q&A — ' . $course->title)
+@section('title', 'Q&A | ' . $course->title)
 @section('page_title', 'Q&A')
 
 @push('styles')
@@ -21,7 +21,7 @@
 </div>
 
 @if($threads->isEmpty())
-  <div class="card"><p class="muted">No questions yet — be the first to ask.</p></div>
+  <div class="card"><p class="muted">No questions yet, be the first to ask.</p></div>
 @else
   <div class="card" style="padding:0;">
     <table class="quiz-table">

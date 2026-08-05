@@ -1,5 +1,5 @@
 /* ==========================================================================
-   True-Doctor — Back-office design system (light · flat · square · thin Inter)
+   True-Doctor, Back-office design system (light · flat · square · thin Inter)
    Redefines the existing .tb-* / .btn-tb / .badge-tb vocabulary so every admin
    view adopts the new look with no per-view rewrite. Matches the public site.
    ========================================================================== */
@@ -25,7 +25,7 @@ a{color:inherit;text-decoration:none;} ul{list-style:none;} button{font-family:i
 strong,b{font-weight:600;}
 ::selection{background:var(--br-soft);}
 
-/* ── Shell ─────────────────────────────────────────────────── */
+/* Shell */
 .tb-wrapper{display:flex;min-height:100vh;}
 .tb-sidebar{width:var(--sw);flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);
   display:flex;flex-direction:column;position:fixed;inset:0 auto 0 0;height:100vh;z-index:50;overflow-y:auto;}
@@ -72,7 +72,7 @@ strong,b{font-weight:600;}
 .tb-nav-item.active a{background:var(--br-soft);color:var(--br);border-left-color:var(--br);font-weight:600;}
 .tb-nav-item.active a i{color:var(--br);}
 
-/* ── Collapsible nav groups (accordion) ─────────────────────── */
+/* Collapsible nav groups (accordion) */
 .tb-nav-rule{height:1px;background:var(--line);margin:10px 16px;}
 .tb-nav-group{margin-bottom:1px;}
 .tb-nav-gh{width:100%;display:flex;align-items:center;gap:11px;padding:7px 16px;background:none;border:none;
@@ -103,12 +103,12 @@ strong,b{font-weight:600;}
   background:var(--surface);border:1px solid var(--line-2);color:var(--tx);font-size:12.5px;font-weight:500;cursor:pointer;transition:.12s;}
 .tb-logout-btn:hover{border-color:var(--bad);color:var(--bad);}
 
-/* ── Topbar ────────────────────────────────────────────────── */
+/* Topbar */
 .tb-topbar{height:var(--th);background:rgba(245,247,250,.9);backdrop-filter:saturate(180%) blur(8px);
   border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 30px;position:sticky;top:0;z-index:30;}
 .tb-topbar-left{display:flex;align-items:center;gap:12px;min-width:0;}
 .tb-topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
-/* Clean, borderless icon buttons — a bare icon at rest, only a subtle tint on hover. */
+/* Clean, borderless icon buttons. A bare icon at rest, only a subtle tint on hover. */
 .tb-topbar-bell,.tb-topbar-toggle{position:relative;display:inline-flex;align-items:center;justify-content:center;
   width:40px;height:40px;padding:0;border:none;background:none;color:var(--mt);cursor:pointer;
   transition:color .12s,background .12s;}
@@ -130,7 +130,7 @@ strong,b{font-weight:600;}
 .tb-user-menu{position:relative;}
 /* colour is NOT optional here. A <button> does not inherit colour, so with
    none declared this fell through to the UA's `buttontext`, which resolves to
-   white under a dark system appearance — white on a near-white bar, the name
+   white under a dark system appearance, white on a near-white bar, the name
    invisible. Every other bare button in this file already sets one. */
 .tb-user-trigger{display:flex;align-items:center;gap:9px;cursor:pointer;padding:5px 8px;border:none;background:none;
   color:var(--tx);font-family:inherit;transition:background .12s;}
@@ -153,21 +153,21 @@ strong,b{font-weight:600;}
 .tb-user-dropdown hr{border:none;border-top:1px solid var(--line);margin:5px 0;}
 .tb-user-dropdown button.danger:hover{color:var(--bad);}
 
-/* ── Page header / breadcrumb ──────────────────────────────── */
+/* Page header / breadcrumb */
 .tb-page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:22px;flex-wrap:wrap;}
 .tb-page-header h1{font-size:24px;font-weight:200;letter-spacing:-.02em;line-height:1.15;}
 .tb-breadcrumb{font-size:12px;font-weight:400;color:var(--mt2);margin-top:6px;}
 .tb-breadcrumb a{color:var(--mt);} .tb-breadcrumb a:hover{color:var(--br);}
 .tb-breadcrumb span{margin:0 6px;color:var(--line-2);}
 
-/* ── Cards ─────────────────────────────────────────────────── */
+/* Cards */
 .tb-card{background:var(--surface);border:1px solid var(--line);}
 .tb-card-header{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .tb-card-title{font-size:13px;font-weight:600;letter-spacing:.01em;}
 .tb-card-body{padding:18px;}
 .tb-card-footer{padding:14px 18px;border-top:1px solid var(--line);}
 
-/* ── Tables ────────────────────────────────────────────────── */
+/* Tables */
 .tb-table-wrap{overflow-x:auto;}
 .tb-table{width:100%;border-collapse:collapse;font-size:12.5px;}
 .tb-table thead th{text-align:left;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
@@ -178,7 +178,7 @@ strong,b{font-weight:600;}
 .tb-table-actions{display:flex;gap:6px;align-items:center;}
 .mono{font-family:var(--font);letter-spacing:.04em;font-size:12px;}
 
-/* ── Buttons (square, one system) ──────────────────────────── */
+/* Buttons (square, one system) */
 .btn-tb{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:var(--font);
   font-weight:500;font-size:12px;letter-spacing:.01em;padding:7px 13px;cursor:pointer;border:1px solid transparent;
   transition:background .13s,border-color .13s,color .13s;white-space:nowrap;}
@@ -194,7 +194,7 @@ strong,b{font-weight:600;}
 .btn-tb-sm{padding:6px 11px;font-size:11.5px;}
 .btn-tb-icon{padding:5px 7px;}
 
-/* ── Badges (status-tinted, square) ────────────────────────── */
+/* Badges (status-tinted, square) */
 .badge-tb,.tb-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;
   letter-spacing:.03em;padding:2px 7px;text-transform:uppercase;background:var(--surface-2);color:var(--mt);}
 .badge-active,.badge-verified,.badge-success{background:var(--ok-soft);color:var(--ok);}
@@ -203,7 +203,7 @@ strong,b{font-weight:600;}
 .badge-closed,.badge-danger{background:var(--bad-soft);color:var(--bad);}
 .badge-brown,.badge-neutral{background:var(--surface-2);color:var(--mt);}
 
-/* ── Forms ─────────────────────────────────────────────────── */
+/* Forms */
 .tb-form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 14px;}
 .tb-form-group{display:flex;flex-direction:column;}
 .tb-form-group.full{grid-column:1/-1;}
@@ -217,11 +217,11 @@ strong,b{font-weight:600;}
 .tb-check-group{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--tx);}
 .tb-check-group input{width:15px;height:15px;accent-color:var(--br);}
 
-/* ── Filter bar / tabs ─────────────────────────────────────── */
+/* Filter bar / tabs */
 .tb-filter-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:16px;}
 .tb-filter-bar .tb-input,.tb-filter-bar .tb-select{width:auto;min-width:160px;padding:6px 10px;font-size:12.5px;}
 
-/* ── Consolidated page toolbar (search/filters left, actions right) ─── */
+/* Consolidated page toolbar (search/filters left, actions right) */
 .tb-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;padding-top:0;}
 .tb-toolbar-actions{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .tb-toolbar-bare{justify-content:flex-end;min-height:0;margin-bottom:10px;}
@@ -235,7 +235,7 @@ strong,b{font-weight:600;}
 .tb-tab.on{background:var(--br);color:#fff;border-color:var(--br);}
 .tb-tab .n{font-size:11px;opacity:.85;}
 
-/* ── Stat cards ────────────────────────────────────────────── */
+/* Stat cards */
 .tb-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
 .tb-stat-card{background:var(--surface);border:1px solid var(--line);padding:16px 18px;display:flex;align-items:center;gap:13px;
   transition:border-color .12s;}
@@ -245,8 +245,8 @@ strong,b{font-weight:600;}
 .tb-stat-value{font-size:23px;font-weight:200;line-height:1;letter-spacing:-.01em;}
 .tb-stat-label{font-size:10.5px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--mt2);margin-top:5px;}
 
-/* ── Role dashboards ───────────────────────────────────────── */
-/* One tight vertical rhythm — a single small gap between every block, no
+/* Role dashboards */
+/* One tight vertical rhythm, a single small gap between every block, no
    stacked per-element margins. Compact but well organised. */
 .dash-root{display:flex;flex-direction:column;gap:12px;}
 .dash-section{margin:0;}
@@ -257,7 +257,7 @@ strong,b{font-weight:600;}
 .dash-grid{display:grid;gap:12px;}
 .dash-grid.cols-2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr));}
 .dash-grid.cols-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
-/* ── Student dashboard widgets: resume card, progress bars, to-do list ────── */
+/* Student dashboard widgets: resume card, progress bars, to-do list */
 .resume-card{border-left:3px solid var(--mp,#0b1f3a);}
 .resume-body{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
 .resume-main{flex:1;min-width:0;}
@@ -369,7 +369,7 @@ a.dash-queue-row:hover{background:var(--surface-2);}
 .dash-spark{width:100%;height:56px;display:block;}
 .dash-spark-foot{display:flex;justify-content:space-between;font-size:10.5px;color:var(--mt2);margin-top:6px;}
 
-/* ── Alerts / flash ────────────────────────────────────────── */
+/* Alerts / flash */
 .tb-flash-wrap{position:fixed;top:74px;right:24px;z-index:60;display:flex;flex-direction:column;gap:10px;max-width:360px;}
 .tb-alert{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;font-size:13px;background:var(--surface);
   border:1px solid var(--line);border-left:3px solid var(--mt2);box-shadow:0 10px 30px -18px rgba(17,28,46,.35);}
@@ -379,12 +379,12 @@ a.dash-queue-row:hover{background:var(--surface-2);}
 .tb-alert-x{margin-left:auto;border:none;background:none;color:var(--mt2);cursor:pointer;}
 .tb-alert ul{margin:4px 0 0;padding-left:16px;list-style:disc;}
 
-/* ── Empty state ───────────────────────────────────────────── */
+/* Empty state */
 .tb-empty{text-align:center;padding:48px 20px;color:var(--mt2);}
 .tb-empty i{font-size:26px;color:var(--line-2);margin-bottom:10px;display:block;}
 .tb-empty p{font-size:13px;}
 
-/* ── Timeline (status history) ─────────────────────────────── */
+/* Timeline (status history) */
 .tb-timeline{position:relative;padding-left:22px;}
 .tb-timeline::before{content:'';position:absolute;left:5px;top:4px;bottom:4px;width:1px;background:var(--line);}
 .tb-tl-item{position:relative;padding:0 0 16px;}
@@ -392,7 +392,7 @@ a.dash-queue-row:hover{background:var(--surface-2);}
   border:2px solid var(--br);}
 .tb-tl-item .t{font-size:12.5px;font-weight:500;} .tb-tl-item .m{font-size:11.5px;color:var(--mt2);margin-top:2px;}
 
-/* ── Modal / drawer ────────────────────────────────────────── */
+/* Modal / drawer */
 .tb-overlay{position:fixed;inset:0;background:rgba(17,28,46,.5);z-index:80;display:flex;align-items:center;justify-content:center;padding:22px;}
 .tb-modal{background:var(--surface);border:1px solid var(--line);width:100%;max-width:440px;box-shadow:0 24px 60px -30px rgba(17,28,46,.5);}
 .tb-modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);}
@@ -403,16 +403,16 @@ a.dash-queue-row:hover{background:var(--surface-2);}
   z-index:85;transform:translateX(100%);transition:transform .2s;display:flex;flex-direction:column;}
 .tb-drawer.open{transform:none;}
 
-/* ── Pagination ────────────────────────────────────────────── */
+/* Pagination */
 .tb-content nav[role="navigation"] span,.tb-content nav[role="navigation"] a,
 .pagination a,.pagination span{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;
   padding:0 8px;border:1px solid var(--line);background:var(--surface);color:var(--tx);font-size:12.5px;margin:0 -1px 0 0;}
 .pagination .active span,nav[role="navigation"] [aria-current] span{background:var(--br);color:#fff;border-color:var(--br);}
 
-/* ── Utilities ─────────────────────────────────────────────── */
+/* Utilities */
 .muted{color:var(--mt2);} .thin{font-weight:300;}
 
-/* ── Responsive ────────────────────────────────────────────── */
+/* Responsive */
 /* Mobile drawer backdrop (only visible while the drawer is open on mobile) */
 .tb-sidebar-backdrop{position:fixed;inset:0;background:rgba(15,23,32,.45);z-index:49;}
 @media(min-width:901px){.tb-sidebar-backdrop{display:none !important;}}
@@ -437,7 +437,7 @@ a.dash-queue-row:hover{background:var(--surface-2);}
   .tb-footer-brand,.tb-foot-sm-hide{display:none;}
 }
 
-/* ── Toast host (Livewire feedback) ─────────────────────────── */
+/* Toast host (Livewire feedback) */
 .tb-toast-host{position:fixed;top:16px;right:16px;z-index:1200;display:flex;flex-direction:column;gap:10px;max-width:360px;}
 .tb-toast{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--line);
   border-left:3px solid var(--br);border-radius:8px;padding:12px 14px;box-shadow:0 8px 30px -10px rgba(0,0,0,.22);font-size:.88rem;}
@@ -450,7 +450,7 @@ a.dash-queue-row:hover{background:var(--surface-2);}
 .tb-toast-x{border:none;background:none;color:var(--mt2);cursor:pointer;padding:0 2px;font-size:.9rem;}
 .tb-toast-x:hover{color:var(--tx);}
 
-/* ── Slide-over (Livewire forms / inline actions) ───────────── */
+/* Slide-over (Livewire forms / inline actions) */
 .tb-slideover-backdrop{position:fixed;inset:0;background:rgba(15,23,32,.42);z-index:1100;}
 .tb-slideover{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--surface);z-index:1110;
   box-shadow:-12px 0 40px -12px rgba(0,0,0,.3);display:flex;flex-direction:column;}
@@ -466,7 +466,7 @@ a.dash-queue-row:hover{background:var(--surface-2);}
 /* Locks page scroll behind any open modal / slide-over (reference-counted in JS). */
 .tb-scroll-lock{overflow:hidden;}
 
-/* ── Modal / slide-over: mobile ────────────────────────────── */
+/* Modal / slide-over: mobile */
 @media(max-width:600px){
   /* Slide-overs go full-screen with a sticky header/footer and a scrollable body. */
   .tb-slideover{width:100% !important;left:0;}
@@ -490,7 +490,7 @@ a.dash-queue-row:hover{background:var(--surface-2);}
 .tb-slide-start{transform:translateX(100%);}
 .tb-slide-end{transform:translateX(0);}
 
-/* ── Sample/starter data import modal ───────────────────────── */
+/* Sample/starter data import modal */
 .smpl-tools{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
 .smpl-table th{padding:8px 10px;}
 .smpl-table td{padding:7px 10px;vertical-align:middle;}
@@ -502,7 +502,7 @@ a.dash-queue-row:hover{background:var(--surface-2);}
 /* Visually-hidden but accessible (page headings live in the topbar now) */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 
-/* ── Accessibility primitives ───────────────────────────────────
+/* Accessibility primitives
    A visible focus ring on every interactive element, and a skip link that
    stays hidden until a keyboard user tabs to it. */
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
@@ -514,7 +514,7 @@ textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
 /* Announcements for assistive tech that must not take up space. */
 .tb-visually-hidden-live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
 
-/* ── Your account (profile & settings) ─────────────────────── */
+/* Your account (profile & settings) */
 .acct-wrap{display:grid;grid-template-columns:196px minmax(0,1fr);gap:22px;align-items:start;}
 .acct-nav{position:sticky;top:12px;display:flex;flex-direction:column;gap:1px;}
 .acct-nav a{display:flex;align-items:center;gap:9px;padding:8px 11px;font-size:12.5px;color:var(--mt);
@@ -541,12 +541,12 @@ textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
 .acct-id-name{font-size:15px;font-weight:600;}
 .acct-id-sub{font-size:12px;color:var(--mt);margin-top:2px;}
 .acct-id-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto;}
-/* The real file input stays focusable and reachable — only visually replaced. */
+/* The real file input stays focusable and reachable, only visually replaced. */
 .acct-file{position:absolute;width:1px;height:1px;opacity:0;}
 .acct-file:focus-visible + .acct-file-label{outline:2px solid var(--br);outline-offset:2px;}
 .acct-file-label{cursor:pointer;}
 
-/* Account-type chooser — the same three options as the sign-up form. */
+/* Account-type chooser, the same three options as the sign-up form. */
 .acct-types{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;}
 .acct-type{position:relative;display:flex;flex-direction:column;gap:4px;padding:12px 13px;cursor:pointer;
   border:1px solid var(--line-2);background:var(--surface);transition:border-color .12s,background .12s;}
@@ -568,7 +568,7 @@ textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
   .acct-id-actions{margin-left:0;width:100%;}
 }
 
-/* ── Course / project cards (the learning & client listings) ── */
+/* Course / project cards (the learning & client listings) */
 .mine-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
 .mine-card{background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;
   transition:border-color .12s;}

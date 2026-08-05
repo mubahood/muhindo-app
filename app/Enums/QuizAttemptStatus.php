@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** §5.2 — the attempt lifecycle QuizService moves an attempt through, server-authoritative. */
+/** The attempt lifecycle QuizService moves an attempt through, server-authoritative. */
 enum QuizAttemptStatus: string
 {
     case InProgress = 'in_progress';

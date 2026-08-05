@@ -169,8 +169,8 @@ class BillingService
     /**
      * Settle an invoice that costs nothing.
      *
-     * A free order still needs an invoice — it is the record of what was taken
-     * and the thing fulfilment listens to — but recordPayment rightly refuses a
+     * A free order still needs an invoice. It is the record of what was taken
+     * and the thing fulfilment listens to, but recordPayment rightly refuses a
      * zero payment, and inventing a 0.00 Payment row would put a payment in the
      * ledger that never happened. This moves the invoice to Paid and fires the
      * same event, so free and paid orders are fulfilled by one code path.
@@ -197,11 +197,11 @@ class BillingService
     }
 
     /**
-     * §7.1 — credits an invoice that money was actually collected against (Paid or
-     * PartiallyPaid only — nothing to credit on one that was never paid). Distinct from
+     * Credits an invoice that money was actually collected against (Paid or
+     * PartiallyPaid only. Nothing to credit on one that was never paid). Distinct from
      * void(): void means "this charge should never have existed"; refunded means "money was
      * collected, then given back." amount_paid/payments stay as the permanent historical
-     * record of what was collected — only status changes, so a refund never fabricates a
+     * record of what was collected, only status changes, so a refund never fabricates a
      * negative balance.
      */
     public function refund(Invoice $invoice, ?int $by = null): Invoice

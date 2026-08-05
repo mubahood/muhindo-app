@@ -1,4 +1,4 @@
-{{-- Muhindo Mubaraka — Back-office Layout (light · square · Inter) --}}
+{{-- Muhindo Mubaraka, Back-office Layout (light · square · Inter) --}}
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -29,13 +29,13 @@
 
 <div class="tb-wrapper">
 
-  {{-- ═══════ Sidebar ═══════ --}}
+  {{-- Sidebar --}}
   <aside class="tb-sidebar" :class="{'open':side}" aria-label="Main navigation">
     <a wire:navigate href="{{ route('dashboard') }}" class="tb-sidebar-brand">
       <span class="bk" style="width:30px;height:30px;background:#0b1f3a;color:#b8933f;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;">MM</span>
       <span class="btext">
         <span class="bt">Muhindo Mubaraka</span>
-        <span class="bs">e‑Learning &amp; Projects</span>
+        <span class="bs">e-Learning &amp; Projects</span>
       </span>
       <button class="tb-sidebar-close" type="button" @click="side=false"><i class="fas fa-xmark"></i></button>
     </a>
@@ -55,14 +55,14 @@
   {{-- Mobile drawer backdrop --}}
   <div class="tb-sidebar-backdrop" x-show="side" x-cloak @click="side=false" x-transition.opacity.duration.150ms></div>
 
-  {{-- ═══════ Main ═══════ --}}
+  {{-- Main --}}
   <div class="tb-main">
     <header class="tb-topbar">
       <div class="tb-topbar-left">
         <button class="tb-topbar-toggle" type="button" @click.stop="side = !side"
                 :aria-expanded="side ? 'true' : 'false'" aria-controls="tb-nav" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
         {{-- Dynamic page title: reads the current page's <h1> (each page provides
-             one — visually-hidden on list pages, visible on detail pages) and
+             one, visually-hidden on list pages, visible on detail pages) and
              mirrors it into the browser tab. Re-reads after each wire:navigate. --}}
         <span class="tb-page-title"
               x-data="{
@@ -165,7 +165,7 @@
 </script>
 <style>[x-cloak]{display:none!important;}</style>
 @include('partials.app-navigation', ['shellPaths' => $shellPaths])
-{{-- Livewire 3 (bundles Alpine — the standalone Alpine include is intentionally removed to avoid a double Alpine). --}}
+{{-- Livewire 3 (bundles Alpine. The standalone Alpine include is intentionally removed to avoid a double Alpine). --}}
 @livewireScripts
 <script defer src="{{ asset('vendor/js/chart.min.js') }}"></script>
 @stack('scripts')

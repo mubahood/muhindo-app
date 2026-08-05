@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use App\Services\Learning\MarkdownRenderer;
 use Tests\TestCase;
 
-/** §7.4 — sanitized, no raw HTML passthrough (league/commonmark's own defaults are the opposite of this). */
+/** Sanitized, no raw HTML passthrough (league/commonmark's own defaults are the opposite of this). */
 class MarkdownRendererTest extends TestCase
 {
     private function renderer(): MarkdownRenderer

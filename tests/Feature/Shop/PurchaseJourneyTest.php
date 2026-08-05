@@ -16,9 +16,9 @@ use Tests\TestCase;
  * The purchase journey end to end: browse, basket, checkout, invoice, payment,
  * fulfilment, download.
  *
- * The point of these is the seam. The shop does not have its own payment code —
+ * The point of these is the seam. The shop does not have its own payment code,
  * it raises an invoice and joins the path that already settles course
- * checkouts and client invoices — so what has to be proved is that access is
+ * checkouts and client invoices, so what has to be proved is that access is
  * granted by *payment*, exactly once, and never before.
  */
 class PurchaseJourneyTest extends TestCase

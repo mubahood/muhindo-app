@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §5.1/§5.3 — admin CRUD for course assignments. */
+/** Admin CRUD for course assignments. */
 class AssignmentCrudTest extends TestCase
 {
     use RefreshDatabase;

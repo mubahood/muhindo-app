@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §7.1 — a coupon code entered at checkout discounts the generated invoice. */
+/** A coupon code entered at checkout discounts the generated invoice. */
 class CouponCheckoutTest extends TestCase
 {
     use RefreshDatabase;

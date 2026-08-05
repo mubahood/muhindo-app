@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
  * Applies config/catalog.php to the imported courses.
  *
  * The owner reviews one config file and runs this, rather than editing 21 rows
- * by hand. Publication is only ever turned ON here — a course the owner
+ * by hand. Publication is only ever turned ON here. A course the owner
  * unpublished stays unpublished, because this command exists to roll out a
  * decision, not to overrule one made later in the admin UI.
  */
@@ -29,7 +29,7 @@ class ApplyCatalogPricing extends Command
             $tier = $tiers[$course->tier] ?? null;
 
             if ($tier === null) {
-                $rows[] = [$course->course_number, mb_substr($course->title, 0, 34), '—', '—', '—', 'no tier'];
+                $rows[] = [$course->course_number, mb_substr($course->title, 0, 34), '-', '-', '-', 'no tier'];
 
                 continue;
             }
@@ -58,14 +58,14 @@ class ApplyCatalogPricing extends Command
                 'T'.$course->tier,
                 $was[0].' → '.$price,
                 '$'.rtrim(rtrim($usd, '0'), '.'),
-                ($publish ? 'published' : ($was[1] ? 'left published' : 'draft — needs approval')),
+                ($publish ? 'published' : ($was[1] ? 'left published' : 'draft, needs approval')),
             ];
         }
 
         $this->table(['#', 'Course', 'Tier', 'UGX', 'USD', 'Status'], $rows);
 
         if ($this->option('dry-run')) {
-            $this->info('Dry run — nothing was written.');
+            $this->info('Dry run. Nothing was written.');
         }
 
         return self::SUCCESS;

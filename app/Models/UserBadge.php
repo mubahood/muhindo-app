@@ -6,7 +6,7 @@ use App\Enums\BadgeType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/** §6.5 — one row per user per earned badge. `created_at` doubles as `earned_at`; never updated. */
+/** One row per user per earned badge. `created_at` doubles as `earned_at`; never updated. */
 class UserBadge extends Model
 {
     public const UPDATED_AT = null;

@@ -18,9 +18,9 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * §5.1/§5.3 — the Classroom-style turn-in flow: draft (private, editable) -> submitted ->
+ * The Classroom-style turn-in flow: draft (private, editable) -> submitted ->
  * returned (graded). Files live on the private `local` disk, same convention as
- * ProjectDocumentController/DocumentService — never web-served directly.
+ * ProjectDocumentController/DocumentService, never web-served directly.
  */
 class AssignmentService
 {
@@ -44,7 +44,7 @@ class AssignmentService
     {
         $isLate = $assignment->isPastDue();
         if ($isLate && ! $assignment->allow_late) {
-            throw new HttpException(422, 'This assignment is closed — the due date has passed.');
+            throw new HttpException(422, 'This assignment is closed. The due date has passed.');
         }
 
         $submission = $this->workingSubmission($enrollment, $assignment);
@@ -95,10 +95,10 @@ class AssignmentService
 
     /**
      * Resolves the row a new draft-save/submit call should write to: the existing draft if one
-     * is still open, otherwise a brand-new attempt — incrementing attempt_no only when the
+     * is still open, otherwise a brand-new attempt, incrementing attempt_no only when the
      * previous attempt has already left draft state (a genuine resubmission), never on every
      * autosave. Blocks further writes once the latest attempt is submitted/returned per
-     * resubmit_until_graded — once returned (graded), the door is closed regardless of the flag.
+     * resubmit_until_graded, once returned (graded), the door is closed regardless of the flag.
      */
     private function workingSubmission(Enrollment $enrollment, Assignment $assignment): AssignmentSubmission
     {
@@ -127,7 +127,7 @@ class AssignmentService
         }
 
         if ($latest->status === AssignmentSubmissionStatus::Returned) {
-            throw new HttpException(409, 'This assignment has already been graded — no further submissions are accepted.');
+            throw new HttpException(409, 'This assignment has already been graded. No further submissions are accepted.');
         }
 
         if (! $assignment->resubmit_until_graded) {

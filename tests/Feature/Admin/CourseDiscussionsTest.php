@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-/** §7.3 — the instructor's per-course Q&A inbox: reply (auto-badged) and resolve. */
+/** The instructor's per-course Q&A inbox: reply (auto-badged) and resolve. */
 class CourseDiscussionsTest extends TestCase
 {
     use RefreshDatabase;

@@ -13,7 +13,7 @@
 @php
     /* Section numbers are assigned as sections render, not written by hand:
        the testimonials block is omitted entirely until real quotes exist, and a
-       hard-coded "03" there left the page counting 01, 02, 04 — which reads as
+       hard-coded "03" there left the page counting 01, 02, 04, which reads as
        a section that failed to load. */
     $n = 0;
     $idx = function () use (&$n) { return str_pad((string) ++$n, 2, '0', STR_PAD_LEFT); };
@@ -73,7 +73,7 @@
   </div>
 </section>
 
-{{-- ═══ Who I am ═══ --}}
+{{-- Who I am --}}
 <section class="tex-glow" id="about">
   <div class="wrap">
     <div class="about-lead">
@@ -100,7 +100,7 @@
   </div>
 </section>
 
-{{-- ═══ References ═══ --}}
+{{-- References --}}
 @if(count($testimonials))
 <section class="band-surface" id="references">
   <div class="wrap">
@@ -137,7 +137,7 @@
 </section>
 @endif
 
-{{-- ═══ What I've built ═══ --}}
+{{-- What I've built --}}
 @if($projects->count())
 <section class="tex-grid">
   <div class="wrap">
@@ -201,7 +201,7 @@
 
 @include('portfolio.partials.elearning-strip')
 
-{{-- ═══ Source code ═══ --}}
+{{-- Source code --}}
 @if($products->isNotEmpty())
 <section class="band-deep code-band">
   <div class="wrap">
@@ -214,7 +214,7 @@
     {{-- A terminal, deliberately answering the browser frame used for the live
          systems above: that section says "this is running", this one says "this
          is the code behind it". Every row is a real product with its real price
-         and real file size, and clicking one opens it — the window is the
+         and real file size, and clicking one opens it. The window is the
          listing, not a picture of a listing. --}}
     <div class="term" data-rise>
       <div class="term-bar" aria-hidden="true">
@@ -230,7 +230,7 @@
             <li>
               <a href="{{ route('shop.show', $product) }}" wire:navigate class="term-row">
                 <span class="perm" aria-hidden="true">-rw-r--r--</span>
-                <span class="size">{{ $product->fileSize() ?? '—' }}</span>
+                <span class="size">{{ $product->fileSize() ?? '-' }}</span>
                 <span class="name">{{ $product->file_name ?: $product->slug.'.zip' }}</span>
                 <span class="price">
                   @if($product->isFree())
@@ -261,7 +261,7 @@
 </section>
 @endif
 
-{{-- ═══ In pictures ═══ --}}
+{{-- In pictures --}}
 @if($photos->isNotEmpty())
 <section class="tex-glow">
   <div class="wrap">
@@ -278,7 +278,7 @@
       @foreach($photos->take(4) as $i => $photo)
         <a href="{{ route('gallery.index') }}" wire:navigate
            class="mosaic-cell {{ $i === 0 ? 'lead' : '' }}"
-           aria-label="{{ $photo->title }} — open the gallery">
+           aria-label="{{ $photo->title }}, open the gallery">
           <img src="{{ $photo->thumbUrl() }}" alt="{{ $photo->altText() }}"
                width="{{ $photo->width }}" height="{{ $photo->height }}" loading="lazy" decoding="async">
           <span class="mosaic-cap">
@@ -298,7 +298,7 @@
 </section>
 @endif
 
-{{-- ═══ Writing ═══ --}}
+{{-- Writing --}}
 @if($posts->isNotEmpty())
 <section class="band-surface">
   <div class="wrap">
@@ -329,7 +329,7 @@
 </section>
 @endif
 
-{{-- ═══ What I can help with ═══ --}}
+{{-- What I can help with --}}
 @if($services->count())
 <section>
   <div class="wrap">
@@ -352,7 +352,7 @@
 </section>
 @endif
 
-{{-- ═══ Who trusts the work ═══ --}}
+{{-- Who trusts the work --}}
 @if(count($clients))
 <section class="band-surface logos-band">
   <div class="wrap">

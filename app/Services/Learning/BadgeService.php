@@ -9,7 +9,7 @@ use App\Models\QuizAttempt;
 use App\Models\User;
 use App\Models\UserBadge;
 
-/** §6.5/§4.5 — awards are idempotent (`firstOrCreate`), so every caller can check-and-award freely without double-issuing. */
+/** Awards are idempotent (`firstOrCreate`), so every caller can check-and-award freely without double-issuing. */
 class BadgeService
 {
     public function __construct(private readonly StreakService $streaks) {}

@@ -34,7 +34,7 @@ class SignatureTest extends TestCase
         $this->get('/brand/signature.png')->assertNotFound();
 
         // And it must actually ship. It was briefly put under storage/app,
-        // which is gitignored in its entirety — a fresh deployment would have
+        // which is gitignored in its entirety. A fresh deployment would have
         // issued unsigned documents and nothing would have said so.
         // git check-ignore exits 0 when a path IS ignored, 1 when it is not.
         exec(
@@ -101,7 +101,7 @@ class SignatureTest extends TestCase
 
         /*
          * Deliberately unsigned. A receipt records that a named person took
-         * the money — "Received by" may be any staff member — so stamping
+         * the money ("Received by" may be any staff member) so stamping
          * Muhindo's signature on it would misstate who did that.
          */
         $this->assertStringNotContainsString(

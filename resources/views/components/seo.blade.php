@@ -1,6 +1,6 @@
 @props([
-    'title' => 'Muhindo Mubaraka — Software Engineer & Programming Teacher',
-    'description' => "I teach computer programming and computer-related courses, and I build software for anyone with a real problem — individuals, startups, schools, clinics, NGOs and enterprises across Uganda.",
+    'title' => 'Muhindo Mubaraka, Software Engineer & Programming Teacher',
+    'description' => "I teach computer programming and computer-related courses, and I build software for anyone with a real problem: individuals, startups, schools, clinics, NGOs and enterprises across Uganda.",
     'image' => null,
     'type' => 'website',
     'canonical' => null,

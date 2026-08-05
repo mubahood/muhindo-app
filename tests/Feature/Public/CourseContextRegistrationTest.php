@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-/** public-w3 — §3.2/§3.3 of PUBLIC_SITE_PLAN.md: contextual auth continuation. */
+/** public-w3, of PUBLIC_SITE_PLAN.md: contextual auth continuation. */
 class CourseContextRegistrationTest extends TestCase
 {
     use RefreshDatabase;
@@ -141,7 +141,7 @@ class CourseContextRegistrationTest extends TestCase
         $this->assertSame(1, Enrollment::where('user_id', $student->id)->where('course_id', $course->id)->count());
     }
 
-    /** W7 walkthrough finding — a guest with a coupon had no way to enter it before an account existed. */
+    /** W7 walkthrough finding. A guest with a coupon had no way to enter it before an account existed. */
     public function test_the_buy_box_shows_a_coupon_field_for_guests_on_a_paid_course(): void
     {
         $course = Course::factory()->create(['is_published' => true, 'price' => 100000]);
@@ -228,7 +228,7 @@ class CourseContextRegistrationTest extends TestCase
             'coupon_code' => 'DOES-NOT-EXIST',
         ]));
 
-        // The account is created and the guest is authenticated regardless — an invalid
+        // The account is created and the guest is authenticated regardless. An invalid
         // coupon must never block registration itself, only fail to discount the invoice.
         $this->assertAuthenticated();
         $response->assertRedirect(route('courses.show', $course));

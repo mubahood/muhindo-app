@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §4.6 — the certificate gate: all lessons complete AND, if any quiz counts_toward_certificate, its average passes. */
+/** The certificate gate: all lessons complete AND, if any quiz counts_toward_certificate, its average passes. */
 class CertificateQuizGateTest extends TestCase
 {
     use RefreshDatabase;
@@ -147,7 +147,7 @@ class CertificateQuizGateTest extends TestCase
         $service->answer($attempt, $question, ['selected' => $correct->id]);
         $service->submit($attempt);
 
-        // Only one of two lessons is done — the enrollment is nowhere near 100%.
+        // Only one of two lessons is done. The enrollment is nowhere near 100%.
         $this->assertSame(0, Certificate::where('enrollment_id', $enrollment->id)->count());
     }
 }

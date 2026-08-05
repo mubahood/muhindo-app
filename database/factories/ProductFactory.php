@@ -34,7 +34,7 @@ class ProductFactory extends Factory
 
     /**
      * Nothing is sold that cannot be handed over, so the default product has
-     * its file actually on disk — otherwise every factory-made product would
+     * its file actually on disk, otherwise every factory-made product would
      * be blocked at the basket and the tests would be testing the guard
      * rather than the journey.
      */

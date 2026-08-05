@@ -15,7 +15,7 @@ use Illuminate\View\View;
 
 class PortfolioController extends Controller
 {
-    /** Lean landing page — a taste of everything, the detail lives on its own page. */
+    /** Lean landing page, a taste of everything, the detail lives on its own page. */
     public function home(): View
     {
         $identity = $this->json('portfolio.identity');
@@ -40,7 +40,7 @@ class PortfolioController extends Controller
     }
 
     /**
-     * §6.2 — Person + Organization structured data for the landing page.
+     * Person + Organization structured data for the landing page.
      *
      * @return array<int,array<string,mixed>>
      */
@@ -143,7 +143,7 @@ class PortfolioController extends Controller
      * The whole record on one page.
      *
      * Assembled from the same tables the individual pages read, so a CV is
-     * never a stale copy of the site — editing an experience entry in the admin
+     * never a stale copy of the site, editing an experience entry in the admin
      * updates the CV in the same breath. It carries print styles rather than a
      * PDF upload for the same reason: an uploaded file goes out of date the
      * moment anything else changes.

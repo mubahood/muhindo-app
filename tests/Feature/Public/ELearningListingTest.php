@@ -6,7 +6,7 @@ use App\Models\Course;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** public-w2 — §2.2 of PUBLIC_SITE_PLAN.md: filters/sort/search are server-rendered and URL-driven. */
+/** public-w2, of PUBLIC_SITE_PLAN.md: filters/sort/search are server-rendered and URL-driven. */
 class ELearningListingTest extends TestCase
 {
     use RefreshDatabase;
@@ -91,7 +91,7 @@ class ELearningListingTest extends TestCase
     {
         /*
          * Six, deliberately small. Twenty-one courses on one page is a wall,
-         * and a wall is a decision a visitor postpones — the owner asked for
+         * and a wall is a decision a visitor postpones, the owner asked for
          * the catalogue broken into groups small enough to actually finish
          * looking at.
          */

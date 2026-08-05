@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Gates the SaaS-central super-admin panel (`/super/*` — HMS_PLAN.md §10
+ * Gates the SaaS-central super-admin panel (`/super/*`,
  * convention: "/admin/* tenant back-office, /super/* SaaS central").
  */
 class IsSuperAdmin

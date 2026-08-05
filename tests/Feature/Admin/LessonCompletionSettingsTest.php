@@ -12,7 +12,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §4.3/§7.4 — admin can configure per-lesson completion rules and content format, per-course progression. */
+/** Admin can configure per-lesson completion rules and content format, per-course progression. */
 class LessonCompletionSettingsTest extends TestCase
 {
     use RefreshDatabase;

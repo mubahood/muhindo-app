@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
  *
  * The page had a one-line description and a bullet list, which answers "what
  * is it called" but not "what was broken", "how does it work" or "what did it
- * have to survive" — the three things a ministry procurement officer is
+ * have to survive" the three things a ministry procurement officer is
  * actually reading for.
  */
 return new class extends Migration

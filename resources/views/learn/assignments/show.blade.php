@@ -28,7 +28,7 @@
     <span><i class="fas fa-calendar"></i> Due {{ $assignment->due_at->toLocal()->format('M j, Y g:ia') }}</span>
   @endif
   @if($assignment->isPastDue())
-    <span style="color:#b91c1c;"><i class="fas fa-triangle-exclamation"></i> {{ $assignment->allow_late ? 'Past due — late submissions accepted' : 'Closed — past due' }}</span>
+    <span style="color:#b91c1c;"><i class="fas fa-triangle-exclamation"></i> {{ $assignment->allow_late ? 'Past due, late submissions accepted' : 'Closed, past due' }}</span>
   @endif
 </div>
 
@@ -44,7 +44,7 @@
     @endif
   </div>
 @elseif($latest && $latest->status->value === 'submitted')
-  <div class="alert-success">Submitted{{ $latest->is_late ? ' (late)' : '' }} on {{ $latest->submitted_at->format('M j, Y g:ia') }} — awaiting grading.</div>
+  <div class="alert-success">Submitted{{ $latest->is_late ? ' (late)' : '' }} on {{ $latest->submitted_at->format('M j, Y g:ia') }}, awaiting grading.</div>
 @endif
 
 @if($canEdit)
@@ -60,13 +60,13 @@
       @if($assignment->acceptsType('link'))
         <div style="margin-bottom:16px;">
           <label class="muted" style="display:block;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Link</label>
-          <input type="url" name="link_url" class="quiz-input" value="{{ old('link_url', $latest?->link_url) }}" placeholder="https://…">
+          <input type="url" name="link_url" class="quiz-input" value="{{ old('link_url', $latest?->link_url) }}" placeholder="https://...">
         </div>
       @endif
       @if($assignment->acceptsAnyFileType())
         <div style="margin-bottom:16px;">
           <label class="muted" style="display:block;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;">
-            File <span>(max {{ $assignment->max_file_mb }}MB — {{ implode(', ', array_diff($assignment->allowedTypes(), ['text', 'link'])) }})</span>
+            File <span>(max {{ $assignment->max_file_mb }}MB, {{ implode(', ', array_diff($assignment->allowedTypes(), ['text', 'link'])) }})</span>
           </label>
           @if($latest?->hasFile())
             <p style="margin-bottom:8px;font-size:13px;">
@@ -90,7 +90,7 @@
     <div style="font-weight:600;margin-bottom:8px;">Submission history</div>
     @foreach($history as $submission)
       <div class="row">
-        Attempt {{ $submission->attempt_no }} — {{ ucfirst($submission->status->value) }}
+        Attempt {{ $submission->attempt_no }}, {{ ucfirst($submission->status->value) }}
         @if($submission->submitted_at) · {{ $submission->submitted_at->format('M j, Y g:ia') }} @endif
         @if($submission->status->value === 'returned') · {{ rtrim(rtrim(number_format((float) $submission->points_awarded, 2), '0'), '.') }}/{{ $assignment->points }} @endif
       </div>

@@ -14,9 +14,9 @@ use RuntimeException;
  * Turns a basket into an invoice.
  *
  * This is the single seam between "what someone chose" and the billing machinery
- * that already exists. Everything after it — the hosted payment session, the
+ * that already exists. Everything after it, the hosted payment session, the
  * server-side verify, recording the payment, the InvoicePaid event and the
- * listeners that grant access — is the same code that already settles course
+ * listeners that grant access, is the same code that already settles course
  * checkouts and client project invoices. There is one payment path on this
  * site, and the shop joins it rather than adding a second.
  */
@@ -50,7 +50,7 @@ class CheckoutService
 
         /* Second check. A basket can sit in a session for days, and a product
            that was deliverable when it went in may have had its file removed
-           since — so the invoice is never raised on a stale answer. */
+           since, so the invoice is never raised on a stale answer. */
         foreach ($contents as $line) {
             if ($line['model'] instanceof Product && ! $line['model']->isDeliverable()) {
                 throw new RuntimeException(
@@ -69,7 +69,7 @@ class CheckoutService
 
             $items[] = [
                 'description' => $line['type'] === 'course'
-                    ? 'Course enrolment — '.$line['name']
+                    ? 'Course enrolment '.$line['name']
                     : $line['name'],
                 'quantity' => $line['quantity'],
                 'unit_price' => $line['unit_price'],

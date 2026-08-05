@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 use Tests\TestCase;
 
-/** §9 — "grades are auditable": grade changes and enrollment mutations are logged via spatie/laravel-activitylog. */
+/** "grades are auditable": grade changes and enrollment mutations are logged via spatie/laravel-activitylog. */
 class GradeAuditLogTest extends TestCase
 {
     use RefreshDatabase;

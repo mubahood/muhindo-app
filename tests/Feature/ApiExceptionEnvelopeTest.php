@@ -27,7 +27,7 @@ class ApiExceptionEnvelopeTest extends TestCase
             });
         });
 
-        // Outside api/* — only gets the envelope when the request itself
+        // Outside api/*, only gets the envelope when the request itself
         // asks for JSON, never by URL alone.
         Route::get('/__test/web-not-found', fn () => abort(404));
     }

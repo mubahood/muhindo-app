@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** P5.4 — API v1 parity: grades (GradebookService) and lesson notes. */
+/** P5.4, API v1 parity: grades (GradebookService) and lesson notes. */
 class GradesAndNotesApiTest extends TestCase
 {
     use RefreshDatabase;

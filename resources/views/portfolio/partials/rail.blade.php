@@ -1,5 +1,5 @@
 @php
-  /* The same set as the "About Me" panel, in the same order — someone who
+  /* The same set as the "About Me" panel, in the same order, someone who
      arrived through the menu finds the rail already familiar. */
   $sections = collect(\App\Support\SiteNav::items())
       ->firstWhere('label', 'About Me')['children'] ?? [];

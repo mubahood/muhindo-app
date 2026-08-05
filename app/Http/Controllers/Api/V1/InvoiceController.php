@@ -10,7 +10,7 @@ use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-/** The signed-in user's own invoices — a client's project invoices or a student's course purchases. */
+/** The signed-in user's own invoices, a client's project invoices or a student's course purchases. */
 class InvoiceController extends Controller
 {
     public function index(Request $request): JsonResponse

@@ -1,10 +1,10 @@
 @props(['show', 'title' => '', 'width' => '560px'])
 {{--
   Reusable AJAX slide-over for Livewire forms.
-  Usage: <x-ui.slideover show="showForm" title="New department">…form…</x-ui.slideover>
+  Usage: <x-ui.slideover show="showForm" title="New department">...form...</x-ui.slideover>
   `show` is the name of a boolean Livewire property; the panel entangles to it so
   opening/closing is driven by the server component and animated by Alpine. No
-  x-teleport — the content stays inside the component root so wire: bindings are
+  x-teleport. The content stays inside the component root so wire: bindings are
   never severed; position:fixed handles the overlay (no transformed ancestors).
 
   STABILITY: the panel only closes via the ✕ button, a Cancel action, or a

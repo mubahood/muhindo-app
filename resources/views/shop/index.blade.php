@@ -1,12 +1,12 @@
 @extends('layouts.marketing')
-@section('title', 'Source code for sale — Muhindo Mubaraka')
-@section('desc', 'Complete, working source code from systems I have delivered — with an install guide for each one.')
+@section('title', 'Source code for sale | Muhindo Mubaraka')
+@section('desc', 'Complete, working source code from systems I have delivered, with an install guide for each one.')
 
 @push('styles')
 <style>
   /* A source-code listing has to answer three questions on the card: what is
      it built in, what is in the archive, and can I actually run it. The old
-     card answered none of them — a cover image, a name and a price. */
+     card answered none of them, a cover image, a name and a price. */
 
   .sc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px;}
   .sc{display:flex;flex-direction:column;border:1px solid var(--line);background:var(--surface);
@@ -46,8 +46,8 @@
   .sc-price s{font-size:12px;color:var(--tx3);}
   .sc-acts{display:flex;gap:6px;margin:0;}
 
-  /* Described, priced, and not yet released. Listed on purpose — the page is
-     worth reading — but with no way to pay for it, because there is nothing
+  /* Described, priced, and not yet released. Listed on purpose. The page is
+     worth reading, but with no way to pay for it, because there is nothing
      behind it to hand over. */
   .sc-soon{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;
     color:var(--tx3);background:var(--bg);border:1px solid var(--line);padding:7px 11px;}
@@ -76,7 +76,7 @@
   <div class="wrap">
     <div class="eyebrow">Buy it and build on it</div>
     <h1>Source code for sale</h1>
-    <p>Complete, working systems I have actually delivered — not demos. Every archive comes with a
+    <p>Complete, working systems I have actually delivered, not demos. Every archive comes with a
        step-by-step install guide, so it runs on your machine and not only on mine.</p>
   </div>
 </section>
@@ -86,7 +86,7 @@
 
     <form method="GET" action="{{ route('shop.index') }}" class="shop-filters" role="search">
       <label class="sr-only" for="q">Search source code</label>
-      <input type="search" id="q" name="q" value="{{ $filters['q'] }}" placeholder="Search…" class="tb-input">
+      <input type="search" id="q" name="q" value="{{ $filters['q'] }}" placeholder="Search..." class="tb-input">
 
       <label class="sr-only" for="category">Category</label>
       <select id="category" name="category" class="tb-input">

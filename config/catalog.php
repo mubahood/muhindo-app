@@ -2,12 +2,12 @@
 
 /*
 |--------------------------------------------------------------------------
-| Course catalogue — pricing, currency and publication
+| Course catalogue, pricing, currency and publication
 |--------------------------------------------------------------------------
 |
 | OWNER: review these. Every price in the catalogue comes from this one file.
 | Change a number, run `php artisan courses:apply-pricing`, and the catalogue
-| follows — you never edit 21 database rows by hand.
+| follows. You never edit 21 database rows by hand.
 |
 | Two currencies, both set by hand. Deliberately NOT a live conversion: an FX
 | API makes the price on the page depend on a third party being up, and can
@@ -15,7 +15,7 @@
 | figures below sit near the UGX ones at roughly 3,800/USD, rounded to prices
 | that read like prices rather than conversions ($15, not $13.16).
 |
-| Only Course 02 (AI-Powered Web Development) is free — it is the shop window.
+| Only Course 02 (AI-Powered Web Development) is free. It is the shop window.
 | Everything else is paid.
 |
 */
@@ -57,7 +57,7 @@ return [
         // accordingly.
         16 => ['price' => 350_000, 'price_usd' => 90],
 
-        // The shortest course in the catalogue at 6 lessons — a crash course,
+        // The shortest course in the catalogue at 6 lessons, a crash course,
         // and priced as one rather than as a full Tier 1.
         6 => ['price' => 40_000, 'price_usd' => 10],
     ],
@@ -66,7 +66,7 @@ return [
     | Currency
     |
     | 'UGX' is home. A visitor is shown USD when we can tell they are outside
-    | Uganda, and either way they can switch with the toggle in the header —
+    | Uganda, and either way they can switch with the toggle in the header
     | an explicit choice always wins over a guess about where somebody is.
     */
     'currencies' => [

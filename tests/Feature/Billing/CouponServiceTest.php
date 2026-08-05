@@ -9,7 +9,7 @@ use App\Services\CouponService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §7.1 — coupon validation + redemption at course-invoice creation. */
+/** Coupon validation + redemption at course-invoice creation. */
 class CouponServiceTest extends TestCase
 {
     use RefreshDatabase;

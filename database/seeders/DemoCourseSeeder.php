@@ -10,14 +10,14 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 /**
- * §9 — "a factory + seeder for every new model (demo course with quiz + assignment seeded for
+ * "a factory + seeder for every new model (demo course with quiz + assignment seeded for
  * local dev)". A demo course with real modules/lessons, a quiz covering several question types,
- * and an assignment is the concretely useful, testable half of that requirement — something a
+ * and an assignment is the concretely useful, testable half of that requirement, something a
  * developer can actually run locally to see the LMS with real-ish content in it. Deliberately
  * NOT wired into DatabaseSeeder's default chain (RbacSeeder/AdminUserSeeder/etc. provision a
  * real environment; this is sample content, opt-in via `--class=DemoCourseSeeder`).
  *
- * Safe to re-run — every write is an upsert keyed on the course slug.
+ * Safe to re-run. Every write is an upsert keyed on the course slug.
  */
 class DemoCourseSeeder extends Seeder
 {
@@ -30,7 +30,7 @@ class DemoCourseSeeder extends Seeder
             [
                 'uuid' => (string) Str::uuid(),
                 'title' => 'Laravel Fundamentals (Demo)',
-                'description' => 'A sample course seeded for local development — covers the basics of routing, Eloquent, and Blade with a short quiz and a written assignment.',
+                'description' => 'A sample course seeded for local development, covers the basics of routing, Eloquent, and Blade with a short quiz and a written assignment.',
                 'price' => 0,
                 'currency' => 'UGX',
                 'level' => 'beginner',
@@ -59,7 +59,7 @@ class DemoCourseSeeder extends Seeder
         $lessonTwo = $module->lessons()->updateOrCreate(
             ['title' => 'Eloquent Models'],
             [
-                'content' => "# Eloquent\n\nEloquent is Laravel's ActiveRecord ORM — each database table gets a corresponding Model for interacting with it.",
+                'content' => "# Eloquent\n\nEloquent is Laravel's ActiveRecord ORM. Each database table gets a corresponding Model for interacting with it.",
                 'content_format' => ContentFormat::Markdown,
                 'sort_order' => 1,
                 'is_published' => true,

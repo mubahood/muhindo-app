@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
 @section('title', 'My library')
-@section('desc', 'Everything you own — downloads, install guides and courses.')
+@section('desc', 'Everything you own, downloads, install guides and courses.')
 
 @push('styles')
 <style>
@@ -54,7 +54,7 @@
   <div class="wrap">
     <div class="eyebrow">Your library</div>
     <h1>Everything you own</h1>
-    <p>Downloads and courses in one place. Re-download as many times as you like — a purchase
+    <p>Downloads and courses in one place. Re-download as many times as you like. A purchase
        does not expire.</p>
   </div>
 </section>
@@ -111,7 +111,7 @@
                 <div class="lb-gone">
                   <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
                   <div>
-                    The file for this is temporarily unavailable. You still own it — tell me and
+                    The file for this is temporarily unavailable. You still own it, tell me and
                     I will send it directly.
                     <a href="{{ route('hire') }}" wire:navigate
                        style="color:var(--pri);font-weight:600;">Ask for it</a>

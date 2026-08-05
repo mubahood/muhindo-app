@@ -73,7 +73,7 @@ class AuthApiTest extends TestCase
 
         $this->withToken($token)->postJson('/api/v1/auth/logout')->assertOk();
 
-        // The token row is revoked (deleted) — the bearer no longer resolves.
+        // The token row is revoked (deleted), the bearer no longer resolves.
         $this->assertSame(0, $u->fresh()->tokens()->count());
     }
 }

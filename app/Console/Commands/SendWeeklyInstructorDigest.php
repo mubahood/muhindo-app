@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
 
 /**
- * §6.4 — weekly "5 students at risk: …" digest, sent to every admin. Runs
+ * Weekly "5 students at risk: ..." digest, sent to every admin. Runs
  * after the nightly `app:detect-at-risk-enrollments` job has had a chance to
  * refresh `at_risk_reason` for the week. Genuinely optional: if nothing is
  * flagged, no email goes out at all.
@@ -18,7 +18,7 @@ class SendWeeklyInstructorDigest extends Command
 {
     protected $signature = 'app:send-weekly-instructor-digest';
 
-    protected $description = 'Email admins a weekly digest of at-risk enrollments (§6.4)';
+    protected $description = 'Email admins a weekly digest of at-risk enrollments';
 
     public function handle(): int
     {
@@ -29,7 +29,7 @@ class SendWeeklyInstructorDigest extends Command
             ->get();
 
         if ($atRisk->isEmpty()) {
-            $this->info('No at-risk enrollments this week — digest skipped.');
+            $this->info('No at-risk enrollments this week, digest skipped.');
 
             return self::SUCCESS;
         }

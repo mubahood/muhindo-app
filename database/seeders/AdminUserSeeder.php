@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-/** Seeds the owner (super_admin) account — always user #1. */
+/** Seeds the owner (super_admin) account, always user #1. */
 class AdminUserSeeder extends Seeder
 {
     public function run(): void
@@ -27,9 +27,9 @@ class AdminUserSeeder extends Seeder
         );
 
         // Seeders run WithoutModelEvents, so the saved-hook role sync never
-        // fires — assign the Spatie role explicitly here.
+        // fires, assign the Spatie role explicitly here.
         $user->syncSpatieRole();
 
-        $this->command->info("AdminUserSeeder: owner account ready — #{$user->id} {$email} / username=admin / password=111111");
+        $this->command->info("AdminUserSeeder: owner account ready, #{$user->id} {$email} / username=admin / password=111111");
     }
 }

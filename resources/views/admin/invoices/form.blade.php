@@ -15,7 +15,7 @@
       <div class="tb-form-group">
         <label class="tb-label">Client *</label>
         <select class="tb-select" name="client_id" required>
-          <option value="">Select…</option>
+          <option value="">Select...</option>
           @foreach($clients as $c)
             <option value="{{ $c->id }}" {{ old('client_id', $selectedClientId) == $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
           @endforeach
@@ -24,7 +24,7 @@
       <div class="tb-form-group">
         <label class="tb-label">Project (optional)</label>
         <select class="tb-select" name="project_id">
-          <option value="">—</option>
+          <option value="">, </option>
           @foreach($projects as $p)
             <option value="{{ $p->id }}" {{ old('project_id', $selectedProjectId) == $p->id ? 'selected' : '' }}>{{ $p->title }}</option>
           @endforeach

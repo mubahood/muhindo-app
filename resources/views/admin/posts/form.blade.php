@@ -81,7 +81,7 @@
         <div class="tb-form-group" style="justify-content:flex-end;">
           <label class="tb-check-group">
             <input type="checkbox" name="is_published" value="1" @checked(old('is_published', $item->is_published))>
-            Published — visible to everyone
+            Published, visible to everyone
           </label>
         </div>
       </div>

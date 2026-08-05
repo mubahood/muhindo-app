@@ -21,7 +21,7 @@
     <div class="tl">
       @foreach($education as $ed)
         <div class="tl-row">
-          <div class="tl-when">{{ $ed->start_date?->format('Y') }} – {{ $ed->end_date?->format('Y') ?? 'Present' }}</div>
+          <div class="tl-when">{{ $ed->start_date?->format('Y') }} - {{ $ed->end_date?->format('Y') ?? 'Present' }}</div>
           <div class="tl-what">
             <h3>{{ $ed->degree }}</h3>
             <div class="org">{{ $ed->institution }}</div>

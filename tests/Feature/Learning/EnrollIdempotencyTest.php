@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** L8 — a double-click on Enrol must never 500; at most one enrollment row ever exists. */
+/** L8. A double-click on Enrol must never 500; at most one enrollment row ever exists. */
 class EnrollIdempotencyTest extends TestCase
 {
     use RefreshDatabase;
@@ -32,7 +32,7 @@ class EnrollIdempotencyTest extends TestCase
         $student = User::factory()->create(['role' => 'student']);
 
         // Simulate the true race: a row is inserted "underneath" the controller's
-        // initial existence check, then firstOrCreate is attempted anyway — it must
+        // initial existence check, then firstOrCreate is attempted anyway. It must
         // resolve to the existing row rather than throwing a unique-constraint 500.
         Enrollment::create([
             'uuid' => (string) \Illuminate\Support\Str::uuid(),

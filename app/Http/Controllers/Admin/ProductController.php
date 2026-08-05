@@ -50,7 +50,7 @@ class ProductController extends Controller
     {
         if ($product->licenses()->exists()) {
             // People who paid for this must keep their download.
-            return back()->with('error', 'This product has been bought — unpublish it instead of deleting it.');
+            return back()->with('error', 'This product has been bought, unpublish it instead of deleting it.');
         }
 
         if ($product->cover_image) {

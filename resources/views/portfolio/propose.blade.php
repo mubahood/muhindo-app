@@ -6,7 +6,7 @@
 <style>
   /* Five questions across three steps, and everything optional folded behind
      one disclosure. The previous version asked ten things over five steps,
-     which is a page people close — every extra field is somebody deciding to
+     which is a page people close. Every extra field is somebody deciding to
      do this another day. */
 
   .pp{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:34px;align-items:start;}
@@ -43,7 +43,7 @@
   .pp-cat:has(input:checked){border-color:var(--gold);background:var(--gold-soft);}
   .pp-cat:has(input:checked) span{color:var(--pri);font-weight:500;}
 
-  /* Money. The currency is a real choice — most clients think in shillings and
+  /* Money. The currency is a real choice, most clients think in shillings and
      some think in dollars, and converting for them is a way to get it wrong. */
   .pp-money{display:flex;}
   .pp-cur{display:flex;flex-shrink:0;}
@@ -152,7 +152,7 @@
       @csrf
 
       <div>
-        {{-- 1 ─────────────────────────────────────────────────────────── --}}
+        {{-- 1 --}}
         <div class="pp-step">
           <h2><span class="pp-n">01</span> What are you building?</h2>
           <p class="pp-hint">A name and a few sentences. Plain language is perfect. I would rather
@@ -187,7 +187,7 @@
           </div>
         </div>
 
-        {{-- 2 ─────────────────────────────────────────────────────────── --}}
+        {{-- 2 --}}
         <div class="pp-step">
           <h2><span class="pp-n">02</span> When, and what can you spend?</h2>
           <p class="pp-hint">Both honestly. A budget you name is a budget I can design to; a budget
@@ -196,7 +196,7 @@
           <div class="pp-f">
             <label for="timeline">When would you want this working?</label>
             <select id="timeline" name="timeline" required>
-              <option value="">Choose one…</option>
+              <option value="">Choose one...</option>
               @foreach($timelines as $value => $label)
                 <option value="{{ $value }}" @selected(old('timeline') === $value)>{{ $label }}</option>
               @endforeach
@@ -215,7 +215,7 @@
               </span>
               {{-- step="any", not step="1000". A stepped number field rejects
                    anything off the ladder, so typing 89 produced "the two
-                   nearest valid values are 0 and 1000" — the browser refusing
+                   nearest valid values are 0 and 1000" the browser refusing
                    a perfectly good answer. --}}
               <input type="number" id="budget_amount" name="budget_amount" min="0" step="any"
                      inputmode="numeric" value="{{ old('budget_amount') }}"
@@ -225,7 +225,7 @@
           </div>
         </div>
 
-        {{-- 3 ─────────────────────────────────────────────────────────── --}}
+        {{-- 3 --}}
         <div class="pp-step">
           <h2><span class="pp-n">03</span> How do I reach you?</h2>
           <p class="pp-hint">I already have your name and email from your account. WhatsApp is how
@@ -250,7 +250,7 @@
           </div>
         </div>
 
-        {{-- Everything optional, out of the way ─────────────────────────── --}}
+        {{-- Everything optional, out of the way --}}
         <details class="pp-more" @if(old('who_uses_it') || old('success_looks_like') || old('organisation')) open @endif>
           <summary>
             <span class="caret" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
@@ -291,7 +291,7 @@
         </div>
       </div>
 
-      {{-- The rail ─────────────────────────────────────────────────────── --}}
+      {{-- The rail --}}
       <aside class="pp-side">
         <div class="pp-card">
           <h3>What happens next</h3>
@@ -343,7 +343,7 @@
   /* The draft.
    *
    * This form is long enough that somebody will be interrupted halfway
-   * through it — a phone call, a dead battery, a session that expired while
+   * through it, a phone call, a dead battery, a session that expired while
    * they were thinking. Losing what they typed loses the client, so every
    * keystroke is kept on their own device and put back when they return.
    *
@@ -390,8 +390,8 @@
     fields().forEach(function (el) {
       var value = data[el.name];
       if (value === undefined || value === null || value === '') return;
-      // Anything the server already put back — old() after a validation
-      // error — wins. It is the more recent truth.
+      // Anything the server already put back, old() after a validation
+      // error, wins. It is the more recent truth.
       if (el.type === 'radio') { if (el.value === value) el.checked = true; }
       else if (!el.value) { el.value = value; }
     });

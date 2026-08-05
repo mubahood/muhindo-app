@@ -57,7 +57,7 @@ class AssignmentSubmission extends Model
         return $this->file_path !== null;
     }
 
-    /** §9 — grades are auditable: the grade itself and the status transition (submitted → returned), not draft edits. */
+    /** Grades are auditable: the grade itself and the status transition (submitted → returned), not draft edits. */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

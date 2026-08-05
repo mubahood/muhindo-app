@@ -10,7 +10,7 @@ use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-/** P5.4 — the API equivalent of Student\GradesController. */
+/** P5.4, the API equivalent of Student\GradesController. */
 class GradeController extends Controller
 {
     public function __construct(private readonly GradebookService $gradebook) {}

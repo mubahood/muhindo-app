@@ -17,7 +17,7 @@ use Tests\TestCase;
  * On a phone every one of these pages is a long scroll and the thing you would
  * act on sits at one end of it, so it is pinned to the bottom of the window
  * instead. What matters is that it never says something different from the
- * control it is standing in for — a bar offering a price, a button or a
+ * control it is standing in for, a bar offering a price, a button or a
  * destination the page itself does not is worse than no bar.
  */
 class ActionBarTest extends TestCase
@@ -129,7 +129,7 @@ class ActionBarTest extends TestCase
         $bar = $this->bar(route('portfolio.project', $project));
 
         // Hire, and a walkthrough of this system. Most of these are internal,
-        // so "request a demo" is the honest offer — and it carries the slug so
+        // so "request a demo" is the honest offer, and it carries the slug so
         // the brief already knows which system.
         $this->assertStringContainsString(route('hire'), $bar);
         $this->assertStringContainsString('demo='.$project->slug, $bar);

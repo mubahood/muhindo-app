@@ -14,12 +14,12 @@ use Illuminate\Http\Request;
  *      always beats an inference about where somebody is sitting.
  *   2. Their country, when the edge tells us. Cloudflare and most CDNs send
  *      it as a header; it costs nothing and needs no lookup.
- *   3. Shillings. This is a Ugandan business — the home currency is the right
+ *   3. Shillings. This is a Ugandan business. The home currency is the right
  *      thing to show when we genuinely do not know.
  *
  * There is deliberately no IP-geolocation API call here. It would put a
  * third-party request in front of every page render, fail closed on a bad day,
- * and be wrong for anybody on a VPN — while the toggle solves the same problem
+ * and be wrong for anybody on a VPN, while the toggle solves the same problem
  * instantly and honestly.
  */
 class Currency
@@ -74,7 +74,7 @@ class Currency
         foreach (self::COUNTRY_HEADERS as $header) {
             $value = $request->header($header);
 
-            // Cloudflare sends XX for anonymised traffic and T1 for Tor —
+            // Cloudflare sends XX for anonymised traffic and T1 for Tor,
             // neither is a country, and treating them as one would silently
             // put those visitors on the wrong currency.
             if (is_string($value) && preg_match('/^[A-Z]{2}$/', $value) && ! in_array($value, ['XX', 'T1'], true)) {
@@ -92,7 +92,7 @@ class Currency
 
         $amount = $currency === 'USD'
             // A course with no USD price set falls back to its shilling price
-            // rather than showing 0 — free is a claim, and a missing number
+            // rather than showing 0, free is a claim, and a missing number
             // is not a claim that something costs nothing.
             ? ($course->price_usd ?? $course->price)
             : $course->price;

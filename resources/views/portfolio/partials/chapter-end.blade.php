@@ -1,8 +1,8 @@
 {{--
   How every chapter of the About story ends: hire, or read the next one.
 
-  The next chapter is derived from SiteNav — the same list the sidebar is built
-  from — rather than hand-written per page. Hard-coding it meant the About page
+  The next chapter is derived from SiteNav. The same list the sidebar is built
+  from, rather than hand-written per page. Hard-coding it meant the About page
   pointed at "Experience" while the rail put "My work" second, so the button
   and the sidebar disagreed about what came next. Reorder the nav and both
   follow together.

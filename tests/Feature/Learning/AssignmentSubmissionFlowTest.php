@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §5.1/§5.3 — the student-facing assignment list/show/draft/submit/download HTTP flow. */
+/** The student-facing assignment list/show/draft/submit/download HTTP flow. */
 class AssignmentSubmissionFlowTest extends TestCase
 {
     use RefreshDatabase;

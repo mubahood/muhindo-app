@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** A client of the business — optionally linked to a `client`-role User for portal access. */
+/** A client of the business, optionally linked to a `client`-role User for portal access. */
 return new class extends Migration
 {
     public function up(): void

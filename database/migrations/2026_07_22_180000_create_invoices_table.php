@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * A billing document raised against either a client (project work) or a user
- * (a course purchase) — billable_type/billable_id covers both. Monetary
+ * (a course purchase), billable_type/billable_id covers both. Monetary
  * columns are decimal(12,2); amount_paid/balance are roll-ups kept in step
  * with the append-only payments rows.
  */

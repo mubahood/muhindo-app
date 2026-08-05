@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.5 — the curriculum builder: publish toggle, quick-add, drag-drop reorder, duration auto-fetch. */
+/** The curriculum builder: publish toggle, quick-add, drag-drop reorder, duration auto-fetch. */
 class CurriculumBuilderTest extends TestCase
 {
     use RefreshDatabase;

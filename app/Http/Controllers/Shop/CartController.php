@@ -47,7 +47,7 @@ class CartController extends Controller
            is not trusted from one place. */
         if ($item instanceof Product && ! $item->isDeliverable()) {
             return back()->with('error',
-                'That download is not ready yet — it has not been added to the basket.');
+                'That download is not ready yet. It has not been added to the basket.');
         }
 
         $this->cart->add($item, (int) ($data['quantity'] ?? 1));

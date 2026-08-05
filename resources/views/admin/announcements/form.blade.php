@@ -27,13 +27,13 @@
         <div class="tb-form-group">
           <label class="tb-check-group">
             <input type="checkbox" name="publish_now" value="1" checked>
-            <span>Publish immediately — notifies every enrolled student</span>
+            <span>Publish immediately, notifies every enrolled student</span>
           </label>
         </div>
       @elseif(!$announcement->isPublished())
         <p class="muted">This announcement is still a draft. Publish it from the course page once you're ready to notify students.</p>
       @else
-        <p class="muted">Published {{ $announcement->published_at->format('M j, Y g:ia') }} — editing now only changes what students see, it will not re-notify them.</p>
+        <p class="muted">Published {{ $announcement->published_at->format('M j, Y g:ia') }}, editing now only changes what students see, it will not re-notify them.</p>
       @endif
     </div>
   </div>

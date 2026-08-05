@@ -13,7 +13,7 @@ use RuntimeException;
  *
  * Everything here is deliberately blunt about one thing: neither action moves
  * money and neither grants access. Access is granted exactly one way in this
- * application — a Payment clears the balance, InvoicePaid fires, and its
+ * application, a Payment clears the balance, InvoicePaid fires, and its
  * listeners activate enrollments and grant product licences. Declaring an
  * intention to pay in cash must not become a second, quieter door into the
  * same place, or "I'll pay you directly" is just a way to take the course free.
@@ -44,7 +44,7 @@ class BuyerPaymentService
         return $invoice->refresh();
     }
 
-    /** Undo the arrangement — for when they come back and pay online after all. */
+    /** Undo the arrangement, for when they come back and pay online after all. */
     public function cancelDirectArrangement(Invoice $invoice): Invoice
     {
         $this->assertOutstanding($invoice);
@@ -65,7 +65,7 @@ class BuyerPaymentService
     public function cancel(Invoice $invoice): Invoice
     {
         if ($invoice->status === InvoiceStatus::Void) {
-            return $invoice;   // idempotent — a double-submitted cancel is not an error
+            return $invoice;   // idempotent. A double-submitted cancel is not an error
         }
 
         if (in_array($invoice->status, [InvoiceStatus::Paid, InvoiceStatus::Refunded], true)) {
@@ -86,7 +86,7 @@ class BuyerPaymentService
             // invoice between the button being rendered and this running, and
             // voiding a just-paid invoice would take away what they bought.
             if (! $locked->status->isPayable() || bccomp((string) $locked->amount_paid, '0', 2) > 0) {
-                throw new RuntimeException('This order can no longer be cancelled — it has just been paid.');
+                throw new RuntimeException('This order can no longer be cancelled. It has just been paid.');
             }
 
             $locked->forceFill([
@@ -99,7 +99,7 @@ class BuyerPaymentService
             // A pending enrollment exists only to hold a seat against this
             // invoice. Left behind, it would block buying the course again:
             // enroll() treats a pending enrollment that has an invoice as
-            // "just go and pay it" — and that invoice is now void.
+            // "just go and pay it" and that invoice is now void.
             Enrollment::where('invoice_id', $locked->id)
                 ->where('status', 'pending')
                 ->update(['status' => 'cancelled', 'invoice_id' => null]);

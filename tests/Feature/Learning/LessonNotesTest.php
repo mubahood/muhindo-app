@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.3 — private, timestamped lesson notes: create, list, delete, and the click-to-seek timestamp. */
+/** Private, timestamped lesson notes: create, list, delete, and the click-to-seek timestamp. */
 class LessonNotesTest extends TestCase
 {
     use RefreshDatabase;

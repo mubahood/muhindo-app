@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-/** §4.5/§6.3.3 — fired by NotifyInstructorOfAssignmentSubmission so grading isn't discovered cold from the queue. */
+/** Fired by NotifyInstructorOfAssignmentSubmission so grading isn't discovered cold from the queue. */
 class AssignmentSubmittedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -28,7 +28,7 @@ class AssignmentSubmittedNotification extends Notification implements ShouldQueu
 
         return [
             'title' => "New submission for \"{$assignment->title}\"",
-            'message' => "{$student->name} turned in their work — grade it from the grading queue.",
+            'message' => "{$student->name} turned in their work, grade it from the grading queue.",
         ];
     }
 }

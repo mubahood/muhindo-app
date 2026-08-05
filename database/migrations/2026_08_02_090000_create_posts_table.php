@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Insights — the writing side of the site.
+ * Insights, the writing side of the site.
  *
  * Deliberately a first-class table rather than another JSON settings blob: a
  * post has its own URL, its own publish date and its own SEO, and none of that

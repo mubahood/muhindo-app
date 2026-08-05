@@ -12,8 +12,8 @@ use Illuminate\Support\Str;
 /**
  * Persists one parsed course file.
  *
- * Idempotent by natural key — course by slug, module by title within the
- * course, lesson by title within the module — so a re-run updates rather than
+ * Idempotent by natural key, course by slug, module by title within the
+ * course, lesson by title within the module, so a re-run updates rather than
  * duplicates. That matters because these files will be re-imported every time
  * a title is fixed or a dead link replaced, and a catalogue that grows a second
  * copy of itself on the second run is not usable.
@@ -130,7 +130,7 @@ class CourseImporter
             // student who only ever visited this site.
             'video_url' => $videoId ? 'https://www.youtube-nocookie.com/embed/'.$videoId : null,
             // The canonical watch URL, kept because a student may want to open
-            // it on YouTube and subscribe — and because a non-embeddable video
+            // it on YouTube and subscribe, and because a non-embeddable video
             // has nowhere else to send them.
             'resource_url' => $videoId ? 'https://www.youtube.com/watch?v='.$videoId : null,
             'is_embeddable' => $canPlayInline,

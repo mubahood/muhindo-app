@@ -25,7 +25,7 @@
 
   @if($bestAttempt)
     <div class="alert-success" style="{{ $bestAttempt->passed ? '' : 'background:#fbe9e9;color:#b91c1c;border-color:#b91c1c;' }}">
-      Best score: {{ rtrim(rtrim(number_format((float) $bestAttempt->score_percent, 1), '0'), '.') }}% —
+      Best score: {{ rtrim(rtrim(number_format((float) $bestAttempt->score_percent, 1), '0'), '.') }}%,
       {{ $bestAttempt->passed ? 'Passed' : 'Not yet passed' }}
     </div>
   @endif

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * public-w1 — §2.1 of PUBLIC_SITE_PLAN.md: /e-learning is the canonical public URL for
+ * public-w1, of PUBLIC_SITE_PLAN.md: /e-learning is the canonical public URL for
  * the course catalogue; /courses/* is kept as a permanent redirect for anyone who
  * already bookmarked or indexed the old URL. Route names stay `courses.*` (zero
  * churn to call sites), only the URI prefix changed.
@@ -59,7 +59,7 @@ class ELearningRoutesTest extends TestCase
     public function test_a_nonexistent_old_course_slug_still_redirects_before_404ing(): void
     {
         // Abuse path: a slug that never existed must still redirect (not 404 on the old
-        // path) — the redirect is a plain URI rewrite, unaware of whether the course
+        // path). The redirect is a plain URI rewrite, unaware of whether the course
         // resolves; the new canonical route is what 404s, which is correct.
         $response = $this->get('/courses/does-not-exist');
 

@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\TestCase;
 
-/** §5.1/§5.3 — AssignmentService's draft/submit lifecycle, resubmission rules, and late handling. */
+/** AssignmentService's draft/submit lifecycle, resubmission rules, and late handling. */
 class AssignmentServiceTest extends TestCase
 {
     use RefreshDatabase;

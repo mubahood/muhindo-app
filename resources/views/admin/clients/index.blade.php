@@ -17,8 +17,8 @@
         <tr>
           <td class="muted">{{ $client->client_number }}</td>
           <td style="font-weight:500;"><a href="{{ route('admin.clients.show', $client) }}">{{ $client->name }}</a></td>
-          <td>{{ $client->company ?? '—' }}</td>
-          <td>{{ $client->email ?? $client->phone ?? '—' }}</td>
+          <td>{{ $client->company ?? '-' }}</td>
+          <td>{{ $client->email ?? $client->phone ?? '-' }}</td>
           <td>{{ $client->projects_count }}</td>
           <td>@if($client->user_id)<span class="badge-tb badge-active">Enabled</span>@else<span class="badge-tb badge-neutral">None</span>@endif</td>
           <td>

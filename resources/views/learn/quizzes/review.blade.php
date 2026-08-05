@@ -1,6 +1,6 @@
 @extends('layouts.learn')
-@section('title', $quiz->title . ' — Review')
-@section('page_title', $quiz->title." — Review")
+@section('title', $quiz->title . ' | Review')
+@section('page_title', $quiz->title." | Review")
 
 @push('styles')
 <style>
@@ -18,7 +18,7 @@
 @endpush
 
 @section('learn_content')
-<h1>{{ $quiz->title }} — Attempt {{ $attempt->attempt_no }}</h1>
+<h1>{{ $quiz->title }}, Attempt {{ $attempt->attempt_no }}</h1>
 
 @if($attempt->status->value === 'in_progress')
   <div class="card"><p class="muted">This attempt hasn't been submitted yet.</p>
@@ -63,7 +63,7 @@
             @else <i class="fas fa-hourglass-half"></i> Pending review
             @endif
           </span>
-          <span>{{ $f['points_awarded'] !== null ? rtrim(rtrim(number_format($f['points_awarded'], 2), '0'), '.') : '—' }} / {{ rtrim(rtrim(number_format($f['max_points'], 2), '0'), '.') }} pts</span>
+          <span>{{ $f['points_awarded'] !== null ? rtrim(rtrim(number_format($f['points_awarded'], 2), '0'), '.') : '-' }} / {{ rtrim(rtrim(number_format($f['max_points'], 2), '0'), '.') }} pts</span>
         </div>
         <div class="markdown-body">{!! $renderedPrompts[$question->id] !!}</div>
         @if($f['explanation'])
@@ -78,7 +78,7 @@
     <div class="card">
       <p class="muted">
         @if($quiz->feedback_mode->value === 'none')
-          This quiz is scored only — no per-question feedback is shown.
+          This quiz is scored only. No per-question feedback is shown.
         @elseif($quiz->feedback_mode->value === 'after_close')
           Feedback for this quiz becomes available after it closes{{ $quiz->available_until ? ' on ' . $quiz->available_until->toLocal()->format('M j, Y g:ia') : '' }}.
         @endif

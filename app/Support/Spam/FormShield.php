@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
  *
  * A captcha service would mean an external dependency, keys to rotate, a
  * request to someone else's server on every page, and a puzzle that is
- * measurably harder for disabled and low-bandwidth visitors — on a site whose
+ * measurably harder for disabled and low-bandwidth visitors, on a site whose
  * whole audience is in places where bandwidth is not free. So this uses the two
  * signals that actually separate a bot from a person, and asks the person to do
  * nothing at all:
@@ -21,7 +21,7 @@ use Illuminate\Validation\ValidationException;
  *      is refused.
  *
  * The timestamp is encrypted rather than plain, so it cannot be forged or
- * replayed with an edited value — Crypt already carries the app key and a MAC.
+ * replayed with an edited value, Crypt already carries the app key and a MAC.
  */
 class FormShield
 {
@@ -56,7 +56,7 @@ class FormShield
     /**
      * Validate the timing signal. Unlike the honeypot this is surfaced to the
      * sender, because a real person can legitimately trip it by leaving a tab
-     * open — and they need to be told to try again rather than silently ignored.
+     * open, and they need to be told to try again rather than silently ignored.
      *
      * @throws ValidationException
      */
@@ -77,7 +77,7 @@ class FormShield
         $elapsed = now()->getTimestamp() - $issuedAt;
 
         if ($elapsed < self::MIN_SECONDS) {
-            self::fail('That was submitted a little too quickly — please try once more.');
+            self::fail('That was submitted a little too quickly, please try once more.');
         }
 
         if ($elapsed > self::MAX_SECONDS) {

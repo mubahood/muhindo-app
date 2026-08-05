@@ -2,7 +2,7 @@
   Muhindo's signature over a ruled line, for documents he issues.
 
   Lives in resources/, NOT public/. DomPDF loads it off the filesystem, so it
-  never needs to be web-reachable — and a signature at a guessable public URL is
+  never needs to be web-reachable, and a signature at a guessable public URL is
   one anyone can download and paste onto a document of their own. dompdf's
   chroot is base_path(), so resources/ is readable.
 

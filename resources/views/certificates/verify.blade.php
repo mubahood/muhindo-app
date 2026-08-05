@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Verify Certificate — Muhindo Mubaraka')
+@section('title', 'Verify Certificate | Muhindo Mubaraka')
 
 @section('content')
 <section class="hero" style="padding-bottom:20px;">

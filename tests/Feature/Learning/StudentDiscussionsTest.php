@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.3 — the student-facing Q&A flow: ask, view, reply, resolve. */
+/** The student-facing Q&A flow: ask, view, reply, resolve. */
 class StudentDiscussionsTest extends TestCase
 {
     use RefreshDatabase;

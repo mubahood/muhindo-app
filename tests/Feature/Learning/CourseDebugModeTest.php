@@ -15,8 +15,8 @@ use Tests\TestCase;
 /**
  * The per-course authoring switch that lifts the pacing gates.
  *
- * Two things are worth defending. It has to actually work — a lesson with a
- * minimum time and a required quiz must complete immediately — and it must
+ * Two things are worth defending. It has to actually work, a lesson with a
+ * minimum time and a required quiz must complete immediately, and it must
  * never be quiet about it, because while it is on, anyone enrolled can finish
  * the course and earn its certificate without doing the work.
  */
@@ -53,7 +53,7 @@ class CourseDebugModeTest extends TestCase
         return [$student, $course, $lesson, $enrollment];
     }
 
-    // ── Off by default ──────────────────────────────────────────────────────
+    // Off by default
 
     public function test_a_course_is_not_in_debug_mode_unless_it_is_turned_on(): void
     {
@@ -82,7 +82,7 @@ class CourseDebugModeTest extends TestCase
         );
     }
 
-    // ── On ──────────────────────────────────────────────────────────────────
+    // On
 
     public function test_with_it_on_every_gate_is_lifted(): void
     {
@@ -134,7 +134,7 @@ class CourseDebugModeTest extends TestCase
             ->assertDontSee('Debug mode is on for this course');
     }
 
-    // ── Who may turn it on ──────────────────────────────────────────────────
+    // Who may turn it on
 
     public function test_staff_can_turn_it_on_and_off_from_the_course_form(): void
     {
@@ -146,7 +146,7 @@ class CourseDebugModeTest extends TestCase
 
         // Mirrors what the form actually posts. The slug matters: it is the
         // course's route key, and leaving it out makes the controller
-        // regenerate it from the title — which would change the URL this very
+        // regenerate it from the title, which would change the URL this very
         // test then posts to.
         $payload = [
             'title' => $course->title,

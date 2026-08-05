@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** PUBLIC_SITE_PLAN.md §3.4 — the first-visit onboarding checklist is dismissible per user. */
+/** The first-visit onboarding checklist is dismissible per user. */
 return new class extends Migration
 {
     public function up(): void

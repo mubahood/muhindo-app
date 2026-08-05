@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §6.5/§4.5 — earned badges (course completions, a perfect quiz, a streak). One row per user per badge, ever. */
+/** Earned badges (course completions, a perfect quiz, a streak). One row per user per badge, ever. */
 return new class extends Migration
 {
     public function up(): void

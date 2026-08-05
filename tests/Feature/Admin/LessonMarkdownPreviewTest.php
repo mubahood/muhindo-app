@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §7.4 — the admin split-pane preview renders through the exact same pipeline students see. */
+/** The admin split-pane preview renders through the exact same pipeline students see. */
 class LessonMarkdownPreviewTest extends TestCase
 {
     use RefreshDatabase;

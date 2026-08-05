@@ -17,7 +17,7 @@ use Illuminate\View\View;
 
 /**
  * One public sign-up form for everyone. The visitor chooses what they're here
- * for — learning, hiring, or both — and the form pre-selects that from where
+ * for (learning, hiring, or both) and the form pre-selects that from where
  * they came: a course page defaults to learning, the "Start a project" page to
  * hiring. Capabilities are independent flags, so choosing both is a first-class
  * option rather than two separate accounts.
@@ -74,7 +74,7 @@ class StudentRegistrationController extends Controller
 
         event(new Registered($user));
 
-        // remember=true — same policy as login: signed in until they sign out.
+        // remember=true, same policy as login: signed in until they sign out.
         Auth::login($user, true);
 
         if ($isStudent && $course = $this->intendedCourse($request)) {
@@ -86,7 +86,7 @@ class StudentRegistrationController extends Controller
            dashboard to find their way back. */
         if (! app(\App\Services\Shop\Cart::class)->isEmpty()) {
             return redirect()->route('checkout.review')
-                ->with('success', 'Welcome! Your basket is still here — finish when you are ready.');
+                ->with('success', 'Welcome! Your basket is still here, finish when you are ready.');
         }
 
         /* A client goes straight to the proposal. They pressed "Hire Me" a
@@ -94,14 +94,14 @@ class StudentRegistrationController extends Controller
            intention gets lost. */
         if ($isClient) {
             return redirect()->route('propose')->with('success',
-                'Account created. Now tell me what you want built — it takes about three minutes.');
+                'Account created. Now tell me what you want built. It takes about three minutes.');
         }
 
         return redirect()->intended(route('dashboard'))
             ->with('success', 'Welcome! Your account has been created.');
     }
 
-    /** §3.2 — a guest arriving via "Enrol now" on a course page carries the course through registration. */
+    /** A guest arriving via "Enrol now" on a course page carries the course through registration. */
     private function intendedCourse(Request $request): ?Course
     {
         $slug = $request->string('intended_course')->trim()->value();

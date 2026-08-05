@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.4 — nightly rules-first at-risk tagging: inactive, stalled, struggling, missing_work. */
+/** Nightly rules-first at-risk tagging: inactive, stalled, struggling, missing_work. */
 class DetectAtRiskEnrollmentsTest extends TestCase
 {
     use RefreshDatabase;

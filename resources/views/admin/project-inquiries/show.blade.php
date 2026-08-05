@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Project Inquiry — '.$inquiry->name)
+@section('title', 'Project Inquiry | '.$inquiry->name)
 
 @section('content')
 
@@ -14,7 +14,7 @@
   <div class="tb-card-body">
     <div class="tb-form-grid">
       <div><div class="muted" style="font-size:.75rem;">Email</div><a href="mailto:{{ $inquiry->email }}">{{ $inquiry->email }}</a></div>
-      <div><div class="muted" style="font-size:.75rem;">Phone / WhatsApp</div>{{ $inquiry->phone ?: '—' }}</div>
+      <div><div class="muted" style="font-size:.75rem;">Phone / WhatsApp</div>{{ $inquiry->phone ?: '-' }}</div>
       <div><div class="muted" style="font-size:.75rem;">Organisation</div>{{ $inquiry->organisation ?: 'Individual' }}</div>
       <div><div class="muted" style="font-size:.75rem;">Project type</div>{{ str_replace('_', ' ', ucfirst($inquiry->project_type)) }}</div>
       <div><div class="muted" style="font-size:.75rem;">Budget</div>{{ $inquiry->budget_range ? str_replace('_', ' ', $inquiry->budget_range) : 'Not specified' }}</div>

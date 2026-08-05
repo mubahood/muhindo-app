@@ -22,7 +22,7 @@
       <div class="tb-form-group">
         <label class="tb-label">Client *</label>
         <select class="tb-select" name="client_id" required>
-          <option value="">Select…</option>
+          <option value="">Select...</option>
           @foreach($clients as $c)
             <option value="{{ $c->id }}" {{ old('client_id', $project->client_id ?? request('client_id')) == $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
           @endforeach

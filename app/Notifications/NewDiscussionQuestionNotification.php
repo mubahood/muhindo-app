@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
-/** §7.3 — fired to the course instructor when a student asks a new question. */
+/** Fired to the course instructor when a student asks a new question. */
 class NewDiscussionQuestionNotification extends Notification implements ShouldQueue
 {
     use Queueable;

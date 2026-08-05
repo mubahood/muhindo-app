@@ -4,7 +4,7 @@ namespace App\Enums;
 
 /**
  * Stable machine-readable codes for the API error envelope (HMS_PLAN.md
- * §3.D). Clients branch on `code`, never on `message` (message is for
+ * ). Clients branch on `code`, never on `message` (message is for
  * humans and may change wording without breaking integrations).
  */
 enum ApiErrorCode: string

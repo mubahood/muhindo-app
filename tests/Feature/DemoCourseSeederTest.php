@@ -7,7 +7,7 @@ use Database\Seeders\DemoCourseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §9 — "a factory + seeder ... demo course with quiz + assignment seeded for local dev." */
+/** "a factory + seeder ... demo course with quiz + assignment seeded for local dev." */
 class DemoCourseSeederTest extends TestCase
 {
     use RefreshDatabase;

@@ -9,7 +9,7 @@ use Tests\TestCase;
  *
  * The public layout carries a single large inline stylesheet. A terminal cursor
  * was styled as a bare `.caret`, and the navigation chevron and the account-menu
- * chevron were both already using that class name — so both header icons turned
+ * chevron were both already using that class name, so both header icons turned
  * into a blinking gold block.
  *
  * There is no general rule to assert here. Plenty of classes in this sheet are
@@ -28,7 +28,7 @@ class StylesheetScopeTest extends TestCase
         $this->assertDoesNotMatchRegularExpression(
             '/(?:^|[,}])\s*\.caret\s*\{/m',
             $css,
-            '.caret must never be styled without a parent — the nav and account chevrons both use it'
+            '.caret must never be styled without a parent, the nav and account chevrons both use it'
         );
     }
 
@@ -43,7 +43,7 @@ class StylesheetScopeTest extends TestCase
     public function test_the_page_header_is_defined_once(): void
     {
         /* It had fragmented into three rules in different parts of the sheet,
-           and the last one set `padding:26px 0 0` — so every page header on the
+           and the last one set `padding:26px 0 0`, so every page header on the
            site sat with its content pressed against whatever came next. Rules
            for one component belong in one place, or the last edit silently
            wins. */

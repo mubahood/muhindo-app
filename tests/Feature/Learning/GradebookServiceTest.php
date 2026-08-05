@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §5.4 — GradebookService: per-quiz grading_method selection, assignment late penalty, course average. */
+/** GradebookService: per-quiz grading_method selection, assignment late penalty, course average. */
 class GradebookServiceTest extends TestCase
 {
     use RefreshDatabase;

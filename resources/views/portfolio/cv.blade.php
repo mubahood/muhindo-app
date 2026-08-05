@@ -5,7 +5,7 @@
 @push('styles')
 <style>
   /* One column, tight, and readable straight through. A CV is a document, not
-     a landing page — the job here is to be scanned quickly and printed cleanly. */
+     a landing page. The job here is to be scanned quickly and printed cleanly. */
   .cv{max-width:820px;margin:0 auto;}
   .cv-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;
     padding-bottom:16px;border-bottom:2px solid var(--pri);}
@@ -156,7 +156,7 @@
           <h2>Experience</h2>
           @foreach($experience as $e)
             <div class="cv-row">
-              <div class="cv-when">{{ $e->start_date?->format('Y') }}&nbsp;–&nbsp;{{ $e->end_date?->format('Y') ?? 'Present' }}</div>
+              <div class="cv-when">{{ $e->start_date?->format('Y') }}&nbsp;-&nbsp;{{ $e->end_date?->format('Y') ?? 'Present' }}</div>
               <div class="cv-what">
                 <h3>{{ $e->role }}</h3>
                 <div class="org">{{ $e->company }}</div>
@@ -172,7 +172,7 @@
           <h2>Qualifications</h2>
           @foreach($education as $ed)
             <div class="cv-row">
-              <div class="cv-when">{{ $ed->start_date?->format('Y') }}&nbsp;–&nbsp;{{ $ed->end_date?->format('Y') ?? 'Present' }}</div>
+              <div class="cv-when">{{ $ed->start_date?->format('Y') }}&nbsp;-&nbsp;{{ $ed->end_date?->format('Y') ?? 'Present' }}</div>
               <div class="cv-what">
                 <h3>{{ $ed->degree }}@if($ed->field), {{ $ed->field }}@endif</h3>
                 <div class="org">{{ $ed->institution }}</div>
@@ -202,7 +202,7 @@
              entry leads with who it was for and what it does, because "Laravel,
              Flutter, MySQL" tells a ministry nothing and "every animal in
              Uganda, identified and tracked" tells them everything. Only the
-             strongest few — a CV that lists thirty projects lists none. --}}
+             strongest few, a CV that lists thirty projects lists none. --}}
         <section class="cv-sec cv-projects">
           <h2>Systems I have built</h2>
 

@@ -3,10 +3,10 @@
 namespace App\Services\Gateway;
 
 /**
- * A payment gateway adapter (HMS_PLAN.md §16). Concrete providers (Flutterwave,
- * …) sit behind this interface so the rest of the app never talks to a vendor
+ * A payment gateway adapter. Concrete providers (Flutterwave,
+ * ...) sit behind this interface so the rest of the app never talks to a vendor
  * SDK directly and providers are swappable/mocked. Money is only ever moved
- * after a server-side verify() — never trusting a client redirect's status.
+ * after a server-side verify(), never trusting a client redirect's status.
  */
 interface PaymentGateway
 {

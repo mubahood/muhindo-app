@@ -8,10 +8,10 @@ use App\Models\LessonProgress;
 use Illuminate\Support\Collection;
 
 /**
- * §6.3.4 — the course analytics tab: enrollment funnel, per-lesson drop-off,
+ * The course analytics tab: enrollment funnel, per-lesson drop-off,
  * and a watch-time histogram. Quiz item analysis (the fourth chart the plan
  * lists here) already exists per-quiz at `QuizAnalysisService`/
- * `admin.quizzes.analysis` — this service links out to it rather than
+ * `admin.quizzes.analysis`, this service links out to it rather than
  * duplicating it. Every count here is scoped to `active`/`completed`
  * enrollments (the same "genuinely enrolled" definition
  * `CourseCatalogueController` already uses) so a student who abandoned
@@ -66,7 +66,7 @@ class CourseAnalyticsService
     /** @return array<string,int> bucket label => enrollment count, ready for <x-dash.bars> */
     public function watchTimeHistogram(Course $course): array
     {
-        $buckets = ['No watch time' => 0, 'Under 30 min' => 0, '30–60 min' => 0, '1–2 hrs' => 0, '2–5 hrs' => 0, '5+ hrs' => 0];
+        $buckets = ['No watch time' => 0, 'Under 30 min' => 0, '30-60 min' => 0, '1-2 hrs' => 0, '2-5 hrs' => 0, '5+ hrs' => 0];
 
         $seconds = $course->enrollments()->whereIn('status', self::ENROLLED_STATUSES)->pluck('total_watch_seconds');
         foreach ($seconds as $totalSeconds) {
@@ -74,9 +74,9 @@ class CourseAnalyticsService
             $bucket = match (true) {
                 (int) $totalSeconds <= 0 => 'No watch time',
                 $minutes < 30 => 'Under 30 min',
-                $minutes < 60 => '30–60 min',
-                $minutes < 120 => '1–2 hrs',
-                $minutes < 300 => '2–5 hrs',
+                $minutes < 60 => '30-60 min',
+                $minutes < 120 => '1-2 hrs',
+                $minutes < 300 => '2-5 hrs',
                 default => '5+ hrs',
             };
             $buckets[$bucket]++;

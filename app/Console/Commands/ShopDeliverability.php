@@ -9,8 +9,8 @@ use Illuminate\Console\Command;
  * What the shop can and cannot hand over.
  *
  * The worst thing this shop could do is take somebody's money for a file that
- * is not there. Three separate places refuse an undeliverable product — the
- * buy button, the basket and the invoice — and this is the fourth: the view
+ * is not there. Three separate places refuse an undeliverable product, the
+ * buy button, the basket and the invoice, and this is the fourth: the view
  * from outside, so the owner knows what is still waiting on an upload.
  *
  * A described-but-unreleased product stays listed; only its buy button is

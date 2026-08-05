@@ -11,7 +11,7 @@ use Tests\TestCase;
 /**
  * The public site must reflect the signed-in state on every page: a role-aware
  * account link (student → My Courses, admin → Dashboard, client → My Projects)
- * plus Sign out — never a stale "Sign in" for an authenticated visitor. And a
+ * plus Sign out, never a stale "Sign in" for an authenticated visitor. And a
  * session must survive until explicit sign-out (always-on remember cookie).
  */
 class PublicHeaderAuthTest extends TestCase
@@ -72,7 +72,7 @@ class PublicHeaderAuthTest extends TestCase
         $response = $this->post(route('login'), [
             'email' => $user->email,
             'password' => 'password123',
-            // deliberately no "remember" field — remembering is the default policy
+            // deliberately no "remember" field, remembering is the default policy
         ]);
 
         $response->assertRedirect();

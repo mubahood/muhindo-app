@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/** The student's "My Courses" learning portal — enrolled courses, lesson player, certificates. */
+/** The student's "My Courses" learning portal, enrolled courses, lesson player, certificates. */
 class LearningController extends Controller
 {
     public function __construct(
@@ -46,12 +46,12 @@ class LearningController extends Controller
     {
         $enrollment = $this->enrollmentFor($request, $course);
 
-        // §6.5 resume UX: pick up where they left off rather than always
+        // Resume UX: pick up where they left off rather than always
         // restarting at lesson #1. lastLesson() excludes soft-deleted lessons
         // via Lesson's own global scope, the course-id check guards against a
         // stale last_lesson_id left over from before a course was reworked, and
         // the lock check guards against the course having switched to
-        // sequential progression since — redirecting straight into a 403 would
+        // sequential progression since, redirecting straight into a 403 would
         // be a worse experience than just falling through to the first lesson.
         $resumeLesson = $enrollment->lastLesson;
         if ($resumeLesson && $resumeLesson->module->course_id === $course->id && $resumeLesson->is_published && ! $course->isLessonLocked($enrollment, $resumeLesson)) {
@@ -86,13 +86,13 @@ class LearningController extends Controller
 
         $notes = $enrollment->lessonNotes()->where('lesson_id', $lesson->id)->orderBy('seconds')->get();
 
-        // P5.3 — a fresh signed URL every page load; the 6-hour window comfortably covers a
+        // A fresh signed URL every page load; the 6-hour window comfortably covers a
         // single viewing session (including pauses) without staying valid indefinitely if shared.
         $videoStreamUrl = $lesson->hasSelfHostedVideo()
             ? URL::temporarySignedRoute('learn.lesson.video-stream', now()->addHours(6), ['course' => $course, 'lesson' => $lesson])
             : null;
 
-        // §activities — every quiz/assignment attached to this lesson, with the
+        // activities, every quiz/assignment attached to this lesson, with the
         // student's submission status, for the banner + overlay picker.
         $activities = $lesson->quizzes()->where('is_published', true)->get()->map(fn ($quiz) => [
             'kind' => 'quiz',
@@ -129,7 +129,7 @@ class LearningController extends Controller
     }
 
     /**
-     * §7.3 — "complete without reload": the same action serves both. A plain
+     * "complete without reload": the same action serves both. A plain
      * form POST (no JS) gets the classic redirect; an AJAX POST (Accept:
      * application/json) gets a JSON summary the player uses for the
      * optimistic-UI auto-advance card and certificate modal. Every mutation
@@ -175,10 +175,10 @@ class LearningController extends Controller
             return redirect()->route('learn.lesson', [$course, $next])->with('success', 'Lesson completed!');
         }
 
-        return redirect()->route('learn.index')->with('success', 'Course completed — congratulations!');
+        return redirect()->route('learn.index')->with('success', 'Course completed, congratulations!');
     }
 
-    /** §6.2/§7.3 — player heartbeat: every ~15s of actual playing time, reports watch progress. */
+    /** Player heartbeat: every ~15s of actual playing time, reports watch progress. */
     public function heartbeat(Request $request, Course $course, Lesson $lesson): JsonResponse
     {
         $enrollment = $this->enrollmentFor($request, $course);
@@ -253,7 +253,7 @@ class LearningController extends Controller
 
         // Enrolled but not paid: send them to pay rather than answering 403.
         // A person who owes money on a course they just chose is not
-        // forbidden — they are one step short, and the step is a payment.
+        // forbidden. They are one step short, and the step is a payment.
         if ($enrollment->status === 'pending' && $enrollment->invoice_id !== null) {
             $invoice = \App\Models\Invoice::find($enrollment->invoice_id);
 
@@ -261,8 +261,8 @@ class LearningController extends Controller
                 throw new \App\Exceptions\PaymentRequiredException(
                     $invoice,
                     $invoice->isAwaitingDirectPayment()
-                        ? 'This course unlocks once Muhindo confirms your payment. You can also pay online here — it is instant.'
-                        : 'Almost there — this course unlocks as soon as your payment goes through.'
+                        ? 'This course unlocks once Muhindo confirms your payment. You can also pay online here. It is instant.'
+                        : 'Almost there, this course unlocks as soon as your payment goes through.'
                 );
             }
         }
@@ -286,7 +286,7 @@ class LearningController extends Controller
         return $index === false ? null : $flat->get($index + $offset);
     }
 
-    /** §7.5 — a draft (unpublished) lesson is invisible to students: not counted, not navigable to, not resumable. */
+    /** A draft (unpublished) lesson is invisible to students: not counted, not navigable to, not resumable. */
     private function publishedLessonsFlat(Course $course): \Illuminate\Support\Collection
     {
         $course->loadMissing('modules.lessons');

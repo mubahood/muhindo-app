@@ -18,7 +18,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Read-only metric provider for the role-based dashboards. Money is summed in
- * bcmath (decimal strings) — never float — matching ReportService.
+ * bcmath (decimal strings) (never float) matching ReportService.
  */
 class DashboardService
 {
@@ -39,7 +39,7 @@ class DashboardService
         return [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()];
     }
 
-    // ── Owner / admin overview ──────────────────────────────────
+    // Owner / admin overview
 
     public function coursesTotal(): int
     {
@@ -61,7 +61,7 @@ class DashboardService
         return Enrollment::whereBetween('created_at', $this->weekRange())->count();
     }
 
-    /** §6.4 — count tagged by the nightly app:detect-at-risk-enrollments command. */
+    /** Count tagged by the nightly app:detect-at-risk-enrollments command. */
     public function atRiskEnrollmentsCount(): int
     {
         return Enrollment::whereNotNull('at_risk_reason')->count();
@@ -136,7 +136,7 @@ class DashboardService
         return Enrollment::with(['user', 'course'])->latest()->limit($limit)->get();
     }
 
-    // ── Personal task list (owner's own to-dos: project_id is null) ─
+    // Personal task list (owner's own to-dos: project_id is null)
 
     public function myPendingTasksCount(): int
     {
@@ -149,7 +149,7 @@ class DashboardService
             ->orderBy('sort_order')->limit($limit)->get();
     }
 
-    // ── Student dashboard ────────────────────────────────────────
+    // Student dashboard
 
     public function studentEnrollments(User $user): Collection
     {
@@ -164,7 +164,7 @@ class DashboardService
         return Enrollment::where('user_id', $user->id)->where('status', 'completed')->count();
     }
 
-    /** §6.5 — the earned-badges shelf, most recent first. @return Collection<int, \App\Models\UserBadge> */
+    /** The earned-badges shelf, most recent first. @return Collection<int, \App\Models\UserBadge> */
     public function studentBadges(User $user): Collection
     {
         return $user->badges;
@@ -195,7 +195,7 @@ class DashboardService
 
     /**
      * Required quizzes and assignments the student still owes across every active
-     * enrollment — the "what do I need to do next" widget. Mirrors the same
+     * enrollment. The "what do I need to do next" widget. Mirrors the same
      * submitted-check ProgressService::completionBlockers uses.
      *
      * @return Collection<int, array<string,mixed>>
@@ -203,7 +203,7 @@ class DashboardService
     public function studentPendingActivities(User $user): Collection
     {
         // Deliberately a fixed number of queries regardless of how many courses the
-        // student is enrolled in — the per-enrollment loop this replaced was a real
+        // student is enrolled in. The per-enrollment loop this replaced was a real
         // N+1 (StudentDashboardQueryCountTest guards this).
         $enrollments = Enrollment::where('user_id', $user->id)
             ->where('status', 'active')->with('course')->get();
@@ -250,7 +250,7 @@ class DashboardService
         return $pending;
     }
 
-    // ── Client dashboard ─────────────────────────────────────────
+    // Client dashboard
 
     public function clientProjects(Client $client): Collection
     {
@@ -258,7 +258,7 @@ class DashboardService
     }
 
     /**
-     * Project requests this account submitted that haven't become a project yet —
+     * Project requests this account submitted that haven't become a project yet,
      * the first step of the client journey, so it doesn't vanish after sending.
      *
      * @return Collection<int, \App\Models\ProjectInquiry>
@@ -271,7 +271,7 @@ class DashboardService
     }
 
     /**
-     * Task completion per project, keyed by project id — one grouped query, not one
+     * Task completion per project, keyed by project id, one grouped query, not one
      * per project.
      *
      * @return Collection<int|string, array{done:int,total:int}>

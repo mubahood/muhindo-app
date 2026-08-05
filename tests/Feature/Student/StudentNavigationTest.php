@@ -13,7 +13,7 @@ use Tests\TestCase;
  * What a signed-in student can see and reach.
  *
  * A student's whole menu used to be two groups. Their profile, their settings
- * and their notifications were only in the top-right dropdown and the bell —
+ * and their notifications were only in the top-right dropdown and the bell,
  * fine once you know they are there, invisible if you do not.
  */
 class StudentNavigationTest extends TestCase
@@ -65,7 +65,7 @@ class StudentNavigationTest extends TestCase
     public function test_the_profile_name_in_the_top_bar_is_not_invisible(): void
     {
         /* The trigger is a <button>, which does not inherit colour. With none
-           declared it fell through to the UA's `buttontext` — white under a
+           declared it fell through to the UA's `buttontext`, white under a
            dark system appearance, on a near-white bar. Measured in a browser
            as rgb(255,255,255) on rgba(245,247,250,.9). */
         $css = (string) file_get_contents(public_path('css/td-admin.css'));
@@ -77,7 +77,7 @@ class StudentNavigationTest extends TestCase
         );
     }
 
-    // ── The pending-course card ─────────────────────────────────────────────
+    // The pending-course card
 
     /** @return array{0:User,1:Course,2:Invoice} */
     private function pendingPurchase(): array

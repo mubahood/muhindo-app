@@ -33,14 +33,14 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Public — portfolio
+| Public, portfolio
 |--------------------------------------------------------------------------
 */
 /**
  * A permanent redirect that survives a sub-directory install.
  *
  * Route::redirect() emits its target verbatim, so a root-relative path like
- * "/e-learning" gets resolved by the browser against the domain root — which
+ * "/e-learning" gets resolved by the browser against the domain root, which
  * drops the /muhindo-app base this app is served from and lands the visitor on
  * a 404. Every legacy URL on the site was doing precisely that, including the
  * /courses redirects that have been in place since the e-learning rename.
@@ -60,7 +60,7 @@ $movedPermanently = function (string $from, string $to): void {
     });
 };
 
-// Switching currency is a preference, not a resource — POST so it is never
+// Switching currency is a preference, not a resource, POST so it is never
 // cached, never prefetched, and never fired by a crawler following a link.
 Route::post('/currency', function (Illuminate\Http\Request $request) {
     \App\Support\Catalog\Currency::set((string) $request->input('currency'));
@@ -85,12 +85,12 @@ Route::get('/education', [PortfolioController::class, 'education'])->name('portf
 Route::get('/research', [PortfolioController::class, 'research'])->name('portfolio.research');
 Route::get('/cv', [PortfolioController::class, 'cv'])->name('portfolio.cv');
 
-// Insights — writing. Public reading side; authoring lives in the back office.
+// Insights, writing. Public reading side; authoring lives in the back office.
 Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 
 /*
 |--------------------------------------------------------------------------
-| Shop — digital products, one basket, one checkout
+| Shop, digital products, one basket, one checkout
 |--------------------------------------------------------------------------
 | Browsing and the basket are public: someone can fill a basket before they
 | have an account. Everything from the review screen on requires sign-in,
@@ -128,7 +128,7 @@ Route::get('/products', [PortfolioController::class, 'products'])->name('portfol
  * Hiring.
  *
  * One entry point. Every hire button on the site points at /hire and the
- * controller decides where that person should actually land — a stranger at
+ * controller decides where that person should actually land, a stranger at
  * registration, a client at the proposal form, a client who has already
  * proposed at their portal. A button cannot get this wrong because a button
  * does not decide it.
@@ -155,12 +155,12 @@ Route::get('/verify/{certificate}', [CertificateVerificationController::class, '
 
 /*
 |--------------------------------------------------------------------------
-| Public — e‑Learning catalogue & checkout
+| Public, e-Learning catalogue & checkout
 |--------------------------------------------------------------------------
-| Public-facing URL is /e-learning (§2.1 of PUBLIC_SITE_PLAN.md — "e‑Learning" is the
+| Public-facing URL is /e-learning (of PUBLIC_SITE_PLAN.md "e-Learning" is the
 | product name shown to visitors). Route *names* stay `courses.*` deliberately: every
 | `route('courses.show', ...)` call site (controllers, views, tests) keeps working
-| unchanged and automatically generates the new /e-learning URL — only the URI
+| unchanged and automatically generates the new /e-learning URL, only the URI
 | pattern changed, not the internal naming, so this is zero backend churn.
 | /courses/* is kept as a permanent redirect below for anyone who already bookmarked
 | or indexed the old URL.
@@ -194,7 +194,7 @@ require __DIR__.'/auth.php';
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard — one entry point, content branches by role
+| Dashboard, one entry point, content branches by role
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
@@ -208,7 +208,7 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Paying for things — one screen for courses, source code and projects
+| Paying for things, one screen for courses, source code and projects
 |--------------------------------------------------------------------------
 | courses/{course}/checkout and checkout/{invoice}/pay used to be two separate
 | payment screens in two different layouts. Both now land here.
@@ -222,7 +222,7 @@ Route::middleware('auth')->group(function () {
     Route::post('pay/{invoice}/recheck', [\App\Http\Controllers\PaymentController::class, 'recheck'])->name('payments.recheck');
 });
 
-// Your account — profile & settings, one screen for every signed-in person
+// Your account, profile & settings, one screen for every signed-in person
 Route::prefix('account')->middleware(['auth'])->name('account.')->group(function () {
     Route::get('/', [\App\Http\Controllers\AccountController::class, 'edit'])->name('edit');
     Route::post('/', [\App\Http\Controllers\AccountController::class, 'update'])->name('update');
@@ -339,7 +339,7 @@ Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () 
     Route::get('{course:slug}', [LearningController::class, 'show'])->name('course');
 
     // These literal-prefix routes (GET {course:slug}/quizzes, {course:slug}/assignments) MUST be
-    // registered before the generic {course:slug}/{lesson} route below — Laravel matches GET
+    // registered before the generic {course:slug}/{lesson} route below. Laravel matches GET
     // routes in registration order at the URI-pattern level, before route-model binding ever
     // runs, so a later, more specific route is unreachable dead code once a bare {lesson}
     // wildcard of the same segment count is registered first (confirmed: it 404s on failing to
@@ -402,7 +402,7 @@ Route::prefix('portal')->middleware(['auth', \App\Http\Middleware\ClientMustProp
 
 /*
 |--------------------------------------------------------------------------
-| Payment gateway (public — Flutterwave callback + webhook)
+| Payment gateway (public, Flutterwave callback + webhook)
 |--------------------------------------------------------------------------
 */
 Route::get('gateway/flutterwave/callback', [GatewayPaymentController::class, 'callback'])->name('gateway.callback');

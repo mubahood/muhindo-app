@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** L9 — the "My Courses" list must not run 2 extra queries per enrollment row. */
+/** L9. The "My Courses" list must not run 2 extra queries per enrollment row. */
 class LearnIndexQueryCountTest extends TestCase
 {
     use RefreshDatabase;
@@ -35,7 +35,7 @@ class LearnIndexQueryCountTest extends TestCase
 
         $enrollment->progressRecords()->create(['lesson_id' => $lessonOne->id, 'completed_at' => now()]);
 
-        // The view now reads the §6.1 denormalized progress_percent column (the
+        // The view now reads the denormalized progress_percent column (the
         // same one ProgressService maintains in real usage) rather than
         // recomputing it live, so this bypass-created fixture needs to set it
         // explicitly to match what a real completion would have written.
@@ -48,7 +48,7 @@ class LearnIndexQueryCountTest extends TestCase
         $this->enrollInANewCourse($studentWithOne);
 
         // The page renders inside the app shell, whose sidebar gates items on
-        // permissions — and Spatie loads the permission table once per process.
+        // permissions, and Spatie loads the permission table once per process.
         // Warm it first, or the first measurement carries a one-off query the
         // second doesn't and the comparison stops being about per-row cost.
         $this->actingAs($studentWithOne)->get(route('learn.index'))->assertOk();
@@ -72,7 +72,7 @@ class LearnIndexQueryCountTest extends TestCase
         $this->assertSame(
             $queriesForOne,
             $queriesForFive,
-            "Expected a flat query count regardless of enrollment count (got {$queriesForOne} for 1 vs {$queriesForFive} for 5) — a per-row query crept back in."
+            "Expected a flat query count regardless of enrollment count (got {$queriesForOne} for 1 vs {$queriesForFive} for 5), a per-row query crept back in."
         );
     }
 

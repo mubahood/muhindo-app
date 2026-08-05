@@ -1,4 +1,4 @@
-@php $subject = 'Welcome — Your Account'; @endphp
+@php $subject = 'Welcome, Your Account'; @endphp
 @include('emails._header')
 
   {{-- Greeting --}}

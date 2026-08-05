@@ -1,7 +1,7 @@
 {{--
   Numbered pagination for the public catalogue.
 
-  The app's global default is simple-default — Previous/Next only — which is
+  The app's global default is simple-default (Previous/Next only) which is
   fine for a feed and wrong for a syllabus: with the catalogue split six at a
   time, a visitor needs to see that there are four pages and be able to jump,
   not discover the end by clicking Next repeatedly.

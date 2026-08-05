@@ -9,14 +9,14 @@ use Symfony\Component\Process\Process;
 /**
  * Draws a cover for any course that has none.
  *
- * Not generated art — drawn, deterministically, from the same two inks and the
+ * Not generated art, drawn, deterministically, from the same two inks and the
  * same flat geometry as the commissioned covers: navy and gold on warm paper.
  * A course keeps the same cover every run, because the composition is seeded
  * from its number.
  *
  * It exists because half a catalogue of commissioned screen prints beside half
  * a catalogue of neon stock renders looks worse than either on its own. This
- * fills the gap in the house style until real artwork replaces it — and when it
+ * fills the gap in the house style until real artwork replaces it, and when it
  * does, the file is simply overwritten.
  *
  * No text is drawn, for the same reason the prompts forbid it: the title is set
@@ -46,7 +46,7 @@ class MakeCourseCovers extends Command
         $magick = trim((string) shell_exec('command -v magick || command -v convert'));
 
         if ($magick === '') {
-            $this->error('ImageMagick is not installed — no `magick` or `convert` on PATH.');
+            $this->error('ImageMagick is not installed, no `magick` or `convert` on PATH.');
 
             return self::FAILURE;
         }
@@ -70,9 +70,11 @@ class MakeCourseCovers extends Command
 
             $this->draw($magick, $path, (int) ($course->course_number ?? $course->id));
 
+            // Store the path, not a URL. asset() would bake in whichever host
+            // ran the command, and the row outlives that machine.
             $course->forceFill([
-                'cover_image' => asset("images/courses/{$course->slug}.png"),
-                'cover_alt' => $course->title.' — course cover',
+                'cover_image' => "images/courses/{$course->slug}.png",
+                'cover_alt' => 'Cover artwork for '.$course->title,
             ])->save();
 
             $this->line("  drawn  {$course->slug}");

@@ -3,9 +3,9 @@
 namespace App\Enums;
 
 /**
- * §4.3 completion rules engine. Only `manual` (existing behaviour) and
+ * Completion rules engine. Only `manual` (existing behaviour) and
  * `min_watch` are enforced today; `quiz_pass`/`submission` are declared now so
- * lesson forms and the schema don't need another migration once P3's quiz/
+ * lesson forms and the schema don't need another migration once the quiz/
  * assignment models exist to back them.
  */
 enum CompletionRule: string

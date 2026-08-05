@@ -1,7 +1,7 @@
 @extends('layouts.marketing')
-@section('title', $course->title.' — e-Learning | Muhindo Mubaraka')
+@section('title', $course->title.' | e-Learning | Muhindo Mubaraka')
 @section('desc', $course->cardTagline())
-@section('og_image', $course->cover_image ?? '')
+@section('og_image', $course->coverUrl() ?? '')
 
 @push('jsonld')
 @foreach($jsonLd as $node)
@@ -79,7 +79,7 @@
               <span class="cf-ic"><i class="fas fa-play" aria-hidden="true"></i></span>
               <span class="cf-b">
                 <strong>Watch the first lesson free</strong>
-                <span>{{ $previews->first()['title'] }} — no account needed</span>
+                <span>{{ $previews->first()['title'] }}, no account needed</span>
               </span>
               <i class="fas fa-arrow-right cf-go" aria-hidden="true"></i>
             </button>
@@ -130,7 +130,7 @@
         <div style="margin-bottom:36px;">
           <h2 style="font-size:19px;margin-bottom:8px;">Best taken after</h2>
           <p class="muted" style="font-size:13.5px;margin-bottom:14px;">
-            You can start here whenever you like — these just cover the ground this course builds on.
+            You can start here whenever you like. These just cover the ground this course builds on.
           </p>
           <div class="prereqs">
             @foreach($prerequisiteCourses as $prerequisite)
@@ -181,7 +181,7 @@
           <h2 style="font-size:19px;margin-bottom:16px;">Student reviews</h2>
           @foreach($publishedReviews as $review)
             <div class="feature-box" style="margin-bottom:14px;padding:18px;">
-              <div style="font-weight:600;">{{ $review->enrollment->user->name }} — {{ $review->rating }} <i class="fas fa-star" style="color:var(--gold);"></i></div>
+              <div style="font-weight:600;">{{ $review->enrollment->user->name }}, {{ $review->rating }} <i class="fas fa-star" style="color:var(--gold);"></i></div>
               @if($review->body)<p style="margin-top:6px;font-size:13.5px;">{{ $review->body }}</p>@endif
             </div>
           @endforeach
@@ -204,8 +204,8 @@
 
       <aside class="buy-box" id="buy">
         <div class="thumb">
-          @if($course->cover_image)
-            <img src="{{ $course->cover_image }}" alt="{{ $course->coverAlt() }}" loading="lazy">
+          @if($course->coverUrl())
+            <img src="{{ $course->coverUrl() }}" alt="{{ $course->coverAlt() }}" loading="lazy">
           @else
             <i class="fas fa-graduation-cap" aria-hidden="true"></i>
           @endif
@@ -229,7 +229,7 @@
             <button type="submit" class="btn gold lg" style="width:100%;justify-content:center;">{{ $course->isFree() ? 'Enrol for free' : 'Buy course' }}</button>
           </form>
         @else
-          {{-- §3.2/W7 — a guest with a coupon needs somewhere to enter it before the
+          {{-- /W7. A guest with a coupon needs somewhere to enter it before the
                account even exists; a plain link (as this used to be) can't carry a
                typed value. A GET form works with no JS, and StudentRegistrationController
                forwards coupon_code straight into the same enroll() call an authenticated
@@ -354,14 +354,14 @@
 
 @endsection
 
-{{-- ═══════════════════════════════════════════════════════════════════════
+{{--
      Free-preview player.
 
      Every preview lesson is already on the page as data, so opening one costs
      no request and starts immediately. It is a dialog: focus moves in, Tab is
      trapped, Escape closes, and focus returns to the row that opened it. Arrow
      keys move between previews without closing.
-     ═══════════════════════════════════════════════════════════════════════ --}}
+      --}}
 @if($previews->isNotEmpty())
 <div class="pv" id="preview-modal" hidden role="dialog" aria-modal="true" aria-labelledby="pv-title">
   <div class="pv-panel">
@@ -433,7 +433,7 @@
     text.hidden = !p.html;
 
     // Rebuilt rather than reused, so the previous video stops the moment the
-    // next one opens — swapping a src leaves audio playing in some browsers.
+    // next one opens, swapping a src leaves audio playing in some browsers.
     stage.innerHTML = '';
     if (p.youtube) {
       var f = document.createElement('iframe');

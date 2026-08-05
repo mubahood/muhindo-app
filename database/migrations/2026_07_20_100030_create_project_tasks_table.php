@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * A task/milestone. When project_id is null it's a standalone personal task
- * (the owner's own to-do list) — one table backs both, no parallel system.
+ * (the owner's own to-do list), one table backs both, no parallel system.
  */
 return new class extends Migration
 {

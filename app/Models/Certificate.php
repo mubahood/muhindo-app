@@ -14,7 +14,7 @@ class Certificate extends Model
         return ['issued_at' => 'datetime'];
     }
 
-    /** Addressed by uuid everywhere (verify page, PDF stream) — matches Invoice's convention. */
+    /** Addressed by uuid everywhere (verify page, PDF stream), matches Invoice's convention. */
     public function getRouteKeyName(): string
     {
         return 'uuid';

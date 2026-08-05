@@ -89,7 +89,7 @@ class AccessibilityTest extends TestCase
         $response->assertOk();
         $html = (string) $response->getContent();
 
-        // A summary a screen reader is told about, plus the field marked invalid —
+        // A summary a screen reader is told about, plus the field marked invalid,
         // red text alone communicates nothing to someone who can't see it.
         $this->assertStringContainsString('role="alert"', $html);
         $this->assertStringContainsString("Your details weren't saved", $html);

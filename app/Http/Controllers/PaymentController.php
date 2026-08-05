@@ -29,7 +29,7 @@ class PaymentController extends Controller
         private readonly GatewayPaymentService $gateway,
     ) {}
 
-    /** Everything I have bought or still owe for — the "pay at any time" list. */
+    /** Everything I have bought or still owe for, the "pay at any time" list. */
     public function index(Request $request): View
     {
         $user = $request->user();
@@ -53,7 +53,7 @@ class PaymentController extends Controller
 
         if (! $invoice->isOutstanding()) {
             return redirect()->route('payments.index')
-                ->with('success', 'That order is settled — everything on it is ready.');
+                ->with('success', 'That order is settled. Everything on it is ready.');
         }
 
         return view('payments.show', [
@@ -80,14 +80,14 @@ class PaymentController extends Controller
         }
 
         return redirect()->route('dashboard')->with('success', trim(sprintf(
-            'Noted — you will pay Muhindo directly for %s (%s %s). It stays locked until he confirms the payment, and you can pay online any time from My orders.',
+            'Noted. You will pay Muhindo directly for %s (%s %s). It stays locked until he confirms the payment, and you can pay online any time from My orders.',
             $this->summaryFor($invoice),
             $invoice->currency,
             number_format((float) $invoice->balance, 2)
         )));
     }
 
-    /** Changed their mind — drop the arrangement and hand over to the gateway. */
+    /** Changed their mind, drop the arrangement and hand over to the gateway. */
     public function online(Request $request, Invoice $invoice): RedirectResponse
     {
         $this->authorize('pay', $invoice);
@@ -132,12 +132,12 @@ class PaymentController extends Controller
 
         if (in_array($result, ['settled', 'already_settled'], true)) {
             return redirect()->route('payments.index')
-                ->with('success', 'Found it — your payment is confirmed and everything is unlocked.');
+                ->with('success', 'Found it. Your payment is confirmed and everything is unlocked.');
         }
 
         return back()->with('error', $result === 'nothing_pending'
             ? 'No payment attempt has been started for this order yet, so there is nothing to check.'
-            : 'We could not find a completed payment for this order yet. If money has left your account, give it a minute and check again — or message Muhindo and he will confirm it manually.');
+            : 'We could not find a completed payment for this order yet. If money has left your account, give it a minute and check again, or message Muhindo and he will confirm it manually.');
     }
 
     /** Where "done" leads, and what the order is called, per kind of purchase. */

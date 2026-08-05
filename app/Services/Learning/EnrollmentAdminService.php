@@ -24,7 +24,7 @@ use RuntimeException;
  *
  *  - Activating is an override, not a payment. It grants access without a
  *    penny changing hands, which is exactly what a scholarship or a
- *    comped seat needs — so it is allowed, it is logged by the model's
+ *    comped seat needs, so it is allowed, it is logged by the model's
  *    activity log, and the caller is told when it leaves an invoice unpaid
  *    rather than being allowed to assume the money is handled.
  *  - Nothing here silently deletes an invoice. Access and billing are
@@ -34,10 +34,10 @@ class EnrollmentAdminService
 {
     /** The statuses an administrator may set, and what each one means. */
     public const STATUSES = [
-        'pending' => 'Pending — waiting on payment, no access',
-        'active' => 'Active — full access to the course',
-        'completed' => 'Completed — finished the course',
-        'cancelled' => 'Cancelled — access revoked',
+        'pending' => 'Pending, waiting on payment, no access',
+        'active' => 'Active, full access to the course',
+        'completed' => 'Completed, finished the course',
+        'cancelled' => 'Cancelled, access revoked',
     ];
 
     public function __construct(private readonly BillingService $billing) {}
@@ -56,7 +56,7 @@ class EnrollmentAdminService
         $was = $enrollment->status;
 
         if ($was === $status) {
-            return 'Nothing changed — it was already '.$status.'.';
+            return 'Nothing changed. It was already '.$status.'.';
         }
 
         // Read before the update: enrolled_at is the only record of whether
@@ -92,7 +92,7 @@ class EnrollmentAdminService
 
             $enrollment->update($attributes);
 
-            // First time this student has ever had access — the welcome mail,
+            // First time this student has ever had access, the welcome mail,
             // progress records and everything else hang off this event, and
             // it must not fire again on a later re-activation.
             if ($status === 'active' && $was === 'pending' && $firstActivation) {
@@ -116,7 +116,7 @@ class EnrollmentAdminService
         }
 
         if ($course->isFree()) {
-            throw new RuntimeException('This course is free — there is nothing to invoice.');
+            throw new RuntimeException('This course is free. There is nothing to invoice.');
         }
 
         if ($enrollment->invoice_id !== null) {
@@ -172,7 +172,7 @@ class EnrollmentAdminService
         if ($invoice !== null && $invoice->isOutstanding()) {
             return $base.' Note that '.$invoice->invoice_no.' is still unpaid ('
                 .$invoice->currency.' '.number_format((float) $invoice->balance, 2)
-                .') — access has been granted anyway.';
+                .'). Access has been granted anyway.';
         }
 
         if ($invoice === null && $enrollment->course !== null && ! $enrollment->course->isFree()) {

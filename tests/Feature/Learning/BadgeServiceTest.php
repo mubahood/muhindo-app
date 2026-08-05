@@ -15,7 +15,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.5/§4.5 — badge awards: idempotent, correctly gated, and wired to the real events they fire from. */
+/** Badge awards: idempotent, correctly gated, and wired to the real events they fire from. */
 class BadgeServiceTest extends TestCase
 {
     use RefreshDatabase;

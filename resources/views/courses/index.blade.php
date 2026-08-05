@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
-@section('title', 'e-Learning — Muhindo Mubaraka')
-@section('desc', 'Learn computer programming and computer-related courses with Muhindo Mubaraka — practical, project-based, in plain English.')
+@section('title', 'e-Learning | Muhindo Mubaraka')
+@section('desc', 'Learn computer programming and computer-related courses with Muhindo Mubaraka: practical, project-based, in plain English.')
 
 @section('content')
 
@@ -9,7 +9,7 @@
   <div class="wrap">
     <div class="eyebrow">e&#8209;Learning</div>
     <h1>Courses</h1>
-    <p>I teach the same stack I build with — practical, project-based, in plain English. Learn at your pace and finish with a certificate you can verify.</p>
+    <p>I teach the same stack I build with: practical, project-based, in plain English. Learn at your pace and finish with a certificate you can verify.</p>
     <div class="trust-chips">
       <span><i class="fas fa-graduation-cap" aria-hidden="true"></i> {{ $courses->total() }} {{ \Illuminate\Support\Str::plural('course', $courses->total()) }}</span>
       <span><i class="fas fa-book" aria-hidden="true"></i> {{ $totalLessonCount }} {{ \Illuminate\Support\Str::plural('lesson', $totalLessonCount) }}</span>
@@ -36,13 +36,13 @@
         @endforeach
       </form>
       @unless(\App\Support\Catalog\Currency::wasChosen())
-        <span class="cur-note">Prices in {{ config('catalog.currencies')[$cur]['label'] }} — switch any time</span>
+        <span class="cur-note">Prices in {{ config('catalog.currencies')[$cur]['label'] }}, switch any time</span>
       @endunless
     </div>
 
     <form method="GET" action="{{ route('courses.index') }}" class="filter-bar">
       <label for="q" class="sr-only">Search courses</label>
-      <input type="text" id="q" name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Search courses…">
+      <input type="text" id="q" name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Search courses...">
       <label for="category" class="sr-only">Category</label>
       <select id="category" name="category" aria-label="Category" onchange="this.form.submit()">
         <option value="">All categories</option>
@@ -93,8 +93,8 @@
           @endphp
           <article class="c-card" data-rise>
             <a href="{{ route('courses.show', $course) }}" wire:navigate class="c-media" tabindex="-1" aria-hidden="true">
-              @if($course->cover_image)
-                <img src="{{ $course->cover_image }}" alt="" loading="lazy" width="400" height="225">
+              @if($course->coverUrl())
+                <img src="{{ $course->coverUrl() }}" alt="" loading="lazy" width="400" height="225">
               @else
                 <span class="c-media-fallback"><i class="fas fa-graduation-cap"></i></span>
               @endif
@@ -147,7 +147,7 @@
                     </ul>
                   @endif
                   {{-- A real anchor. It was a <span> styled as a button, which
-                       looked clickable and was not — and on touch, where the
+                       looked clickable and was not, and on touch, where the
                        panel is always open, it is the card's main action. --}}
                   <a href="{{ route('courses.show', $course) }}" wire:navigate class="btn gold sm c-cta">
                     {{ $course->isFree() ? 'Start free' : 'View course' }} <i class="fas fa-arrow-right"></i>
@@ -162,7 +162,7 @@
            catalogue is left; a row of bare numbers does not. --}}
       <div class="pager">
         <p class="pager-where">
-          Showing <b>{{ $courses->firstItem() }}–{{ $courses->lastItem() }}</b>
+          Showing <b>{{ $courses->firstItem() }}-{{ $courses->lastItem() }}</b>
           of <b>{{ $courses->total() }}</b> courses
           <span class="pager-sep">·</span>
           page {{ $courses->currentPage() }} of {{ $courses->lastPage() }}

@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
- * Focused-time tracking — total engaged seconds per lesson (reading or watching),
+ * Focused-time tracking, total engaged seconds per lesson (reading or watching),
  * fed by the visibility-gated frontend timer, clamped server-side, resumable.
  */
 class ActiveTimeTrackingTest extends TestCase
@@ -132,7 +132,7 @@ class ActiveTimeTrackingTest extends TestCase
         $response = $this->actingAs($student)->get(route('learn.lesson', [$course, $lesson]));
 
         $response->assertOk();
-        $response->assertSee('12:34'); // 754s server-rendered in the header — resume works without JS
+        $response->assertSee('12:34'); // 754s server-rendered in the header, resume works without JS
         // The shell config is embedded via Js::from(), which hex-escapes quotes.
         $response->assertSee('activeSeconds\\u0022:754', false);
     }

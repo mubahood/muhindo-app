@@ -17,8 +17,8 @@ use Tests\TestCase;
  *
  * Every chapter must (a) stay inside the rail, so the sidebar never vanishes
  * mid-story, and (b) end pointing at the chapter the sidebar puts next. Those
- * two used to disagree — the About page's next button said "Experience" while
- * the rail's second entry was "My work" — so this walks the whole chain rather
+ * two used to disagree, the About page's next button said "Experience" while
+ * the rail's second entry was "My work" so this walks the whole chain rather
  * than checking one page's one link.
  */
 class AboutChapterSequenceTest extends TestCase
@@ -90,7 +90,7 @@ class AboutChapterSequenceTest extends TestCase
             "{$chapter} does not offer the hire button.");
 
         // The next link lives inside the ending, not merely somewhere on the
-        // page — the rail links to most of these too, so a page-wide search
+        // page, the rail links to most of these too, so a page-wide search
         // would pass even with the button pointing at the wrong chapter.
         $ending = substr($html, (int) strpos($html, '<div class="ch-end">'));
 
@@ -121,7 +121,7 @@ class AboutChapterSequenceTest extends TestCase
 
         $this->assertStringContainsString('muhindo-mubaraka-cv.pdf', $bar);
 
-        // And only once — it used to have a bar of its own alongside this one.
+        // And only once. It used to have a bar of its own alongside this one.
         $this->assertSame(1, substr_count($bar, '<div class="act-bar">'));
     }
 

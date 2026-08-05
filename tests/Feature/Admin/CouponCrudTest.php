@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §7.1 — admin CRUD for coupons. */
+/** Admin CRUD for coupons. */
 class CouponCrudTest extends TestCase
 {
     use RefreshDatabase;

@@ -47,7 +47,7 @@
     @forelse($svc->recentProjects(6) as $project)
       <div class="dash-queue-row">
         <div class="qmain"><div class="qname">{{ $project->title }}</div>
-          <div class="qmeta">{{ $project->client->name ?? '—' }}</div></div>
+          <div class="qmeta">{{ $project->client->name ?? '-' }}</div></div>
         <span class="qtime">{{ ucfirst($project->status) }}</span>
       </div>
     @empty
@@ -58,8 +58,8 @@
   <x-dash.section title="Recent enrollments" icon="fa-user-graduate" :href="route('admin.enrollments.index')" viewLabel="View all">
     @forelse($svc->recentEnrollments(6) as $enrollment)
       <div class="dash-queue-row">
-        <div class="qmain"><div class="qname">{{ $enrollment->user->name ?? '—' }}</div>
-          <div class="qmeta">{{ $enrollment->course->title ?? '—' }}</div></div>
+        <div class="qmain"><div class="qname">{{ $enrollment->user->name ?? '-' }}</div>
+          <div class="qmeta">{{ $enrollment->course->title ?? '-' }}</div></div>
         <span class="qtime">{{ ucfirst($enrollment->status) }}</span>
       </div>
     @empty

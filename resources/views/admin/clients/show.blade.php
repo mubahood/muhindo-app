@@ -17,10 +17,10 @@
   <div class="tb-card-body">
     <div class="tb-form-grid">
       <div><div class="muted" style="font-size:.75rem;">Client #</div><div>{{ $client->client_number }}</div></div>
-      <div><div class="muted" style="font-size:.75rem;">Company</div><div>{{ $client->company ?? '—' }}</div></div>
-      <div><div class="muted" style="font-size:.75rem;">Email</div><div>{{ $client->email ?? '—' }}</div></div>
-      <div><div class="muted" style="font-size:.75rem;">Phone</div><div>{{ $client->phone ?? '—' }}</div></div>
-      <div><div class="muted" style="font-size:.75rem;">District</div><div>{{ $client->district?->name ?? '—' }}</div></div>
+      <div><div class="muted" style="font-size:.75rem;">Company</div><div>{{ $client->company ?? '-' }}</div></div>
+      <div><div class="muted" style="font-size:.75rem;">Email</div><div>{{ $client->email ?? '-' }}</div></div>
+      <div><div class="muted" style="font-size:.75rem;">Phone</div><div>{{ $client->phone ?? '-' }}</div></div>
+      <div><div class="muted" style="font-size:.75rem;">District</div><div>{{ $client->district?->name ?? '-' }}</div></div>
       <div><div class="muted" style="font-size:.75rem;">Portal access</div><div>{{ $client->user_id ? 'Enabled' : 'Not set up' }}</div></div>
     </div>
     @if($client->notes)<p style="margin-top:14px;">{{ $client->notes }}</p>@endif
@@ -38,7 +38,7 @@
           <td style="font-weight:500;"><a href="{{ route('admin.projects.show', $project) }}">{{ $project->title }}</a></td>
           <td><span class="badge-tb badge-info">{{ ucfirst(str_replace('_',' ',$project->status)) }}</span></td>
           <td>{{ ucfirst($project->priority) }}</td>
-          <td>{{ $project->due_date?->format('d M Y') ?? '—' }}</td>
+          <td>{{ $project->due_date?->format('d M Y') ?? '-' }}</td>
           <td><a href="{{ route('admin.projects.show', $project) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-eye"></i></a></td>
         </tr>
         @empty

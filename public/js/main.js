@@ -1,5 +1,5 @@
 // =======================================
-// DEVROOTS ACADEMY – SITE INTERACTIONS
+// DEVROOTS ACADEMY - SITE INTERACTIONS
 // =======================================
 document.addEventListener("DOMContentLoaded", () => {
 

@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** Random temporary password, forced reset at first login — App\Http\Middleware\RequirePasswordChange. */
+/** Random temporary password, forced reset at first login, App\Http\Middleware\RequirePasswordChange. */
 class ForcedPasswordChangeTest extends TestCase
 {
     use RefreshDatabase;

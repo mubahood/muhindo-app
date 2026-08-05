@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
- * P5.4/P5.3 — the mobile equivalent of Student\LessonVideoController::stream(). Deliberately
+ * The mobile equivalent of Student\LessonVideoController::stream(). Deliberately
  * `signed`-only, with no `auth:sanctum` layer on top: a native mobile video player generally
- * can't attach a bearer token to the request its own OS media stack makes, so — unlike the web
- * version, where the browser sends the session cookie for free — the signature has to be the
+ * can't attach a bearer token to the request its own OS media stack makes, so, unlike the web
+ * version, where the browser sends the session cookie for free. The signature has to be the
  * sole credential here. Authorization is still fully enforced, just earlier: at mint time, in
  * Api\V1\LessonController::show(), which already runs the same EnrollmentPolicy/LessonPolicy
  * checks before it ever hands out a signed URL. The 6-hour window bounds how long a leaked link

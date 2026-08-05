@@ -32,7 +32,7 @@ Route::prefix('v1')->group(function () {
         'show' => 'api.courses.show',
     ])->only(['index', 'show']);
 
-    // Signed, time-limited — deliberately outside auth:sanctum (see LessonVideoController's
+    // Signed, time-limited, deliberately outside auth:sanctum (see LessonVideoController's
     // docblock: a native mobile video player generally can't attach a bearer token).
     Route::get('courses/{course}/lessons/{lesson}/video-stream', [LessonVideoController::class, 'stream'])
         ->middleware('signed')->name('api.lessons.video-stream');
@@ -48,13 +48,13 @@ Route::prefix('v1')->group(function () {
         Route::post('lessons/{lesson}/complete', [EnrollmentController::class, 'completeLesson'])->name('api.lessons.complete');
         Route::post('lessons/{lesson}/heartbeat', [EnrollmentController::class, 'heartbeat'])->middleware('throttle:20,1')->name('api.lessons.heartbeat');
 
-        // P5.4 — lesson detail + notes
+        // Lesson detail + notes
         Route::get('courses/{course}/lessons/{lesson}', [LessonController::class, 'show'])->name('api.lessons.show');
         Route::get('courses/{course}/lessons/{lesson}/notes', [LessonNoteController::class, 'index'])->name('api.lesson-notes.index');
         Route::post('courses/{course}/lessons/{lesson}/notes', [LessonNoteController::class, 'store'])->name('api.lesson-notes.store');
         Route::delete('courses/{course}/lessons/{lesson}/notes/{note}', [LessonNoteController::class, 'destroy'])->name('api.lesson-notes.destroy');
 
-        // P5.4 — quizzes
+        // Quizzes
         Route::get('courses/{course}/quizzes', [QuizController::class, 'index'])->name('api.quizzes.index');
         Route::get('courses/{course}/quizzes/{quiz}', [QuizController::class, 'show'])->name('api.quizzes.show');
         Route::post('courses/{course}/quizzes/{quiz}/start', [QuizAttemptController::class, 'start'])->name('api.quiz-attempts.start');
@@ -64,21 +64,21 @@ Route::prefix('v1')->group(function () {
         Route::post('courses/{course}/quizzes/{quiz}/attempts/{attempt}/submit', [QuizAttemptController::class, 'submit'])->name('api.quiz-attempts.submit');
         Route::get('courses/{course}/quizzes/{quiz}/attempts/{attempt}/review', [QuizAttemptController::class, 'review'])->name('api.quiz-attempts.review');
 
-        // P5.4 — assignments
+        // Assignments
         Route::get('courses/{course}/assignments', [AssignmentController::class, 'index'])->name('api.assignments.index');
         Route::get('courses/{course}/assignments/{assignment}', [AssignmentController::class, 'show'])->name('api.assignments.show');
         Route::post('courses/{course}/assignments/{assignment}/draft', [AssignmentController::class, 'saveDraft'])->name('api.assignments.draft');
         Route::post('courses/{course}/assignments/{assignment}/submit', [AssignmentController::class, 'submit'])->name('api.assignments.submit');
         Route::get('courses/{course}/assignments/{assignment}/submissions/{submission}/download', [AssignmentController::class, 'download'])->name('api.assignments.download');
 
-        // P5.4 — grades
+        // Grades
         Route::get('courses/{course}/grades', [GradeController::class, 'show'])->name('api.grades.show');
 
         // Client: my projects
         Route::get('my/projects', [ProjectController::class, 'mine'])->name('api.projects.mine');
         Route::get('projects/{project}', [ProjectController::class, 'show'])->name('api.projects.show');
 
-        // Invoices (scoped to the authenticated billable — client or student)
+        // Invoices (scoped to the authenticated billable, client or student)
         Route::apiResource('invoices', InvoiceController::class)->names([
             'index' => 'api.invoices.index',
             'show' => 'api.invoices.show',

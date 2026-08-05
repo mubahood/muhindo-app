@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * Flutterwave v3 adapter. All secrets come from config('services.flutterwave')
- * (env only — C11). initialize() creates a Standard hosted-payment link;
+ * (env only, C11). initialize() creates a Standard hosted-payment link;
  * verify() confirms a transaction server-side; verifyWebhookSignature() checks
  * the `verif-hash` header against our configured secret hash.
  */

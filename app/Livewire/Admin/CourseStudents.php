@@ -10,9 +10,9 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 /**
- * §6.3.1 — the instructor's "Course → Students" workhorse: one row per
+ * The instructor's "Course → Students" workhorse: one row per
  * enrollment, sortable/filterable, searchable by student. Grade-to-date,
- * quiz average, and missing assignments are deferred to P3 (no quiz/
+ * Quiz average, and missing assignments are deferred later (no quiz/
  * assignment models exist yet); everything else here reads real data.
  */
 class CourseStudents extends Component
@@ -84,6 +84,6 @@ class CourseStudents extends Component
 
         return view('livewire.admin.course-students', ['enrollments' => $enrollments])
             ->layout('layouts.admin')
-            ->title($this->course->title.' — Students');
+            ->title($this->course->title.' | Students');
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §9 — a completed enrollment's progress_percent freezes at 100; it must never regress just because the curriculum grew afterward. */
+/** A completed enrollment's progress_percent freezes at 100; it must never regress just because the curriculum grew afterward. */
 class CompletedEnrollmentFreezeTest extends TestCase
 {
     use RefreshDatabase;
@@ -34,7 +34,7 @@ class CompletedEnrollmentFreezeTest extends TestCase
         $this->assertSame('completed', $enrollment->status);
         $this->assertSame(100, $enrollment->progress_percent);
 
-        // The curriculum grows after completion — a new, unfinished lesson.
+        // The curriculum grows after completion, a new, unfinished lesson.
         Lesson::create(['course_module_id' => $module->id, 'title' => 'L2', 'sort_order' => 1]);
 
         // The student revisits the lesson they already completed.

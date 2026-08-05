@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.4 — content_format=markdown renders sanitized HTML; plain lessons render exactly as before. */
+/** Content_format=markdown renders sanitized HTML; plain lessons render exactly as before. */
 class MarkdownLessonRenderingTest extends TestCase
 {
     use RefreshDatabase;

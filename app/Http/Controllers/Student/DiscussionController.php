@@ -12,7 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-/** §7.3 — the student's Q&A tab: course-wide + per-lesson threads. */
+/** The student's Q&A tab: course-wide + per-lesson threads. */
 class DiscussionController extends Controller
 {
     public function __construct(private readonly DiscussionService $discussions) {}

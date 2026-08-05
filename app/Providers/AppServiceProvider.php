@@ -15,14 +15,14 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // Payment gateway adapter — swap the binding to change providers; the
+        // Payment gateway adapter, swap the binding to change providers; the
         // app only ever depends on the PaymentGateway interface.
         $this->app->bind(
             \App\Services\Gateway\PaymentGateway::class,
             \App\Services\Gateway\FlutterwaveGateway::class,
         );
 
-        // Telescope is a dev-only dependency — register its providers only when
+        // Telescope is a dev-only dependency, register its providers only when
         // the package is actually installed (local), so production --no-dev
         // installs work without it.
         if ($this->app->environment('local') && class_exists(\Laravel\Telescope\TelescopeServiceProvider::class)) {
@@ -35,13 +35,13 @@ class AppServiceProvider extends ServiceProvider
     {
         // Trust the proxy in front of us. On this shared host the load balancer
         // terminates TLS, so %{HTTPS} reads "off" by the time Apache sees the
-        // request and Laravel decides it is on plain HTTP — which is what makes
+        // request and Laravel decides it is on plain HTTP, which is what makes
         // secure-cookie and is-this-request-secure checks answer wrongly.
         //
         // X_FORWARDED_HOST is deliberately NOT trusted. The proxy list has to be
         // 0.0.0.0/0 because shared hosting gives no fixed address to name, and a
         // trusted-everyone list plus a trusted Host header means anybody can set
-        // X-Forwarded-Host and have the app repeat their domain back — which is
+        // X-Forwarded-Host and have the app repeat their domain back, which is
         // how password-reset links get poisoned. Nothing here needs it: every
         // generated URL comes from URL::forceRootUrl(config('app.url')) below,
         // which reads APP_URL and never the request.
@@ -56,17 +56,17 @@ class AppServiceProvider extends ServiceProvider
         // the 1000-byte key limit on older MySQL/MariaDB builds.
         Schema::defaultStringLength(191);
 
-        // §9 — every timestamp is stored/computed in UTC (config('app.timezone'));
+        // Every timestamp is stored/computed in UTC (config('app.timezone'));
         // student/instructor-facing due dates and time windows render in the
         // learners' actual timezone instead. Deliberately a Carbon macro (not a
-        // model accessor) so it applies uniformly to any datetime that needs it —
+        // model accessor) so it applies uniformly to any datetime that needs it,
         // currently Assignment::due_at and Quiz::available_from/available_until.
         \Illuminate\Support\Carbon::macro('toLocal', function () {
             /** @var \Illuminate\Support\Carbon $this */
             return $this->copy()->timezone('Africa/Kampala');
         });
 
-        // API JSON Resources don't add their own {"data": …} wrapper — the single
+        // API JSON Resources don't add their own {"data": ...} wrapper. The single
         // envelope comes from App\Support\ApiResponse, so resources stay flat.
         \Illuminate\Http\Resources\Json\JsonResource::withoutWrapping();
 
@@ -77,7 +77,7 @@ class AppServiceProvider extends ServiceProvider
         // forced-composition rules push people towards one predictable pattern
         // ("Password1!") and towards writing the result down, which is why NIST
         // 800-63B dropped them. Length is what actually helps, and the accounts
-        // that matter — anything with billing.manage — are staff accounts we
+        // that matter, anything with billing.manage, are staff accounts we
         // can hold to a higher bar separately if we ever need to.
         Password::defaults(fn () => Password::min(6));
 
@@ -86,7 +86,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultView('pagination::simple-default');
         Paginator::defaultSimpleView('pagination::simple-default');
 
-        // The 'api' rate limiter — every /api/* route via $middleware->throttleApi()
+        // The 'api' rate limiter, every /api/* route via $middleware->throttleApi()
         // in bootstrap/app.php. Per authenticated user when
         // signed in (Sanctum), else per IP.
         RateLimiter::for('api', function (Request $request) {
@@ -106,9 +106,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->fixLivewireSubdirectoryUrls();
 
-        // PUBLIC_SITE_PLAN.md §6.6 — livewire.js is ~380KB and was measured as the single
+        // PUBLIC_SITE_PLAN.md Livewire.js is ~380KB and was measured as the single
         // largest render-blocking resource on the public marketing pages (Lighthouse:
-        // ~3.6s of estimated savings). Those pages don't mount real Livewire components —
+        // ~3.6s of estimated savings). Those pages don't mount real Livewire components,
         // it's only loaded there to power wire:navigate's link interception, which is a
         // progressive enhancement over real <a href> navigation and works fine once the
         // script finishes loading a beat later. `defer` costs nothing on pages that DO use
@@ -121,7 +121,7 @@ class AppServiceProvider extends ServiceProvider
      * /muhindo-app), Livewire 3 emits BOTH its <script src> and its
      * data-update-uri root-relative (/livewire/livewire.js, /livewire/update).
      * Under the subdirectory those 404 at the web server before Laravel ever
-     * sees them — the script 404 blanks the page (x-cloak never lifts), and the
+     * sees them. The script 404 blanks the page (x-cloak never lifts), and the
      * update 404 makes every wire:click/model fail with Livewire's error
      * overlay showing the server's "Not Found" page.
      *
@@ -139,7 +139,7 @@ class AppServiceProvider extends ServiceProvider
         $base = rtrim((string) parse_url((string) config('app.url'), PHP_URL_PATH), '/');
 
         if ($base === '') {
-            return; // Served from the domain root — Livewire's defaults are correct.
+            return; // Served from the domain root, Livewire's defaults are correct.
         }
 
         config(['livewire.asset_url' => $base.'/livewire/livewire.js']);

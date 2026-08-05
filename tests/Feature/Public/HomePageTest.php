@@ -59,7 +59,7 @@ class HomePageTest extends TestCase
     {
         /* The slot resolves against public_path, so proving it picks a real file
            up means writing one there. The name is randomised and namespaced so
-           this can never collide with a genuine asset — an earlier version of
+           this can never collide with a genuine asset, an earlier version of
            this test used images/portrait.jpg and its cleanup deleted the site's
            actual portrait. A test may not be able to destroy production files. */
         $slug = 'zz-test-'.Str::random(8);
@@ -221,7 +221,7 @@ class HomePageTest extends TestCase
 
     public function test_the_source_code_terminal_lists_real_products_with_real_prices(): void
     {
-        // The window is the listing, not a picture of one — every row has to be
+        // The window is the listing, not a picture of one. Every row has to be
         // a real product, a real size and a real link.
         $paid = \App\Models\Product::create([
             'name' => 'Laravel Starter', 'slug' => 'laravel-starter', 'type' => 'template',

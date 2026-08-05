@@ -7,16 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
- * Public, unauthenticated anti-forgery check for a certificate — closes L3.
+ * Public, unauthenticated anti-forgery check for a certificate, covers this.
  *
  * Two ways in, because a certificate is used in two ways. Someone with the
  * document on a screen scans the QR and lands on show() directly. Someone
- * holding a printed or photocopied certificate — an employer, a registrar —
+ * holding a printed or photocopied certificate, an employer, a registrar
  * has a number on paper and no scanner, and needs somewhere to type it.
  *
  * What matters most is the answer when a code does NOT resolve. Route model
  * binding answered that with a 404, which reads as "this site is broken"
- * rather than "this certificate is not genuine" — the one answer the page
+ * rather than "this certificate is not genuine" the one answer the page
  * exists to give. A forged number now gets an explicit, unambiguous no.
  */
 class CertificateVerificationController extends Controller
@@ -40,7 +40,7 @@ class CertificateVerificationController extends Controller
          * telling somebody their certificate is not genuine when they simply
          * fat-fingered a digit is a serious thing to get wrong.
          *
-         * Only claimed when the string looks like one of our numbers at all —
+         * Only claimed when the string looks like one of our numbers at all.
          * a UUID from the QR has no checksum, and neither does a random word.
          */
         $looksMistyped = $certificate === null
@@ -61,7 +61,7 @@ class CertificateVerificationController extends Controller
      * number, or the UUID the QR encodes.
      *
      * Case and surrounding whitespace are forgiven, because this gets typed
-     * off paper. Nothing else is — no partial matching, no fuzzy search. A
+     * off paper. Nothing else is, no partial matching, no fuzzy search. A
      * verification that guesses is not a verification.
      */
     private function find(string $code): ?Certificate

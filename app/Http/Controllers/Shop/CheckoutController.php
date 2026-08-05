@@ -76,7 +76,7 @@ class CheckoutController extends Controller
             app(\App\Services\BillingService::class)->settleFreeInvoice($invoice);
 
             return redirect()->route('shop.downloads')
-                ->with('success', trim(($notice ? $notice.' ' : '').'Done — your items are ready below.'));
+                ->with('success', trim(($notice ? $notice.' ' : '').'Done. Your items are ready below.'));
         }
 
         return redirect()->route('checkout.pay', $invoice)->with('success', $notice);

@@ -8,8 +8,8 @@
 
      The previous version was a full-width card grid with no rail: clicking
      "My work" in the sidebar dropped you out of the layout you were reading
-     in. The grid still exists — it moved to /work/all, where a listing
-     belongs — and this page is now the short version that hands off to it. */
+     in. The grid still exists. It moved to /work/all, where a listing
+     belongs, and this page is now the short version that hands off to it. */
 
   /* One system gets the room it deserves. Buried as card 04 of nine, the
      project a ministry would actually recognise reads like all the others. */
@@ -45,7 +45,7 @@
     margin-top:16px;padding:13px 15px;background:var(--surface);border:1px solid var(--line);}
   .wk-all p{font-size:12.5px;color:var(--tx3);margin:0;}
 
-  /* How the work is done — the part a card grid cannot say. */
+  /* How the work is done. The part a card grid cannot say. */
   .wk-how{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
   .wk-how div{background:var(--surface);padding:14px 16px;}
   .wk-how h3{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;margin:0 0 4px;}
@@ -104,7 +104,7 @@
 
         @if($rest->isNotEmpty())
           {{-- A handful more, briefly. A chapter that reprints the whole
-               portfolio is not a chapter — /work/all is one click away. --}}
+               portfolio is not a chapter, /work/all is one click away. --}}
           <div class="ch-sec">
             <h2 class="ch-h">And a few others</h2>
 

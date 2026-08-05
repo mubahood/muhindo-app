@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.2 — server-side hooks for view/complete/download must feed the learning_events stream. */
+/** Server-side hooks for view/complete/download must feed the learning_events stream. */
 class LearningEventRecordingTest extends TestCase
 {
     use RefreshDatabase;

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.3 — admin CRUD + publish flow for course announcements. */
+/** Admin CRUD + publish flow for course announcements. */
 class AnnouncementCrudTest extends TestCase
 {
     use RefreshDatabase;

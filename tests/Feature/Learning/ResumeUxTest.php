@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.5 — "resume where you left off" instead of always restarting at lesson #1. */
+/** "resume where you left off" instead of always restarting at lesson #1. */
 class ResumeUxTest extends TestCase
 {
     use RefreshDatabase;

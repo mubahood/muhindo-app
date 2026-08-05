@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Orchestrates gateway payments on top of a PaymentGateway adapter. initialize()
- * opens a hosted session and logs it; settle() is the ONE place money moves — it
+ * opens a hosted session and logs it; settle() is the ONE place money moves, it
  * verifies server-side, then records a Payment through BillingService. It is
  * idempotent (a gateway_log row is locked and marked successful once), so the
  * redirect callback and the webhook can both call it without double-crediting.
@@ -63,7 +63,7 @@ class GatewayPaymentService
      *
      * This asks the gateway about every session we opened for the invoice,
      * keyed on the tx_ref we generated, so a stuck payment can be recovered on
-     * demand — by the payer pressing "I have paid" or by staff. It settles
+     * demand, by the payer pressing "I have paid" or by staff. It settles
      * through exactly the same verified, idempotent path as everything else.
      *
      * @return string One of: settled, already_settled, nothing_pending, not_successful
@@ -122,7 +122,7 @@ class GatewayPaymentService
                 return 'unknown_reference';
             }
             if ($log->isSettled()) {
-                return 'already_settled';   // idempotent — webhook + callback race
+                return 'already_settled';   // idempotent, webhook + callback race
             }
 
             if (strtoupper($v->currency) !== strtoupper($log->currency)) {

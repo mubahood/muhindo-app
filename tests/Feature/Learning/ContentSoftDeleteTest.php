@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** L7 — restructuring a course must never destroy student progress history. */
+/** L7, restructuring a course must never destroy student progress history. */
 class ContentSoftDeleteTest extends TestCase
 {
     use RefreshDatabase;

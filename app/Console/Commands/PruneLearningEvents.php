@@ -6,16 +6,16 @@ use App\Models\LearningEvent;
 use Illuminate\Console\Command;
 
 /**
- * §6.2 — the retention half of the event stream: raw learning_events rows are pruned after
+ * The retention half of the event stream: raw learning_events rows are pruned after
  * ~12 months, while the aggregates they fed (enrollments.progress_percent/total_watch_seconds,
  * lesson_progress, at-risk tags, badges) live forever on their own rows and are entirely
- * unaffected — this command only ever touches the append-only log itself.
+ * unaffected. This command only ever touches the append-only log itself.
  */
 class PruneLearningEvents extends Command
 {
     protected $signature = 'app:prune-learning-events';
 
-    protected $description = 'Delete learning_events rows older than 12 months (§6.2) — aggregate columns elsewhere are unaffected';
+    protected $description = 'Delete learning_events rows older than 12 months, aggregate columns elsewhere are unaffected';
 
     public function handle(): int
     {

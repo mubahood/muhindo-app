@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * A lead becomes a proposal.
  *
- * The old form took a name, an email and a paragraph — enough to start a
+ * The old form took a name, an email and a paragraph, enough to start a
  * conversation, not enough to price anything. These are the fields that turn
  * "I want a system" into something that can be quoted, and they are asked for
  * once, at the point somebody decides to hire, rather than over four emails.

@@ -10,7 +10,7 @@ use Spatie\Permission\PermissionRegistrar;
 
 /**
  * Platform RBAC: super_admin (owner) · admin (future staff) · student · client.
- * Students and clients never see /admin — they get their own portals
+ * Students and clients never see /admin. They get their own portals
  * (/learn, /portal) gated by plain `auth` + ownership policies, not
  * permissions. Permissions here only gate the back-office.
  */

@@ -33,7 +33,7 @@ class VerificationCode
         $sum = 0;
         $chars = preg_replace('/[^0-9A-Z]/', '', strtoupper($core));
         foreach (str_split($chars) as $i => $ch) {
-            $val = ctype_digit($ch) ? (int) $ch : (ord($ch) - 55); // A=10 … Z=35
+            $val = ctype_digit($ch) ? (int) $ch : (ord($ch) - 55); // A=10 ... Z=35
             $sum += $val * ($i % 2 === 0 ? 1 : 3);
         }
 

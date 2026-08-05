@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 
 /**
- * §6.3.3 — "your daily inbox": every ungraded quiz answer (essay/unmatched-short_text) and
+ * "your daily inbox": every ungraded quiz answer (essay/unmatched-short_text) and
  * every submitted-but-not-returned assignment, across every course, oldest first.
  */
 class GradingQueue extends Component
@@ -79,7 +79,7 @@ class GradingQueue extends Component
                 'id' => $answer->id,
                 'student' => $answer->attempt->enrollment->user->name,
                 'course' => $answer->attempt->quiz->course->title,
-                'title' => $answer->attempt->quiz->title.' — '.Str::limit(strip_tags($answer->question->prompt), 60),
+                'title' => $answer->attempt->quiz->title.' - '.Str::limit(strip_tags($answer->question->prompt), 60),
                 'submitted_at' => $answer->attempt->submitted_at,
                 'max_points' => (float) $answer->question->points,
             ];

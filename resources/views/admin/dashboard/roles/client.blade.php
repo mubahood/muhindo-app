@@ -41,12 +41,12 @@
       @endforeach
     </div>
   </div>
-  <p class="muted" style="font-size:.78rem;margin-top:6px;">Every request gets a reply within 24 hours — it appears below as a project once the scope is agreed.</p>
+  <p class="muted" style="font-size:.78rem;margin-top:6px;">Every request gets a reply within 24 hours. It appears below as a project once the scope is agreed.</p>
 </div>
 @endif
 
 @if(! $client && $openRequests->isEmpty())
-  <x-dash.empty icon="fa-diagram-project" text="No projects yet — tell me what you'd like built and I'll take it from there." />
+  <x-dash.empty icon="fa-diagram-project" text="No projects yet, tell me what you'd like built and I'll take it from there." />
 @else
 <div class="dash-section">
   <div class="dash-section-title"><i class="fas fa-diagram-project"></i> Projects</div>
@@ -75,7 +75,7 @@
         </div>
       </div>
     @empty
-      <x-dash.empty icon="fa-diagram-project" text="No projects yet — your request becomes a project once the scope is agreed." />
+      <x-dash.empty icon="fa-diagram-project" text="No projects yet, your request becomes a project once the scope is agreed." />
     @endforelse
   </div>
 </div>

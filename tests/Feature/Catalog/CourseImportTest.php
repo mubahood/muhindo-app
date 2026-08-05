@@ -91,7 +91,7 @@ class CourseImportTest extends TestCase
         return app(CourseFileParser::class)->parse($this->fixture);
     }
 
-    // ── Parsing ─────────────────────────────────────────────────────────────
+    // Parsing
 
     public function test_it_reads_the_courses_own_metadata(): void
     {
@@ -168,7 +168,7 @@ class CourseImportTest extends TestCase
         $this->assertNotNull($parsed['quiz_brief']);
     }
 
-    // ── Importing ───────────────────────────────────────────────────────────
+    // Importing
 
     public function test_it_creates_the_course_its_modules_and_its_lessons(): void
     {
@@ -236,7 +236,7 @@ class CourseImportTest extends TestCase
         $this->assertSame(0, Lesson::where('title', 'Another shorthand')->count());
     }
 
-    // ── The embeddability the link report settled ───────────────────────────
+    // The embeddability the link report settled
 
     public function test_a_video_that_cannot_be_embedded_is_marked_and_keeps_its_watch_url(): void
     {
@@ -274,7 +274,7 @@ class CourseImportTest extends TestCase
             ->assertDontSee('youtube-nocookie.com/embed/aaaaaaaaaaa', false);
     }
 
-    // ── The real files ──────────────────────────────────────────────────────
+    // The real files
 
     public function test_every_authored_course_parses_into_something_importable(): void
     {

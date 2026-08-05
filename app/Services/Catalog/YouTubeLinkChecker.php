@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
  *
  * oEmbed rather than the Data API: it needs no API key. But oEmbed alone
  * cannot tell a missing video from a perfectly good one whose owner disabled
- * embedding — both come back 401 — and those two need opposite responses. A
+ * embedding (both come back 401) and those two need opposite responses. A
  * gone video must be replaced or rewritten; a non-embeddable one is real
  * teaching that simply cannot play inside an iframe and must be linked out to.
  *
@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Http;
  * watch page before a verdict is recorded.
  *
  * Results are cached to a JSON file so re-runs are instant and so a repair pass
- * only pays for the links it changed. Only definitive answers are cached — a
+ * only pays for the links it changed. Only definitive answers are cached. A
  * network failure is never written down as a verdict.
  */
 class YouTubeLinkChecker
@@ -53,7 +53,7 @@ class YouTubeLinkChecker
         $verdict = $this->ask($url, $type, $id);
 
         // A transport failure says nothing about the link, so it is not cached
-        // — otherwise one flaky minute would poison every later run.
+        // Otherwise one flaky minute would poison every later run.
         if ($verdict['reason'] !== 'unreachable') {
             $this->cache[$key] = $verdict;
             $this->persist();
@@ -87,7 +87,7 @@ class YouTubeLinkChecker
             ];
         }
 
-        // oEmbed said no. That is not yet a verdict — ask the watch page
+        // oEmbed said no. That is not yet a verdict, ask the watch page
         // whether the video actually exists.
         if ($type === 'video') {
             return $this->confirmAgainstWatchPage($id, $response->status());
@@ -103,7 +103,7 @@ class YouTubeLinkChecker
 
     /**
      * The tie-breaker. A live page carrying "status":"OK" and a real title is a
-     * real video whose owner turned embedding off — watchable, just not inside
+     * real video whose owner turned embedding off, watchable, just not inside
      * our player. Anything else is genuinely unavailable to a student.
      *
      * @return array{ok:bool,embeddable:bool,title:?string,reason:?string}
@@ -113,7 +113,7 @@ class YouTubeLinkChecker
         /*
          * No ->retry() here. A watch page is around a megabyte, and retrying a
          * response whose stream has already been touched throws "Unable to read
-         * stream contents" — which is a transport artefact, not a verdict about
+         * stream contents" which is a transport artefact, not a verdict about
          * the video. One attempt, and the body is read inside the try.
          */
         try {
@@ -136,7 +136,7 @@ class YouTubeLinkChecker
                 'ok' => true,
                 'embeddable' => false,
                 'title' => html_entity_decode($m[1] ?? '', ENT_QUOTES),
-                'reason' => 'embedding disabled — plays on YouTube, not in our player',
+                'reason' => 'embedding disabled, plays on YouTube, not in our player',
             ];
         }
 

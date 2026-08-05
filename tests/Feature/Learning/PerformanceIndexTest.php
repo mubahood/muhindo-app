@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
-/** L13 — the queries these surfaces run at scale must be backed by real indexes. */
+/** L13. The queries these surfaces run at scale must be backed by real indexes. */
 class PerformanceIndexTest extends TestCase
 {
     use RefreshDatabase;

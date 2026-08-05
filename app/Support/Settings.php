@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
  *
  * Safe to call before the table exists (fresh install / early boot): every
  * lookup falls back to the supplied default. Categories, regulatory bodies and
- * validity periods live in their own tables — this holds site-wide config only
+ * validity periods live in their own tables. This holds site-wide config only
  * (name, tagline, contacts, languages, verify rate-limit, QR base URL).
  */
 class Settings

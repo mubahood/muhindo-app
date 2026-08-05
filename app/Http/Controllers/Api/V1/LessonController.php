@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 
-/** P5.4 — lesson detail for the mobile player: content, video source, resume position, lock state. */
+/** P5.4, lesson detail for the mobile player: content, video source, resume position, lock state. */
 class LessonController extends Controller
 {
     public function __construct(

@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Support\FakePaymentGateway;
 use Tests\TestCase;
 
-/** public-w4 — §5.1/§5.2 of PUBLIC_SITE_PLAN.md: checkout order summary and failure-path retry. */
+/** public-w4, of PUBLIC_SITE_PLAN.md: checkout order summary and failure-path retry. */
 class CheckoutPageTest extends TestCase
 {
     use RefreshDatabase;
@@ -45,7 +45,7 @@ class CheckoutPageTest extends TestCase
         $response = $this->followingRedirects()->get(route('courses.checkout', $course));
 
         $response->assertOk();
-        // The one payment screen says "Discount applied" — an invoice discount
+        // The one payment screen says "Discount applied" an invoice discount
         // is not always from a coupon.
         $response->assertSee('Discount applied');
         $response->assertSee('UGX 30,000.00'); // 20% of 150,000

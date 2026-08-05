@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** Site settings are global (site name, tagline, contacts) — only the owner (super_admin) may change them. */
+/** Site settings are global (site name, tagline, contacts), only the owner (super_admin) may change them. */
 class GlobalSettingsAuthorizationTest extends TestCase
 {
     use RefreshDatabase;

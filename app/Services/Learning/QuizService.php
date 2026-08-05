@@ -17,12 +17,12 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-/** §5.2 — the attempt lifecycle: start → answer (autosave) → submit (server-graded). Server is the only source of truth. */
+/** The attempt lifecycle: start → answer (autosave) → submit (server-graded). Server is the only source of truth. */
 class QuizService
 {
     public function __construct(private readonly LearningEventRecorder $events) {}
 
-    /** Starts a new attempt, or resumes the caller's existing in-progress one — never a second parallel attempt. */
+    /** Starts a new attempt, or resumes the caller's existing in-progress one, never a second parallel attempt. */
     public function start(Quiz $quiz, Enrollment $enrollment): QuizAttempt
     {
         Gate::authorize('access', $enrollment);
@@ -111,7 +111,7 @@ class QuizService
         $questions = Question::whereIn('id', $questionIds)->with('options')->get()->keyBy('id');
         $timeSpent = $attempt->started_at ? $attempt->started_at->diffInSeconds(now()) : null;
 
-        // §9 — every answer's grade, the learning_events row, and the attempt's final status all
+        // Every answer's grade, the learning_events row, and the attempt's final status all
         // finalize together or not at all; a crash mid-loop must never leave some questions
         // graded and others not while the attempt is still nominally "in progress".
         [$attempt, $needsManualReview] = DB::transaction(function () use ($attempt, $quiz, $questionIds, $questions, $timeSpent, $integrity) {
@@ -217,7 +217,7 @@ class QuizService
     }
 
     /**
-     * Per-question feedback for the attempt's review page, gated by the quiz's feedback_mode —
+     * Per-question feedback for the attempt's review page, gated by the quiz's feedback_mode,
      * null means "don't show anything yet" (client renders score-only or a "pending" message).
      *
      * @return array<int,array{question_id:int,is_correct:?bool,points_awarded:?float,max_points:float,explanation:?string,grader_feedback:?string}>|null
@@ -277,7 +277,7 @@ class QuizService
         QuizAttemptSubmitted::dispatch($attempt->fresh());
     }
 
-    /** Freezes question order (respecting the pool draw) and, per question, option order — so a resumed attempt is stable. */
+    /** Freezes question order (respecting the pool draw) and, per question, option order, so a resumed attempt is stable. */
     private function buildQuestionOrder(Quiz $quiz): array
     {
         $questions = $quiz->questions()->with('options')->get();

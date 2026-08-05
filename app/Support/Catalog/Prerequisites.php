@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 /**
  * Turns the authored prerequisite text into real, clickable courses.
  *
- * The files say "Prerequisites: Courses 10, 11, 12" — useful to a reader, dead
+ * The files say "Prerequisites: Courses 10, 11, 12" useful to a reader, dead
  * to a student who then has to go and find them. These are advisory: shown as
  * "best after", never blocking, always one click away.
  */

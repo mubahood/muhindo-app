@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** public-w2 — §2.2/§2.3 of PUBLIC_SITE_PLAN.md: tagline/outcomes/requirements/cover_alt. */
+/** public-w2, of PUBLIC_SITE_PLAN.md: tagline/outcomes/requirements/cover_alt. */
 class CourseCatalogueFieldsTest extends TestCase
 {
     use RefreshDatabase;

@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** L2 — a pending/cancelled enrollment must never grant lesson/material/completion access. */
+/** L2. A pending/cancelled enrollment must never grant lesson/material/completion access. */
 class EnrollmentAccessPolicyTest extends TestCase
 {
     use RefreshDatabase;
@@ -94,7 +94,7 @@ class EnrollmentAccessPolicyTest extends TestCase
     }
 
     /**
-     * Final-walkthrough finding: the pending badge alone was a dead end — a student who
+     * Final-walkthrough finding: the pending badge alone was a dead end. A student who
      * abandoned checkout had no way back to it from "My Courses" and would have had to
      * independently remember to revisit the course's public page.
      */
@@ -110,7 +110,7 @@ class EnrollmentAccessPolicyTest extends TestCase
 
         // This enrollment carries no invoice, so the way forward is back to
         // the course to complete enrolling. A pending enrollment that DOES
-        // have one links straight to the payment screen instead — covered in
+        // have one links straight to the payment screen instead, covered in
         // StudentNavigationTest.
         $response->assertSee(route('courses.show', $course), false);
     }
@@ -145,7 +145,7 @@ class EnrollmentAccessPolicyTest extends TestCase
         $admin = User::factory()->create(['role' => 'super_admin', 'is_admin' => true]);
         $admin->syncSpatieRole();
 
-        // The admin has no enrollment of their own — accessing another user's course
+        // The admin has no enrollment of their own, accessing another user's course
         // player is out of scope for the `access` ability (it's per-owner), but the
         // super_admin `before` bypass on the policy still short-circuits any check
         // performed directly against a specific Enrollment instance they are given.

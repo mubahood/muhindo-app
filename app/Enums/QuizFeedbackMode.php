@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** §5.2.4 — when a student sees the correct answer/explanation. */
+/** When a student sees the correct answer/explanation. */
 enum QuizFeedbackMode: string
 {
     case Immediate = 'immediate';

@@ -52,7 +52,7 @@
                 @if($due && $due->isOutstanding())
                   {{ $due->currency }} {{ number_format((float) $due->balance, 2) }} to pay
                   @if($due->direct_payment_at)
-                    <br><span class="muted">You are paying Muhindo directly — it opens once he confirms.</span>
+                    <br><span class="muted">You are paying Muhindo directly. It opens once he confirms.</span>
                   @endif
                 @else
                   Payment pending
@@ -101,7 +101,7 @@
             <a href="{{ route('learn.course', $course) }}" class="btn-tb btn-tb-primary btn-tb-sm">
               <i class="fas {{ $enrollment->status === 'completed' ? 'fa-rotate-right' : 'fa-play' }}"></i>
               {{ $enrollment->status === 'completed' ? 'Review' : ($started ? 'Resume' : 'Start course') }}
-              <span class="sr-only">— {{ $course->title }}</span>
+              <span class="sr-only">, {{ $course->title }}</span>
             </a>
             @if($enrollment->certificate)
               <a href="{{ route('learn.certificate.download', $enrollment->certificate) }}" target="_blank" rel="noopener"

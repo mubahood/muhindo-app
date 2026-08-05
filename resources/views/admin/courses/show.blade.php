@@ -98,7 +98,7 @@
             @if($quiz->is_required)
               <span class="badge-tb badge-pending">Must be done to finish the topic</span>
             @else
-              <span class="muted act-optional">Optional — does not block the topic</span>
+              <span class="muted act-optional">Optional, does not block the topic</span>
             @endif
           </div>
         @endforeach
@@ -111,7 +111,7 @@
             @if($assignment->is_required)
               <span class="badge-tb badge-pending">Must be done to finish the topic</span>
             @else
-              <span class="muted act-optional">Optional — does not block the topic</span>
+              <span class="muted act-optional">Optional, does not block the topic</span>
             @endif
           </div>
         @endforeach
@@ -120,20 +120,20 @@
       @endforelse
       <form method="POST" action="{{ route('admin.modules.lessons.quick-store', $module) }}" style="display:flex;gap:8px;padding:12px 18px;">
         @csrf
-        <input type="text" name="title" class="tb-input" placeholder="Quick-add a lesson title…" required style="flex:1;">
+        <input type="text" name="title" class="tb-input" placeholder="Quick-add a lesson title..." required style="flex:1;">
         <button type="submit" class="btn-tb btn-tb-ghost btn-tb-sm"><i class="fas fa-plus"></i> Add</button>
       </form>
     </div>
   </div>
 @empty
-  <div class="tb-empty" style="padding:40px;"><i class="fas fa-book"></i><p>No modules yet — add one to start building the course.</p></div>
+  <div class="tb-empty" style="padding:40px;"><i class="fas fa-book"></i><p>No modules yet, add one to start building the course.</p></div>
 @endforelse
 </div>
 
 @push('scripts')
 <script src="{{ asset('vendor/js/sortable.min.js') }}"></script>
 <script>
-/** §7.5 — drag-and-drop module/lesson reorder, one AJAX call per drop, degrades to the static (non-reorderable) list with no JS. */
+/** Drag-and-drop module/lesson reorder, one AJAX call per drop, degrades to the static (non-reorderable) list with no JS. */
 function curriculumBuilder(cfg) {
   return {
     init() {
@@ -176,7 +176,7 @@ function curriculumBuilder(cfg) {
           body: JSON.stringify({ modules, lessons }),
         });
       } catch (e) {
-        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not save the new order — please refresh and try again.', type: 'error' } }));
+        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not save the new order, please refresh and try again.', type: 'error' } }));
       }
     },
   };

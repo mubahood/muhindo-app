@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\District;
 use Illuminate\Database\Seeder;
 
-/** Uganda's districts by region — reference data used by client address fields. */
+/** Uganda's districts by region, reference data used by client address fields. */
 class DistrictSeeder extends Seeder
 {
     public function run(): void

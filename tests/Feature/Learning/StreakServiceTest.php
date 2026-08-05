@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.5 — the weekly streak counter, computed portably in PHP (no MySQL-only YEARWEEK) so it works on SQLite too. */
+/** The weekly streak counter, computed portably in PHP (no MySQL-only YEARWEEK) so it works on SQLite too. */
 class StreakServiceTest extends TestCase
 {
     use RefreshDatabase;
@@ -26,7 +26,7 @@ class StreakServiceTest extends TestCase
         ]);
     }
 
-    /** `created_at` isn't mass-assignable (by design — it's a domain event log, not client input), so it's backdated after the fact. */
+    /** `created_at` isn't mass-assignable (by design, it's a domain event log, not client input), so it's backdated after the fact. */
     private function activityAt(Enrollment $enrollment, \Illuminate\Support\Carbon $when): void
     {
         $event = $enrollment->learningEvents()->create(['event' => LearningEventType::LessonViewed->value]);

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.3 — "complete without reload": one route, JSON for AJAX, a redirect for a plain form POST. */
+/** "complete without reload": one route, JSON for AJAX, a redirect for a plain form POST. */
 class AjaxLessonCompletionTest extends TestCase
 {
     use RefreshDatabase;

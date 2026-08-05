@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** §7.4 — how Lesson::content is rendered to students. */
+/** How Lesson::content is rendered to students. */
 enum ContentFormat: string
 {
     case Plain = 'plain';

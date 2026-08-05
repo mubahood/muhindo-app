@@ -1,4 +1,4 @@
-/* Cryptocoinex theme switcher — applies data-theme before paint (no FOUC),
+/* Cryptocoinex theme switcher, applies data-theme before paint (no FOUC),
    persists to localStorage and (when authed) the user profile. */
 (function () {
   var KEY = 'cx_theme';

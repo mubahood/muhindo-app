@@ -22,7 +22,7 @@
       <div class="tb-form-group" style="margin-top:14px;">
         <label class="tb-check-group">
           <input type="checkbox" name="void" value="1">
-          <span>Void this invoice (irreversible — no further payments can be recorded)</span>
+          <span>Void this invoice (irreversible. No further payments can be recorded)</span>
         </label>
       </div>
     @endif

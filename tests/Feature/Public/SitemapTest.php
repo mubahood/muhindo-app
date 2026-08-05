@@ -6,7 +6,7 @@ use App\Models\Course;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** public-w6 — §6.3 of PUBLIC_SITE_PLAN.md: a real sitemap + robots.txt pointing at this app's own domain. */
+/** public-w6, of PUBLIC_SITE_PLAN.md: a real sitemap + robots.txt pointing at this app's own domain. */
 class SitemapTest extends TestCase
 {
     use RefreshDatabase;

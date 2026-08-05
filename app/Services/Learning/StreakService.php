@@ -7,8 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 
 /**
- * §6.5 — the "optional weekly streak counter": consecutive ISO weeks (ending this week or
- * last week — a week still in progress doesn't break a streak that's still alive) with at
+ * The "optional weekly streak counter": consecutive ISO weeks (ending this week or
+ * last week. A week still in progress doesn't break a streak that's still alive) with at
  * least one `learning_events` row across any of the user's enrollments. Computed in PHP
  * rather than a DB-specific week function (`YEARWEEK` is MySQL-only; tests run on SQLite),
  * so this stays portable across both.

@@ -47,7 +47,7 @@
     </div>
   </div>
 
-  {{-- No "remember me" checkbox — staying signed in until sign-out is the default policy. --}}
+  {{-- No "remember me" checkbox, staying signed in until sign-out is the default policy. --}}
   <x-captcha />
   <button type="submit" class="a-btn gold" style="margin-top:6px;"><i class="fas fa-right-to-bracket"></i> Sign in</button>
 </form>
@@ -61,7 +61,7 @@
   </a>
   <a class="a-way" href="{{ route('hire') }}">
     <i class="fas fa-handshake" aria-hidden="true"></i>
-    <span><b>Hire Muhindo</b>Describe your project first — no account needed</span>
+    <span><b>Hire Muhindo</b>Describe your project first, no account needed</span>
   </a>
 </div>
 

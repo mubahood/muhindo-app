@@ -17,7 +17,7 @@
 <div style="display:grid;grid-template-columns:1fr minmax(300px,360px);gap:20px;align-items:start;" class="pt-cols">
   <div class="tb-card">
     <div class="tb-card-header" style="display:flex;justify-content:space-between;align-items:center;">
-      <span class="tb-card-title">Invoice — {{ $invoice->billable?->name }}</span>
+      <span class="tb-card-title">Invoice, {{ $invoice->billable?->name }}</span>
       <span class="badge-tb {{ $invoice->status->badge() }}">{{ $invoice->status->label() }}</span>
     </div>
     <div class="tb-table-wrap"><table class="tb-table">
@@ -56,7 +56,7 @@
             <hr style="margin:14px 0;border:none;border-top:1px solid var(--bd);">
             <form method="POST" action="{{ route('admin.invoices.flutterwave', $invoice) }}">@csrf
               <button class="btn-tb" style="width:100%;background:#f5a623;color:#1b2733;"><i class="fas fa-globe"></i> Pay online (Flutterwave)</button>
-              <p class="muted" style="font-size:.72rem;margin-top:6px;text-align:center;">Card · Mobile money · Bank · USSD — amount: {{ $invoice->currency }} {{ number_format((float) $invoice->balance, 2) }}</p>
+              <p class="muted" style="font-size:.72rem;margin-top:6px;text-align:center;">Card · Mobile money · Bank · USSD, amount: {{ $invoice->currency }} {{ number_format((float) $invoice->balance, 2) }}</p>
             </form>
           </div>
         </div>

@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
- * §4.5 — LessonCompleted/CourseCompleted/EnrollmentCreated decouple
+ * LessonCompleted/CourseCompleted/EnrollmentCreated decouple
  * certificate issuance and notifications from ProgressService/enroll().
  */
 class LearningEventsTest extends TestCase

@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §6.3.4 — the admin-facing quiz item analysis page. */
+/** The admin-facing quiz item analysis page. */
 class QuizAnalysisPageTest extends TestCase
 {
     use RefreshDatabase;

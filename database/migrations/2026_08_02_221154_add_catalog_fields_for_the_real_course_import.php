@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
  *
  * tagline, outcomes and requirements already existed. These are the rest:
  * a course's place in the catalogue (number, tier, featured), and the two
- * facts a lesson can now hold that came out of link verification — whether a
+ * facts a lesson can now hold that came out of link verification, whether a
  * video is somebody else's work, and whether YouTube will let it play inside
  * our player at all.
  */
@@ -18,7 +18,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('courses', function (Blueprint $table) {
-            // The catalogue's own numbering (01…21), which drives ordering,
+            // The catalogue's own numbering (01...21), which drives ordering,
             // "next course" suggestions and the learning paths.
             $table->unsignedSmallInteger('course_number')->nullable()->after('slug');
             $table->unsignedTinyInteger('tier')->nullable()->after('level');
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('playlist_url', 255)->nullable()->after('cover_alt');
 
             // Which authored file this course came from, and when it last
-            // matched it — so an imported course is never a mystery in admin.
+            // matched it, so an imported course is never a mystery in admin.
             $table->string('source_file', 120)->nullable()->after('created_by');
             $table->timestamp('synced_at')->nullable()->after('source_file');
 
@@ -35,7 +35,7 @@ return new class extends Migration
         });
 
         Schema::table('lessons', function (Blueprint $table) {
-            // Somebody else's video (freeCodeCamp, Mosh…). The attribution
+            // Somebody else's video (freeCodeCamp, Mosh...). The attribution
             // stays visible in the body; this is what the UI badges.
             $table->boolean('is_external')->default(false)->after('is_free_preview');
 

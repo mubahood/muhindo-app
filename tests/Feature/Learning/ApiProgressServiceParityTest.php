@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
- * L14 — the API must never drift from the web player's completion rules.
+ * The API must never drift from the web player's completion rules.
  * Both now go through the same ProgressService.
  */
 class ApiProgressServiceParityTest extends TestCase

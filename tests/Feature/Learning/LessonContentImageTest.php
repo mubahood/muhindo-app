@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.4 — images uploaded into markdown content, stored privately, served back only to an enrolled (and unlocked) student. */
+/** Images uploaded into markdown content, stored privately, served back only to an enrolled (and unlocked) student. */
 class LessonContentImageTest extends TestCase
 {
     use RefreshDatabase;

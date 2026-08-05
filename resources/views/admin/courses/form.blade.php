@@ -91,13 +91,13 @@
       <div class="tb-form-group dbg-box">
         <label class="tb-check-group">
           <input type="checkbox" name="debug_mode" value="1" {{ old('debug_mode', $course->debug_mode) ? 'checked' : '' }}>
-          <span><b>Debug mode — skip the pacing gates</b></span>
+          <span><b>Debug mode, skip the pacing gates</b></span>
         </label>
         <p class="dbg-note">
           Lets you move to the next topic immediately: no minimum screen time, and no
           required quiz or assignment to submit first. Meant for walking through a course
           while you build it.
-          <b>This applies to everyone taking the course, not just you</b> — anyone enrolled
+          <b>This applies to everyone taking the course, not just you</b>. Anyone enrolled
           can finish it, and earn its certificate, without doing the work. Turn it off
           before students use the course.
         </p>

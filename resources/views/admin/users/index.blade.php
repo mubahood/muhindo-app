@@ -49,7 +49,7 @@
             @endphp
             <span class="badge-tb {{ $roleBadge }}">{{ $user->role_label }}</span>
           </td>
-          <td>{{ $user->phone ?? '—' }}</td>
+          <td>{{ $user->phone ?? '-' }}</td>
           <td>
             <span class="badge-tb {{ $user->is_active?'badge-active':'badge-danger' }}">
               {{ $user->is_active ? 'Active' : 'Inactive' }}

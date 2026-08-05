@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** P5.4 — API v1 parity: lesson detail, heartbeat, free self-enroll expiry stamping. */
+/** P5.4, API v1 parity: lesson detail, heartbeat, free self-enroll expiry stamping. */
 class LessonApiTest extends TestCase
 {
     use RefreshDatabase;

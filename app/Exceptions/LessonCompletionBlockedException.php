@@ -5,7 +5,7 @@ namespace App\Exceptions;
 use Exception;
 
 /**
- * A student tried to complete a lesson whose requirements aren't met yet —
+ * A student tried to complete a lesson whose requirements aren't met yet,
  * minimum focused time not reached, or a required quiz/assignment unsubmitted.
  * Carries the structured blocker list so callers (web JSON, API, redirects)
  * can each present it their own way.

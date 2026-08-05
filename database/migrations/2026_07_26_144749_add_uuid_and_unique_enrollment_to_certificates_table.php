@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('certificates', function (Blueprint $table) {
             // Public, unguessable identifier for the /verify/{uuid} page and the QR
-            // code on the PDF — mirrors Invoice::getRouteKeyName(), the existing
+            // code on the PDF, mirrors Invoice::getRouteKeyName(), the existing
             // convention for documents addressed outside the admin/authenticated area.
             $table->uuid()->unique()->after('id');
             $table->unique('enrollment_id');

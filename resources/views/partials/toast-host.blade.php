@@ -1,4 +1,4 @@
-{{-- Global toast host. Livewire components fire: $this->dispatch('toast', message: '…', type: 'success'|'error'|'info').
+{{-- Global toast host. Livewire components fire: $this->dispatch('toast', message: '...', type: 'success'|'error'|'info').
      Livewire 3 also emits a window CustomEvent, so Alpine catches it via @toast.window. --}}
 <div class="tb-toast-host" aria-live="polite" aria-atomic="true"
      x-data="{

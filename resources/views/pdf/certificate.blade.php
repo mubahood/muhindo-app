@@ -5,7 +5,7 @@
 <title>Certificate {{ $certificate->certificate_no }}</title>
 <style>
   /*
-    DomPDF, not a browser. No flexbox, no grid — the previous version laid the
+    DomPDF, not a browser. No flexbox, no grid, the previous version laid the
     footer out with `display:flex`, which DomPDF silently ignored, stacking the
     certificate number, the issue date and the QR into a narrow column down the
     left instead of spreading them across the foot. Anything that has to sit

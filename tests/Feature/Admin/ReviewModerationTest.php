@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-/** §7.3 — the admin review moderation queue: publish/unpublish/delete. */
+/** The admin review moderation queue: publish/unpublish/delete. */
 class ReviewModerationTest extends TestCase
 {
     use RefreshDatabase;

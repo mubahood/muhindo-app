@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Total focused time a student has spent on a lesson (reading OR watching) — distinct
+ * Total focused time a student has spent on a lesson (reading OR watching), distinct
  * from watch_seconds, which only accumulates while a video is actually playing. Fed by
  * the focus-gated frontend timer, clamped server-side like the video heartbeat.
  */

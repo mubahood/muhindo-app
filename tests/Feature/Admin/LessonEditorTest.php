@@ -13,7 +13,7 @@ use Tests\TestCase;
  * The lesson content editor.
  *
  * The toolbar, drag-and-drop and paste behaviour are browser concerns and were
- * exercised in one — clicking each control and reading the field back. What
+ * exercised in one, clicking each control and reading the field back. What
  * belongs here is everything that rewrite could have quietly broken on the
  * server side: the field still posts under the same name, content still round
  * trips, and the image control is only offered when there is somewhere to put

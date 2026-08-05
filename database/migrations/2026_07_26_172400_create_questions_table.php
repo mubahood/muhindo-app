@@ -6,8 +6,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * §5.1. `softDeletes` added here even though the plan's schema table doesn't
- * list it for `questions` — mirrors the exact P0.3/L7 reasoning: an editor
+ * `softDeletes` added here even though the plan's schema table doesn't
+ * list it for `questions`, for the same reason: an editor
  * hard-deleting a question after students have already answered it would
  * cascade-delete `attempt_answers`, silently destroying graded history. The
  * plan explicitly calls this pattern out for `quizzes`/`assignments`; a

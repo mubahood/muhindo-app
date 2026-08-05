@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-/** §4.5 — fired by NotifyStudentOfEnrollment for a genuinely new enrollment. */
+/** Fired by NotifyStudentOfEnrollment for a genuinely new enrollment. */
 class EnrolledInCourseNotification extends Notification implements ShouldQueue
 {
     use Queueable;

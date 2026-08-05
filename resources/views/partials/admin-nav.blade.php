@@ -17,7 +17,7 @@
   };
 
   $groups = [
-      // Capability groups first — for a student or client these ARE their menu.
+      // Capability groups first, for a student or client these ARE their menu.
       ['key' => 'learning', 'label' => 'Learning', 'icon' => 'fa-graduation-cap', 'gate' => 'is:student', 'items' => [
           ['label' => 'My Courses', 'icon' => 'fa-book-open', 'route' => 'learn.index', 'match' => ['learn.index']],
           ['label' => 'Browse Courses', 'icon' => 'fa-magnifying-glass', 'route' => 'courses.index', 'match' => ['courses.index']],
@@ -33,7 +33,7 @@
           ['label' => 'My downloads', 'icon' => 'fa-download', 'route' => 'shop.downloads', 'match' => ['shop.downloads', 'shop.download']],
       ]],
       // Both of these were reachable only from the top-right dropdown and the
-      // bell — fine once you know they are there, invisible if you do not.
+      // bell, fine once you know they are there, invisible if you do not.
       // A student's menu was two groups; this is the rest of their account.
       ['key' => 'account', 'label' => 'My account', 'icon' => 'fa-user-gear', 'gate' => null, 'items' => [
           ['label' => 'Profile & settings', 'icon' => 'fa-id-badge', 'route' => 'account.edit', 'match' => ['account.edit']],

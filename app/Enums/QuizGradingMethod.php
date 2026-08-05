@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** §5.1 — which attempt counts when a quiz allows more than one. */
+/** Which attempt counts when a quiz allows more than one. */
 enum QuizGradingMethod: string
 {
     case Highest = 'highest';

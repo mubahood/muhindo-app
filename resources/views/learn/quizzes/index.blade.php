@@ -1,5 +1,5 @@
 @extends('layouts.learn')
-@section('title', 'Quizzes — ' . $course->title)
+@section('title', 'Quizzes | ' . $course->title)
 @section('page_title', 'Quizzes')
 
 @push('styles')
@@ -38,7 +38,7 @@
                 {{ rtrim(rtrim(number_format((float) $latest->score_percent, 1), '0'), '.') }}%
                 @if($latest->passed) <span class="status-pill ok">Passed</span> @else <span class="status-pill warn">Not passed</span> @endif
               @else
-                <span class="muted">—</span>
+                <span class="muted">, </span>
               @endif
             </td>
             <td>

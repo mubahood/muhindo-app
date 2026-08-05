@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 /**
  * Serves the API v1 OpenAPI 3.0 document. Hand-maintained alongside the
  * routes; the standard ApiResponse envelope is described once as a reusable
- * schema. Public — it's just docs.
+ * schema. Public, it's just docs.
  */
 class OpenApiController extends Controller
 {
@@ -64,7 +64,7 @@ class OpenApiController extends Controller
                 '/my/enrollments' => ['get' => ['summary' => "The signed-in student's enrollments", 'tags' => ['Courses'], 'security' => $secured, 'responses' => ['200' => $ok]]],
 
                 '/courses/{course}/lessons/{id}' => ['get' => ['summary' => 'Lesson detail: content, video source, resume position', 'tags' => ['Courses'], 'security' => $secured, 'parameters' => [$this->path('course'), $this->path('id')], 'responses' => ['200' => $ok, '403' => $ok]]],
-                '/courses/{course}/lessons/{id}/video-stream' => ['get' => ['summary' => 'Signed, time-limited self-hosted video stream (no bearer token needed — the signature is the credential)', 'tags' => ['Courses'], 'parameters' => [$this->path('course'), $this->path('id')], 'responses' => ['200' => ['description' => 'Video file'], '403' => $ok, '404' => $ok]]],
+                '/courses/{course}/lessons/{id}/video-stream' => ['get' => ['summary' => 'Signed, time-limited self-hosted video stream (no bearer token needed. The signature is the credential)', 'tags' => ['Courses'], 'parameters' => [$this->path('course'), $this->path('id')], 'responses' => ['200' => ['description' => 'Video file'], '403' => $ok, '404' => $ok]]],
                 '/courses/{course}/lessons/{id}/notes' => [
                     'get' => ['summary' => "List the student's notes on a lesson", 'tags' => ['Courses'], 'security' => $secured, 'parameters' => [$this->path('course'), $this->path('id')], 'responses' => ['200' => $ok]],
                     'post' => ['summary' => 'Add a timestamped note', 'tags' => ['Courses'], 'security' => $secured, 'parameters' => [$this->path('course'), $this->path('id')], 'responses' => ['201' => $ok]],
@@ -74,7 +74,7 @@ class OpenApiController extends Controller
                 '/courses/{course}/quizzes' => ['get' => ['summary' => 'List published quizzes with the latest attempt', 'tags' => ['Assessment'], 'security' => $secured, 'parameters' => [$this->path('course')], 'responses' => ['200' => $ok]]],
                 '/courses/{course}/quizzes/{id}' => ['get' => ['summary' => 'Quiz intro: attempts used, in-progress/best attempt', 'tags' => ['Assessment'], 'security' => $secured, 'parameters' => [$this->path('course'), $this->path('id')], 'responses' => ['200' => $ok]]],
                 '/courses/{course}/quizzes/{id}/start' => ['post' => ['summary' => 'Start (or resume) an attempt', 'tags' => ['Assessment'], 'security' => $secured, 'parameters' => [$this->path('course'), $this->path('id')], 'responses' => ['201' => $ok]]],
-                '/courses/{course}/quizzes/{id}/attempts/{attempt}' => ['get' => ['summary' => 'The frozen question order for an in-progress attempt — never exposes which option is correct', 'tags' => ['Assessment'], 'security' => $secured, 'parameters' => [$this->path('course'), $this->path('id'), $this->path('attempt')], 'responses' => ['200' => $ok, '409' => $ok]]],
+                '/courses/{course}/quizzes/{id}/attempts/{attempt}' => ['get' => ['summary' => 'The frozen question order for an in-progress attempt, never exposes which option is correct', 'tags' => ['Assessment'], 'security' => $secured, 'parameters' => [$this->path('course'), $this->path('id'), $this->path('attempt')], 'responses' => ['200' => $ok, '409' => $ok]]],
                 '/courses/{course}/quizzes/{id}/attempts/{attempt}/questions/{question}/answer' => ['post' => ['summary' => 'Autosave one answer', 'tags' => ['Assessment'], 'security' => $secured, 'parameters' => [$this->path('course'), $this->path('id'), $this->path('attempt'), $this->path('question')], 'responses' => ['200' => $ok]]],
                 '/courses/{course}/quizzes/{id}/attempts/{attempt}/submit' => ['post' => ['summary' => 'Submit and grade the attempt', 'tags' => ['Assessment'], 'security' => $secured, 'parameters' => [$this->path('course'), $this->path('id'), $this->path('attempt')], 'responses' => ['200' => $ok]]],
                 '/courses/{course}/quizzes/{id}/attempts/{attempt}/review' => ['get' => ['summary' => 'Per-question feedback, gated by the quiz feedback_mode', 'tags' => ['Assessment'], 'security' => $secured, 'parameters' => [$this->path('course'), $this->path('id'), $this->path('attempt')], 'responses' => ['200' => $ok]]],

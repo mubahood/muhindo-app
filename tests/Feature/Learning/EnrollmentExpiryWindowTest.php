@@ -14,7 +14,7 @@ use Tests\Support\FakePaymentGateway;
 use Tests\TestCase;
 
 /**
- * §4.4/§6.4 — enrollment access-window expiry: stamped at every activation site off the
+ * Enrollment access-window expiry: stamped at every activation site off the
  * course's optional `access_duration_days`, enforced in EnrollmentPolicy, and
  * extendable/removable from the admin drill-down.
  */

@@ -7,7 +7,7 @@
 
   Extracted from the gallery so the About page's strip opens the same viewer
   rather than throwing the visitor onto another page. Clicking a photograph
-  should show that photograph — being navigated somewhere else is a different,
+  should show that photograph, being navigated somewhere else is a different,
   unasked-for action.
 
   @param  $photos  Collection of GalleryPhoto

@@ -31,7 +31,7 @@ class Post extends Model
     protected static function booted(): void
     {
         // Derived fields are filled here rather than in the controller so every
-        // path that writes a post — admin form, seeder, future import — produces
+        // path that writes a post (admin form, seeder, future import) produces
         // the same record.
         static::saving(function (Post $post) {
             if (blank($post->slug)) {
@@ -41,7 +41,7 @@ class Post extends Model
             if (blank($post->excerpt)) {
                 // The body is Markdown, so stripping HTML tags alone leaves the
                 // syntax behind and the listing reads "## A heading The first
-                // sentence…". Render first, then strip, then collapse the
+                // sentence...". Render first, then strip, then collapse the
                 // whitespace the block elements leave behind.
                 $text = strip_tags(app(MarkdownRenderer::class)->toHtml($post->body));
                 $post->excerpt = Str::limit(trim(preg_replace('/\s+/u', ' ', $text) ?? ''), 180);
@@ -56,7 +56,7 @@ class Post extends Model
         });
     }
 
-    /** Appends -2, -3 … only when needed, and ignores the post's own row when editing. */
+    /** Appends -2, -3 ... only when needed, and ignores the post's own row when editing. */
     public static function uniqueSlug(string $title, ?int $ignoreId = null): string
     {
         $base = Str::slug($title) ?: 'post';

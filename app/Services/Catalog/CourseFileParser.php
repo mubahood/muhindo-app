@@ -89,7 +89,7 @@ class CourseFileParser
                 continue;
             }
 
-            // ── Headings ────────────────────────────────────────────────────
+            // Headings
             if (str_starts_with($trimmed, '# ')) {
                 $course = array_merge($course, $this->heading($trimmed));
 
@@ -122,7 +122,7 @@ class CourseFileParser
                 continue;
             }
 
-            // ── Course metadata, before the first module ────────────────────
+            // Course metadata, before the first module
             if ($section === 'intro') {
                 if (preg_match('/^\*\*Tier\s/i', $trimmed)) {
                     $course = array_merge($course, $this->metaLine($trimmed));
@@ -156,7 +156,7 @@ class CourseFileParser
                 continue;
             }
 
-            // ── The quiz brief can appear anywhere below the modules ────────
+            // The quiz brief can appear anywhere below the modules
             if (preg_match('/^\*\*(?:Quiz ideas|Milestone quizzes)[^*]*\*\*\s*(.*)$/i', $trimmed, $m)) {
                 $course['quiz_brief'] = trim($m[1]) !== '' ? trim($m[1]) : ($course['quiz_brief'] ?? '');
 
@@ -175,7 +175,7 @@ class CourseFileParser
                 continue;
             }
 
-            // ── Lessons ─────────────────────────────────────────────────────
+            // Lessons
             if (preg_match('/^\s*(\d+)\.\s+(.*)$/', $line, $m)) {
                 $lesson = $this->closeLesson($module, $lesson);
                 $lesson = $this->startLesson((int) $m[1], trim($m[2]));

@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §5.1/§5.3 — one row per submission attempt; a draft is saved here before the student turns it in. */
+/** One row per submission attempt; a draft is saved here before the student turns it in. */
 return new class extends Migration
 {
     public function up(): void

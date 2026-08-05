@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view (shared by every role — owner, admin, student, client).
+     * Display the login view (shared by every role, owner, admin, student, client).
      */
     public function create(Request $request): View
     {
@@ -54,13 +54,13 @@ class AuthenticatedSessionController extends Controller
         /* Same courtesy registration already extends: somebody who signed in
            with a basket waiting is sent to finish paying, not dropped on a
            dashboard to find their way back. An explicit intended URL still
-           wins — it is the stronger signal about where they were headed. */
+           wins. It is the stronger signal about where they were headed. */
         $fallback = app(\App\Services\Shop\Cart::class)->isEmpty()
             ? \App\Support\AfterAuth::destination($user)
             : route('checkout.review');
 
         /* A client who has not proposed anything yet goes to do that even if
-           they had a page in mind — they made this account to hire somebody,
+           they had a page in mind, they made this account to hire somebody,
            and the proposal is the step that makes that real. */
         if (\App\Support\AfterAuth::mustPropose($user)) {
             return redirect()->route('propose');
@@ -69,7 +69,7 @@ class AuthenticatedSessionController extends Controller
         return redirect()->intended($fallback);
     }
 
-    /** §3.2 — a guest arriving via "Enrol now" on a course page carries the course through sign-in. */
+    /** A guest arriving via "Enrol now" on a course page carries the course through sign-in. */
     private function intendedCourse(Request $request): ?Course
     {
         $slug = $request->string('intended_course')->trim()->value();

@@ -11,7 +11,7 @@ use Illuminate\View\View;
 /**
  * Single dashboard entry point for every role. Sections are composed by
  * capability rather than picking one role view, because an account can be both
- * a student and a client — such a person sees their learning and their projects
+ * a student and a client, such a person sees their learning and their projects
  * on the same dashboard.
  */
 class DashboardController extends Controller
@@ -33,7 +33,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    /** §3.4 — dismisses the first-visit onboarding checklist card, remembered per user. */
+    /** Dismisses the first-visit onboarding checklist card, remembered per user. */
     public function dismissOnboarding(Request $request): RedirectResponse
     {
         $request->user()->update(['onboarding_dismissed_at' => now()]);

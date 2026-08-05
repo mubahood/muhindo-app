@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
-/** §7.3 — Classroom's stream: fired to every active/completed enrollment the moment an announcement publishes. */
+/** Classroom's stream: fired to every active/completed enrollment the moment an announcement publishes. */
 class AnnouncementPublishedNotification extends Notification implements ShouldQueue
 {
     use Queueable;

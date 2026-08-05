@@ -17,7 +17,7 @@
         <tr>
           <td style="font-weight:500;">{{ $item->degree }}</td>
           <td>{{ $item->institution }}</td>
-          <td>{{ $item->start_date?->format('Y') }} – {{ $item->end_date?->format('Y') ?? 'Present' }}</td>
+          <td>{{ $item->start_date?->format('Y') }} - {{ $item->end_date?->format('Y') ?? 'Present' }}</td>
           <td>
             <div class="tb-table-actions">
               <a href="{{ route('admin.education.edit', $item) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-pen"></i></a>

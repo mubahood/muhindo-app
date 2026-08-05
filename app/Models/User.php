@@ -55,7 +55,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
         ];
     }
 
-    // ── Roles ──────────────────────────────────────────────────
+    // Roles
 
     /** Every account type on the platform (mirrors Spatie role names & RbacSeeder). */
     public const ROLES = ['super_admin', 'admin', 'student', 'client'];
@@ -134,7 +134,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
         };
     }
 
-    // ── Domain relations ──────────────────────────────────────────
+    // Domain relations
 
     /**
      * A `client`-role user's client profile (project billing/portal access).
@@ -168,19 +168,19 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $this->hasMany(DeviceToken::class);
     }
 
-    /** §6.5 — earned badges, most recent first. @return HasMany<UserBadge, $this> */
+    /** Earned badges, most recent first. @return HasMany<UserBadge, $this> */
     public function badges(): HasMany
     {
         return $this->hasMany(UserBadge::class)->latest('created_at');
     }
 
-    /** Invoices billed directly to this user (course purchases) — project invoices are billed to a Client instead. */
+    /** Invoices billed directly to this user (course purchases), project invoices are billed to a Client instead. */
     public function invoices(): MorphMany
     {
         return $this->morphMany(Invoice::class, 'billable');
     }
 
-    // ── Avatar helper ──────────────────────────────────────────
+    // Avatar helper
 
     public function getAvatarUrlAttribute(): ?string
     {
@@ -202,14 +202,14 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $initials;
     }
 
-    // ── Password reset ─────────────────────────────────────────
+    // Password reset
 
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new ResetPasswordNotification($token));
     }
 
-    // ── Spatie role sync ───────────────────────────────────────
+    // Spatie role sync
 
     protected static function booted(): void
     {

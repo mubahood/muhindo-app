@@ -1,10 +1,10 @@
-{{-- Muhindo Mubaraka — Learning shell (full-bleed course player) --}}
+{{-- Muhindo Mubaraka, Learning shell (full-bleed course player) --}}
 {{--
   A distraction-free shell for pages inside a course: a fixed 44px header, a
   fixed sidebar running top → bottom with its own scrollbar, an independently
   scrolling content column, and an optional slim action bar.
 
-  It loads exactly the same stylesheets as layouts/admin — Livewire's head merge
+  It loads exactly the same stylesheets as layouts/admin, Livewire's head merge
   appends the incoming page's assets without removing the outgoing ones, so a
   second design system here would leave both layered on top of each other the
   moment a student moves between My Courses and a lesson. Shared assets are what
@@ -26,7 +26,7 @@
   @livewireStyles
 
   <style>
-  /* ── Shell tokens ─────────────────────────────────────────────────────────
+  /* Shell tokens
      The player's own vocabulary, mapped onto the shared design system so the
      two never drift apart on colour. Scoped to the shell so nothing leaks. */
   .learn-shell{
@@ -53,7 +53,7 @@
   .learn-shell .alert-success{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);
     padding:8px 12px;margin-bottom:10px;font-size:12.5px;}
 
-  /* ── Header ─────────────────────────────────────────────────── */
+  /* Header */
   .learn-hd{position:fixed;top:0;left:0;right:0;height:var(--lhd);z-index:50;background:#0d2237;color:#fff;
     display:flex;align-items:center;gap:12px;padding:0 12px;}
   .learn-hd .exit{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.75);font-size:12px;
@@ -75,7 +75,7 @@
   .learn-toggle{display:none;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.25);background:none;
     color:#fff;padding:6px 10px;font-size:11.5px;font-weight:500;cursor:pointer;flex-shrink:0;}
 
-  /* ── Sidebar ────────────────────────────────────────────────── */
+  /* Sidebar */
   .learn-side{position:fixed;top:var(--lhd);left:0;bottom:0;width:var(--lsw);z-index:45;
     background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;}
   .learn-side-close{display:none;background:none;border:none;color:var(--tx3);cursor:pointer;font-size:15px;padding:4px;flex-shrink:0;}
@@ -90,7 +90,7 @@
   .learn-side-links a i{font-size:11px;}
   .learn-side-list{overflow-y:auto;flex:1;overscroll-behavior:contain;}
 
-  /* Collapsible chapters — native <details>, so collapse works with zero JS. */
+  /* Collapsible chapters, native <details>, so collapse works with zero JS. */
   .mod-group{border-bottom:1px solid var(--line);}
   .mod-group summary{list-style:none;display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;
     font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx3);background:var(--surface-2);user-select:none;}
@@ -143,7 +143,7 @@
 
   .learn-backdrop{display:none;}
 
-  /* ── Content column ─────────────────────────────────────────── */
+  /* Content column */
   .learn-main{margin-left:var(--lsw);margin-top:var(--lhd);padding:10px 14px calc(var(--abh) + 14px);}
   .learn-main.no-bar{padding-bottom:16px;}
   .learn-main h1{font-size:17px;font-weight:600;margin-bottom:10px;}
@@ -151,7 +151,7 @@
   .learn-main .page-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
   .learn-main:focus{outline:none;}
 
-  /* Slim fixed action bar — pinned to the content column, never overlaps the sidebar. */
+  /* Slim fixed action bar, pinned to the content column, never overlaps the sidebar. */
   .learn-action-bar{position:fixed;bottom:0;left:var(--lsw);right:0;min-height:var(--abh);background:var(--surface);
     border-top:1px solid var(--line);padding:7px 14px;z-index:44;display:flex;align-items:center;}
   .learn-action-bar-inner{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;}
@@ -219,7 +219,7 @@
      user, so every course-context page gets identical chrome without each
      controller passing it. $currentLesson is set only by the lesson player.
      A child view that needs $shell inside its own sections builds it first
-     (child sections are buffered before this layout runs) — reuse it if so,
+     (child sections are buffered before this layout runs), reuse it if so,
      so the queries only ever happen once per request. */
   $shell = $shell ?? new \App\Support\Learning\LearnShell($course, auth()->user(), $currentLesson ?? null);
   $shellPaths = \App\Support\AppShell::paths();

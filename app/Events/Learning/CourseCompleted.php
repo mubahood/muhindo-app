@@ -5,7 +5,7 @@ namespace App\Events\Learning;
 use App\Models\Enrollment;
 use Illuminate\Foundation\Events\Dispatchable;
 
-/** §4.5 — fired the moment an enrollment crosses 100% and its status flips to completed. */
+/** Fired the moment an enrollment crosses 100% and its status flips to completed. */
 class CourseCompleted
 {
     use Dispatchable;

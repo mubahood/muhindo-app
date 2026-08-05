@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.4 — the weekly instructor digest: only fires when something is actually at risk, reaches every admin. */
+/** The weekly instructor digest: only fires when something is actually at risk, reaches every admin. */
 class SendWeeklyInstructorDigestTest extends TestCase
 {
     use RefreshDatabase;

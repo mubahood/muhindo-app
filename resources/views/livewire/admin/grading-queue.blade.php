@@ -22,7 +22,7 @@
                   {{ $item['type'] === 'submission' ? 'Assignment' : 'Quiz' }}
                 </span>
               </td>
-              <td class="muted">{{ $item['submitted_at']?->diffForHumans() ?? '—' }}</td>
+              <td class="muted">{{ $item['submitted_at']?->diffForHumans() ?? '-' }}</td>
               <td>{{ rtrim(rtrim(number_format($item['max_points'], 2), '0'), '.') }}</td>
               <td>
                 @if($gradingType === $item['type'] && $gradingId === $item['id'])
@@ -41,7 +41,7 @@
               </td>
             </tr>
           @empty
-            <tr><td colspan="6"><div class="tb-empty" style="padding:30px;"><i class="fas fa-circle-check"></i><p>Nothing to grade — inbox zero.</p></div></td></tr>
+            <tr><td colspan="6"><div class="tb-empty" style="padding:30px;"><i class="fas fa-circle-check"></i><p>Nothing to grade, inbox zero.</p></div></td></tr>
           @endforelse
         </tbody>
       </table>

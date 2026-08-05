@@ -9,7 +9,7 @@ use App\Services\Learning\MarkdownRenderer;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-/** §7.3 — the student's Announcements tab: published announcements, newest first. */
+/** The student's Announcements tab: published announcements, newest first. */
 class AnnouncementController extends Controller
 {
     public function __construct(private readonly MarkdownRenderer $markdown) {}

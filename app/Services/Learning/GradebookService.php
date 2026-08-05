@@ -12,9 +12,9 @@ use App\Models\Quiz;
 use App\Models\QuizAttempt;
 
 /**
- * §5.4 — per-enrollment grades: each quiz's counted attempt (per its grading_method), each
+ * Per-enrollment grades: each quiz's counted attempt (per its grading_method), each
  * assignment's returned points (late penalty applied), averaged into one course grade. An
- * ungraded/not-yet-attempted item is excluded from the average rather than counted as zero —
+ * ungraded/not-yet-attempted item is excluded from the average rather than counted as zero,
  * "current grade so far," not "final grade assuming zeros for everything outstanding."
  */
 class GradebookService
@@ -47,14 +47,14 @@ class GradebookService
         return $items;
     }
 
-    /** The weighted course grade — equal weight per graded item, per §5.4 ("weights default equal"). */
+    /** The weighted course grade, equal weight per graded item, per ("weights default equal"). */
     public function courseGradePercent(Enrollment $enrollment): ?float
     {
         return $this->courseGradePercentFromItems($this->itemsFor($enrollment));
     }
 
     /**
-     * Same computation as courseGradePercent(), but from an already-fetched item list — lets a
+     * Same computation as courseGradePercent(), but from an already-fetched item list, lets a
      * caller iterating many enrollments (the admin grade matrix) avoid re-querying itemsFor()
      * a second time per row just to get the course grade.
      *
@@ -72,10 +72,10 @@ class GradebookService
     }
 
     /**
-     * §4.6 — the certificate gate: no counts_toward_certificate quizzes means no gate at all.
+     * The certificate gate: no counts_toward_certificate quizzes means no gate at all.
      * Otherwise every gating quiz must have a grade yet (an unattempted one blocks issuance
      * outright), and the average of their grades must reach the average of their own pass
-     * marks — each quiz keeps its own pass_percent, there's no single course-wide pass mark.
+     * marks. Each quiz keeps its own pass_percent, there's no single course-wide pass mark.
      */
     public function meetsCertificateQuizRequirement(Enrollment $enrollment): bool
     {

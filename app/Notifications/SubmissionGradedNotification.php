@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-/** §4.5/§5.3 — fired by NotifyStudentOfSubmissionGrade once an instructor returns a submission. */
+/** Fired by NotifyStudentOfSubmissionGrade once an instructor returns a submission. */
 class SubmissionGradedNotification extends Notification implements ShouldQueue
 {
     use Queueable;

@@ -7,7 +7,7 @@ use Database\Seeders\PublicCourseCatalogueSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** public-w2 — §2.5 of PUBLIC_SITE_PLAN.md: a real-looking public catalogue to build every e-Learning page against. */
+/** public-w2, of PUBLIC_SITE_PLAN.md: a real-looking public catalogue to build every e-Learning page against. */
 class PublicCourseCatalogueSeederTest extends TestCase
 {
     use RefreshDatabase;

@@ -22,7 +22,7 @@ class ClientController extends Controller
         ]);
     }
 
-    /** §4.3 — "Convert" from the project-inquiry inbox pre-fills a new client from the lead. */
+    /** "Convert" from the project-inquiry inbox pre-fills a new client from the lead. */
     public function create(Request $request): View
     {
         $client = new Client;
@@ -72,7 +72,7 @@ class ClientController extends Controller
 
         $message = 'Client created.';
         if ($user) {
-            $message .= " Portal login: {$user->email} / {$password} (temporary — change required at first login).";
+            $message .= " Portal login: {$user->email} / {$password} (temporary, change required at first login).";
         }
 
         return redirect()->route('admin.clients.show', $client)->with('success', $message);

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §7.1 — mirrors the existing issued_by/issued_at pattern for a refund's own audit trail. */
+/** Mirrors the existing issued_by/issued_at pattern for a refund's own audit trail. */
 return new class extends Migration
 {
     public function up(): void

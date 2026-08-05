@@ -6,7 +6,7 @@ use App\Models\Lesson;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
-/** §7.3 — the YouTube IFrame API needs a bare video id extracted from whatever URL shape an admin pastes. */
+/** The YouTube IFrame API needs a bare video id extracted from whatever URL shape an admin pastes. */
 class LessonYoutubeVideoIdTest extends TestCase
 {
     #[DataProvider('urls')]
@@ -22,8 +22,8 @@ class LessonYoutubeVideoIdTest extends TestCase
     {
         return [
             'embed url' => ['https://www.youtube.com/embed/dQw4w9WgXcQ', 'dQw4w9WgXcQ'],
-            /* The whole imported catalogue is written in nocookie URLs — 384
-               lessons of it — and every one of them used to fall back to a
+            /* The whole imported catalogue is written in nocookie URLs, 384
+               lessons of it, and every one of them used to fall back to a
                plain iframe, so the IFrame API never loaded and no watch
                progress was ever recorded. */
             'nocookie embed' => ['https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ', 'dQw4w9WgXcQ'],

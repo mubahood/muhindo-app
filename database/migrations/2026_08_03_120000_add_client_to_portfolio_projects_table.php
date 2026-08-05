@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
  * Who each system was built for.
  *
  * The column was added to the live database by hand and to the model's
- * $fillable, but never to a migration — so it existed in production and
+ * $fillable, but never to a migration, so it existed in production and
  * nowhere else. A fresh clone could not insert a project at all.
  *
  * Guarded, because the live database already has it.

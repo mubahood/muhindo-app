@@ -91,7 +91,7 @@
           <div class="dz-drop-label" style="font-size:.72rem;">
             <strong>Drag &amp; drop</strong> or click camera icon
           </div>
-          <div class="dz-drop-hint" style="font-size:.65rem;">JPG, PNG, WebP — max 2 MB</div>
+          <div class="dz-drop-hint" style="font-size:.65rem;">JPG, PNG, WebP, max 2 MB</div>
         </div>
 
         @if($user->avatar)
@@ -161,7 +161,7 @@
           <div class="tb-form-group full">
             <label class="tb-label">Bio</label>
             <textarea class="tb-textarea" name="bio" rows="2"
-                      placeholder="Short bio or notes about this user…">{{ old('bio', $user->bio) }}</textarea>
+                      placeholder="Short bio or notes about this user...">{{ old('bio', $user->bio) }}</textarea>
           </div>
         </div>
       </div>
@@ -310,7 +310,7 @@
 
   /* Loading state on submit */
   document.getElementById('editUserForm').addEventListener('submit', function() {
-    document.getElementById('submitBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+    document.getElementById('submitBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
   });
 })();
 </script>

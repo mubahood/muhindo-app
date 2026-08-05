@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * Without this a client can reach the portal by typing the URL, by an old
  * bookmark, or by the header, and find nothing there and no obvious next
- * step. The redirect is not a wall — it is the missing first page.
+ * step. The redirect is not a wall. It is the missing first page.
  */
 class ClientMustPropose
 {
@@ -20,7 +20,7 @@ class ClientMustPropose
     {
         if (AfterAuth::mustPropose($request->user())) {
             return redirect()->route('propose')->with('success',
-                'One thing first — tell me what you want built and it starts moving.');
+                'One thing first, tell me what you want built and it starts moving.');
         }
 
         return $next($request);

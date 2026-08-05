@@ -9,14 +9,14 @@ use Tests\TestCase;
 /**
  * Regression: `routes/api.php`'s `Route::apiResource('courses', ...)` (and
  * `invoices`) had no name override, so Laravel defaulted them to the bare
- * `courses.index`/`courses.show` (`invoices.index`/`invoices.show`) — the
+ * `courses.index`/`courses.show` (`invoices.index`/`invoices.show`), the
  * exact same names the public web catalogue (and the admin invoice list)
  * already use. Because both routes shared a name, `route('courses.show', ...)`
  * resolved to whichever was registered last, silently sending every
  * `route('courses.show')`/`route('courses.index')` call site in the app (site
  * nav "Courses" link, course cards, the admin "View public page" link, the
  * free-preview page) to the JSON API endpoint instead of the HTML page.
- * Found via a brand-new test, not a code review — pinned here so it can't
+ * Found via a brand-new test, not a code review, pinned here so it can't
  * regress silently again.
  */
 class RouteNamingTest extends TestCase

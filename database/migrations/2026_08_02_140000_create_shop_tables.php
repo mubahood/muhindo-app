@@ -28,7 +28,7 @@ return new class extends Migration
             $table->json('tags')->nullable();
             $table->string('cover_image')->nullable();
 
-            // Money as decimal, never float — matched to the invoices table so
+            // Money as decimal, never float, matched to the invoices table so
             // a price can move between them without a rounding step.
             $table->decimal('price', 12, 2)->default(0);
             $table->decimal('compare_at_price', 12, 2)->nullable();   // shown struck through

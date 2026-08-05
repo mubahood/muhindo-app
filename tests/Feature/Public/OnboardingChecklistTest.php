@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** public-w3 — §3.4 of PUBLIC_SITE_PLAN.md: a dismissible, three-item first-visit checklist. */
+/** public-w3, of PUBLIC_SITE_PLAN.md: a dismissible, three-item first-visit checklist. */
 class OnboardingChecklistTest extends TestCase
 {
     use RefreshDatabase;

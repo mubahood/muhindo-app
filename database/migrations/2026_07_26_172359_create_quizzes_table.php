@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §5.1 — a quiz is always scoped to a course; a nullable lesson_id makes it a per-lesson quiz vs. a course-level/final one. */
+/** A quiz is always scoped to a course; a nullable lesson_id makes it a per-lesson quiz vs. a course-level/final one. */
 return new class extends Migration
 {
     public function up(): void

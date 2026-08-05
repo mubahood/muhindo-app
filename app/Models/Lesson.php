@@ -33,19 +33,19 @@ class Lesson extends Model
         ];
     }
 
-    /** Seconds are what telemetry/thresholds actually work in — derived, not stored, to avoid a second column that can drift from duration_minutes. */
+    /** Seconds are what telemetry/thresholds actually work in, derived, not stored, to avoid a second column that can drift from duration_minutes. */
     public function durationSeconds(): ?int
     {
         return $this->duration_minutes !== null ? $this->duration_minutes * 60 : null;
     }
 
-    /** §6.2/P5.3 — a self-hosted video takes priority over a YouTube/Vimeo `video_url` when both happen to be set. */
+    /** A self-hosted video takes priority over a YouTube/Vimeo `video_url` when both happen to be set. */
     public function hasSelfHostedVideo(): bool
     {
         return filled($this->video_disk_path);
     }
 
-    /** §7.3 — the YouTube IFrame API needs a bare video id, not the embed URL admins paste in. Null for non-YouTube URLs (Vimeo, etc.), which fall back to a plain iframe. */
+    /** The YouTube IFrame API needs a bare video id, not the embed URL admins paste in. Null for non-YouTube URLs (Vimeo, etc.), which fall back to a plain iframe. */
     public function youtubeVideoId(): ?string
     {
         return $this->video_url ? self::extractYoutubeId($this->video_url) : null;

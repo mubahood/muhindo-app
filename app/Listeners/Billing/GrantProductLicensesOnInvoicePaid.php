@@ -14,7 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
  *
  * Sits alongside the course listener rather than replacing it, so one invoice
  * containing a course and an e-book fulfils both halves. Idempotent by the
- * unique (user, product) index — the callback and the webhook both settle the
+ * unique (user, product) index, the callback and the webhook both settle the
  * same invoice, and the second one must be a no-op rather than a duplicate.
  *
  * Runs on payment, never on redirect: a browser returning from the gateway

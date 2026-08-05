@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 /**
- * "Your account" — the profile and settings screen every signed-in person shares,
+ * "Your account" the profile and settings screen every signed-in person shares,
  * on the same shell as the rest of the logged-in side.
  *
  * Each panel posts its own form and validates into its own error bag, so a
@@ -29,7 +29,7 @@ class AccountController extends Controller
         return view('account.edit', [
             'user' => $user,
             'currentType' => $this->accounts->currentType($user),
-            // What a person would lose by narrowing their account type — shown up
+            // What a person would lose by narrowing their account type, shown up
             // front rather than silently overridden after they save.
             'enrollmentCount' => $user->enrollments()->count(),
             'projectCount' => $user->client?->projects()->count() ?? 0,
@@ -80,7 +80,7 @@ class AccountController extends Controller
                 ? 'you still have projects on your account'
                 : 'you are still enrolled in a course';
 
-            return back()->with('warning', 'Saved — but '.implode(' and ', array_map(
+            return back()->with('warning', 'Saved, but '.implode(' and ', array_map(
                 fn (string $c) => $c === 'client' ? 'client access' : 'learning access', $kept
             )).' was kept because '.$reason.'.');
         }

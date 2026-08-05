@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.3 — reviews: gated at ≥50% progress, moderated (unpublished until an admin approves), one per enrollment. */
+/** Reviews: gated at ≥50% progress, moderated (unpublished until an admin approves), one per enrollment. */
 class CourseReviewTest extends TestCase
 {
     use RefreshDatabase;

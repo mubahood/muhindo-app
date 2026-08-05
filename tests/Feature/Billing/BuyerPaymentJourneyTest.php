@@ -19,7 +19,7 @@ use Tests\TestCase;
  * Everything a buyer can do with an unpaid order.
  *
  * The single rule this file exists to defend: nothing here unlocks anything.
- * Access comes from a Payment clearing the balance and InvoicePaid firing —
+ * Access comes from a Payment clearing the balance and InvoicePaid firing,
  * never from saying you intend to pay. "I'll pay Muhindo directly" is the
  * obvious place for that to go wrong, so it is tested from both ends: the
  * content stays shut when the promise is made, and it opens when the cash is
@@ -50,7 +50,7 @@ class BuyerPaymentJourneyTest extends TestCase
         return [$student, $course, Invoice::firstOrFail()];
     }
 
-    // ── Getting to the payment screen ───────────────────────────────────────
+    // Getting to the payment screen
 
     public function test_enrolling_in_a_paid_course_leads_to_the_payment_screen(): void
     {
@@ -85,7 +85,7 @@ class BuyerPaymentJourneyTest extends TestCase
         $this->actingAs($this->student())->post(route('payments.direct', $invoice))->assertForbidden();
     }
 
-    // ── "I will pay Muhindo directly" ───────────────────────────────────────
+    // "I will pay Muhindo directly"
 
     public function test_paying_directly_lets_you_through_to_the_dashboard(): void
     {
@@ -169,7 +169,7 @@ class BuyerPaymentJourneyTest extends TestCase
         $this->assertNull($invoice->fresh()->direct_payment_at);
     }
 
-    // ── Cancelling ──────────────────────────────────────────────────────────
+    // Cancelling
 
     public function test_cancelling_voids_the_invoice_and_frees_the_enrollment(): void
     {
@@ -235,7 +235,7 @@ class BuyerPaymentJourneyTest extends TestCase
             ->assertSessionHasNoErrors();
     }
 
-    // ── Recovering a payment whose callback never arrived ───────────────────
+    // Recovering a payment whose callback never arrived
 
     public function test_a_stuck_payment_can_be_recovered_on_demand(): void
     {
@@ -244,7 +244,7 @@ class BuyerPaymentJourneyTest extends TestCase
         $gateway = new FakePaymentGateway;
         $this->app->instance(PaymentGateway::class, $gateway);
 
-        // The payer reaches Flutterwave and pays — then the browser never
+        // The payer reaches Flutterwave and pays, then the browser never
         // comes back and no webhook is configured.
         $this->actingAs($student)->post(route('portal.invoice.pay', $invoice));
         $txRef = \App\Models\GatewayLog::firstOrFail()->tx_ref;
@@ -280,7 +280,7 @@ class BuyerPaymentJourneyTest extends TestCase
         $this->assertSame('0.00', (string) $invoice->fresh()->amount_paid);
     }
 
-    // ── The same journey for source code ────────────────────────────────────
+    // The same journey for source code
 
     public function test_source_code_uses_the_very_same_payment_screen(): void
     {
@@ -313,7 +313,7 @@ class BuyerPaymentJourneyTest extends TestCase
         $this->actingAs($buyer)->get(route('shop.download', $product))->assertForbidden();
     }
 
-    // ── The orders list ─────────────────────────────────────────────────────
+    // The orders list
 
     public function test_my_orders_separates_what_is_owed_from_what_is_done(): void
     {
@@ -337,14 +337,14 @@ class BuyerPaymentJourneyTest extends TestCase
             ->assertDontSee(route('payments.show', $invoice), false);
     }
 
-    // ── Project invoices, billed to a Client rather than the User ───────────
+    // Project invoices, billed to a Client rather than the User
 
     /**
      * The branch that shipped broken. A plain whereHas on the billable MorphTo
      * ran "where user_id = ?" against the users table as well as the clients
      * table; MySQL rejects that outright, and the dashboard 500'd for every
      * signed-in person. SQLite executes the same SQL happily, so nothing in
-     * this suite noticed — hence a test that exercises the Client branch by
+     * this suite noticed, hence a test that exercises the Client branch by
      * value rather than by whether the query merely runs.
      */
     public function test_a_project_invoice_belongs_to_the_client_behind_it(): void
@@ -387,7 +387,7 @@ class BuyerPaymentJourneyTest extends TestCase
      * A structural guard, because a behavioural one cannot do this job here.
      *
      * The suite runs SQLite while production runs MySQL, and SQLite executes
-     * the broken form of this query without complaint — so no amount of
+     * the broken form of this query without complaint, so no amount of
      * "does the right invoice come back" testing catches it. This asserts the
      * shape instead: the client rule must be scoped to the clients table and
      * must never be applied to users.
@@ -400,6 +400,6 @@ class BuyerPaymentJourneyTest extends TestCase
         $this->assertMatchesRegularExpression('/from ["`]clients["`]/', $sql,
             'the client branch must query the clients table');
         $this->assertDoesNotMatchRegularExpression('/from ["`]users["`]/', $sql,
-            'user_id does not exist on users — MySQL rejects this, SQLite hides it');
+            'user_id does not exist on users, MySQL rejects this, SQLite hides it');
     }
 }

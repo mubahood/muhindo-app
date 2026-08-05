@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §5.1 — used by mcq_single/mcq_multi/true_false/matching/ordering; `match_key` pairs a matching-type option with its correct match. */
+/** Used by mcq_single/mcq_multi/true_false/matching/ordering; `match_key` pairs a matching-type option with its correct match. */
 return new class extends Migration
 {
     public function up(): void

@@ -89,7 +89,7 @@ class GalleryPhotoController extends Controller
     }
 
     /**
-     * Runs an upload through the same optimisation the bulk importer uses —
+     * Runs an upload through the same optimisation the bulk importer uses,
      * orientation baked in, metadata stripped, resized, WebP and thumbnail
      * written. An upload that skipped this would be the one 4MB image on an
      * otherwise fast page.
@@ -110,7 +110,7 @@ class GalleryPhotoController extends Controller
         $this->convert([$jpeg, '-resize', '800x800>', '-quality', '78', $thumb]);
 
         if (! is_file($jpeg)) {
-            // ImageMagick missing or the file unreadable — keep the original so
+            // ImageMagick missing or the file unreadable, keep the original so
             // the upload is not silently lost.
             $photo->path = $file->store('gallery', 'public');
 

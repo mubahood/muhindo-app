@@ -12,7 +12,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §5.1 — admin CRUD for quiz settings (question management is a separate item). */
+/** Admin CRUD for quiz settings (question management is a separate item). */
 class QuizCrudTest extends TestCase
 {
     use RefreshDatabase;

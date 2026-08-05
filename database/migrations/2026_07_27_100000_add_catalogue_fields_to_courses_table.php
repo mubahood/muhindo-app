@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** PUBLIC_SITE_PLAN.md §2.2/§2.3 — public catalogue card + sales-page fields. */
+/** PUBLIC_SITE_PLAN.md Public catalogue card + sales-page fields. */
 return new class extends Migration
 {
     public function up(): void

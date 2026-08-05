@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * Issues and serves course-completion certificates. The PDF is rendered once
  * at issuance and stored on the private `local` disk (mirrors DocumentService);
  * every later view streams the stored file instead of re-rendering. Issuance
- * is idempotent on `enrollment_id` — a replayed completion event or a
+ * is idempotent on `enrollment_id`, a replayed completion event or a
  * double-click on "complete" must never produce a second certificate.
  */
 class CertificateService
@@ -30,9 +30,9 @@ class CertificateService
     ) {}
 
     /**
-     * §4.6 — issues only when every lesson is complete *and*, if the course has any
+     * Issues only when every lesson is complete *and*, if the course has any
      * counts_toward_certificate quiz, the gradebook's quiz-requirement check passes. Safe to
-     * call from multiple trigger points (a lesson finishing, a quiz being graded) — issues at
+     * call from multiple trigger points (a lesson finishing, a quiz being graded), issues at
      * most once (issue()'s own idempotency) and returns null while any requirement is unmet.
      */
     public function issueIfEligible(Enrollment $enrollment): ?Certificate
@@ -52,7 +52,7 @@ class CertificateService
      * What stands between this student and their certificate.
      *
      * Built from the same two checks issueIfEligible() makes, so the page can
-     * never tell somebody they are finished while issuance disagrees — or
+     * never tell somebody they are finished while issuance disagrees, or
      * leave them staring at a locked certificate with no idea what is missing,
      * which is the whole reason this exists.
      *

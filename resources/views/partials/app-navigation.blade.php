@@ -7,12 +7,12 @@
   whole signed-in side behaves as one app with no per-link markup.
 
   It deliberately only covers links that stay inside the shell. Livewire's head
-  merge is additive — it appends the incoming page's stylesheets and never
-  removes the outgoing ones — so SPA-navigating to the public site would leave
+  merge is additive. It appends the incoming page's stylesheets and never
+  removes the outgoing ones, so SPA-navigating to the public site would leave
   both design systems layered on top of each other. Those links get a real page
   load, which is correct: it's a different section of the site.
 
-  Opt out explicitly with data-no-navigate (or target / download) — used for file
+  Opt out explicitly with data-no-navigate (or target / download), used for file
   responses, which must reach the browser as real navigations.
 --}}
 <script>

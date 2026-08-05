@@ -44,7 +44,7 @@ class ImportCourses extends Command
         $embeddable = $this->embeddableMap($directory);
 
         if ($embeddable === [] && ! $this->option('dry-run')) {
-            $this->warn('No link report cache found — run courses:verify-links first,');
+            $this->warn('No link report cache found, run courses:verify-links first,');
             $this->warn('or every lesson will be assumed embeddable.');
         }
 
@@ -60,7 +60,7 @@ class ImportCourses extends Command
                     mb_substr($parsed['title'], 0, 38),
                     count($parsed['modules']),
                     $lessons,
-                    $parsed['assignment'] ? 'yes' : '—',
+                    $parsed['assignment'] ? 'yes' : '-',
                     'dry run',
                 ];
 
@@ -82,7 +82,7 @@ class ImportCourses extends Command
         $this->table(['#', 'Course', 'Modules', 'Lessons', 'Content', 'Result'], $rows);
 
         if ($this->option('dry-run')) {
-            $this->info('Dry run — nothing was written.');
+            $this->info('Dry run. Nothing was written.');
         }
 
         return self::SUCCESS;

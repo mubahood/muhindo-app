@@ -8,7 +8,7 @@ use App\Models\LearningEvent;
 use App\Models\Lesson;
 use Illuminate\Database\Eloquent\Model;
 
-/** The single funnel for every `learning_events` row (§6.2) — the truth layer under the fast-path columns. */
+/** The single funnel for every `learning_events` row, the truth layer under the fast-path columns. */
 class LearningEventRecorder
 {
     public function record(

@@ -6,7 +6,7 @@ use App\Models\CourseReview;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-/** §7.3 — moderation queue: every review, unpublished first, with publish/unpublish/delete. */
+/** Moderation queue: every review, unpublished first, with publish/unpublish/delete. */
 class ReviewModeration extends Component
 {
     public function publish(int $id): void

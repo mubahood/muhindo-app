@@ -1,5 +1,5 @@
 @extends('layouts.learn')
-@section('title', 'Announcements — ' . $course->title)
+@section('title', 'Announcements | ' . $course->title)
 @section('page_title', 'Announcements')
 
 @section('learn_content')

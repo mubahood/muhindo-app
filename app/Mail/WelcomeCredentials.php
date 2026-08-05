@@ -21,7 +21,7 @@ class WelcomeCredentials extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome — Your Account Credentials',
+            subject: 'Welcome, Your Account Credentials',
         );
     }
 

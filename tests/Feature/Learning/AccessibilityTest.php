@@ -14,10 +14,10 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
- * §7.6 — accessibility non-negotiables that are actually verifiable from code: captions,
+ * Accessibility non-negotiables that are actually verifiable from code: captions,
  * accessible names on video embeds, YouTube's own captions enabled by default, and the
  * WCAG-AA-passing theme colors staying that way. Contrast ratios, exact focus-ring visuals,
- * and real screen-reader behavior aren't testable from PHPUnit — those were verified by
+ * and real screen-reader behavior aren't testable from PHPUnit. Those were verified by
  * computing WCAG contrast ratios directly (documented in the worklog) rather than a browser.
  */
 class AccessibilityTest extends TestCase

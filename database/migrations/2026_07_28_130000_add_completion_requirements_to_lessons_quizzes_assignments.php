@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * Lesson completion requirements, all enforced server-side in ProgressService:
- * - lessons.min_active_seconds — a student must spend at least this much focused
+ * - lessons.min_active_seconds. A student must spend at least this much focused
  *   time (the active_seconds tracker) on the lesson before they can complete it.
- * - quizzes/assignments.is_required — a compulsory activity blocks completing its
+ * - quizzes/assignments.is_required, a compulsory activity blocks completing its
  *   lesson until the student has submitted it; optional ones never block.
  */
 return new class extends Migration

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §7.3 — one review per enrollment; moderated (is_published defaults false, an admin approves). */
+/** One review per enrollment; moderated (is_published defaults false, an admin approves). */
 return new class extends Migration
 {
     public function up(): void

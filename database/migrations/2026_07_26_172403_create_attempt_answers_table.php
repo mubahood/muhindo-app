@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §5.1 — one row per (attempt, question); autosaved by QuizService::answer() as the student works through the quiz. */
+/** One row per (attempt, question); autosaved by QuizService::answer() as the student works through the quiz. */
 return new class extends Migration
 {
     public function up(): void

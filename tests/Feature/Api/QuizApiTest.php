@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** P5.4 — API v1 parity: the quiz runner (start -> answer -> submit -> review), routed through the same QuizService the web runner uses. */
+/** P5.4, API v1 parity: the quiz runner (start -> answer -> submit -> review), routed through the same QuizService the web runner uses. */
 class QuizApiTest extends TestCase
 {
     use RefreshDatabase;

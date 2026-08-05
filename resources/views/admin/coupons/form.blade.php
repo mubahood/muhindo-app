@@ -28,7 +28,7 @@
         </select>
       </div>
       <div class="tb-form-group">
-        <label class="tb-label">Value * <span class="muted">(percent 0–100, or a flat amount)</span></label>
+        <label class="tb-label">Value * <span class="muted">(percent 0-100, or a flat amount)</span></label>
         <input class="tb-input" type="number" step="0.01" min="0.01" name="value" value="{{ old('value', $coupon->value) }}" required>
       </div>
       <div class="tb-form-group">
@@ -42,7 +42,7 @@
       <div class="tb-form-group">
         <label class="tb-label">Course scope (blank = any course)</label>
         <select class="tb-select" name="course_id">
-          <option value="">— Any course —</option>
+          <option value="">, Any course, </option>
           @foreach($courses as $c)
             <option value="{{ $c->id }}" {{ (int) old('course_id', $coupon->course_id) === $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
           @endforeach

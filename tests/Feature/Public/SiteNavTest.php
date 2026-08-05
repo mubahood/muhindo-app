@@ -45,7 +45,7 @@ class SiteNavTest extends TestCase
         $html = (string) $this->get(route('home'))->assertOk()->getContent();
 
         // Both are rendered from SiteNav, so each destination must appear at
-        // least twice — once in the bar or its panel, once in the mobile sheet.
+        // least twice, once in the bar or its panel, once in the mobile sheet.
         foreach (SiteNav::urls() as $url) {
             $this->assertGreaterThanOrEqual(
                 2,
@@ -106,13 +106,13 @@ class SiteNavTest extends TestCase
         $header = $this->headerOf($this->get(route('home')));
 
         $this->assertStringContainsString('>Hire Me<', $header);
-        // Sign in is a link, not a button — it must not compete with the actions.
+        // Sign in is a link, not a button. It must not compete with the actions.
         $this->assertStringContainsString('class="signin desk"', $header);
     }
 
     public function test_no_destination_appears_twice_in_one_menu(): void
     {
-        // Two links to one page in a single menu is a wayfinding smell — it was
+        // Two links to one page in a single menu is a wayfinding smell. It was
         // why the top-level "Projects" was folded into the About panel, where
         // "My work" already points at the same page.
         /* Only destinations that are actually rendered as links count. An item
@@ -135,7 +135,7 @@ class SiteNavTest extends TestCase
 
     public function test_every_old_section_url_redirects_to_a_page_that_exists(): void
     {
-        // Anything already linked or indexed must not start 404ing — and a
+        // Anything already linked or indexed must not start 404ing, and a
         // redirect is only useful if what it points at actually resolves, which
         // is the part the original assertions never checked.
         $moved = [
@@ -159,7 +159,7 @@ class SiteNavTest extends TestCase
         /* The bug this pins: Route::redirect emits its target verbatim, so a
            root-relative "/e-learning" is resolved by the browser against the
            domain root. Under a sub-directory install that drops the base path
-           and every legacy URL 301s straight to a 404 — which is exactly what
+           and every legacy URL 301s straight to a 404, which is exactly what
            was happening, unnoticed, because asserting the redirect target
            string says nothing about where a browser would actually land. */
         $location = (string) $this->get('/courses')->headers->get('Location');
@@ -222,7 +222,7 @@ class SiteNavTest extends TestCase
     public function test_the_cv_page_is_assembled_from_live_records(): void
     {
         /* Seeded deliberately. The earlier version asserted on the words
-           "Experience" and "Skills" with an empty database — and passed only
+           "Experience" and "Skills" with an empty database, and passed only
            because the old footer happened to link to pages with those names.
            It was testing the footer, not the CV. */
         \App\Models\Experience::create([
@@ -245,7 +245,7 @@ class SiteNavTest extends TestCase
             // Printing is the delivery mechanism, so the control must be there.
             // The print button is gone. Somebody who wants this CV wants a
             // file to attach to an email, not a browser-rendered approximation
-            // of the page — so it offers the real PDF instead.
+            // of the page, so it offers the real PDF instead.
             ->assertDontSee('window.print()', false)
             ->assertSee('files/muhindo-mubaraka-cv.pdf', false)
             ->assertSee('Download CV');

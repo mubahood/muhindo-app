@@ -8,17 +8,17 @@ use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 
 /**
- * QR generation for certificates and documents. Uses endroid (GD backend — no
+ * QR generation for certificates and documents. Uses endroid (GD backend, no
  * imagick dependency). Encodes the public verification URL.
  *
  * Two settings here exist because these codes get printed, photocopied, faxed
- * and photographed off a desk under bad light — not scanned off a screen:
+ * and photographed off a desk under bad light, not scanned off a screen:
  *
  *  - Quartile error correction. Around a quarter of the symbol can be lost to
  *    a smudge, a fold or a staple and it still reads. The default (Low) tops
  *    out near 7%.
  *  - ISO-8859-1 rather than UTF-8. A URL is ASCII, and UTF-8 makes endroid
- *    emit an ECI header that some scanners handle poorly — OpenCV warns about
+ *    emit an ECI header that some scanners handle poorly, OpenCV warns about
  *    exactly this. Dropping it costs nothing and removes a class of failure.
  */
 class QrService

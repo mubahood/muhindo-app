@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 /**
  * Project document storage. Files live on the *private* `local` disk under a
- * per-project path — never web-served directly; downloads stream through
+ * per-project path, never web-served directly; downloads stream through
  * ProjectDocumentController after a Policy check.
  */
 class DocumentService

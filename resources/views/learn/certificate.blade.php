@@ -1,5 +1,5 @@
 @extends('layouts.learn')
-@section('title', 'Certificate — '.$course->title)
+@section('title', 'Certificate | '.$course->title)
 @section('page_title', 'Certificate')
 
 @push('styles')
@@ -85,7 +85,7 @@
   {{-- The point of the number and the link is that somebody else can check
        them, so they are here to be copied rather than only printed. --}}
   <p class="muted" style="font-size:12px;margin-top:18px;">
-    Send this link to an employer and they can confirm it themselves — no account needed.
+    Send this link to an employer and they can confirm it themselves, no account needed.
   </p>
   <div class="cert-share">
     <input type="text" readonly value="{{ route('certificates.verify', $certificate) }}"
@@ -96,7 +96,7 @@
 
 @else
   <div class="cert-todo">
-    <h2>Not yet — here is what is left</h2>
+    <h2>Not yet, here is what is left</h2>
     <p>
       Your certificate is issued the moment you finish this course. Nothing to apply for:
       it appears here, and you can download it and share a link anyone can check.
@@ -118,7 +118,7 @@
       </h3>
 
       @if($report['lessonsRemaining']->isEmpty())
-        <p class="muted" style="font-size:12.5px;margin:0;">Done — every topic is complete.</p>
+        <p class="muted" style="font-size:12.5px;margin:0;">Done. Every topic is complete.</p>
       @else
         <div class="cert-list">
           @foreach($report['lessonsRemaining']->take(8) as $lesson)
@@ -147,7 +147,7 @@
         </h3>
 
         @if($report['quizRequirementMet'])
-          <p class="muted" style="font-size:12.5px;margin:0;">Done — your average is above the pass mark.</p>
+          <p class="muted" style="font-size:12.5px;margin:0;">Done. Your average is above the pass mark.</p>
         @else
           <div class="cert-list">
             @foreach($report['gatingQuizzes'] as $quiz)

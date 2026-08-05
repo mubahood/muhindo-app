@@ -18,7 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-/** §5.2/§7 — the student-facing quiz runner: list → intro/start → take (AJAX autosave) → review. */
+/** The student-facing quiz runner: list → intro/start → take (AJAX autosave) → review. */
 class QuizAttemptController extends Controller
 {
     public function __construct(

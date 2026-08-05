@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §5.2/§7 — the student-facing quiz runner: start → run (AJAX autosave + plain-form fallback) → submit → review. */
+/** The student-facing quiz runner: start → run (AJAX autosave + plain-form fallback) → submit → review. */
 class QuizRunnerTest extends TestCase
 {
     use RefreshDatabase;
@@ -39,7 +39,7 @@ class QuizRunnerTest extends TestCase
 
     /**
      * Regression test: the plain 2-segment GET {course:slug}/quizzes route once collided with
-     * the generic GET {course:slug}/{lesson} route registered earlier in routes/web.php — since
+     * the generic GET {course:slug}/{lesson} route registered earlier in routes/web.php, since
      * Laravel matches GET routes in registration order before model binding runs, "quizzes" was
      * being swallowed as a failed Lesson lookup (404) and this route was unreachable dead code
      * until the routes were reordered (literal-prefix routes must precede the {lesson} wildcard).
@@ -138,7 +138,7 @@ class QuizRunnerTest extends TestCase
         $this->actingAs($student);
         $attempt = app(\App\Services\Learning\QuizService::class)->start($quiz, $enrollment);
 
-        // No prior AJAX autosave at all — simulates JS being completely disabled.
+        // No prior AJAX autosave at all, simulates JS being completely disabled.
         $response = $this->post(route('learn.quiz.submit', [$course, $quiz, $attempt]), [
             'answers' => [$mcq->id => ['selected' => $correct->id]],
         ]);

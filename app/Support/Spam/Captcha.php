@@ -8,7 +8,7 @@ namespace App\Support\Spam;
  * Every public form asks this class for its rules rather than hard-coding the
  * `captcha` rule, for one reason: the widget is only real once a site key and
  * a secret exist. Hard-coding it would mean that the moment the package is
- * installed — before anybody has been to the Google console — every public
+ * installed (before anybody has been to the Google console) every public
  * form on the site starts rejecting every submission, because the rule fails
  * closed against an empty secret. Here, no keys means no rule and no widget:
  * the forms keep working and the honeypot in FormShield keeps covering them.

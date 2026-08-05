@@ -6,7 +6,7 @@ use App\Enums\ApiErrorCode;
 use Illuminate\Http\JsonResponse;
 
 /**
- * The one API response envelope (HMS_PLAN.md §3.D constraint D — "keep the
+ * The one API response envelope (constraint D "keep the
  * manifest pattern" sibling: a consistent shape everywhere, not one ad hoc
  * per controller). Every API response, success or error, has this shape:
  *

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-/** §7.1 — fired when an admin cancels a paid enrollment and credits the invoice. */
+/** Fired when an admin cancels a paid enrollment and credits the invoice. */
 class EnrollmentCancelledNotification extends Notification implements ShouldQueue
 {
     use Queueable;

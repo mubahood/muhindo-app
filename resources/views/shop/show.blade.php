@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', $product->name.' — Source code for sale')
+@section('title', $product->name.' | Source code for sale')
 @section('desc', $product->summary)
 @section('og_image', $product->coverUrl() ?? '')
 
@@ -144,7 +144,7 @@
                 <i class="fas fa-book-open" aria-hidden="true"></i>
                 <div>
                   <strong>A full install guide comes with it</strong>
-                  <p>Unzip, dependencies, database, .env, first run, putting it on a real server — and a
+                  <p>Unzip, dependencies, database, .env, first run, putting it on a real server, and a
                      troubleshooting list for the things that actually go wrong. It is in your library
                      beside the download, the moment you own it.</p>
                 </div>

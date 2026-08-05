@@ -39,7 +39,7 @@
         @forelse($invoices as $invoice)
           <tr>
             <th scope="row" class="mono" style="font-weight:500;">{{ $invoice->invoice_no }}</th>
-            <td>{{ $invoice->issued_at?->format('d M Y') ?? '—' }}</td>
+            <td>{{ $invoice->issued_at?->format('d M Y') ?? '-' }}</td>
             <td>{{ $invoice->currency }} {{ number_format((float) $invoice->total, 2) }}</td>
             <td>{{ $invoice->currency }} {{ number_format((float) $invoice->balance, 2) }}</td>
             <td><span class="badge-tb {{ $invoice->status->badge() }}">{{ $invoice->status->label() }}</span></td>
@@ -56,7 +56,7 @@
                     @csrf
                     <button type="submit" class="btn-tb btn-tb-primary btn-tb-sm">
                       <i class="fas fa-lock"></i> Pay now
-                      <span class="sr-only">— invoice {{ $invoice->invoice_no }}</span>
+                      <span class="sr-only">, invoice {{ $invoice->invoice_no }}</span>
                     </button>
                   </form>
                 @endif

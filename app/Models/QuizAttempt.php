@@ -58,7 +58,7 @@ class QuizAttempt extends Model
         return $this->hasMany(AttemptAnswer::class);
     }
 
-    /** §9 — grades are auditable: the score/pass outcome and the status transition that produced it, not every autosaved answer. */
+    /** Grades are auditable: the score/pass outcome and the status transition that produced it, not every autosaved answer. */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

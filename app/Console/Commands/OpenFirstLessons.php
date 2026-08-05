@@ -15,7 +15,7 @@ use Illuminate\Console\Command;
  * persuasive: somebody who watches it has already learned how this instructor
  * teaches, which is the actual question.
  *
- * A command rather than a migration, because it has to be re-runnable — every
+ * A command rather than a migration, because it has to be re-runnable. Every
  * course imported after this needs the same treatment, and re-running must not
  * close a preview somebody opened by hand.
  */
@@ -45,7 +45,7 @@ class OpenFirstLessons extends Command
             $lesson = $this->firstPlayableLesson($course);
 
             if (! $lesson) {
-                $this->line("  <fg=yellow>skip</>  {$course->slug} — no published lesson with a video");
+                $this->line("  <fg=yellow>skip</>  {$course->slug}, no published lesson with a video");
                 $skipped++;
 
                 continue;
@@ -61,7 +61,7 @@ class OpenFirstLessons extends Command
                 $lesson->forceFill(['is_free_preview' => ! $closing])->save();
             }
 
-            $this->line(sprintf('  <fg=green>%s</> %s — %s',
+            $this->line(sprintf('  <fg=green>%s</> %s, %s',
                 $closing ? 'close' : 'open ', $course->slug, $lesson->title));
             $changed++;
         }

@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.3.4 — per-question correct-rate across every attempt that has answered it. */
+/** Per-question correct-rate across every attempt that has answered it. */
 class QuizItemAnalysisTest extends TestCase
 {
     use RefreshDatabase;

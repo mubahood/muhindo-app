@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-/** §6.3.3 — the grading queue: every ungraded quiz answer + submitted assignment, oldest first. */
+/** The grading queue: every ungraded quiz answer + submitted assignment, oldest first. */
 class GradingQueueTest extends TestCase
 {
     use RefreshDatabase;

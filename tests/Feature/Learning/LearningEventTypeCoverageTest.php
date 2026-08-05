@@ -20,13 +20,13 @@ use Tests\TestCase;
  *
  * `learning_events.event` was a MySQL ENUM frozen at the moment the table was
  * created. LearningEventType later gained a case and the column did not, so
- * submitting an assignment died on "Data truncated for column 'event'" — after
+ * submitting an assignment died on "Data truncated for column 'event'" after
  * the submission row was already written, leaving the student with a 500 having
  * genuinely handed in their work.
  *
  * The suite could not have caught it: it runs on SQLite, where an ENUM column
  * is reported as plain varchar and enforces nothing. Both guards here therefore
- * only bite against MySQL — the recorder walk-through would have thrown on the
+ * only bite against MySQL. The recorder walk-through would have thrown on the
  * truncation, and the schema check reads the real column type. On SQLite the
  * first still proves every case round-trips, and the second skips loudly rather
  * than passing quietly.
@@ -73,7 +73,7 @@ class LearningEventTypeCoverageTest extends TestCase
     {
         /*
          * Only MySQL can answer this. SQLite reports an ENUM column as plain
-         * 'varchar' — measured, not assumed — so on the suite's usual driver
+         * 'varchar' (measured, not assumed) so on the suite's usual driver
          * this assertion passes against the very schema that caused the bug.
          * It skips loudly rather than passing quietly, because a test that
          * cannot fail is worse than no test at all.
@@ -90,7 +90,7 @@ class LearningEventTypeCoverageTest extends TestCase
             ->selectOne('SHOW COLUMNS FROM learning_events LIKE "event"')->Type);
 
         $this->assertStringNotContainsString('enum(', $type,
-            'event must not be an enum column — the PHP enum is the only list of these values');
+            'event must not be an enum column. The PHP enum is the only list of these values');
     }
 
     public function test_the_recorder_will_not_take_anything_but_a_known_type(): void

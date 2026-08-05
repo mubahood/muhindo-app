@@ -92,7 +92,7 @@
         </div>
 
         {{-- Editing in place, because the only way to fix a typo used to be
-             deleting the entry — which threw away the person's photo too. --}}
+             deleting the entry, which threw away the person's photo too. --}}
         <div id="t-edit-{{ $i }}" hidden style="padding:12px 0 16px;border-bottom:1px solid var(--line);">
           <form method="POST" action="{{ route('admin.testimonials.update', $i) }}" enctype="multipart/form-data"
                 style="display:grid;gap:9px;">
@@ -102,7 +102,7 @@
               <input class="tb-input" type="text" name="name" value="{{ $t['name'] ?? '' }}" placeholder="Name" required>
               <input class="tb-input" type="text" name="role" value="{{ $t['role'] ?? '' }}" placeholder="Role">
               <input class="tb-input" type="text" name="org" value="{{ $t['org'] ?? '' }}" placeholder="Organisation">
-              <input class="tb-input" type="url" name="link" value="{{ $t['link'] ?? '' }}" placeholder="https://…">
+              <input class="tb-input" type="url" name="link" value="{{ $t['link'] ?? '' }}" placeholder="https://...">
             </div>
             <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
               <input class="tb-input" type="file" name="photo" accept="image/*" style="flex:1;min-width:180px;">

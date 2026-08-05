@@ -11,7 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-/** P5.3 — admin-side self-hosted video upload: store, replace, and remove. */
+/** P5.3, admin-side self-hosted video upload: store, replace, and remove. */
 class LessonVideoUploadTest extends TestCase
 {
     use RefreshDatabase;

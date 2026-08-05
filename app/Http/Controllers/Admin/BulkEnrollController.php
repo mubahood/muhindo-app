@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-/** §7.5 — bulk enroll: paste emails, one per line or comma-separated; unknown emails get a real account. */
+/** Bulk enroll: paste emails, one per line or comma-separated; unknown emails get a real account. */
 class BulkEnrollController extends Controller
 {
     public function create(Course $course): View

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §4.4/§6.4 — nullable access-window expiry, checked in EnrollmentPolicy@access alongside status. Null = lifetime access. */
+/** Nullable access-window expiry, checked in EnrollmentPolicy@access alongside status. Null = lifetime access. */
 return new class extends Migration
 {
     public function up(): void

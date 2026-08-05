@@ -25,7 +25,7 @@ class SpamShieldTest extends TestCase
 
     /**
      * Registration is what the shield guards now. The contact form it was
-     * written against is gone — "get in touch" produced messages nobody could
+     * written against is gone "get in touch" produced messages nobody could
      * act on, and hiring goes through an account instead.
      */
     private function contactPayload(array $overrides = []): array
@@ -99,7 +99,7 @@ class SpamShieldTest extends TestCase
 
     /**
      * The public lead form is gone. Proposing a project now needs an account,
-     * which is a harder wall than a honeypot — a bot has to get through
+     * which is a harder wall than a honeypot. A bot has to get through
      * registration, and registration is shielded.
      */
     public function test_proposing_a_project_needs_an_account(): void
@@ -139,8 +139,8 @@ class SpamShieldTest extends TestCase
     public function test_the_honeypot_is_hidden_from_assistive_tech(): void
     {
         /* Hidden by inline style rather than a class. It used to rely on
-           `.hp-field` from the marketing layout, so on the auth pages — which
-           use a different layout — the honeypot rendered fully visible, label
+           `.hp-field` from the marketing layout, so on the auth pages, which
+           use a different layout, the honeypot rendered fully visible, label
            and all. Anyone who typed in it would have been silently discarded. */
         foreach ([route('register'), route('login')] as $url) {
             $html = (string) $this->get($url)->assertOk()->getContent();

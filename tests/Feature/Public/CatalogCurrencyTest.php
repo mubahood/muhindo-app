@@ -102,7 +102,7 @@ class CatalogCurrencyTest extends TestCase
         $this->assertSame('140000.00', Currency::priceOf($course, 'USD'));
     }
 
-    // ── Paging ──────────────────────────────────────────────────────────────
+    // Paging
 
     public function test_the_catalogue_shows_six_at_a_time_and_says_where_you_are(): void
     {

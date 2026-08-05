@@ -50,7 +50,7 @@ class DownloadController extends Controller
      *
      * The licence is looked up from the signed-in user rather than taken from
      * the URL, so guessing another person's licence id gets you nothing. Files
-     * live outside the public disk — the only way to one is through here.
+     * live outside the public disk. The only way to one is through here.
      */
     public function download(Request $request, Product $product): StreamedResponse
     {

@@ -1,5 +1,5 @@
 @extends('layouts.learn')
-@section('title', 'Grades — ' . $course->title)
+@section('title', 'Grades | ' . $course->title)
 @section('page_title', 'Grades')
 
 @push('styles')
@@ -18,7 +18,7 @@
 
 <div class="card" style="margin-bottom:20px;">
   <div class="grade-summary">
-    <span class="num">{{ $courseGrade !== null ? rtrim(rtrim(number_format($courseGrade, 1), '0'), '.').'%' : '—' }}</span>
+    <span class="num">{{ $courseGrade !== null ? rtrim(rtrim(number_format($courseGrade, 1), '0'), '.').'%' : '-' }}</span>
     <span class="muted">current course grade{{ $courseGrade === null ? ' (nothing graded yet)' : '' }}</span>
   </div>
 </div>

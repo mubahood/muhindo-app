@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/** The client's own portal — their projects, progress, documents and invoices. Nothing here is admin-writable. */
+/** The client's own portal, their projects, progress, documents and invoices. Nothing here is admin-writable. */
 class PortalController extends Controller
 {
     public function __construct(private readonly DocumentService $documents) {}
@@ -20,7 +20,7 @@ class PortalController extends Controller
     public function index(Request $request): View
     {
         $client = $request->user()->client;
-        // Task counts are aggregated in the same query — the listing shows a
+        // Task counts are aggregated in the same query. The listing shows a
         // completion bar per project, which a lazy `tasks` relation would turn
         // into one query per card.
         $projects = $client

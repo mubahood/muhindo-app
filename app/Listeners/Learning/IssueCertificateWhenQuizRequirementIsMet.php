@@ -8,9 +8,9 @@ use App\Services\Learning\CertificateService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
- * §4.6 — a student can finish every lesson before passing the gating quiz, in which case
+ * A student can finish every lesson before passing the gating quiz, in which case
  * HandleCourseCompletion's issueIfEligible() call comes back empty. This is the other trigger:
- * once any quiz attempt is graded, re-check whether the certificate is now earned — a no-op if
+ * once any quiz attempt is graded, re-check whether the certificate is now earned. A no-op if
  * lessons aren't done yet, the quiz doesn't count toward the certificate, the requirement still
  * isn't met, or a certificate already exists (issue() itself is idempotent regardless).
  */

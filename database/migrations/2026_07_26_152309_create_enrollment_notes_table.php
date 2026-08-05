@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** Internal instructor notes on a student's enrollment (§6.3.2) — always private. */
+/** Internal instructor notes on a student's enrollment, always private. */
 return new class extends Migration
 {
     public function up(): void

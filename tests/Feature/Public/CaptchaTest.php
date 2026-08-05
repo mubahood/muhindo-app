@@ -46,7 +46,7 @@ class CaptchaTest extends TestCase
     }
 
     /**
-     * Registration, which is the public form the captcha guards now — the
+     * Registration, which is the public form the captcha guards now. The
      * contact form it was written against is gone.
      *
      * @return array<string, string>
@@ -63,7 +63,7 @@ class CaptchaTest extends TestCase
         ]);
     }
 
-    // ── With no keys configured: the site as it runs today ──────────────────
+    // With no keys configured: the site as it runs today
 
     public function test_it_is_off_until_both_keys_are_present(): void
     {
@@ -91,7 +91,7 @@ class CaptchaTest extends TestCase
         $this->get(route('register'))->assertOk()->assertDontSee('g-recaptcha', false);
     }
 
-    // ── With keys configured: the site once it is switched on ───────────────
+    // With keys configured: the site once it is switched on
 
     public function test_the_widget_appears_on_every_public_form_once_keys_are_set(): void
     {

@@ -10,7 +10,7 @@ use App\Models\User;
  *
  * There is one rule here worth stating out loud: a client who has not told me
  * about their project yet is sent to do that, every time, until they have.
- * They made the account in order to hire somebody — landing them on an empty
+ * They made the account in order to hire somebody, landing them on an empty
  * portal and hoping they find "Start a project" is how a lead becomes nothing.
  *
  * Everything else keeps its existing answer, and an explicit intended URL

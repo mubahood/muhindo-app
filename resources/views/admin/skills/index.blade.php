@@ -16,8 +16,8 @@
         @forelse($skills as $skill)
         <tr>
           <td style="font-weight:500;">{{ $skill->name }}</td>
-          <td>{{ $skill->category ?? '—' }}</td>
-          <td>{{ $skill->proficiency !== null ? $skill->proficiency.'%' : '—' }}</td>
+          <td>{{ $skill->category ?? '-' }}</td>
+          <td>{{ $skill->proficiency !== null ? $skill->proficiency.'%' : '-' }}</td>
           <td>
             <div class="tb-table-actions">
               <a href="{{ route('admin.skills.edit', $skill) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-pen"></i></a>

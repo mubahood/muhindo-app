@@ -36,7 +36,7 @@
   .xp .org{font-size:12.5px;font-weight:500;color:var(--gold-d);}
   .xp p{font-size:12.5px;line-height:1.7;color:var(--tx3);margin:7px 0 0;}
 
-  /* Two roles overlap for most of this history — the day job and the teaching
+  /* Two roles overlap for most of this history, the day job and the teaching
      ran side by side. Saying so is better than leaving a reader to work out
      why the dates do not queue up neatly. */
   .xp-note{font-size:12px;line-height:1.65;color:var(--tx3);background:var(--surface);

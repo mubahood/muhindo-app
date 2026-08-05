@@ -1,5 +1,5 @@
 @extends('layouts.learn')
-@section('title', 'Q&A — ' . $course->title)
+@section('title', 'Q&A | ' . $course->title)
 @section('page_title', $thread->title)
 
 @push('styles')
@@ -38,7 +38,7 @@
 <div class="card" style="margin-top:20px;">
   <form method="POST" action="{{ route('learn.discussions.reply', [$course, $discussion]) }}">
     @csrf
-    <textarea name="body" style="width:100%;padding:10px 12px;border:1px solid var(--line);min-height:100px;font-family:var(--font);" placeholder="Write a reply…" required>{{ old('body') }}</textarea>
+    <textarea name="body" style="width:100%;padding:10px 12px;border:1px solid var(--line);min-height:100px;font-family:var(--font);" placeholder="Write a reply..." required>{{ old('body') }}</textarea>
     <div style="margin-top:12px;">
       <button type="submit" class="btn gold"><i class="fas fa-reply"></i> Reply</button>
     </div>

@@ -11,7 +11,7 @@ use App\Notifications\NewDiscussionQuestionNotification;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * §7.3 — Q&A: per-lesson (or course-wide) threads. Authorization (enrollment/admin access) is
+ * Q&A: per-lesson (or course-wide) threads. Authorization (enrollment/admin access) is
  * the caller's responsibility, matching GradebookService/QuizAnalysisService's convention for
  * services that aren't the sole gate on money or grades.
  */

@@ -3,9 +3,9 @@
 namespace App\Enums;
 
 /**
- * The xAPI-lite event vocabulary fed into `learning_events` (§6.2). Not every
- * case has a recorder yet — note and question wait on community features
- * (P4); they're declared now so the schema doesn't need another migration
+ * The xAPI-lite event vocabulary fed into `learning_events`. Not every
+ * case has a recorder yet, note and question wait on community features
+ * ; they're declared now so the schema doesn't need another migration
  * when that phase lands.
  */
 enum LearningEventType: string
@@ -23,7 +23,7 @@ enum LearningEventType: string
     case QuestionAsked = 'question.asked';
     case AssignmentSubmitted = 'assignment.submitted';
 
-    /** Human label for the instructor's per-student activity timeline (§6.3.2). */
+    /** Human label for the instructor's per-student activity timeline. */
     public function label(): string
     {
         return match ($this) {

@@ -24,7 +24,7 @@
     <tr><th>Paid by</th><td>{{ $billTo }}</td></tr>
     <tr><th>Method</th><td>{{ $payment->method->label() }}</td></tr>
     @if($payment->reference)<tr><th>Reference</th><td>{{ $payment->reference }}</td></tr>@endif
-    <tr><th>Received by</th><td>{{ $payment->receivedBy?->name ?? '—' }}</td></tr>
+    <tr><th>Received by</th><td>{{ $payment->receivedBy?->name ?? '-' }}</td></tr>
     <tr><th>Balance after</th><td>{{ $money($payment->balance_after) }}</td></tr>
   </tbody></table>
 

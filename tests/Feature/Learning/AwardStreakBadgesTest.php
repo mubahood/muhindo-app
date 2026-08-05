@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.5 — the nightly command that awards the 4-week-streak badge. */
+/** The nightly command that awards the 4-week-streak badge. */
 class AwardStreakBadgesTest extends TestCase
 {
     use RefreshDatabase;

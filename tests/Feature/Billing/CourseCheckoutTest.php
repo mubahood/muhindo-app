@@ -11,14 +11,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Support\FakePaymentGateway;
 use Tests\TestCase;
 
-/** §7.1 — enroll() on a priced course routes through checkout instead of enrolling directly. */
+/** Enroll() on a priced course routes through checkout instead of enrolling directly. */
 class CourseCheckoutTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
      * Regression test: courses.show() originally treated ANY existing enrollment row (including
-     * a pending, unpaid one) as "enrolled," rendering "Continue learning" — which routes into
+     * a pending, unpaid one) as "enrolled," rendering "Continue learning" which routes into
      * EnrollmentPolicy::access() and 404s/403s since pending isn't active/completed. Introducing
      * self-serve paid checkout made this reachable for the first time; fixed by only extending
      * $enrollment to active/completed and showing a distinct "Complete checkout" state for pending.

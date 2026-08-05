@@ -41,7 +41,7 @@
 
   <div>
 
-    {{-- ═══ Your details ═══ --}}
+    {{-- Your details --}}
     <section class="acct-panel tb-card" id="details" aria-labelledby="details-h">
       <div class="tb-card-header">
         <div>
@@ -147,13 +147,13 @@
       </div>
     </section>
 
-    {{-- ═══ Account type ═══ --}}
+    {{-- Account type --}}
     @unless($user->isAdmin())
     <section class="acct-panel tb-card" id="account-type" aria-labelledby="type-h">
       <div class="tb-card-header">
         <div>
           <h2 class="tb-card-title" id="type-h">Account type</h2>
-          <p>What you use this account for. Change it any time — adding an option unlocks the matching menu straight away.</p>
+          <p>What you use this account for. Change it any time, adding an option unlocks the matching menu straight away.</p>
         </div>
       </div>
 
@@ -189,8 +189,8 @@
               @endif
               @if($projectCount > 0)
                 you have {{ $projectCount }} {{ Str::plural('project', $projectCount) }} on your account
-              @endif
-              — so that side stays available whatever you pick here.
+              @endif,
+              so that side stays available whatever you pick here.
             </p>
           @endif
         </div>
@@ -202,7 +202,7 @@
     </section>
     @endunless
 
-    {{-- ═══ Security ═══ --}}
+    {{-- Security --}}
     <section class="acct-panel tb-card" id="security" aria-labelledby="security-h">
       <div class="tb-card-header">
         <div>
@@ -268,7 +268,7 @@
 @push('scripts')
 <script>
   /* Highlights the section you're reading in the side nav. Progressive
-     enhancement only — the anchors already work without it. */
+     enhancement only. The anchors already work without it. */
   (function () {
     const nav = document.querySelector('.acct-nav');
     if (!nav || !('IntersectionObserver' in window)) return;

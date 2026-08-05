@@ -62,7 +62,7 @@
             </label>
           </template>
           <template x-if="type === 'matching'">
-            <input type="text" class="tb-input" :name="'options['+index+'][match_key]'" x-model="option.match_key" placeholder="Matches with…" style="flex:1;">
+            <input type="text" class="tb-input" :name="'options['+index+'][match_key]'" x-model="option.match_key" placeholder="Matches with..." style="flex:1;">
           </template>
           <button type="button" class="btn-tb btn-tb-danger btn-tb-icon btn-tb-sm" @click="removeOption(index)"><i class="fas fa-trash"></i></button>
         </div>
@@ -92,7 +92,7 @@
       </div>
     </div>
 
-    <p class="muted" x-show="type === 'essay'" style="margin-top:20px;" x-cloak>Essay answers are always graded manually — no auto-grading config needed.</p>
+    <p class="muted" x-show="type === 'essay'" style="margin-top:20px;" x-cloak>Essay answers are always graded manually, no auto-grading config needed.</p>
   </div>
   <div class="tb-card-footer" style="display:flex;gap:10px;justify-content:flex-end;">
     <a href="{{ route('admin.quizzes.edit', $quiz) }}" class="btn-tb btn-tb-ghost">Cancel</a>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** Files attached to a project (contracts, deliverables, assets) — private disk, streamed downloads. */
+/** Files attached to a project (contracts, deliverables, assets), private disk, streamed downloads. */
 return new class extends Migration
 {
     public function up(): void

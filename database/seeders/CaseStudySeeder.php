@@ -8,8 +8,8 @@ use Illuminate\Database\Seeder;
 /**
  * The long-form half of each case study.
  *
- * OWNER: read these. They are written from the facts already on record — the
- * CV, the project descriptions and the highlights — expanded into the four
+ * OWNER: read these. They are written from the facts already on record, the
+ * CV, the project descriptions and the highlights, expanded into the four
  * things somebody deciding whether to hire actually reads for: what was
  * broken, what was built, how it works, and what it had to survive.
  *

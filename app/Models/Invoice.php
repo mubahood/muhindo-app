@@ -101,7 +101,7 @@ class Invoice extends Model
      *
      * whereHasMorph, not whereHas. A plain whereHas on a MorphTo applies its
      * closure to EVERY billable type it finds, so `where user_id = ?` gets run
-     * against the users table too — which has no such column. MySQL rejects
+     * against the users table too, which has no such column. MySQL rejects
      * that outright; SQLite quietly accepts it, which is why the test suite
      * did not notice.
      *
@@ -128,7 +128,7 @@ class Invoice extends Model
 
     /**
      * The buyer said they would pay Muhindo directly. Says nothing about
-     * whether they have — an arrangement, not a payment.
+     * whether they have, an arrangement, not a payment.
      */
     public function isAwaitingDirectPayment(): bool
     {

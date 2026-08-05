@@ -58,7 +58,7 @@ class CourseCatalogueUxTest extends TestCase
 
         $this->assertStringContainsString('Build a database-backed app', $html);
         // The call to action must be an anchor. It was a <span> styled as a
-        // button — it looked clickable and did nothing, and on touch, where the
+        // button. It looked clickable and did nothing, and on touch, where the
         // panel is always open, it is the card\'s main action.
         $this->assertMatchesRegularExpression(
             '/<a[^>]+href="'.preg_quote(route('courses.show', $course), '/').'"[^>]*class="btn gold sm c-cta"/',

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** P5.3 — self-hosted video: signed streaming URL, policy enforcement, and player rendering priority. */
+/** P5.3, self-hosted video: signed streaming URL, policy enforcement, and player rendering priority. */
 class SelfHostedVideoTest extends TestCase
 {
     use RefreshDatabase;

@@ -17,8 +17,8 @@ use RuntimeException;
  * between them and the content is a payment they are trying to make. Sending
  * them to the payment screen turns a dead end into the next step.
  *
- * It lives in an exception so every route into a course — the overview, a
- * lesson, quizzes, assignments, discussions, the heartbeat endpoints — behaves
+ * It lives in an exception so every route into a course, the overview, a
+ * lesson, quizzes, assignments, discussions, the heartbeat endpoints, behaves
  * the same way without each one remembering to check.
  */
 class PaymentRequiredException extends RuntimeException

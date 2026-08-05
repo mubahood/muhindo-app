@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', $course->title.' — Analytics')
+@section('title', $course->title.' | Analytics')
 
 @section('content')
 
@@ -50,7 +50,7 @@
           </div>
         @endforeach
       </div></div>
-      <p class="muted" style="padding:0 18px 16px;font-size:.8rem;">Share of enrolled students who completed each lesson, in curriculum order — where the line drops sharply is where students quit.</p>
+      <p class="muted" style="padding:0 18px 16px;font-size:.8rem;">Share of enrolled students who completed each lesson, in curriculum order, where the line drops sharply is where students quit.</p>
     @endif
   </x-dash.section>
 </div>
@@ -67,7 +67,7 @@
             <tr>
               <td>{{ $quiz['title'] }}</td>
               <td>{{ $quiz['graded_attempts'] }}</td>
-              <td>{{ $quiz['average_score_percent'] !== null ? $quiz['average_score_percent'].'%' : '—' }}</td>
+              <td>{{ $quiz['average_score_percent'] !== null ? $quiz['average_score_percent'].'%' : '-' }}</td>
               <td><a href="{{ route('admin.quizzes.analysis', $quiz['quiz_id']) }}" class="btn-tb btn-tb-ghost btn-tb-sm">Item analysis <i class="fas fa-arrow-right"></i></a></td>
             </tr>
           @endforeach

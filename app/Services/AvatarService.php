@@ -35,7 +35,7 @@ class AvatarService
 
             return $filename;
         } catch (\Throwable $e) {
-            // Processing failed (corrupt file, unsupported format) — store as-is.
+            // Processing failed (corrupt file, unsupported format), store as-is.
             return $file->store($dir, 'public');
         }
     }

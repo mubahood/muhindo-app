@@ -5,7 +5,7 @@ namespace Tests\Feature\Public;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** public-w6 — §7 of PUBLIC_SITE_PLAN.md: branded 404/500 pages, never Laravel's bare default. */
+/** public-w6, of PUBLIC_SITE_PLAN.md: branded 404/500 pages, never Laravel's bare default. */
 class ErrorPagesTest extends TestCase
 {
     use RefreshDatabase;

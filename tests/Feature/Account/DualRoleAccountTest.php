@@ -100,7 +100,7 @@ class DualRoleAccountTest extends TestCase
 
         $response->assertOk();
         /* Assert the radio itself is checked. The previous version looked for
-           an Alpine attribute — which was present in the HTML but never ran,
+           an Alpine attribute, which was present in the HTML but never ran,
            because the auth layout loads no Alpine. It passed for months while
            no option was ever actually selected. */
         $this->assertRadioChecked($response->getContent(), 'client');
@@ -309,7 +309,7 @@ class DualRoleAccountTest extends TestCase
 
     /**
      * There is no such thing as a guest request any more. A proposal needs an
-     * account, so every one of them has an owner who can come back to it —
+     * account, so every one of them has an owner who can come back to it,
      * which is the whole reason the public lead form was retired.
      */
     public function test_a_guest_cannot_leave_an_unowned_request(): void

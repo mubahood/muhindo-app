@@ -33,7 +33,7 @@ class Enrollment extends Model
         ];
     }
 
-    /** §4.4/§6.4 — a null `expires_at` means lifetime access; a past one means the access window has closed. */
+    /** A null `expires_at` means lifetime access; a past one means the access window has closed. */
     public function isExpired(): bool
     {
         return $this->expires_at !== null && $this->expires_at->isPast();
@@ -100,7 +100,7 @@ class Enrollment extends Model
     }
 
     /**
-     * The student's own private study notes — distinct from notes(), the admin's private notes
+     * The student's own private study notes, distinct from notes(), the admin's private notes
      * about this student.
      *
      * @return HasMany<LessonNote, $this>
@@ -116,7 +116,7 @@ class Enrollment extends Model
         return $this->hasOne(CourseReview::class);
     }
 
-    /** §9 — enrollment mutations are auditable: status transitions (enrolled/activated/cancelled/completed) and access-window changes, not every denormalized progress tick. */
+    /** Enrollment mutations are auditable: status transitions (enrolled/activated/cancelled/completed) and access-window changes, not every denormalized progress tick. */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

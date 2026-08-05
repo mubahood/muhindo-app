@@ -13,11 +13,11 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 /**
- * §6.3.2 — the per-student drill-down: activity timeline, lesson-by-lesson
- * progress, private instructor notes, a one-click nudge, (§7.1) cancel +
- * refund, and (§6.4/P5.2) extend/remove the access-window expiry. "Reset
- * quiz attempts" remains deferred — nothing in the plan scopes it to a
- * specific phase, and it isn't needed for any P5 item.
+ * The per-student drill-down: activity timeline, lesson-by-lesson
+ * progress, private instructor notes, a one-click nudge, cancel +
+ * refund, and extend/remove the access-window expiry. "Reset
+ * quiz attempts" remains deferred, nothing in the plan scopes it to a
+ * Specific phase, and it isn't needed for anything outstanding.
  */
 class EnrollmentDrilldown extends Component
 {
@@ -38,7 +38,7 @@ class EnrollmentDrilldown extends Component
         $this->enrollment = $enrollment->load(['user', 'course', 'lastLesson', 'notes.user']);
     }
 
-    /** §7.1 — revokes access immediately; credits the funding invoice if one was actually paid. */
+    /** Revokes access immediately; credits the funding invoice if one was actually paid. */
     public function cancelAndRefund(BillingService $billing): void
     {
         $refunded = false;
@@ -76,7 +76,7 @@ class EnrollmentDrilldown extends Component
         $this->nudgeSent = true;
     }
 
-    /** §6.4/P5.2 — extends from the later of "now" or the current expiry, so a lapsed window doesn't shortchange the extension. */
+    /** Extends from the later of "now" or the current expiry, so a lapsed window doesn't shortchange the extension. */
     public function extendAccess(): void
     {
         $this->validate(['extendByDays' => 'required|integer|min:1|max:3650']);
@@ -109,6 +109,6 @@ class EnrollmentDrilldown extends Component
             'timeline' => $timeline,
         ])
             ->layout('layouts.admin')
-            ->title($this->enrollment->user->name.' — '.$this->enrollment->course->title);
+            ->title($this->enrollment->user->name.' - '.$this->enrollment->course->title);
     }
 }

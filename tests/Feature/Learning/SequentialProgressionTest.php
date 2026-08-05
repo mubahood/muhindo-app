@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §4.3 — in sequential progression, lesson N+1 is locked until N is complete, server-side. */
+/** In sequential progression, lesson N+1 is locked until N is complete, server-side. */
 class SequentialProgressionTest extends TestCase
 {
     use RefreshDatabase;

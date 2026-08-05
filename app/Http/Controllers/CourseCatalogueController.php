@@ -26,7 +26,7 @@ class CourseCatalogueController extends Controller
         private readonly BillingService $billing,
     ) {}
 
-    /** §2.2 — server-rendered, URL-driven filters/sort/search so listing pages stay shareable and crawlable. */
+    /** Server-rendered, URL-driven filters/sort/search so listing pages stay shareable and crawlable. */
     public function index(Request $request): View
     {
         $query = Course::where('is_published', true)
@@ -55,7 +55,7 @@ class CourseCatalogueController extends Controller
         match ($request->query('sort')) {
             'price_asc' => $query->orderBy('price'),
             'most_enrolled' => $query->orderByDesc('enrollments_count'),
-            // The catalogue is numbered 01…21 for a reason: it is a syllabus,
+            // The catalogue is numbered 01...21 for a reason: it is a syllabus,
             // not a feed. Newest-first would put the advanced capstones above
             // the course an absolute beginner is meant to start with.
             default => $query->orderByRaw('course_number IS NULL, course_number')->latest(),
@@ -64,7 +64,7 @@ class CourseCatalogueController extends Controller
         return view('courses.index', [
             /*
              * Six. Twenty-one courses on one page is a wall, and a wall is a
-             * decision a visitor postpones — the catalogue reads as a syllabus
+             * decision a visitor postpones. The catalogue reads as a syllabus
              * best in small, finishable groups. Paged clearly, with the tier
              * each page belongs to named above it.
              */
@@ -95,7 +95,7 @@ class CourseCatalogueController extends Controller
         $faq = $this->settingsJson('courses.faq');
 
         /* Every free-preview lesson, rendered up front and handed to the page as
-           data. The modal then opens instantly with no request in flight — a
+           data. The modal then opens instantly with no request in flight. A
            preview that spins before it plays is a preview people abandon. Only
            lessons explicitly marked as free previews are included, so nothing
            paid can leak through the same channel. */
@@ -142,9 +142,9 @@ class CourseCatalogueController extends Controller
     }
 
     /**
-     * §6.2 — Course + BreadcrumbList (+ FAQPage when real FAQ content exists) structured
+     * Course + BreadcrumbList (+ FAQPage when real FAQ content exists) structured
      * data for the course detail page. Returned as a list of separate JSON-LD nodes, one
-     * <script> tag per node — simpler and just as valid as merging into a single @graph.
+     * <script> tag per node, simpler and just as valid as merging into a single @graph.
      *
      * @return array<int,array<string,mixed>>
      */
@@ -163,7 +163,7 @@ class CourseCatalogueController extends Controller
                     ? sprintf('%02d', $course->course_number)
                     : null,
                 'inLanguage' => 'en',
-                'image' => $course->cover_image ?: null,
+                'image' => $course->coverUrl(),
                 // Google reads `teaches` for the "what you'll learn" surface,
                 // and the authored outcomes are exactly that list.
                 'teaches' => $course->outcomes ?: null,
@@ -231,7 +231,7 @@ class CourseCatalogueController extends Controller
         );
     }
 
-    /** §7.2 — free preview: a guest (no enrollment) can view an is_free_preview lesson, closing L5. */
+    /** Free preview: a guest (no enrollment) can view an is_free_preview lesson, closing L5. */
     public function preview(Course $course, Lesson $lesson): View
     {
         abort_unless($course->is_published, 404);
@@ -268,13 +268,13 @@ class CourseCatalogueController extends Controller
                     EnrollmentCreated::dispatch($enrollment);
                 }
             } catch (UniqueConstraintViolationException) {
-                // A concurrent request (double-click) won the race — the enrollment exists either way, no new event.
+                // A concurrent request (double-click) won the race, the enrollment exists either way, no new event.
             }
 
-            return redirect()->route('learn.course', $course)->with('success', 'You are enrolled — happy learning!');
+            return redirect()->route('learn.course', $course)->with('success', 'You are enrolled, happy learning!');
         }
 
-        // §7.1 — a paid course: a pending enrollment already sitting on an unpaid invoice
+        // A paid course: a pending enrollment already sitting on an unpaid invoice
         // just needs to be paid, not re-invoiced.
         if ($existing && $existing->status === 'pending' && $existing->invoice_id) {
             return redirect()->route('courses.checkout', $course);
@@ -302,7 +302,7 @@ class CourseCatalogueController extends Controller
                     'source' => 'self',
                 ]);
             } catch (UniqueConstraintViolationException) {
-                // A concurrent request already created the pending enrollment — the invoice we
+                // A concurrent request already created the pending enrollment. The invoice we
                 // just generated is simply unused; the checkout page below finds the real one.
             }
         }
@@ -310,7 +310,7 @@ class CourseCatalogueController extends Controller
         return redirect()->route('courses.checkout', $course);
     }
 
-    /** §7.1 — shows the pending invoice for a paid course and a "Pay with Flutterwave" button. */
+    /** Shows the pending invoice for a paid course and a "Pay with Flutterwave" button. */
     public function checkout(Request $request, Course $course): View|RedirectResponse
     {
         $user = $request->user();

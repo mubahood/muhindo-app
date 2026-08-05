@@ -17,7 +17,7 @@ use Tests\TestCase;
 /**
  * Every page a signed-in person can reach renders in one shell, on one
  * stylesheet, with SPA navigation wired up. Two chromes for the same user is
- * how the logged-in side drifted apart before — and shared assets are the
+ * how the logged-in side drifted apart before, and shared assets are the
  * precondition for wire:navigate, because Livewire's head merge appends the
  * incoming page's stylesheets without removing the outgoing ones.
  */

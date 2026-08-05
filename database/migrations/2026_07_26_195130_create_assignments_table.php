@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §5.1/§5.3 — Classroom-style assignment: text/link/file turn-in, optional due date + late penalty. */
+/** Classroom-style assignment: text/link/file turn-in, optional due date + late penalty. */
 return new class extends Migration
 {
     public function up(): void

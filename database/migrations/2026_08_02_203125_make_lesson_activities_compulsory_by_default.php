@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Work attached to a topic is part of that topic.
  *
- * `is_required` already did exactly the right thing — it blocks completing the
+ * `is_required` already did exactly the right thing, it blocks completing the
  * lesson an activity hangs off, and the admin form says so in as many words.
  * Its default was simply the wrong way round: attaching a quiz to a lesson did
  * nothing at all unless the author separately remembered to tick a box, so a

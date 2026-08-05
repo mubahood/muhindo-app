@@ -10,8 +10,8 @@ use Tests\TestCase;
 /**
  * Hiring, from the button to the portal.
  *
- * There used to be three ways in — a contact form, a lead form and a hire
- * button — and none of them ended anywhere a person could return to. There is
+ * There used to be three ways in, a contact form, a lead form and a hire
+ * button, and none of them ended anywhere a person could return to. There is
  * one now: press Hire Me, make an account, say what you want built, and watch
  * it move. This walks it, and pins the two rules that make it work.
  */
@@ -44,7 +44,7 @@ class HireJourneyTest extends TestCase
         ];
     }
 
-    // ── one door ─────────────────────────────────────────────────────────
+    // one door
 
     public function test_hire_sends_a_stranger_to_make_an_account(): void
     {
@@ -68,7 +68,7 @@ class HireJourneyTest extends TestCase
             ->assertSee('tell me what you want built', false);
     }
 
-    // ── the rule: a client with nothing proposed is asked ────────────────
+    // the rule: a client with nothing proposed is asked
 
     public function test_registering_as_a_client_lands_on_the_proposal(): void
     {
@@ -111,7 +111,7 @@ class HireJourneyTest extends TestCase
             ->assertRedirect(route('dashboard'));
     }
 
-    // ── the proposal itself ──────────────────────────────────────────────
+    // the proposal itself
 
     public function test_the_form_asks_the_questions_a_price_needs(): void
     {
@@ -200,7 +200,7 @@ class HireJourneyTest extends TestCase
     public function test_any_budget_figure_is_accepted_not_just_round_thousands(): void
     {
         /* The number field shipped step="1000", so a browser refused 89 with
-           "the two nearest valid values are 0 and 1000" — the form rejecting a
+           "the two nearest valid values are 0 and 1000" the form rejecting a
            perfectly good answer before it ever reached the server. */
         $html = (string) $this->actingAs($this->client())->get(route('propose'))
             ->assertOk()->getContent();

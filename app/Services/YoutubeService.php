@@ -5,7 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 
 /**
- * §7.5 — YouTube Data API v3 lookups for the curriculum builder. oEmbed (no key needed) doesn't
+ * YouTube Data API v3 lookups for the curriculum builder. oEmbed (no key needed) doesn't
  * expose a video's duration at all, so this is the real API, used only when YOUTUBE_API_KEY is
  * configured; entirely optional everywhere it's called from.
  */

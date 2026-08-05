@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
  * progress, and the current lesson's position.
  *
  * The layout builds this itself from the course + signed-in user, so every
- * course-context page (lesson, quizzes, assignments, Q&A, grades, …) gets
+ * course-context page (lesson, quizzes, assignments, Q&A, grades, ...) gets
  * identical chrome without each controller having to pass sidebar data.
  */
 class LearnShell
@@ -166,7 +166,7 @@ class LearnShell
         return $index === false ? 0 : $index + 1;
     }
 
-    /** Completed lessons in the module holding the current lesson — the sidebar's live counter. */
+    /** Completed lessons in the module holding the current lesson, the sidebar's live counter. */
     public function currentModuleDone(): int
     {
         return (int) ($this->modules->firstWhere('isCurrent', true)['done'] ?? 0);

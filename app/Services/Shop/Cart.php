@@ -15,7 +15,7 @@ use Illuminate\Contracts\Session\Session;
  * thing twice a no-op instead of a duplicate line.
  *
  * Lives in the session rather than the database so a guest can fill a basket
- * before they have an account — signing in at checkout keeps what they chose.
+ * before they have an account, signing in at checkout keeps what they chose.
  */
 class Cart
 {
@@ -37,7 +37,7 @@ class Cart
         $lines = $this->lines();
         $key = $this->keyFor($item);
 
-        // A course is a right of access, not a stack of goods — buying two of
+        // A course is a right of access, not a stack of goods, buying two of
         // the same course is meaningless, so its quantity is pinned at one.
         $lines[$key] = $item instanceof Course
             ? 1

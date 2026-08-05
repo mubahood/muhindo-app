@@ -6,7 +6,7 @@ namespace App\Support;
  * The public navigation, defined once.
  *
  * The desktop bar, the mega panel and the mobile sheet all render from this,
- * so the three cannot drift — which is exactly what had happened before, where
+ * so the three cannot drift, which is exactly what had happened before, where
  * the mobile menu still listed pages the desktop bar had renamed and had lost
  * others entirely.
  *
@@ -43,7 +43,7 @@ class SiteNav
                 'blurb' => 'Who I am, what I have built, and what I am researching.',
                 'children' => [
                     ['label' => 'About me', 'url' => route('portfolio.about'), 'icon' => 'fa-user',
-                        'desc' => 'The short version — how I work and who I work with.',
+                        'desc' => 'The short version, how I work and who I work with.',
                         'match' => ['portfolio.about']],
                     ['label' => 'My work', 'url' => route('portfolio.work'), 'icon' => 'fa-diagram-project',
                         'desc' => 'Systems I have delivered, with case studies.',

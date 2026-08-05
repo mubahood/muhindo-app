@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-/** §6.3.2 — the per-student drill-down: timeline, lesson checklist, private notes, nudge. */
+/** The per-student drill-down: timeline, lesson checklist, private notes, nudge. */
 class EnrollmentDrilldownTest extends TestCase
 {
     use RefreshDatabase;

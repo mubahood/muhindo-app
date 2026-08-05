@@ -12,13 +12,13 @@ use Symfony\Component\Process\Process;
  * Imports photographs from a folder, optimising each one on the way in.
  *
  * Phone photos arrive at 2304px and up to 700KB apiece, carrying whatever EXIF
- * the camera wrote — which on many devices includes GPS coordinates. Serving
+ * the camera wrote, which on many devices includes GPS coordinates. Serving
  * them untouched would push several megabytes at every visitor and republish
  * any location data along with them. Each image is therefore re-encoded:
  * orientation baked in, all metadata stripped, resized to a sane maximum, and
  * written as both JPEG and WebP with a small grid thumbnail.
  *
- * Re-running is safe — a photo already imported under the same source name is
+ * Re-running is safe. A photo already imported under the same source name is
  * skipped unless --force is given.
  */
 class ImportGalleryPhotos extends Command

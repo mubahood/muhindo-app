@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §5.4 — the admin per-course grade matrix + CSV export. */
+/** The admin per-course grade matrix + CSV export. */
 class GradeMatrixTest extends TestCase
 {
     use RefreshDatabase;

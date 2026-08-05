@@ -72,7 +72,7 @@
     <span>
       You told Muhindo you would pay him directly on
       <b>{{ $invoice->direct_payment_at->format('j M Y') }}</b>. This stays locked until he
-      confirms the payment. You can still pay online below — it is instant.
+      confirms the payment. You can still pay online below. It is instant.
     </span>
   </div>
 @endif
@@ -106,7 +106,7 @@
 
       @if(bccomp((string) $invoice->amount_paid, '0', 2) > 0)
         <div class="pay-line">
-          <div class="meta"><b>Already paid</b><span>Thank you — this is what is left.</span></div>
+          <div class="meta"><b>Already paid</b><span>Thank you. This is what is left.</span></div>
           <div class="amt">&minus;{{ $invoice->currency }} {{ number_format((float) $invoice->amount_paid, 2) }}</div>
         </div>
       @endif
@@ -119,7 +119,7 @@
       {{-- The moment someone is deciding whether to hand over money is the
            moment to say plainly what happens next. --}}
       <ol class="pay-steps">
-        <li><b>You pay</b><span>Card, mobile money or bank — or arrange it with Muhindo directly.</span></li>
+        <li><b>You pay</b><span>Card, mobile money or bank, or arrange it with Muhindo directly.</span></li>
         <li><b>It clears</b><span>Online payments confirm in seconds. Direct payments unlock once Muhindo confirms them.</span></li>
         <li><b>{{ $destination['label'] }}</b><span>Yours from then on, with nothing further to pay.</span></li>
       </ol>
@@ -147,7 +147,7 @@
         <h3><i class="fas fa-handshake" aria-hidden="true"></i> I will pay Mr. Muhindo Mubaraka directly</h3>
         <p>
           Arranging cash, mobile money or a bank transfer with Muhindo yourself. We will note it
-          and you can carry on — but this stays locked until he confirms your payment.
+          and you can carry on, but this stays locked until he confirms your payment.
         </p>
         <form method="POST" action="{{ route('payments.direct', $invoice) }}">
           @csrf
@@ -178,7 +178,7 @@
     </div>
 
     <div class="pay-secure">
-      <div><i class="fas fa-lock" aria-hidden="true"></i> Paid securely through Flutterwave — we never see your card</div>
+      <div><i class="fas fa-lock" aria-hidden="true"></i> Paid securely through Flutterwave. We never see your card</div>
       <div><i class="fas fa-receipt" aria-hidden="true"></i> Invoice {{ $invoice->invoice_no }} · {{ $invoice->status->label() }}</div>
     </div>
   </div>

@@ -19,7 +19,7 @@ use Illuminate\View\View;
  *
  * This replaced two things that were not working: a contact form producing
  * messages nobody could act on, and a lead form asking for a name, an email
- * and a paragraph — enough to start a conversation, not enough to price
+ * and a paragraph, enough to start a conversation, not enough to price
  * anything.
  *
  * It sits behind sign-in on purpose. A proposal with an owner can be returned
@@ -36,7 +36,7 @@ class ProjectInquiryController extends Controller
         $user = $request->user();
 
         // Somebody who has already told me about a project does not need to be
-        // asked again — the portal is where the answer will appear.
+        // asked again. The portal is where the answer will appear.
         if ($existing = ProjectInquiry::where('user_id', $user->id)->latest('id')->first()) {
             return redirect()->route('portal.index')->with('success',
                 'You have already told me about "'.($existing->title ?: 'your project')
@@ -86,8 +86,8 @@ class ProjectInquiryController extends Controller
             'country' => 'required|string|max:80',
         ], [
             'title.required' => 'Give it a name, even a rough one.',
-            'description.min' => 'A few more words, please — I price from what this has to do.',
-            'phone.required' => 'A WhatsApp number — it is how most of this gets discussed.',
+            'description.min' => 'A few more words, please. I price from what this has to do.',
+            'phone.required' => 'A WhatsApp number. It is how most of this gets discussed.',
         ]);
 
         $inquiry = ProjectInquiry::create($data + [
@@ -110,7 +110,7 @@ class ProjectInquiryController extends Controller
         );
 
         return redirect()->route('portal.index')->with('success',
-            'Got it — "'.$inquiry->title.'" is with me. I read every one myself and reply '
+            'Got it "'.$inquiry->title.'" is with me. I read every one myself and reply '
             .'within one working day, usually sooner.');
     }
 }

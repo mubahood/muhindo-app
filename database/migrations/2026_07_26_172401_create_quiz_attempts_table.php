@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §5.1 — one row per attempt; `question_order` freezes the shuffle/pool-draw so a resumed attempt sees the same questions. */
+/** One row per attempt; `question_order` freezes the shuffle/pool-draw so a resumed attempt sees the same questions. */
 return new class extends Migration
 {
     public function up(): void

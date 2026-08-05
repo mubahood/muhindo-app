@@ -118,7 +118,7 @@ class EnrollmentController extends Controller
         }
 
         return back()->with('success', sprintf(
-            'Invoice %s raised for %s %s. The payment link is now on this row — send it to the student.',
+            'Invoice %s raised for %s %s. The payment link is now on this row, send it to the student.',
             $invoice->invoice_no,
             $invoice->currency,
             number_format((float) $invoice->total, 2),

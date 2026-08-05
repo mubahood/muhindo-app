@@ -69,7 +69,7 @@ class Product extends Model
      * The single most damaging thing this shop could do is take somebody's
      * money for a file that is not there. Publication is a decision the owner
      * makes; deliverability is a fact about the row, and every path that moves
-     * money checks it — the basket, the checkout and the buy buttons.
+     * money checks it, the basket, the checkout and the buy buttons.
      *
      * A missing file on disk counts as undeliverable even when file_path is
      * set: a database row is not a download.
@@ -84,7 +84,7 @@ class Product extends Model
             && \Illuminate\Support\Facades\Storage::disk('local')->exists($this->file_path);
     }
 
-    /** Why it cannot be handed over, for the admin — never shown to a buyer. */
+    /** Why it cannot be handed over, for the admin, never shown to a buyer. */
     public function undeliverableReason(): ?string
     {
         if ($this->isDeliverable()) {
@@ -133,7 +133,7 @@ class Product extends Model
      *
      * Drawn rather than photographed, for the same reason the case-study
      * screenshots are: what a buyer needs to see in one second is the
-     * wordmark, the promise, the stack and the interface — and a real
+     * wordmark, the promise, the stack and the interface, and a real
      * screengrab of an admin panel delivers none of them at card size.
      *
      * An uploaded cover always wins, so replacing one of these is an upload

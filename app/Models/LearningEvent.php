@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-/** Append-only xAPI-lite event stream (§6.2) — never updated, only pruned (P5). */
+/** Append-only xAPI-lite event stream, never updated, only pruned (P5). */
 class LearningEvent extends Model
 {
     public const UPDATED_AT = null;

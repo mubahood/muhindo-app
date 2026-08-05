@@ -20,7 +20,7 @@ class AccountService
     /**
      * Apply a chosen account type to an account.
      *
-     * Capabilities are only ever added or kept — never silently revoked. Dropping
+     * Capabilities are only ever added or kept, never silently revoked. Dropping
      * client access from someone who owns projects and invoices, or student
      * access from someone with enrollments, would orphan that work and hide it
      * behind a menu they can no longer reach, so existing access is retained and
@@ -55,7 +55,7 @@ class AccountService
     /**
      * Whether dropping client access would strand something real.
      *
-     * Deliberately not "does a client record exist" — choosing "both" creates an
+     * Deliberately not "does a client record exist" choosing "both" creates an
      * empty client profile up front, and treating that container as work would
      * trap anyone who ever ticked the box into keeping a side of the app they
      * don't use. Only actual projects or invoices count.

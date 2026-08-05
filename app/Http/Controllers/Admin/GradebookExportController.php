@@ -8,7 +8,7 @@ use App\Services\Learning\GradebookService;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/** §5.4 — CSV export of the per-course grade matrix. */
+/** CSV export of the per-course grade matrix. */
 class GradebookExportController extends Controller
 {
     public function __invoke(Course $course, GradebookService $gradebook): StreamedResponse

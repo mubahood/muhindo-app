@@ -8,7 +8,7 @@ use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-/** A client's own projects — read-only, scoped to their linked Client record. */
+/** A client's own projects, read-only, scoped to their linked Client record. */
 class ProjectController extends Controller
 {
     public function mine(Request $request): JsonResponse

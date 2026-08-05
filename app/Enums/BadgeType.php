@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** §6.5 — the fixed, code-defined set of earnable badges. No admin CRUD; new badges ship as new cases. */
+/** The fixed, code-defined set of earnable badges. No admin CRUD; new badges ship as new cases. */
 enum BadgeType: string
 {
     case FirstCourseCompleted = 'first_course_completed';

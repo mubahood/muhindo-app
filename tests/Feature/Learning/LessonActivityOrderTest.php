@@ -93,11 +93,11 @@ class LessonActivityOrderTest extends TestCase
         return app(ProgressService::class)->completionBlockers($this->enrollment, $lesson);
     }
 
-    // ── A topic cannot be finished with its work outstanding ────────────────
+    // A topic cannot be finished with its work outstanding
 
     public function test_a_topic_with_no_work_is_free_to_complete(): void
     {
-        // "or none" — the common case must stay frictionless.
+        // "or none" the common case must stay frictionless.
         $this->assertSame([], $this->blockers($this->lesson()));
     }
 
@@ -154,7 +154,7 @@ class LessonActivityOrderTest extends TestCase
         $this->quiz($lesson, 'Practice quiz', required: false);
 
         // The default flipped to compulsory, but an author can still say a
-        // quiz is practice — that capability was worth keeping.
+        // quiz is practice. That capability was worth keeping.
         $this->assertSame([], $this->blockers($lesson));
     }
 
@@ -191,7 +191,7 @@ class LessonActivityOrderTest extends TestCase
         );
     }
 
-    // ── Where the work appears ──────────────────────────────────────────────
+    // Where the work appears
 
     public function test_the_curriculum_lists_a_topics_work_beneath_it_in_order(): void
     {
@@ -202,7 +202,7 @@ class LessonActivityOrderTest extends TestCase
         $shell = new LearnShell($this->course, $this->student, $lesson);
         $activities = $shell->activitiesFor($lesson);
 
-        // Questions before work — the order a student meets them.
+        // Questions before work, the order a student meets them.
         $this->assertSame(['quiz', 'task'], array_column($activities, 'type'));
         $this->assertSame(['The quiz', 'The task'], array_column($activities, 'title'));
         $this->assertSame([false, false], array_column($activities, 'done'));
@@ -253,10 +253,10 @@ class LessonActivityOrderTest extends TestCase
             ->assertSee('Author-visible quiz')
             ->assertSee('Author-visible task')
             ->assertSee('Must be done to finish the topic')
-            ->assertSee('Optional — does not block the topic');
+            ->assertSee('Optional, does not block the topic');
     }
 
-    // ── Helpers ─────────────────────────────────────────────────────────────
+    // Helpers
 
     private function submit(Quiz $quiz): void
     {

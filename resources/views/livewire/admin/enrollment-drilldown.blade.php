@@ -113,7 +113,7 @@
       <div class="tb-card-header"><span class="tb-card-title">Instructor notes (private)</span></div>
       <div class="tb-card-body">
         <form wire:submit="addNote" style="display:flex;gap:8px;margin-bottom:14px;">
-          <input type="text" class="tb-input" wire:model="newNote" placeholder="Add a private note about this student…">
+          <input type="text" class="tb-input" wire:model="newNote" placeholder="Add a private note about this student...">
           <button type="submit" class="btn-tb btn-tb-primary btn-tb-sm">Add</button>
         </form>
         @error('newNote') <div class="field-error" style="margin-bottom:10px;">{{ $message }}</div> @enderror
@@ -139,7 +139,7 @@
           @forelse($timeline as $event)
             <tr>
               <td>{{ $event->event->label() }}</td>
-              <td>{{ $event->lesson->title ?? '—' }}</td>
+              <td>{{ $event->lesson->title ?? '-' }}</td>
               <td>{{ $event->created_at->diffForHumans() }}</td>
             </tr>
           @empty

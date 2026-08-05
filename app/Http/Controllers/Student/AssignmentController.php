@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/** §5.1/§5.3 — the student side of the Classroom turn-in flow: view, save draft, submit, review. */
+/** The student side of the Classroom turn-in flow: view, save draft, submit, review. */
 class AssignmentController extends Controller
 {
     public function __construct(

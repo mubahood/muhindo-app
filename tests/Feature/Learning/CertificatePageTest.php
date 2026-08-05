@@ -73,7 +73,7 @@ class CertificatePageTest extends TestCase
         }
     }
 
-    // ── The tab ─────────────────────────────────────────────────────────────
+    // The tab
 
     public function test_the_course_menu_offers_the_certificate_instead_of_news(): void
     {
@@ -86,7 +86,7 @@ class CertificatePageTest extends TestCase
             ->assertDontSee('>News<', false);
     }
 
-    // ── Before it is earned ─────────────────────────────────────────────────
+    // Before it is earned
 
     public function test_an_unfinished_student_is_told_what_is_left(): void
     {
@@ -141,7 +141,7 @@ class CertificatePageTest extends TestCase
             ->assertSee('Final assessment');
     }
 
-    // ── Once it is earned ───────────────────────────────────────────────────
+    // Once it is earned
 
     public function test_a_finished_student_gets_their_certificate_with_a_way_to_prove_it(): void
     {
@@ -193,7 +193,7 @@ class CertificatePageTest extends TestCase
         $this->assertNotNull($service->issueIfEligible($enrollment->fresh()));
     }
 
-    // ── Who may see it ──────────────────────────────────────────────────────
+    // Who may see it
 
     public function test_somebody_not_enrolled_cannot_open_it(): void
     {

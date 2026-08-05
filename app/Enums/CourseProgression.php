@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** §4.3 — per-course navigation rule. `sequential` locks lesson N+1 until N completes. */
+/** Per-course navigation rule. `sequential` locks lesson N+1 until N completes. */
 enum CourseProgression: string
 {
     case Free = 'free';

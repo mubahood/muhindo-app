@@ -15,7 +15,7 @@
   .acct-type:has(input:checked){border-color:var(--pri);background:var(--pri-soft);box-shadow:inset 0 0 0 1px var(--pri);}
   .acct-type:has(input:checked) .t i{color:var(--pri);}
   /* The radio itself is visually hidden but still focusable, so the card has to
-     carry its focus ring — without this the keyboard focus is invisible here. */
+     carry its focus ring, without this the keyboard focus is invisible here. */
   .acct-type:has(input:focus-visible){outline:2px solid var(--pri);outline-offset:2px;}
   @media(max-width:560px){.acct-types{grid-template-columns:1fr;}}
 </style>
@@ -27,7 +27,7 @@
 @if($hiring)
   <div class="af-eyebrow">Step 1 of 2</div>
   <h2 class="af-title">First, an account</h2>
-  <p class="af-sub">It takes thirty seconds, and it is what lets you follow the project afterwards —
+  <p class="af-sub">It takes thirty seconds, and it is what lets you follow the project afterwards,
      the brief, the price, the progress and the invoices all live in your own portal.
      Next screen: tell me what you want built.</p>
 
@@ -38,7 +38,7 @@
 @else
   <div class="af-eyebrow">Create an account</div>
   <h2 class="af-title">Join Muhindo Mubaraka</h2>
-  <p class="af-sub">One account for both sides. Pick what brings you here — you can add the other later.</p>
+  <p class="af-sub">One account for both sides. Pick what brings you here. You can add the other later.</p>
 @endif
 
 @include('auth.partials.course-context')

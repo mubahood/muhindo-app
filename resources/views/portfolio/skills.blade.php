@@ -24,7 +24,7 @@
         @php
           /* The owner writes standout skills as "Laravel (Expert)". That is his
              own assessment, so it is promoted to a real badge and leads its
-             group — rather than inventing proficiency levels for all of them,
+             group, rather than inventing proficiency levels for all of them,
              which would put claims about his ability in his mouth. */
           $parsed = $items->map(function ($skill) {
               preg_match('/^(.*?)\s*\((.+)\)\s*$/', $skill->name, $m);

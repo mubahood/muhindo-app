@@ -1,7 +1,7 @@
 <div>
   <div class="tb-page-header">
     <div>
-      <h1>{{ $course->title }} — Students</h1>
+      <h1>{{ $course->title }}: Students</h1>
       <div class="tb-breadcrumb">
         <a href="{{ route('admin.courses.index') }}">Courses</a> <span>/</span>
         <a href="{{ route('admin.courses.show', $course) }}">{{ $course->title }}</a> <span>/</span> Students
@@ -10,7 +10,7 @@
   </div>
 
   <div class="tb-filter-bar">
-    <input type="text" class="tb-input" wire:model.live.debounce.400ms="search" placeholder="Search by name or email…" style="min-width:220px;">
+    <input type="text" class="tb-input" wire:model.live.debounce.400ms="search" placeholder="Search by name or email..." style="min-width:220px;">
     <select class="tb-select" wire:model.live="statusFilter">
       <option value="">All statuses</option>
       <option value="active">Active</option>
@@ -45,7 +45,7 @@
           @forelse($enrollments as $enrollment)
             <tr>
               <td>
-                <a href="{{ route('admin.enrollments.show', $enrollment) }}" style="font-weight:500;color:var(--tx);">{{ $enrollment->user->name ?? '—' }}</a>
+                <a href="{{ route('admin.enrollments.show', $enrollment) }}" style="font-weight:500;color:var(--tx);">{{ $enrollment->user->name ?? '-' }}</a>
                 <div class="muted" style="font-size:.78rem;">{{ $enrollment->user->email ?? '' }}</div>
               </td>
               <td>
@@ -57,7 +57,7 @@
                 </div>
               </td>
               <td>{{ intdiv($enrollment->total_watch_seconds, 60) }}m</td>
-              <td>{{ $enrollment->lastLesson->title ?? '—' }}</td>
+              <td>{{ $enrollment->lastLesson->title ?? '-' }}</td>
               <td>
                 <span class="{{ $enrollment->at_risk_reason ? 'badge-tb badge-danger' : 'muted' }}" style="{{ $enrollment->at_risk_reason ? '' : 'font-size:.85rem;' }}">
                   {{ $enrollment->last_accessed_at?->diffForHumans() ?? 'Never' }}

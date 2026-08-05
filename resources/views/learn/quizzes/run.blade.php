@@ -96,7 +96,7 @@
             <div class="quiz-pairs">
               <span class="lbl">{{ $option->label }}</span>
               <input type="text" name="answers[{{ $question->id }}][pairs][{{ $option->id }}]"
-                     value="{{ $existing['pairs'][$option->id] ?? '' }}" placeholder="Matches with…"
+                     value="{{ $existing['pairs'][$option->id] ?? '' }}" placeholder="Matches with..."
                      @change="autosave({{ $question->id }})">
             </div>
           @endforeach
@@ -143,7 +143,7 @@
 @push('scripts')
 <script>
 /**
- * §5.2/§7 quiz runner. The <form> works as a plain POST with no JS at all — every
+ * Quiz runner. The <form> works as a plain POST with no JS at all. Every
  * field's `name` already matches what QuizAttemptController::submit() expects in bulk.
  * JS only adds: per-question autosave (fetch, best-effort), a cosmetic countdown (the
  * server enforces the real deadline independently), one-question-per-page paging, and
@@ -184,14 +184,14 @@ function quizRunner(cfg) {
       const m = Math.floor(this.secondsLeft / 60);
       const s = this.secondsLeft % 60;
       this.formattedTime = `${m}:${String(s).padStart(2, '0')}`;
-      // §7.6 — announced to screen readers via the existing aria-live toast host, not just
+      // Announced to screen readers via the existing aria-live toast host, not just
       // shown visually; the countdown itself isn't aria-live (that would read every second).
       if (this.secondsLeft === 300) {
         window.dispatchEvent(new CustomEvent('toast', { detail: { message: '5 minutes remaining.', type: 'info' } }));
       } else if (this.secondsLeft === 60) {
         window.dispatchEvent(new CustomEvent('toast', { detail: { message: '1 minute remaining.', type: 'info' } }));
       } else if (this.secondsLeft === 0) {
-        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Time is up — submitting your quiz.', type: 'error' } }));
+        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Time is up, submitting your quiz.', type: 'error' } }));
         this.$el.querySelector('form').requestSubmit();
       }
     },
@@ -220,7 +220,7 @@ function quizRunner(cfg) {
         this.savedQuestionId = questionId;
         setTimeout(() => { if (this.savedQuestionId === questionId) this.savedQuestionId = null; }, 1500);
       } catch (e) {
-        // Best-effort — the final bulk submit still carries every field's current value.
+        // Best-effort. The final bulk submit still carries every field's current value.
       }
     },
     confirmSubmit(event) {
@@ -229,7 +229,7 @@ function quizRunner(cfg) {
       }
     },
     onFormSubmit() {
-      // Native submit — no preventDefault, so this works identically with JS disabled.
+      // Native submit. No preventDefault, so this works identically with JS disabled.
     },
   };
 }

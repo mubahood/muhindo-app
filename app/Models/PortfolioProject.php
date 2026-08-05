@@ -18,7 +18,7 @@ class PortfolioProject extends Model
      * These are drawn rather than captured: the real screens hold livestock
      * registries, patient records and human-rights case files, none of which
      * can be published. Each one is the actual screen a user of that system
-     * works in, redrawn in the site's own two inks — so the set reads as one
+     * works in, redrawn in the site's own two inks, so the set reads as one
      * body of work, and nothing anybody's data appears in a portfolio.
      *
      * A real cover uploaded through the admin wins, if there ever is one.

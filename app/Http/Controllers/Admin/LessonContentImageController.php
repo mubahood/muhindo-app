@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 /**
- * §7.4 — images uploaded into a markdown lesson's content. Stored on the same
+ * Images uploaded into a markdown lesson's content. Stored on the same
  * private `local` disk as everything else in the LMS (DocumentService
  * convention); served back through a policy-gated route, never a public URL,
  * since the image lives inside paid/enrolled-only lesson content.

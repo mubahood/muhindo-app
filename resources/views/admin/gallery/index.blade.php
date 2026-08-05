@@ -28,13 +28,13 @@
               <a href="{{ route('admin.gallery.edit', $item) }}">{{ $item->title }}</a>
               @if($item->caption)<div class="muted" style="font-size:11px;">{{ Str::limit($item->caption, 60) }}</div>@endif
             </th>
-            <td>{{ $item->category ?? '—' }}</td>
+            <td>{{ $item->category ?? '-' }}</td>
             <td>
               @if($item->is_published)<span class="badge-tb badge-success">Published</span>
               @else<span class="badge-tb badge-neutral">Hidden</span>@endif
               @if($item->is_featured)<span class="badge-tb badge-warn">Featured</span>@endif
             </td>
-            <td class="muted">{{ $item->width }}×{{ $item->height }} · {{ $item->bytes ? round($item->bytes / 1024).'KB' : '—' }}</td>
+            <td class="muted">{{ $item->width }}×{{ $item->height }} · {{ $item->bytes ? round($item->bytes / 1024).'KB' : '-' }}</td>
             <td class="mono">{{ $item->sort_order }}</td>
             <td>
               <div class="tb-table-actions">
@@ -56,7 +56,7 @@
 
 <p class="muted" style="font-size:11.5px;margin-top:12px;">
   Bulk import a folder from the command line:
-  <code>php artisan gallery:import /path/to/folder</code> — each file is auto-oriented, stripped of metadata, resized and written as JPEG + WebP with a thumbnail.
+  <code>php artisan gallery:import /path/to/folder</code>. Each file is auto-oriented, stripped of metadata, resized and written as JPEG + WebP with a thumbnail.
 </p>
 
 @endsection

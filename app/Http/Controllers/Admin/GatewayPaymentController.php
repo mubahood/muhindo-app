@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
  * Flutterwave payment flow. start() opens a hosted session and redirects the
  * payer to Flutterwave; callback() (browser return) and webhook()
  * (server-to-server) both funnel into the idempotent, verify-first
- * GatewayPaymentService::settle — money is only ever recorded after verification.
+ * GatewayPaymentService::settle, money is only ever recorded after verification.
  */
 class GatewayPaymentController extends Controller
 {
@@ -51,7 +51,7 @@ class GatewayPaymentController extends Controller
         return redirect()->away($charge->link);
     }
 
-    /** Browser return from Flutterwave. Public — the payer may not be signed in. */
+    /** Browser return from Flutterwave. Public. The payer may not be signed in. */
     public function callback(Request $request)
     {
         $transactionId = (string) $request->query('transaction_id', '');
@@ -73,7 +73,7 @@ class GatewayPaymentController extends Controller
     }
 
     /**
-     * §5.2 — on a failed/cancelled Flutterwave attempt, send the payer back to the
+     * On a failed/cancelled Flutterwave attempt, send the payer back to the
      * specific course's checkout page (invoice is untouched, reusable) rather than a
      * dead-end. Falls back to browsing courses when the invoice isn't a course
      * purchase or can't be resolved from the tx_ref.

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §6.4 — written nightly by app:detect-at-risk-enrollments; null means not at risk. */
+/** Written nightly by app:detect-at-risk-enrollments; null means not at risk. */
 return new class extends Migration
 {
     public function up(): void

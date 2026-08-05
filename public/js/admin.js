@@ -1,5 +1,5 @@
 /* ================================================================
-   ONYX Legal — Admin JS
+   ONYX Legal, Admin JS
    Stack: jQuery 3.7 · SweetAlert2 · Select2 · Flatpickr
    Globals: ONYX_CONFIG  (set by admin layout)
    ================================================================ */
@@ -30,7 +30,7 @@
   };
 
   /* ================================================================
-     DRAWER (right slide-in panel — case/client details)
+     DRAWER (right slide-in panel, case/client details)
   ================================================================ */
   const Drawer = {
     open(title, html) {
@@ -61,7 +61,7 @@
   });
 
   /* ================================================================
-     MODAL (centered dialog — forms / confirms)
+     MODAL (centered dialog, forms / confirms)
   ================================================================ */
   const Modal = {
     open(title, html, size = 'md') {
@@ -282,9 +282,9 @@
       </div>
 
       <div class="ox-case-grid">
-        <div class="ox-case-field"><div class="ox-case-field-label">Client</div><div class="ox-case-field-value">${c.client?.full_name || '—'} ${c.client ? `<span style="color:var(--mt);font-size:.625rem;">(${c.client.client_number})</span>` : ''}</div></div>
+        <div class="ox-case-field"><div class="ox-case-field-label">Client</div><div class="ox-case-field-value">${c.client?.full_name || '-'} ${c.client ? `<span style="color:var(--mt);font-size:.625rem;">(${c.client.client_number})</span>` : ''}</div></div>
         <div class="ox-case-field"><div class="ox-case-field-label">Stage</div><div class="ox-case-field-value">${c.stage_label}</div></div>
-        <div class="ox-case-field"><div class="ox-case-field-label">Officer</div><div class="ox-case-field-value">${c.main_officer?.name || '—'}</div></div>
+        <div class="ox-case-field"><div class="ox-case-field-label">Officer</div><div class="ox-case-field-value">${c.main_officer?.name || '-'}</div></div>
         <div class="ox-case-field"><div class="ox-case-field-label">Filed</div><div class="ox-case-field-value">${c.filing_date}</div></div>
         <div class="ox-case-field"><div class="ox-case-field-label">Days Open</div><div class="ox-case-field-value">${c.days_open}</div></div>
         ${c.closed_date ? `<div class="ox-case-field"><div class="ox-case-field-label">Closed</div><div class="ox-case-field-value">${c.closed_date}</div></div>` : ''}
@@ -295,10 +295,10 @@
       <div class="ox-section">
         <div class="ox-section-title"><i class="fas fa-gavel"></i> Court Details</div>
         <div class="ox-tracker-panel">
-          <div class="ox-case-field"><div class="ox-case-field-label">Court</div><div class="ox-case-field-value">${c.court_name||'—'}</div></div>
-          <div class="ox-case-field"><div class="ox-case-field-label">Division</div><div class="ox-case-field-value">${c.court_division||'—'}</div></div>
-          <div class="ox-case-field"><div class="ox-case-field-label">Case No.</div><div class="ox-case-field-value">${c.court_case_number||'—'}</div></div>
-          <div class="ox-case-field"><div class="ox-case-field-label">Judge</div><div class="ox-case-field-value">${c.judge_name||'—'}</div></div>
+          <div class="ox-case-field"><div class="ox-case-field-label">Court</div><div class="ox-case-field-value">${c.court_name||'-'}</div></div>
+          <div class="ox-case-field"><div class="ox-case-field-label">Division</div><div class="ox-case-field-value">${c.court_division||'-'}</div></div>
+          <div class="ox-case-field"><div class="ox-case-field-label">Case No.</div><div class="ox-case-field-value">${c.court_case_number||'-'}</div></div>
+          <div class="ox-case-field"><div class="ox-case-field-label">Judge</div><div class="ox-case-field-value">${c.judge_name||'-'}</div></div>
           ${c.next_hearing_date ? `<div class="ox-case-field" style="grid-column:1/-1;"><div class="ox-case-field-label">Next Hearing</div><div class="ox-case-field-value" style="color:var(--br);font-weight:600;">${c.next_hearing_date}</div></div>` : ''}
         </div>
       </div>` : ''}
@@ -307,9 +307,9 @@
       <div class="ox-section">
         <div class="ox-section-title"><i class="fas fa-shield-halved"></i> Police Details</div>
         <div class="ox-tracker-panel police">
-          <div class="ox-case-field"><div class="ox-case-field-label">Station</div><div class="ox-case-field-value">${c.police_station||'—'}</div></div>
-          <div class="ox-case-field"><div class="ox-case-field-label">Ref No.</div><div class="ox-case-field-value">${c.police_ref_number||'—'}</div></div>
-          <div class="ox-case-field"><div class="ox-case-field-label">Inv. Officer</div><div class="ox-case-field-value">${c.investigating_officer||'—'}</div></div>
+          <div class="ox-case-field"><div class="ox-case-field-label">Station</div><div class="ox-case-field-value">${c.police_station||'-'}</div></div>
+          <div class="ox-case-field"><div class="ox-case-field-label">Ref No.</div><div class="ox-case-field-value">${c.police_ref_number||'-'}</div></div>
+          <div class="ox-case-field"><div class="ox-case-field-label">Inv. Officer</div><div class="ox-case-field-value">${c.investigating_officer||'-'}</div></div>
         </div>
       </div>` : ''}
 
@@ -319,7 +319,7 @@
         <div class="ox-section-title"><i class="fas fa-sticky-note"></i> Notes (${c.notes.length})</div>
         <div id="oxCaseNotes">${notesHtml}</div>
         <div class="ox-add-note-form" style="margin-top:10px;">
-          <textarea class="ad-input ad-textarea" id="oxNoteText" rows="2" placeholder="Add a note…" style="min-height:56px;"></textarea>
+          <textarea class="ad-input ad-textarea" id="oxNoteText" rows="2" placeholder="Add a note..." style="min-height:56px;"></textarea>
           <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
             <button class="btn-ad btn-ad-primary btn-ad-sm" id="oxAddNoteBtn" data-case="${c.id}">
               <i class="fas fa-plus"></i> Add Note
@@ -419,12 +419,12 @@
       <div class="ad-form-grid" style="margin-bottom:0;">
         <div class="ad-form-group span-2">
           <label class="ad-form-group">Case Title <span class="req">*</span></label>
-          <input type="text" name="title" class="ad-input" required placeholder="e.g. Smith v. Jones – Land Dispute">
+          <input type="text" name="title" class="ad-input" required placeholder="e.g. Smith v. Jones - Land Dispute">
         </div>
         <div class="ad-form-group">
           <label>Category <span class="req">*</span></label>
           <select name="category" class="ad-select" required>
-            <option value="">— Category —</option>
+            <option value="">, Category, </option>
             <option value="civil_litigation">Civil Litigation</option>
             <option value="criminal_defense">Criminal Defence</option>
             <option value="family_law">Family Law</option>
@@ -461,7 +461,7 @@
         </div>
         <div class="ad-form-group span-2">
           <label>Brief Description</label>
-          <textarea name="description" class="ad-input ad-textarea" rows="2" placeholder="Optional brief…"></textarea>
+          <textarea name="description" class="ad-input ad-textarea" rows="2" placeholder="Optional brief..."></textarea>
         </div>
       </div>
       <div class="ox-modal-foot" style="margin-top:14px;padding:0;">
@@ -489,7 +489,7 @@
         </div>
         <div class="ad-form-group">
           <label>Phone <span class="req">*</span></label>
-          <input type="text" name="phone" class="ad-input" required placeholder="+256…">
+          <input type="text" name="phone" class="ad-input" required placeholder="+256...">
         </div>
         <div class="ad-form-group">
           <label>Email</label>
@@ -578,7 +578,7 @@
         Drawer.open('Case Details');
         $.get(API + '/cases/' + id)
           .done(c => {
-            Drawer.setTitle(c.case_number + ' — ' + c.title);
+            Drawer.setTitle(c.case_number + ' - ' + c.title);
             Drawer.setContent(renderCaseDrawer(c));
           })
           .fail(() => { Drawer.setContent('<div style="padding:20px;color:#DC2626;">Failed to load case.</div>'); Toast.error('Could not load case details.'); });
@@ -590,14 +590,14 @@
         $.get(API + '/clients-select')
           .done(data => {
             const $sel = $('.ox-client-select');
-            $sel.html('<option value="">— Select Client —</option>' +
+            $sel.html('<option value="">, Select Client, </option>' +
               data.results.map(c => `<option value="${c.id}">${c.text}</option>`).join(''));
           });
         // Load officers
         $.get(API + '/officers')
           .done(data => {
             const $sel = $('.ox-officer-select');
-            $sel.html('<option value="">— Select Officer —</option>' +
+            $sel.html('<option value="">, Select Officer, </option>' +
               data.map(o => `<option value="${o.id}">${o.name}</option>`).join(''));
           });
         // Form submit
@@ -606,7 +606,7 @@
           const $btn  = $('#oxQuickCaseSave');
           const data  = {};
           $(this).serializeArray().forEach(f => data[f.name] = f.value);
-          $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Creating…');
+          $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Creating...');
           $.ajax({ url: API + '/cases', method: 'POST', contentType: 'application/json', data: JSON.stringify(data) })
             .done(res => {
               Modal.close();
@@ -634,7 +634,7 @@
             </div>
             <div class="ad-form-group">
               <label>Closing Remarks</label>
-              <textarea name="closing_remarks" class="ad-input ad-textarea" rows="3" placeholder="Summary of how the case was resolved…"></textarea>
+              <textarea name="closing_remarks" class="ad-input ad-textarea" rows="3" placeholder="Summary of how the case was resolved..."></textarea>
             </div>
             <div class="ox-modal-foot" style="margin-top:14px;padding:0;">
               <button type="button" class="btn-ad btn-ad-ghost" onclick="Modal.close()">Cancel</button>
@@ -671,11 +671,11 @@
           const $btn = $('#oxQuickClientSave');
           const data = {};
           $(this).serializeArray().forEach(f => data[f.name] = f.value);
-          $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Creating…');
+          $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Creating...');
           $.ajax({ url: API + '/clients', method: 'POST', contentType: 'application/json', data: JSON.stringify(data) })
             .done(res => {
               Modal.close();
-              Toast.success('Client ' + res.client_number + ' — ' + res.full_name + ' created!');
+              Toast.success('Client ' + res.client_number + ' - ' + res.full_name + ' created!');
               setTimeout(() => location.reload(), 700);
             })
             .fail(xhr => {
@@ -685,11 +685,11 @@
         });
       },
 
-      /* ── quickAddToSelect ──────────────────────────────────────
+      /* quickAddToSelect
          Opens a rich quick-add modal. On success, injects the new
          client into the Select2 with `selectId` and auto-selects it.
-         Does NOT reload the page — stays on the current form.
-      ─────────────────────────────────────────────────────────── */
+         Does NOT reload the page, stays on the current form.
+       */
       quickAddToSelect(selectId) {
         const form = `
           <div class="ox-modal-hint">
@@ -771,7 +771,7 @@
 
           /* Button loading */
           const origHtml = $btn.html();
-          $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Saving…');
+          $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Saving...');
 
           $.ajax({
             url: API + '/clients',
@@ -782,7 +782,7 @@
           .done(function (res) {
             Modal.close();
 
-            /* ── Inject into Select2 and auto-select ── */
+            /* Inject into Select2 and auto-select */
             const $sel  = $('#' + selectId);
             const label = res.full_name + ' (' + res.client_number + ')';
 
@@ -804,7 +804,7 @@
             const $confirm = $(
               '<div class="ox-client-confirmed">' +
               '<i class="fas fa-check-circle"></i>' +
-              '<span><strong>' + res.full_name + '</strong> (' + res.client_number + ') — auto-selected</span>' +
+              '<span><strong>' + res.full_name + '</strong> (' + res.client_number + '), auto-selected</span>' +
               '</div>'
             );
             $grp.append($confirm);
@@ -852,12 +852,12 @@
         Modal.open('Record Transaction', quickTxnForm, 'md');
         // Load accounts
         $.get(API + '/accounts').done(data => {
-          $('.ox-account-select').html('<option value="">— Select Account —</option>' +
+          $('.ox-account-select').html('<option value="">, Select Account, </option>' +
             data.map(a => `<option value="${a.id}">${a.name} (${a.type})</option>`).join(''));
         });
         // Load active cases
         $.get(API + '/active-cases').done(data => {
-          $('.ox-active-cases-select').html('<option value="">— No Case —</option>' +
+          $('.ox-active-cases-select').html('<option value="">, No Case, </option>' +
             data.map(c => `<option value="${c.id}">${c.text}</option>`).join(''));
         });
         // Load active period
@@ -872,7 +872,7 @@
           const $btn = $('#oxQuickTxnSave');
           const data = {};
           $(this).serializeArray().forEach(f => { if (f.value) data[f.name] = f.value; });
-          $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Saving…');
+          $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Saving...');
           $.ajax({ url: API + '/transactions', method: 'POST', contentType: 'application/json', data: JSON.stringify(data) })
             .done(res => {
               Modal.close();
@@ -934,11 +934,11 @@
   });
 
   /* ================================================================
-     PROFILE NAMESPACE — My Profile & Change Password
+     PROFILE NAMESPACE, My Profile & Change Password
   ================================================================ */
   ONYX.profile = {
 
-    /* ── helpers to sync avatar across all instances in the DOM ── */
+    /* helpers to sync avatar across all instances in the DOM */
     _syncAvatar(url, initials) {
       var $img = $('#topbarAvatarImg,#sidebarAvatarImg,#dropdownAvatarImg');
       var $ini = $('#topbarAvatarInitials,#sidebarAvatarInitials,#dropdownAvatarInitials');
@@ -955,7 +955,7 @@
       $('#topbarUserName, #sidebarUserName, #dropdownUserName').text(name);
     },
 
-    /* ── My Profile modal ── */
+    /* My Profile modal */
     open() {
       var u = ONYX_CONFIG.user;
       var avatarHtml = u.avatar_url
@@ -1001,7 +1001,7 @@
           </div>
           <div class="ad-form-group" style="margin-top:10px;">
             <label>Bio</label>
-            <textarea name="bio" class="ad-input ad-textarea" rows="2" placeholder="Short bio…">${u.bio || ''}</textarea>
+            <textarea name="bio" class="ad-input ad-textarea" rows="2" placeholder="Short bio...">${u.bio || ''}</textarea>
           </div>
         </form>
         <div class="ox-modal-foot" style="margin-top:14px;padding:0;">
@@ -1085,7 +1085,7 @@
       .fail(() => Toast.error('Photo upload failed.'));
     },
 
-    /* ── Change Password modal ── */
+    /* Change Password modal */
     changePassword() {
       Modal.open('Change Password', `
         <div id="pwdFormErrors" style="display:none;margin-bottom:10px;"></div>

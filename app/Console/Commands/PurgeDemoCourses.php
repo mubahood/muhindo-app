@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\DB;
  * Two deliberate limits, both decided with the owner:
  *
  * 1. **Billing is never touched.** Invoices and payments are a financial record
- *    that outlives the thing they were for — this database holds ten invoices
+ *    that outlives the thing they were for. This database holds ten invoices
  *    with over a million shillings outstanding. Access is course data; money is
  *    not. Invoice line items keep their stored description, so a settled or
  *    outstanding invoice still reads correctly after its course is gone.
  *
  * 2. **It names what it deletes before deleting it.** The brief that asked for
- *    this described the demo content as faker/lorem-ipsum. It is not — the
+ *    this described the demo content as faker/lorem-ipsum. It is not. The
  *    seeded courses are hand-authored and carry real enrolments, progress and
  *    an issued certificate. Anything that destructive states its case first and
  *    refuses to guess.
@@ -45,7 +45,7 @@ class PurgeDemoCourses extends Command
         $courses = Course::whereIn('id', $ids)->withCount('modules')->get();
 
         if ($courses->isEmpty()) {
-            $this->info('Nothing to purge — no courses matched.');
+            $this->info('Nothing to purge, no courses matched.');
 
             return self::SUCCESS;
         }
@@ -60,7 +60,7 @@ class PurgeDemoCourses extends Command
         $this->line('<comment>Untouched:</comment> invoices, payments, users, and every other table.');
 
         if ($this->option('dry-run')) {
-            $this->info('Dry run — nothing was changed.');
+            $this->info('Dry run. Nothing was changed.');
 
             return self::SUCCESS;
         }
@@ -122,8 +122,8 @@ class PurgeDemoCourses extends Command
     }
 
     /**
-     * One transaction. A half-purged catalogue — lessons gone, enrolments
-     * pointing at nothing — is worse than either outcome.
+     * One transaction. A half-purged catalogue, lessons gone, enrolments
+     * pointing at nothing, is worse than either outcome.
      *
      * @param  list<int>  $courseIds
      */

@@ -10,9 +10,9 @@ use Tests\TestCase;
 /**
  * Every system has a picture of itself.
  *
- * The screenshots are drawn rather than captured — the real screens hold
+ * The screenshots are drawn rather than captured. The real screens hold
  * livestock registries, patient records and human-rights case files, none of
- * which can be published — so nothing stops a new project being added with no
+ * which can be published, so nothing stops a new project being added with no
  * picture and quietly falling back to a grey "Screenshot 1600 x 1000px" slot
  * on the home page. This is what notices.
  */
@@ -35,7 +35,7 @@ class SystemScreenshotTest extends TestCase
         foreach ($projects as $project) {
             $this->assertNotNull(
                 $project->screenshotUrl(),
-                "{$project->slug} has no screenshot — draw one into "
+                "{$project->slug} has no screenshot, draw one into "
                     ."public/images/systems/{$project->slug}.svg"
             );
         }

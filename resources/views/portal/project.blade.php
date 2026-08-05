@@ -35,7 +35,7 @@
         {{ $done }} of {{ $tasks->count() }} tasks done · {{ $percent }}%
       </p>
     @else
-      <p class="mine-meta">Scope is still being agreed — the task list appears here once it's set.</p>
+      <p class="mine-meta">Scope is still being agreed. The task list appears here once it's set.</p>
     @endif
 
     @if($project->start_date || $project->due_date)

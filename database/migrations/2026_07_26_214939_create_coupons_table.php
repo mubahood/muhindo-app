@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §7.1 — coupons applied at course-invoice creation. A null course_id scopes to any course. */
+/** Coupons applied at course-invoice creation. A null course_id scopes to any course. */
 return new class extends Migration
 {
     public function up(): void

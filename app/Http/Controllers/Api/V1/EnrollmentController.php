@@ -45,7 +45,7 @@ class EnrollmentController extends Controller
                 EnrollmentCreated::dispatch($enrollment);
             }
         } catch (UniqueConstraintViolationException) {
-            // A concurrent request (double-tap) won the race — the enrollment exists either way, no new event.
+            // A concurrent request (double-tap) won the race, the enrollment exists either way, no new event.
             $enrollment = Enrollment::where('user_id', $request->user()->id)->where('course_id', $course->id)->firstOrFail();
         }
 
@@ -67,7 +67,7 @@ class EnrollmentController extends Controller
         return ApiResponse::success($progress);
     }
 
-    /** §6.2 — same ProgressService::recordHeartbeat() the web player calls; player-agnostic by design. */
+    /** Same ProgressService::recordHeartbeat() the web player calls; player-agnostic by design. */
     public function heartbeat(Request $request, Lesson $lesson): JsonResponse
     {
         $enrollment = Enrollment::where('user_id', $request->user()->id)

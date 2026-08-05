@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.3 — the student's Announcements tab shows only published announcements, newest first. */
+/** The student's Announcements tab shows only published announcements, newest first. */
 class StudentAnnouncementsTest extends TestCase
 {
     use RefreshDatabase;

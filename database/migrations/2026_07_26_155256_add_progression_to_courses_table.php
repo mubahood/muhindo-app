@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §4.3 — free (any order) vs sequential (locked until the previous lesson completes). */
+/** Free (any order) vs sequential (locked until the previous lesson completes). */
 return new class extends Migration
 {
     public function up(): void

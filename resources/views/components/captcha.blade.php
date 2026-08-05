@@ -27,7 +27,7 @@
       .c-shell{margin:0 0 16px;}
       /* Google's iframe is a fixed 304px wide and will not reflow. Below that
          the page would scroll sideways, so the widget is scaled down instead
-         and its box shrunk to match — otherwise scaling leaves dead space. */
+         and its box shrunk to match, otherwise scaling leaves dead space. */
       .c-shell .g-recaptcha{transform-origin:0 0;}
       @media(max-width:360px){
         .c-shell .g-recaptcha{transform:scale(.86);}

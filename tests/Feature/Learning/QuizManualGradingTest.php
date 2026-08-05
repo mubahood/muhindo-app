@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\TestCase;
 
-/** §5.2/§5.2.4 — QuizService::gradeManual() finalizing an attempt, and feedback_mode-gated review data. */
+/** QuizService::gradeManual() finalizing an attempt, and feedback_mode-gated review data. */
 class QuizManualGradingTest extends TestCase
 {
     use RefreshDatabase;

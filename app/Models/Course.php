@@ -67,7 +67,7 @@ class Course extends Model
         // hasManyThrough does not apply the intermediate model's own soft-delete
         // scope automatically, so a soft-deleted module's lessons must be excluded
         // explicitly to keep lessonCount() (and therefore progressPercent()) correct.
-        // Unpublished (draft) lessons are excluded too — §7.5's publish toggle means a
+        // Unpublished (draft) lessons are excluded too. The publish toggle means a
         // draft doesn't count toward a course's structure from the student's side at all
         // (not "locked," genuinely doesn't exist yet), so it can't block 100% completion.
         return $this->hasManyThrough(Lesson::class, CourseModule::class)
@@ -116,7 +116,7 @@ class Course extends Model
         return (float) $this->price <= 0;
     }
 
-    /** §4.4/§6.4 — the access-window expiry to stamp on a newly-activated enrollment; null (lifetime access) unless the course sets a duration. */
+    /** The access-window expiry to stamp on a newly-activated enrollment; null (lifetime access) unless the course sets a duration. */
     public function enrollmentExpiresAt(): ?Carbon
     {
         return $this->access_duration_days ? now()->addDays($this->access_duration_days) : null;
@@ -127,7 +127,7 @@ class Course extends Model
         return $this->lessons()->count();
     }
 
-    /** §2.2 — the one-line card hook; falls back to a trimmed description so an unset tagline never shows blank space. */
+    /** The one-line card hook; falls back to a trimmed description so an unset tagline never shows blank space. */
     /**
      * The description a search engine should index: the whole thing, with
      * markdown stripped but nothing truncated.
@@ -152,7 +152,7 @@ class Course extends Model
      *
      * cardTagline() and seoDescription() both strip markdown because their
      * destinations are plain text. The detail page is the one place with room
-     * to show it as written, and it was printing the asterisks instead — the
+     * to show it as written, and it was printing the asterisks instead, the
      * author's **bold** arriving on screen as literal punctuation.
      */
     public function descriptionHtml(): string
@@ -165,7 +165,7 @@ class Course extends Model
          * The import hard-wrapped these at about 85 characters and left blank
          * lines at the wrap points, so markdown reads one sentence as three
          * paragraphs. A break whose next line starts lower-case is a wrap, not
-         * a paragraph — joined back. A break after a full stop is left alone.
+         * a paragraph, joined back. A break after a full stop is left alone.
          */
         $text = preg_replace('/\n\s*\n(?=\p{Ll})/u', ' ', (string) $this->description);
         $text = preg_replace('/(?<!\n)\n(?!\n)/u', ' ', (string) $text);
@@ -180,8 +180,8 @@ class Course extends Model
         }
 
         /*
-         * Descriptions are markdown — the imported catalogue is full of **bold**
-         * and *emphasis* — and a card renders plain text, so the raw asterisks
+         * Descriptions are markdown. The imported catalogue is full of **bold**
+         * and *emphasis*, and a card renders plain text, so the raw asterisks
          * were showing up on screen. Strip the inline marks rather than render
          * HTML into a place that has no room for it.
          */
@@ -194,14 +194,45 @@ class Course extends Model
         return \Illuminate\Support\Str::limit(trim($plain), 110);
     }
 
-    /** §2.3/§6.5 — image alt text; falls back to the course title so a cover is never missing alt text. */
+    /** Image alt text; falls back to the course title so a cover is never missing alt text. */
     public function coverAlt(): string
     {
         return $this->cover_alt ?: $this->title;
     }
 
     /**
-     * §4.3 — in `sequential` progression, a lesson is locked until the one
+     * The cover, resolved against the host actually serving the page.
+     *
+     * Covers used to be stored as whole URLs, built with asset() by whichever
+     * machine generated them. That works until the rows travel: a database
+     * filled on a development machine carries "http://localhost:8888/..." into
+     * production, where every cover is a broken image for everyone but the
+     * person who made it. Only the path is meaningful; the host never was.
+     *
+     * Rows written either way are accepted, so this keeps working whether or
+     * not a given database has been normalised yet.
+     */
+    public function coverUrl(): ?string
+    {
+        $cover = trim((string) $this->cover_image);
+
+        if ($cover === '') {
+            return null;
+        }
+
+        if (preg_match('#^https?://#i', $cover)) {
+            $path = (string) parse_url($cover, PHP_URL_PATH);
+
+            // Strip any mount prefix the other host was installed under
+            // ("/muhindo-app/images/..."), keeping the part we own.
+            $cover = preg_replace('#^.*?(?=images/)#', '', ltrim($path, '/')) ?? ltrim($path, '/');
+        }
+
+        return asset(ltrim($cover, '/'));
+    }
+
+    /**
+     * In `sequential` progression, a lesson is locked until the one
      * immediately before it (in module/lesson sort order) is completed. The
      * first lesson is never locked. `free` progression never locks anything.
      */

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** Inline PDF preview for the lesson player's Materials card — never forces a download dialog. */
+/** Inline PDF preview for the lesson player's Materials card, never forces a download dialog. */
 class LessonMaterialPreviewTest extends TestCase
 {
     use RefreshDatabase;

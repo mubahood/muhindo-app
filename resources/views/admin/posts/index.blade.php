@@ -23,7 +23,7 @@
               <a href="{{ route('admin.posts.edit', $item) }}">{{ $item->title }}</a>
               <div class="muted" style="font-size:11px;">/blog/{{ $item->slug }}</div>
             </th>
-            <td>{{ $item->category ?? '—' }}</td>
+            <td>{{ $item->category ?? '-' }}</td>
             <td>
               @if($item->is_published)
                 <span class="badge-tb badge-success">Published</span>
@@ -31,7 +31,7 @@
                 <span class="badge-tb badge-neutral">Draft</span>
               @endif
             </td>
-            <td>{{ $item->published_at?->format('d M Y') ?? '—' }}</td>
+            <td>{{ $item->published_at?->format('d M Y') ?? '-' }}</td>
             <td>{{ $item->read_minutes }} min</td>
             <td>
               <div class="tb-table-actions">

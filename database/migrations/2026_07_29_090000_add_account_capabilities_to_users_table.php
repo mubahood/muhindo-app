@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Schema;
  * `role` column couldn't express that ("student" OR "client"), so learning and
  * client access become independent flags any account can hold.
  *
- * `role` stays as the account's primary role — it still drives admin access and
- * the Spatie role sync — but student/client access is now read from these flags.
+ * `role` stays as the account's primary role. It still drives admin access and
+ * the Spatie role sync, but student/client access is now read from these flags.
  */
 return new class extends Migration
 {

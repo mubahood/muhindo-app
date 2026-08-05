@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** §5.1 — the nine question types QuizService's auto-grader (§5.2) knows how to score. */
+/** The nine question types QuizService's auto-grader knows how to score. */
 enum QuestionType: string
 {
     case McqSingle = 'mcq_single';

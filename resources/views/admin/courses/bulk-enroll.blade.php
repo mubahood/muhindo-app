@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Bulk Enroll — ' . $course->title)
+@section('title', 'Bulk Enroll | ' . $course->title)
 
 @section('content')
 

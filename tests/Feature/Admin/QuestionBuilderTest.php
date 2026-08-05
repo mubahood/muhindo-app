@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §5.1 — admin question/option builder, one form adapting to each of the 9 question types. */
+/** Admin question/option builder, one form adapting to each of the 9 question types. */
 class QuestionBuilderTest extends TestCase
 {
     use RefreshDatabase;

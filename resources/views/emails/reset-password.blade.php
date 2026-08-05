@@ -44,7 +44,7 @@
       <td style="padding:14px 18px;">
         <p style="font-size:12px;font-weight:700;color:#8B4513;margin:0 0 5px;">&#9888; Didn't request this?</p>
         <p style="font-size:12px;color:#7A5A3A;line-height:1.7;margin:0;">
-          If you did not request a password reset, no action is required — your account is safe.
+          If you did not request a password reset, no action is required. Your account is safe.
           If you are concerned, please contact your administrator immediately.
         </p>
       </td>

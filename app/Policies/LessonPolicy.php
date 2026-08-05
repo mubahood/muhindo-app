@@ -6,7 +6,7 @@ use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Models\User;
 
-/** §4.3 — sequential progression: a locked lesson is never viewable/completable server-side, never mind the UI. */
+/** Sequential progression: a locked lesson is never viewable/completable server-side, never mind the UI. */
 class LessonPolicy
 {
     public function before(User $user, string $ability): ?bool

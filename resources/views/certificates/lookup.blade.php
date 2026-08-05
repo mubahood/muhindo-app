@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Verify a certificate — Muhindo Mubaraka')
+@section('title', 'Verify a certificate | Muhindo Mubaraka')
 
 @push('styles')
 <style>
@@ -89,8 +89,8 @@
           <b>That number has a typo</b>
           <p>
             <span class="mono">{{ $code }}</span> fails its own check digit, so a character has been
-            mistyped or misread. Compare it against the certificate — the number is printed beside
-            the QR code — and try again.
+            mistyped or misread. Compare it against the certificate. The number is printed beside
+            the QR code, and try again.
           </p>
         </div>
       </div>
@@ -101,8 +101,8 @@
         <div>
           <b>No certificate with that number</b>
           <p>
-            Nothing matching <span class="mono">{{ $code }}</span> has been issued. Check for a typo —
-            the number is on the certificate, next to the QR code. If it is correct as printed,
+            Nothing matching <span class="mono">{{ $code }}</span> has been issued. Check for a typo.
+            The number is on the certificate, next to the QR code. If it is correct as printed,
             the document is not one of Muhindo's.
           </p>
         </div>

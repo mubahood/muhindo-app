@@ -1,5 +1,5 @@
 @extends('layouts.learn')
-@section('title', 'Assignments — ' . $course->title)
+@section('title', 'Assignments | ' . $course->title)
 @section('page_title', 'Assignments')
 
 @push('styles')

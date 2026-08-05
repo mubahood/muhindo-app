@@ -97,7 +97,7 @@
     @if($proposals->isEmpty())
       <div class="tb-card" style="grid-column:1/-1;">
         <div class="tb-empty">
-          <p>Nothing here yet — tell me what you would like built and I will take it from there.</p>
+          <p>Nothing here yet, tell me what you would like built and I will take it from there.</p>
           <a href="{{ route('hire') }}" class="btn-tb btn-tb-primary" style="margin-top:12px;">
             <i class="fas fa-plus"></i> Tell me about your project
           </a>

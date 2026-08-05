@@ -34,7 +34,7 @@
       </div>
       <div class="tb-form-group full">
         <p class="muted" style="font-size:.75rem;">
-          A random temporary password is generated and emailed to this user — they'll set their
+          A random temporary password is generated and emailed to this user, they'll set their
           own password at first login.
         </p>
       </div>

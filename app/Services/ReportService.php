@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Payment;
 use Illuminate\Support\Carbon;
 
-/** Read-only revenue analytics. Money is summed in bcmath — never float. */
+/** Read-only revenue analytics. Money is summed in bcmath, never float. */
 class ReportService
 {
     /**

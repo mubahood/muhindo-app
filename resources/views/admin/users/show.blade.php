@@ -44,9 +44,9 @@
         <tbody>
           <tr><th style="width:38%;">Role</th><td>{{ $user->role_label }}</td></tr>
           <tr><th>Email</th><td>{{ $user->email }}</td></tr>
-          <tr><th>Phone</th><td>{{ $user->phone ?? '—' }}</td></tr>
+          <tr><th>Phone</th><td>{{ $user->phone ?? '-' }}</td></tr>
           <tr><th>Status</th><td><span class="badge-tb {{ $user->is_active?'badge-active':'badge-danger' }}">{{ $user->is_active ? 'Active' : 'Inactive' }}</span></td></tr>
-          <tr><th>Joined</th><td>{{ $user->created_at?->format('d M Y') ?? '—' }}</td></tr>
+          <tr><th>Joined</th><td>{{ $user->created_at?->format('d M Y') ?? '-' }}</td></tr>
         </tbody>
       </table>
     </div>

@@ -14,7 +14,7 @@ use Illuminate\Database\Seeder;
  * Seeds the real portfolio content (identity, about, stats, projects, skills,
  * experience, education, research, products, languages) sourced from
  * amout-muhindo.md / config/portfolio.php in the muhindomubaraka project.
- * Safe to re-run — every write is an upsert keyed on a natural identifier.
+ * Safe to re-run. Every write is an upsert keyed on a natural identifier.
  */
 class PortfolioContentSeeder extends Seeder
 {
@@ -41,13 +41,13 @@ class PortfolioContentSeeder extends Seeder
             'name' => 'Muhindo Mubaraka',
             'title' => 'Full-Stack Developer & Software Engineer',
             // The headline claims the work, not a map. What makes someone hire or
-            // enrol is that the software gets finished and the teaching lands —
+            // enrol is that the software gets finished and the teaching lands,
             // neither of which is a regional trait, and naming a region up front
             // quietly caps the audience at it.
             //
             // "scales" over the earlier "ships": school directors and ministry
             // officers read this line too, and "ships" is a word that only means
-            // anything to programmers. "…teach others to do the same" carries both
+            // anything to programmers. "...teach others to do the same" carries both
             // the building and the standard without repeating the verb.
             'tagline' => 'I build software that works, and I teach others to do the same.',
             'location' => 'Kampala, Uganda',
@@ -106,7 +106,7 @@ class PortfolioContentSeeder extends Seeder
          *
          * Every other seed here is a real fact taken from the owner's CV. A
          * quote is different: it is attributed to a named person, and inventing
-         * one — even as filler meant to be replaced — publishes words that
+         * one (even as filler meant to be replaced) publishes words that
          * person never said. The home page simply omits the section until real
          * ones are added, and the admin editor accepts them in this shape:
          *   quote, name, role, org, photo (path under public/), link
@@ -177,7 +177,7 @@ class PortfolioContentSeeder extends Seeder
                 'tags' => ['Web', 'Android', 'iOS', 'Offline-first', 'GIS/GPS', 'MySQL', 'SMS/USSD'],
                 'highlights' => ['Offline-first architecture for use in low-connectivity rural districts.', 'GPS/GIS integration for movement tracking and disease surveillance.', 'Role-based access control across web, Android and iOS clients.', 'SMS/USSD notifications and MySQL database administration.', 'User training conducted across multiple districts.'],
                 'featured' => true],
-            ['slug' => 'school-dynamics', 'title' => 'School Dynamics — School Management Information System', 'external_link' => 'https://schooldynamics.ug',
+            ['slug' => 'school-dynamics', 'title' => 'School Dynamics: School Management Information System', 'external_link' => 'https://schooldynamics.ug',
                 'description' => 'SaaS platform serving primary and secondary schools with role-based portals for parents, teachers, and administrators.',
                 'tags' => ['SaaS', 'Mobile Money', 'Visa', 'SMS/Email', 'Dashboards'],
                 'highlights' => ['Modules for student records, staff, fee collection, examinations and timetabling.', 'Library, transport and hostel management.', 'Role-based portals for parents, teachers and administrators.', 'Mobile Money / Visa payment gateways and SMS/email notifications.', 'Reporting dashboards for school administrators.'],

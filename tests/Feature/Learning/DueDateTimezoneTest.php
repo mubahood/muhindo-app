@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §9 — due dates/time windows are stored in UTC (config('app.timezone')) but must render in Africa/Kampala (UTC+3). */
+/** Due dates/time windows are stored in UTC (config('app.timezone')) but must render in Africa/Kampala (UTC+3). */
 class DueDateTimezoneTest extends TestCase
 {
     use RefreshDatabase;

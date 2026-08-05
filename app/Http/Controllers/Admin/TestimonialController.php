@@ -55,7 +55,7 @@ class TestimonialController extends Controller
      * Edit one in place.
      *
      * Without this the only way to fix a typo in somebody's name or title was
-     * to delete the entry and retype it — which also destroyed their photo,
+     * to delete the entry and retype it, which also destroyed their photo,
      * for a spelling mistake. The photo is kept unless a new file is supplied.
      */
     public function update(Request $request, int $index): RedirectResponse
@@ -137,7 +137,7 @@ class TestimonialController extends Controller
 
     /**
      * Callers re-index before calling, so the stored JSON is always a plain
-     * array — a hole in the keys would serialise as an object and break the
+     * array. A hole in the keys would serialise as an object and break the
      * home page's iteration.
      *
      * @param  list<array<string,mixed>>  $items

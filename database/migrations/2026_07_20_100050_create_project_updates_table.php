@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** The client-visible progress log — this is how a client sees work happen. */
+/** The client-visible progress log. This is how a client sees work happen. */
 return new class extends Migration
 {
     public function up(): void

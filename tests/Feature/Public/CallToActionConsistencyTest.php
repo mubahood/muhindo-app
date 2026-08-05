@@ -22,7 +22,7 @@ class CallToActionConsistencyTest extends TestCase
         'hire' => 'Hire Muhindo',
         'portfolio.projects.index' => 'See the projects',
         'shop.index' => 'See the source code',
-        // 'contact' has no call to action of its own any more — the buttons
+        // 'contact' has no call to action of its own any more. The buttons
         // that used to say "Get in touch" now say "Hire Me" and land on the
         // brief form, because a label promising hiring should not open a
         // generic contact box.
@@ -41,7 +41,7 @@ class CallToActionConsistencyTest extends TestCase
 
             // Each anchor is matched whole first. Scanning for a route and then
             // for the next cta-b lets the match run past </a> and pair one
-            // link's destination with a different link's label — which is
+            // link's destination with a different link's label, which is
             // exactly the false positive this replaced.
             preg_match_all('/<a\s+(?:(?!<\/a>).)*?<\/a>/s', $source, $anchors);
 

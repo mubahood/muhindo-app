@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §5.4 — the student's "Grades" tab. */
+/** The student's "Grades" tab. */
 class StudentGradesPageTest extends TestCase
 {
     use RefreshDatabase;

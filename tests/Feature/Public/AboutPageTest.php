@@ -44,7 +44,7 @@ class AboutPageTest extends TestCase
         $this->assertStringContainsString('id="lightbox"', $html);
         $this->assertStringContainsString('lb-caption', $html);
 
-        // The strip itself must contain no anchors — the sidebar rail links to
+        // The strip itself must contain no anchors, the sidebar rail links to
         // the gallery legitimately, so counting the route across the whole page
         // proves nothing. What matters is that a thumbnail is not a link.
         preg_match('#<div class="ab-shots"[^>]*>(.*?)</div>#s', $html, $strip);
@@ -74,7 +74,7 @@ class AboutPageTest extends TestCase
 
     public function test_the_organisations_section_appears_once_there_are_any(): void
     {
-        // Conditional on real content — an empty "Trusted by" band claiming
+        // Conditional on real content. An empty "Trusted by" band claiming
         // nothing would be worse than no band.
         $this->get(route('portfolio.about'))->assertOk()
             ->assertDontSee("Organisations I've delivered for", false);

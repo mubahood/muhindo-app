@@ -27,12 +27,12 @@
         <textarea class="tb-textarea" name="description" rows="3">{{ old('description', $quiz->description) }}</textarea>
       </div>
       <div class="tb-form-group">
-        <label class="tb-label">Attached to lesson (optional — leave blank for a course-final quiz)</label>
+        <label class="tb-label">Attached to lesson (optional, leave blank for a course-final quiz)</label>
         <select class="tb-select" name="lesson_id">
-          <option value="">— Course-final quiz —</option>
+          <option value="">, Course-final quiz, </option>
           @foreach($course->modules as $module)
             @foreach($module->lessons as $lesson)
-              <option value="{{ $lesson->id }}" {{ (int) old('lesson_id', $quiz->lesson_id) === $lesson->id ? 'selected' : '' }}>{{ $module->title }} — {{ $lesson->title }}</option>
+              <option value="{{ $lesson->id }}" {{ (int) old('lesson_id', $quiz->lesson_id) === $lesson->id ? 'selected' : '' }}>{{ $module->title }}, {{ $lesson->title }}</option>
             @endforeach
           @endforeach
         </select>
@@ -104,7 +104,7 @@
       <div class="tb-form-group">
         <label class="tb-check-group">
           <input type="checkbox" name="is_required" value="1" {{ old('is_required', $quiz->exists ? $quiz->is_required : true) ? 'checked' : '' }}>
-          <span>Compulsory — students cannot complete the attached lesson until they submit this quiz</span>
+          <span>Compulsory. Students cannot complete the attached lesson until they submit this quiz</span>
         </label>
       </div>
       <div class="tb-form-group">

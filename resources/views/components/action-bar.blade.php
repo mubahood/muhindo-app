@@ -1,7 +1,7 @@
 {{--
   The phone-only bar pinned to the bottom of the window.
 
-  Put the page's one real action in it — buy, enrol, check out, hire — with an
+  Put the page's one real action in it (buy, enrol, check out, hire) with an
   optional <span class="act-note"> on the left for what it costs. Anything in
   the slot is laid out by the layout's .act-bar rules: links and forms stretch
   to equal width, .btn.sq stays a square.

@@ -19,8 +19,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
- * P5.4 — the API equivalent of Student\QuizAttemptController's start/run/answer/submit/review
- * flow. Unlike the web version, this expects a native JSON payload from every caller — no
+ * The API equivalent of Student\QuizAttemptController's start/run/answer/submit/review
+ * flow. Unlike the web version, this expects a native JSON payload from every caller, no
  * "no-JS form" bulk-answers fallback or ordering-question position-input normalization, since
  * a mobile client always sends a well-shaped `{"order": [id, id, id]}` array directly.
  */
@@ -47,7 +47,7 @@ class QuizAttemptController extends Controller
         $this->guardAttempt($attempt, $quiz, $course, $enrollment);
 
         if ($attempt->status !== QuizAttemptStatus::InProgress) {
-            return ApiResponse::error(ApiErrorCode::Forbidden, 'This attempt is no longer in progress — see the review endpoint.', 409);
+            return ApiResponse::error(ApiErrorCode::Forbidden, 'This attempt is no longer in progress, see the review endpoint.', 409);
         }
 
         $questionIds = $attempt->question_order['questions'] ?? [];

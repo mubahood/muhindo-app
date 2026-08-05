@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
- * P5.3 — streams a self-hosted lesson video from the private disk. The route itself is
+ * Streams a self-hosted lesson video from the private disk. The route itself is
  * `signed` (tamper-proof, time-limited, and doesn't leak the real storage path), but the
  * signature alone isn't trusted as authorization: this still re-checks the same
  * EnrollmentPolicy/LessonPolicy every other lesson surface enforces, so a leaked link is

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.5 — bulk enroll: paste emails, unknown ones get a real account + WelcomeCredentials mail. */
+/** Bulk enroll: paste emails, unknown ones get a real account + WelcomeCredentials mail. */
 class BulkEnrollTest extends TestCase
 {
     use RefreshDatabase;

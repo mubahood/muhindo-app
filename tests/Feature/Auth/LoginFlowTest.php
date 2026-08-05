@@ -26,7 +26,7 @@ class LoginFlowTest extends TestCase
     {
         $this->get(route('account.edit'))->assertRedirect(route('login'));
 
-        // A basket is waiting too — the explicit intended URL still wins,
+        // A basket is waiting too. The explicit intended URL still wins,
         // because it says more about where they were headed than the basket.
         app(\App\Services\Shop\Cart::class)->add(
             \App\Models\Product::factory()->create(['is_published' => true])

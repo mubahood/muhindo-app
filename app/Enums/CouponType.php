@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** §7.1 — how a coupon's value is applied: a percentage off, or a flat currency amount off. */
+/** How a coupon's value is applied: a percentage off, or a flat currency amount off. */
 enum CouponType: string
 {
     case Percent = 'percent';

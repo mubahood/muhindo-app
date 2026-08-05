@@ -35,23 +35,23 @@ return [
         ],
     ],
 
-    // Tawk.to live-chat widget. Disabled by default — set TAWK_ENABLED=true and
+    // Tawk.to live-chat widget. Disabled by default, set TAWK_ENABLED=true and
     // TAWK_ID to your own property to enable. (Never inherit a third party's id.)
     'tawk' => [
         'enabled' => env('TAWK_ENABLED', false),
         'id' => env('TAWK_ID'),
     ],
 
-    // §7.5 — optional: auto-fetches a pasted YouTube lesson video's duration via the Data API
-    // v3 (oEmbed alone doesn't expose duration). Entirely optional — with no key configured,
+    // Optional: auto-fetches a pasted YouTube lesson video's duration via the Data API
+    // v3 (oEmbed alone doesn't expose duration). Entirely optional, with no key configured,
     // the curriculum builder's "Auto-fetch duration" button just no-ops and duration stays a
     // manual field, exactly as it already was before this feature existed.
     'youtube' => [
         'key' => env('YOUTUBE_API_KEY'),
     ],
 
-    // Flutterwave payment gateway (HMS_PLAN.md §16). Secrets live ONLY in env
-    // (C11) — never commit real keys. secret_hash verifies inbound webhooks.
+    // Flutterwave payment gateway. Secrets live ONLY in env
+    // (C11), never commit real keys. secret_hash verifies inbound webhooks.
     'flutterwave' => [
         'secret_key' => env('FLW_SECRET_KEY'),
         'public_key' => env('FLW_PUBLIC_KEY'),

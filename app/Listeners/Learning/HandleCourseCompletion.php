@@ -8,15 +8,15 @@ use App\Services\Learning\CertificateService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
- * §4.5 — certificate issuance (§4.6-gated: all lessons *and* any
+ * Certificate issuance (gated: all lessons *and* any
  * counts_toward_certificate quiz requirement) + the completion email,
  * decoupled from ProgressService's completion write. Both live in one
  * listener (rather than two registered on the same event) so the order is
  * guaranteed: the certificate must exist before the email is built, since
- * its "view your certificate" action links to it — Laravel doesn't
+ * its "view your certificate" action links to it. Laravel doesn't
  * guarantee execution order across independently auto-discovered listeners
  * on the same event. If a quiz gate is still unmet, no certificate is
- * issued yet — IssueCertificateWhenQuizRequirementIsMet picks it up once
+ * issued yet, IssueCertificateWhenQuizRequirementIsMet picks it up once
  * the gating quiz is later graded.
  */
 class HandleCourseCompletion implements ShouldQueue

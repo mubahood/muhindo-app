@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-/** §6.4/§6.3.2 — the one-click "nudge" sent from the drill-down page or the at-risk digest. */
+/** The one-click "nudge" sent from the drill-down page or the at-risk digest. */
 class StudentNudgeNotification extends Notification
 {
     use Queueable;
@@ -27,7 +27,7 @@ class StudentNudgeNotification extends Notification
         return (new MailMessage)
             ->subject("Keep going on {$course->title}")
             ->greeting("Hi {$notifiable->name},")
-            ->line("You're {$this->enrollment->progress_percent}% through \"{$course->title}\" — just a quick nudge to keep your momentum going.")
+            ->line("You're {$this->enrollment->progress_percent}% through \"{$course->title}\" just a quick nudge to keep your momentum going.")
             ->action('Continue learning', route('learn.course', $course))
             ->line('Even 10 minutes today keeps you on track.');
     }
@@ -39,7 +39,7 @@ class StudentNudgeNotification extends Notification
 
         return [
             'title' => "Keep going on {$course->title}",
-            'message' => "You're {$this->enrollment->progress_percent}% through — pick up where you left off.",
+            'message' => "You're {$this->enrollment->progress_percent}% through, pick up where you left off.",
         ];
     }
 }

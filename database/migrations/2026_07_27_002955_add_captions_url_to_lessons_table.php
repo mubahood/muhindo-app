@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §7.6 — an optional WebVTT captions track for self-hosted video; YouTube's own captions already pass through the IFrame player once cc_load_policy is enabled. */
+/** An optional WebVTT captions track for self-hosted video; YouTube's own captions already pass through the IFrame player once cc_load_policy is enabled. */
 return new class extends Migration
 {
     public function up(): void

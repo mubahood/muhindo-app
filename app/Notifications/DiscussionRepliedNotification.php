@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
-/** §7.3 — fired to the original asker when someone (an "Instructor" reply included) replies to their question. */
+/** Fired to the original asker when someone (an "Instructor" reply included) replies to their question. */
 class DiscussionRepliedNotification extends Notification implements ShouldQueue
 {
     use Queueable;

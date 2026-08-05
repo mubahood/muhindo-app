@@ -16,7 +16,7 @@
      * While the file is missing this renders a labelled drop-target naming the
      * exact path and pixel size to use, so the page is reviewable before any
      * asset exists. The moment the file lands at that path it renders as the
-     * real image — no template edit, nothing to remember to switch over.
+     * real image, no template edit, nothing to remember to switch over.
      */
     $path = $src ? ltrim($src, '/') : null;
     $exists = $path !== null && is_file(public_path($path));
@@ -31,7 +31,7 @@
        for whoever is filling the page in. --}}
   <div {{ $attributes->merge(['class' => 'ph'.($round ? ' round' : '')]) }}
        style="aspect-ratio:{{ $ratio }};{{ $attributes->get('style') }}"
-       role="img" aria-label="{{ $alt !== '' ? $alt : $label.' — image not added yet' }}">
+       role="img" aria-label="{{ $alt !== '' ? $alt : $label.' image not added yet' }}">
     <i class="fas {{ $icon }}" aria-hidden="true"></i>
     <span class="ph-label">{{ $label }}</span>
     @if($size)<span class="ph-size">{{ $size }}</span>@endif

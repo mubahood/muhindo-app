@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/** P5.4 — the API equivalent of Student\AssignmentController's Classroom-style turn-in flow. */
+/** P5.4, the API equivalent of Student\AssignmentController's Classroom-style turn-in flow. */
 class AssignmentController extends Controller
 {
     public function __construct(

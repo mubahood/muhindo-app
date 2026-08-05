@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.1 — a paid course invoice activates the matching enrollment(s); everything else is a no-op. */
+/** A paid course invoice activates the matching enrollment(s); everything else is a no-op. */
 class ActivateCourseEnrollmentsOnInvoicePaidTest extends TestCase
 {
     use RefreshDatabase;
@@ -46,7 +46,7 @@ class ActivateCourseEnrollmentsOnInvoicePaidTest extends TestCase
         $billing = app(BillingService::class);
         $invoice = $billing->generateCourseInvoice($student, $course);
 
-        // No enrollment row created up front — e.g. an admin raised the invoice directly.
+        // No enrollment row created up front, e.g. an admin raised the invoice directly.
         $billing->recordPayment($invoice, PaymentMethod::Cash, '50.00');
 
         $this->assertDatabaseHas('enrollments', [
@@ -68,7 +68,7 @@ class ActivateCourseEnrollmentsOnInvoicePaidTest extends TestCase
 
         $billing->recordPayment($invoice, PaymentMethod::Cash, '50.00');
 
-        // Manually re-fire the listener against the same (now Paid) invoice to simulate a race —
+        // Manually re-fire the listener against the same (now Paid) invoice to simulate a race,
         // BillingService itself would refuse a second recordPayment() on a Paid invoice, but the
         // listener's own idempotency is what's under test here.
         app(\App\Listeners\Billing\ActivateCourseEnrollmentsOnInvoicePaid::class)

@@ -46,7 +46,7 @@ class CourseLinkVerificationTest extends TestCase
             .'<body>{"playabilityStatus":{"status":"'.$status.'"}}</body></html>';
     }
 
-    // ── The three verdicts ──────────────────────────────────────────────────
+    // The three verdicts
 
     public function test_an_embeddable_video_is_reported_as_playable_here(): void
     {
@@ -102,7 +102,7 @@ class CourseLinkVerificationTest extends TestCase
         $this->assertStringContainsString('removed', (string) $result['reason']);
     }
 
-    // ── Caching ─────────────────────────────────────────────────────────────
+    // Caching
 
     public function test_a_verdict_is_cached_so_a_re_run_costs_nothing(): void
     {
@@ -126,7 +126,7 @@ class CourseLinkVerificationTest extends TestCase
         $this->assertFileDoesNotExist($this->cachePath);
     }
 
-    // ── Reading the authored files ──────────────────────────────────────────
+    // Reading the authored files
 
     public function test_the_scanner_reads_both_file_shapes(): void
     {

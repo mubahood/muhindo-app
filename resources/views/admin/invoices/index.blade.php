@@ -18,11 +18,11 @@
       @forelse($invoices as $inv)
         <tr onclick="window.location='{{ route('admin.invoices.show', $inv) }}'" style="cursor:pointer;">
           <td class="mono">{{ $inv->invoice_no }}</td>
-          <td style="font-weight:500;">{{ $inv->billable?->name ?? '—' }}</td>
+          <td style="font-weight:500;">{{ $inv->billable?->name ?? '-' }}</td>
           <td style="text-align:right;" class="mono">{{ $inv->currency }} {{ number_format((float) $inv->total, 2) }}</td>
           <td style="text-align:right;" class="mono">{{ $inv->currency }} {{ number_format((float) $inv->balance, 2) }}</td>
           <td><span class="badge-tb {{ $inv->status->badge() }}">{{ $inv->status->label() }}</span></td>
-          <td class="muted">{{ $inv->issued_at?->format('d M Y') ?? '—' }}</td>
+          <td class="muted">{{ $inv->issued_at?->format('d M Y') ?? '-' }}</td>
           <td><a href="{{ route('admin.invoices.show', $inv) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-eye"></i></a></td>
         </tr>
       @empty

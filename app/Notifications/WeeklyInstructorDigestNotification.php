@@ -9,9 +9,8 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Collection;
 
 /**
- * §6.4 — the weekly "5 students at risk: …" instructor digest. Only ever
- * dispatched when at least one enrollment is flagged (§6.4's "optional" —
- * no email when there's nothing to say); the command that sends this never
+ * The weekly "5 students at risk: ..." instructor digest. Only ever
+ * dispatched when at least one enrollment is flagged ('s "optional" * no email when there's nothing to say); the command that sends this never
  * fires it on an empty list.
  */
 class WeeklyInstructorDigestNotification extends Notification implements ShouldQueue
@@ -41,11 +40,11 @@ class WeeklyInstructorDigestNotification extends Notification implements ShouldQ
 
         foreach ($shown as $enrollment) {
             $reason = ucfirst(str_replace('_', ' ', (string) $enrollment->at_risk_reason));
-            $mail->line("• {$enrollment->user->name} — \"{$enrollment->course->title}\" ({$reason})");
+            $mail->line("• {$enrollment->user->name}, \"{$enrollment->course->title}\" ({$reason})");
         }
 
         if ($count > $shown->count()) {
-            $mail->line('…and '.($count - $shown->count()).' more.');
+            $mail->line('...and '.($count - $shown->count()).' more.');
         }
 
         return $mail->action('Review enrollments', route('admin.enrollments.index'))

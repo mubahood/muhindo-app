@@ -8,7 +8,7 @@ use App\Services\Learning\DiscussionService;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-/** §7.3 — the instructor's Q&A inbox for one course: reply (auto-badged "Instructor") and resolve. */
+/** The instructor's Q&A inbox for one course: reply (auto-badged "Instructor") and resolve. */
 class CourseDiscussions extends Component
 {
     public Course $course;
@@ -60,6 +60,6 @@ class CourseDiscussions extends Component
 
         return view('livewire.admin.course-discussions', ['threads' => $threads])
             ->layout('layouts.admin')
-            ->title('Q&A — '.$this->course->title);
+            ->title('Q&A '.$this->course->title);
     }
 }

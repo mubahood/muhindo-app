@@ -86,7 +86,7 @@
           <label class="tb-label" for="file">Deliverable file</label>
           <input class="tb-input" type="file" id="file" name="file" aria-describedby="file-help">
           <p class="tb-field-error" style="color:var(--mt);" id="file-help">
-            Stored privately — reachable only through a buyer's licence, never by URL.
+            Stored privately, reachable only through a buyer's licence, never by URL.
             @if($item->file_name)<br>Current: {{ $item->file_name }} ({{ $item->fileSize() }})@endif
           </p>
           @error('file')<p class="tb-field-error">{{ $message }}</p>@enderror

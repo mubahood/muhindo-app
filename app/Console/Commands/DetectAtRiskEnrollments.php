@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 
 /**
- * §6.4 — nightly rules-first at-risk tagging (no ML pretence), first match wins
+ * Nightly rules-first at-risk tagging (no ML pretence), first match wins
  * in the order the plan lists them:
  * - inactive: no activity (or never started) in 14 days.
  * - stalled: active in the last 3 weeks but nothing completed in that window
@@ -19,14 +19,14 @@ use Illuminate\Support\Carbon;
  *   own pass mark, or the two most recent graded attempts both failed.
  * - missing_work: any published assignment past its due date has no
  *   submission at all from this enrollment.
- * The latter two were deferred in P1 pending the P3 quiz/assignment models,
+ * The latter two were deferred pending the quiz/assignment models,
  * which now exist.
  */
 class DetectAtRiskEnrollments extends Command
 {
     protected $signature = 'app:detect-at-risk-enrollments';
 
-    protected $description = 'Tag active enrollments as inactive/stalled/struggling/missing_work based on activity and performance (§6.4)';
+    protected $description = 'Tag active enrollments as inactive/stalled/struggling/missing_work based on activity and performance';
 
     public function handle(): int
     {

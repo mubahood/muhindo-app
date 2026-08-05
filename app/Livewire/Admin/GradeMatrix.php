@@ -7,7 +7,7 @@ use App\Services\Learning\GradebookService;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-/** §5.4 — the instructor's per-course grade matrix: students × items, plus a CSV export link. */
+/** The instructor's per-course grade matrix: students × items, plus a CSV export link. */
 class GradeMatrix extends Component
 {
     public Course $course;
@@ -47,6 +47,6 @@ class GradeMatrix extends Component
 
         return view('livewire.admin.grade-matrix', ['items' => $items, 'rows' => $rows])
             ->layout('layouts.admin')
-            ->title('Gradebook — '.$this->course->title);
+            ->title('Gradebook '.$this->course->title);
     }
 }

@@ -10,10 +10,10 @@
 <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#F4EFE9;min-height:100vh;">
 <tr><td align="center" style="padding:40px 16px 24px;">
 
-  {{-- ── Outer card ── --}}
+  {{-- Outer card --}}
   <table width="600" cellpadding="0" cellspacing="0" role="presentation" style="max-width:600px;width:100%;">
 
-    {{-- ── HEADER ── --}}
+    {{-- HEADER --}}
     <tr>
       <td style="background:linear-gradient(135deg,#1A0E07 0%,#3A2010 100%);border-radius:12px 12px 0 0;padding:20px 32px;">
         <div style="background:#ffffff;border-radius:8px;display:inline-block;padding:8px 16px;">
@@ -25,6 +25,6 @@
       </td>
     </tr>
 
-    {{-- ── BODY starts ── --}}
+    {{-- BODY starts --}}
     <tr>
       <td style="background:#FFFFFF;padding:36px 40px 8px;">

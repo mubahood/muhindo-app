@@ -12,8 +12,8 @@
           {{-- Same duotone cover as the catalogue, so a course looks like the
                same object on both pages. --}}
           <div class="course-cover">
-            @if($c->cover_image)
-              <img src="{{ $c->cover_image }}" alt="{{ $c->coverAlt() }}" loading="lazy" decoding="async" width="400" height="225">
+            @if($c->coverUrl())
+              <img src="{{ $c->coverUrl() }}" alt="{{ $c->coverAlt() }}" loading="lazy" decoding="async" width="400" height="225">
             @else
               <i class="fas fa-graduation-cap" aria-hidden="true"></i>
             @endif

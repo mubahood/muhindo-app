@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\TestCase;
 
-/** §5.2 — QuizService's attempt lifecycle: start → answer (autosave) → submit (server-graded), objective types. */
+/** QuizService's attempt lifecycle: start → answer (autosave) → submit (server-graded), objective types. */
 class QuizServiceLifecycleTest extends TestCase
 {
     use RefreshDatabase;

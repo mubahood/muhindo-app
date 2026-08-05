@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-/** §7.3 — private, timestamped student notes on a lesson; each is a discrete entry, not an editable document. */
+/** Private, timestamped student notes on a lesson; each is a discrete entry, not an editable document. */
 class LessonNoteController extends Controller
 {
     public function store(Request $request, Course $course, Lesson $lesson): RedirectResponse|JsonResponse

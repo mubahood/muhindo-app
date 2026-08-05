@@ -44,7 +44,7 @@ class CertificateVerificationTest extends TestCase
         return app(CertificateService::class)->issue($enrollment);
     }
 
-    // ── Issuing ─────────────────────────────────────────────────────────────
+    // Issuing
 
     public function test_issuing_stores_one_pdf_and_never_a_second_certificate(): void
     {
@@ -67,7 +67,7 @@ class CertificateVerificationTest extends TestCase
         $this->assertTrue(VerificationCode::isValid($number));
 
         /*
-         * Every single-digit substitution must be caught — that is the typo a
+         * Every single-digit substitution must be caught. That is the typo a
          * person actually makes reading a number off paper. Measured across
          * all of them rather than one sample, because the check character is a
          * mod-32 sum: any one arbitrary change has roughly a 1-in-32 chance of
@@ -106,7 +106,7 @@ class CertificateVerificationTest extends TestCase
         $this->assertStringStartsWith('%PDF', $pdf);
     }
 
-    // ── The QR ──────────────────────────────────────────────────────────────
+    // The QR
 
     public function test_the_qr_encodes_the_public_verification_url(): void
     {
@@ -121,7 +121,7 @@ class CertificateVerificationTest extends TestCase
         $this->get($url)->assertOk()->assertSee('Aisha Nakalema');
     }
 
-    // ── The public check ────────────────────────────────────────────────────
+    // The public check
 
     public function test_a_stranger_can_verify_without_an_account(): void
     {

@@ -29,7 +29,7 @@
         <b>{{ $invoice->items->first()?->description ?? 'Invoice '.$invoice->invoice_no }}</b>
         <span>
           @if($invoice->isAwaitingDirectPayment())
-            You are paying Muhindo directly. It unlocks once he confirms — or pay online now, it is instant.
+            You are paying Muhindo directly. It unlocks once he confirms, or pay online now, it is instant.
           @else
             Waiting for payment. This unlocks the moment it clears.
           @endif

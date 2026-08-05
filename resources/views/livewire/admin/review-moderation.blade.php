@@ -2,7 +2,7 @@
   <div class="tb-page-header">
     <div>
       <h1>Reviews</h1>
-      <div class="tb-breadcrumb">Course review moderation — unpublished first</div>
+      <div class="tb-breadcrumb">Course review moderation, unpublished first</div>
     </div>
   </div>
 
@@ -16,7 +16,7 @@
               <td>{{ $review->course->title }}</td>
               <td class="muted">{{ $review->enrollment->user->name }}</td>
               <td>{{ $review->rating }} <i class="fas fa-star" style="color:#b8933f;"></i></td>
-              <td>{{ \Illuminate\Support\Str::limit($review->body ?? '—', 80) }}</td>
+              <td>{{ \Illuminate\Support\Str::limit($review->body ?? '-', 80) }}</td>
               <td>
                 <span class="badge-tb {{ $review->is_published ? 'badge-active' : 'badge-pending' }}">{{ $review->is_published ? 'Published' : 'Pending' }}</span>
               </td>

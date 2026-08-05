@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
-/** §4.3 — the "Start a project" lead inbox. */
+/** The "Start a project" lead inbox. */
 class ProjectInquiryController extends Controller
 {
     public function index(): View
@@ -38,7 +38,7 @@ class ProjectInquiryController extends Controller
         return back()->with('success', 'Status updated.');
     }
 
-    /** Delete an inquiry — spam gets through, and it had nowhere to go. */
+    /** Delete an inquiry, spam gets through, and it had nowhere to go. */
     public function destroy(\App\Models\ProjectInquiry $projectInquiry): \Illuminate\Http\RedirectResponse
     {
         $projectInquiry->delete();

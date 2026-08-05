@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', $lesson->title.' (Free Preview) — '.$course->title)
+@section('title', $lesson->title.' (Free Preview) | '.$course->title)
 @section('desc', $course->description)
 
 @push('styles')
@@ -45,7 +45,7 @@
   @auth
     <form method="POST" action="{{ route('courses.enroll', $course) }}">
       @csrf
-      <button type="submit" class="btn gold">{{ $course->isFree() ? 'Enrol for free' : 'Enrol — '.$course->currency.' '.number_format((float) $course->price) }}</button>
+      <button type="submit" class="btn gold">{{ $course->isFree() ? 'Enrol for free' : 'Enrol for '.$course->currency.' '.number_format((float) $course->price) }}</button>
     </form>
   @else
     <a href="{{ route('register', ['intended_course' => $course->slug]) }}" wire:navigate class="btn gold">Sign up to enrol</a>

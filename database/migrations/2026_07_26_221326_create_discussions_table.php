@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §7.3 — Q&A: per-lesson (or course-wide, when lesson_id is null) threads. A non-null parent_id is a reply. */
+/** Q&A: per-lesson (or course-wide, when lesson_id is null) threads. A non-null parent_id is a reply. */
 return new class extends Migration
 {
     public function up(): void

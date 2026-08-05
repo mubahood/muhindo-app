@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
 
-/** §7.3 — Classroom's stream: draft or publish-immediately; publishing later is a separate, one-time action. */
+/** Classroom's stream: draft or publish-immediately; publishing later is a separate, one-time action. */
 class AnnouncementController extends Controller
 {
     public function create(Course $course): View
@@ -51,7 +51,7 @@ class AnnouncementController extends Controller
         return redirect()->route('admin.courses.show', $announcement->course)->with('success', 'Announcement updated.');
     }
 
-    /** Publishing is a one-time, explicit action — never re-triggered by an unrelated edit. */
+    /** Publishing is a one-time, explicit action, never re-triggered by an unrelated edit. */
     public function publish(Announcement $announcement): RedirectResponse
     {
         if ($announcement->isPublished()) {

@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.2 — the retention prune: raw learning_events older than 12 months are deleted; the aggregates they fed are untouched. */
+/** The retention prune: raw learning_events older than 12 months are deleted; the aggregates they fed are untouched. */
 class PruneLearningEventsTest extends TestCase
 {
     use RefreshDatabase;

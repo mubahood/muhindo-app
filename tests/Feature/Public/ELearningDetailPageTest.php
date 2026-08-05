@@ -8,7 +8,7 @@ use App\Models\Lesson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** public-w2 — §2.3 of PUBLIC_SITE_PLAN.md: the course detail sales page. */
+/** public-w2, of PUBLIC_SITE_PLAN.md: the course detail sales page. */
 class ELearningDetailPageTest extends TestCase
 {
     use RefreshDatabase;

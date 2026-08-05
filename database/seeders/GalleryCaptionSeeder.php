@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
  *
  * The import command can only derive a filename; what a picture *shows* has to
  * be written by someone who looked at it. Captions here describe what is
- * visibly in each frame and nothing beyond it — no invented clients, projects
+ * visibly in each frame and nothing beyond it, no invented clients, projects
  * or dates. Everything is editable in the admin afterwards.
  *
  * Safe to re-run: matched on path, and it never overwrites a caption that has
@@ -24,7 +24,7 @@ class GalleryCaptionSeeder extends Seeder
      *
      * Several frames are near-identical alternates from the same moment. The
      * strongest of each set stays published and the rest are unpublished rather
-     * than deleted — a gallery that shows the same shot three times reads as
+     * than deleted. A gallery that shows the same shot three times reads as
      * unedited, and one toggle in the admin brings any of them back.
      */
     private const PHOTOS = [
@@ -70,7 +70,7 @@ class GalleryCaptionSeeder extends Seeder
         ],
         'gallery/13-img-20180318-232440.jpg' => [
             'Study', 'Late thesis nights',
-            'Islamic University of Technology — the long stretch before a submission.',
+            'Islamic University of Technology, the long stretch before a submission.',
             'Working late on a laptop, an IUT banner on the wall behind', 9, true,
         ],
         'gallery/15-20170703-151005.jpg' => [
@@ -85,7 +85,7 @@ class GalleryCaptionSeeder extends Seeder
         ],
         'gallery/7-img-0968.jpg' => [
             'Workspace', 'Where it happens',
-            'Laptop, second screen, microphone — the recording and the building share a desk.',
+            'Laptop, second screen, microphone: the recording and the building share a desk.',
             'A desk holding a closed laptop, an external monitor and a studio microphone', 12, true,
         ],
         'gallery/2-20231011-131849.jpg' => [
@@ -109,7 +109,7 @@ class GalleryCaptionSeeder extends Seeder
             'Two graduates in academic gowns standing together outdoors', 16, true,
         ],
 
-        // Alternates from the same moments — kept, not published.
+        // Alternates from the same moments, kept, not published.
         'gallery/5-img-1307.jpg' => ['Workspace', 'Deep work (alternate)', null, 'Working at a desk with a monitor of code', 90, false],
         'gallery/6-img-1302.jpg' => ['Workspace', 'Deep work (alternate)', null, 'At a desk holding a phone, monitor of code behind', 91, false],
         'gallery/8-img-0967.jpg' => ['Workspace', 'Desk (alternate)', null, 'A desk with a laptop, monitor and microphone', 92, false],

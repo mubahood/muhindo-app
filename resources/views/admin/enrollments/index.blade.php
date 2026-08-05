@@ -3,7 +3,7 @@
 
 @push('styles')
 <style>
-  /* Counts double as filters — the number and the way to act on it are the
+  /* Counts double as filters, the number and the way to act on it are the
      same control, rather than a statistic you then have to go and find. */
   .en-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
   .en-tab{display:flex;align-items:baseline;gap:7px;padding:9px 13px;border:1px solid var(--line);
@@ -92,7 +92,7 @@
     <form method="GET" action="{{ route('admin.enrollments.index') }}" class="en-filters">
       <div class="tb-form-group" style="margin:0;">
         <label class="tb-label" for="q">Student</label>
-        <input class="tb-input" id="q" type="search" name="q" value="{{ $f['q'] }}" placeholder="Name or email…">
+        <input class="tb-input" id="q" type="search" name="q" value="{{ $f['q'] }}" placeholder="Name or email...">
       </div>
       <div class="tb-form-group" style="margin:0;">
         <label class="tb-label" for="course_id">Course</label>
@@ -141,9 +141,9 @@
         <label class="tb-label" for="enroll-course">Course</label>
         <select class="tb-select" id="enroll-course" name="course_select" required
                 data-base="{{ url('/admin/courses') }}">
-          <option value="">Select a course…</option>
+          <option value="">Select a course...</option>
           @foreach($courses as $c)
-            <option value="{{ $c->id }}">{{ $c->title }} — {{ $c->isFree() ? 'Free' : $c->currency.' '.number_format((float) $c->price) }}</option>
+            <option value="{{ $c->id }}">{{ $c->title }}, {{ $c->isFree() ? 'Free' : $c->currency.' '.number_format((float) $c->price) }}</option>
           @endforeach
         </select>
       </div>
@@ -157,7 +157,7 @@
         <label class="tb-label" for="enroll-status">Access</label>
         <select class="tb-select" id="enroll-status" name="status">
           <option value="active">Grant access now</option>
-          <option value="pending">Pending — bill them first</option>
+          <option value="pending">Pending, bill them first</option>
         </select>
       </div>
       <button type="submit" class="btn-tb btn-tb-primary"><i class="fas fa-plus"></i> Enroll</button>
@@ -189,13 +189,13 @@
           <tr>
             <td>
               <div class="en-who">
-                <b>{{ $e->user->name ?? '—' }}</b>
+                <b>{{ $e->user->name ?? '-' }}</b>
                 <span>{{ $e->user->email ?? '' }}</span>
               </div>
             </td>
             <td>
               <div class="en-course">
-                {{ $e->course->title ?? '—' }}
+                {{ $e->course->title ?? '-' }}
                 <span>{{ $e->course && $e->course->isFree() ? 'Free' : $e->course?->currency.' '.number_format((float) ($e->course?->price ?? 0)) }}</span>
               </div>
             </td>
@@ -214,7 +214,7 @@
               </div>
             </td>
             <td>{{ ucfirst($e->source) }}</td>
-            <td>{{ $e->enrolled_at?->format('d M Y') ?? '—' }}</td>
+            <td>{{ $e->enrolled_at?->format('d M Y') ?? '-' }}</td>
             <td>
               <div class="en-acts">
                 <a href="{{ route('admin.enrollments.show', $e) }}" class="btn-tb btn-tb-ghost btn-tb-sm" title="Open the full record">
@@ -251,7 +251,7 @@
                     @if($e->expires_at)
                       <p class="en-hint">Expires {{ $e->expires_at->format('d M Y') }} ({{ $e->expires_at->diffForHumans() }}).</p>
                     @else
-                      <p class="en-hint">No expiry — access does not lapse.</p>
+                      <p class="en-hint">No expiry. Access does not lapse.</p>
                     @endif
                   </form>
                 </div>
@@ -274,7 +274,7 @@
                     @endif
                   @else
                     <p class="en-hint" style="margin-bottom:9px;">
-                      <b>{{ $inv->invoice_no }}</b> — {{ $inv->status->label() }},
+                      <b>{{ $inv->invoice_no }}</b>, {{ $inv->status->label() }},
                       {{ $inv->currency }} {{ number_format((float) $inv->balance, 2) }} outstanding
                       of {{ number_format((float) $inv->total, 2) }}.
                       @if($inv->direct_payment_at)
@@ -288,7 +288,7 @@
                         <button type="button" class="btn-tb btn-tb-ghost btn-tb-sm"
                                 data-copy="{{ route('payments.show', $inv) }}">Copy</button>
                       </div>
-                      <p class="en-hint" style="margin-bottom:9px;">Send this to the student — they sign in and pay.</p>
+                      <p class="en-hint" style="margin-bottom:9px;">Send this to the student, they sign in and pay.</p>
                     @endif
                     <a href="{{ route('admin.invoices.show', $inv) }}" class="btn-tb btn-tb-ghost btn-tb-sm">
                       <i class="fas fa-money-bill-wave"></i> Open invoice / record a payment
@@ -300,7 +300,7 @@
                 <div class="en-box">
                   <h4><i class="fas fa-trash"></i> Remove</h4>
                   <p class="en-hint" style="margin-bottom:9px;">
-                    Deletes the enrollment. Any invoice stays in Billing — removing access must not erase a debt.
+                    Deletes the enrollment. Any invoice stays in Billing. Removing access must not erase a debt.
                   </p>
                   <form method="POST" action="{{ route('admin.enrollments.destroy', $e) }}"
                         onsubmit="return confirm('Remove this enrollment?');">
@@ -359,7 +359,7 @@
         setTimeout(function () { copy.textContent = was; }, 1400);
       };
       // navigator.clipboard needs a secure context. http://localhost counts,
-      // a LAN address does not — hence the fallback.
+      // a LAN address does not, hence the fallback.
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(value).then(done).catch(function () {});
       } else {

@@ -32,7 +32,7 @@
 
         @if($openThreadId === $thread->id)
           <form wire:submit="submitReply" style="margin-top:12px;">
-            <textarea class="tb-textarea" wire:model="reply" rows="3" placeholder="Write a reply…"></textarea>
+            <textarea class="tb-textarea" wire:model="reply" rows="3" placeholder="Write a reply..."></textarea>
             @error('reply') <div class="field-error">{{ $message }}</div> @enderror
             <div style="margin-top:8px;display:flex;gap:8px;">
               <button type="submit" class="btn-tb btn-tb-primary btn-tb-sm"><i class="fas fa-reply"></i> Send</button>

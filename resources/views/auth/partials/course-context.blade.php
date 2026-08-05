@@ -2,7 +2,7 @@
   Why the visitor is on this page.
 
   Someone bounced to sign-in mid-purchase needs to see that what they chose is
-  still waiting — otherwise signing in feels like starting over, which is where
+  still waiting, otherwise signing in feels like starting over, which is where
   people abandon. Covers both routes in: a single course they clicked "enrol"
   on, and a basket they were about to check out.
 --}}
@@ -14,8 +14,8 @@
 @if($intendedCourse ?? null)
 <div class="a-course-ctx">
   <div class="thumb">
-    @if($intendedCourse->cover_image)
-      <img src="{{ $intendedCourse->cover_image }}" alt="">
+    @if($intendedCourse->coverUrl())
+      <img src="{{ $intendedCourse->coverUrl() }}" alt="">
     @else
       <i class="fas fa-graduation-cap" aria-hidden="true"></i>
     @endif
@@ -35,7 +35,7 @@
 <div class="a-course-ctx">
   <div class="thumb"><i class="fas fa-basket-shopping" aria-hidden="true"></i></div>
   <p>
-    Your basket is waiting — <b>{{ $cartCount }} {{ \Illuminate\Support\Str::plural('item', $cartCount) }}</b>
+    Your basket is waiting, <b>{{ $cartCount }} {{ \Illuminate\Support\Str::plural('item', $cartCount) }}</b>
     <span class="ctx-sub">Nothing is lost. You will land back on checkout once you are in.</span>
   </p>
 </div>

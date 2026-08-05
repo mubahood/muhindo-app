@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.2/§7.3 — the player heartbeat is the only source of truth for watch time and min_watch completion. */
+/** The player heartbeat is the only source of truth for watch time and min_watch completion. */
 class PlayerHeartbeatTest extends TestCase
 {
     use RefreshDatabase;

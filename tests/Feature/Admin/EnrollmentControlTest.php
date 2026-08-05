@@ -21,7 +21,7 @@ use Tests\TestCase;
  *
  * The rule these tests defend is that access and billing stay separate facts.
  * Granting access must not pretend an invoice is paid, and removing access
- * must not quietly erase a debt — either would lose real money.
+ * must not quietly erase a debt, either would lose real money.
  */
 class EnrollmentControlTest extends TestCase
 {
@@ -58,7 +58,7 @@ class EnrollmentControlTest extends TestCase
         ]);
     }
 
-    // ── The list ────────────────────────────────────────────────────────────
+    // The list
 
     public function test_the_list_links_to_the_full_record(): void
     {
@@ -131,7 +131,7 @@ class EnrollmentControlTest extends TestCase
             ->assertDontSee(route('admin.enrollments.show', $settled), false);
     }
 
-    // ── Status control ──────────────────────────────────────────────────────
+    // Status control
 
     public function test_an_admin_can_grant_access_without_a_payment(): void
     {
@@ -227,7 +227,7 @@ class EnrollmentControlTest extends TestCase
         $this->assertSame('pending', $e->fresh()->status);
     }
 
-    // ── The access window ───────────────────────────────────────────────────
+    // The access window
 
     public function test_an_admin_can_set_and_clear_the_expiry(): void
     {
@@ -257,7 +257,7 @@ class EnrollmentControlTest extends TestCase
         $this->actingAs($e->user)->get(route('learn.course', $e->course))->assertForbidden();
     }
 
-    // ── Billing control ─────────────────────────────────────────────────────
+    // Billing control
 
     public function test_an_admin_can_raise_an_invoice_for_a_hand_added_student(): void
     {
@@ -322,7 +322,7 @@ class EnrollmentControlTest extends TestCase
         $this->assertSame('active', $e->fresh()->status);
     }
 
-    // ── Removal ─────────────────────────────────────────────────────────────
+    // Removal
 
     public function test_removing_an_enrollment_leaves_the_debt_alone(): void
     {
@@ -341,7 +341,7 @@ class EnrollmentControlTest extends TestCase
         $this->assertStringContainsString('invoice is untouched', session('success'));
     }
 
-    // ── Who is allowed ──────────────────────────────────────────────────────
+    // Who is allowed
 
     public function test_a_student_cannot_reach_any_of_this(): void
     {
@@ -360,7 +360,7 @@ class EnrollmentControlTest extends TestCase
         $this->assertSame(1, Enrollment::count());
     }
 
-    // ── The service's own guard ─────────────────────────────────────────────
+    // The service's own guard
 
     public function test_the_service_refuses_a_status_it_does_not_know(): void
     {

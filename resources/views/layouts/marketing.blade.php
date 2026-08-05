@@ -9,9 +9,9 @@
     :image="trim($__env->yieldContent('og_image', '')) ?: null"
   >@stack('jsonld')</x-seo>
   <link rel="stylesheet" href="{{ asset('vendor/fonts/inter/inter.css') }}">
-  {{-- §6.6 — FontAwesome (74KB) isn't needed for first paint (icons are secondary to text/
+  {{-- FontAwesome (74KB) isn't needed for first paint (icons are secondary to text/
        layout); loaded at print-media priority then swapped to all, so it never blocks
-       render. noscript fallback covers JS-disabled visitors (§7's "works without JS"). --}}
+       render. noscript fallback covers JS-disabled visitors ('s "works without JS"). --}}
   <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}"></noscript>
   @livewireStyles
@@ -31,7 +31,7 @@
     ::selection{background:var(--gold-soft);}
     .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
 
-    /* ── Fixed header ── */
+    /* Fixed header */
     header.site{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--hd);
       background:rgba(247,246,242,.88);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line);}
     header.site .bar{display:flex;align-items:center;gap:18px;height:var(--hd);}
@@ -41,7 +41,7 @@
     .nav{display:flex;align-items:center;gap:18px;font-size:13px;font-weight:600;}
     /* The nav is now set at the same weight and ink as the body text it sits
        above, so hover needs its own colour or it reads as dead. Active keeps
-       that colour plus a standing rule, which hover never draws — the two
+       that colour plus a standing rule, which hover never draws. The two
        states have to be told apart at a glance. */
     .nav a{position:relative;color:var(--tx);transition:color .15s;padding:2px 0;}
     .nav a:hover{color:var(--gold-d);}
@@ -53,9 +53,9 @@
       color:var(--tx2);align-items:center;justify-content:center;cursor:pointer;font-size:13.5px;}
     main{padding-top:var(--hd);}
 
-    /* ── Buttons ── */
-    /* §7 — "tap targets >= 44px": base/.lg padding+line-height sized to clear 44px total
-       height (a real gap the W7 walkthrough caught — the original 36px/41px heights
+    /* Buttons */
+    /* "tap targets >= 44px": base/.lg padding+line-height sized to clear 44px total
+       height (a real gap the W7 walkthrough caught, the original 36px/41px heights
        looked fine on desktop but fail the plan's own mobile tap-target requirement). */
     .btn{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:12.5px;padding:12px 16px;
       min-height:44px;border:1px solid var(--pri);background:var(--pri);color:#fff;
@@ -65,10 +65,10 @@
     .btn.gold:hover{background:var(--gold-d);border-color:var(--gold-d);color:#fff;}
     .btn.ghost{background:transparent;color:var(--pri);}
     .btn.ghost:hover{background:var(--pri-soft);}
-    .btn.sm{padding:9px 12px;font-size:12px;min-height:38px;} /* header/inline use only — never a primary conversion CTA */
+    .btn.sm{padding:9px 12px;font-size:12px;min-height:38px;} /* header/inline use only, never a primary conversion CTA */
     .btn.lg{padding:14px 20px;font-size:13px;min-height:48px;}
 
-    /* ── Sections ── */
+    /* Sections */
     section{padding:52px 0;}
     .eyebrow{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-d);}
     h1{font-size:38px;font-weight:200;letter-spacing:-.025em;line-height:1.12;}
@@ -87,7 +87,7 @@
     .stat-row .v{font-size:23px;font-weight:600;color:var(--pri);}
     .stat-row .l{font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
 
-    /* compact "what I do" teaser row (home only — the full grid lives on /services) */
+    /* compact "what I do" teaser row (home only, the full grid lives on /services) */
     .icon-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;}
     .icon-row a{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:20px 12px;
       border:1px solid var(--line);background:var(--surface);transition:border-color .15s,transform .15s;}
@@ -95,10 +95,10 @@
     .icon-row .ic{width:38px;height:38px;background:var(--gold-soft);color:var(--gold-d);display:flex;align-items:center;justify-content:center;font-size:15px;}
     .icon-row span{font-size:13px;font-weight:600;color:var(--tx);}
 
-    /* page hero (every sub-page) — shorter, left-aligned, no stat row */
-    /* ── Page header ──────────────────────────────────────────────────────
+    /* page hero (every sub-page), shorter, left-aligned, no stat row */
+    /* Page header
        One definition. This had fragmented into three rules in different parts
-       of the sheet, and the last of them set `padding:26px 0 0` — which is why
+       of the sheet, and the last of them set `padding:26px 0 0`, which is why
        every page header sat with its content pressed against whatever came
        next.
 
@@ -131,7 +131,7 @@
     .page-hero p{color:var(--tx2);font-size:13.5px;font-weight:450;line-height:1.6;max-width:560px;margin-bottom:0;}
     .page-hero .subnav,.page-hero .trust-chips{margin-top:16px;}
 
-    /* subnav — cross-links between the about-family pages */
+    /* subnav, cross-links between the about-family pages */
     .subnav{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
     .subnav a{font-size:12px;font-weight:500;color:var(--tx2);padding:5px 12px;border:1px solid var(--line-2);background:var(--bg);transition:all .15s;}
     .subnav a:hover{border-color:var(--gold);color:var(--gold-d);}
@@ -208,7 +208,7 @@
     .steps .step h4{font-size:13.5px;font-weight:600;margin-bottom:5px;}
     .steps .step p{font-size:12.5px;color:var(--tx2);line-height:1.5;}
     .alert-success{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);padding:12px 16px;font-size:13px;margin-bottom:16px;}
-    /* honeypot — hidden from real visitors, catches simple bots */
+    /* honeypot, hidden from real visitors, catches simple bots */
     .hp-field{position:absolute;left:-9999px;top:-9999px;}
 
     /* e-learning catalogue */
@@ -251,10 +251,10 @@
     .pay-icons span{border:1px solid var(--line-2);padding:4px 8px;}
     .buy-box .coupon-field{width:100%;border:1px solid var(--line-2);padding:9px 12px;font-family:var(--font);font-size:13px;margin-bottom:10px;}
     .buy-box .money-comfort{font-size:11px;color:var(--tx3);margin-top:12px;text-align:center;}
-    /* ── Curriculum accordion ──────────────────────────────────────────────
+    /* Curriculum accordion
        These opened and closed with no sign that they could. A <summary> with
        its default marker suppressed and nothing put back is a heading that
-       happens to be clickable, which nobody discovers — so the chevron is
+       happens to be clickable, which nobody discovers, so the chevron is
        explicit, it turns, and the whole header is obviously a control. */
     .accordion-mod{border:1px solid var(--line);margin-bottom:10px;background:var(--surface);}
     .accordion-mod summary{padding:14px 16px;font-weight:600;font-size:14px;cursor:pointer;list-style:none;
@@ -336,14 +336,14 @@
     .mmenu a{font-size:18px;font-weight:300;color:var(--tx);padding:12px 0;border-bottom:1px solid var(--line);}
     .mmenu .btn{margin-top:16px;justify-content:center;}
 
-    /* ══════════════════════════════════════════════════════════════════════
+    /*
        Navigation
 
        Four items, one of which opens a panel. Opening is driven by :hover and
        :focus-within, so the panel works with a mouse, with a keyboard, and
        with JavaScript switched off. Script only adds what CSS cannot express:
        Escape to close, and keeping aria-expanded truthful.
-       ══════════════════════════════════════════════════════════════════════ */
+        */
     .nav{position:relative;}
     .nav-item{position:relative;display:flex;align-items:center;}
     .nav-link{position:relative;display:inline-flex;align-items:center;gap:6px;color:var(--tx);
@@ -380,11 +380,11 @@
       padding:9px 11px;background:var(--bg);border-top:1px solid var(--line);font-size:11.5px;
       font-weight:500;color:var(--tx2);}
 
-    /* ── Calls to action that say what they do ─────────────────────────────
+    /* Calls to action that say what they do
        The resting label is short enough to scan; the hover label names the
        actual outcome. Both live in the same grid cell so the button is sized
-       by the longer of the two and never changes width mid-interaction —
-       a button that resizes under the pointer is a button people miss. */
+       by the longer of the two and never changes width mid-interaction.
+       A button that resizes under the pointer is a button people miss. */
     .cta{display:inline-grid;align-items:center;justify-items:center;overflow:hidden;}
     .cta > span{grid-area:1/1;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
       transition:transform .3s cubic-bezier(.22,.61,.36,1),opacity .22s;}
@@ -397,16 +397,16 @@
       .cta:hover .cta-a{transform:none;opacity:1;}
     }
 
-    /* ── Account control ──────────────────────────────────────────────────
+    /* Account control
        Signing in used to displace the two calls to action with account links.
        That is backwards: the actions are what the header is for, and they
-       still apply to someone who already has an account — a student can hire,
+       still apply to someone who already has an account. A student can hire,
        a client can enrol. Account navigation is secondary, so it collapses to
        an avatar and gets out of the way.
 
        (Phrased without quoting the button labels: this comment ships inside
        the inline <style> block, so any label named here would appear in the
-       page source for every visitor — including logged-out ones.) */
+       page source for every visitor, including logged-out ones.) */
     .acct{position:relative;display:flex;align-items:center;}
     .acct-trigger{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;
       font-family:inherit;padding:3px;color:var(--tx2);transition:color .15s;}
@@ -435,7 +435,7 @@
     .signin{font-size:12.5px;font-weight:600;color:var(--tx2);white-space:nowrap;padding:6px 2px;}
     .signin:hover{color:var(--gold-d);}
 
-    /* ── Mobile sheet ────────────────────────────────────────────────────── */
+    /* Mobile sheet */
     .mm-group{border-bottom:1px solid var(--line);}
     .mm-group > summary{display:flex;align-items:center;justify-content:space-between;gap:10px;
       font-size:17px;font-weight:600;color:var(--tx);padding:13px 0;cursor:pointer;list-style:none;}
@@ -451,12 +451,12 @@
     .mmenu .mm-actions{display:flex;flex-direction:column;gap:8px;margin-top:18px;}
     .mmenu .mm-actions .btn{width:100%;justify-content:center;}
 
-    /* ══════════════════════════════════════════════════════════════════════
+    /*
        Density
 
        Deliberately tight. Space is spent where it separates ideas and taken
        back everywhere else, so a page carries more without feeling fuller.
-       ══════════════════════════════════════════════════════════════════════ */
+        */
     section{padding:40px 0;}
     .sec-head{margin-bottom:26px;}
     .grid{gap:12px;}
@@ -466,7 +466,7 @@
     .card p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.55;}
     .proj-card{padding:18px;gap:8px;}
 
-    /* ── Blended bands ───────────────────────────────────────────────────
+    /* Blended bands
        Sections used to meet at a hard 1px rule, which chops the page into
        stacked boxes. They now bleed into one another: the border is replaced
        by a short gradient in the neighbouring surface colour, so the eye
@@ -477,12 +477,12 @@
     .band-surface::after{bottom:-26px;background:linear-gradient(to top,transparent,var(--surface));}
     .band-deep{margin-top:26px;}
     .band-deep::before{}
-    /* The dark band still needs a hard edge — a gradient into navy would read
+    /* The dark band still needs a hard edge. A gradient into navy would read
        as a printing fault rather than a transition. It gets a gold hairline
        instead, which announces the change deliberately. */
     .band-deep{border-top:2px solid var(--gold);}
 
-    /* ── Links that reward pointing at them ─────────────────────────────── */
+    /* Links that reward pointing at them */
     .link,a.link{position:relative;display:inline-flex;align-items:center;gap:6px;}
     .link::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:currentColor;
       transform:scaleX(0);transform-origin:left;transition:transform .26s cubic-bezier(.22,.61,.36,1);}
@@ -494,8 +494,8 @@
        visibly the same family of object as everything else on the page.
 
        Drawn with box-shadow, not a pseudo-element. A ::before at z-index:-1
-       paints *above* its own element's background — that is the CSS painting
-       order, negative-z-index descendants come after the background box — so
+       paints *above* its own element's background. That is the CSS painting
+       order, negative-z-index descendants come after the background box, so
        on a transparent ghost button the plate covered the button face and the
        navy label vanished into it. A shadow is painted entirely outside the
        border box and can never touch the text.
@@ -511,7 +511,7 @@
     .btn i{transition:transform .22s;}
     .btn:hover i{transform:translateX(3px);}
 
-    /* ── Segmented sub-navigation ────────────────────────────────────────
+    /* Segmented sub-navigation
        Seven detached grey pills were the main wayfinding for the whole
        about-family and the least designed thing on the site. One connected
        rail instead, sitting on the section rule so it belongs to the content
@@ -526,7 +526,7 @@
     .subnav a.on{color:var(--pri);font-weight:600;background:none;}
     .subnav a.on::after{transform:scaleX(1);}
 
-    /* ── Page hero: asymmetric, with the section word set as a watermark ─── */
+    /* Page hero: asymmetric, with the section word set as a watermark */
     /* An oversized ghost of the page name, cropped by the section. Gives the
        thin repeated header a piece of typography to hang on without adding
        height, which is what a banner image would have cost. */
@@ -535,9 +535,9 @@
       color:var(--pri);opacity:.045;white-space:nowrap;user-select:none;}
     @media(max-width:760px){.hero-mark{display:none;}}
 
-    /* ── Skills: a capability matrix, not a wall of chips ────────────────
+    /* Skills: a capability matrix, not a wall of chips
        Laid out in CSS columns so the groups pack tight and fill the whole
-       measure — the old grid stopped three quarters across and left the right
+       measure, the old grid stopped three quarters across and left the right
        edge dead. */
     .skill-cols{columns:3;column-gap:26px;}
     .skill-group{break-inside:avoid;margin:0 0 20px;display:block;}
@@ -550,7 +550,7 @@
       padding:5px 8px;border:1px solid var(--line);transition:border-color .15s,color .15s,background .15s;}
     .skill-group li:hover{border-color:var(--gold);color:var(--pri);background:var(--gold-soft);}
     /* The few marked Expert in the owner's own data lead their group and carry
-       the accent — a skills page whose items all look identical tells a reader
+       the accent. A skills page whose items all look identical tells a reader
        nothing about what this person is actually best at. */
     .skill-group li.core{background:var(--pri);border-color:var(--pri);color:#fff;font-weight:600;}
     .skill-group li.core .lv{color:var(--gold);font-size:9.5px;font-weight:700;letter-spacing:.06em;
@@ -559,7 +559,7 @@
     @media(max-width:900px){.skill-cols{columns:2;}}
     @media(max-width:600px){.skill-cols{columns:1;}}
 
-    /* ── Numbered service cards ─────────────────────────────────────────── */
+    /* Numbered service cards */
     .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
     .svc{position:relative;isolation:isolate;border:1px solid var(--line);background:var(--surface);
       padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;transition:border-color .18s,transform .18s;}
@@ -575,9 +575,9 @@
     .svc h3{font-size:14px;font-weight:600;line-height:1.3;}
     .svc p{font-size:13px;font-weight:450;color:var(--tx2);line-height:1.55;}
 
-    /* ── Timeline with a rail you can actually see ──────────────────────── */
+    /* Timeline with a rail you can actually see */
     /* The rail position is derived from the same tokens the grid uses. Written
-       as a literal it drifts the moment either column changes — which it did:
+       as a literal it drifts the moment either column changes, which it did:
        the dots sat 17px off the line because the rail was placed at the column
        edge and the dots at the content edge, a gap away. */
     .tl{--tl-w:118px;--tl-gap:22px;
@@ -604,15 +604,15 @@
       .tl-what::before{left:0;}
     }
 
-    /* ══════════════════════════════════════════════════════════════════════
+    /*
        Surface system
 
        The site was five identical stacks of centred heading + white boxes on
-       flat cream. The fix isn't ornament — it's giving each band its own
+       flat cream. The fix isn't ornament, it's giving each band its own
        surface, and drawing them the way an engineer draws: ruled grids,
        hairlines, indexed sections. All of it is generated in CSS, so the whole
        system costs no image requests and stays crisp at any density.
-       ══════════════════════════════════════════════════════════════════════ */
+        */
 
     /* Ruled paper. Two hairline grids at different scales, so the texture reads
        as drafting rather than as a repeating tile. */
@@ -638,7 +638,7 @@
         radial-gradient(760px 320px at 78% 0%,rgba(184,147,63,.13),transparent 62%),
         radial-gradient(620px 280px at 8% 100%,rgba(11,31,58,.07),transparent 60%);}
 
-    /* Deep band — used once or twice per page to break the cream monotony. */
+    /* Deep band, used once or twice per page to break the cream monotony. */
     .band-deep{background:var(--pri);color:#fff;border-top:none;border-bottom:none;position:relative;isolation:isolate;}
     .band-deep::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
       background-image:
@@ -655,8 +655,8 @@
     .band-deep .sec-idx{color:rgba(255,255,255,.35);}
     .band-deep .sec-idx::after{background:rgba(255,255,255,.18);}
 
-    /* ── Indexed section headers ──────────────────────────────────────────
-       "01 —— SELECTED WORK". Numbering the sections is how a schematic or a
+    /* Indexed section headers
+       "01, SELECTED WORK". Numbering the sections is how a schematic or a
        syllabus is laid out, which is exactly what this person does for a
        living, and it gives the eye an anchor other than another centred
        heading. */
@@ -669,22 +669,22 @@
     .sec-head:not(.left) .sec-idx::after{display:none;}
     .sec-head:not(.left) .sec-idx::before{content:'';flex:0 0 26px;height:1px;background:var(--line-2);}
 
-    /* ── Cards: the offset-plate motif from the hero, made interactive ──── */
+    /* Cards: the offset-plate motif from the hero, made interactive */
     .proj-card{position:relative;isolation:isolate;}
     .proj-card::before{content:'';position:absolute;z-index:-1;inset:0;background:var(--gold-soft);
       border:1px solid var(--line);opacity:0;transition:opacity .22s,transform .22s;}
     .proj-card:hover::before{opacity:1;transform:translate(7px,7px);}
-    /* The arrow leans into the direction it points on hover — a small reward
+    /* The arrow leans into the direction it points on hover, a small reward
        for pointing at the thing, and the only motion on the card that isn't
        the plate. */
     .proj-card .link i{transition:transform .22s;}
     .proj-card:hover .link i{transform:translateX(4px);}
 
-    /* ── Duotone course covers ───────────────────────────────────────────
+    /* Duotone course covers
        The uploaded cover art is loud stock rendering in reds that fight the
        navy-and-gold palette and pull every eye on the page. Rather than
        discard the owner's images, they're desaturated and re-tinted into the
-       brand's own light, and the full original colour returns on hover — so
+       brand's own light, and the full original colour returns on hover, so
        the artwork still does its job when someone is actually looking at it. */
     .course-cover{position:relative;overflow:hidden;}
     .course-cover img{transition:filter .35s ease,transform .5s ease;filter:grayscale(1) contrast(1.04) brightness(1.04);}
@@ -703,7 +703,7 @@
     .grid > .proj-card:nth-child(3n+3) .course-cover::after{
       background:linear-gradient(115deg,var(--pri) 20%,rgba(125,98,40,.6) 100%);}
 
-    /* ── Work cards with a visual, not just a text block ────────────────── */
+    /* Work cards with a visual, not just a text block */
     .work-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:20px;}
     .work-card{position:relative;isolation:isolate;border:1px solid var(--line);background:var(--surface);
       display:flex;flex-direction:column;transition:border-color .2s,transform .2s;}
@@ -725,10 +725,10 @@
     .work-body .link i{transition:transform .22s;}
     .work-card:hover .work-body .link i{transform:translateX(4px);}
 
-    /* ── Vertical section rail (the about-family) ─────────────────────────
+    /* Vertical section rail (the about-family)
        The horizontal tab strip only showed where you were; every other section
        was a word you had to read and click to find out about. As a rail down
-       the side, all of them stay on screen beside the content — you can see
+       the side, all of them stay on screen beside the content. You can see
        what is next without going there, which is the whole point of a
        sub-navigation. It sticks, so it is still there after scrolling. */
     .rail-layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:34px;align-items:start;}
@@ -760,7 +760,7 @@
 
     .rail-foot{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);}
 
-    /* ── The action bar ───────────────────────────────────────────────────
+    /* The action bar
        On a phone, every page worth acting on is a long scroll, and the thing
        you would act on sits at one end of it. This pins that action to the
        bottom of the window so it is never more than a thumb away: hire and
@@ -775,7 +775,7 @@
 
       /* The rail is gone here, not turned into a scrolling strip. A strip
          that has to be dragged sideways to reveal half its items is a control
-         you have to work out before it tells you anything — and the bar below
+         you have to work out before it tells you anything, and the bar below
          already answers the only question it was answering. Every chapter is
          still one tap away in the header menu and the footer. */
       .rail{display:none;}
@@ -806,7 +806,7 @@
 
       body.has-act-bar,body:has(.act-bar){padding-bottom:78px;}
 
-      /* One set of buttons, not two. The line above them stays — it is the
+      /* One set of buttons, not two. The line above them stays. It is the
          only place that says what the next chapter actually contains. */
       .ch-end .btn{display:none;}
       .ch-end{margin-top:26px;padding-top:14px;}
@@ -814,12 +814,12 @@
 
       /* The footer is a site-wide index. At the end of a chapter it buries
          the two actions that chapter was leading to under six columns of
-         links — and those two are already pinned to the bottom of the
+         links, and those two are already pinned to the bottom of the
          window. Chapters only; everywhere else it still belongs. */
       body.about-chapter footer{display:none;}
     }
 
-    /* ── Curriculum rows ──────────────────────────────────────────────────
+    /* Curriculum rows
        A previewable lesson looks openable; a locked one looks locked. That is
        the whole job of this list before someone has paid. */
     .lesson-row{gap:12px;}
@@ -834,7 +834,7 @@
     .preview-open i{font-size:9px;}
     .preview-open:hover{background:var(--gold);color:#231a05;}
 
-    /* ── Preview player ───────────────────────────────────────────────────── */
+    /* Preview player */
     .pv{position:fixed;inset:0;z-index:200;background:rgba(6,15,31,.9);
       display:flex;align-items:center;justify-content:center;padding:24px;}
     .pv[hidden]{display:none;}
@@ -873,9 +873,9 @@
       .pv-cta{justify-content:space-between;}
     }
 
-    /* ── Course cards ─────────────────────────────────────────────────────
+    /* Course cards
        Level, category, length and price all sit on the cover. They are what
-       people scan by, and the artwork was already occupying that space — so
+       people scan by, and the artwork was already occupying that space, so
        putting them there costs no height at all, where a row of chips under
        the image cost a line each. */
     .course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;}
@@ -898,7 +898,7 @@
     .c-media-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
       color:var(--gold);font-size:30px;}
 
-    /* Currency switch. Two states, one visibly chosen — a segmented control
+    /* Currency switch. Two states, one visibly chosen, a segmented control
        rather than a dropdown, because there are only ever two answers. */
     .cur-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
     .cur-switch{display:inline-flex;border:1px solid var(--line-2);background:var(--surface);margin:0;}
@@ -958,7 +958,7 @@
 
     @media(hover:none){
       /* No hover on touch, so the panel would be unreachable. It is simply
-         always open — the card is taller, but nothing is hidden behind a
+         always open. The card is taller, but nothing is hidden behind a
          gesture the device cannot make. */
       .c-more{grid-template-rows:1fr;}
       .c-outcomes{display:none;}          /* keep the card compact; the CTA is the point */
@@ -969,10 +969,10 @@
     }
     @media(max-width:420px){ .course-grid{grid-template-columns:1fr;} }
 
-    /* ── Source code: a terminal, answering the browser frame above ───────
+    /* Source code: a terminal, answering the browser frame above
        The work section frames screenshots in browser chrome to say "this is
        running". This frames the catalogue in a terminal to say "this is what
-       is behind it". Each row is a real product and a real link — the window
+       is behind it". Each row is a real product and a real link. The window
        is the listing itself, not a picture of one. */
     .code-band{padding:44px 0;}
     .term{border:1px solid rgba(255,255,255,.14);background:rgba(6,15,31,.55);
@@ -1010,7 +1010,7 @@
       .term-row .perm,.term-row .size{display:none;}   /* detail nobody reads on a phone */
     }
 
-    /* ── Logo marquee ─────────────────────────────────────────────────────
+    /* Logo marquee
        Thirteen names in a static grid is a wall; moving slowly, it reads as a
        list that continues past the edge of the screen. Two identical tracks
        scroll as one and the animation resets after exactly one track width, so
@@ -1030,13 +1030,13 @@
     .marquee-item:hover .wordmark{color:var(--pri);}
     @media(prefers-reduced-motion:no-preference){
       .marquee-track{animation:marquee 46s linear infinite;}
-      /* Pausing on hover is what makes it usable rather than decorative —
-         a name you want to read stops moving when you point at it. */
+      /* Pausing on hover is what makes it usable rather than decorative.
+         A name you want to read stops moving when you point at it. */
       .marquee:hover .marquee-track{animation-play-state:paused;}
     }
     @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-100%);}}
 
-    /* ── Photo mosaic ─────────────────────────────────────────────────────
+    /* Photo mosaic
        One frame given real size so the section has a subject, the rest packed
        around it. Six equal thumbnails read as filler. */
     .mosaic{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,138px);gap:8px;}
@@ -1053,7 +1053,7 @@
     .mosaic-cap .c{display:none;font-size:10.5px;font-weight:450;color:rgba(255,255,255,.72);line-height:1.4;margin-top:2px;}
     .mosaic-cell.lead .mosaic-cap .c{display:block;}
     .mosaic-cell.lead .mosaic-cap .t{font-size:14px;}
-    /* The closing tile is a door, not a photograph — it says how much more
+    /* The closing tile is a door, not a photograph. It says how much more
        there is and where to go, which a seventh thumbnail would not. */
     .mosaic-more{display:flex;flex-direction:column;align-items:flex-start;
       justify-content:center;gap:2px;padding:16px 18px;border:1px solid var(--line);
@@ -1068,7 +1068,7 @@
       .mosaic-more{grid-column:span 2;}
     }
 
-    /* ── About, on the home page ──────────────────────────────────────────
+    /* About, on the home page
        Two columns of prose at a comfortable measure. Long-form lives on
        /about; this is the ten-second version. */
     .about-lead{max-width:900px;}
@@ -1079,7 +1079,7 @@
     .about-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:18px;}
     @media(max-width:720px){.about-cols{columns:1;}}
 
-    /* ── References ───────────────────────────────────────────────────────
+    /* References
        Named people with links out, rather than anonymous praise. A card works
        with or without a quote: until someone's own words are in hand, who they
        are and where to check is the substance. */
@@ -1094,7 +1094,7 @@
        later in this sheet, so a single-class rule here loses and the avatar
        stretches the whole card. */
     .ref figcaption .ref-avatar{width:42px;height:42px;flex:0 0 42px;padding:6px;gap:0;}
-    /* At 42px there is no room for the slot's guidance text — the icon alone
+    /* At 42px there is no room for the slot's guidance text. The icon alone
        reads as "a photo goes here", the words just become noise. */
     .ref figcaption .ref-avatar .ph-label,
     .ref figcaption .ref-avatar .ph-size,
@@ -1106,7 +1106,7 @@
     .ref-who .og{display:block;font-size:11px;font-weight:500;color:var(--gold-d);line-height:1.35;margin-top:1px;}
     .ref-link{font-size:12px;font-weight:600;color:var(--pri);align-self:flex-start;}
 
-    /* ── Shop ─────────────────────────────────────────────────────────────── */
+    /* Shop */
     .shop-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px;}
     .shop-filters .tb-input{width:auto;min-width:150px;border:1px solid var(--line-2);background:var(--surface);
       padding:9px 11px;font-family:var(--font);font-size:13px;color:var(--tx);}
@@ -1135,7 +1135,7 @@
       .buy-box{position:static;order:-1;}
     }
 
-    /* Basket indicator — only shown when there is something in it, so an empty
+    /* Basket indicator, only shown when there is something in it, so an empty
        basket never adds noise to the header. */
     .cart-link{position:relative;display:inline-flex;align-items:center;justify-content:center;
       width:34px;height:34px;color:var(--tx2);transition:color .15s;}
@@ -1144,7 +1144,7 @@
       background:var(--gold);color:var(--pri-d);font-size:9.5px;font-weight:700;
       display:flex;align-items:center;justify-content:center;}
 
-    /* ── Gallery ──────────────────────────────────────────────────────────
+    /* Gallery
        A column masonry rather than a grid of equal boxes: these photographs
        are a mix of portrait, landscape and square, and forcing them all into
        one crop throws away the framing of every shot that is not that shape. */
@@ -1178,7 +1178,7 @@
     @media(max-width:700px){.gal-grid{columns:2;}}
     @media(max-width:420px){.gal-grid{columns:1;}}
 
-    /* ── Lightbox ─────────────────────────────────────────────────────────── */
+    /* Lightbox */
     .lb{position:fixed;inset:0;z-index:200;background:rgba(6,15,31,.94);
       display:flex;align-items:center;justify-content:center;padding:40px 56px;}
     .lb[hidden]{display:none;}
@@ -1206,7 +1206,7 @@
       .lb-img{max-height:calc(100vh - 200px);}
     }
 
-    /* ── Photo strips embedded in other pages ─────────────────────────────── */
+    /* Photo strips embedded in other pages */
     .photo-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;}
     .photo-strip a{position:relative;display:block;overflow:hidden;border:1px solid var(--line);aspect-ratio:1;}
     .photo-strip img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
@@ -1214,12 +1214,12 @@
     .photo-strip a::after{content:'';position:absolute;inset:0;background:var(--pri);opacity:0;transition:opacity .2s;}
     .photo-strip a:hover::after{opacity:.12;}
 
-    /* ══════════════════════════════════════════════════════════════════════
+    /*
        Artwork slots
        A slot renders the real image once the file exists and a labelled
        drop-target until then, so the page can be reviewed and shipped before
        a single photo has been taken.
-       ══════════════════════════════════════════════════════════════════════ */
+        */
     .ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;
       padding:16px;background:
         repeating-linear-gradient(-45deg,var(--surface-2) 0 10px,transparent 10px 20px),var(--surface);
@@ -1233,13 +1233,13 @@
     .ph-img.round{border-radius:50%;}
     .ph-img.contain{object-fit:contain;}
 
-    /* ── Hero: portrait beside the claim ── */
+    /* Hero: portrait beside the claim */
     .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;text-align:left;}
     .hero-grid .ctas{justify-content:flex-start;}
     .hero-grid .hero-copy p{margin-left:0;margin-right:0;}
     .hero-portrait{position:relative;max-width:340px;margin-left:auto;width:100%;}
     .hero-portrait .ph,.hero-portrait .ph-img{position:relative;z-index:1;}
-    /* A soft gold plate offset behind the portrait — depth without a drop shadow,
+    /* A soft gold plate offset behind the portrait, depth without a drop shadow,
        which would read as a different design language from the flat squares. */
     .hero-portrait::after{content:'';position:absolute;inset:14px -14px -14px 14px;background:var(--gold-soft);
       border:1px solid var(--line);z-index:0;}
@@ -1248,7 +1248,7 @@
     .hero-badge .n{font-size:16px;font-weight:700;color:var(--pri);line-height:1;}
     .hero-badge .t{font-size:10.5px;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;line-height:1.3;}
 
-    /* ── Trusted-by logo strip ── */
+    /* Trusted-by logo strip */
     /* Each cell draws its own hairline instead of the grid showing a background
        through its gaps: an odd number of logos leaves a blank cell on narrow
        screens, and a background-based grid renders that blank as a tinted block
@@ -1258,20 +1258,20 @@
       padding:18px 14px;min-height:78px;box-shadow:0 0 0 1px var(--line);}
     .logo-strip .cell .ph{border:none;background:none;padding:0;gap:2px;}
     .logo-strip .cell .ph i{font-size:14px;}
-    /* Until a logo file lands, the organisation's name IS the mark — a wordmark
+    /* Until a logo file lands, the organisation's name IS the mark. A wordmark
        reads as deliberate, where an empty grey box reads as broken. */
     .logo-strip .wordmark{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
       color:var(--tx2);text-align:center;line-height:1.35;}
     .logo-strip img{max-height:40px;width:auto;object-fit:contain;filter:grayscale(1);opacity:.72;transition:filter .2s,opacity .2s;}
     .logo-strip .cell:hover img{filter:none;opacity:1;}
 
-    /* ── Systems showcase ── */
+    /* Systems showcase */
     .shot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
     .shot{border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;
       transition:border-color .18s,transform .18s;}
     .shot:hover{border-color:var(--gold);transform:translateY(-3px);}
     /* The card around each screenshot. The window chrome that used to live
-       here is now drawn inside the screenshot itself, where it belongs — one
+       here is now drawn inside the screenshot itself, where it belongs, one
        window bar per picture instead of one drawn over another. */
     .shot-frame{border-bottom:1px solid var(--line);background:var(--surface-2);}
     .shot-shot{aspect-ratio:16/10;overflow:hidden;background:var(--bg);}
@@ -1292,7 +1292,7 @@
     .shot-live:hover{color:var(--pri);}
     .shot-body h3 a:hover{color:var(--gold-d);}
 
-    /* ── Testimonials ── */
+    /* Testimonials */
     .quote-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
     .quote{border:1px solid var(--line);background:var(--surface);padding:24px;display:flex;flex-direction:column;gap:14px;}
     .quote blockquote{font-size:14px;line-height:1.65;color:var(--tx);font-weight:300;}
@@ -1304,12 +1304,12 @@
     .quote .who .nm{font-size:12.5px;font-weight:600;}
     .quote .who .rl{font-size:11.5px;color:var(--tx3);line-height:1.35;}
 
-    /* ══════════════════════════════════════════════════════════════════════
+    /*
        Motion
        Content is visible by default and animation only ever *removes* an
        offset, so a failed script or a blocked observer can never leave the
        page blank. Anyone who asked their system for less motion gets none.
-       ══════════════════════════════════════════════════════════════════════ */
+        */
     @media(prefers-reduced-motion:no-preference){
       .js [data-rise]{opacity:0;transform:translateY(14px);
         transition:opacity .6s cubic-bezier(.22,.61,.36,1),transform .6s cubic-bezier(.22,.61,.36,1);
@@ -1343,7 +1343,7 @@
     }
     @media(max-width:520px){
       /* Stays two columns. A single column turned the footer into a screen and
-         a half of scrolling past links nobody was looking for — a footer that
+         a half of scrolling past links nobody was looking for. A footer that
          cannot be skimmed is not doing its job. */
       .foot{grid-template-columns:1fr 1fr;gap:20px 18px;}
       .foot a{font-size:12.5px;margin:5px 0;}
@@ -1526,7 +1526,7 @@
       </div>
 
       {{-- Columns come from SiteNav, so the footer cannot drift away from the
-           menu — which is exactly what had happened: it was still offering
+           menu, which is exactly what had happened: it was still offering
            "Work" and "Skills" as top-level, and had never heard of the blog,
            the source code or the gallery. --}}
       @foreach($nav as $item)
@@ -1584,7 +1584,7 @@
     b.addEventListener('click',function(){ var o=m.classList.toggle('open'); b.setAttribute('aria-expanded',o); b.querySelector('i').className=o?'fas fa-xmark':'fas fa-bars'; document.body.style.overflow=o?'hidden':''; });
   }
   initBurgerMenu();
-  // wire:navigate swaps <body> for internal links (pjax-style — no full reload, every
+  // wire:navigate swaps <body> for internal links (pjax-style. No full reload, every
   // page is still a real server-rendered URL, so SEO is unaffected); re-wire the burger
   // button and close any menu left open after each swap.
   /* CSS already opens the mega panel on hover and on focus-within, which
@@ -1621,7 +1621,7 @@
      page. */
   /* Two body classes derived from what the page actually contains, rather
      than from a per-page script. Re-run on every wire:navigate, because a
-     one-shot script would leave the padding — or a hidden footer — behind on
+     one-shot script would leave the padding (or a hidden footer) behind on
      the next page. */
   function syncPageChrome(){
     document.body.classList.toggle('has-act-bar', !!document.querySelector('.act-bar'));
@@ -1637,7 +1637,7 @@
     if(m && m.classList.contains('open')){ m.classList.remove('open'); document.body.style.overflow=''; if(b){ b.setAttribute('aria-expanded','false'); b.querySelector('i').className='fas fa-bars'; } }
   });
 
-  /* ── Motion ────────────────────────────────────────────────────────────
+  /* Motion
      Sections rise into place as they're reached, and the hero's numbers
      count up once.
 
@@ -1665,14 +1665,14 @@
        These numbers are someone's credentials, so the animation is built to be
        incapable of leaving a wrong one on screen. requestAnimationFrame stops
        being delivered in a background tab, in low-power mode, and under some
-       automation — and a count-up that stalls mid-flight leaves "9+ years"
+       automation, and a count-up that stalls mid-flight leaves "9+ years"
        reading "1+ years" permanently. So the true text is restored by a timer
        that does not depend on frames arriving, and again if the tab is hidden
        mid-count. Worst case the number simply appears without counting. */
     function countUp(el){
       // The real value is copied out of the node before anything writes to it,
       // and every restore reads from there. Reading it back off the element
-      // would be reading whatever frame the animation happens to be on — which
+      // would be reading whatever frame the animation happens to be on, which
       // is how a second run once captured "1+" as the true value of "9+" and
       // left it there.
       if (el.dataset.trueValue === undefined) el.dataset.trueValue = el.textContent.trim();
@@ -1730,7 +1730,7 @@
       /* Anything already on screen is revealed straight away rather than left
          to the observer. The observer's negative bottom margin creates a dead
          band at the foot of the viewport, and on a screen tall enough to show
-         the whole page there is no scroll to move anything out of it — so that
+         the whole page there is no scroll to move anything out of it, so that
          content would stay invisible for good. */
       requestAnimationFrame(function () {
         document.querySelectorAll('[data-rise]:not(.in)').forEach(function (el) {
@@ -1754,7 +1754,7 @@
     function safeWire(){
       /* Arriving on a deep link jumps straight past everything above the
          target, and those sections never come back into view for the observer
-         to notice — so the visitor lands on a page of invisible text. Anyone
+         to notice, so the visitor lands on a page of invisible text. Anyone
          who followed a link to a specific section gets the whole page revealed
          at once instead. */
       if (location.hash && document.getElementById(location.hash.slice(1))) {

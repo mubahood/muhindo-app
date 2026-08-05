@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-/** §6.3.1 — the instructor's Course -> Students workhorse. */
+/** The instructor's Course -> Students workhorse. */
 class CourseStudentsTabTest extends TestCase
 {
     use RefreshDatabase;
@@ -49,7 +49,7 @@ class CourseStudentsTabTest extends TestCase
 
     /**
      * Regression: layouts.admin's <title> used only @yield('title'), which Livewire's
-     * full-page ->title() never populates (it passes a $title layout param instead) —
+     * full-page ->title() never populates (it passes a $title layout param instead),
      * a full-page Livewire route silently kept the layout's "Dashboard" browser-tab
      * title. Caught by manual smoke test, fixed in the layout; this pins it.
      */
@@ -59,7 +59,7 @@ class CourseStudentsTabTest extends TestCase
         $course = Course::factory()->create(['title' => 'Laravel Basics']);
 
         $this->actingAs($admin)->get(route('admin.courses.students', $course))
-            ->assertSee('<title>Laravel Basics — Students · Muhindo Mubaraka</title>', false);
+            ->assertSee('<title>Laravel Basics | Students · Muhindo Mubaraka</title>', false);
     }
 
     public function test_an_admin_sees_every_enrolled_student(): void

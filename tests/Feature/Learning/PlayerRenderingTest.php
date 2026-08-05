@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §7.3 — the YouTube IFrame API wrapper renders for YouTube URLs; everything else degrades to a plain iframe. */
+/** The YouTube IFrame API wrapper renders for YouTube URLs; everything else degrades to a plain iframe. */
 class PlayerRenderingTest extends TestCase
 {
     use RefreshDatabase;

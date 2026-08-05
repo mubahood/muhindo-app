@@ -103,7 +103,7 @@ class CoursePreviewAccessTest extends TestCase
         $this->assertStringContainsString('Lesson 1', $html);
 
         // Before the module list, not buried inside it. Matched on the markup
-        // rather than the class name — the layout's stylesheet mentions
+        // rather than the class name, the layout's stylesheet mentions
         // .accordion-mod long before the first <details> does.
         $this->assertLessThan(
             strpos($html, '<details class="accordion-mod"'),
@@ -163,7 +163,7 @@ class CoursePreviewAccessTest extends TestCase
     public function test_every_lesson_in_the_real_catalogue_resolves_its_video(): void
     {
         // The whole imported catalogue is written in youtube-nocookie URLs,
-        // which the id extractor used to reject — so the IFrame API never
+        // which the id extractor used to reject, so the IFrame API never
         // loaded and no watch progress was ever recorded.
         $lesson = Lesson::create([
             'course_module_id' => CourseModule::create([

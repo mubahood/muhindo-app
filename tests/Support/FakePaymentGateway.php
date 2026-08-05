@@ -7,7 +7,7 @@ use App\Services\Gateway\GatewayVerification;
 use App\Services\Gateway\PaymentGateway;
 
 /**
- * A test double for the Flutterwave adapter — no real HTTP calls. Bind via
+ * A test double for the Flutterwave adapter, no real HTTP calls. Bind via
  * `$this->app->instance(PaymentGateway::class, new FakePaymentGateway())` and call
  * `succeedNext($txRef, $amount, $currency)` before exercising GatewayPaymentService::settle().
  */
@@ -32,8 +32,8 @@ class FakePaymentGateway implements PaymentGateway
     {
         // Real Flutterwave gives verify_by_reference a transaction id in
         // data.id, which is then passed to verify(). The fake mints that id as
-        // "FLW-{tx_ref}", so accept it here too or the reconcile path — which
-        // deliberately settles through verify() — could never be exercised.
+        // "FLW-{tx_ref}", so accept it here too or the reconcile path, which
+        // deliberately settles through verify(), could never be exercised.
         $txRef = str_starts_with($providerTransactionId, 'FLW-')
             ? substr($providerTransactionId, 4)
             : $providerTransactionId;

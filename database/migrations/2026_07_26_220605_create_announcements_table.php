@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** §7.3 — Classroom's stream: a null published_at is a draft, never notified. */
+/** Classroom's stream: a null published_at is a draft, never notified. */
 return new class extends Migration
 {
     public function up(): void

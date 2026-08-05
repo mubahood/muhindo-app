@@ -14,7 +14,7 @@ use Tests\TestCase;
 /**
  * Buying source code, from a stranger arriving to a zip on their disk.
  *
- * PurchaseJourneyTest already proves the billing seam — that access is granted
+ * PurchaseJourneyTest already proves the billing seam. That access is granted
  * by payment, exactly once, and never before. This is the other half: that the
  * shop cannot take money for something it has no way to hand over, and that
  * somebody who has paid can actually get the file and find out how to run it.
@@ -38,7 +38,7 @@ class SourceCodeJourneyTest extends TestCase
     private function sellable(array $overrides = []): Product
     {
         return Product::factory()->create($overrides + [
-            'name' => 'InvetoTrack — Inventory Management System',
+            'name' => 'InvetoTrack, Inventory Management System',
             'price' => '450000.00',
             'type' => 'template',
             'version' => '2.1',
@@ -51,7 +51,7 @@ class SourceCodeJourneyTest extends TestCase
         ]);
     }
 
-    // ── nothing is sold that cannot be handed over ────────────────────────
+    // nothing is sold that cannot be handed over
 
     public function test_an_undeliverable_product_cannot_be_put_in_a_basket(): void
     {
@@ -112,7 +112,7 @@ class SourceCodeJourneyTest extends TestCase
         $this->get(route('cart.show'))->assertOk()->assertSee($product->name);
     }
 
-    // ── the journey ──────────────────────────────────────────────────────
+    // the journey
 
     public function test_every_product_in_the_catalogue_has_a_thumbnail(): void
     {
@@ -120,7 +120,7 @@ class SourceCodeJourneyTest extends TestCase
 
         foreach (Product::all() as $product) {
             $this->assertNotNull($product->coverUrl(),
-                "{$product->slug} has no thumbnail — draw one into "
+                "{$product->slug} has no thumbnail, draw one into "
                     ."public/images/products/{$product->slug}.svg");
         }
     }

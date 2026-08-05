@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
- * P0.8 — a stale browser tab re-posting a lesson it already completed (or the
+ * A stale browser tab re-posting a lesson it already completed (or the
  * final, certificate-earning lesson) must be a safe no-op, not a duplicate row
  * or a second certificate.
  */

@@ -31,7 +31,7 @@
             log('cleaned old SW + caches');
             if (!sessionStorage.getItem('cx_sw_cleared')) {
               sessionStorage.setItem('cx_sw_cleared', '1');
-              log('reloading once to fetch fresh assets…');
+              log('reloading once to fetch fresh assets...');
               location.reload();
             }
           }).catch(function (e) { log('cleanup error', e && e.message); });

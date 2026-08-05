@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** §5.3 — Classroom's turn-in flow: draft (private, editable) -> submitted -> returned (graded). */
+/** Classroom's turn-in flow: draft (private, editable) -> submitted -> returned (graded). */
 enum AssignmentSubmissionStatus: string
 {
     case Draft = 'draft';

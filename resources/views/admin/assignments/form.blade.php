@@ -26,10 +26,10 @@
       <div class="tb-form-group">
         <label class="tb-label">Attached to lesson (optional)</label>
         <select class="tb-select" name="lesson_id">
-          <option value="">— Course-wide assignment —</option>
+          <option value="">, Course-wide assignment, </option>
           @foreach($course->modules as $module)
             @foreach($module->lessons as $lesson)
-              <option value="{{ $lesson->id }}" {{ (int) old('lesson_id', $assignment->lesson_id) === $lesson->id ? 'selected' : '' }}>{{ $module->title }} — {{ $lesson->title }}</option>
+              <option value="{{ $lesson->id }}" {{ (int) old('lesson_id', $assignment->lesson_id) === $lesson->id ? 'selected' : '' }}>{{ $module->title }}, {{ $lesson->title }}</option>
             @endforeach
           @endforeach
         </select>
@@ -77,7 +77,7 @@
       <div class="tb-form-group">
         <label class="tb-check-group">
           <input type="checkbox" name="is_required" value="1" {{ old('is_required', $assignment->exists ? $assignment->is_required : true) ? 'checked' : '' }}>
-          <span>Compulsory — students cannot complete the attached lesson until they submit this assignment</span>
+          <span>Compulsory. Students cannot complete the attached lesson until they submit this assignment</span>
         </label>
       </div>
       <div class="tb-form-group">

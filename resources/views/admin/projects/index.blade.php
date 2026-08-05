@@ -17,10 +17,10 @@
         <tr>
           <td class="muted">{{ $project->project_number }}</td>
           <td style="font-weight:500;"><a href="{{ route('admin.projects.show', $project) }}">{{ $project->title }}</a></td>
-          <td>{{ $project->client->name ?? '—' }}</td>
+          <td>{{ $project->client->name ?? '-' }}</td>
           <td><span class="badge-tb badge-info">{{ ucfirst(str_replace('_',' ',$project->status)) }}</span></td>
           <td>{{ ucfirst($project->priority) }}</td>
-          <td>{{ $project->due_date?->format('d M Y') ?? '—' }}</td>
+          <td>{{ $project->due_date?->format('d M Y') ?? '-' }}</td>
           <td>
             <div class="tb-table-actions">
               <a href="{{ route('admin.projects.show', $project) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-eye"></i></a>

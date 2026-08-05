@@ -35,3 +35,21 @@ credentials.txt
 # anyone who asked. remote_env.txt holds production secrets. Neither belongs in
 # anything that gets pushed or scp'd.
 _deploy-oneoffs/
+
+# Build plans, agent briefs and build logs. They describe how the codebase was
+# produced rather than what it does, they are no use to anyone reading the repo,
+# and a document root is the wrong place for them. Kept alongside the project in
+# ../muhindo-app-notes/; the committed history still has every earlier version.
+/AGENT_COMMAND.md
+/COURSE_COVER_PROMPTS.md
+/COURSE_IMPORT_COMMAND.md
+/COURSE_IMPORT_LOG.md
+/IMAGES.md
+/LMS_BUILD_LOG.md
+/LMS_MASTER_PLAN.md
+/LOGO_SPEC.md
+/PORTFOLIO_REDESIGN_PLAN.md
+/PROJECT_PLAN.md
+/PUBLIC_BUILD_LOG.md
+/PUBLIC_SITE_COMMAND.md
+/PUBLIC_SITE_PLAN.md

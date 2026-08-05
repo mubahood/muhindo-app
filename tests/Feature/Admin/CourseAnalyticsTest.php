@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.3.4 — the course analytics tab: enrollment funnel, per-lesson drop-off, watch-time histogram, quiz summaries. */
+/** The course analytics tab: enrollment funnel, per-lesson drop-off, watch-time histogram, quiz summaries. */
 class CourseAnalyticsTest extends TestCase
 {
     use RefreshDatabase;
@@ -129,7 +129,7 @@ class CourseAnalyticsTest extends TestCase
         $response->assertViewHas('watchTime', function (array $watchTime) {
             return $watchTime['No watch time'] === 1
                 && $watchTime['Under 30 min'] === 1
-                && $watchTime['1–2 hrs'] === 1;
+                && $watchTime['1-2 hrs'] === 1;
         });
     }
 

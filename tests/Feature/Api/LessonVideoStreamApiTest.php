@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 /**
- * P5.4 — the API's self-hosted video stream route is deliberately `signed`-only (no
+ * The API's self-hosted video stream route is deliberately `signed`-only (no
  * auth:sanctum), since a native mobile player generally can't attach a bearer token to its
  * own request. Real authorization already happened when Api\V1\LessonController::show()
  * minted the signed URL in the first place.

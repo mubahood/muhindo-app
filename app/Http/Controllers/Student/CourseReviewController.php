@@ -10,7 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-/** §7.3 — reviews: prompted once ≥50% progress, moderated (an admin must publish before it counts toward the average). */
+/** Reviews: prompted once ≥50% progress, moderated (an admin must publish before it counts toward the average). */
 class CourseReviewController extends Controller
 {
     public function create(Request $request, Course $course): View
@@ -45,7 +45,7 @@ class CourseReviewController extends Controller
             ],
         );
 
-        return redirect()->route('learn.index')->with('success', 'Thanks for your review — it will appear once approved.');
+        return redirect()->route('learn.index')->with('success', 'Thanks for your review. It will appear once approved.');
     }
 
     private function enrollmentFor(Request $request, Course $course): Enrollment

@@ -8,7 +8,7 @@ use App\Models\Lesson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** §7.2 — a guest (no enrollment, no login) can view a free-preview lesson, closing L5. */
+/** A guest (no enrollment, no login) can view a free-preview lesson, closing L5. */
 class FreePreviewTest extends TestCase
 {
     use RefreshDatabase;

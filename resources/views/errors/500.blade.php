@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Something went wrong — Muhindo Mubaraka</title>
+<title>Something went wrong | Muhindo Mubaraka</title>
 <style>
   *{box-sizing:border-box;}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
@@ -16,7 +16,7 @@
 <body><div class="card">
   <div class="icon">!</div>
   <h1>Something went wrong on my end</h1>
-  <p>Nothing you did caused this — it's been logged and I'll take a look. Try again in a moment.</p>
+  <p>Nothing you did caused this, it's been logged and I'll take a look. Try again in a moment.</p>
   <a href="/" class="btn">Back to home</a>
 </div>
 </body></html>

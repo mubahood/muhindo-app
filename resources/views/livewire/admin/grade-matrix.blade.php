@@ -28,9 +28,9 @@
             <tr>
               <td>{{ $row['enrollment']->user->name }}</td>
               @foreach($row['grades'] as $percent)
-                <td>{{ $percent !== null ? rtrim(rtrim(number_format($percent, 1), '0'), '.').'%' : '—' }}</td>
+                <td>{{ $percent !== null ? rtrim(rtrim(number_format($percent, 1), '0'), '.').'%' : '-' }}</td>
               @endforeach
-              <td><strong>{{ $row['course_grade'] !== null ? rtrim(rtrim(number_format($row['course_grade'], 1), '0'), '.').'%' : '—' }}</strong></td>
+              <td><strong>{{ $row['course_grade'] !== null ? rtrim(rtrim(number_format($row['course_grade'], 1), '0'), '.').'%' : '-' }}</strong></td>
             </tr>
           @empty
             <tr><td colspan="{{ count($items) + 2 }}"><div class="tb-empty" style="padding:30px;"><p>No active or completed enrollments yet.</p></div></td></tr>

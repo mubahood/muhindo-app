@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** L9 — the student dashboard's course cards must not run 2 extra queries per enrollment row. */
+/** L9. The student dashboard's course cards must not run 2 extra queries per enrollment row. */
 class StudentDashboardQueryCountTest extends TestCase
 {
     use RefreshDatabase;
@@ -31,7 +31,7 @@ class StudentDashboardQueryCountTest extends TestCase
             'status' => 'active',
             'source' => 'self',
             'enrolled_at' => now(),
-            // §9 — the dashboard now reads the denormalized column (frozen once an enrollment
+            // The dashboard now reads the denormalized column (frozen once an enrollment
             // completes), not a live recompute, so this fixture has to set it directly rather
             // than relying on the progressRecords() insert below alone.
             'progress_percent' => 50,
@@ -68,7 +68,7 @@ class StudentDashboardQueryCountTest extends TestCase
         $this->assertSame(
             $queriesForOne,
             $queriesForFive,
-            "Expected a flat query count regardless of enrollment count (got {$queriesForOne} for 1 vs {$queriesForFive} for 5) — a per-row query crept back in."
+            "Expected a flat query count regardless of enrollment count (got {$queriesForOne} for 1 vs {$queriesForFive} for 5), a per-row query crept back in."
         );
     }
 

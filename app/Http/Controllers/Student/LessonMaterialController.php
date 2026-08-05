@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/** Student-facing material download — mirrors DocumentService's private-disk, policy-gated stream. */
+/** Student-facing material download, mirrors DocumentService's private-disk, policy-gated stream. */
 class LessonMaterialController extends Controller
 {
     public function __construct(private readonly LearningEventRecorder $events) {}
@@ -40,7 +40,7 @@ class LessonMaterialController extends Controller
         return Storage::disk('local')->download($material->file_path, $material->title);
     }
 
-    /** Inline PDF preview for an <iframe> — same auth as download(), but never forces a save-as dialog. */
+    /** Inline PDF preview for an <iframe>, same auth as download(), but never forces a save-as dialog. */
     public function preview(Request $request, Course $course, Lesson $lesson, LessonMaterial $material): StreamedResponse
     {
         abort_unless($lesson->module->course_id === $course->id, 404);

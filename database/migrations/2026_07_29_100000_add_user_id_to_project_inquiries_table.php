@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Links a project request back to the account that submitted it, so a signed-in
  * client can follow their own request in the portal instead of it disappearing
- * into the admin inbox. Stays nullable — guests can still request a project
+ * into the admin inbox. Stays nullable, guests can still request a project
  * without an account, exactly as before.
  */
 return new class extends Migration

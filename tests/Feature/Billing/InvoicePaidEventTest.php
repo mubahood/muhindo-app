@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
-/** §7.1 — InvoicePaid fires exactly when an invoice's balance reaches zero, not on a partial payment. */
+/** InvoicePaid fires exactly when an invoice's balance reaches zero, not on a partial payment. */
 class InvoicePaidEventTest extends TestCase
 {
     use RefreshDatabase;

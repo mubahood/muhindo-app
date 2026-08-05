@@ -47,7 +47,7 @@
     <div class="tb-card-footer">
       <form method="POST" action="{{ route('admin.projects.tasks.store', $project) }}" style="display:flex;gap:8px;">
         @csrf
-        <input class="tb-input" type="text" name="title" placeholder="New task…" required>
+        <input class="tb-input" type="text" name="title" placeholder="New task..." required>
         <button type="submit" class="btn-tb btn-tb-primary btn-tb-sm">Add</button>
       </form>
     </div>
@@ -69,7 +69,7 @@
     <div class="tb-card-footer">
       <form method="POST" action="{{ route('admin.projects.updates.store', $project) }}" style="display:flex;flex-direction:column;gap:8px;">
         @csrf
-        <textarea class="tb-textarea" name="update_text" rows="2" placeholder="Post a progress update…" required></textarea>
+        <textarea class="tb-textarea" name="update_text" rows="2" placeholder="Post a progress update..." required></textarea>
         <div style="display:flex;gap:8px;align-items:center;">
           <input class="tb-input" type="number" name="percent_complete" min="0" max="100" placeholder="% complete" style="max-width:140px;">
           <button type="submit" class="btn-tb btn-tb-primary btn-tb-sm">Post</button>
@@ -96,7 +96,7 @@
     <div class="tb-card-footer">
       <form method="POST" action="{{ route('admin.projects.notes.store', $project) }}" style="display:flex;flex-direction:column;gap:8px;">
         @csrf
-        <textarea class="tb-textarea" name="note" rows="2" placeholder="Add an internal note…" required></textarea>
+        <textarea class="tb-textarea" name="note" rows="2" placeholder="Add an internal note..." required></textarea>
         <label class="tb-check-group" style="font-size:.8rem;"><input type="checkbox" name="is_client_visible" value="1"> Visible to client</label>
         <button type="submit" class="btn-tb btn-tb-primary btn-tb-sm" style="align-self:flex-start;">Add note</button>
       </form>

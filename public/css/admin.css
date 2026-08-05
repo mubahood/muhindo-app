@@ -1,7 +1,7 @@
-/* ═══════════════════════════════════════════════════════════════
-   Cryptocoinex — Admin CSS  |  Inter  |  Premium dark / gold theme
+/*
+   Cryptocoinex, Admin CSS  |  Inter  |  Premium dark / gold theme
    (matches the public site + trading screen)
-   ═══════════════════════════════════════════════════════════════ */
+    */
 
 :root {
   /* Surfaces */
@@ -32,7 +32,7 @@
   --ad-success: #16d291; --ad-danger: #ff4d6a;
 }
 
-/* ── Reset ─────────────────────────────────────────────────── */
+/* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif);
   font-size: 14px; color: var(--tx); background: var(--bg);
@@ -46,10 +46,10 @@ ul { list-style: none; }
 button { font-family: inherit; }
 ::selection { background: rgba(245,166,35,.28); }
 
-/* ── Shell ─────────────────────────────────────────────────── */
+/* Shell */
 .ad-wrapper { display: flex; min-height: 100vh; position: relative; z-index: 1; }
 
-/* ══════════ SIDEBAR ══════════ */
+/* SIDEBAR */
 .ad-sidebar {
   position: fixed; top: 0; left: 0; width: var(--sw); height: 100vh;
   background: var(--sb); border-right: 1px solid var(--bd);
@@ -114,7 +114,7 @@ button { font-family: inherit; }
 }
 .ad-logout-btn:hover { border-color: rgba(255,77,106,.4); color: var(--p-high); background: rgba(255,77,106,.07); }
 
-/* ══════════ MAIN ══════════ */
+/* MAIN */
 .ad-main { flex: 1; margin-left: var(--sw); min-width: 0; display: flex; flex-direction: column; }
 
 .ad-topbar {
@@ -158,7 +158,7 @@ button { font-family: inherit; }
 .ad-user-dropdown hr { border: none; border-top: 1px solid var(--bd); margin: 5px 0; }
 .ad-user-dropdown button.danger:hover { color: var(--p-high); }
 
-/* ── Content ───────────────────────────────────────────────── */
+/* Content */
 .ad-content { padding: 28px 26px 60px; max-width: 1400px; width: 100%; }
 
 .ad-page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; flex-wrap: wrap; margin-bottom: 24px; }
@@ -168,7 +168,7 @@ button { font-family: inherit; }
 .ad-breadcrumb i { color: var(--br); }
 .hd-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
-/* ── Flash / alerts ────────────────────────────────────────── */
+/* Flash / alerts */
 .ad-flash-wrap { padding: 0 26px; margin: -8px 0 18px; max-width: 1400px; }
 .ad-alert {
   display: flex; align-items: flex-start; gap: 11px; padding: 13px 16px; border-radius: var(--r);
@@ -182,14 +182,14 @@ button { font-family: inherit; }
 .ad-alert-x { margin-left: auto; background: none; border: none; color: inherit; opacity: .65; cursor: pointer; }
 .ad-alert-x:hover { opacity: 1; }
 
-/* ── Cards ─────────────────────────────────────────────────── */
+/* Cards */
 .ad-card { background: var(--card); border: 1px solid var(--bd); border-radius: var(--r); box-shadow: var(--sh); margin-bottom: 20px; overflow: hidden; }
 .ad-card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--bd); }
 .ad-card-title { font-size: .92rem; font-weight: 700; display: flex; align-items: center; }
 .ad-card-body { padding: 20px; }
 .ad-card-footer { padding: 14px 20px; border-top: 1px solid var(--bd); }
 
-/* ── Stat cards ────────────────────────────────────────────── */
+/* Stat cards */
 .ad-stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 22px; }
 .ad-stat-card {
   display: flex; align-items: center; gap: 15px; background: var(--card); border: 1px solid var(--bd);
@@ -204,11 +204,11 @@ button { font-family: inherit; }
 .ad-stat-value { font-size: 1.55rem; font-weight: 800; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .ad-stat-label { font-size: .74rem; color: var(--mt2); margin-top: 5px; }
 
-/* ── Grids ─────────────────────────────────────────────────── */
+/* Grids */
 .ox-grid-2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; }
 @media (max-width: 1000px) { .ox-grid-2 { grid-template-columns: 1fr; } }
 
-/* ── Tables ────────────────────────────────────────────────── */
+/* Tables */
 .ad-table-wrap { overflow-x: auto; }
 .ad-table { width: 100%; border-collapse: collapse; }
 .ad-table thead th {
@@ -221,7 +221,7 @@ button { font-family: inherit; }
 .ad-table tbody tr:last-child td { border-bottom: none; }
 .ad-table-actions { display: flex; gap: 6px; }
 
-/* ── Buttons ───────────────────────────────────────────────── */
+/* Buttons */
 .btn-ad {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   padding: 10px 16px; border-radius: var(--r-sm); border: 1px solid transparent; cursor: pointer;
@@ -237,7 +237,7 @@ button { font-family: inherit; }
 .btn-ad-sm { padding: 7px 12px; font-size: .78rem; border-radius: 8px; }
 .btn-ad-icon { width: 34px; height: 34px; padding: 0; }
 
-/* ── Badges ────────────────────────────────────────────────── */
+/* Badges */
 .badge-ad, .ad-badge {
   display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 7px;
   font-size: .66rem; font-weight: 800; text-transform: capitalize; letter-spacing: .01em;
@@ -251,7 +251,7 @@ button { font-family: inherit; }
 .badge-ongoing { background: rgba(77,141,255,.14); color: #6ea2ff; }
 .badge-success { background: rgba(22,210,145,.14); color: var(--s-active); }
 
-/* ── Forms ─────────────────────────────────────────────────── */
+/* Forms */
 .ad-form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
 .ad-form-group { margin-bottom: 16px; }
 .ad-label, .ad-form-group > label { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .03em; color: var(--mt); margin-bottom: 7px; }
@@ -274,15 +274,15 @@ button { font-family: inherit; }
 .ad-search-wrap i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--mt2); font-size: .82rem; }
 .ad-search-wrap .ad-input { padding-left: 38px; }
 
-/* ── Empty state ───────────────────────────────────────────── */
+/* Empty state */
 .ad-empty { text-align: center; color: var(--mt2); padding: 36px 16px; }
 .ad-empty i { font-size: 1.8rem; display: block; margin-bottom: 12px; color: var(--bd2); }
 .ad-empty a { color: var(--br); font-weight: 600; }
 
-/* ── Code block (dashboard tips) ───────────────────────────── */
+/* Code block (dashboard tips) */
 code { background: #0c1119; color: var(--br); border: 1px solid var(--bd); padding: .15rem .4rem; border-radius: 6px; font-size: .82em; }
 
-/* ── Drawer ────────────────────────────────────────────────── */
+/* Drawer */
 .ox-drawer-overlay, .ox-modal-overlay {
   position: fixed; inset: 0; background: rgba(3,5,9,.72); backdrop-filter: blur(4px); z-index: 900;
   opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s;
@@ -300,7 +300,7 @@ code { background: #0c1119; color: var(--br); border: 1px solid var(--bd); paddi
 .ox-drawer-close:hover { background: rgba(255,255,255,.06); color: var(--tx); }
 .ox-drawer-body, .ox-modal-body { padding: 20px; overflow-y: auto; flex: 1; }
 
-/* ── Modal ─────────────────────────────────────────────────── */
+/* Modal */
 .ox-modal-overlay { display: flex; align-items: center; justify-content: center; padding: 20px; }
 .ox-modal {
   width: 100%; max-width: 540px; background: var(--panel); border: 1px solid var(--bd2); border-radius: var(--r);
@@ -309,12 +309,12 @@ code { background: #0c1119; color: var(--br); border: 1px solid var(--bd); paddi
 .ox-modal.sm { max-width: 420px; } .ox-modal.lg { max-width: 720px; }
 .ox-modal-overlay.show .ox-modal { transform: none; }
 
-/* ── Spinner ───────────────────────────────────────────────── */
+/* Spinner */
 .ox-spinner-wrap { display: flex; align-items: center; justify-content: center; padding: 40px; }
 .ox-spinner { width: 30px; height: 30px; border: 3px solid var(--bd); border-top-color: var(--br); border-radius: 50%; animation: ox-spin .7s linear infinite; }
 @keyframes ox-spin { to { transform: rotate(360deg); } }
 
-/* ── Toast ─────────────────────────────────────────────────── */
+/* Toast */
 .ox-toast-container { position: fixed; bottom: 22px; right: 22px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
 .ox-toast {
   display: flex; align-items: center; gap: 11px; padding: 13px 16px; min-width: 260px; max-width: 380px;
@@ -326,12 +326,12 @@ code { background: #0c1119; color: var(--br); border: 1px solid var(--bd); paddi
 .ox-toast.error   { border-left: 3px solid var(--p-high); }
 .ox-toast.info    { border-left: 3px solid #4d8dff; }
 
-/* ── Pagination ────────────────────────────────────────────────
+/* Pagination
    Styled centrally in tokens.css (.pagination / .pg-link) so admin and
    trade share one themed paginator. Give it a little breathing room here. */
 .ad-content .pagination { margin-top: 4px; }
 
-/* ── Responsive (off-canvas sidebar) ───────────────────────── */
+/* Responsive (off-canvas sidebar) */
 @media (max-width: 1000px) {
   .ad-sidebar { transform: translateX(-100%); }
   .ad-sidebar.open { transform: none; box-shadow: var(--sh2); }

@@ -8,7 +8,7 @@ use App\Models\Course;
 use Illuminate\Support\Facades\DB;
 
 /**
- * §7.1 — coupon validation + redemption, applied at course-invoice creation (not at payment —
+ * Coupon validation + redemption, applied at course-invoice creation (not at payment
  * a use is spent the moment it's applied to an invoice, matching how the plan frames it as a
  * lightweight growth lever, not a financial ledger needing cross-invoice atomicity).
  */

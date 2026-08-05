@@ -61,7 +61,7 @@
     @empty
       <div class="ord-empty">
         <i class="fas fa-circle-check" aria-hidden="true"></i>
-        Nothing outstanding — you are all paid up.
+        Nothing outstanding. You are all paid up.
       </div>
     @endforelse
   </div>

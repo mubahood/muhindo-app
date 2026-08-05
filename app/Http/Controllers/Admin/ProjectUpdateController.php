@@ -7,7 +7,7 @@ use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-/** The client-visible progress log — this is the client's window into project work. */
+/** The client-visible progress log. This is the client's window into project work. */
 class ProjectUpdateController extends Controller
 {
     public function store(Request $request, Project $project): RedirectResponse
@@ -23,6 +23,6 @@ class ProjectUpdateController extends Controller
             'percent_complete' => $data['percent_complete'] ?? null,
         ]);
 
-        return back()->with('success', 'Update posted — visible to the client.');
+        return back()->with('success', 'Update posted, visible to the client.');
     }
 }

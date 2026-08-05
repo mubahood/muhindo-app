@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * §5.2/P5.4 — a question as shown DURING an in-progress attempt: never exposes
+ * A question as shown DURING an in-progress attempt: never exposes
  * `QuestionOption::is_correct`/`match_key`, which would leak the answer before grading.
  * The web quiz runner gets this for free by simply never echoing those fields in Blade;
  * a JSON API has no such implicit safety, so this resource is the explicit equivalent.

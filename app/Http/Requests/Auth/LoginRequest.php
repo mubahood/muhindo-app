@@ -49,7 +49,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        // Honeypot only — deliberately NOT FormShield's timing check. A
+        // Honeypot only, deliberately NOT FormShield's timing check. A
         // password manager fills and submits this form in well under a second,
         // and refusing that would lock out exactly the people with the
         // strongest credentials. The hidden field carries no such risk: no

@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Item Analysis — ' . $quiz->title)
+@section('title', 'Item Analysis | ' . $quiz->title)
 
 @section('content')
 

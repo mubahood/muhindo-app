@@ -14,7 +14,7 @@ abstract class TestCase extends BaseTestCase
      * Public forms carry an encrypted "issued at" stamp and refuse anything
      * submitted implausibly fast, so a test posting a bare array is rejected
      * exactly as a bot would be. This supplies a stamp old enough to read as
-     * human — which is what a real submission carries.
+     * human, which is what a real submission carries.
      *
      * @param  array<string,mixed>  $payload
      * @return array<string,mixed>

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** L3 — a certificate must be verifiable, stored once, and never issued twice. */
+/** L3. A certificate must be verifiable, stored once, and never issued twice. */
 class CertificateIssuanceTest extends TestCase
 {
     use RefreshDatabase;
@@ -103,7 +103,7 @@ class CertificateIssuanceTest extends TestCase
     public function test_a_forged_certificate_number_alone_does_not_resolve_on_the_verify_page(): void
     {
         // The verify route is keyed on the unguessable uuid, not the human-readable
-        // certificate_no — posting the printed code itself must not resolve anything.
+        // certificate_no, posting the printed code itself must not resolve anything.
         $this->get('/verify/CRT-2026-000001A')->assertNotFound();
     }
 }

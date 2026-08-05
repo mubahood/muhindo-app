@@ -24,7 +24,7 @@ class LessonController extends Controller
         private readonly YoutubeService $youtube,
     ) {}
 
-    /** §7.4 — the split-pane editor's live preview renders through the exact same pipeline students see, so it can never drift from the real output. */
+    /** The split-pane editor's live preview renders through the exact same pipeline students see, so it can never drift from the real output. */
     public function previewMarkdown(Request $request): JsonResponse
     {
         $data = $request->validate(['content' => 'nullable|string']);
@@ -32,7 +32,7 @@ class LessonController extends Controller
         return response()->json(['html' => $this->markdown->toHtml($data['content'] ?? '')]);
     }
 
-    /** §7.5 — optional duration auto-fetch; a plain {available:false} when no API key is configured or the lookup fails. */
+    /** Optional duration auto-fetch; a plain {available:false} when no API key is configured or the lookup fails. */
     public function fetchVideoDuration(Request $request): JsonResponse
     {
         $data = $request->validate(['video_url' => 'required|url']);
@@ -63,7 +63,7 @@ class LessonController extends Controller
         return redirect()->route('admin.courses.show', $module->course)->with('success', 'Lesson added.');
     }
 
-    /** §7.5 — the curriculum tree's quick-add row: a title only, everything else editable afterward. */
+    /** The curriculum tree's quick-add row: a title only, everything else editable afterward. */
     public function storeInline(Request $request, CourseModule $module): RedirectResponse
     {
         $data = $request->validate(['title' => 'required|string|max:200']);
@@ -77,10 +77,10 @@ class LessonController extends Controller
             'completion_threshold' => 80,
         ]);
 
-        return redirect()->route('admin.courses.show', $module->course)->with('success', 'Lesson added as a draft — publish it once it has content.');
+        return redirect()->route('admin.courses.show', $module->course)->with('success', 'Lesson added as a draft, publish it once it has content.');
     }
 
-    /** §7.5 — a quick per-lesson publish toggle, no full edit-form visit needed. */
+    /** A quick per-lesson publish toggle, no full edit-form visit needed. */
     public function togglePublish(Lesson $lesson): RedirectResponse
     {
         $lesson->update(['is_published' => ! $lesson->is_published]);
@@ -111,7 +111,7 @@ class LessonController extends Controller
     }
 
     /**
-     * P5.3 — an optional self-hosted upload, stored on the private `local` disk and streamed
+     * An optional self-hosted upload, stored on the private `local` disk and streamed
      * back to students only via a signed, time-limited URL (LessonVideoController::stream()).
      * A newly-uploaded file replaces (and deletes) whatever was there before; the "remove"
      * checkbox is the only way back to YouTube-only once a file has been attached.

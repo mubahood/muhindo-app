@@ -85,7 +85,7 @@
   <div class="wrap">
     <div class="eyebrow">Basket</div>
     <h1>Your basket</h1>
-    <p>Courses and downloads go in the same basket — one order, one payment.</p>
+    <p>Courses and downloads go in the same basket, one order, one payment.</p>
   </div>
 </section>
 
@@ -191,7 +191,7 @@
 
           <div class="bk-trust">
             <span><i class="fas fa-bolt" aria-hidden="true"></i> Downloads land in your library the moment payment clears.</span>
-            <span><i class="fas fa-lock" aria-hidden="true"></i> Card details never touch this site — Flutterwave handles them.</span>
+            <span><i class="fas fa-lock" aria-hidden="true"></i> Card details never touch this site, Flutterwave handles them.</span>
             <span><i class="fas fa-mobile-screen" aria-hidden="true"></i> MTN MoMo, Airtel Money, Visa and Mastercard.</span>
           </div>
         </aside>

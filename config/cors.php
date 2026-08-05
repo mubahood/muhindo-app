@@ -10,7 +10,7 @@ return [
     | HMS_PLAN.md constraint C15: locked to known origins, never a wildcard
     | (the legacy audit found `['*']` everywhere). No config/cors.php meant
     | this app was silently running on the framework's own default
-    | (`allowed_origins => ['*']`) — this file replaces that with an
+    | (`allowed_origins => ['*']`), this file replaces that with an
     | explicit, env-driven allow-list that defaults to *nothing* until
     | CORS_ALLOWED_ORIGINS is set.
     |

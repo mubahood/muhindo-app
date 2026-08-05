@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-/** §6.1 — the denormalized fast-path columns must stay in sync with real progress. */
+/** The denormalized fast-path columns must stay in sync with real progress. */
 class EnrollmentFastPathColumnsTest extends TestCase
 {
     use RefreshDatabase;

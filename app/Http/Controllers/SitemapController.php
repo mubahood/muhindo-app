@@ -7,9 +7,9 @@ use App\Models\PortfolioProject;
 use Illuminate\Http\Response;
 
 /**
- * §6.3 — /sitemap.xml generated from real content (never a static, go-stale file) and
+ * /sitemap.xml generated from real content (never a static, go-stale file) and
  * /robots.txt generated from the app's actual URL (the static file it replaced pointed
- * at a completely different project's domain, inherited from the true-doctor ancestor —
+ * at a completely different project's domain, inherited from the true-doctor ancestor,
  * a hand-maintained robots.txt is exactly how that kind of drift happens again).
  */
 class SitemapController extends Controller
@@ -18,7 +18,7 @@ class SitemapController extends Controller
     {
         $urls = [
             // Trailing slash avoids an extra redirect hop some server configs add for a bare
-            // subdirectory path (found crawling the live sitemap during the W7 walkthrough) —
+            // Subdirectory path (found crawling the live sitemap during the walkthrough),
             // harmless and equivalent at a plain domain root, where most servers serve both forms identically.
             ['loc' => route('home').'/', 'lastmod' => null],
             ['loc' => route('courses.index'), 'lastmod' => null],

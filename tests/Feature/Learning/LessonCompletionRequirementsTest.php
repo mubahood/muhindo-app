@@ -16,8 +16,8 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
- * Lesson completion requirements — minimum focused time (lessons.min_active_seconds)
- * and compulsory activities (quizzes/assignments.is_required) — enforced in
+ * Lesson completion requirements, minimum focused time (lessons.min_active_seconds)
+ * and compulsory activities (quizzes/assignments.is_required), enforced in
  * ProgressService::completeLesson for every surface (web, API, min-watch auto-complete).
  */
 class LessonCompletionRequirementsTest extends TestCase
@@ -157,7 +157,7 @@ class LessonCompletionRequirementsTest extends TestCase
     public function test_an_already_completed_lesson_bypasses_new_blockers(): void
     {
         // The "Next lesson" button re-posts complete on completed lessons (idempotent
-        // stale-tab path) — a requirement added later must never break it.
+        // stale-tab path). A requirement added later must never break it.
         [$course, $lesson, $student, $enrollment] = $this->activeEnrollment();
         $this->actingAs($student)->postJson(route('learn.lesson.complete', [$course, $lesson]))->assertOk();
 

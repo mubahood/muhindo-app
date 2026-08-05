@@ -34,7 +34,7 @@
               @else<span class="badge-tb badge-neutral">Draft</span>@endif
             </td>
             <td>{{ $item->licenses_count }}</td>
-            <td class="muted">{{ $item->fileSize() ?? ($item->external_url ? 'Link' : '—') }}</td>
+            <td class="muted">{{ $item->fileSize() ?? ($item->external_url ? 'Link' : '-') }}</td>
             <td>
               <div class="tb-table-actions">
                 @if($item->is_published)

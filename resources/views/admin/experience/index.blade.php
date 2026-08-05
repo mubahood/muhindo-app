@@ -17,7 +17,7 @@
         <tr>
           <td style="font-weight:500;">{{ $item->role }}</td>
           <td>{{ $item->company }}</td>
-          <td>{{ $item->start_date->format('M Y') }} – {{ $item->end_date?->format('M Y') ?? 'Present' }}</td>
+          <td>{{ $item->start_date->format('M Y') }} - {{ $item->end_date?->format('M Y') ?? 'Present' }}</td>
           <td>
             <div class="tb-table-actions">
               <a href="{{ route('admin.experience.edit', $item) }}" class="btn-tb btn-tb-ghost btn-tb-icon"><i class="fas fa-pen"></i></a>

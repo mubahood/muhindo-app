@@ -6,7 +6,7 @@ use App\Enums\ProjectInquiryStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/** §4.3 — a public "start a project" lead. */
+/** A public "start a project" lead. */
 class ProjectInquiry extends Model
 {
     use HasFactory;
@@ -34,20 +34,20 @@ class ProjectInquiry extends Model
 
     /** What somebody can pick from, and what each one means in plain words. */
     public const CATEGORIES = [
-        'management_system' => 'A system to run something — stock, patients, students, cases',
-        'ecommerce' => 'Selling online — a shop, a marketplace, bookings',
+        'management_system' => 'A system to run something, stock, patients, students, cases',
+        'ecommerce' => 'Selling online, a shop, a marketplace, bookings',
         'mobile_app' => 'A mobile app, on its own or alongside a website',
         'data_platform' => 'Collecting and reporting on data across many places',
         'website' => 'A website that has to do more than sit there',
         'rescue' => 'Something that exists and is not working',
-        'other' => 'Something else — tell me below',
+        'other' => 'Something else, tell me below',
     ];
 
     public const TIMELINES = [
         'asap' => 'As soon as you can start',
         '1_3_months' => 'Within one to three months',
         '3_6_months' => 'Three to six months out',
-        'exploring' => 'No date yet — I am working out whether to do it',
+        'exploring' => 'No date yet. I am working out whether to do it',
     ];
 
     public function categoryLabel(): string
@@ -60,7 +60,7 @@ class ProjectInquiry extends Model
         return self::TIMELINES[$this->timeline] ?? ($this->timeline ?: 'Not said');
     }
 
-    /** "UGX 12,000,000" or "$3,000" — however they chose to think about it. */
+    /** "UGX 12,000,000" or "$3,000" however they chose to think about it. */
     public function budgetLabel(): string
     {
         if (! $this->budget_amount) {

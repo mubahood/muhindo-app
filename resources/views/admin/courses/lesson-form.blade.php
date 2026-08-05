@@ -63,7 +63,7 @@
         {{-- The editor writes Markdown rather than being a WYSIWYG on purpose.
              The preview renders through the very same server-side renderer the
              student sees, so what is shown here cannot drift from the real
-             output — a WYSIWYG producing its own HTML would give up that
+             output. A WYSIWYG producing its own HTML would give up that
              guarantee, and the stored content would stop being diffable. --}}
         <div class="ed" :class="{ 'is-drop': dragging }" x-show="!showPreview">
           <div class="ed-bar" x-show="contentFormat === 'markdown'">
@@ -125,8 +125,8 @@
       </div>
       <div class="tb-form-group full">
         <label class="tb-label">Captions URL (.vtt)</label>
-        <input class="tb-input" type="url" name="captions_url" value="{{ old('captions_url', $lesson->captions_url) }}" placeholder="https://…/captions-en.vtt">
-        <p class="muted" style="font-size:.75rem;margin-top:4px;">For a self-hosted video file only — a YouTube video's own captions already show automatically.</p>
+        <input class="tb-input" type="url" name="captions_url" value="{{ old('captions_url', $lesson->captions_url) }}" placeholder="https://.../captions-en.vtt">
+        <p class="muted" style="font-size:.75rem;margin-top:4px;">For a self-hosted video file only. A YouTube video's own captions already show automatically.</p>
       </div>
       <div class="tb-form-group">
         <label class="tb-label">Duration (minutes)</label>
@@ -146,7 +146,7 @@
         <label class="tb-label">Completion rule</label>
         <select class="tb-select" name="completion_rule" x-model="completionRule">
           @foreach(\App\Enums\CompletionRule::cases() as $rule)
-            <option value="{{ $rule->value }}" {{ ! $rule->isEnforced() ? 'disabled' : '' }}>{{ $rule->label() }}{{ ! $rule->isEnforced() ? ' — coming soon' : '' }}</option>
+            <option value="{{ $rule->value }}" {{ ! $rule->isEnforced() ? 'disabled' : '' }}>{{ $rule->label() }}{{ ! $rule->isEnforced() ? ' coming soon' : '' }}</option>
           @endforeach
         </select>
       </div>
@@ -256,7 +256,7 @@
 @push('scripts')
 <script>
 /**
- * §7.4 — split-pane markdown editor.
+ * Split-pane markdown editor.
  *
  * The preview calls the exact same server-side renderer students see
  * (admin.lessons.preview-markdown), so it can never show something different
@@ -266,7 +266,7 @@
  * lossy conversion back, and the stored content would stop being readable and
  * diffable.
  *
- * Everything the toolbar does — and every image dropped, pasted or picked —
+ * Everything the toolbar does, and every image dropped, pasted or picked
  * goes in at the caret and leaves the selection sensible afterwards. The
  * previous version appended images to the very end of the field regardless of
  * where you were working, which meant scrolling down and cutting them back to
@@ -287,8 +287,8 @@ function lessonEditor(cfg) {
     uploadLabel: '',
 
     /**
-     * wrap  — puts the markers either side of the selection.
-     * line  — prefixes every selected line (lists, quotes, headings).
+     * wrap, puts the markers either side of the selection.
+     * line, prefixes every selected line (lists, quotes, headings).
      * Each carries the word to use when nothing is selected, so a bare click
      * gives you something to type over rather than an empty pair of markers.
      */
@@ -324,12 +324,12 @@ function lessonEditor(cfg) {
           this.durationMinutes = data.minutes;
           this.durationFetchMessage = `Fetched: ${data.minutes} min.`;
         } else if (data.reason === 'not_youtube') {
-          this.durationFetchMessage = 'Not a recognizable YouTube URL — enter the duration manually.';
+          this.durationFetchMessage = 'Not a recognizable YouTube URL, enter the duration manually.';
         } else {
-          this.durationFetchMessage = 'Could not auto-fetch (no API key configured, or the lookup failed) — enter it manually.';
+          this.durationFetchMessage = 'Could not auto-fetch (no API key configured, or the lookup failed), enter it manually.';
         }
       } catch (e) {
-        this.durationFetchMessage = 'Could not auto-fetch — enter it manually.';
+        this.durationFetchMessage = 'Could not auto-fetch, enter it manually.';
       } finally {
         this.fetchingDuration = false;
       }
@@ -353,7 +353,7 @@ function lessonEditor(cfg) {
         this.previewHtml = '<p class="muted">Preview unavailable.</p>';
       }
     },
-    // ── Writing into the field ──────────────────────────────────────────
+    // Writing into the field
 
     /**
      * The one place text enters the document.
@@ -361,7 +361,7 @@ function lessonEditor(cfg) {
      * Everything routes through here so the caret always ends up somewhere
      * sensible and every edit stays undoable: execCommand('insertText') keeps
      * the browser's native undo stack, which assigning to textarea.value
-     * destroys — losing a whole lesson to one mistaken Ctrl+Z is not a
+     * destroys, losing a whole lesson to one mistaken Ctrl+Z is not a
      * trade worth making for slightly simpler code.
      */
     insert(text, selectFrom = null, selectTo = null) {
@@ -451,7 +451,7 @@ function lessonEditor(cfg) {
       this.apply(this.tools.find((t) => t.key === key));
     },
 
-    // ── Images ──────────────────────────────────────────────────────────
+    // Images
 
     onDrop(event) {
       this.dragging = false;
@@ -485,8 +485,8 @@ function lessonEditor(cfg) {
       // the order they were dropped, and the caret moves with each insert.
       for (const [index, file] of files.entries()) {
         this.uploadLabel = files.length > 1
-          ? `Uploading ${index + 1} of ${files.length}…`
-          : 'Uploading…';
+          ? `Uploading ${index + 1} of ${files.length}...`
+          : 'Uploading...';
         await this.uploadImage(file);
       }
 

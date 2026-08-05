@@ -1,7 +1,7 @@
       </td>
     </tr>
 
-    {{-- ── FOOTER ── --}}
+    {{-- FOOTER --}}
     <tr>
       <td style="background:#F0EAE2;border-radius:0 0 12px 12px;padding:22px 40px 26px;text-align:center;">
         <p style="font-size:11px;color:#8A7A6A;margin:0;line-height:1.6;">

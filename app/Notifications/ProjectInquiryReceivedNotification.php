@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
-/** §4.3 — a new "start a project" lead, sent to every admin (mail + database — this is a sales lead, not routine activity). */
+/** (a new "start a project" lead, sent to every admin (mail + database) this is a sales lead, not routine activity). */
 class ProjectInquiryReceivedNotification extends Notification implements ShouldQueue
 {
     use Queueable;

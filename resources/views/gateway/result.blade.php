@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Payment {{ $ok ? 'received' : 'not completed' }} — Muhindo Mubaraka</title>
+<title>Payment {{ $ok ? 'received' : 'not completed' }} | Muhindo Mubaraka</title>
 <link rel="stylesheet" href="{{ asset('vendor/fonts/inter/inter.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}">
 <style>
@@ -21,10 +21,10 @@
   <h1>{{ $ok ? 'Payment received' : 'Payment not completed' }}</h1>
   <p>
     @if($ok)
-      Thank you — your payment has been recorded and your enrollment is now active.
+      Thank you. Your payment has been recorded and your enrollment is now active.
     @else
       The payment wasn't completed, so nothing was charged. If money did leave your
-      account, it will reconcile automatically — nothing else to do. Your course is
+      account, it will reconcile automatically. Nothing else to do. Your course is
       still reserved; you can pick up right where you left off.
     @endif
   </p>

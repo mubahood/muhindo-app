@@ -6,9 +6,9 @@ use App\Models\AttemptAnswer;
 use App\Models\Quiz;
 
 /**
- * §6.3.4 — quiz item analysis: per-question correct-rate across every attempt that has actually
+ * Quiz item analysis: per-question correct-rate across every attempt that has actually
  * answered it. A question everyone fails is a signal about the question (or the lesson before
- * it), not about the students — this is the instructor-facing view that surfaces it.
+ * it), not about the students. This is the instructor-facing view that surfaces it.
  */
 class QuizAnalysisService
 {

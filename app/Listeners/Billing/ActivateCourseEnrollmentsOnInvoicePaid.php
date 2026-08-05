@@ -11,8 +11,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Str;
 
 /**
- * §7.1 — the "last mile" of course checkout: an invoice reaching Paid (via Flutterwave
- * or an admin-recorded cash/bank payment — recordPayment() is the one shared chokepoint,
+ * The "last mile" of course checkout: an invoice reaching Paid (via Flutterwave
+ * or an admin-recorded cash/bank payment, recordPayment() is the one shared chokepoint,
  * so both paths activate access identically) turns every course line item on it into an
  * active enrollment. Idempotent: re-running against an already-active enrollment is a no-op,
  * so a webhook/callback race settling the same invoice twice never double-enrolls or

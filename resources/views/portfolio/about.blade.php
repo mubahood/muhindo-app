@@ -5,7 +5,7 @@
 @push('styles')
 <style>
   /* One column, one spine. Everything on this page sits inside the rail
-     layout — the previous version dropped out of it halfway down, so the
+     layout, the previous version dropped out of it halfway down, so the
      sidebar simply stopped and the page turned into a run of unrelated
      full-width bands with a generic call to action at the end. */
   .ab-sec{margin-top:34px;}

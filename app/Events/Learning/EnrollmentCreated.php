@@ -5,7 +5,7 @@ namespace App\Events\Learning;
 use App\Models\Enrollment;
 use Illuminate\Foundation\Events\Dispatchable;
 
-/** §4.5 — fired once, only for a genuinely new enrollment (not a double-click/idempotent hit on an existing one). */
+/** Fired once, only for a genuinely new enrollment (not a double-click/idempotent hit on an existing one). */
 class EnrollmentCreated
 {
     use Dispatchable;

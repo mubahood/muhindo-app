@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
-/** Staff management — super_admin and admin accounts only (students/clients are managed via their own screens). */
+/** Staff management, super_admin and admin accounts only (students/clients are managed via their own screens). */
 class UserController extends Controller
 {
     public function __construct(private readonly AvatarService $avatars) {}
@@ -66,7 +66,7 @@ class UserController extends Controller
             $emailNote = " Login credentials sent to {$user->email}.";
         } catch (\Exception $e) {
             Log::error("Welcome email failed for {$user->email}: ".$e->getMessage());
-            $emailNote = ' (Email delivery failed — please share credentials manually.)';
+            $emailNote = ' (Email delivery failed, please share credentials manually.)';
         }
 
         return redirect()->route('admin.users.index')
@@ -106,7 +106,7 @@ class UserController extends Controller
         $data['is_admin'] = $data['role'] === 'super_admin';
 
         if (! empty($data['password'])) {
-            // An admin-initiated reset — the affected user still sets their
+            // An admin-initiated reset. The affected user still sets their
             // own password at next login, same as a fresh temporary password would.
             $data['password'] = Hash::make($data['password']);
             $data['password_change_required'] = true;

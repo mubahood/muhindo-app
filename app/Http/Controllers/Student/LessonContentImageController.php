@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/** Serves a markdown lesson's embedded images inline — same policy gate as materials/heartbeat. */
+/** Serves a markdown lesson's embedded images inline, same policy gate as materials/heartbeat. */
 class LessonContentImageController extends Controller
 {
     public function show(Request $request, Course $course, Lesson $lesson, string $filename): StreamedResponse

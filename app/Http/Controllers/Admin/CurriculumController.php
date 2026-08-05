@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-/** §7.5 — one AJAX endpoint for the curriculum builder's drag-and-drop: modules and/or lessons, in one transaction. */
+/** One AJAX endpoint for the curriculum builder's drag-and-drop: modules and/or lessons, in one transaction. */
 class CurriculumController extends Controller
 {
     public function reorder(Request $request, Course $course): JsonResponse

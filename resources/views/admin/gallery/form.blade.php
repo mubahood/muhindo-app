@@ -23,7 +23,7 @@
           <input class="tb-input" type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp"
                  aria-describedby="photo-help" @unless($item->exists) required @endunless>
           <p class="tb-field-error" style="color:var(--mt);" id="photo-help">
-            Optimised on upload — resized, metadata stripped, WebP and thumbnail generated. Up to 12&nbsp;MB.
+            Optimised on upload, resized, metadata stripped, WebP and thumbnail generated. Up to 12&nbsp;MB.
           </p>
           @if($item->exists)
             <img src="{{ $item->thumbUrl() }}" alt="" style="margin-top:10px;max-height:150px;border:1px solid var(--line);">
@@ -58,7 +58,7 @@
           <input class="tb-input" type="text" id="alt" name="alt" maxlength="250"
                  value="{{ old('alt', $item->alt) }}" aria-describedby="alt-help">
           <p class="tb-field-error" style="color:var(--mt);" id="alt-help">
-            Describes the picture for someone who cannot see it — this is not the caption. Left blank, the title is used.
+            Describes the picture for someone who cannot see it. This is not the caption. Left blank, the title is used.
           </p>
         </div>
 
@@ -74,7 +74,7 @@
           </label>
           <label class="tb-check-group">
             <input type="checkbox" name="is_featured" value="1" @checked(old('is_featured', $item->is_featured))>
-            Featured — may appear on other pages
+            Featured, may appear on other pages
           </label>
         </div>
       </div>

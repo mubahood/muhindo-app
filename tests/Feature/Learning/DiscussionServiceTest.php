@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\TestCase;
 
-/** §7.3 — DiscussionService: ask/reply/resolve, the Instructor badge, and who gets notified. */
+/** DiscussionService: ask/reply/resolve, the Instructor badge, and who gets notified. */
 class DiscussionServiceTest extends TestCase
 {
     use RefreshDatabase;

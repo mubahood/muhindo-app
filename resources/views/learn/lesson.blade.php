@@ -4,8 +4,8 @@
 @section('main_class', '')
 
 @php
-  /* Built here (not just in the layout) because this page's own sections —
-     header_meta, shell_component — are buffered before the layout renders. */
+  /* Built here (not just in the layout) because this page's own sections,
+     header_meta, shell_component, are buffered before the layout renders. */
   $currentLesson = $lesson;
   $shell = new \App\Support\Learning\LearnShell($course, auth()->user(), $lesson);
   $activeSeconds = (int) ($enrollment->progressRecords()->where('lesson_id', $lesson->id)->value('active_seconds') ?? 0);
@@ -44,7 +44,7 @@
 
 @section('header_meta')
   <span class="pos">Lesson {{ $shell->lessonPosition() }} of {{ $shell->totalLessons() }}</span>
-  <span class="timer" title="Your time on this lesson — counts only while this tab is focused"
+  <span class="timer" title="Your time on this lesson, counts only while this tab is focused"
         :class="{paused: !isFocused}">
     <i class="far fa-clock" aria-hidden="true"></i>
     <span x-text="formatTime(activeSeconds)">{{ $activeSecondsLabel }}</span>
@@ -83,7 +83,7 @@
   .confetti-piece{position:fixed;top:-10px;width:8px;height:14px;z-index:200;pointer-events:none;}
 
   /* Activities: a slim banner in the flow + an independent overlay layer for the
-     detail (fixed position — opening/closing it can never shift the page). */
+     detail (fixed position, opening/closing it can never shift the page). */
   .activities-banner{display:flex;align-items:center;gap:10px;background:var(--gold-soft);border:1px solid var(--gold);
     padding:8px 12px;margin-bottom:10px;font-size:12.5px;}
   .activities-banner .ab-icon{color:var(--gold-d);font-size:14px;flex-shrink:0;}
@@ -132,7 +132,7 @@
       </div>
     {{-- is_embeddable matters here, not only in the plain-iframe branch below.
          A video whose owner switched embedding off cannot play in the IFrame
-         API either — it would show "Video unavailable" inside our own chrome,
+         API either. It would show "Video unavailable" inside our own chrome,
          which is worse than saying so and linking out. --}}
     @elseif($lesson->youtubeVideoId() && $lesson->is_embeddable)
       <div
@@ -166,7 +166,7 @@
           <h3>{{ $lesson->title }}</h3>
           <p class="watch-out-note">
             Embedding is switched off for this video, so it cannot play here. It opens in a
-            new tab — come back and mark the lesson complete when you are done.
+            new tab, come back and mark the lesson complete when you are done.
           </p>
           <a href="{{ $lesson->resource_url }}" target="_blank" rel="noopener" class="btn gold">
             Watch on YouTube <i class="fas fa-arrow-up-right-from-square"></i>
@@ -181,10 +181,10 @@
         <span class="ab-icon"><i class="fas fa-clipboard-check" aria-hidden="true"></i></span>
         <span class="ab-text">
           This lesson has {{ $activities->count() }} {{ \Illuminate\Support\Str::plural('activity', $activities->count()) }}
-          @if($requiredPending > 0)
-            — <b>{{ $requiredPending }} required</b> before you can complete the lesson
-          @elseif($activities->where('required', true)->isNotEmpty())
-            — all required work submitted <i class="fas fa-circle-check" style="color:var(--ok);"></i>
+          @if($requiredPending > 0),
+            <b>{{ $requiredPending }} required</b> before you can complete the lesson
+          @elseif($activities->where('required', true)->isNotEmpty()).
+            All required work submitted <i class="fas fa-circle-check" style="color:var(--ok);"></i>
           @endif
         </span>
         <button type="button" class="btn" @click="activitiesOpen = true">View</button>
@@ -248,7 +248,7 @@
             </form>
           </div>
         @empty
-          <p class="muted" style="font-size:13px;" data-notes-empty>No notes yet — jot one down as you watch.</p>
+          <p class="muted" style="font-size:13px;" data-notes-empty>No notes yet, jot one down as you watch.</p>
         @endforelse
       </div>
       <form method="POST" action="{{ route('learn.notes.store', [$course, $lesson]) }}"
@@ -257,9 +257,9 @@
             onsubmit="this.querySelector('[name=seconds]').value = Math.floor(window.__lessonVideoPlayer?.getCurrentTime?.() ?? 0) || ''">
         @csrf
         <input type="hidden" name="seconds" value="">
-        <input type="text" name="body" placeholder="Add a note at the current time…" required
+        <input type="text" name="body" placeholder="Add a note at the current time..." required
                style="flex:1;padding:7px 10px;border:1px solid var(--line);font-family:var(--font);font-size:13px;">
-        <button type="submit" class="btn" :disabled="noteSaving"><span x-text="noteSaving ? 'Saving…' : 'Add'">Add</span></button>
+        <button type="submit" class="btn" :disabled="noteSaving"><span x-text="noteSaving ? 'Saving...' : 'Add'">Add</span></button>
       </form>
     </div>
 @endsection
@@ -275,7 +275,7 @@
       </template>
 
       <div x-show="showAdvance" x-cloak class="learn-advance" style="flex:1;margin:0 12px;">
-        <span>Next: <strong x-text="nextLessonTitle"></strong> — <span x-text="advanceSeconds"></span>s</span>
+        <span>Next: <strong x-text="nextLessonTitle"></strong>, <span x-text="advanceSeconds"></span>s</span>
         <button type="button" @click="cancelAdvance()"><i class="fas fa-pause"></i> Stay</button>
       </div>
 
@@ -288,14 +288,14 @@
         </span>
         <button type="submit" class="btn gold" :disabled="submitting || (!completed && timeRemaining() > 0)" x-show="!(completed && !nextLessonUrl && !showAdvance)">
           <span x-show="!submitting" x-text="completeLabel()">Mark complete & continue</span>
-          <span x-show="submitting" x-cloak>Saving…</span>
+          <span x-show="submitting" x-cloak>Saving...</span>
           <i class="fas fa-arrow-right"></i>
         </button>
       </form>
 
       {{-- The end of the course. Once the last topic is done the button above
            hides itself, which used to leave the bar empty and the student with
-           nowhere to go — the one moment they most want their certificate. --}}
+           nowhere to go. The one moment they most want their certificate. --}}
       <a href="{{ route('learn.certificate', $course) }}" wire:navigate class="btn gold"
          x-show="completed && !nextLessonUrl && !showAdvance" x-cloak>
         <i class="fas fa-award"></i> Get your certificate
@@ -305,7 +305,7 @@
 @endsection
 
 @section('overlays')
-  {{-- Activities overlay — its own fixed layer; responding to it never shakes the page. --}}
+  {{-- Activities overlay, its own fixed layer; responding to it never shakes the page. --}}
   <div class="learn-modal-backdrop" x-show="activitiesOpen" x-cloak @click.self="activitiesOpen = false">
     <div class="activities-modal" role="dialog" aria-label="Lesson activities">
       <div class="am-head">
@@ -338,7 +338,7 @@
 
   <div class="learn-modal-backdrop" x-show="showCertificateModal" x-cloak>
     <div class="learn-modal">
-      <h2>🎉 Course completed!</h2>
+      <h2> Course completed!</h2>
       <p class="muted" style="margin-bottom:20px;">Congratulations on finishing {{ $course->title }}.</p>
       <a :href="certificateUrl" target="_blank" class="btn gold" style="margin-bottom:10px;" x-show="certificateUrl"><i class="fas fa-award"></i> View certificate</a>
       <br>
@@ -350,10 +350,10 @@
 @push('scripts')
 <script>
 /**
- * Shared by both player wrappers below — the heartbeat request/response
+ * Shared by both player wrappers below. The heartbeat request/response
  * contract is identical regardless of which player (YouTube IFrame API or
  * a native <video> element) reports the delta, since ProgressService
- * itself is already player-agnostic (§6.2).
+ * itself is already player-agnostic.
  */
 async function postLessonHeartbeat(heartbeatUrl, csrfToken, secondsDelta, positionSeconds) {
   try {
@@ -364,16 +364,16 @@ async function postLessonHeartbeat(heartbeatUrl, csrfToken, secondsDelta, positi
     });
     const data = await res.json();
     if (data.completed) {
-      window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Lesson auto-completed — nice work!', type: 'success' } }));
+      window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Lesson auto-completed, nice work!', type: 'success' } }));
       window.dispatchEvent(new CustomEvent('lesson-auto-completed'));
     }
   } catch (e) {
-    // Silent — this heartbeat's delta is lost, the next one carries on from now().
+    // Silent. This heartbeat's delta is lost, the next one carries on from now().
   }
 }
 
 /**
- * §7.3 YouTube IFrame API wrapper. Resumes at `resumeAt`, reports a heartbeat
+ * YouTube IFrame API wrapper. Resumes at `resumeAt`, reports a heartbeat
  * every ~15s of actual playing time (never while paused), and a final
  * heartbeat on pause/end so the last few seconds aren't lost. `min_watch`
  * auto-completion is decided entirely server-side (ProgressService); this
@@ -444,7 +444,7 @@ function youtubePlayer(cfg) {
 }
 
 /**
- * P5.3 — the self-hosted equivalent of youtubePlayer() above, same heartbeat
+ * The self-hosted equivalent of youtubePlayer() above, same heartbeat
  * cadence/contract, native <video> element instead of the YouTube IFrame
  * API. Exposes the same window.__lessonVideoPlayer.getCurrentTime()/seekTo()
  * contract the notes tab already relies on, so notes/seek work identically
@@ -496,11 +496,11 @@ function selfHostedVideoPlayer(cfg) {
 }
 
 /**
- * §7.3 — the learning shell's brain. Everything a student does mid-lesson is
+ * The learning shell's brain. Everything a student does mid-lesson is
  * AJAX (complete, heartbeat auto-complete, notes add/delete), with optimistic
  * UI updates that roll back on failure and toast. The live progress in the
  * learning header and the current chapter's counter update instantly on
- * completion — no reload. Every form keeps a real action/method, so with JS
+ * completion, no reload. Every form keeps a real action/method, so with JS
  * disabled the page degrades to ordinary full-page posts (Alpine simply never
  * attaches).
  */
@@ -535,7 +535,7 @@ function lessonPlayer(cfg) {
       window.addEventListener('lesson-auto-completed', () => { this.bumpProgress(); this.completed = true; }, sig);
       window.addEventListener('keydown', (e) => this.onKeydown(e), sig);
       this.startActiveTimer(sig);
-      // wire:navigate swaps the body but keeps the JS context alive — without this
+      // wire:navigate swaps the body but keeps the JS context alive, without this
       // teardown, the old lesson's timers and key handlers would keep running (and
       // keep posting time to the WRONG lesson) after every pjax navigation.
       document.addEventListener('livewire:navigating', () => this.destroy(), { once: true });
@@ -550,12 +550,12 @@ function lessonPlayer(cfg) {
     navigate(url) {
       window.Livewire?.navigate ? window.Livewire.navigate(url) : (window.location.href = url);
     },
-    /* ── Focused-time tracking ─────────────────────────────────────────────
+    /* Focused-time tracking
        The header timer ticks once per second, but ONLY while the tab is both
-       visible and focused — switch tabs, minimize, or click another window
+       visible and focused, switch tabs, minimize, or click another window
        and it pauses (the chip dims to show it). Accumulated seconds sync to
        the server every 15s; losing focus or leaving the page flushes
-       immediately (fetch keepalive on exit — it survives navigation and,
+       immediately (fetch keepalive on exit. It survives navigation and,
        unlike sendBeacon, isn't blocked by privacy shields like Brave's).
        A failed sync keeps the delta queued and retries on the next flush. */
     startActiveTimer(sig) {
@@ -575,7 +575,7 @@ function lessonPlayer(cfg) {
       }, 1000);
     },
     flushActiveTime(isExit = false) {
-      const delta = Math.min(this.unsyncedSeconds, 30); // server clamps at 30/beat — never send more
+      const delta = Math.min(this.unsyncedSeconds, 30); // server clamps at 30/beat, never send more
       if (delta <= 0) return;
       const send = () => fetch(cfg.timeUrl, {
         method: 'POST',
@@ -584,7 +584,7 @@ function lessonPlayer(cfg) {
         keepalive: isExit, // lets the request outlive an unloading page
       });
       if (isExit) {
-        // Fire-and-forget — the page may be going away, so count it sent now.
+        // Fire-and-forget. The page may be going away, so count it sent now.
         this.unsyncedSeconds -= delta;
         try { send().catch(() => {}); } catch (e) { /* nothing left to try */ }
         return;
@@ -596,8 +596,8 @@ function lessonPlayer(cfg) {
       const ss = (sec < 10 ? '0' : '') + sec;
       return h > 0 ? h + ':' + (m < 10 ? '0' : '') + m + ':' + ss : m + ':' + ss;
     },
-    /* ── Completion requirements (mirrored client-side for UX; the server is the
-       authority and re-checks everything in ProgressService::completionBlockers) ── */
+    /* Completion requirements (mirrored client-side for UX; the server is the
+       authority and re-checks everything in ProgressService::completionBlockers) */
     timeRemaining() {
       // Live countdown for free: activeSeconds ticks every focused second, so this shrinks with it.
       return Math.max(0, cfg.minActiveSeconds - this.activeSeconds);
@@ -702,7 +702,7 @@ function lessonPlayer(cfg) {
         this.completed = wasCompleted; // roll back
         if (!wasCounted) this.unbumpProgress();
         this.submitting = false;
-        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not save your progress — please try again.', type: 'error' } }));
+        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not save your progress, please try again.', type: 'error' } }));
       }
     },
     async addNote(e) {
@@ -722,7 +722,7 @@ function lessonPlayer(cfg) {
         this.appendNoteRow(data.note);
         body.value = '';
       } catch (err) {
-        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not save the note — please try again.', type: 'error' } }));
+        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not save the note, please try again.', type: 'error' } }));
       }
       this.noteSaving = false;
     },
@@ -766,7 +766,7 @@ function lessonPlayer(cfg) {
         row.remove();
       } catch (err) {
         row.style.opacity = '';
-        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not delete the note — please try again.', type: 'error' } }));
+        window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not delete the note, please try again.', type: 'error' } }));
       }
     },
     startAdvanceCountdown() {

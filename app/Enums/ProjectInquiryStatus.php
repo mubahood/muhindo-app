@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** §4.3 — a "start a project" lead's lifecycle in the admin inbox. */
+/** A "start a project" lead's lifecycle in the admin inbox. */
 enum ProjectInquiryStatus: string
 {
     case New = 'new';

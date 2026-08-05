@@ -1,28 +1,27 @@
 # muhindo-app
 
-Muhindo Mubaraka's personal platform: a **public portfolio site** in front, and — behind
-one login — a **learning management system** for students taking his courses and a
+Muhindo Mubaraka's personal platform: a **public portfolio site** in front, and, behind
+one login, a **learning management system** for students taking his courses and a
 **client/project management system** for tracking work delivered to clients.
 
-Built on Laravel 12 (PHP 8.2+), Blade + Livewire + Alpine.js, Tailwind CSS. See
-`PROJECT_PLAN.md` for the full build plan this codebase was built from.
+Built on Laravel 12 (PHP 8.2+), Blade + Livewire + Alpine.js, Tailwind CSS.
 
 ## What's here
 
-- **Public site** (`/`) — portfolio (about, projects, skills, experience, research,
+- **Public site** (`/`), portfolio (about, projects, skills, experience, research,
   products, contact), backed by a database-driven CMS editable from the admin.
-- **Courses** (`/courses`) — a public catalogue; free courses self-enrol, paid courses
+- **Courses** (`/courses`), a public catalogue; free courses self-enrol, paid courses
   checkout via Flutterwave.
-- **`/dashboard`** — one entry point after login; content branches by role:
-  - **Owner / admin** — full back office: portfolio CMS, courses, clients, projects,
+- **`/dashboard`**, one entry point after login; content branches by role:
+  - **Owner / admin**, full back office: portfolio CMS, courses, clients, projects,
     invoices/payments, users, settings.
-  - **Student** (`/learn`) — enrolled courses, lesson player, progress, certificates.
-  - **Client** (`/portal`) — their own projects, progress updates, documents, invoices.
+  - **Student** (`/learn`), enrolled courses, lesson player, progress, certificates.
+  - **Client** (`/portal`), their own projects, progress updates, documents, invoices.
 
 ## Requirements
 
 - PHP 8.2+, Composer 2
-- MySQL 5.7+/8 (MAMP socket supported) — the app uses a `muhindo_app` database
+- MySQL 5.7+/8 (MAMP socket supported), the app uses a `muhindo_app` database
 - Node 18+ (for building front-end assets)
 
 ## Setup
@@ -31,7 +30,7 @@ Built on Laravel 12 (PHP 8.2+), Blade + Livewire + Alpine.js, Tailwind CSS. See
 composer install
 npm install
 
-cp .env.example .env
+cp.env.example.env
 php artisan key:generate
 #   Set DB_DATABASE=muhindo_app, DB_USERNAME/DB_PASSWORD, and (MAMP) DB_SOCKET.
 
@@ -45,7 +44,7 @@ php artisan serve
 
 ## Spam protection on public forms
 
-Every public form — contact, project brief, register, sign in, password reset —
+Every public form, contact, project brief, register, sign in, password reset,
 runs two independent layers.
 
 1. **Honeypot + timing** (`App\Support\Spam\FormShield`). Always on, needs no
@@ -63,7 +62,7 @@ NOCAPTCHA_SECRET=your-secret
 ```
 
 Then `php artisan config:clear`. Every form picks the widget up at once; no code
-changes. Leaving either value empty keeps it off — deliberately, so that
+changes. Leaving either value empty keeps it off, deliberately, so that
 installing the package cannot start rejecting every submission on a site that
 has never been to the Google console. Layer 1 covers the forms either way.
 
@@ -83,6 +82,6 @@ vendor/bin/phpstan analyse   # static analysis
 - **Payments:** Flutterwave, behind a swappable `PaymentGateway` interface
   (`app/Services/Gateway/`). Set `FLW_*` keys in `.env` to enable checkout.
 - **Documents:** project documents are stored on the private `local` disk and only ever
-  streamed through an authorization check — never web-served directly.
+  streamed through an authorization check, never web-served directly.
 - **Branding:** logo/favicon assets under `public/` are still placeholders inherited from
-  this codebase's source project — swap them for real brand assets before shipping.
+  this codebase's source project, swap them for real brand assets before shipping.

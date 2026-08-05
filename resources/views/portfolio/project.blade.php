@@ -6,8 +6,8 @@
 <style>
   /* A case study answers four questions in order: what was broken, what was
      built, how does it actually work, and what did it have to survive. The
-     old page answered none of them — one line of description and a bullet
-     list — so somebody deciding whether to hire had nothing to read.
+     old page answered none of them, one line of description and a bullet
+     list, so somebody deciding whether to hire had nothing to read.
 
      The section furniture is the shared .ch-sec / .ch-h from the layout, so
      this reads as the same publication as the About chapters rather than a
@@ -33,7 +33,7 @@
   /* How it works, in order. The numbers are the point: this is a sequence,
      not a feature list. */
   /* .page already styles every li with a gold square bullet at 22px, and an
-     element+class selector beats a bare class — so these have to be written
+     element+class selector beats a bare class, so these have to be written
      through .page or the numbers never appear. */
   .page .pj-steps{counter-reset:step;list-style:none;margin:0;padding:0;}
   .page .pj-step{position:relative;padding:0 0 22px 52px;margin:0;}
@@ -70,7 +70,7 @@
   .page .pj-did li::before{content:'';position:absolute;left:0;top:10px;width:7px;height:1px;
     background:var(--gold);}
 
-  /* Two ways in. Most of these systems are not public — asking for a
+  /* Two ways in. Most of these systems are not public, asking for a
      walkthrough is the honest offer, not "visit site". */
   .pj-end{margin-top:38px;padding:22px;border:1px solid var(--line);background:var(--surface);
     border-top:2px solid var(--pri);}
@@ -117,7 +117,7 @@
           <i class="fas fa-pen-ruler" aria-hidden="true"></i>
           {{-- Said plainly, because a drawn screen presented as a photograph
                of a live system would be a lie about somebody's data. --}}
-          Drawn, not captured — the real screens hold live records that cannot be published.
+          Drawn, not captured. The real screens hold live records that cannot be published.
         </figcaption>
       </figure>
     @endif
@@ -222,8 +222,8 @@
   </div>
 </section>
 
-{{-- Phone only. A case study is read to answer one question — can he build
-     mine — so the answer to it stays on screen. --}}
+{{-- Phone only. A case study is read to answer one question, can he build
+     mine, so the answer to it stays on screen. --}}
 <x-action-bar>
   <a href="{{ route('hire', ['demo' => $project->slug]) }}" wire:navigate class="btn gold">
     Request a demo

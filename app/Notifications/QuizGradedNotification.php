@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-/** §4.5/§5.2 — fired by NotifyStudentOfQuizGrade once a QuizAttempt reaches `graded`. */
+/** Fired by NotifyStudentOfQuizGrade once a QuizAttempt reaches `graded`. */
 class QuizGradedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -42,7 +42,7 @@ class QuizGradedNotification extends Notification implements ShouldQueue
 
         return [
             'title' => "\"{$quiz->title}\" was graded",
-            'message' => "You scored {$percent}%".($this->attempt->passed ? ' — passed!' : '.'),
+            'message' => "You scored {$percent}%".($this->attempt->passed ? ' passed!' : '.'),
         ];
     }
 }

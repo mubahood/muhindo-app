@@ -13,9 +13,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('enrollment_id')->constrained()->cascadeOnDelete();
             $table->foreignId('lesson_id')->nullable()->constrained()->nullOnDelete();
-            $table->nullableMorphs('subject'); // quiz attempt, submission, … (P3+)
+            $table->nullableMorphs('subject'); // quiz attempt, submission, ... (P3+)
             $table->enum('event', array_map(fn ($case) => $case->value, LearningEventType::cases()));
-            $table->json('value')->nullable(); // position, seconds, score, …
+            $table->json('value')->nullable(); // position, seconds, score, ...
             $table->timestamp('created_at')->useCurrent();
 
             $table->index(['enrollment_id', 'created_at']);
