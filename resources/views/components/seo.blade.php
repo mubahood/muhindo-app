@@ -26,4 +26,19 @@
 <meta name="twitter:title" content="{{ $seoTitle }}">
 <meta name="twitter:description" content="{{ $seoDescription }}">
 <meta name="twitter:image" content="{{ $seoImage }}">
+{{-- Ownership tokens. Search engines look for these on the page they were
+     given, so they belong in the layout every public page shares rather than
+     on the home page alone: a property verified against /e-learning fails if
+     the tag only exists at the root.
+
+     Anything that is not a non-empty string is skipped rather than printed.
+     Two of these provider names contain a dot, and config() reads a dot as a
+     level of nesting, so one config(['seo.verifications.msvalidate.01' => ...])
+     turns the value into an array. Rendering that would put a PHP error on
+     every public page over a line nobody would think to test. --}}
+@foreach((array) config('seo.verifications', []) as $provider => $token)
+@if(is_string($token) && trim($token) !== '')
+<meta name="{{ $provider }}" content="{{ trim($token) }}">
+@endif
+@endforeach
 {!! $slot ?? '' !!}
