@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'About — Muhindo Mubaraka')
+@section('title', 'About | Muhindo Mubaraka')
 @section('desc', $about['lead'] ?? '')
 
 @push('styles')
@@ -53,7 +53,7 @@
   <span class="hero-mark" aria-hidden="true">ABOUT</span>
   <div class="wrap">
     <div class="eyebrow">About</div>
-    <h1>{{ $about['heading'] ?? 'Systems that hold up in the real world' }}</h1>
+    <h1>{{ $about['heading'] ?? 'Nine years of building systems people actually use' }}</h1>
     <p>{{ $about['lead'] ?? '' }}</p>
   </div>
 </section>
@@ -79,7 +79,7 @@
           <div class="ab-work">
             <div>
               <h3><i class="fas fa-landmark"></i> Government systems</h3>
-              <p>National platforms for ministries and agencies — livestock traceability, seed tracking, wildlife enforcement — built to survive audit and staff turnover.</p>
+              <p>National platforms for ministries and agencies, including livestock traceability, seed tracking and wildlife enforcement. Built to survive audit and staff turnover.</p>
             </div>
             <div>
               <h3><i class="fas fa-signal"></i> Works without signal</h3>
@@ -87,11 +87,11 @@
             </div>
             <div>
               <h3><i class="fas fa-diagram-project"></i> The whole lifecycle</h3>
-              <p>Requirements, architecture, build, deployment — then the staff training that decides whether any of it is still running a year later.</p>
+              <p>Requirements, architecture, build, deployment. Then the staff training that decides whether any of it is still running a year later.</p>
             </div>
             <div>
               <h3><i class="fas fa-chalkboard-user"></i> Teaching it</h3>
-              <p>200+ tutorials and 23,000 subscribers, plus the courses on this site that take somebody from their first HTML tag to a deployed application.</p>
+              <p>200+ tutorials and over 23,000 subscribers, plus the courses on this site that take someone from their first HTML tag to a deployed application. I still code every day, which is the only reason the teaching makes sense.</p>
             </div>
           </div>
         </div>

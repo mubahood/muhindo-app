@@ -4,7 +4,7 @@
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ isset($idx) ? $idx() : "02" }} <span>e&#8209;Learning</span></div>
       <h2>Learn to build these yourself</h2>
-      <p>I teach the same stack I build with. Practical, project-based, in plain English — go at your own pace and finish with a certificate you can verify.</p>
+      <p>I teach the same stack I build with. Practical, project-based, in plain English. Go at your own pace and finish with a certificate you can verify.</p>
     </div>
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
       @foreach($courses as $c)

@@ -49,7 +49,7 @@ class PortfolioContentSeeder extends Seeder
             // officers read this line too, and "ships" is a word that only means
             // anything to programmers. "…teach others to do the same" carries both
             // the building and the standard without repeating the verb.
-            'tagline' => 'I build software that scales, and I teach others to do the same.',
+            'tagline' => 'I build software that works, and I teach others to do the same.',
             'location' => 'Kampala, Uganda',
             'initials' => 'MM',
         ]));
@@ -66,26 +66,31 @@ class PortfolioContentSeeder extends Seeder
         ]));
 
         Settings::set('portfolio.stats', json_encode([
-            ['value' => '9+', 'label' => 'Years in systems delivery'],
-            ['value' => '20+', 'label' => 'Systems shipped'],
-            ['value' => '23K+', 'label' => 'YouTube subscribers'],
+            ['value' => '9+', 'label' => 'Years building systems'],
+            ['value' => '20+', 'label' => 'Systems in production'],
+            ['value' => '23K', 'label' => 'YouTube subscribers'],
             ['value' => '200+', 'label' => 'Free tutorials published'],
         ]));
 
         Settings::set('portfolio.about', json_encode([
-            'lead' => 'IT professional with over 9 years of experience in systems development, database administration, IT infrastructure management, and digital solutions delivery.',
+            'heading' => 'Nine years of building systems people actually use',
+            'lead' => 'I design and build software for anyone with a real problem, and I teach others to do the same.',
             'paragraphs' => [
-                'I teach computer programming and computer-related courses online, practically and in plain language. I also design and build software for anyone with a real problem — individuals, startups, schools, clinics, NGOs, government ministries and private organisations across Uganda — owning the full lifecycle from requirements and architecture through development, deployment, training, and support.',
-                'My work spans full-stack software engineering, relational database management, server administration, network systems, cybersecurity best practices, and ICT project management. I am currently completing a Master of Science in Computer Science at Makerere University, researching distributed systems, blockchain, and machine learning.',
-                'Beyond delivery, I focus on stakeholder engagement, staff training and capacity building, IT policy development, and digital transformation strategy — building systems that hold up in the real conditions of East Africa.',
+                'I started writing code in secondary school, mostly to understand how things worked. Nine years later, I am still doing that. Except now the systems I build are running inside government ministries, clinics, schools and NGOs across Uganda. I own the whole journey: the first conversation about what the problem actually is, through architecture, development, deployment, and the staff training that decides whether any of it is still running a year later.',
+                'My day-to-day work sits at the intersection of full-stack engineering, database administration and server infrastructure. I am comfortable at any layer: writing the SQL, configuring the server, building the mobile app, and sitting with a district officer to understand why the data looks the way it does. I am currently finishing a Master of Science in Computer Science at Makerere University, with research focused on distributed machine learning and blockchain for agricultural early-warning systems.',
+                'Alongside delivery work, I run a YouTube channel where I teach web and mobile development in plain language, and I built the e-learning platform on this site so students can take structured courses at their own pace. The teaching and the building feed each other. I explain things better because I still do them, and I build things better because I have to explain them.',
+            ],
+            'home' => [
+                'I started writing code in secondary school, mostly to understand how things worked. Nine years later I am still doing that. Except now the systems I build are running inside government ministries, clinics, schools and farms across Uganda.',
+                'I own the whole journey: the first conversation about what the problem really is, through architecture, development, deployment, and the staff training that decides whether any of it is still running a year later.',
             ],
         ]));
 
         Settings::set('courses.faq', json_encode([
             ['q' => 'How do I pay?', 'a' => 'Pay with MTN Mobile Money, Airtel Money, or a Visa/Mastercard card, all handled securely through Flutterwave. Free courses need no payment at all.'],
-            ['q' => 'Is it self-paced?', 'a' => "Yes — you learn on your own schedule. There are no live class times to catch; lessons stay available for the course's access window."],
+            ['q' => 'Is it self-paced?', 'a' => "Yes, you learn on your own schedule. There are no live class times to catch. Lessons stay available for the course's access window."],
             ['q' => 'Do I get a certificate?', 'a' => 'Yes, a certificate is issued automatically once you complete every lesson in the course, and you can verify it any time from its own link.'],
-            ['q' => 'What if I get stuck?', 'a' => "Use the course's discussion Q&A to ask a question — I read and answer these myself."],
+            ['q' => 'What if I get stuck?', 'a' => "Use the course's discussion Q&A to ask a question. I read and answer these myself."],
         ]));
 
         // Names only. The home page renders a logo when one exists at
@@ -112,9 +117,9 @@ class PortfolioContentSeeder extends Seeder
 
         Settings::set('portfolio.research', json_encode([
             'title' => 'Blockchain-Secured Federated Learning for Livestock Disease Early Warning',
-            'institution' => 'MSc Computer Science · Makerere University',
+            'institution' => 'MSc Computer Science, Makerere University',
             'supervisor' => 'Supervisor: Dr. Chongomweru Halimu',
-            'body' => "My Master's research targets foot-and-mouth disease (FMD) detection in Ugandan cattle farms. It combines distributed machine learning — so farm data never has to leave the source — with blockchain for trust and tamper-resistance, designed to be lightweight enough to deploy in resource-constrained rural environments.",
+            'body' => "My Master's research targets foot-and-mouth disease (FMD) detection in Ugandan cattle farms. It combines distributed machine learning (so farm data never has to leave the source) with blockchain for trust and tamper-resistance, designed to be lightweight enough to deploy in rural environments with limited connectivity.",
             'outcomes' => ['An open-source prototype', 'Peer-reviewed publications', 'A deployable early-warning dashboard'],
             'areas' => ['Distributed systems', 'Database systems', 'Network security', 'Machine learning'],
         ]));
@@ -122,8 +127,8 @@ class PortfolioContentSeeder extends Seeder
         Settings::set('portfolio.products', json_encode([
             [
                 'name' => 'LugaFlix', 'icon' => 'fa-film',
-                'tagline' => 'Luganda-language movie streaming for Android — phones, tablets and TV.',
-                'body' => 'Built for everyday Ugandan users around emotional, local-language entertainment and easy access via Google Play. Features the VJ experience, Matatu, the Connect module and a Games Arcade.',
+                'tagline' => 'Luganda-language movie streaming for Android: phones, tablets and TV.',
+                'body' => 'Built for everyday Ugandan users around local-language entertainment that is easy to access via Google Play. Features the VJ experience, Matatu, the Connect module and a Games Arcade.',
                 'link' => null,
             ],
             [
@@ -134,29 +139,29 @@ class PortfolioContentSeeder extends Seeder
             ],
             [
                 'name' => 'Learn It With Muhindo', 'icon' => 'fa-graduation-cap',
-                'tagline' => '23,000+ subscribers · 200+ tutorials.',
-                'body' => 'An educational YouTube brand teaching web and mobile development to a growing community across the region.',
+                'tagline' => '23,000 subscribers · 200+ free tutorials.',
+                'body' => 'A YouTube channel teaching web and mobile development in plain language, plus structured courses on this site. Free to browse, paid if you want the full thing.',
                 'link' => 'https://learnitwithmuhindo.com',
             ],
         ]));
 
         Settings::set('portfolio.languages', json_encode([
-            ['name' => 'English', 'level' => 'C1 — Proficient'],
-            ['name' => 'Luganda', 'level' => 'C1 — Proficient'],
-            ['name' => 'Swahili', 'level' => 'C1 — Proficient'],
-            ['name' => 'Lukonzo', 'level' => 'C1 — Native'],
+            ['name' => 'English', 'level' => 'C1 (Proficient)'],
+            ['name' => 'Luganda', 'level' => 'C1 (Proficient)'],
+            ['name' => 'Swahili', 'level' => 'C1 (Proficient)'],
+            ['name' => 'Lukonzo', 'level' => 'Native'],
         ]));
     }
 
     private function seedServices(): void
     {
         $rows = [
-            ['icon' => 'fa-cubes', 'title' => 'Enterprise system design', 'description' => 'Architecting and building multi-platform information systems — web, Android, iOS, USSD/SMS — that run reliably at national scale and offline-first in the field.'],
-            ['icon' => 'fa-database', 'title' => 'Databases & data governance', 'description' => 'Schema design, query optimisation, migration, backup and recovery across MySQL, PostgreSQL and MongoDB, with data governance built in.'],
-            ['icon' => 'fa-shield-halved', 'title' => 'Infrastructure & security', 'description' => 'Linux server administration, Docker, Nginx, cloud deployment, and cybersecurity best practice — SSL/TLS, RBAC, encryption and secure APIs.'],
+            ['icon' => 'fa-cubes', 'title' => 'Enterprise system design', 'description' => 'Architecting and building multi-platform information systems (web, Android, iOS, USSD/SMS) that run reliably at national scale and work offline in the field.'],
+            ['icon' => 'fa-database', 'title' => 'Databases & data governance', 'description' => 'Schema design, query optimisation, migration, backup and recovery across MySQL, PostgreSQL and MongoDB, with data governance built in from the start.'],
+            ['icon' => 'fa-shield-halved', 'title' => 'Infrastructure & security', 'description' => 'Linux server administration, Docker, Nginx, cloud deployment, and cybersecurity best practice: SSL/TLS, RBAC, encryption and secure APIs.'],
             ['icon' => 'fa-diagram-project', 'title' => 'ICT strategy & delivery', 'description' => 'Digital transformation strategy, IT policy, vendor and stakeholder management, and end-to-end project delivery from requirements to rollout.'],
-            ['icon' => 'fa-plug', 'title' => 'Integration & interoperability', 'description' => 'Payment gateways, GIS/GPS, biometrics, barcode/QR and USSD/SMS — integrating systems so government and private data move together.'],
-            ['icon' => 'fa-people-group', 'title' => 'Training & capacity building', 'description' => 'Hands-on staff training and user enablement across districts, plus technical documentation and ongoing support that makes systems stick.'],
+            ['icon' => 'fa-plug', 'title' => 'Integration & interoperability', 'description' => 'Payment gateways, GIS/GPS, biometrics, barcode/QR and USSD/SMS. I integrate systems so government and private data move together without manual re-entry.'],
+            ['icon' => 'fa-people-group', 'title' => 'Training & capacity building', 'description' => 'Hands-on staff training and user enablement across districts, plus technical documentation and ongoing support that makes systems stick after handover.'],
         ];
 
         foreach ($rows as $i => $r) {
@@ -249,15 +254,15 @@ class PortfolioContentSeeder extends Seeder
     {
         $rows = [
             ['company' => 'Eight Tech Consults Ltd', 'role' => 'Full-Stack Developer & Application Engineer', 'start_date' => '2021-01-01', 'end_date' => null,
-                'description' => 'Lead technical architect designing, developing, deploying and maintaining complex enterprise information systems for government agencies, NGOs and private clients. Manage the full software development lifecycle — requirements, architecture, development, testing, deployment, training and support.'],
-            ['company' => 'M-Omulimisa Uganda Limited', 'role' => 'Lead Developer — Agrihub Mobile Application', 'start_date' => '2023-01-01', 'end_date' => '2024-12-31',
+                'description' => 'Lead technical architect on complex enterprise information systems for government agencies, NGOs and private clients. Responsible for the full software development lifecycle: requirements, architecture, development, testing, deployment, training and ongoing support.'],
+            ['company' => 'M-Omulimisa Uganda Limited', 'role' => 'Lead Developer, Agrihub Mobile Application', 'start_date' => '2023-01-01', 'end_date' => '2024-12-31',
                 'description' => 'Led development of an agricultural information platform integrating weather APIs, marketplace functionality and mobile payment systems. Conducted user training across multiple districts.'],
             ['company' => 'Gonevas.com', 'role' => 'Full-Stack Developer', 'start_date' => '2019-01-01', 'end_date' => '2021-12-31',
                 'description' => 'E-commerce web and Android app development, hosting and content management.'],
             ['company' => 'Independent (Freelance)', 'role' => 'Freelance Web Developer', 'start_date' => '2018-01-01', 'end_date' => '2021-12-31',
                 'description' => 'Websites and systems for IUIU Alumni Association, Double Tree Tours, Lukman Primary School and UgNews24.'],
-            ['company' => '"Learn It With Muhindo" (YouTube)', 'role' => 'Programming Instructor', 'start_date' => '2018-01-01', 'end_date' => '2022-12-31',
-                'description' => 'Grew a channel to 23,000+ subscribers with 200+ tutorials on web and mobile development.'],
+            ['company' => 'Learn It With Muhindo (YouTube)', 'role' => 'Programming Instructor', 'start_date' => '2018-01-01', 'end_date' => '2022-12-31',
+                'description' => 'Taught web and mobile development through free video tutorials. The channel grew to around 23,000 subscribers. Content covered HTML, CSS, JavaScript, PHP, Laravel, Flutter and Android development in plain, practical language.'],
         ];
 
         foreach ($rows as $i => $r) {

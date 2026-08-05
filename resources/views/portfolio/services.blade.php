@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Consultancy — Muhindo Mubaraka')
+@section('title', 'Consultancy | Muhindo Mubaraka')
 @section('desc', 'What I take on, how an engagement runs, and how to start one.')
 
 @push('styles')
@@ -90,7 +90,7 @@
             </div>
             <div class="sv-step">
               <h3>Requirements, with the people who will use it</h3>
-              <p>Time with the actual users — field officers, clerks, inspectors — not only the managers commissioning the work. This is the step most failed systems skipped.</p>
+              <p>Time with the actual users (field officers, clerks, inspectors), not only the managers commissioning the work. This is the step most failed systems skipped.</p>
             </div>
             <div class="sv-step">
               <h3>A written scope and a fixed price</h3>

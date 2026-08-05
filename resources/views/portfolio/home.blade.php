@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', ($identity['name'] ?? 'Muhindo Mubaraka').' — '.($identity['title'] ?? 'Information Systems'))
+@section('title', ($identity['name'] ?? 'Muhindo Mubaraka').' | '.($identity['title'] ?? 'Information Systems'))
 @section('desc', $identity['tagline'] ?? '')
 
 @push('jsonld')
@@ -79,7 +79,7 @@
     <div class="about-lead">
       <div class="sec-head left" style="margin-bottom:16px;" data-rise>
         <div class="sec-idx">{{ $idx() }} <span>About me</span></div>
-        <h2>{{ $about['heading'] ?? 'Nine years of building the systems people depend on' }}</h2>
+        <h2>{{ $about['heading'] ?? 'Nine years of building systems people actually use' }}</h2>
       </div>
 
       <div class="about-cols" data-rise>
@@ -106,7 +106,7 @@
   <div class="wrap">
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ $idx() }} <span>References</span></div>
-      <h2>Don't take my word for it — ask them about me</h2>
+      <h2>Don't take my word for it. Ask them about me.</h2>
       <p>I have worked under, alongside and for each of these people. Their pages are linked, so look them up and ask what I was actually like to work with.</p>
     </div>
 
@@ -145,7 +145,7 @@
       <div class="sec-idx">{{ $idx() }} <span>Selected work</span></div>
       <h2>These are live right now, with real people using them</h2>
       <p>Not prototypes or coursework. Each of these was taken from a first conversation through to a team running it
-         on their own — and you can open every one of them yourself.</p>
+         on their own, and you can open every one of them yourself.</p>
     </div>
 
     <div class="shot-grid">
@@ -207,8 +207,8 @@
   <div class="wrap">
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ $idx() }} <span>Source code</span></div>
-      <h2>Download the source code</h2>
-      <p>The same starters, schemas and integrations I use on client work. Buy it, open it, and it is yours to build on.</p>
+      <h2>Source code you can build on</h2>
+      <p>The same starters, database schemas and integrations I use in client work. Buy it, open it, and it's yours.</p>
     </div>
 
     {{-- A terminal, deliberately answering the browser frame used for the live
@@ -267,8 +267,8 @@
   <div class="wrap">
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ $idx() }} <span>In pictures</span></div>
-      <h2>See who you would actually be working with</h2>
-      <p>No stock photography and no agency in between — this is the desk, the rooms and the people the work happens in.</p>
+      <h2>No stock photography</h2>
+      <p>This is the desk, the rooms and the people the work actually happens with. No agency, no stock images.</p>
     </div>
 
     {{-- A mosaic rather than a row of equal squares: the first frame is given
@@ -305,7 +305,7 @@
     <div class="sec-head left" data-rise>
       <div class="sec-idx">{{ $idx() }} <span>Blog</span></div>
       <h2>What I have been writing about</h2>
-      <p>What I have learned delivering systems and teaching people to build them — written down so you can use it too.</p>
+      <p>What I have learned delivering systems and teaching people to build them, written down so you can use it too.</p>
     </div>
     <div class="work-grid">
       @foreach($posts as $i => $post)
@@ -399,7 +399,7 @@
 <section class="band-deep" style="text-align:center;">
   <div class="wrap">
     <h2 data-rise>Let's build something together</h2>
-    <p class="lead" style="max-width:480px;margin:12px auto 26px;" data-rise>Tell me what the problem is and I will tell you honestly whether I am the right person for it.</p>
+    <p class="lead" style="max-width:480px;margin:12px auto 26px;" data-rise>Tell me what the problem is. I'll be honest about whether I can help, and if I can't, I'll point you to who might.</p>
     <div data-rise><a href="{{ route('hire') }}" wire:navigate class="btn gold lg cta">
       <span class="cta-a">Hire Me</span>
       <span class="cta-b" aria-hidden="true">Hire Muhindo <i class="fas fa-arrow-right"></i></span>

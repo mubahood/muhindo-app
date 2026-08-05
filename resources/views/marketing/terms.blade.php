@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Terms of Service — Muhindo Mubaraka')
+@section('title', 'Terms of Service | Muhindo Mubaraka')
 
 @section('content')
 <section>
@@ -7,7 +7,7 @@
     <h1>Terms of Service</h1>
     <div class="updated">Last updated {{ date('F Y') }}</div>
 
-    <p>These terms govern use of this site — the portfolio, the course platform, and the client project portal. By creating an account, you agree to them.</p>
+    <p>These terms govern use of this site: the portfolio, the course platform, and the client project portal. By creating an account, you agree to them.</p>
 
     <h2>Courses</h2>
     <p>Free courses are available to any signed-in student. Paid courses are billed as a one-off purchase per course; access is granted once payment is confirmed. Course content may be improved or expanded over time.</p>
@@ -26,7 +26,7 @@
     </ul>
 
     <h2>Payments</h2>
-    <p>Paid courses and client project invoices are processed via Flutterwave. Refunds are handled on a case-by-case basis — get in touch if something's wrong with a payment.</p>
+    <p>Paid courses and client project invoices are processed via Flutterwave. Refunds are handled on a case-by-case basis, so get in touch if something's wrong with a payment.</p>
 
     <h2>Contact</h2>
     <p>Questions about these terms? Email <a class="link" href="mailto:mubahood360@gmail.com">mubahood360@gmail.com</a>.</p>

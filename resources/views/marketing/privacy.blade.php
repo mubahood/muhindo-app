@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Privacy Policy — Muhindo Mubaraka')
+@section('title', 'Privacy Policy | Muhindo Mubaraka')
 
 @section('content')
 <section>
@@ -16,7 +16,7 @@
     <p>Creating an account to enrol in a course stores your name, email and course progress (lessons completed, certificates earned). This data is used to run the course and is never sold or shared with third parties.</p>
 
     <h2>Client accounts</h2>
-    <p>If you're a client, your project details, documents, invoices and communications are stored to deliver and bill for the work. This data is visible only to you and to me — never to other clients.</p>
+    <p>If you're a client, your project details, documents, invoices and communications are stored to deliver and bill for the work. This data is visible only to you and to me, and never to other clients.</p>
 
     <h2>How data is protected</h2>
     <ul>

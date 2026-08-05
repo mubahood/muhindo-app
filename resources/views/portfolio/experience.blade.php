@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
-@section('title', 'Experience — Muhindo Mubaraka')
-@section('desc', 'Where I have worked, in order — enterprise systems delivery since 2018.')
+@section('title', 'Experience | Muhindo Mubaraka')
+@section('desc', 'Where I have worked, in order. Enterprise systems delivery since 2018.')
 
 @push('styles')
 <style>
@@ -51,7 +51,7 @@
   <div class="wrap">
     <div class="eyebrow">Experience</div>
     <h1>The record, in order</h1>
-    <p>From freelance websites to lead architect on national systems — and a teaching habit that never stopped running alongside it.</p>
+    <p>From freelance websites to lead architect on national systems. The teaching habit never stopped running alongside it.</p>
   </div>
 </section>
 
@@ -96,7 +96,7 @@
                 @endphp
                 <article @class(['xp', 'now' => $current])>
                   <div class="xp-when">
-                    <span>{{ $role->start_date?->format('M Y') }} — {{ $role->end_date?->format('M Y') ?? 'Present' }}</span>
+                    <span>{{ $role->start_date?->format('M Y') }} to {{ $role->end_date?->format('M Y') ?? 'Present' }}</span>
                     @if($current)<span class="xp-now">Current</span>@endif
                     <span class="xp-dur">{{ $duration }}</span>
                   </div>
@@ -109,8 +109,8 @@
 
             <p class="xp-note">
               Several of these overlap, and that is not a typo. The consultancy work, the
-              freelance clients and the YouTube channel ran at the same time for years —
-              evenings and weekends went into teaching what the day job had just taught me.
+              freelance clients and the YouTube channel ran at the same time for years.
+              Evenings and weekends went into teaching what the day job had just taught me.
             </p>
           </div>
 

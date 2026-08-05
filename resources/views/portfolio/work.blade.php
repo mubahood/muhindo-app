@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'My work — Muhindo Mubaraka')
+@section('title', 'My work | Muhindo Mubaraka')
 @section('desc', 'Systems delivered for government ministries, NGOs and private organisations across Uganda.')
 
 @push('styles')
@@ -62,7 +62,7 @@
   <div class="wrap">
     <div class="eyebrow">My work</div>
     <h1>Systems people depend on</h1>
-    <p>Nine years of enterprise systems for government ministries, NGOs and private organisations — each one taken from a first conversation about requirements through to a team running it without me.</p>
+    <p>Nine years of enterprise systems for government ministries, NGOs and private organisations. Each one taken from a first conversation about requirements through to a team running it without me.</p>
   </div>
 </section>
 

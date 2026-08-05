@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'All projects — Muhindo Mubaraka')
+@section('title', 'All projects | Muhindo Mubaraka')
 @section('desc', 'Enterprise systems delivered for government ministries, NGOs and private organisations.')
 
 @section('content')
@@ -11,7 +11,7 @@
          to it the same way a case study does. --}}
     <div class="eyebrow"><a href="{{ route('portfolio.work') }}" wire:navigate style="color:var(--gold-d);">&larr; Back to my work</a></div>
     <h1>Every project</h1>
-    <p>All {{ $projects->count() }} systems, newest first — government ministries, NGOs and private organisations, each taken from requirements through to a team running it themselves.</p>
+    <p>All {{ $projects->count() }} systems, newest first. Government ministries, NGOs and private organisations, each taken from requirements through to a team running it themselves.</p>
   </div>
 </section>
 

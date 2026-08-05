@@ -60,8 +60,8 @@ class CaseStudySeeder extends Seeder
                 'constraints' => [
                     'No network. Field officers work in districts with no reliable signal, so the app captures everything on the device and uploads when a connection returns. Nothing is lost and nothing waits for coverage.',
                     'No smartphone, sometimes. Farmers get status and alerts over SMS and USSD, because a system only half the country can reach is not a national system.',
-                    'Audit. It is a government register: every record is attributable to a named officer, and roles decide who can see and change what, across web, Android and iOS alike.',
-                    'Staff turnover. District officers rotate. The interface has to be learnable in a morning, and it was — training ran across multiple districts.',
+                    'Audit trail. It is a government register: every record is attributable to a named officer, and roles decide who can see and change what, across web, Android and iOS alike.',
+                    'Staff turnover. District officers rotate. The interface has to be learnable in a morning, and it was. Training ran across multiple districts.',
                 ],
             ],
 
@@ -74,8 +74,8 @@ class CaseStudySeeder extends Seeder
                     .'cannot see attendance until the term ends, and a parent finds out their child has been '
                     .'absent for a week when the report card arrives.',
                 'approach' => 'One school record with three doors into it. Parents, teachers and administrators '
-                    .'each get a portal that shows only their part, over the same underlying data — so the '
-                    .'attendance a teacher takes at 08:00 is the attendance a parent sees at 08:05, and the fee '
+                    .'each get a portal that shows only their part, all reading from the same underlying data. '
+                    .'The attendance a teacher takes at 08:00 is the attendance a parent sees at 08:05, and the fee '
                     .'a parent pays by Mobile Money clears against the bursar\'s ledger without anybody keying '
                     .'it in twice.',
                 'mechanics' => [
@@ -88,7 +88,7 @@ class CaseStudySeeder extends Seeder
                 'stack' => ['Laravel', 'MySQL', 'Mobile Money APIs', 'Visa', 'SMS gateway', 'Email'],
                 'constraints' => [
                     'Multi-tenant. It is one platform serving many schools, so a school\'s data has to be invisible to every other school on it, by construction rather than by care.',
-                    'Term-time load. Everybody logs in on results day. Reporting is built to answer a thousand parents at once without the bursar\'s screen slowing down.',
+                    'Term-time load. Everybody logs in on results day. Reporting is built to answer a large number of parents at once without the bursar\'s screen slowing down.',
                     'Money. Fee collection is real money moving through Mobile Money and card rails, so every transaction is reconciled and receipted, and a failed payment can never leave a student marked as paid.',
                     'Non-technical staff. Bursars and teachers are not IT people. If a screen needs training beyond one session, it is the wrong screen.',
                 ],
@@ -102,7 +102,7 @@ class CaseStudySeeder extends Seeder
                     .'after the decision that needed them. Pharmacy dispenses against a handwritten note. And an '
                     .'insurance claim assembled from three disconnected records is a claim that gets rejected.',
                 'approach' => 'The record moves, not the folder. One electronic health record per patient, which '
-                    .'every department writes into and reads from — so a doctor ordering a test, the lab running '
+                    .'every department writes into and reads from. A doctor ordering a test, the lab running '
                     .'it, the pharmacy dispensing against it and the billing office claiming for it are all '
                     .'looking at the same thing at the same moment.',
                 'mechanics' => [
@@ -114,9 +114,9 @@ class CaseStudySeeder extends Seeder
                 ],
                 'stack' => ['Laravel', 'MySQL', 'Role-based access control', 'PDF reporting', 'Encrypted storage'],
                 'constraints' => [
-                    'Confidentiality. Health records are among the most sensitive data anybody holds. Access is by role and by need, and who opened what is recorded.',
+                    'Confidentiality. Health records are among the most sensitive data a system can hold. Access is by role and by need, and who opened what is recorded.',
                     'It cannot be down. A ward does not stop at night, so the system has to survive the hours when nobody is watching it.',
-                    'Continuity. Clinical staff change shift mid-treatment. The record has to make sense to somebody who was not there when it was written.',
+                    'Continuity. Clinical staff change shift mid-treatment. The record has to make sense to a nurse or doctor who was not there when it was written.',
                     'Claims discipline. Insurers reject anything inconsistent, so the billing module has to be right the first time rather than corrected later.',
                 ],
             ],
@@ -125,14 +125,14 @@ class CaseStudySeeder extends Seeder
                 'role' => 'Lead developer',
                 'period' => 'For the Uganda Wildlife Authority',
                 'problem' => 'Wildlife crime is repeat business, and repeat offenders were being treated as first '
-                    .'offenders. Each park kept its own records, so somebody caught poaching in Murchison Falls '
+                    .'offenders. Each park kept its own records, so a person caught poaching in Murchison Falls '
                     .'and again in Queen Elizabeth was two unrelated names in two unrelated books. Cases were '
                     .'lost between arrest and court because nobody could produce a coherent file.',
                 'approach' => 'One national offender register with biometrics attached, and a case that carries '
-                    .'its own evidence from the ranger post to the courtroom. If somebody has been caught before, '
+                    .'its own evidence from the ranger post to the courtroom. If an officer has been caught before, '
                     .'anywhere in the country, the officer at the post knows within seconds.',
                 'mechanics' => [
-                    'A ranger captures the incident where it happened — offender, offence, location, seizure, photographs — on a mobile device rather than in a notebook.',
+                    'A ranger captures the incident where it happened (offender, offence, location, seizure, photographs) on a mobile device rather than in a notebook.',
                     'Fingerprints and photographs are matched against the national register. A previous record surfaces at the post, not months later in court.',
                     'The case moves through a defined workflow: opened, charged, escalated, in court, closed. Every state change is attributable and timed.',
                     'Seizures are logged as evidence against the case, so what was taken and where it is now is answerable at any point.',
@@ -151,16 +151,16 @@ class CaseStudySeeder extends Seeder
                 'role' => 'Developer',
                 'period' => 'For MAAIF crop inspection',
                 'problem' => 'A farmer buys a bag of certified maize seed, plants it, and half of it does not come '
-                    .'up. The bag looked genuine — counterfeit seed is packaged to look genuine. By the time the '
+                    .'up. The bag looked genuine, because counterfeit seed is packaged to look genuine. By the time the '
                     .'failure is obvious the season is gone, and there is no way to trace the bag back to whoever '
                     .'sold it. Subsidy vouchers had the same hole: no way to tell a redeemed voucher from a '
                     .'photocopied one.',
                 'approach' => 'Give every certified batch an identity that can be checked in a shop, in thirty '
-                    .'seconds, by anybody with a phone. Then record every hand-off along the way, so a bag that '
+                    .'seconds, by anyone with a phone. Then record every hand-off along the way, so a bag that '
                     .'appears from nowhere has no history to show and fails the check.',
                 'mechanics' => [
                     'Each certified batch is issued a barcode or QR code carrying its identity, not just a number printed on a label.',
-                    'The code is scanned at each hand-off — breeder, multiplier, processor, agro-dealer — building a chain of custody that is signed and timestamped at every step.',
+                    'The code is scanned at each hand-off (breeder, multiplier, processor, agro-dealer), building a chain of custody that is signed and timestamped at every step.',
                     'A farmer or an inspector scans the bag in the shop. The system answers with the batch, its germination and moisture test results, and where it was multiplied.',
                     'A bag that skips a stage, is scanned twice in two places, or comes from an unregistered dealer is flagged, and the dealer goes onto an inspection list.',
                     'Subsidy vouchers are redeemed against the same scan, so a voucher can be spent once and the redemption is tied to a real batch.',
@@ -169,7 +169,7 @@ class CaseStudySeeder extends Seeder
                 'constraints' => [
                     'It has to work in a shop. The check is done standing at a counter, on whatever handset the person has, in the time before the customer walks away.',
                     'Interoperability. Government systems have to exchange this data, so the formats were agreed rather than invented.',
-                    'Volume. Seed moves in millions of bags a season. The scan path is the part that has to stay fast when everything else is busy.',
+                    'Volume. Seed moves in large volumes each season. The scan path is the part that has to stay fast when everything else is busy.',
                     'Counterfeiters adapt. Anything printed can be copied, so the answer comes from the chain of custody behind the code, not from the code alone.',
                 ],
             ],
@@ -185,7 +185,7 @@ class CaseStudySeeder extends Seeder
                     .'disability associations themselves, with dashboards designed so that a policy officer who '
                     .'is not a statistician can find the number they need and cite it.',
                 'mechanics' => [
-                    'Data is collected door to door with NUDIPU district associations — by people the communities already know, not by strangers with clipboards.',
+                    'Data is collected door to door with NUDIPU district associations, by people the communities already know rather than strangers with clipboards.',
                     'Nobody is recorded without consenting to be, and what each record is for is explained at the point it is taken.',
                     'Responses are weighted to the national population, so a sub-region with fewer respondents does not vanish from the picture.',
                     'Dashboards break access to ICT down by sub-region, by type of disability and by round, so change over time is visible rather than asserted.',
@@ -193,9 +193,9 @@ class CaseStudySeeder extends Seeder
                 ],
                 'stack' => ['Laravel', 'MySQL', 'Analytics dashboards', 'Data export', 'Accessible front end'],
                 'constraints' => [
-                    'The platform itself has to be accessible. A disability observatory that a screen reader cannot read would be an embarrassment, so contrast, keyboard use and semantics were requirements, not polish.',
+                    'The platform itself has to be accessible. A disability observatory that a screen reader cannot use would undermine the whole point, so contrast, keyboard use and semantics were requirements, not polish.',
                     'Consent and dignity. These are records about people, held with their agreement, and the system is built to make that agreement real rather than assumed.',
-                    'National coverage. All 146 districts, including the ones that are hardest and most expensive to reach — the ones usually left out are the point.',
+                    'National coverage. All 146 districts, including the ones that are hardest to reach. The ones usually left out of surveys are the point of this one.',
                     'Comparability. Rounds have to line up with each other, so question wording and weighting are fixed rather than improved between rounds.',
                 ],
             ],
@@ -209,12 +209,12 @@ class CaseStudySeeder extends Seeder
                     .'as an email thread nobody can reconstruct. Meanwhile nobody could see patterns across '
                     .'cases, which is where the advocacy value actually is.',
                 'approach' => 'One case register with a sealed evidence vault behind it. Everything about a case '
-                    .'lives in one place, encrypted, with access held by named people, and every open written to '
+                    .'lives in one place, encrypted, with access held by named people, and every access written to '
                     .'an audit log. Then, on top of that, the trend analysis that turns individual cases into an '
                     .'argument.',
                 'mechanics' => [
                     'Intake records the case once, with consent, and issues an identifier that follows it to court.',
-                    'Evidence — photographs, medical reports, audio statements, letters — is attached to the case and encrypted at rest.',
+                    'Evidence (photographs, medical reports, audio statements, letters) is attached to the case and encrypted at rest.',
                     'Access is held by named people. Opening a sealed item is written to the audit log against that person and a stated reason.',
                     'The case moves through a tracked workflow: intake, sealed, referred to counsel, filed, heard. Nothing advances without leaving a record.',
                     'Trend dashboards aggregate across cases by type, district and time, so documentation becomes evidence for advocacy rather than a filing cabinet.',
@@ -222,7 +222,7 @@ class CaseStudySeeder extends Seeder
                 'stack' => ['Laravel', 'MySQL', 'Encryption at rest', 'Role-based access control', 'Audit logging'],
                 'constraints' => [
                     'The threat model is real. This data can put people at risk, so encryption, key custody and access logging were the first decisions rather than a later hardening pass.',
-                    'Keys are not held on the platform. Somebody who takes the server does not thereby have the evidence.',
+                    'Keys are not held on the platform. Anyone who takes the server does not thereby have the evidence.',
                     'Field intake. Documentation happens away from the office, so capture works there and syncs afterwards.',
                     'Court usefulness. Documentation that cannot be produced coherently to a lawyer has failed, so export was designed alongside capture.',
                 ],
@@ -231,25 +231,25 @@ class CaseStudySeeder extends Seeder
             'ecommerce-realestate' => [
                 'role' => 'Full-stack developer',
                 'period' => 'AfriInventions & Eight Tech Consults',
-                'problem' => 'Two businesses, two entirely different things to sell — physical goods that ship '
-                    .'and property that does not — and both were being run out of spreadsheets and WhatsApp. '
-                    .'Stock counts were wrong by the time anybody read them, enquiries were lost in a phone, and '
+                'problem' => 'Two businesses, two entirely different things to sell: physical goods that ship '
+                    .'and property that does not. Both were being run out of spreadsheets and WhatsApp. '
+                    .'Stock counts were wrong by the time anyone read them, enquiries were lost in a phone, and '
                     .'nobody could answer "what did we actually make this month" without an afternoon of adding '
                     .'up.',
                 'approach' => 'One back office, two storefronts. Goods and property are different enough to need '
                     .'different listing types and different journeys, and similar enough that inventory, '
                     .'payments, customers and reporting should not be built twice.',
                 'mechanics' => [
-                    'A listing is either a product with stock and shipping, or a property with an agent and a viewing — the same catalogue, two shapes.',
+                    'A listing is either a product with stock and shipping, or a property with an agent and a viewing. The same catalogue, two shapes.',
                     'Checkout takes MTN and Airtel Money, Visa and Mastercard, because a Ugandan customer who cannot pay by phone is a customer who does not buy.',
                     'Stock decrements on payment, not on adding to a basket, so two people cannot buy the last one.',
-                    'Enquiries and customers land in a CRM rather than a phone, so a follow-up is a task somebody owns instead of a message somebody remembers.',
+                    'Enquiries and customers land in a CRM rather than a phone, so a follow-up is a task someone owns instead of a message they may or may not remember.',
                     'The admin dashboard answers the money question directly: revenue this month, orders today, what is selling and what is not.',
                 ],
                 'stack' => ['Laravel', 'MySQL', 'Mobile Money', 'Visa/Mastercard', 'CRM', 'Admin dashboards'],
                 'constraints' => [
                     'Payments have to be Ugandan. Card-only checkout excludes most of the market, so Mobile Money is a first-class path, not a fallback.',
-                    'Two very different sales cycles. A water pump sells in three minutes; a house takes three months. The same system has to be sane for both.',
+                    'Two very different sales cycles. A water pump sells in three minutes; a house takes three months. The same system has to work sensibly for both.',
                     'Non-technical operators. The people adding listings are shop staff and agents, so the admin has to be obvious.',
                     'Public-facing. It is on the open internet with money moving through it, which sets the security floor.',
                 ],

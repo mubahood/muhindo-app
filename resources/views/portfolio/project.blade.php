@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', $project->title.' — '.($identity['name'] ?? 'Muhindo Mubaraka'))
+@section('title', $project->title.'| '.($identity['name'] ?? 'Muhindo Mubaraka'))
 @section('desc', $project->description)
 
 @push('styles')

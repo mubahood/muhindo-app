@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Research — Muhindo Mubaraka')
+@section('title', 'Research | Muhindo Mubaraka')
 @section('desc', $research['title'] ?? 'Graduate research.')
 
 @section('content')

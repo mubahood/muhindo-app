@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <x-seo
-    :title="trim($__env->yieldContent('title', 'Muhindo Mubaraka — Software Engineer & Programming Teacher'))"
-    :description="trim($__env->yieldContent('desc', 'I teach computer programming and computer-related courses, and I build software for anyone with a real problem — individuals, startups, schools, clinics, NGOs and enterprises across Uganda.'))"
+    :title="trim($__env->yieldContent('title', 'Muhindo Mubaraka | Software Engineer & Programming Teacher'))"
+    :description="trim($__env->yieldContent('desc', 'I teach computer programming and computer-related courses, and I build software for anyone with a real problem: individuals, startups, schools, clinics, NGOs and enterprises across Uganda.'))"
     :image="trim($__env->yieldContent('og_image', '')) ?: null"
   >@stack('jsonld')</x-seo>
   <link rel="stylesheet" href="{{ asset('vendor/fonts/inter/inter.css') }}">

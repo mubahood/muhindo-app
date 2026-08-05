@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Tell me about your project — Muhindo Mubaraka')
+@section('title', 'Tell me about your project | Muhindo Mubaraka')
 @section('desc', 'Five questions. Three minutes. Then I tell you honestly whether I am the right fit.')
 
 @push('styles')
@@ -123,7 +123,7 @@
     <div class="eyebrow">Step 2 of 2 · about three minutes</div>
     <h1>Tell me about your project</h1>
     <p>Five questions. They are the ones I need answered before I can tell you honestly
-       whether I am the right person for this — and roughly what it would cost.</p>
+       whether I am the right person for this, and roughly what it would cost.</p>
   </div>
 </section>
 
@@ -143,7 +143,7 @@
         <i class="fas fa-desktop" aria-hidden="true"></i>
         <div>
           <b>You came from {{ $demo->title }}</b>
-          <span>Say below if you want something like it — I will show you the real thing on a call.</span>
+          <span>Say below if you want something like it. I will show you the real thing on a call.</span>
         </div>
       </div>
     @endif
@@ -155,7 +155,7 @@
         {{-- 1 ─────────────────────────────────────────────────────────── --}}
         <div class="pp-step">
           <h2><span class="pp-n">01</span> What are you building?</h2>
-          <p class="pp-hint">A name and a few sentences. Plain language is perfect — I would rather
+          <p class="pp-hint">A name and a few sentences. Plain language is perfect. I would rather
              read how you describe it than how you think a developer would.</p>
 
           <div class="pp-f">
@@ -205,7 +205,7 @@
           </div>
 
           <div class="pp-f" style="margin-bottom:0;">
-            <label for="budget_amount">Budget you have in mind <span class="opt">— optional, and not held against you</span></label>
+            <label for="budget_amount">Budget you have in mind <span class="opt">(optional, and not held against you)</span></label>
             <div class="pp-money">
               <span class="pp-cur">
                 <label><input type="radio" name="budget_currency" value="UGX"
@@ -219,7 +219,7 @@
                    a perfectly good answer. --}}
               <input type="number" id="budget_amount" name="budget_amount" min="0" step="any"
                      inputmode="numeric" value="{{ old('budget_amount') }}"
-                     placeholder="Any figure — a rough one is fine">
+                     placeholder="Any figure, rough is fine">
             </div>
             @error('budget_amount')<div class="pp-err">{{ $message }}</div>@enderror
           </div>
@@ -255,7 +255,7 @@
           <summary>
             <span class="caret" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
             Add more detail
-            <span class="why">Optional — it makes my first reply more useful</span>
+            <span class="why">Optional. It makes my first reply more useful</span>
           </summary>
           <div class="pp-more-body">
             <div class="pp-f" style="margin-top:14px;">
@@ -271,7 +271,7 @@
             <div class="pp-f" style="margin-bottom:0;">
               <label for="organisation">Organisation</label>
               <input type="text" id="organisation" name="organisation" value="{{ old('organisation') }}"
-                     placeholder="Individuals are welcome — leave it blank">
+                     placeholder="Individuals welcome. Leave it blank">
             </div>
           </div>
         </details>
@@ -286,7 +286,7 @@
           </p>
           <p class="pp-saved" id="pp-saved">
             <i class="fas fa-check" aria-hidden="true"></i>
-            <span>Draft saved on this device — close the tab and it will still be here.</span>
+            <span>Draft saved on this device. Close the tab and it will still be here.</span>
           </p>
         </div>
       </div>
@@ -321,7 +321,7 @@
             <li>I take on a few projects at a time, so I may say no.</li>
             <li>I do not do logos, branding or purely visual design.</li>
             <li>I need access to the people who will use it.</li>
-            <li>Your team should be able to run it after I leave — that is the point.</li>
+            <li>Your team should be able to run it after I leave. That is the point.</li>
           </ul>
         </div>
       </aside>

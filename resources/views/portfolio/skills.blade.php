@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
-@section('title', 'Skills — Muhindo Mubaraka')
-@section('desc', 'The toolbox — languages, frameworks, databases and infrastructure.')
+@section('title', 'Skills | Muhindo Mubaraka')
+@section('desc', 'The toolbox: languages, frameworks, databases and infrastructure.')
 
 @section('content')
 
@@ -9,7 +9,7 @@
   <div class="wrap">
     <div class="eyebrow">Toolbox</div>
     <h1>Skills</h1>
-    <p>What I reach for, grouped by category — {{ $skills->flatten()->count() }} across {{ $skills->count() }} areas.</p>
+    <p>What I reach for, grouped by category. {{ $skills->flatten()->count() }} across {{ $skills->count() }} areas.</p>
   </div>
 </section>
 
@@ -47,7 +47,7 @@
     </div>
     <p style="font-size:12.5px;line-height:1.7;color:var(--tx3);margin-top:16px;">
       Nothing on this list is here because it looks good on a list. Every one of them has
-      shipped inside a system somebody depends on — the next chapter is where.
+      shipped inside a system someone depends on. The next chapter is where.
     </p>
 
     {{-- "Skills & experience" is one entry in the rail but two pages, so this

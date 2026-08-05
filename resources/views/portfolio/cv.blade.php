@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', ($identity['name'] ?? 'Muhindo Mubaraka').' — CV')
+@section('title', ($identity['name'] ?? 'Muhindo Mubaraka').'| CV')
 @section('desc', 'Full curriculum vitae: experience, qualifications, skills, research and selected systems delivered.')
 
 @push('styles')
@@ -99,7 +99,7 @@
   <div class="wrap">
     <div class="eyebrow">Curriculum vitae</div>
     <h1>The full record</h1>
-    <p>Everything on one page — assembled from the same records the rest of this site reads, so it is never out of date.</p>
+    <p>Everything on one page, assembled from the same records the rest of this site reads, so it is never out of date.</p>
   </div>
 </section>
 

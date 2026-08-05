@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Products — Muhindo Mubaraka')
+@section('title', 'Products | Muhindo Mubaraka')
 @section('desc', 'Products built and shipped independently.')
 
 @section('content')
