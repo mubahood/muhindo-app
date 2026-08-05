@@ -52,12 +52,18 @@ class LoginRequest extends FormRequest
         // Honeypot only, deliberately NOT FormShield's timing check. A
         // password manager fills and submits this form in well under a second,
         // and refusing that would lock out exactly the people with the
-        // strongest credentials. The hidden field carries no such risk: no
-        // person can fill in something they cannot see.
+        // strongest credentials.
+        //
+        // The hidden field was believed to carry no such risk, on the grounds
+        // that nobody can fill in something they cannot see. Their software
+        // can: the field was called `website`, which is what a password
+        // manager fills from a saved address card, and those same people were
+        // told their password was wrong and then rate-limited out. The field
+        // is now named and marked so that no manager touches it.
         //
         // A trip is answered exactly as a wrong password is, so a script
         // learns nothing about why it failed.
-        if (\App\Support\Spam\FormShield::looksAutomated($this->all())) {
+        if (\App\Support\Spam\FormShield::looksAutomated($this->all(), 'login')) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages(['email' => trans('auth.failed')]);

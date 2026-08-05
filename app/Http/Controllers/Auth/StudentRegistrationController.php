@@ -38,7 +38,7 @@ class StudentRegistrationController extends Controller
     {
         // Registration is the most valuable public form on the site to a
         // spammer, so it carries the same shield as the contact forms.
-        if (\App\Support\Spam\FormShield::looksAutomated($request->all())) {
+        if (\App\Support\Spam\FormShield::looksAutomated($request->all(), 'register')) {
             return redirect()->route('register')->with('success', 'Check your inbox to continue.');
         }
 

@@ -64,7 +64,7 @@ class SpamShieldTest extends TestCase
 
     public function test_an_instant_submission_is_refused(): void
     {
-        // Nobody reads a form and completes it in under three seconds.
+        // Nobody reads a form and completes it in under two seconds.
         $this->post(route('register'), $this->contactPayload([FormShield::TIMESTAMP => $this->humanStamp(0)]))
             ->assertSessionHasErrors(FormShield::TIMESTAMP);
 
@@ -134,6 +134,61 @@ class SpamShieldTest extends TestCase
             $this->assertStringContainsString('name="'.FormShield::HONEYPOT.'"', $html, "{$url} is missing the honeypot");
             $this->assertStringContainsString('name="'.FormShield::TIMESTAMP.'"', $html, "{$url} is missing the stamp");
         }
+    }
+
+    /**
+     * The bug this class exists to prevent a repeat of.
+     *
+     * The honeypot was called `website`. Chrome, Safari and every password
+     * manager fill a field of that name from a saved address card, whether or
+     * not it is on screen, and autocomplete="off" is documented as ignored for
+     * exactly that. So people with password managers had the trap filled in
+     * for them and were refused an account, a sign-in and a password reset,
+     * silently, with no error anyone could act on.
+     *
+     * The defence is the name itself, so the name is what gets asserted.
+     */
+    public function test_the_honeypot_is_not_named_after_anything_a_browser_autofills(): void
+    {
+        $name = FormShield::HONEYPOT;
+
+        foreach (['url', 'web', 'site', 'mail', 'name', 'phone', 'tel', 'addr',
+            'city', 'zip', 'post', 'country', 'company', 'organi', 'user', 'nick',
+            'bday', 'birth', 'card', 'cc-', 'street', 'homepage'] as $token) {
+            $this->assertStringNotContainsString($token, strtolower($name),
+                "A honeypot containing \"{$token}\" invites the autofill that broke this before");
+        }
+    }
+
+    public function test_the_honeypot_tells_password_managers_to_leave_it_alone(): void
+    {
+        // Each manager honours its own attribute and ignores the others, so
+        // all of them have to be present for the field to be left alone.
+        $html = (string) $this->get(route('register'))->assertOk()->getContent();
+
+        foreach (['data-1p-ignore', 'data-lpignore="true"', 'data-bwignore',
+            'data-form-type="other"', 'autocomplete="off"'] as $attribute) {
+            $this->assertStringContainsString($attribute, $html,
+                "the honeypot must carry {$attribute}");
+        }
+    }
+
+    public function test_a_dropped_submission_leaves_a_trace(): void
+    {
+        // Silence is right for a bot and disastrous for a false positive: no
+        // error for the person, no report for the owner, and no way to find
+        // out weeks later why somebody never got an account. The log is it.
+        \Illuminate\Support\Facades\Log::spy();
+
+        $this->post(route('register'), $this->contactPayload([
+            FormShield::HONEYPOT => 'http://spam.example',
+            'name' => 'Looks Like A Person',
+        ]))->assertRedirect();
+
+        \Illuminate\Support\Facades\Log::shouldHaveReceived('warning')
+            ->withArgs(fn (string $message, array $context = []) => str_contains($message, 'honeypot')
+                && ($context['form'] ?? null) === 'register'
+                && ($context['name'] ?? null) === 'Looks Like A Person');
     }
 
     public function test_the_honeypot_is_hidden_from_assistive_tech(): void
