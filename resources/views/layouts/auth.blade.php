@@ -126,5 +126,6 @@
     });
   </script>
   @stack('scripts')
+<x-analytics.beacon />
 </body>
 </html>

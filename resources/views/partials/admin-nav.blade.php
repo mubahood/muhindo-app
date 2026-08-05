@@ -66,6 +66,13 @@
           ['label' => 'Invoices', 'icon' => 'fa-file-invoice-dollar', 'route' => 'admin.invoices.index', 'match' => ['admin.invoices.*']],
           ['label' => 'Coupons', 'icon' => 'fa-tag', 'route' => 'admin.coupons.index', 'match' => ['admin.coupons.*']],
       ]],
+      ['key' => 'insights', 'label' => 'Analytics', 'icon' => 'fa-chart-line', 'gate' => 'analytics.view', 'items' => [
+          ['label' => 'Overview', 'icon' => 'fa-chart-pie', 'route' => 'admin.analytics.index', 'match' => ['admin.analytics.index']],
+          ['label' => 'Live', 'icon' => 'fa-tower-broadcast', 'route' => 'admin.analytics.live', 'match' => ['admin.analytics.live']],
+          ['label' => 'Visitors', 'icon' => 'fa-user-group', 'route' => 'admin.analytics.visitors', 'match' => ['admin.analytics.visitors', 'admin.analytics.visitor']],
+          ['label' => 'Content', 'icon' => 'fa-file-lines', 'route' => 'admin.analytics.content', 'match' => ['admin.analytics.content']],
+          ['label' => 'Sources', 'icon' => 'fa-signs-post', 'route' => 'admin.analytics.sources', 'match' => ['admin.analytics.sources']],
+      ]],
       ['key' => 'system', 'label' => 'System', 'icon' => 'fa-users-gear', 'gate' => ['manage-users', 'manage-settings'], 'items' => [
           ['label' => 'Staff', 'icon' => 'fa-user-shield', 'route' => 'admin.users.index', 'match' => ['admin.users.*'], 'can' => 'manage-users'],
           ['label' => 'Site settings', 'icon' => 'fa-sliders', 'route' => 'admin.settings.index', 'match' => ['admin.settings.index'], 'can' => 'manage-settings'],

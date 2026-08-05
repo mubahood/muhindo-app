@@ -25,12 +25,13 @@ class RbacSeeder extends Seeder
         'clients.manage',
         'projects.manage',
         'billing.manage',
+        'analytics.view',
     ];
 
     /** @var array<string, '*'|list<string>> */
     public const MATRIX = [
         'super_admin' => '*',
-        'admin' => ['access-admin', 'manage-settings', 'portfolio.manage', 'courses.manage', 'clients.manage', 'projects.manage', 'billing.manage'],
+        'admin' => ['access-admin', 'manage-settings', 'portfolio.manage', 'courses.manage', 'clients.manage', 'projects.manage', 'billing.manage', 'analytics.view'],
         'student' => [],
         'client' => [],
     ];

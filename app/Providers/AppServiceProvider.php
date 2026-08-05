@@ -22,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
             \App\Services\Gateway\FlutterwaveGateway::class,
         );
 
+        // One tracker per request. The middleware resolves the visitor into it
+        // early and a conversion listener reads that back later in the same
+        // request, so a fresh instance per resolution would lose the visit and
+        // orphan every event from the browser that caused it.
+        $this->app->singleton(\App\Services\Analytics\Tracker::class);
+
         // Telescope is a dev-only dependency, register its providers only when
         // the package is actually installed (local), so production --no-dev
         // installs work without it.
@@ -105,6 +111,11 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $this->fixLivewireSubdirectoryUrls();
+
+        // Conversions are recorded from the models themselves rather than from
+        // the controllers that write them, so a path added later is measured
+        // without anyone remembering to instrument it.
+        \Illuminate\Support\Facades\Event::subscribe(\App\Listeners\RecordAnalyticsConversions::class);
 
         // PUBLIC_SITE_PLAN.md Livewire.js is ~380KB and was measured as the single
         // largest render-blocking resource on the public marketing pages (Lighthouse:

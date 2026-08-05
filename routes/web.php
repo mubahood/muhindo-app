@@ -124,6 +124,14 @@ Route::get('/blog/{post:slug}', [\App\Http\Controllers\InsightController::class,
 $movedPermanently('/insights', '/blog');
 $movedPermanently('/insights/{post}', '/blog/{post}');
 Route::get('/products', [PortfolioController::class, 'products'])->name('portfolio.products');
+
+/*
+ * Analytics beacon. Unauthenticated because most of the audience is, and
+ * exempt from CSRF because sendBeacon cannot carry a session token: what it
+ * may write is limited instead by an encrypted, short-lived page handle. See
+ * BeaconController.
+ */
+Route::post('/_a', \App\Http\Controllers\Analytics\BeaconController::class)->name('analytics.beacon');
 /*
  * Hiring.
  *
@@ -296,6 +304,18 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::post('enrollments/{enrollment}/invoice', [EnrollmentController::class, 'invoice'])->name('enrollments.invoice');
     Route::delete('enrollments/{enrollment}', [EnrollmentController::class, 'destroy'])->name('enrollments.destroy');
 
+    // Analytics. Read-only, and gated on its own permission because audience
+    // data is the one part of the back office a future assistant editing
+    // courses has no business reading.
+    Route::middleware('permission:analytics.view')->prefix('analytics')->name('analytics.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('index');
+        Route::get('/content', [\App\Http\Controllers\Admin\AnalyticsController::class, 'content'])->name('content');
+        Route::get('/sources', [\App\Http\Controllers\Admin\AnalyticsController::class, 'sources'])->name('sources');
+        Route::get('/live', \App\Livewire\Admin\AnalyticsLive::class)->name('live');
+        Route::get('/visitors', \App\Livewire\Admin\AnalyticsVisitors::class)->name('visitors');
+        Route::get('/visitors/{visitor}', \App\Livewire\Admin\VisitorProfile::class)->name('visitor');
+    });
+
     // Clients & Projects
     Route::resource('clients', ClientController::class);
     Route::resource('projects', ProjectController::class);
@@ -407,3 +427,21 @@ Route::prefix('portal')->middleware(['auth', \App\Http\Middleware\ClientMustProp
 */
 Route::get('gateway/flutterwave/callback', [GatewayPaymentController::class, 'callback'])->name('gateway.callback');
 Route::post('gateway/flutterwave/webhook', [GatewayPaymentController::class, 'webhook'])->name('gateway.webhook');
+
+/*
+|--------------------------------------------------------------------------
+| Anything that matched nothing
+|--------------------------------------------------------------------------
+|
+| The response is byte for byte what the router would have produced on its
+| own. What changes is that the request now passes through the web middleware
+| group on its way to that 404, and is therefore recorded.
+|
+| A 404 with real traffic behind it is the most actionable thing in analytics:
+| it is a link somebody else published, against a URL that has since moved.
+| Unrecorded, that visitor is simply lost and nothing anywhere says so.
+|
+| API routes keep their own JSON envelope: abort() is rendered by the handler
+| in bootstrap/app.php, which decides on the shape by looking at the request.
+*/
+Route::fallback(fn () => abort(404));

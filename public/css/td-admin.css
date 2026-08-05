@@ -592,3 +592,163 @@ textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
 @media(max-width:600px){
   .mine-grid{grid-template-columns:1fr;}
 }
+
+/* Analytics
+   Everything here is prefixed .an-. It shares the admin palette and the card
+   shell; what it adds is the handful of shapes a reporting screen needs and a
+   CRUD screen does not: a column chart, a funnel, a ranked list whose bar is
+   the row background, and a session timeline. */
+
+.an-header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+
+/* The "somebody is here" indicator. Only animates when it is true, so a still
+   dot genuinely means an empty site rather than a broken script. */
+.an-live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--line-2);margin-right:6px;vertical-align:middle;}
+.an-live-dot.is-on{background:var(--ok);box-shadow:0 0 0 0 rgba(21,128,61,.45);animation:an-pulse 2s infinite;}
+@keyframes an-pulse{
+  70%{box-shadow:0 0 0 7px rgba(21,128,61,0);}
+  100%{box-shadow:0 0 0 0 rgba(21,128,61,0);}
+}
+@media (prefers-reduced-motion: reduce){ .an-live-dot.is-on{animation:none;} }
+
+/* Period switch */
+.an-period{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 14px;}
+.an-period-tabs{display:inline-flex;border:1px solid var(--line);background:var(--surface);border-radius:6px;overflow:hidden;}
+.an-period-tab{padding:7px 14px;font-size:12.5px;font-weight:500;color:var(--mt);border-right:1px solid var(--line);transition:background .12s,color .12s;}
+.an-period-tab:last-child{border-right:0;}
+.an-period-tab:hover{background:var(--surface-2);color:var(--tx);}
+.an-period-tab.on{background:var(--br);color:#fff;}
+.an-period-range{font-size:12px;color:var(--mt2);}
+
+/* Period-on-period change */
+.an-change-strip{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px;}
+.an-change{display:inline-flex;align-items:baseline;gap:6px;padding:6px 11px;border:1px solid var(--line);
+  background:var(--surface);border-radius:6px;font-size:12px;color:var(--mt);}
+.an-change b{font-weight:600;}
+.an-change em{font-style:normal;color:var(--mt2);font-size:11px;}
+.an-change.is-up b{color:var(--ok);}
+.an-change.is-down b{color:var(--bad);}
+.an-change.is-new b,.an-change.is-muted b{color:var(--mt2);}
+
+/* Column chart */
+.an-cols{display:flex;align-items:flex-end;gap:2px;width:100%;}
+.an-col{flex:1;min-width:2px;height:100%;display:flex;align-items:flex-end;cursor:default;}
+.an-col-fill{display:block;width:100%;border-radius:2px 2px 0 0;transition:opacity .12s;min-height:2px;}
+.an-col:hover .an-col-fill{opacity:.72;}
+.an-col-fill.is-empty{opacity:.5;}
+.an-cols-axis{display:flex;gap:2px;margin-top:6px;}
+.an-cols-axis span{flex:1;min-width:0;font-size:10px;color:var(--mt2);text-align:left;white-space:nowrap;overflow:hidden;}
+
+/* Funnel */
+.an-funnel{display:flex;flex-direction:column;gap:9px;}
+.an-funnel-row{display:grid;grid-template-columns:150px 1fr 92px;align-items:center;gap:10px;}
+.an-funnel-label{font-size:12.5px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.an-funnel-track{position:relative;height:26px;background:var(--surface-2);border-radius:4px;overflow:hidden;display:flex;align-items:center;}
+.an-funnel-fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--br),var(--br-d));border-radius:4px;}
+.an-funnel-value{position:relative;padding-left:9px;font-size:12px;font-weight:600;color:#fff;mix-blend-mode:difference;}
+.an-funnel-pct{font-size:12px;color:var(--mt);text-align:right;}
+.an-funnel-pct .an-drop{display:block;font-style:normal;font-size:10.5px;color:var(--bad);}
+
+/* Ranked rows: the bar is the row's own background, so long labels stay readable. */
+.an-rows{display:flex;flex-direction:column;}
+.an-row{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:8px 10px;border-bottom:1px solid var(--line);overflow:hidden;}
+.an-row:last-child{border-bottom:0;}
+.an-row-bar{position:absolute;inset:0 auto 0 0;background:var(--br-soft);z-index:0;}
+.an-row-label{position:relative;z-index:1;font-size:12.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.an-row-label a{color:var(--br);}
+.an-row-label a:hover{text-decoration:underline;}
+.an-row-label em{display:block;font-style:normal;font-size:11px;color:var(--mt2);}
+.an-row-value{position:relative;z-index:1;font-size:12.5px;font-weight:600;white-space:nowrap;}
+
+/* Activity feed */
+.an-feed{display:flex;flex-direction:column;}
+.an-feed-row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);transition:background .12s;}
+.an-feed-row:last-child{border-bottom:0;}
+.an-feed-row:hover{background:var(--surface-2);}
+.an-feed-icon{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;background:var(--surface-2);color:var(--mt);font-size:10.5px;}
+.an-feed-icon.cat-conversion{background:var(--ok-soft);color:var(--ok);}
+.an-feed-icon.cat-intent{background:var(--info-soft);color:var(--info);}
+.an-feed-icon.cat-learning{background:var(--warn-soft);color:var(--warn);}
+.an-feed-main{flex:1;min-width:0;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.an-feed-main em{font-style:normal;color:var(--mt2);}
+.an-feed-value{font-size:12px;font-weight:600;color:var(--ok);white-space:nowrap;}
+.an-feed-when{font-size:11px;color:var(--mt2);white-space:nowrap;}
+
+/* Visitor identity */
+.an-who{display:flex;align-items:center;gap:9px;min-width:0;}
+.an-who b{display:block;font-size:12.5px;}
+.an-who em{display:block;font-style:normal;font-size:11px;color:var(--mt2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:230px;}
+.an-avatar{width:28px;height:28px;flex-shrink:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  background:var(--surface-2);color:var(--mt);font-size:11.5px;font-weight:600;}
+.an-avatar.is-known{background:var(--br);color:#fff;}
+.an-avatar.lg{width:34px;height:34px;font-size:14px;vertical-align:middle;margin-right:8px;}
+.an-sub{font-size:11px;color:var(--mt2);margin-top:2px;}
+.an-path{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.an-path a{color:var(--br);}
+.an-mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;}
+.an-break{word-break:break-all;}
+tr.an-bot{opacity:.55;}
+
+/* Segments and filters */
+.an-segments{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px;}
+.an-segment{padding:6px 13px;font-size:12.5px;border:1px solid var(--line);background:var(--surface);
+  color:var(--mt);border-radius:20px;cursor:pointer;transition:all .12s;}
+.an-segment:hover{border-color:var(--line-2);color:var(--tx);}
+.an-segment.on{background:var(--br);border-color:var(--br);color:#fff;}
+.an-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.an-filters .tb-input{flex:1;min-width:200px;}
+.an-filters .tb-select{width:auto;min-width:130px;}
+.an-checkbox{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--mt);white-space:nowrap;}
+
+/* Fact lists */
+.an-facts{display:grid;grid-template-columns:auto 1fr;gap:7px 16px;font-size:12.5px;align-items:baseline;}
+.an-facts dt{color:var(--mt2);white-space:nowrap;}
+.an-facts dd{color:var(--tx);min-width:0;}
+.an-facts dd a{color:var(--br);}
+.an-list{display:flex;flex-direction:column;gap:7px;}
+.an-list-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12.5px;}
+.an-hint p{font-size:12.5px;margin-bottom:8px;}
+.an-hint code{background:var(--surface-2);padding:2px 5px;border-radius:3px;font-size:11.5px;}
+
+/* Attention score */
+.an-score{display:flex;align-items:center;gap:7px;}
+.an-score-track{width:64px;height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden;}
+.an-score-fill{display:block;height:100%;background:linear-gradient(90deg,var(--warn),var(--ok));}
+.an-score em{font-style:normal;font-size:11px;color:var(--mt);}
+
+/* Session timeline. The rail is drawn on the list, not per row, so it stays
+   continuous across items of different heights. */
+.an-sessions{display:flex;flex-direction:column;gap:16px;}
+.an-session{border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+.an-session-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:9px 13px;background:var(--surface-2);border-bottom:1px solid var(--line);}
+.an-session-when b{font-size:12.5px;}
+.an-session-when em{font-style:normal;font-size:11.5px;color:var(--mt2);margin-left:6px;}
+.an-session-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:11.5px;}
+.an-track{position:relative;padding:11px 13px 11px 0;margin:0;list-style:none;}
+.an-track::before{content:'';position:absolute;left:83px;top:0;bottom:0;width:1px;background:var(--line);}
+.an-track-item{position:relative;display:grid;grid-template-columns:64px 20px 1fr;align-items:start;gap:10px;padding:5px 0;}
+.an-track-time{font-size:11px;color:var(--mt2);text-align:right;font-variant-numeric:tabular-nums;padding-top:1px;}
+.an-track-dot{position:relative;z-index:1;width:20px;height:20px;border-radius:50%;background:var(--surface);
+  border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--mt2);margin-left:8px;}
+.an-track-item.is-event .an-track-dot{background:var(--info-soft);border-color:var(--info-soft);color:var(--info);}
+.an-track-item.cat-conversion .an-track-dot{background:var(--ok-soft);border-color:var(--ok-soft);color:var(--ok);}
+.an-track-item.cat-learning .an-track-dot{background:var(--warn-soft);border-color:var(--warn-soft);color:var(--warn);}
+.an-track-body{font-size:12.5px;min-width:0;}
+.an-track-body a{color:var(--br);}
+.an-track-body a:hover{text-decoration:underline;}
+.an-track-detail{display:block;font-style:normal;font-size:11px;color:var(--mt2);overflow:hidden;text-overflow:ellipsis;}
+.an-more{margin-top:14px;}
+
+.an-live-table td{vertical-align:middle;}
+
+@media (max-width: 720px){
+  .an-funnel-row{grid-template-columns:1fr;gap:4px;}
+  .an-funnel-pct{text-align:left;}
+  .an-track::before{left:63px;}
+  .an-track-item{grid-template-columns:46px 20px 1fr;}
+  .an-who em{max-width:150px;}
+  .an-period{flex-direction:column;align-items:flex-start;}
+}

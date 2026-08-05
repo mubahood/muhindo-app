@@ -1772,5 +1772,6 @@
 </script>
 @stack('scripts')
 @livewireScripts
+<x-analytics.beacon />
 </body>
 </html>

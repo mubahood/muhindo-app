@@ -29,12 +29,19 @@ return Application::configure(basePath: dirname(__DIR__))
         // authenticity is verified via the verif-hash signature in the controller.
         $middleware->validateCsrfTokens(except: [
             'gateway/flutterwave/webhook',
+            // sendBeacon fires while the page is being torn down and cannot
+            // attach a session token. Authenticity comes from the encrypted
+            // page handle in the payload instead.
+            '_a',
         ]);
 
         $middleware->redirectGuestsTo(fn () => route('login'));
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\RequirePasswordChange::class,
+            // Last in the group, and terminable: the recording happens after
+            // the response has been flushed to the browser.
+            \App\Http\Middleware\TrackVisitor::class,
         ]);
         $middleware->api(append: [
             \App\Http\Middleware\SetLocale::class,
