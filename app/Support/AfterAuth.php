@@ -20,6 +20,16 @@ class AfterAuth
 {
     public static function destination(User $user): string
     {
+        // An admin administers both sides of this, so neither answer below is
+        // theirs. The rules read the raw capability columns, and an owner
+        // account carrying is_client was being signed in to the client portal
+        // and never shown the back office at all. isClient()/isStudent() would
+        // not have done it: those report true for any admin, which sends the
+        // same account down the client branch for the opposite reason.
+        if ($user->isAdmin()) {
+            return route('dashboard');
+        }
+
         if (self::mustPropose($user)) {
             return route('propose');
         }
@@ -35,7 +45,7 @@ class AfterAuth
     /** A client, hired nobody yet, and has not said what they want built. */
     public static function mustPropose(?User $user): bool
     {
-        if (! $user || ! $user->is_client) {
+        if (! $user || $user->isAdmin() || ! $user->is_client) {
             return false;
         }
 

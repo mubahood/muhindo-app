@@ -332,4 +332,31 @@ class DualRoleAccountTest extends TestCase
         // ...but the label still reads as their real role, not "Student & Client".
         $this->assertSame('Owner', $admin->accountTypeLabel());
     }
+
+    /**
+     * The owner account carries is_client, because the owner is also the person
+     * who owns the client records. Signing in was reading that column directly
+     * and delivering them to the client portal, so the one account that
+     * administers the site never saw the back office.
+     */
+    public function test_an_owner_carrying_client_access_still_lands_on_the_dashboard(): void
+    {
+        $owner = User::factory()->create([
+            'role' => 'super_admin',
+            'is_admin' => true,
+            'is_client' => true,
+            'is_student' => false,
+            'password' => 'password123',
+        ]);
+
+        $this->post(route('login'), $this->shielded([
+            'email' => $owner->email,
+            'password' => 'password123',
+        ]))->assertRedirect(route('dashboard'));
+
+        // And the proposal detour is for clients hiring somebody, not for the
+        // person being hired, however few inquiries their own account has.
+        $this->assertSame(0, ProjectInquiry::where('user_id', $owner->id)->count());
+        $this->actingAs($owner)->get(route('portal.index'))->assertOk();
+    }
 }
