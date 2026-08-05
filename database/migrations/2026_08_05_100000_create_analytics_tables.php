@@ -43,7 +43,7 @@ return new class extends Migration
             $table->timestamp('identified_at')->nullable();
 
             // First-touch attribution. Written once, on the first request.
-            $table->string('first_landing_path', 255)->nullable();
+            $table->string('first_landing_path', 191)->nullable();
             $table->string('first_referrer', 255)->nullable();
             $table->string('first_source', 64)->nullable();
             $table->string('first_medium', 32)->nullable();
@@ -83,8 +83,8 @@ return new class extends Migration
             $table->foreignId('visitor_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
 
-            $table->string('entry_path', 255)->nullable();
-            $table->string('exit_path', 255)->nullable();
+            $table->string('entry_path', 191)->nullable();
+            $table->string('exit_path', 191)->nullable();
             $table->string('referrer', 255)->nullable();
             $table->string('referrer_host', 128)->nullable();
 
@@ -129,7 +129,11 @@ return new class extends Migration
             $table->foreignId('visitor_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
 
-            $table->string('path', 255);
+            // 191, not 255. utf8mb4 gives every character four bytes, and this
+            // column is half of a composite index; at 255 that index needs 1025
+            // bytes and MariaDB's older row formats cap a key at 1000. Long
+            // enough for any URL this site generates by a wide margin.
+            $table->string('path', 191);
             $table->string('query', 512)->nullable();
             $table->string('route_name', 96)->nullable();
             $table->string('title', 191)->nullable();
@@ -168,7 +172,7 @@ return new class extends Migration
             $table->string('category', 24)->default('interaction');
             $table->string('label', 191)->nullable();
             $table->nullableMorphs('subject');
-            $table->string('path', 255)->nullable();
+            $table->string('path', 191)->nullable();
 
             // Money on the event that earned it, so a channel report can add up
             // revenue instead of counting clicks and calling it performance.

@@ -78,7 +78,7 @@ class Tracker
                 $acquisition = Channel::resolve($request);
                 $visitor->fill([
                     'first_seen_at' => now(),
-                    'first_landing_path' => Str::limit($request->path() === '/' ? '/' : '/'.ltrim($request->path(), '/'), 250, ''),
+                    'first_landing_path' => Str::limit($request->path() === '/' ? '/' : '/'.ltrim($request->path(), '/'), 185, ''),
                     'first_referrer' => $acquisition['referrer'],
                     'first_source' => $acquisition['source'],
                     'first_medium' => $acquisition['medium'],
@@ -483,7 +483,7 @@ class Tracker
     {
         $path = '/'.ltrim($request->path(), '/');
 
-        return Str::limit($path === '//' ? '/' : $path, 250, '');
+        return Str::limit($path === '//' ? '/' : $path, 185, '');
     }
 
     private function visitorFor(?Request $request, ?User $user): ?Visitor
