@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', ($identity['name'] ?? 'Muhindo Mubaraka').'| CV')
+@section('title', ($identity['name'] ?? 'Muhindo Mubaraka').' | CV')
 @section('desc', 'Full curriculum vitae: experience, qualifications, skills, research and selected systems delivered.')
 
 @push('styles')

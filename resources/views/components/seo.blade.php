@@ -6,8 +6,24 @@
     'canonical' => null,
 ])
 @php
-    $seoTitle = \Illuminate\Support\Str::limit($title, 60, '');
-    $seoDescription = \Illuminate\Support\Str::limit($description, 155, '');
+    /*
+     * Decoded before it is escaped, and this is not belt-and-braces.
+     *
+     * The two-argument form of @section runs its content through e() when it
+     * stores it, so a title arriving from a layout's yieldContent() is already
+     * escaped once. Printing it with {{ }} escapes it a second time, and the
+     * ampersand in "Full-Stack Developer & Software Engineer" reached Google
+     * as a literal &amp; in the search result.
+     *
+     * Decoding first normalises both sources, a raw string passed straight to
+     * this component and a pre-escaped one from a section, so exactly one
+     * escape happens either way. It stays safe because {{ }} below still does
+     * that escaping; this only removes a duplicate.
+     */
+    $decode = fn (string $value) => html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+    $seoTitle = \Illuminate\Support\Str::limit($decode($title), 60, '');
+    $seoDescription = \Illuminate\Support\Str::limit($decode($description), 155, '');
     $seoCanonical = $canonical ?? url()->current();
     $seoImage = $image ?? asset('images/og.png');
 @endphp
