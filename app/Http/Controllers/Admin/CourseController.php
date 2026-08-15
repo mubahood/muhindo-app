@@ -87,6 +87,7 @@ class CourseController extends Controller
             'level' => 'required|in:beginner,intermediate,advanced',
             'category' => 'nullable|string|max:100',
             'is_published' => 'nullable|boolean',
+            'is_coming_soon' => 'nullable|boolean',
             'progression' => ['nullable', Rule::in(array_column(CourseProgression::cases(), 'value'))],
             'access_duration_days' => 'nullable|integer|min:1',
             'debug_mode' => 'nullable|boolean',
@@ -95,6 +96,7 @@ class CourseController extends Controller
         $data['slug'] = ($data['slug'] ?? null) ?: Str::slug($data['title']);
         $data['currency'] = ($data['currency'] ?? null) ?: 'UGX';
         $data['is_published'] = $request->boolean('is_published');
+        $data['is_coming_soon'] = $request->boolean('is_coming_soon');
         $data['debug_mode'] = $request->boolean('debug_mode');
         $data['progression'] = $data['progression'] ?? CourseProgression::Free->value;
         $data['outcomes'] = $this->linesToArray($data['outcomes'] ?? null);

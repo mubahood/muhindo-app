@@ -105,13 +105,19 @@
               </span>
 
               @php $cur = \App\Support\Catalog\Currency::current(); @endphp
-              <span @class(['c-price', 'free' => \App\Support\Catalog\Currency::isFreeIn($course, $cur)])>
-                @if(\App\Support\Catalog\Currency::isFreeIn($course, $cur))
-                  Free
-                @else
-                  {{ \App\Support\Catalog\Currency::format(\App\Support\Catalog\Currency::priceOf($course, $cur), $cur) }}
-                @endif
-              </span>
+              @if($course->isComingSoon())
+                {{-- A price on a course nobody can buy is a promise the page
+                     cannot keep, so the badge takes its place entirely. --}}
+                <span class="c-price soon">Coming soon</span>
+              @else
+                <span @class(['c-price', 'free' => \App\Support\Catalog\Currency::isFreeIn($course, $cur)])>
+                  @if(\App\Support\Catalog\Currency::isFreeIn($course, $cur))
+                    Free
+                  @else
+                    {{ \App\Support\Catalog\Currency::format(\App\Support\Catalog\Currency::priceOf($course, $cur), $cur) }}
+                  @endif
+                </span>
+              @endif
             </a>
 
             <div class="c-body">
@@ -150,7 +156,12 @@
                        looked clickable and was not, and on touch, where the
                        panel is always open, it is the card's main action. --}}
                   <a href="{{ route('courses.show', $course) }}" wire:navigate class="btn gold sm c-cta">
-                    {{ $course->isFree() ? 'Start free' : 'View course' }} <i class="fas fa-arrow-right"></i>
+                    @if($course->isComingSoon())
+                      Notify me
+                    @else
+                      {{ $course->isFree() ? 'Start free' : 'View course' }}
+                    @endif
+                    <i class="fas fa-arrow-right"></i>
                   </a>
                 </div>
               </div>

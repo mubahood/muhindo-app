@@ -211,11 +211,21 @@
           @endif
         </div>
 
-        <div class="price {{ $course->isFree() ? 'free' : '' }}">
-          {{ $course->isFree() ? 'Free' : $course->currency.' '.number_format((float) $course->price) }}
-        </div>
+        @if($course->isComingSoon())
+          <div class="price soon">Coming soon</div>
+        @else
+          <div class="price {{ $course->isFree() ? 'free' : '' }}">
+            {{ $course->isFree() ? 'Free' : $course->currency.' '.number_format((float) $course->price) }}
+          </div>
+        @endif
 
-        @if($enrollment)
+        {{-- A course that is not open replaces every buying control with the
+             one thing that is still worth doing on this page. Somebody already
+             enrolled keeps their way in: closing the catalogue must never take
+             a course away from a student who already paid for it. --}}
+        @if($course->isComingSoon() && ! $enrollment)
+          @include('courses.partials.notify-form')
+        @elseif($enrollment)
           <a href="{{ route('learn.course', $course) }}" class="btn gold lg" style="width:100%;justify-content:center;">Continue learning</a>
         @elseif($pendingCheckout ?? false)
           <a href="{{ route('courses.checkout', $course) }}" class="btn gold lg" style="width:100%;justify-content:center;">Complete checkout</a>
@@ -253,12 +263,14 @@
           @if($course->access_duration_days)<li>{{ $course->access_duration_days }} days of access</li>@endif
         </ul>
 
-        @unless($course->isFree())
+        {{-- Not while the course is closed: naming four ways to pay under a
+             form that only collects a name is an offer the page cannot keep. --}}
+        @if(! $course->isFree() && ! $course->isComingSoon())
           <div class="pay-icons">
             <span>MTN MoMo</span><span>Airtel Money</span><span>Visa</span><span>Mastercard</span>
           </div>
           <div class="money-comfort">Secure payment via Flutterwave</div>
-        @endunless
+        @endif
       </aside>
     </div>
   </div>

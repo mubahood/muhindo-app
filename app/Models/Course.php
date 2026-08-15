@@ -24,7 +24,7 @@ class Course extends Model
     protected $fillable = [
         'uuid', 'title', 'slug', 'description', 'tagline', 'outcomes', 'requirements',
         'cover_image', 'cover_alt', 'price',
-        'currency', 'level', 'category', 'is_published', 'created_by', 'progression', 'debug_mode',
+        'currency', 'level', 'category', 'is_published', 'is_coming_soon', 'created_by', 'progression', 'debug_mode',
         'price_usd', 'course_number', 'tier', 'is_featured', 'prerequisites_note', 'playlist_url', 'source_file', 'synced_at',
         'access_duration_days',
     ];
@@ -34,6 +34,7 @@ class Course extends Model
         return [
             'price' => 'decimal:2',
             'is_published' => 'boolean',
+            'is_coming_soon' => 'boolean',
             'progression' => CourseProgression::class,
             'debug_mode' => 'boolean',
             'is_featured' => 'boolean',
@@ -109,6 +110,35 @@ class Course extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(CourseReview::class);
+    }
+
+    /**
+     * Is this course actually purchasable right now?
+     *
+     * Published and coming-soon are different questions. Published controls
+     * whether the page exists at all; coming soon controls whether there is
+     * anything to buy on it. A course behind "coming soon" is deliberately
+     * still visible, still indexed, and still collecting names: that page is
+     * the advertisement, and hiding it would waste the only audience it has.
+     */
+    public function isComingSoon(): bool
+    {
+        return (bool) $this->is_coming_soon;
+    }
+
+    public function isSellable(): bool
+    {
+        return (bool) $this->is_published && ! $this->is_coming_soon;
+    }
+
+    /**
+     * Courses a visitor can actually pay for.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
+     */
+    public function scopeSellable(\Illuminate\Database\Eloquent\Builder $query): void
+    {
+        $query->where('is_published', true)->where('is_coming_soon', false);
     }
 
     public function isFree(): bool

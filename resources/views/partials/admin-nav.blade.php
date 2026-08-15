@@ -62,6 +62,7 @@
           ['label' => 'Enrollments', 'icon' => 'fa-user-graduate', 'route' => 'admin.enrollments.index', 'match' => ['admin.enrollments.*']],
           ['label' => 'Grading Queue', 'icon' => 'fa-inbox', 'route' => 'admin.grading-queue', 'match' => ['admin.grading-queue']],
           ['label' => 'Reviews', 'icon' => 'fa-star', 'route' => 'admin.reviews.index', 'match' => ['admin.reviews.*']],
+          ['label' => 'Waitlist', 'icon' => 'fa-bell', 'route' => 'admin.waitlist', 'match' => ['admin.waitlist']],
       ]],
       ['key' => 'work', 'label' => 'Clients & Projects', 'icon' => 'fa-handshake', 'gate' => ['clients.manage', 'projects.manage'], 'items' => [
           ['label' => 'Clients', 'icon' => 'fa-address-book', 'route' => 'admin.clients.index', 'match' => ['admin.clients.*'], 'can' => 'clients.manage'],

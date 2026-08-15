@@ -103,7 +103,10 @@ class Cart
         $courseIds = $this->idsFor($lines, 'course');
 
         $products = $productIds ? Product::published()->findMany($productIds)->keyBy('id') : collect();
-        $courses = $courseIds ? Course::where('is_published', true)->findMany($courseIds)->keyBy('id') : collect();
+        // sellable(), not just published: a course put back behind "coming
+        // soon" after somebody added it drops out of their basket on the next
+        // page load, the same way a withdrawn product does.
+        $courses = $courseIds ? Course::sellable()->findMany($courseIds)->keyBy('id') : collect();
 
         $out = collect();
 

@@ -85,6 +85,18 @@
         </label>
       </div>
 
+      <div class="tb-form-group">
+        <label class="tb-check-group">
+          <input type="checkbox" name="is_coming_soon" value="1" {{ old('is_coming_soon', $course->exists ? $course->is_coming_soon : true) ? 'checked' : '' }}>
+          <span><b>Coming soon</b>, the page is live but nothing can be bought</span>
+        </label>
+        <p class="muted" style="font-size:.75rem;margin-top:4px;">
+          The sales page stays public and keeps collecting names on the waitlist; enrolling,
+          the basket and checkout are all closed. Untick it on the day the course opens.
+          Anyone already enrolled keeps their access either way.
+        </p>
+      </div>
+
       {{-- Set apart on purpose. This is not a content setting: while it is on,
            every student on the course is affected, not just whoever turned it
            on, so it must never read as one more checkbox in a list. --}}

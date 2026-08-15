@@ -251,6 +251,14 @@ class CourseCatalogueController extends Controller
 
     public function enroll(Request $request, Course $course): RedirectResponse
     {
+        // The last of the three checks, at the point access is actually
+        // granted. Somebody who kept a form open before the course closed, or
+        // who posts the route directly, arrives here.
+        if ($course->isComingSoon()) {
+            return redirect()->route('courses.show', $course)->with('error',
+                'That course is not open yet. Leave your name and you will hear the day it is.');
+        }
+
         $user = $request->user();
         $existing = Enrollment::where('user_id', $user->id)->where('course_id', $course->id)->first();
 
@@ -313,6 +321,11 @@ class CourseCatalogueController extends Controller
     /** Shows the pending invoice for a paid course and a "Pay with Flutterwave" button. */
     public function checkout(Request $request, Course $course): View|RedirectResponse
     {
+        if ($course->isComingSoon()) {
+            return redirect()->route('courses.show', $course)->with('error',
+                'That course is not open yet. Leave your name and you will hear the day it is.');
+        }
+
         $user = $request->user();
         $enrollment = Enrollment::where('user_id', $user->id)
             ->where('course_id', $course->id)

@@ -50,6 +50,12 @@ class CartController extends Controller
                 'That download is not ready yet. It has not been added to the basket.');
         }
 
+        // Same rule, same three points, for a course that has not opened.
+        if ($item instanceof Course && $item->isComingSoon()) {
+            return back()->with('error',
+                'That course is not open yet. Leave your name on it and you will hear the day it is.');
+        }
+
         $this->cart->add($item, (int) ($data['quantity'] ?? 1));
 
         if ($request->boolean('buy_now')) {

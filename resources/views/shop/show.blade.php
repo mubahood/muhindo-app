@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
 @section('title', $product->name.' | Source code for sale')
-@section('desc', $product->summary)
+@section('desc', $product->summary ?? '')
 @section('og_image', $product->coverUrl() ?? '')
 
 @push('styles')

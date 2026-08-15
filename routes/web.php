@@ -178,6 +178,12 @@ Route::get('/e-learning/{course:slug}', [CourseCatalogueController::class, 'show
 Route::get('/e-learning/{course:slug}/preview/{lesson}', [CourseCatalogueController::class, 'preview'])->name('courses.preview');
 Route::post('/e-learning/{course:slug}/enroll', [CourseCatalogueController::class, 'enroll'])
     ->middleware(['auth', 'throttle:10,1'])->name('courses.enroll');
+// The waitlist. Open to a stranger on purpose: the person worth catching here
+// is the one who read the page, decided yes, and found nothing to buy. Making
+// them register first would lose exactly them.
+Route::post('/e-learning/{course:slug}/notify-me', [\App\Http\Controllers\CourseNotifyController::class, 'store'])
+    ->middleware('throttle:6,1')->name('courses.notify');
+
 Route::get('/e-learning/{course:slug}/checkout', [CourseCatalogueController::class, 'checkout'])
     ->middleware('auth')->name('courses.checkout');
 
@@ -299,6 +305,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('enrollments/{enrollment}', \App\Livewire\Admin\EnrollmentDrilldown::class)->name('enrollments.show');
     Route::get('grading-queue', \App\Livewire\Admin\GradingQueue::class)->name('grading-queue');
     Route::get('reviews', \App\Livewire\Admin\ReviewModeration::class)->name('reviews.index');
+    Route::get('waitlist', \App\Livewire\Admin\CourseWaitlist::class)->name('waitlist');
     Route::post('courses/{course}/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
     Route::patch('enrollments/{enrollment}', [EnrollmentController::class, 'update'])->name('enrollments.update');
     Route::post('enrollments/{enrollment}/invoice', [EnrollmentController::class, 'invoice'])->name('enrollments.invoice');

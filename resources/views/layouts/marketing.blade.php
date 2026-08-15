@@ -638,6 +638,60 @@
         radial-gradient(760px 320px at 78% 0%,rgba(184,147,63,.13),transparent 62%),
         radial-gradient(620px 280px at 8% 100%,rgba(11,31,58,.07),transparent 60%);}
 
+
+    /* WhatsApp launcher
+       z-index 45: below the mobile action bar (50), the menu (55) and the
+       header (60), so it can never sit on top of Buy, Hire or an open menu. */
+    .wa{position:fixed;right:18px;bottom:18px;z-index:45;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+    .wa-btn{width:54px;height:54px;border-radius:50%;border:0;cursor:pointer;
+      background:#25D366;color:#fff;font-size:26px;line-height:1;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 6px 20px rgba(37,211,102,.42);transition:transform .15s,box-shadow .15s;}
+    .wa-btn:hover{transform:scale(1.06);box-shadow:0 8px 26px rgba(37,211,102,.52);}
+    .wa-btn:focus-visible{outline:3px solid var(--pri);outline-offset:3px;}
+    .wa-panel{width:min(310px,calc(100vw - 36px));background:var(--surface);
+      border:1px solid var(--line);border-radius:14px;overflow:hidden;
+      box-shadow:0 18px 44px rgba(11,31,58,.20);}
+    .wa-head{display:flex;align-items:center;gap:10px;padding:13px 15px;
+      background:#075E54;color:#fff;}
+    .wa-avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);
+      display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;letter-spacing:.02em;}
+    .wa-head b{display:block;font-size:13.5px;font-weight:600;}
+    .wa-head em{display:block;font-style:normal;font-size:11px;opacity:.85;}
+    .wa-q{padding:13px 15px 8px;font-size:12.5px;color:var(--tx2);}
+    .wa-opt{display:flex;align-items:center;gap:11px;padding:11px 15px;
+      border-top:1px solid var(--line);transition:background .13s;}
+    .wa-opt:hover{background:var(--surface-2);}
+    .wa-opt > i:first-child{width:32px;height:32px;flex-shrink:0;border-radius:50%;
+      background:var(--pri-soft);color:var(--pri);display:flex;align-items:center;justify-content:center;font-size:13px;}
+    .wa-opt span{flex:1;min-width:0;}
+    .wa-opt b{display:block;font-size:13px;font-weight:600;}
+    .wa-opt em{display:block;font-style:normal;font-size:11px;color:var(--tx2);}
+    .wa-go{font-size:11px;color:var(--line-2);}
+    .wa-ctx{padding:9px 15px;background:var(--surface-2);border-top:1px solid var(--line);
+      font-size:11px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+    /* Coming soon */
+    .c-price.soon,.buy-box .price.soon{background:var(--pri);color:#fff;}
+    .buy-box .price.soon{font-size:17px;letter-spacing:.01em;}
+    .notify{margin-top:4px;}
+    .notify-lead{font-size:12.5px;color:var(--tx2);line-height:1.55;margin-bottom:11px;}
+    .notify-form input[type=text],.notify-form input[type=tel],.notify-form input[type=email]{
+      width:100%;padding:11px 12px;margin-bottom:8px;font:inherit;font-size:13px;
+      border:1px solid var(--line-2);background:var(--surface);color:var(--tx);}
+    .notify-form input:focus{outline:2px solid var(--pri);outline-offset:-1px;}
+    .notify-form input[aria-invalid]{border-color:#b91c1c;}
+    .notify-err{display:block;font-size:11.5px;color:#b91c1c;margin:-4px 0 8px;}
+    .notify-fine{font-size:11px;color:var(--tx3);text-align:center;margin-top:9px;}
+    .notify-done{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;line-height:1.5;
+      padding:12px;background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);}
+
+    @media (max-width: 900px) {
+      /* Clear of the mobile action bar, which is where Buy and Hire live. */
+      .wa{right:14px;bottom:calc(72px + env(safe-area-inset-bottom, 0px));}
+      .wa-btn{width:50px;height:50px;font-size:24px;}
+    }
+
     /* Deep band, used once or twice per page to break the cream monotony. */
     .band-deep{background:var(--pri);color:#fff;border-top:none;border-bottom:none;position:relative;isolation:isolate;}
     .band-deep::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
@@ -1772,6 +1826,7 @@
 </script>
 @stack('scripts')
 @livewireScripts
+<x-whatsapp-launcher />
 <x-analytics.beacon />
 </body>
 </html>

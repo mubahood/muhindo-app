@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
 @section('title', $post->title.' | Muhindo Mubaraka')
-@section('desc', $post->excerpt)
+@section('desc', $post->excerpt ?? '')
 @section('og_image', $post->cover_image ? asset('storage/'.$post->cover_image) : '')
 
 @push('jsonld')

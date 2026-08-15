@@ -21,6 +21,18 @@ class CourseFactory extends Factory
             'currency' => 'UGX',
             'level' => 'beginner',
             'is_published' => false,
+            /*
+             * The column defaults to TRUE in the database, which is the right
+             * default for real data: a course imported or created by hand is
+             * not on sale before anybody has looked at it.
+             *
+             * A factory is the opposite situation. It builds an ordinary
+             * course for a test that means "a student buys a course", and
+             * inheriting the cautious default made 65 existing tests fail
+             * against a shop that had silently closed. A test that wants a
+             * closed course says so.
+             */
+            'is_coming_soon' => false,
         ];
     }
 }
