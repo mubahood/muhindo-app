@@ -136,17 +136,94 @@ class DashboardService
         return Enrollment::with(['user', 'course'])->latest()->limit($limit)->get();
     }
 
+    /**
+     * Days since each client last heard anything, worst first.
+     *
+     * This is the one number on the dashboard that exists to be uncomfortable.
+     * Silence with a client is not an event that happens on a particular day,
+     * it is an absence that grows while nothing anywhere counts it, which is
+     * how two months can pass without a decision ever being made to let them.
+     *
+     * "Heard anything" means a row in project_updates, because that is what
+     * the client can actually see on their own portal page. A note written to
+     * yourself is not contact.
+     *
+     * A client who has never been updated is the worst case, not a blank: they
+     * are ranked above everyone by using the project's start date as the
+     * baseline, so a new client cannot hide at the bottom of the list.
+     *
+     * @return Collection<int, array{client: Client, project: Project, days: int|null, level: string, last_at: \Illuminate\Support\Carbon|null}>
+     */
+    public function clientContactHealth(int $limit = 10): Collection
+    {
+        return Project::query()
+            ->whereIn('status', ['proposal', 'active'])
+            ->with('client')
+            ->get()
+            ->map(function (Project $project) {
+                $lastAt = $project->updates()->max('created_at');
+                $lastAt = $lastAt ? \Illuminate\Support\Carbon::parse($lastAt) : null;
+
+                // Never updated: count from when the work started, so the
+                // number means "days this client has been in the dark".
+                $since = $lastAt ?? $project->start_date ?? $project->created_at;
+                $days = $since ? (int) $since->diffInDays(now()) : null;
+
+                return [
+                    'client' => $project->client,
+                    'project' => $project,
+                    'last_at' => $lastAt,
+                    'days' => $days,
+                    'level' => match (true) {
+                        $days === null => 'unknown',
+                        $days >= 14 => 'critical',
+                        $days >= 7 => 'warn',
+                        default => 'ok',
+                    },
+                ];
+            })
+            ->filter(fn (array $row) => $row['client'] !== null)
+            ->sortByDesc('days')
+            ->take($limit)
+            ->values();
+    }
+
+    /** How many clients have gone a week or more without hearing anything. */
+    public function clientsGoingQuietCount(): int
+    {
+        return $this->clientContactHealth(100)
+            ->filter(fn (array $row) => in_array($row['level'], ['warn', 'critical'], true))
+            ->count();
+    }
+
     // Personal task list (owner's own to-dos: project_id is null)
 
+    /**
+     * Every open task, not only the ones with no project.
+     *
+     * This used to filter whereNull('project_id'), which meant client work was
+     * invisible from the dashboard: of 38 tasks in the first real plan loaded
+     * into this system, 18 could only be found by opening five project pages
+     * one at a time. "My tasks" now means what it says.
+     */
     public function myPendingTasksCount(): int
     {
-        return ProjectTask::whereNull('project_id')->where('status', '!=', 'done')->count();
+        return ProjectTask::open()->count();
+    }
+
+    public function myOverdueCount(): int
+    {
+        return ProjectTask::overdue()->count();
     }
 
     public function myPendingTasks(int $limit = 8): Collection
     {
-        return ProjectTask::whereNull('project_id')->where('status', '!=', 'done')
-            ->orderBy('sort_order')->limit($limit)->get();
+        return ProjectTask::open()
+            ->with('project.client')
+            // Undated work sinks below dated work rather than leading it.
+            ->orderByRaw('due_date IS NULL, due_date')
+            ->orderBy('sort_order')
+            ->limit($limit)->get();
     }
 
     // Student dashboard

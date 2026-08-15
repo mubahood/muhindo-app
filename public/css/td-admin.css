@@ -752,3 +752,85 @@ tr.an-bot{opacity:.55;}
   .an-who em{max-width:150px;}
   .an-period{flex-direction:column;align-items:flex-start;}
 }
+
+/* Today
+   The day view. Everything is prefixed .tk-. The visual job is narrow: make a
+   task tickable in one movement, make overdue impossible to scroll past, and
+   make the days-since-contact number the loudest thing on a quiet page. */
+
+.tk-capture{padding:12px 14px;margin-bottom:16px;}
+.tk-capture-form{display:flex;gap:8px;flex-wrap:wrap;}
+.tk-capture-form .tb-input{flex:1;min-width:220px;}
+.tk-capture-form .tb-select{width:auto;min-width:150px;}
+
+.tk-block{margin-bottom:16px;}
+.tk-block.is-overdue{border-color:var(--bad);}
+.tk-block.is-overdue .tb-card-header{background:var(--bad-soft);}
+.tk-block.is-overdue .tb-card-title{color:var(--bad);}
+.tk-block.is-quiet .tb-card-header{background:var(--surface-2);}
+.tk-count{font-size:12px;font-weight:600;color:var(--mt);background:var(--surface-2);
+  border-radius:11px;padding:2px 9px;min-width:22px;text-align:center;}
+
+.tk-list{display:flex;flex-direction:column;}
+.tk-row{display:flex;align-items:flex-start;gap:11px;padding:10px 14px;border-bottom:1px solid var(--line);}
+.tk-row:last-child{border-bottom:0;}
+.tk-row:hover{background:var(--surface-2);}
+.tk-row.is-done .tk-title{text-decoration:line-through;color:var(--mt2);}
+
+/* One movement to tick. 26px is above the 24px minimum for a comfortable
+   pointer target without turning the row into a button. */
+.tk-check{flex-shrink:0;width:26px;height:26px;border-radius:50%;cursor:pointer;
+  border:1.5px solid var(--line-2);background:var(--surface);color:transparent;
+  display:flex;align-items:center;justify-content:center;font-size:11px;
+  transition:background .12s,border-color .12s,color .12s;}
+.tk-check:hover{border-color:var(--ok);color:var(--line-2);}
+.tk-check.on{background:var(--ok);border-color:var(--ok);color:#fff;}
+
+.tk-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding-top:3px;}
+.tk-title{font-size:13px;line-height:1.4;}
+.tk-desc{font-style:normal;font-size:11.5px;color:var(--mt2);line-height:1.4;}
+
+.tk-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex-shrink:0;padding-top:4px;}
+.tk-flag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;
+  padding:2px 7px;border-radius:3px;}
+.tk-flag.high{background:var(--bad-soft);color:var(--bad);}
+.tk-flag.low{background:var(--surface-2);color:var(--mt2);}
+.tk-client{font-size:11.5px;color:var(--br);max-width:170px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;}
+.tk-client:hover{text-decoration:underline;}
+.tk-client.is-personal{color:var(--mt2);}
+.tk-due{font-size:11.5px;color:var(--mt2);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.tk-due.is-late{color:var(--bad);font-weight:600;}
+.tk-pull{font-size:11px;padding:3px 9px;border-radius:4px;cursor:pointer;
+  border:1px solid var(--line-2);background:var(--surface);color:var(--mt);}
+.tk-pull:hover{border-color:var(--br);color:var(--br);}
+
+.tk-daybreak{display:flex;align-items:baseline;justify-content:space-between;
+  padding:8px 14px 4px;font-size:11.5px;font-weight:600;color:var(--mt);
+  background:var(--surface-2);border-bottom:1px solid var(--line);}
+.tk-daybreak em{font-style:normal;font-weight:400;color:var(--mt2);}
+
+/* Contact health. The number leads, and it is sized to be read from across the
+   room, because its whole purpose is to be uncomfortable before it is useful. */
+.tk-health{display:flex;flex-direction:column;}
+.tk-health-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);}
+.tk-health-row:last-child{border-bottom:0;}
+.tk-health-row:hover{background:var(--surface-2);}
+.tk-health-days{flex-shrink:0;min-width:44px;height:34px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;
+  background:var(--surface-2);color:var(--mt);}
+.tk-health-row.lvl-ok .tk-health-days{background:var(--ok-soft);color:var(--ok);}
+.tk-health-row.lvl-warn .tk-health-days{background:var(--warn-soft);color:var(--warn);}
+.tk-health-row.lvl-critical .tk-health-days{background:var(--bad);color:#fff;}
+.tk-health-main{flex:1;min-width:0;}
+.tk-health-main b{display:block;font-size:13px;}
+.tk-health-main em{font-style:normal;font-size:11.5px;color:var(--mt2);}
+.tk-health-note{font-size:11.5px;color:var(--mt2);white-space:nowrap;}
+
+@media (max-width: 700px){
+  .tk-row{flex-wrap:wrap;}
+  .tk-meta{width:100%;padding-left:37px;}
+  .tk-health-note{display:none;}
+  .tk-client{max-width:120px;}
+}

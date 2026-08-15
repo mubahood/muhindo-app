@@ -30,3 +30,11 @@ Schedule::command('app:prune-learning-events')->monthlyOn(1, '03:30');
 Schedule::command('analytics:rollup')->hourly();
 Schedule::command('analytics:prune')->weeklyOn(0, '03:45');
 Schedule::command('analytics:geolocate')->hourlyAt(20)->when(fn () => (bool) config('analytics.geo.enabled'));
+
+/*
+ * Repeating tasks become real ones before the day starts.
+ *
+ * 05:00 so the day view is already correct at 09:00, and early enough that a
+ * missed run can be caught by hand with --date before anybody looks.
+ */
+Schedule::command('tasks:generate-recurring')->dailyAt('05:00');

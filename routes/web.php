@@ -304,6 +304,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::post('enrollments/{enrollment}/invoice', [EnrollmentController::class, 'invoice'])->name('enrollments.invoice');
     Route::delete('enrollments/{enrollment}', [EnrollmentController::class, 'destroy'])->name('enrollments.destroy');
 
+    // The day view. First entry in the menu because it is the screen this
+    // back office is meant to be opened on.
+    Route::get('today', \App\Livewire\Admin\Today::class)->name('today');
+
     // Analytics. Read-only, and gated on its own permission because audience
     // data is the one part of the back office a future assistant editing
     // courses has no business reading.

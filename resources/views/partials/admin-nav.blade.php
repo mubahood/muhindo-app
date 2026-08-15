@@ -39,6 +39,12 @@
           ['label' => 'Profile & settings', 'icon' => 'fa-id-badge', 'route' => 'account.edit', 'match' => ['account.edit']],
           ['label' => 'Notifications', 'icon' => 'fa-bell', 'route' => 'notifications.index', 'match' => ['notifications.index']],
       ]],
+      // Work first: this is the screen the owner opens the back office to see.
+      ['key' => 'today', 'label' => 'My work', 'icon' => 'fa-sun', 'gate' => ['clients.manage', 'projects.manage'], 'items' => [
+          ['label' => 'Today', 'icon' => 'fa-sun', 'route' => 'admin.today', 'match' => ['admin.today']],
+          ['label' => 'Projects', 'icon' => 'fa-diagram-project', 'route' => 'admin.projects.index', 'match' => ['admin.projects.*'], 'can' => 'projects.manage'],
+          ['label' => 'Clients', 'icon' => 'fa-address-book', 'route' => 'admin.clients.index', 'match' => ['admin.clients.*'], 'can' => 'clients.manage'],
+      ]],
       ['key' => 'portfolio', 'label' => 'Portfolio', 'icon' => 'fa-id-card', 'gate' => 'portfolio.manage', 'items' => [
           ['label' => 'Projects', 'icon' => 'fa-diagram-project', 'route' => 'admin.portfolio-projects.index', 'match' => ['admin.portfolio-projects.*']],
           ['label' => 'Skills', 'icon' => 'fa-star', 'route' => 'admin.skills.index', 'match' => ['admin.skills.*']],
