@@ -193,11 +193,23 @@ class CourseCatalogueController extends Controller
                     'bestRating' => 5,
                     'worstRating' => 1,
                 ] : null,
+                /*
+                 * Availability has to agree with the page.
+                 *
+                 * Saying InStock on a course whose every buying control has
+                 * been replaced by a waitlist form is a structured-data
+                 * mismatch: Google treats markup that contradicts the visible
+                 * page as a manual-action offence, and it would be lying to a
+                 * search engine about whether something can be bought.
+                 * PreOrder is schema.org's vocabulary for exactly this state.
+                 */
                 'offers' => [
                     '@type' => 'Offer',
                     'price' => (string) $course->price,
                     'priceCurrency' => $course->currency,
-                    'availability' => 'https://schema.org/InStock',
+                    'availability' => $course->isComingSoon()
+                        ? 'https://schema.org/PreOrder'
+                        : 'https://schema.org/InStock',
                     'url' => route('courses.show', $course),
                 ],
             ],

@@ -84,6 +84,29 @@ class ComingSoonCoursesTest extends TestCase
         $this->get(route('courses.index'))->assertOk()->assertSee('150,000');
     }
 
+    /**
+     * Markup that contradicts the page is a manual-action offence, not a
+     * cosmetic slip: InStock on a course whose every buying control has been
+     * replaced by a waitlist form tells a search engine something the page
+     * does not.
+     */
+    public function test_the_structured_data_agrees_with_the_page(): void
+    {
+        $course = $this->course();
+
+        $this->get(route('courses.show', $course))->assertOk()
+            ->assertSee('schema.org/PreOrder', false)
+            ->assertDontSee('schema.org/InStock', false);
+    }
+
+    public function test_an_open_course_is_marked_in_stock(): void
+    {
+        $course = $this->course(comingSoon: false);
+
+        $this->get(route('courses.show', $course))->assertOk()
+            ->assertSee('schema.org/InStock', false);
+    }
+
     /* The three points money could move -------------------------------- */
 
     public function test_it_cannot_be_added_to_a_basket(): void

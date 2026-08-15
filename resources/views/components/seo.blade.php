@@ -16,6 +16,14 @@
 <link rel="canonical" href="{{ $seoCanonical }}">
 <meta name="theme-color" content="#0b1f3a">
 <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon.png') }}">
+{{-- Linked here rather than per layout, because a manifest nothing points at
+     is a file the browser never asks for: it shipped correct-looking and
+     completely inert, so no install prompt was ever offered. apple-touch-icon
+     is the same story on iOS, which ignores the manifest and looks only for
+     this tag before falling back to a screenshot of the page. --}}
+<link rel="manifest" href="{{ asset('manifest.json') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/logo-192.png') }}">
+<meta name="apple-mobile-web-app-title" content="Muhindo">
 <meta property="og:type" content="{{ $type }}">
 <meta property="og:site_name" content="Muhindo Mubaraka">
 <meta property="og:title" content="{{ $seoTitle }}">
