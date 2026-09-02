@@ -19,7 +19,7 @@ need a video (short concept or practice lessons) deliberately have none.
 | 04 | Database Design & MySQL for Beginners | `04-databases-and-mysql.md` |
 | 05 | JavaScript, jQuery & AJAX Essentials | `05-javascript-jquery-ajax.md` |
 | 06 | CodeIgniter Crash Course (Your First Framework) | `06-codeigniter-crash-course.md` |
-| 07 | WordPress from Zero to Hero | `07-wordpress-zero-to-hero.md` |
+| 07 | ⭐ WordPress from Zero to Hero | `07-wordpress-zero-to-hero.md` |
 | 08 | Web Application Security Essentials | `08-web-security-essentials.md` |
 | 22 | ⭐ Microsoft Office Mastery (Word, PowerPoint & Excel) | `22-microsoft-office-mastery.md` |
 | 24 | ⭐ Working With AI | `24-working-with-ai.md` |
@@ -48,7 +48,7 @@ need a video (short concept or practice lessons) deliberately have none.
 | 20 | ⭐ Android E-Commerce App with Firebase | `20-android-ecommerce-firebase.md` |
 | 21 | Flutter Mini-Projects: Local Diary & News App | `21-flutter-mini-projects.md` |
 
-**Featured (⭐):** 02, 11, 12, 13, 15, 16, 17, 18, 19, 20, 22, 23, 24.
+**Featured (⭐):** 02, 07, 11, 12, 13, 15, 16, 17, 18, 19, 20, 22, 23, 24.
 
 **Added August 2026, from a student poll of 229 votes.** Microsoft Office took 23%
 of all votes and nothing in the catalogue covered it; deployment took 7% and
@@ -58,7 +58,7 @@ own to point at.
 
 ## Recommended learning paths
 
-- **Web developer:** 01 → 02 → 03 → 04 → 05 → 09 → 10 → 12 → 16/17 · security 08 anytime after 05
+- **Web developer:** 01 → 02 → 03 → 04 → 05 → 09 → 10 → 12 → 23 → 16/17 · security 08 anytime after 05
 - **Mobile developer:** 03 → 11 → 13 → 21 → 14 → 15 → 16 (app phase) → 20
 - **Freelancer fast-track:** 01 → 07 → 19 → 18 → 08 → 23
 - **Employable in an office, no code:** 22 → 24

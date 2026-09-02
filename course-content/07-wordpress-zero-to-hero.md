@@ -1,6 +1,6 @@
-# Course 07 — WordPress from Zero to Hero
+# Course 07 ⭐ — WordPress from Zero to Hero
 
-**Tier 1 · Foundations · Level: Absolute beginner · Prerequisites: none**
+**Tier 1 · Foundations · Level: Absolute beginner · Prerequisites: none · TOP FEATURED**
 
 Not everyone needs to write code to publish on the web. WordPress powers about 40% of
 all websites — and it is also a real income skill: many clients simply want a
