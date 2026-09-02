@@ -1,6 +1,6 @@
 # Learn It With Muhindo — Complete Course Catalog
 
-**21 courses · 3 tiers · Top-10 featured marked ⭐**
+**24 courses · 3 tiers · Featured marked ⭐**
 
 Every course below has its own detailed file in this folder: modules and lessons in
 learning order, simple-English descriptions, example code, quiz ideas, and a real
@@ -21,6 +21,8 @@ need a video (short concept or practice lessons) deliberately have none.
 | 06 | CodeIgniter Crash Course (Your First Framework) | `06-codeigniter-crash-course.md` |
 | 07 | WordPress from Zero to Hero | `07-wordpress-zero-to-hero.md` |
 | 08 | Web Application Security Essentials | `08-web-security-essentials.md` |
+| 22 | ⭐ Microsoft Office Mastery (Word, PowerPoint & Excel) | `22-microsoft-office-mastery.md` |
+| 24 | ⭐ Working With AI | `24-working-with-ai.md` |
 
 ## Tier 2 — Frameworks & Mobile Specialisation
 
@@ -33,6 +35,7 @@ need a video (short concept or practice lessons) deliberately have none.
 | 13 | ⭐ Mastering Flutter UI | `13-mastering-flutter-ui.md` |
 | 14 | Android Development Fundamentals (Java) | `14-android-development-fundamentals.md` |
 | 15 | ⭐ Android Material UI Design Challenge | `15-android-material-ui-challenge.md` |
+| 23 | ⭐ cPanel, Git & GitHub: Getting Your System Live | `23-deployment-cpanel-git-github.md` |
 
 ## Tier 3 — Capstone Systems (portfolio builders)
 
@@ -45,13 +48,21 @@ need a video (short concept or practice lessons) deliberately have none.
 | 20 | ⭐ Android E-Commerce App with Firebase | `20-android-ecommerce-firebase.md` |
 | 21 | Flutter Mini-Projects: Local Diary & News App | `21-flutter-mini-projects.md` |
 
-**Top-10 featured (⭐):** 02, 11, 12, 13, 15, 16, 17, 18, 19, 20.
+**Featured (⭐):** 02, 11, 12, 13, 15, 16, 17, 18, 19, 20, 22, 23, 24.
+
+**Added August 2026, from a student poll of 229 votes.** Microsoft Office took 23%
+of all votes and nothing in the catalogue covered it; deployment took 7% and
+nothing covered that either. Working With AI was added because every other course
+now threads AI through its own subject, and that thread needs one course of its
+own to point at.
 
 ## Recommended learning paths
 
 - **Web developer:** 01 → 02 → 03 → 04 → 05 → 09 → 10 → 12 → 16/17 · security 08 anytime after 05
 - **Mobile developer:** 03 → 11 → 13 → 21 → 14 → 15 → 16 (app phase) → 20
-- **Freelancer fast-track:** 01 → 07 → 19 → 18 → 08
+- **Freelancer fast-track:** 01 → 07 → 19 → 18 → 08 → 23
+- **Employable in an office, no code:** 22 → 24
+- **Anyone, before anything else:** 24
 - **Complete path:** Tier 1 in order → Tier 2 in order → any two capstones
 
 ## Editorial decisions (vs the earlier draft catalog)
