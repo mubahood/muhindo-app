@@ -277,6 +277,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         ->shallow()->except('show');
     Route::post('modules/{module}/lessons-quick', [LessonController::class, 'storeInline'])->name('modules.lessons.quick-store');
     Route::post('lessons/{lesson}/toggle-publish', [LessonController::class, 'togglePublish'])->name('lessons.toggle-publish');
+    // Record, attach and publish in one submit, from the curriculum tree.
+    Route::post('lessons/{lesson}/record', [LessonController::class, 'record'])->name('lessons.record');
+    Route::post('courses/{course}/publish-ready', [\App\Http\Controllers\Admin\CoursePublishingController::class, 'course'])->name('courses.publish-ready');
+    Route::post('modules/{module}/publish-ready', [\App\Http\Controllers\Admin\CoursePublishingController::class, 'module'])->name('modules.publish-ready');
     Route::post('lessons/preview-markdown', [LessonController::class, 'previewMarkdown'])->name('lessons.preview-markdown');
     Route::post('lessons/fetch-video-duration', [LessonController::class, 'fetchVideoDuration'])->name('lessons.fetch-video-duration');
     Route::post('courses/{course}/curriculum/reorder', [\App\Http\Controllers\Admin\CurriculumController::class, 'reorder'])->name('courses.curriculum.reorder');

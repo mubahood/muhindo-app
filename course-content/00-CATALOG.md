@@ -50,6 +50,12 @@ need a video (short concept or practice lessons) deliberately have none.
 
 **Featured (⭐):** 02, 07, 11, 12, 13, 15, 16, 17, 18, 19, 20, 22, 23, 24.
 
+**Course 22 was rebuilt in September 2026**, from 37 topics across 5 modules to
+55 across 11: a contents page that updates itself, printing, saving in a format
+the other person can open, dropdown lists and data cleaning in Excel, reading
+error messages, and a closing module of three worked examples of the AI
+assistant being confidently wrong.
+
 **Added August 2026, from a student poll of 229 votes.** Microsoft Office took 23%
 of all votes and nothing in the catalogue covered it; deployment took 7% and
 nothing covered that either. Working With AI was added because every other course

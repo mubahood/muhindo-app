@@ -8,114 +8,177 @@ a budget that calculates itself, a presentation people sit through. You start
 from a blank screen and finish with documents you can put in front of an
 employer.
 
+Every example is a real one. A school-fees reminder going to fifty parents. A
+term's marks turned into pass and fail without touching a calculator. A shop's
+month of sales summarised on one slide. You will also learn to use an AI
+assistant inside Office, and, just as importantly, how to catch it when it is
+confidently wrong.
+
 **What you will learn**
 
-- Produce a clean, properly formatted report in Word without fighting the layout
-- Build a spreadsheet that does the arithmetic for you, and trust the answer
-- Design a presentation that reads from the back of a room
-- Use an AI assistant on real documents, and check its work before you send it
+- Create, format and share professional documents, letters and reports in Word
+- Build clear presentations in PowerPoint and deliver them with confidence
+- Enter, calculate, sort and chart data in Excel using everyday formulas
+- Summarise long lists with PivotTables and highlight what matters automatically
+- Use an AI assistant inside Office to work faster, and check its output before you trust it
 
 ---
 
-## Module 1 — Set up and stop losing files
+## Module 1 — Get comfortable with the computer and the Office apps
 
-1. **Install Office and find your way around** — the ribbon, the file menu, and where things actually live in the current version.
-2. **Save once, save properly** — file names that still make sense in a month, folders, and OneDrive so a dead laptop does not cost you a semester.
-3. **Print and export to PDF** — the format you send to anyone who is not going to edit it.
-4. **Meet your AI assistant** — turning on Copilot or opening a chat assistant beside your document, and what it can see. Set up once here, used throughout.
+1. **Know which app to open** — what Word, PowerPoint and Excel are each for, and how to pick the right one before you waste an hour in the wrong one.
+2. **Find your way around the window** — the ribbon, its tabs, and where the common buttons live, so nothing feels hidden.
+3. **Create, name and save a file** — start a file, save it, close it, open it again, and the difference between Save and Save As.
+4. **Keep your work safe** — store files in OneDrive, let autosave protect you, and find the file you saved somewhere you have forgotten.
+5. **Move text and undo mistakes anywhere** — copy, cut, paste, undo and redo with the keyboard shortcuts that work the same in all three apps.
 
-## Module 2 — Word: documents that look like somebody meant it
+## Module 2 — Set up an AI assistant to help you inside Office
 
-5. **Type, select, and move text without the mouse** — the shortcuts that make everything after this faster.
-6. **Format text so it reads** — font, size, spacing, alignment, and why three fonts on one page is two too many.
-7. **Use styles instead of formatting by hand** — Heading 1, Heading 2, Normal. This is the single habit that separates a tidy document from a mess.
-8. **Build an automatic table of contents** — the payoff for using styles, updated with one click.
-9. **Insert and position images** — text wrapping, and how to stop a photograph throwing your page apart.
-10. **Make and format a table** — a fee structure, a class list, a stock count.
-11. **Page numbers, headers and footers** — including the trick for not numbering the cover page.
-12. **Check spelling, grammar and word count** — and read a document aloud before submitting it.
-13. **Track changes and comments** — how a supervisor marks your work and how you respond.
-14. **Draft a report with AI, then fix it yourself** — ask for a first draft of a field report, then correct the three things it always gets wrong: invented detail, generic openings, and a conclusion that says nothing.
+6. **Understand what the AI assistant can and cannot do** — where an assistant genuinely helps in Office and where it will confidently mislead you, so you trust it the right amount from the first day.
+7. **Open the AI assistant with a document in front of you** — turn it on, ask it something simple about the file you have open, and see its answer sit beside your work.
 
-## Module 3 — Excel: your numbers, calculated
+## Module 3 — Write and format a document in Word
 
-15. **Understand rows, columns and cells** — how a spreadsheet is addressed, and why A1 matters.
-16. **Enter data without ruining it** — dates, numbers, text, and the leading zero on a phone number that Excel keeps eating.
-17. **Write your first formula** — add, subtract, multiply, divide.
+8. **Type and select text without a fight** — enter text, move the cursor, and select a word, a line or the whole document quickly.
+9. **Change how text looks** — font, size, bold, italic, underline, colour and highlight, and when each is worth using.
+10. **Shape your paragraphs** — alignment, line and paragraph spacing, bullet points and numbered lists.
+11. **Use heading styles to stay consistent** — apply the built-in heading styles so a long document looks uniform and can build its own contents page later.
+12. **Find and replace across a whole document** — fix a name or a word everywhere at once instead of hunting page by page.
+
+## Module 4 — Make Word documents that look professional
+
+13. **Control the page** — margins, portrait or landscape, and page breaks that put each section where you want it.
+14. **Add headers, footers and page numbers** — the same information on every page, set once.
+15. **Insert images and tables** — place a picture or a table and position it so the text flows around it cleanly.
+16. **Build a contents page that updates itself** — turn the heading styles from Module 3 into an automatic table of contents, and refresh it after you edit.
+17. **Build a real letter with a letterhead** — lay out an official letter with an organisation name, address and date, ready to print or send.
+18. **Mail merge one letter to many people** — send the same school-fees reminder to fifty parents, each with their own name and balance, from one Word file and one list.
+19. **Draft and improve text with AI, then check it** — ask the assistant to draft or tidy a paragraph, then read it against what you actually meant and correct what it changed or invented.
+
+## Module 5 — Finish, print and share a Word document
+
+20. **Work on a document with someone else** — track changes and add comments so two people can edit without losing each other's work.
+21. **Print it the way you meant it** — print preview, choosing pages, fitting the content, and why the printed copy so often looks different from the screen.
+22. **Save it in a format the other person can open** — .docx, the older .doc, and PDF, and which to send when you do not know what they have.
+23. **Export a clean PDF** — save as PDF for sending or printing so the layout stays exactly as you set it.
+24. **Run a final-quality check** — a short written checklist that catches the spacing, heading and consistency mistakes that make a document look unfinished.
+
+## Module 6 — Build your first PowerPoint presentation
+
+25. **Create slides and add your content** — start a deck, add slides, choose a layout for each, and type your points in.
+26. **Apply a theme so every slide matches** — pick one theme and let colours, fonts and spacing stay consistent across the whole deck.
+27. **Add images, shapes and icons that support the point** — place visuals that help the message instead of crowding it.
+28. **Turn numbers into a simple chart on a slide** — put a small set of figures, such as a term's income, onto a chart the audience can read from the back of the room.
+
+## Module 7 — Make a presentation people can follow
+
+29. **Fix your look once with the slide master** — change the logo, font or colour in one place and have every slide follow.
+30. **Add transitions and animations with restraint** — use movement to guide attention, and know the point where it starts to distract.
+31. **Write speaker notes and rehearse timing** — put your talking points in the notes and practise so the talk fits the time you have.
+32. **Outline a deck with AI, then fix its facts** — ask the assistant to draft a slide outline from your topic, then correct where it misstates your content or invents detail you never gave it.
+33. **Deliver the presentation** — presenter view, moving through slides smoothly, printing handouts, and exporting to PDF or video for people who missed it.
+
+## Module 8 — Enter and organise data in Excel
+
+34. **Understand cells, rows, columns and sheets** — how a spreadsheet is laid out, and how to move around a large one without getting lost.
+35. **Enter data cleanly and fill it fast** — type data, and use autofill to complete dates, numbers and repeating series in seconds.
+36. **Format cells so they read correctly** — show money as UGX, dates as dates and percentages as percentages, with borders that make a table clear.
+37. **Stop bad data before it gets in** — a dropdown list for a class stream or a product name, so nobody types "P.5", "p5" and "Primary 5" into the same column.
+38. **Clean up a list you were given** — remove duplicates, trim stray spaces, and split a full name into two columns.
+39. **Sort and filter a list** — order a list of students or products, and filter it to show only the rows you need right now.
+
+## Module 9 — Calculate with formulas and functions
+
+40. **Write your first formula** — add, subtract, multiply and divide in a cell, and follow the order of operations Excel uses.
 
 ```
-=B2+B3+B4        adds three cells
-=SUM(B2:B10)     the same thing, for a whole column
-=B2*0.18         18% VAT on the amount in B2
+=B2+B3
+=B2*0.18
+=(B2+B3)/2
 ```
 
-18. **Use SUM, AVERAGE, MIN, MAX and COUNT** — the five functions that cover most real work.
-19. **Copy a formula down a column** — relative references, and why the answer changes as it moves.
-20. **Lock a cell with the dollar sign** — absolute references, taught with one exchange rate applied to a whole price list.
+41. **Total and average a column** — the everyday functions for adding things up and finding the middle.
 
 ```
-=C2*$F$1         every row multiplies by the rate in F1
-=C2*F1           the same formula without locking, and why row 3 breaks
+=SUM(B2:B13)
+=AVERAGE(C2:C40)
+=COUNT(C2:C40)
+=MIN(C2:C40)
+=MAX(C2:C40)
 ```
 
-21. **Make a decision with IF** — pass or fail, paid or outstanding.
+42. **Lock a cell with absolute references** — the dollar sign, and why a formula breaks when you copy it down until you use one.
 
 ```
-=IF(D2>=50, "Pass", "Retake")
-=IF(E2=0, "Cleared", "Owes " & E2)
+=B2*$F$1
 ```
 
-22. **Look a value up with VLOOKUP or XLOOKUP** — pull a student's name from their number, or a price from a product code.
-23. **Sort and filter a list** — find the twelve students who still owe fees, out of four hundred.
-24. **Format numbers as money, percentages and dates** — UGX, and why 0.18 and 18% are the same number.
-25. **Turn numbers into a chart** — column, line, pie, and which one to use for what.
-26. **Print a spreadsheet that fits on the page** — page setup, repeat header rows, fit to width.
-27. **Build a formula with AI, then prove it is right** — ask for a formula in plain English, paste it in, then test it against three rows you have worked out by hand. The testing is the lesson.
+43. **Make Excel decide with IF** — mark each student pass or fail from their score, automatically.
 
-## Module 4 — PowerPoint: presentations people remember
+```
+=IF(C2>=50,"Pass","Fail")
+```
 
-28. **Build a deck from an outline, not a blank slide** — decide what you are saying before you decorate it.
-29. **Use slide layouts and the slide master** — change the design once instead of on forty slides.
-30. **Put less on a slide** — the rule that one slide carries one idea, and what to do with the rest.
-31. **Add images, icons and charts** — including pasting a live chart from Excel so it updates.
-32. **Add transitions and animation, sparingly** — two effects for a whole deck, and why more is worse.
-33. **Rehearse and present** — presenter view, speaker notes, and the timing rehearsal nobody does.
-34. **Draft a deck with AI, then cut it in half** — AI writes long. Generating an outline is useful; the skill is deleting two thirds of what comes back.
+44. **Look up a value with VLOOKUP or XLOOKUP** — find a product's price from a price list by typing its name, instead of scrolling to find it.
 
-## Module 5 — Where AI gets Office wrong
+```
+=XLOOKUP(A2, Products!A:A, Products!C:C)
+=VLOOKUP(A2, Products!A:C, 3, FALSE)
+```
 
-35. **Formulas that do not exist** — an assistant will confidently invent an Excel function. How to spot one in five seconds and what to do instead.
-36. **Facts, figures and citations it made up** — why a report drafted by AI must have every number checked against your own source, and how a made-up statistic in a submitted report reads to a marker.
-37. **What not to paste into it** — student records, patient names, salary lists, an NDA. A short, blunt lesson on data you do not put in somebody else's server.
+45. **Count and total by condition** — count how many students passed, or total this month's mobile-money sales only.
+
+```
+=COUNTIF(D2:D40,"Pass")
+=SUMIF(E2:E200,"June",F2:F200)
+```
+
+46. **Work with dates** — insert today's date, and calculate things like the days left until a fees deadline.
+
+```
+=TODAY()
+=A2-TODAY()
+```
+
+47. **Read an error message instead of fearing it** — what #DIV/0!, #N/A, #VALUE! and #REF! are each telling you, and how to hide the ones that are harmless.
+
+```
+=IFERROR(XLOOKUP(A2, Products!A:A, Products!C:C), "Not in the price list")
+```
+
+48. **Get a formula from AI, then test it** — ask the assistant to write a formula for a task, paste it in, and check it against a few rows you can work out by hand before trusting it on the whole sheet.
+
+## Module 10 — Turn spreadsheet data into answers
+
+49. **Highlight the numbers that matter** — conditional formatting to colour every failing mark red, or every low stock item, without going through the list yourself.
+50. **Build and label a chart** — make a column, line and pie chart from your data, and label them so they explain themselves.
+51. **Summarise a big list with a PivotTable** — turn a long list of sales into totals by month or by product in a few clicks.
+52. **Prepare a spreadsheet to print or share** — freeze the top row, name a range, and set the print area so it fits the page instead of spilling onto nine.
+
+## Module 11 — Know where the AI assistant gets it wrong
+
+53. **Catch an invented Excel function** — a worked example where the assistant produces a formula that looks perfectly reasonable, uses a function that does not exist, and how to check in ten seconds.
+54. **Catch a total that does not add up** — where the assistant summarises your own numbers and gets them subtly wrong, and the habit of spot-checking two rows by hand that catches it every time.
+55. **Catch a confident claim about Word or PowerPoint** — the assistant describes a menu in convincing detail and that menu does not exist, and what to do instead of hunting for it for twenty minutes.
+
+---
 
 ## Final project
 
-Produce a **complete termly report pack** for an imaginary school or small
-business, in one folder: a Word report of at least six pages with styles, an
-automatic table of contents, one table and one image; an Excel workbook that
-takes a fee or sales list and calculates totals, outstanding balances and a
-chart; and a ten-slide PowerPoint that presents the findings. At least one part
-must be drafted with AI, and you submit a short note saying what it got wrong
-and how you found out.
+Take a real set of records from your own life or work: a class's exam marks, a
+shop's month of sales, or a savings group's contributions.
 
-**Quiz ideas:** which function for which job, given a scenario · spot the broken
-formula (missing dollar sign, wrong range) · true or false on when to use styles
-· identify the invented Excel function from a list of four · one practical
-graded by opening the submitted file.
+In Excel, clean and format the data, total and average it, add one chart, and
+summarise it with one PivotTable. In Word, write a one-page report of what the
+numbers show, using heading styles, a table and a proper letterhead, and export
+it as a PDF. In PowerPoint, build a six-slide summary to present the findings.
 
-**Continue to:** Course 24 (Working With AI) to go deeper on the assistant you
-just met, or Course 09 (Introduction to Web Programming) if you want to build
-for the web.
+Use the AI assistant at least once in each app. In your submission, write one
+thing it got wrong and how you caught it.
 
-## Decisions
+**Quiz ideas:** Save vs Save As · which function totals only matching rows · what
+the dollar sign does in a reference · when a chart type misleads · one thing AI
+cannot be trusted to do in Excel · heading styles against manual bold.
 
-- Word before Excel before PowerPoint. Word is the gentlest start and the one
-  every student already half knows, so it carries the habit-forming lessons
-  (styles, saving) that the other two then assume.
-- The AI thread is spread through the app modules rather than gathered into an
-  AI module, so it is always doing that module's own work. Only the failure
-  lessons are grouped, because they generalise across all three programs.
-- Absolute references get a whole lesson. In teaching this course by hand it is
-  the single point where beginners silently produce wrong answers for weeks.
-- No video links: no Office material exists on the channel yet, so every lesson
-  here is a fresh recording. That is deliberate and section 8 counts it.
+**Continue to:** Course 24 (Working With AI ⭐), which takes the judgement you
+practised here and applies it well beyond Office.

@@ -5,6 +5,23 @@
 <style>
   .sortable-ghost{opacity:.4;}
   .sortable-chosen .lesson-row,.module-row.sortable-chosen{background:var(--pri-soft, #eef1f6);}
+
+  /* The recording queue at a glance. One bar, four numbers, no chart. */
+  .ready-bar{display:flex;height:10px;border-radius:99px;overflow:hidden;background:var(--bd);margin:10px 0 12px;}
+  .ready-bar span{display:block;height:100%;}
+  .ready-live{background:#16a34a;} .ready-ready{background:#2563eb;}
+  .ready-planned{background:#cbd5e1;} .ready-unrecorded{background:#dc2626;}
+  .ready-key{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;}
+  .ready-key i{margin-right:5px;}
+  .ready-key b{font-variant-numeric:tabular-nums;}
+
+  /* Paste a link, publish. Hidden until asked for, so 47 draft rows do not
+     become 47 open text boxes. */
+  .rec-row{padding:0 18px 12px 44px;border-bottom:1px solid var(--bd);}
+  .rec-row form{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .rec-row input[type=url]{flex:1;min-width:220px;}
+  .rec-hint{font-size:.76rem;margin:6px 0 0;}
+  .mod-ready{font-size:.78rem;font-weight:400;margin-left:10px;}
 </style>
 @endpush
 
@@ -34,6 +51,57 @@
   </div>
 </div>
 
+@php $ready = \App\Services\Catalog\CourseReadiness::forCourse($course); @endphp
+@if($ready['total'] > 0)
+  {{-- How much of this course actually exists. The bar is the honest answer to
+       "how far am I", which the Draft/Published badge above cannot give: a
+       course can be published and still be mostly empty. --}}
+  <div class="tb-card" style="margin-bottom:20px;">
+    <div class="tb-card-header">
+      <span class="tb-card-title">Recording progress</span>
+      <span class="muted" style="font-size:.85rem;">{{ $ready['recorded'] }} of {{ $ready['total'] }} topics recorded · {{ $ready['percent'] }}%</span>
+    </div>
+    <div class="tb-card-body">
+      <div class="ready-bar" role="img"
+           aria-label="{{ $ready['live'] }} live, {{ $ready['ready'] }} ready to publish, {{ $ready['planned'] }} still to record, {{ $ready['unrecorded'] }} live with no video">
+        @foreach(['live','ready','planned','unrecorded'] as $part)
+          @if($ready[$part] > 0)
+            <span class="ready-{{ $part }}" style="width:{{ $ready[$part] / $ready['total'] * 100 }}%"></span>
+          @endif
+        @endforeach
+      </div>
+
+      <div class="ready-key">
+        @foreach(\App\Enums\LessonStage::byUrgency() as $stage)
+          @continue($ready[$stage->value] === 0)
+          <span class="ready-key-item">
+            <i class="fas {{ $stage->icon() }} ready-{{ $stage->value }}"
+               style="color:{{ ['live'=>'#16a34a','ready'=>'#2563eb','planned'=>'#94a3b8','unrecorded'=>'#dc2626'][$stage->value] }};background:none;"></i>
+            <b>{{ $ready[$stage->value] }}</b> {{ $stage->label() }}
+          </span>
+        @endforeach
+      </div>
+
+      @if($ready['unrecorded'] > 0)
+        <p class="rec-hint" style="color:#dc2626;margin-top:12px;">
+          <i class="fas fa-triangle-exclamation"></i>
+          {{ trans_choice('{1}One topic is published with no video on it. A student can open it and there is nothing to watch.|[2,*]:count topics are published with no video on them. A student can open one and there is nothing to watch.', $ready['unrecorded'], ['count' => $ready['unrecorded']]) }}
+        </p>
+      @endif
+
+      @if($ready['ready'] > 0)
+        <form method="POST" action="{{ route('admin.courses.publish-ready', $course) }}" style="margin-top:14px;">
+          @csrf
+          <button type="submit" class="btn-tb btn-tb-primary btn-tb-sm">
+            <i class="fas fa-circle-play"></i>
+            Publish the {{ $ready['ready'] }} {{ \Illuminate\Support\Str::plural('topic', $ready['ready']) }} that {{ $ready['ready'] === 1 ? 'has' : 'have' }} a video
+          </button>
+        </form>
+      @endif
+    </div>
+  </div>
+@endif
+
 <div class="tb-page-header">
   <div><h2 style="font-size:1.1rem;">Course content</h2></div>
   <a href="{{ route('admin.courses.modules.create', $course) }}" class="btn-tb btn-tb-primary btn-tb-sm"><i class="fas fa-plus"></i> New Module</a>
@@ -46,8 +114,21 @@
 @forelse($course->modules as $module)
   <div class="tb-card module-row" data-module-id="{{ $module->id }}" style="margin-bottom:16px;">
     <div class="tb-card-header">
-      <span class="tb-card-title"><i class="fas fa-grip-vertical module-drag-handle" style="cursor:grab;margin-right:8px;color:var(--mt2);"></i>{{ $module->title }}</span>
+      @php $modReady = $module->readiness(); @endphp
+      <span class="tb-card-title"><i class="fas fa-grip-vertical module-drag-handle" style="cursor:grab;margin-right:8px;color:var(--mt2);"></i>{{ $module->title }}
+        @if($modReady['total'] > 0)
+          <span class="muted mod-ready">{{ $modReady['recorded'] }}/{{ $modReady['total'] }} recorded</span>
+        @endif
+      </span>
       <div style="display:flex;gap:6px;">
+        @if($modReady['ready'] > 0)
+          <form method="POST" action="{{ route('admin.modules.publish-ready', $module) }}">
+            @csrf
+            <button type="submit" class="btn-tb btn-tb-ghost btn-tb-sm" title="Publish every topic in this module that has a video">
+              <i class="fas fa-circle-play"></i> Publish {{ $modReady['ready'] }} ready
+            </button>
+          </form>
+        @endif
         <a href="{{ route('admin.modules.edit', $module) }}" class="btn-tb btn-tb-ghost btn-tb-icon btn-tb-sm"><i class="fas fa-pen"></i></a>
         <form method="POST" action="{{ route('admin.modules.destroy', $module) }}" onsubmit="return confirm('Delete this module and its lessons?');">
           @csrf @method('DELETE')
@@ -62,8 +143,13 @@
           <div style="display:flex;align-items:center;">
             <i class="fas fa-grip-vertical lesson-drag-handle" style="cursor:grab;margin-right:10px;color:var(--mt2);"></i>
             <div>
+              @php $stage = $lesson->stage(); @endphp
               <div style="font-weight:500;">{{ $lesson->title }}
-                <span class="badge-tb {{ $lesson->is_published ? 'badge-active' : 'badge-neutral' }}" style="margin-left:6px;">{{ $lesson->is_published ? 'Published' : 'Draft' }}</span>
+                {{-- Four states from one stored bit: whether it is published,
+                     read together with whether there is anything in it. --}}
+                <span class="badge-tb {{ $stage->badgeClass() }}" style="margin-left:6px;" title="{{ $stage->nextStep() }}">
+                  <i class="fas {{ $stage->icon() }}"></i> {{ $stage->label() }}
+                </span>
                 @if($lesson->is_free_preview)<span class="badge-tb badge-info" style="margin-left:6px;">Free preview</span>@endif
               </div>
               <div class="muted" style="font-size:.78rem;">
@@ -74,6 +160,14 @@
             </div>
           </div>
           <div class="tb-table-actions">
+            @if(! $lesson->hasVideo())
+              {{-- The one action this row actually needs. Opening the full edit
+                   form to paste a single URL was the whole friction. --}}
+              <button type="button" class="btn-tb btn-tb-ghost btn-tb-sm"
+                      data-record-toggle="{{ $lesson->id }}">
+                <i class="fas fa-link"></i> Add video
+              </button>
+            @endif
             <form method="POST" action="{{ route('admin.lessons.toggle-publish', $lesson) }}">
               @csrf
               <button type="submit" class="btn-tb btn-tb-ghost btn-tb-sm">{{ $lesson->is_published ? 'Unpublish' : 'Publish' }}</button>
@@ -85,6 +179,28 @@
             </form>
           </div>
         </div>
+
+        @if(! $lesson->hasVideo())
+          {{-- Hidden until "Add video" is pressed. A course with forty-seven
+               unrecorded topics would otherwise open as forty-seven text
+               boxes, and the page would be unreadable. --}}
+          <div class="rec-row" id="record-{{ $lesson->id }}" hidden>
+            <form method="POST" action="{{ route('admin.lessons.record', $lesson) }}">
+              @csrf
+              <input type="url" name="video_url" class="tb-input" required
+                     placeholder="https://youtu.be/... the link to the recording"
+                     aria-label="Video link for {{ $lesson->title }}">
+              <button type="submit" name="publish" value="1" class="btn-tb btn-tb-primary btn-tb-sm">
+                <i class="fas fa-circle-check"></i> Save and publish
+              </button>
+              <button type="submit" class="btn-tb btn-tb-ghost btn-tb-sm">Save as draft</button>
+            </form>
+            <p class="rec-hint muted">
+              A YouTube link is rewritten to the privacy-preserving embed, and the
+              length is filled in automatically when it can be read.
+            </p>
+          </div>
+        @endif
 
         {{-- The work hanging off this topic, shown where it lives rather than
              only in the flat Quizzes and Assignments lists further down. An
@@ -137,6 +253,8 @@
 function curriculumBuilder(cfg) {
   return {
     init() {
+      this.initRecordToggles();
+
       const tree = document.getElementById('curriculum-tree');
       if (!tree || typeof Sortable === 'undefined') return;
 
@@ -154,6 +272,17 @@ function curriculumBuilder(cfg) {
           animation: 150,
           draggable: '.lesson-row',
           onEnd: () => this.persist(),
+        });
+      });
+    },
+    /** Reveals one lesson's record box and puts the cursor in it. */
+    initRecordToggles() {
+      document.querySelectorAll('[data-record-toggle]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const box = document.getElementById('record-' + button.dataset.recordToggle);
+          if (!box) return;
+          box.hidden = !box.hidden;
+          if (!box.hidden) box.querySelector('input[type=url]').focus();
         });
       });
     },

@@ -133,7 +133,24 @@ class CourseLinkVerificationTest extends TestCase
         $scanner = app(CourseFileScanner::class);
         $dir = base_path('course-content');
 
-        $this->assertCount(21, $scanner->files($dir), 'all 21 course files must be found, index excluded');
+        // Counted from the directory rather than written down. The literal was
+        // 21 and the catalogue is 24, so this had been failing on nothing more
+        // than three courses being added since it was written.
+        $onDisk = array_filter(
+            glob($dir.'/[0-9][0-9]-*.md') ?: [],
+            fn (string $path) => ! str_starts_with(basename($path), '00-'),
+        );
+
+        $found = $scanner->files($dir);
+
+        $this->assertCount(count($onDisk), $found, 'every numbered course file must be found');
+        $this->assertNotEmpty($found);
+
+        // The rules that actually matter, asserted directly: the index is not a
+        // course, and neither is a report that happens to live alongside them.
+        $names = $found->map(fn (string $path) => basename($path))->all();
+        $this->assertNotContains('00-CATALOG.md', $names);
+        $this->assertNotContains('_link-report.md', $names);
 
         // Tier 1: "N. **Title** — text" with the link on its own indented line.
         $tier1 = $scanner->references($dir.'/01-introduction-to-web-development.md');

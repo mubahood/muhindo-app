@@ -96,8 +96,13 @@ class CourseImporter
                     ->whereNotIn('id', $keptLessonIds)->delete();
             }
 
+            // Deleted one model at a time, not with a builder delete, so that
+            // CourseModule's cascade fires and the lessons underneath go with
+            // it. A builder delete skips model events, which is how a course
+            // that was restructured left every lesson of its old shape behind.
             CourseModule::where('course_id', $course->id)
-                ->whereNotIn('id', $keptModuleIds)->delete();
+                ->whereNotIn('id', $keptModuleIds)->get()
+                ->each->delete();
 
             $this->upsertAssignment($course, $parsed);
 
@@ -136,8 +141,21 @@ class CourseImporter
             'is_embeddable' => $canPlayInline,
             'is_external' => $parsed['is_external'],
             'sort_order' => $position,
-            'is_published' => true,
         ]);
+
+        // Publication belongs to the owner, exactly as it does for the course
+        // row above. This used to be a flat `true` on every run, which meant
+        // any import at all, in any course, republished every topic that had
+        // been deliberately taken down, with no video, to whoever was enrolled.
+        //
+        // A topic being created for the first time has no owner decision to
+        // respect yet, so the file answers: it arrives live if it shipped with
+        // a video and as a draft if it did not. That is what lets a 47-topic
+        // course with nothing recorded import safely, while the 21 courses that
+        // do have their videos import exactly as before.
+        if (! $lesson->exists) {
+            $lesson->is_published = $videoId !== null;
+        }
 
         $lesson->save();
 

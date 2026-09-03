@@ -48,7 +48,7 @@ $stmt->execute([$email]);          // safe — data can never become SQL
 echo htmlspecialchars($comment, ENT_QUOTES, 'UTF-8');
 ```
 
-10. **Stop CSRF: tokens on every form.** One hidden token per session, checked on POST.
+10. **Stop CSRF with a token on every form** — one hidden token per session, checked on every POST.
 11. **Passwords done right** — `password_hash()` and `password_verify()`, never MD5.
 12. **File-upload safety** — check type and size, rename files, store outside the web root.
 
