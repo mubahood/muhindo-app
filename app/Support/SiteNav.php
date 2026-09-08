@@ -83,6 +83,29 @@ class SiteNav
         ];
     }
 
+    /**
+     * The legal pages, defined here for the same reason as everything else.
+     *
+     * These were three hand-written links in one footer column and nothing at
+     * all in the mobile sheet, so on a phone the refund policy could not be
+     * reached from the menu by anybody who had not been sent the URL. A
+     * payment provider checks that on a phone.
+     *
+     * They are kept apart from items() because they are not navigation: they
+     * belong in the footer's bottom rule and at the foot of the mobile sheet,
+     * not in the header bar or the mega panel.
+     *
+     * @return list<array{label:string, url:string}>
+     */
+    public static function legal(): array
+    {
+        return [
+            ['label' => 'Privacy', 'url' => route('privacy')],
+            ['label' => 'Terms', 'url' => route('terms')],
+            ['label' => 'Refund policy', 'url' => route('refund-policy')],
+        ];
+    }
+
     /** Every destination the menu can reach, for smoke-testing that none 404s. */
     public static function urls(): array
     {
@@ -92,6 +115,10 @@ class SiteNav
             foreach ($item['children'] ?? [] as $child) {
                 $urls[] = $child['url'];
             }
+        }
+
+        foreach (self::legal() as $item) {
+            $urls[] = $item['url'];
         }
 
         return array_values(array_unique($urls));

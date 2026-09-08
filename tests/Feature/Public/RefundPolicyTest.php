@@ -102,6 +102,34 @@ class RefundPolicyTest extends TestCase
         }
     }
 
+    /**
+     * On a phone, and that is the case that mattered: the mobile sheet carried
+     * no legal links at all, so the policy could only be reached by somebody
+     * who already knew the URL.
+     */
+    public function test_it_is_in_the_mobile_menu_and_the_footer_rule(): void
+    {
+        $html = (string) $this->get('/')->assertOk()->getContent();
+
+        preg_match('#<div class="mm-legal">(.*?)</div>#s', $html, $mobile);
+        $this->assertNotEmpty($mobile[1] ?? '', 'the mobile sheet has no legal links');
+        $this->assertStringContainsString(route('refund-policy'), $mobile[1]);
+
+        preg_match('#<span class="foot-legal">(.*?)</span>#s', $html, $footer);
+        $this->assertNotEmpty($footer[1] ?? '', 'the footer rule has no legal links');
+        $this->assertStringContainsString(route('refund-policy'), $footer[1]);
+    }
+
+    /** Defined once, so the footer and the mobile sheet cannot drift apart. */
+    public function test_the_three_legal_pages_are_all_reachable(): void
+    {
+        foreach (\App\Support\SiteNav::legal() as $item) {
+            $this->get($item['url'])->assertOk();
+        }
+
+        $this->assertContains(route('refund-policy'), \App\Support\SiteNav::urls());
+    }
+
     /** A provider that cannot find the page treats it as not published. */
     public function test_it_is_in_the_sitemap(): void
     {

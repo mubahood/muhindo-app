@@ -328,10 +328,17 @@
     .foot a:hover{color:var(--gold-d);}
     .foot-bar{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;font-size:12px;color:var(--tx3);
       display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+    .foot-legal{display:flex;flex-wrap:wrap;gap:6px 16px;}
+    .foot-bar .foot-legal a{display:inline;font-size:12px;font-weight:500;color:var(--tx3);margin:0;}
+    .foot-bar .foot-legal a:hover{color:var(--gold-d);}
 
 
     /* mobile menu */
-    .mmenu{position:fixed;inset:var(--hd) 0 0 0;z-index:55;background:var(--bg);padding:22px 24px;display:none;flex-direction:column;gap:4px;}
+    .mmenu{position:fixed;inset:var(--hd) 0 0 0;z-index:55;background:var(--bg);padding:22px 24px;display:none;flex-direction:column;gap:4px;overflow-y:auto;}
+    .mm-legal{margin-top:auto;padding-top:18px;border-top:1px solid var(--line);
+      display:flex;flex-wrap:wrap;gap:6px 16px;}
+    .mm-legal a{font-size:12.5px;font-weight:500;color:var(--tx3);}
+    .mm-legal a:hover{color:var(--gold-d);}
     .mmenu.open{display:flex;}
     .mmenu a{font-size:18px;font-weight:300;color:var(--tx);padding:12px 0;border-bottom:1px solid var(--line);}
     .mmenu .btn{margin-top:16px;justify-content:center;}
@@ -1564,6 +1571,15 @@
       <a href="{{ route('login') }}" wire:navigate class="btn ghost">Sign in</a>
     @endauth
   </div>
+
+  {{-- The sheet had none of these, so on a phone the refund policy could only
+       be reached by somebody who already knew the URL. Most people here are on
+       a phone, and so is anybody reviewing the site for a payment provider. --}}
+  <div class="mm-legal">
+    @foreach(\App\Support\SiteNav::legal() as $item)
+      <a href="{{ $item['url'] }}" wire:navigate>{{ $item['label'] }}</a>
+    @endforeach
+  </div>
 </div>
 
 <main>
@@ -1618,15 +1634,19 @@
           <a href="{{ route('login') }}" wire:navigate>Sign in</a>
           <a href="{{ route('register') }}" wire:navigate>Create an account</a>
         @endauth
-        <a href="{{ route('privacy') }}" wire:navigate>Privacy</a>
-        <a href="{{ route('terms') }}" wire:navigate>Terms</a>
-        <a href="{{ route('refund-policy') }}" wire:navigate>Refunds</a>
       </div>
     </div>
 
+    {{-- Legal sits on the bottom rule rather than under "Work with me", which
+         is where it had been piling up: hiring, signing in and three policies
+         in one column under one heading that described none of them. --}}
     <div class="foot-bar">
       <span>&copy; {{ date('Y') }} Muhindo Mubaraka. All rights reserved.</span>
-      <span>Built and maintained by me.</span>
+      <span class="foot-legal">
+        @foreach(\App\Support\SiteNav::legal() as $item)
+          <a href="{{ $item['url'] }}" wire:navigate>{{ $item['label'] }}</a>
+        @endforeach
+      </span>
     </div>
   </div>
 </footer>
