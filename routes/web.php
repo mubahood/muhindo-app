@@ -156,6 +156,7 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::view('/privacy', 'marketing.privacy')->name('privacy');
 Route::view('/terms', 'marketing.terms')->name('terms');
+Route::view('/refund-policy', 'marketing.refund-policy')->name('refund-policy');
 // The lookup form must be declared before /verify/{certificate}, or "verify"
 // itself would be captured as a certificate identifier and 404.
 Route::get('/verify', [CertificateVerificationController::class, 'lookup'])->name('certificates.lookup');

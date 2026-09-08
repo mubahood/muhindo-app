@@ -37,6 +37,7 @@ class SitemapController extends Controller
             ['loc' => route('portfolio.products'), 'lastmod' => null],
             ['loc' => route('privacy'), 'lastmod' => null],
             ['loc' => route('terms'), 'lastmod' => null],
+            ['loc' => route('refund-policy'), 'lastmod' => null],
         ];
 
         foreach (\App\Models\Product::published()->get(['slug', 'updated_at']) as $product) {

@@ -1620,6 +1620,7 @@
         @endauth
         <a href="{{ route('privacy') }}" wire:navigate>Privacy</a>
         <a href="{{ route('terms') }}" wire:navigate>Terms</a>
+        <a href="{{ route('refund-policy') }}" wire:navigate>Refunds</a>
       </div>
     </div>
 

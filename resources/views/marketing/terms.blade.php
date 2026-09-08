@@ -26,7 +26,7 @@
     </ul>
 
     <h2>Payments</h2>
-    <p>Paid courses and client project invoices are processed via Flutterwave. Refunds are handled on a case-by-case basis, so get in touch if something's wrong with a payment.</p>
+    <p>Paid courses and client project invoices are processed via Flutterwave. Refunds and cancellations are governed by the <a class="link" href="{{ route('refund-policy') }}">Refund and Cancellation Policy</a>, which sets out exactly what is refunded and how to ask.</p>
 
     <h2>Contact</h2>
     <p>Questions about these terms? Email <a class="link" href="mailto:mubahood360@gmail.com">mubahood360@gmail.com</a>.</p>
