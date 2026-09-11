@@ -70,13 +70,17 @@
     <div class="updated">Effective 8 September 2026</div>
 
     <div class="legal-id">
-      <b>SOLAVIA GROUP LIMITED</b>
+      {{-- Read from config rather than typed here: the same registration
+           number and address appear in the footer and in the structured data,
+           and the copy that goes stale is always the one somebody official
+           reads. --}}
+      <b>{{ config('company.name') }}</b>
       <span>
-        Registration No. 80048169153974<br>
-        Plot 2335, Buwambo-Katadde-Najjo Road, Nansana Municipality, Wakiso District, Uganda<br>
-        P.O. Box 214231, Kampala &middot;
-        <a class="link" href="tel:+256783204665">+256 783 204 665</a> &middot;
-        <a class="link" href="mailto:solaviaug@gmail.com">solaviaug@gmail.com</a>
+        Registration No. {{ config('company.registration_number') }}<br>
+        {{ config('company.address.street') }}, {{ config('company.address.locality') }}, {{ config('company.address.region') }}, {{ config('company.address.country') }}<br>
+        {{ config('company.address.po_box') }} &middot;
+        <a class="link" href="tel:{{ config('company.phone_e164') }}">{{ config('company.phone') }}</a> &middot;
+        <a class="link" href="mailto:{{ config('company.email') }}">{{ config('company.email') }}</a>
       </span>
     </div>
 
@@ -138,11 +142,11 @@
 
     <h2>6. Contact</h2>
     <p>
-      SOLAVIA GROUP LIMITED<br>
-      Plot 2335, Buwambo-Katadde-Najjo Road, Nansana Municipality, Wakiso District, Uganda<br>
-      P.O. Box 214231, Kampala<br>
-      Email <a class="link" href="mailto:solaviaug@gmail.com">solaviaug@gmail.com</a> &middot;
-      Phone <a class="link" href="tel:+256783204665">+256 783 204 665</a>
+      {{ config('company.name') }}<br>
+      {{ config('company.address.street') }}, {{ config('company.address.locality') }}, {{ config('company.address.region') }}, {{ config('company.address.country') }}<br>
+      {{ config('company.address.po_box') }}<br>
+      Email <a class="link" href="mailto:{{ config('company.email') }}">{{ config('company.email') }}</a> &middot;
+      Phone <a class="link" href="tel:{{ config('company.phone_e164') }}">{{ config('company.phone') }}</a>
     </p>
 
     <div class="legal-sign">

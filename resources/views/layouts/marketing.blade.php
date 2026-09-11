@@ -328,6 +328,10 @@
     .foot a:hover{color:var(--gold-d);}
     .foot-bar{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;font-size:12px;color:var(--tx3);
       display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+    .foot-social{display:flex;gap:9px;margin-top:14px;}
+    .foot-social a{display:flex;align-items:center;justify-content:center;width:32px;height:32px;
+      border:1px solid var(--line);color:var(--tx2);font-size:13px;margin:0;transition:.15s;}
+    .foot-social a:hover{border-color:var(--gold);color:var(--gold-d);background:var(--gold-soft);}
     .foot-legal{display:flex;flex-wrap:wrap;gap:6px 16px;}
     .foot-bar .foot-legal a{display:inline;font-size:12px;font-weight:500;color:var(--tx3);margin:0;}
     .foot-bar .foot-legal a:hover{color:var(--gold-d);}
@@ -1593,6 +1597,17 @@
         <a href="{{ route('home') }}" wire:navigate class="brand"><span class="badge">MM</span> Muhindo Mubaraka</a>
         <p class="blurb">Software engineer and programming teacher. I build systems people depend on, and I teach the people who run them.</p>
         <p class="foot-place"><i class="fas fa-location-dot" aria-hidden="true"></i> Kampala, Uganda</p>
+
+        {{-- The accounts, which double as the schema.org sameAs on the home
+             page: the same three links tie the site to the same business. --}}
+        <div class="foot-social">
+          @foreach(config('company.social') as $account)
+            <a href="{{ $account['url'] }}" target="_blank" rel="noopener me"
+               aria-label="{{ $account['label'] }}" title="{{ $account['label'] }}">
+              <i class="{{ $account['icon'] }}" aria-hidden="true"></i>
+            </a>
+          @endforeach
+        </div>
       </div>
 
       {{-- Columns come from SiteNav, so the footer cannot drift away from the
@@ -1641,7 +1656,9 @@
          is where it had been piling up: hiring, signing in and three policies
          in one column under one heading that described none of them. --}}
     <div class="foot-bar">
-      <span>&copy; {{ date('Y') }} Muhindo Mubaraka. All rights reserved.</span>
+      {{-- Who actually trades here. A site that takes payments has to say so,
+           and it is the first thing a payment provider looks for. --}}
+      <span>&copy; {{ date('Y') }} {{ config('company.name') }} &middot; Reg. No. {{ config('company.registration_number') }}</span>
       <span class="foot-legal">
         @foreach(\App\Support\SiteNav::legal() as $item)
           <a href="{{ $item['url'] }}" wire:navigate>{{ $item['label'] }}</a>
