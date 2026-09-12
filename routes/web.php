@@ -156,7 +156,33 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::view('/privacy', 'marketing.privacy')->name('privacy');
 Route::view('/terms', 'marketing.terms')->name('terms');
-Route::view('/refund-policy', 'marketing.refund-policy')->name('refund-policy');
+
+/*
+ * The company section.
+ *
+ * These pages are written for somebody at a payment provider or a bank
+ * confirming that a registered company stands behind the payments. The refund
+ * policy moved here and the old URL redirects permanently, because that URL has
+ * already been sent to providers and must not become a 404.
+ */
+$movedPermanently('/refund-policy', '/solavia/refund-policy');
+
+Route::prefix('solavia')->name('solavia.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\SolaviaController::class, 'home'])->name('home');
+    Route::get('/products', [\App\Http\Controllers\SolaviaController::class, 'products'])->name('products');
+    Route::get('/terms', [\App\Http\Controllers\SolaviaController::class, 'terms'])->name('terms');
+    Route::get('/privacy', [\App\Http\Controllers\SolaviaController::class, 'privacy'])->name('privacy');
+    Route::get('/refund-policy', [\App\Http\Controllers\SolaviaController::class, 'refundPolicy'])->name('refund-policy');
+    Route::get('/contact', [\App\Http\Controllers\SolaviaController::class, 'contact'])->name('contact');
+    // Five an hour per IP, as briefed. Enough for a real person who mistypes
+    // their address twice, useless to anybody harvesting the mailbox.
+    Route::post('/contact', [\App\Http\Controllers\SolaviaController::class, 'contactSubmit'])
+        ->middleware('throttle:5,60')->name('contact.submit');
+});
+
+// Machine-readable company details, for providers who ask for them that way.
+Route::get('/.well-known/company.json', [\App\Http\Controllers\SolaviaController::class, 'companyJson'])
+    ->name('company.json');
 // The lookup form must be declared before /verify/{certificate}, or "verify"
 // itself would be captured as a certificate identifier and 404.
 Route::get('/verify', [CertificateVerificationController::class, 'lookup'])->name('certificates.lookup');

@@ -26,8 +26,8 @@ class SiteNavTest extends TestCase
         $labels = array_column(SiteNav::items(), 'label');
 
         // Order is the message: learning first, then who he is, then what can
-        // be bought, then the writing.
-        $this->assertSame(['Learn', 'About Me', 'Source code', 'Blog'], $labels);
+        // be bought, then the writing, then the company that sells all of it.
+        $this->assertSame(['Learn', 'About Me', 'Source code', 'Blog', 'Company'], $labels);
     }
 
     public function test_the_about_panel_carries_every_page_about_him(): void

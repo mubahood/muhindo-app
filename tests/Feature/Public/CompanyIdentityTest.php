@@ -120,9 +120,13 @@ class CompanyIdentityTest extends TestCase
 
     public function test_the_legal_pages_all_load(): void
     {
-        foreach (['/refund-policy', '/terms', '/privacy'] as $path) {
+        foreach (['/solavia/refund-policy', '/solavia/terms', '/solavia/privacy',
+            '/terms', '/privacy'] as $path) {
             $this->get($path)->assertOk();
         }
+
+        // The URL already in circulation with the payment providers.
+        $this->get('/refund-policy')->assertRedirect('/solavia/refund-policy');
     }
 
     /** @return array<int,array<string,mixed>> */

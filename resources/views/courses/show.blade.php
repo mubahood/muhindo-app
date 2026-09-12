@@ -270,6 +270,8 @@
             <span>MTN MoMo</span><span>Airtel Money</span><span>Visa</span><span>Mastercard</span>
           </div>
           <div class="money-comfort">Secure payment via Flutterwave</div>
+          <div class="money-comfort">Payments are processed for {{ config('company.name') }}.
+            <a class="link" href="{{ route('solavia.refund-policy') }}" wire:navigate>Refund policy</a>.</div>
         @endif
       </aside>
     </div>

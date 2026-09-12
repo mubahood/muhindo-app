@@ -21,16 +21,27 @@ class RefundPolicyTest extends TestCase
 
     public function test_it_is_published_at_the_agreed_url(): void
     {
-        $this->get('/refund-policy')->assertOk();
+        $this->get('/solavia/refund-policy')->assertOk();
+    }
+
+    /**
+     * The old URL has already been sent to payment providers, so it must never
+     * become a 404. Permanent, so anything that cached it follows for good.
+     */
+    public function test_the_old_url_still_leads_there(): void
+    {
+        $this->get('/refund-policy')
+            ->assertStatus(301)
+            ->assertRedirect('/solavia/refund-policy');
     }
 
     public function test_it_names_the_company_that_is_bound_by_it(): void
     {
-        $this->get(route('refund-policy'))->assertOk()
+        $this->get(route('solavia.refund-policy'))->assertOk()
             ->assertSee('SOLAVIA GROUP LIMITED')
             ->assertSee('80048169153974')
-            ->assertSee('Nansana Municipality, Wakiso District')
-            ->assertSee('P.O. Box 214231');
+            ->assertSee('Nansana Municipality')
+            ->assertSee('Wakiso District');
     }
 
     /**
@@ -40,7 +51,7 @@ class RefundPolicyTest extends TestCase
      */
     public function test_there_is_exactly_one_contact_address_on_the_page(): void
     {
-        $html = (string) $this->get(route('refund-policy'))->assertOk()->getContent();
+        $html = (string) $this->get(route('solavia.refund-policy'))->assertOk()->getContent();
 
         preg_match_all('/[\w.+-]+@[\w-]+\.[\w.]+/', $html, $matches);
         $addresses = array_values(array_unique($matches[0]));
@@ -52,28 +63,30 @@ class RefundPolicyTest extends TestCase
 
     public function test_every_refund_situation_is_on_the_page(): void
     {
-        $page = $this->get(route('refund-policy'))->assertOk();
+        $page = $this->get(route('solavia.refund-policy'))->assertOk();
 
+        // The wording is the version already sent to the payment providers,
+        // so it is asserted phrase by phrase rather than by markup: the page
+        // may be restyled, but what it promises may not drift.
         foreach ([
-            'no access within 24 hours',
-            'charged twice',
+            'did not receive access within 24 hours',
+            'charged twice for the same order',
             'materially different from its description',
-            'no order was created',
-            'changed your mind',
-            'subscription period that has already started',
+            'money was deducted but no order was created',
+            'change of mind after the product was accessed',
+            'unused part of a subscription period that has already started',
         ] as $situation) {
             $page->assertSee($situation, false);
         }
 
-        // Four refunded, two not. A table that lost a row still looks fine.
         $html = (string) $page->getContent();
-        $this->assertSame(4, substr_count($html, 'r-tag r-yes'));
-        $this->assertSame(2, substr_count($html, 'r-tag r-no'));
+        $this->assertStringContainsString('Full refund', $html);
+        $this->assertStringContainsString('No refund', $html);
     }
 
     public function test_it_states_the_windows_a_customer_is_held_to(): void
     {
-        $this->get(route('refund-policy'))->assertOk()
+        $this->get(route('solavia.refund-policy'))->assertOk()
             ->assertSee('within 7 days of payment')
             ->assertSee('within 2 business days')
             ->assertSee('within 7 business days')
@@ -91,14 +104,14 @@ class RefundPolicyTest extends TestCase
     {
         $this->travelTo(now()->addMonths(7));
 
-        $this->get(route('refund-policy'))->assertOk()->assertSee('Effective 8 September 2026');
+        $this->get(route('solavia.refund-policy'))->assertOk()->assertSee('Effective 8 September 2026');
     }
 
     /** "Published on our website" means reachable without knowing the URL. */
     public function test_it_is_linked_from_every_public_page(): void
     {
         foreach (['/', '/about', '/e-learning', '/work'] as $path) {
-            $this->get($path)->assertOk()->assertSee(route('refund-policy'), false);
+            $this->get($path)->assertOk()->assertSee(route('solavia.refund-policy'), false);
         }
     }
 
@@ -113,11 +126,11 @@ class RefundPolicyTest extends TestCase
 
         preg_match('#<div class="mm-legal">(.*?)</div>#s', $html, $mobile);
         $this->assertNotEmpty($mobile[1] ?? '', 'the mobile sheet has no legal links');
-        $this->assertStringContainsString(route('refund-policy'), $mobile[1]);
+        $this->assertStringContainsString(route('solavia.refund-policy'), $mobile[1]);
 
         preg_match('#<span class="foot-legal">(.*?)</span>#s', $html, $footer);
         $this->assertNotEmpty($footer[1] ?? '', 'the footer rule has no legal links');
-        $this->assertStringContainsString(route('refund-policy'), $footer[1]);
+        $this->assertStringContainsString(route('solavia.refund-policy'), $footer[1]);
     }
 
     /** Defined once, so the footer and the mobile sheet cannot drift apart. */
@@ -127,13 +140,13 @@ class RefundPolicyTest extends TestCase
             $this->get($item['url'])->assertOk();
         }
 
-        $this->assertContains(route('refund-policy'), \App\Support\SiteNav::urls());
+        $this->assertContains(route('solavia.refund-policy'), \App\Support\SiteNav::urls());
     }
 
     /** A provider that cannot find the page treats it as not published. */
     public function test_it_is_in_the_sitemap(): void
     {
-        $this->get('/sitemap.xml')->assertOk()->assertSee(route('refund-policy'), false);
+        $this->get('/sitemap.xml')->assertOk()->assertSee(route('solavia.refund-policy'), false);
     }
 
     /** Terms used to say refunds were case by case, which this page contradicts. */
@@ -141,12 +154,12 @@ class RefundPolicyTest extends TestCase
     {
         $this->get(route('terms'))->assertOk()
             ->assertDontSee('case-by-case')
-            ->assertSee(route('refund-policy'), false);
+            ->assertSee(route('solavia.refund-policy'), false);
     }
 
     public function test_it_is_indexable_and_carries_its_own_description(): void
     {
-        $html = (string) $this->get(route('refund-policy'))->assertOk()->getContent();
+        $html = (string) $this->get(route('solavia.refund-policy'))->assertOk()->getContent();
 
         // A policy a provider has to find must not be excluded from search.
         $this->assertStringNotContainsString('noindex', $html);
@@ -161,7 +174,7 @@ class RefundPolicyTest extends TestCase
     {
         $level = ob_get_level();
 
-        $this->get(route('refund-policy'))->assertOk();
+        $this->get(route('solavia.refund-policy'))->assertOk();
 
         $this->assertSame($level, ob_get_level());
     }

@@ -37,7 +37,14 @@ class SitemapController extends Controller
             ['loc' => route('portfolio.products'), 'lastmod' => null],
             ['loc' => route('privacy'), 'lastmod' => null],
             ['loc' => route('terms'), 'lastmod' => null],
-            ['loc' => route('refund-policy'), 'lastmod' => null],
+            // The company section. A provider that cannot find these pages
+            // treats them as not published.
+            ['loc' => route('solavia.home'), 'lastmod' => null],
+            ['loc' => route('solavia.products'), 'lastmod' => null],
+            ['loc' => route('solavia.terms'), 'lastmod' => null],
+            ['loc' => route('solavia.privacy'), 'lastmod' => null],
+            ['loc' => route('solavia.refund-policy'), 'lastmod' => null],
+            ['loc' => route('solavia.contact'), 'lastmod' => null],
         ];
 
         foreach (\App\Models\Product::published()->get(['slug', 'updated_at']) as $product) {

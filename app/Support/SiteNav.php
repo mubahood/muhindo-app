@@ -80,6 +80,43 @@ class SiteNav
                 'match' => ['insights.*'],
                 'icon' => 'fa-pen-nib',
             ],
+            /*
+             * The company, as a section of its own rather than a single link.
+             *
+             * Last in the bar because a visitor wants the products first, but
+             * present on every page because the reader who needs it most,
+             * somebody verifying the business behind a payment, must reach it
+             * from wherever they landed, and must reach the exact page they
+             * came for without hunting: the registration details, the product
+             * list, or the refund terms.
+             */
+            [
+                'label' => 'Company',
+                'url' => route('solavia.home'),
+                'match' => ['solavia.*'],
+                'icon' => 'fa-building',
+                'blurb' => 'SOLAVIA GROUP LIMITED, the registered company behind this site and everything on it.',
+                'children' => [
+                    ['label' => 'About SOLAVIA', 'url' => route('solavia.home'), 'icon' => 'fa-building',
+                        'desc' => 'Who we are, the registered details, and who runs the company.',
+                        'match' => ['solavia.home']],
+                    ['label' => 'Our products', 'url' => route('solavia.products'), 'icon' => 'fa-cubes',
+                        'desc' => 'Everything we build and operate, and what each one costs.',
+                        'match' => ['solavia.products']],
+                    ['label' => 'Terms of Service', 'url' => route('solavia.terms'), 'icon' => 'fa-file-contract',
+                        'desc' => 'What you agree to when you buy or use our products.',
+                        'match' => ['solavia.terms']],
+                    ['label' => 'Privacy Policy', 'url' => route('solavia.privacy'), 'icon' => 'fa-user-shield',
+                        'desc' => 'What we collect, why, and who we share it with.',
+                        'match' => ['solavia.privacy']],
+                    ['label' => 'Refund policy', 'url' => route('solavia.refund-policy'), 'icon' => 'fa-rotate-left',
+                        'desc' => 'When we refund, how to ask, and how long it takes.',
+                        'match' => ['solavia.refund-policy']],
+                    ['label' => 'Contact us', 'url' => route('solavia.contact'), 'icon' => 'fa-envelope',
+                        'desc' => 'Address, phone, WhatsApp and a message form.',
+                        'match' => ['solavia.contact']],
+                ],
+            ],
         ];
     }
 
@@ -100,9 +137,12 @@ class SiteNav
     public static function legal(): array
     {
         return [
-            ['label' => 'Privacy', 'url' => route('privacy')],
-            ['label' => 'Terms', 'url' => route('terms')],
-            ['label' => 'Refund policy', 'url' => route('refund-policy')],
+            ['label' => 'Company', 'url' => route('solavia.home')],
+            ['label' => 'Products', 'url' => route('solavia.products')],
+            ['label' => 'Terms', 'url' => route('solavia.terms')],
+            ['label' => 'Privacy', 'url' => route('solavia.privacy')],
+            ['label' => 'Refund policy', 'url' => route('solavia.refund-policy')],
+            ['label' => 'Contact', 'url' => route('solavia.contact')],
         ];
     }
 

@@ -80,7 +80,7 @@ class PortfolioController extends Controller
                 'legalName' => config('company.name'),
                 'identifier' => config('company.registration_number'),
                 'url' => route('home'),
-                'logo' => asset('images/logo-square.png'),
+                'logo' => asset('images/solavia-icon-512.png'),
                 'email' => config('company.email'),
                 'telephone' => config('company.phone_e164'),
                 'address' => [

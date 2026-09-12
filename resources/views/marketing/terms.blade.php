@@ -9,6 +9,8 @@
 
     <p>These terms govern use of this site: the portfolio, the course platform, and the client project portal. By creating an account, you agree to them.</p>
 
+    <p>This site is operated by {{ config('company.name') }} (Reg. No. {{ config('company.registration_number') }}). The full company terms, covering every product we operate, are the <a class="link" href="{{ route('solavia.terms') }}">SOLAVIA GROUP LIMITED Terms of Service</a>.</p>
+
     <h2>Courses</h2>
     <p>Free courses are available to any signed-in student. Paid courses are billed as a one-off purchase per course; access is granted once payment is confirmed. Course content may be improved or expanded over time.</p>
 
@@ -26,7 +28,7 @@
     </ul>
 
     <h2>Payments</h2>
-    <p>Paid courses and client project invoices are processed via Flutterwave. Refunds and cancellations are governed by the <a class="link" href="{{ route('refund-policy') }}">Refund and Cancellation Policy</a>, which sets out exactly what is refunded and how to ask.</p>
+    <p>Paid courses and client project invoices are processed via Flutterwave. Refunds and cancellations are governed by the <a class="link" href="{{ route('solavia.refund-policy') }}">Refund and Cancellation Policy</a>, which sets out exactly what is refunded and how to ask.</p>
 
     <h2>Contact</h2>
     <p>Questions about these terms? Email <a class="link" href="mailto:mubahood360@gmail.com">mubahood360@gmail.com</a>.</p>

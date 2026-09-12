@@ -332,6 +332,10 @@
     .foot-social a{display:flex;align-items:center;justify-content:center;width:32px;height:32px;
       border:1px solid var(--line);color:var(--tx2);font-size:13px;margin:0;transition:.15s;}
     .foot-social a:hover{border-color:var(--gold);color:var(--gold-d);background:var(--gold-soft);}
+    .foot-company{max-width:62ch;}
+    .foot-bar .foot-company a{display:inline;color:var(--tx3);text-decoration:underline;
+      text-underline-offset:2px;margin:0;font-size:12px;}
+    .foot-bar .foot-company a:hover{color:var(--gold-d);}
     .foot-legal{display:flex;flex-wrap:wrap;gap:6px 16px;}
     .foot-bar .foot-legal a{display:inline;font-size:12px;font-weight:500;color:var(--tx3);margin:0;}
     .foot-bar .foot-legal a:hover{color:var(--gold-d);}
@@ -1615,7 +1619,10 @@
            "Work" and "Skills" as top-level, and had never heard of the blog,
            the source code or the gallery. --}}
       @foreach($nav as $item)
-        @if(!empty($item['children']))
+        {{-- Company is skipped here on purpose: its six links already sit on
+             the bottom rule, and one footer showing the same six twice reads
+             as a mistake rather than as emphasis. --}}
+        @if(!empty($item['children']) && $item['label'] !== 'Company')
           <div>
             <p class="foot-h">{{ $item['label'] }}</p>
             @foreach($item['children'] as $child)
@@ -1658,7 +1665,10 @@
     <div class="foot-bar">
       {{-- Who actually trades here. A site that takes payments has to say so,
            and it is the first thing a payment provider looks for. --}}
-      <span>&copy; {{ date('Y') }} {{ config('company.name') }} &middot; Reg. No. {{ config('company.registration_number') }}</span>
+      <span class="foot-company">
+        &copy; {{ date('Y') }} {{ config('company.name') }}. Reg. No. {{ config('company.registration_number') }}.
+        <a href="{{ route('solavia.home') }}" wire:navigate>muhindomubaraka.com is operated by {{ config('company.name') }}</a>.
+      </span>
       <span class="foot-legal">
         @foreach(\App\Support\SiteNav::legal() as $item)
           <a href="{{ $item['url'] }}" wire:navigate>{{ $item['label'] }}</a>

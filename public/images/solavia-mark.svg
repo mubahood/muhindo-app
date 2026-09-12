@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <clipPath id="mCut"><path d="M30 0 H170 V138 Q100 114 30 138 Z"/></clipPath>
+  <clipPath id="mSun"><path d="M30 0 H170 V146 Q100 126 30 146 Z"/></clipPath>
+  <path clip-path="url(#mCut)" fill-rule="evenodd" fill="#0C3B2E"
+    d="M46 90 a54 54 0 1 0 108 0 a54 54 0 1 0 -108 0 Z M66 90 a34 34 0 1 0 68 0 a34 34 0 1 0 -68 0 Z"/>
+  <circle clip-path="url(#mSun)" cx="100" cy="137" r="27" fill="#E8602C"/>
+  <path fill="#0C3B2E" d="M34 146 Q100 126 166 146 Q100 161 34 146 Z"/></svg>
