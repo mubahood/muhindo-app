@@ -53,3 +53,7 @@ _deploy-oneoffs/
 /PUBLIC_BUILD_LOG.md
 /PUBLIC_SITE_COMMAND.md
 /PUBLIC_SITE_PLAN.md
+
+# Generated at deploy from config; the URLs inside are environment specific.
+/public/.well-known/company.json
+/.well-known/

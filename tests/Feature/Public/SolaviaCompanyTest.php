@@ -275,6 +275,30 @@ class SolaviaCompanyTest extends TestCase
         $this->assertArrayHasKey('refunds', $json['policies']);
     }
 
+    /**
+     * The file and the route must not be able to disagree.
+     *
+     * Production serves a real file, because the server's .htaccess passes
+     * anything under .well-known/ straight to the filesystem for SSL
+     * validation and Laravel never sees the request. The command writes that
+     * file from the controller so there is still one source of truth.
+     */
+    public function test_the_generated_manifest_matches_the_route(): void
+    {
+        $path = public_path('.well-known/company.json');
+        @unlink($path);
+
+        $this->artisan('company:manifest')->assertSuccessful();
+
+        $this->assertFileExists($path);
+        $this->assertSame(
+            $this->get('/.well-known/company.json')->json(),
+            json_decode(file_get_contents($path), true, 512, JSON_THROW_ON_ERROR),
+        );
+
+        @unlink($path);
+    }
+
     /* Site-wide ------------------------------------------------------------ */
 
     public function test_the_company_is_one_click_away_from_any_page(): void
