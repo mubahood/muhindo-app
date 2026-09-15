@@ -114,8 +114,7 @@ class SolaviaCompanyTest extends TestCase
         $page = $this->get(route('solavia.products'))->assertOk();
 
         foreach (['e-Learning courses', 'Source code and templates', 'School Dynamics',
-            'Hospital Management System', 'ULITS', 'LugaFlix', 'MunoApp',
-            'VJ Junior Movies', 'UGNEWS24', 'Musenene Family App'] as $product) {
+            'Hospital Management System', 'ULITS', 'LugaFlix'] as $product) {
             $page->assertSee($product, false);
         }
 
@@ -271,7 +270,10 @@ class SolaviaCompanyTest extends TestCase
         $this->assertSame('UG', $json['address']['countryCode']);
         $this->assertSame('solaviaug@gmail.com', $json['email']);
         $this->assertCount(3, $json['leadership']);
-        $this->assertCount(10, $json['products']);
+        // Counted from the config rather than written down, so removing a
+        // product does not fail a test about something else.
+        $expected = array_sum(array_map(fn (array $g) => count($g['items']), config('products')));
+        $this->assertCount($expected, $json['products']);
         $this->assertArrayHasKey('refunds', $json['policies']);
     }
 
@@ -297,6 +299,44 @@ class SolaviaCompanyTest extends TestCase
         );
 
         @unlink($path);
+    }
+
+    /**
+     * Every listed product must have somewhere real to send a reviewer.
+     *
+     * The page exists to be checked by somebody deciding whether this is a
+     * genuine business. One card they cannot open costs more than the card was
+     * worth, so this is asserted rather than left to whoever edits the config
+     * next.
+     */
+    public function test_every_product_has_a_working_destination(): void
+    {
+        foreach (config('products') as $group) {
+            $this->assertNotEmpty($group['items'], "the {$group['heading']} group is empty");
+
+            foreach ($group['items'] as $item) {
+                $this->assertNotEmpty(
+                    $item['url'] ?? null,
+                    "{$item['name']} is listed with no link. Either give it one or take it off the page.",
+                );
+                $this->assertNotEmpty($item['description'] ?? null, "{$item['name']} has no description");
+            }
+        }
+    }
+
+    /** No apologies for things that are not there. */
+    public function test_the_page_makes_no_promises_about_missing_listings(): void
+    {
+        $html = (string) $this->get('/solavia/products')->assertOk()->getContent();
+
+        // Stylesheets and scripts are stripped first: the layout carries a CSS
+        // comment reading "Coming soon" for the catalogue's own badge, which is
+        // not text anybody reads.
+        $visible = preg_replace('#<(style|script)\b[^>]*>.*?</\1>#si', '', $html);
+
+        foreach (['being restored', 'coming soon', 'to be confirmed', 'TBC'] as $hedge) {
+            $this->assertStringNotContainsStringIgnoringCase($hedge, (string) $visible);
+        }
     }
 
     /* Site-wide ------------------------------------------------------------ */

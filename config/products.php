@@ -70,7 +70,7 @@ return [
 
     [
         'heading' => 'Consumer apps',
-        'blurb' => 'Mobile products used across Uganda and the diaspora.',
+        'blurb' => 'Streaming built for Ugandan audiences at home and in the diaspora.',
         'items' => [
             [
                 'name' => 'LugaFlix',
@@ -81,42 +81,6 @@ return [
                 'extra_links' => [
                     ['label' => 'App Store', 'url' => 'https://apps.apple.com/us/app/lugaflix-luganda-movies-tra/id6777522770'],
                 ],
-                'link_note' => 'The Android listing is being restored.',
-                'image' => null,
-            ],
-            [
-                'name' => 'MunoApp',
-                'description' => 'Free Luganda translated movies, supported by advertising.',
-                'price' => 'Free, ad supported',
-                'platforms' => ['Android'],
-                'url' => null,
-                'link_note' => 'Play Store listing is being restored.',
-                'image' => null,
-            ],
-            [
-                'name' => 'VJ Junior Movies',
-                'description' => 'Films translated by VJ Junior, one of Uganda\'s best known voice artists.',
-                'price' => 'Free, ad supported',
-                'platforms' => ['Android'],
-                'url' => null,
-                'link_note' => 'Play Store listing is being restored.',
-                'image' => null,
-            ],
-            [
-                'name' => 'UGNEWS24',
-                'description' => 'Uganda local news, published daily on the web and in the app.',
-                'price' => 'Free',
-                'platforms' => ['Android', 'Web'],
-                'url' => 'https://ugnews24.info',
-                'image' => null,
-            ],
-            [
-                'name' => 'Musenene Family App',
-                'description' => 'A family and community app for the Musenene network.',
-                'price' => 'Free',
-                'platforms' => ['Android'],
-                'url' => null,
-                'link_note' => 'Play Store listing is being restored.',
                 'image' => null,
             ],
         ],
