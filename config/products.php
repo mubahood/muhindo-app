@@ -81,7 +81,9 @@ return [
                 'extra_links' => [
                     ['label' => 'App Store', 'url' => 'https://apps.apple.com/us/app/lugaflix-luganda-movies-tra/id6777522770'],
                 ],
-                'image' => null,
+                // The app's own icon, so the card shows the thing a customer
+                // actually taps rather than a placeholder monogram.
+                'image' => 'images/systems/lugaflix.png',
             ],
         ],
     ],
