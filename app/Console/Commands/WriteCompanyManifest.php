@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\File;
  *
  * The content still comes from the controller, so the file and the route
  * cannot say different things, and a test asserts they match.
+ *
+ * Run it AFTER `optimize:clear` and BEFORE `config:cache`. It reads the
+ * product list out of config, so running it against a cache built from the
+ * previous deploy writes a manifest describing the old catalogue while the
+ * pages show the new one. That happened once: the page listed six products
+ * and the manifest still listed ten.
  */
 class WriteCompanyManifest extends Command
 {
