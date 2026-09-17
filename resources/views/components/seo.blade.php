@@ -33,7 +33,12 @@
      * LinkedIn fetch the image before they can lay the card out, and the first
      * share of a URL often renders with no picture at all while that happens.
      */
-    $seoImageAlt = $imageAlt ?? config('company.name').' — '.$seoTitle;
+    // Prefixed with the company only when the title does not already say it,
+    // or the company pages read "SOLAVIA GROUP LIMITED — SOLAVIA GROUP
+    // LIMITED | Company" to anybody using a screen reader.
+    $seoImageAlt = $imageAlt ?? (str_contains($seoTitle, config('company.name'))
+        ? $seoTitle
+        : config('company.name').' — '.$seoTitle);
 @endphp
 <title>{{ $seoTitle }}</title>
 <meta name="description" content="{{ $seoDescription }}">

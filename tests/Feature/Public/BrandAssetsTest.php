@@ -117,6 +117,16 @@ class BrandAssetsTest extends TestCase
         $this->assertStringContainsString('SOLAVIA GROUP LIMITED', $m[1]);
     }
 
+    /** A title that already names the company must not have it prefixed again. */
+    public function test_the_alt_text_does_not_repeat_the_company_name(): void
+    {
+        $html = (string) $this->get('/solavia')->assertOk()->getContent();
+
+        preg_match('#<meta property="og:image:alt" content="([^"]+)"#', $html, $m);
+
+        $this->assertSame(1, substr_count($m[1] ?? '', 'SOLAVIA GROUP LIMITED'), $m[1] ?? '');
+    }
+
     /** A course shares its own cover, not the site default. */
     public function test_a_course_page_shares_its_own_cover(): void
     {
