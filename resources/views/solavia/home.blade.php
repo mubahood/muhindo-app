@@ -1,6 +1,7 @@
 @extends('layouts.marketing')
 @section('title', 'SOLAVIA GROUP LIMITED | Company')
 @section('desc', 'SOLAVIA GROUP LIMITED is a Ugandan software company, Reg. No. 80048169153974, building and operating digital products for learners, schools and consumers across East Africa.')
+@section('og_image', asset('images/og-solavia.png'))
 
 @include('solavia.partials.styles')
 

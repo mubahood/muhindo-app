@@ -1,6 +1,7 @@
 @extends('layouts.marketing')
 @section('title', 'Terms of Service | SOLAVIA GROUP LIMITED')
 @section('desc', 'The terms you agree to when you buy or use any product operated by SOLAVIA GROUP LIMITED: accounts, payment in UGX, digital delivery, acceptable use, intellectual property and governing law.')
+@section('og_image', asset('images/og-solavia.png'))
 
 @include('solavia.partials.styles')
 

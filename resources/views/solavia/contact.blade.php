@@ -1,6 +1,7 @@
 @extends('layouts.marketing')
 @section('title', 'Contact | SOLAVIA GROUP LIMITED')
 @section('desc', 'Reach SOLAVIA GROUP LIMITED by phone, WhatsApp or email, or send a message from this page. Registered office in Nansana Municipality, Wakiso District, Uganda.')
+@section('og_image', asset('images/og-solavia.png'))
 
 @include('solavia.partials.styles')
 

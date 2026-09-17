@@ -1,6 +1,7 @@
 @extends('layouts.marketing')
 @section('title', 'Refund Policy | SOLAVIA GROUP LIMITED')
 @section('desc', 'How SOLAVIA GROUP LIMITED handles refunds and cancellations for courses, digital products, video subscriptions and school software licences. What we refund, how to ask, and how long it takes.')
+@section('og_image', asset('images/og-solavia.png'))
 
 @include('solavia.partials.styles')
 

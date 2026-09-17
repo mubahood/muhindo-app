@@ -1,6 +1,7 @@
 @extends('layouts.marketing')
 @section('title', 'Privacy Policy | SOLAVIA GROUP LIMITED')
 @section('desc', 'What SOLAVIA GROUP LIMITED collects, why, who we share it with and how long we keep it. The data controller is SOLAVIA GROUP LIMITED, Reg. No. 80048169153974, Wakiso District, Uganda.')
+@section('og_image', asset('images/og-solavia.png'))
 
 @include('solavia.partials.styles')
 

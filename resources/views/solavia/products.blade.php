@@ -1,6 +1,7 @@
 @extends('layouts.marketing')
 @section('title', 'Products | SOLAVIA GROUP LIMITED')
 @section('desc', 'Every product built and operated by SOLAVIA GROUP LIMITED: online courses, source code, School Dynamics school management, hospital and livestock systems, and the LugaFlix streaming service.')
+@section('og_image', asset('images/og-solavia.png'))
 
 @include('solavia.partials.styles')
 
