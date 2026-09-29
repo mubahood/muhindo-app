@@ -2,6 +2,7 @@
     'title' => 'Muhindo Mubaraka, Software Engineer & Programming Teacher',
     'description' => "I teach computer programming and computer-related courses, and I build software for anyone with a real problem: individuals, startups, schools, clinics, NGOs and enterprises across Uganda.",
     'image' => null,
+    'imageAlt' => null,
     'type' => 'website',
     'canonical' => null,
 ])
@@ -26,11 +27,27 @@
     $seoDescription = \Illuminate\Support\Str::limit($decode($description), 155, '');
     $seoCanonical = $canonical ?? url()->current();
     $seoImage = $image ?? asset('images/og.png');
+
+    /*
+     * Social scrapers want the dimensions up front. Without them Facebook and
+     * LinkedIn fetch the image before they can lay the card out, and the first
+     * share of a URL often renders with no picture at all while that happens.
+     */
+    // Prefixed with the company only when the title does not already say it,
+    // or the company pages read "SOLAVIA GROUP LIMITED — SOLAVIA GROUP
+    // LIMITED | Company" to anybody using a screen reader.
+    $seoImageAlt = $imageAlt ?? (str_contains($seoTitle, config('company.name'))
+        ? $seoTitle
+        : config('company.name').' — '.$seoTitle);
 @endphp
 <title>{{ $seoTitle }}</title>
 <meta name="description" content="{{ $seoDescription }}">
 <link rel="canonical" href="{{ $seoCanonical }}">
 <meta name="theme-color" content="#0b1f3a">
+{{-- /favicon.ico is requested by convention whether it is linked or not, and
+     the file that was there was zero bytes. The PNG is what modern browsers
+     take; the ICO is the fallback and what appears in bookmarks and history. --}}
+<link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
 <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon.png') }}">
 {{-- Linked here rather than per layout, because a manifest nothing points at
      is a file the browser never asks for: it shipped correct-looking and
@@ -38,18 +55,25 @@
      is the same story on iOS, which ignores the manifest and looks only for
      this tag before falling back to a screenshot of the page. --}}
 <link rel="manifest" href="{{ asset('manifest.json') }}">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/logo-192.png') }}">
-<meta name="apple-mobile-web-app-title" content="Muhindo">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/icon-180.png') }}">
+<meta name="apple-mobile-web-app-title" content="Muhindo Mubaraka">
 <meta property="og:type" content="{{ $type }}">
 <meta property="og:site_name" content="Muhindo Mubaraka">
 <meta property="og:title" content="{{ $seoTitle }}">
 <meta property="og:description" content="{{ $seoDescription }}">
 <meta property="og:url" content="{{ $seoCanonical }}">
 <meta property="og:image" content="{{ $seoImage }}">
+<meta property="og:image:alt" content="{{ $seoImageAlt }}">
+@if($seoImage === asset('images/og.png') || $seoImage === asset('images/og-solavia.png'))
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+@endif
+<meta property="og:locale" content="en_UG">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ $seoTitle }}">
 <meta name="twitter:description" content="{{ $seoDescription }}">
 <meta name="twitter:image" content="{{ $seoImage }}">
+<meta name="twitter:image:alt" content="{{ $seoImageAlt }}">
 {{-- Ownership tokens. Search engines look for these on the page they were
      given, so they belong in the layout every public page shares rather than
      on the home page alone: a property verified against /e-learning fails if

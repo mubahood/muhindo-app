@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\CompletionRule;
 use App\Enums\ContentFormat;
+use App\Enums\LessonStage;
 use App\Http\Controllers\Controller;
 use App\Models\CourseModule;
 use App\Models\Lesson;
@@ -85,8 +86,61 @@ class LessonController extends Controller
     {
         $lesson->update(['is_published' => ! $lesson->is_published]);
 
+        // Publishing a topic with no recording is allowed, because a written
+        // topic is a real thing, but it is never allowed to be silent: a
+        // student can open it and there is nothing to watch.
+        $unrecorded = $lesson->stage() === LessonStage::Unrecorded;
+
+        $note = match (true) {
+            $unrecorded && $lesson->isBlank() => 'Published, but this topic has no video and no text at all. A student will see a blank page.',
+            $unrecorded => 'Published, but there is no video on this topic yet.',
+            $lesson->is_published => 'Lesson published.',
+            default => 'Lesson unpublished.',
+        };
+
         return redirect()->route('admin.courses.show', $lesson->module->course)
-            ->with('success', $lesson->is_published ? 'Lesson published.' : 'Lesson unpublished.');
+            ->with($unrecorded ? 'error' : 'success', $note);
+    }
+
+    /**
+     * Record, attach, publish: the whole loop in one submit.
+     *
+     * This is the single most repeated action in building out a course, and
+     * before this it meant opening a sixteen-field edit form to paste one URL,
+     * saving, finding the row again and clicking Publish. One input and one
+     * button instead, from the curriculum tree, without leaving the page.
+     *
+     * The duration lookup is best-effort by design. It needs a YouTube API key
+     * that may not be configured, and a video that failed to answer is not a
+     * reason to refuse the URL the author just recorded.
+     */
+    public function record(Request $request, Lesson $lesson): RedirectResponse
+    {
+        $data = $request->validate([
+            'video_url' => 'required|url|max:500',
+            'publish' => 'nullable|boolean',
+        ], [
+            'video_url.required' => 'Paste the link to the recording first.',
+            'video_url.url' => 'That is not a link. Paste the whole URL, starting with https.',
+        ]);
+
+        $lesson->attachVideo($data['video_url']);
+
+        if ($lesson->duration_minutes === null && ($id = $lesson->youtubeVideoId())) {
+            $lesson->duration_minutes = $this->youtube->fetchDurationMinutes($id);
+        }
+
+        $published = $request->boolean('publish');
+        if ($published) {
+            $lesson->is_published = true;
+        }
+
+        $lesson->save();
+
+        return redirect()->route('admin.courses.show', $lesson->module->course)
+            ->with('success', $published
+                ? '"'.$lesson->title.'" has its video and is now live.'
+                : '"'.$lesson->title.'" has its video. It is still a draft, publish it when you are ready.');
     }
 
     public function edit(Lesson $lesson): View

@@ -64,6 +64,7 @@ class CourseFileParser
         $section = 'intro';      // intro | modules | assignment
         $bulletTarget = null;    // outcomes while inside "What you will learn"
         $fence = null;           // open code fence, if any
+        $quizOpen = false;       // inside a wrapped quiz brief
         $assignment = [];
         $descriptionLines = [];
 
@@ -156,15 +157,39 @@ class CourseFileParser
                 continue;
             }
 
-            // The quiz brief can appear anywhere below the modules
+            // The quiz brief can appear anywhere below the modules, and it
+            // usually wraps onto a second and third line. Only the first was
+            // being taken, and the rest fell through into whatever section was
+            // open, which after the final project meant the assignment brief.
             if (preg_match('/^\*\*(?:Quiz ideas|Milestone quizzes)[^*]*\*\*\s*(.*)$/i', $trimmed, $m)) {
-                $course['quiz_brief'] = trim($m[1]) !== '' ? trim($m[1]) : ($course['quiz_brief'] ?? '');
+                $course['quiz_brief'] = trim($m[1]);
+                $quizOpen = true;
+
+                continue;
+            }
+            if ($quizOpen) {
+                if ($trimmed === '') {
+                    $quizOpen = false;
+                } else {
+                    $course['quiz_brief'] = trim($course['quiz_brief'].' '.$trimmed);
+                }
+
+                continue;
+            }
+
+            // Where to go next is course navigation, not part of the brief a
+            // student is marked against. It sits after the final project in
+            // every file, so without this it was being read as the last
+            // paragraph of the assignment.
+            if (preg_match('/^\*\*Continue to:/i', $trimmed)) {
+                $section = 'other';
 
                 continue;
             }
 
             if ($section === 'assignment') {
-                if ($trimmed !== '') {
+                // A horizontal rule is layout, not instructions.
+                if ($trimmed !== '' && $trimmed !== '---') {
                     $assignment['body'][] = $trimmed;
                 }
 

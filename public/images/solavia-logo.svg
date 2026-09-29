@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <g>
+    <clipPath id="oCut"><path d="M95 0 H183 V133 Q139 117 95 133 Z"/></clipPath>
+    <clipPath id="oSun"><path d="M95 0 H183 V141 Q139 127 95 141 Z"/></clipPath>
+    <path clip-path="url(#oCut)" fill-rule="evenodd" fill="#0C3B2E"
+      d="M107 108 a32 32 0 1 0 64 0 a32 32 0 1 0 -64 0 Z M121 108 a18 18 0 1 0 36 0 a18 18 0 1 0 -36 0 Z"/>
+    <circle clip-path="url(#oSun)" cx="139" cy="134" r="17" fill="#E8602C"/>
+    <path fill="#0C3B2E" d="M100 141 Q139 127 178 141 Q139 153.5 100 141 Z"/>
+  </g><path fill="none" stroke="#0C3B2E" stroke-width="13.5" d="M82 81 A17 17 0 1 0 70 108 A17 17 0 1 1 58 135"/><rect x="185.5" y="42" width="14" height="98" fill="#0C3B2E"/><path fill-rule="evenodd" fill="#0C3B2E" d="M214 108 a32 32 0 1 0 64 0 a32 32 0 1 0 -64 0 Z M228 108 a18 18 0 1 0 36 0 a18 18 0 1 0 -36 0 Z"/><rect x="264" y="76" width="14" height="64" fill="#0C3B2E"/><polygon fill="#0C3B2E" points="289.1,76 303.9,76 319,119 334.1,76 348.9,76 324.6,145 313.4,145"/><rect x="361.5" y="76" width="14" height="64" fill="#0C3B2E"/><circle cx="368.5" cy="57" r="9.5" fill="#E8602C"/><path fill-rule="evenodd" fill="#0C3B2E" d="M390 108 a32 32 0 1 0 64 0 a32 32 0 1 0 -64 0 Z M404 108 a18 18 0 1 0 36 0 a18 18 0 1 0 -36 0 Z"/><rect x="440" y="76" width="14" height="64" fill="#0C3B2E"/><g fill="none" stroke="#0C3B2E" stroke-width="5" stroke-linecap="butt"><path d="M176 160 V180 H189"/><path d="M201.5 160 V180"/><path d="M213.5 180 V160 L224.5 178 L235.5 160 V180"/><path d="M247.5 160 V180"/><path d="M259.5 160 H272.5 M266 160 V180"/><path d="M284.5 160 V180 M284.5 160 H296.5 M284.5 170 H294.5 M284.5 180 H296.5"/><path d="M308.5 160 V180 M308.5 160 H312.5 A10 10 0 0 1 312.5 180 H308.5"/></g></svg>

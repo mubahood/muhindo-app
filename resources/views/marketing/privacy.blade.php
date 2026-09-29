@@ -7,7 +7,9 @@
     <h1>Privacy Policy</h1>
     <div class="updated">Last updated {{ date('F Y') }}</div>
 
-    <p>This site is operated by Muhindo Mubaraka. This policy explains what information is collected through the portfolio site, the course platform, and the client project portal, and how it's used.</p>
+    <p>This site is operated by {{ config('company.name') }} (Reg. No. {{ config('company.registration_number') }}). This policy explains what information is collected through the portfolio site, the course platform, and the client project portal, and how it's used.</p>
+
+    <p>The full company privacy policy, covering every product we operate and naming the data controller, is the <a class="link" href="{{ route('solavia.privacy') }}">SOLAVIA GROUP LIMITED Privacy Policy</a>.</p>
 
     <h2>Contact form</h2>
     <p>When you send a message through the contact form, your name, email, subject and message are stored so I can reply and keep a record of the conversation.</p>

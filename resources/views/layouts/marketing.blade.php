@@ -328,10 +328,25 @@
     .foot a:hover{color:var(--gold-d);}
     .foot-bar{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;font-size:12px;color:var(--tx3);
       display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+    .foot-social{display:flex;gap:9px;margin-top:14px;}
+    .foot-social a{display:flex;align-items:center;justify-content:center;width:32px;height:32px;
+      border:1px solid var(--line);color:var(--tx2);font-size:13px;margin:0;transition:.15s;}
+    .foot-social a:hover{border-color:var(--gold);color:var(--gold-d);background:var(--gold-soft);}
+    .foot-company{max-width:62ch;}
+    .foot-bar .foot-company a{display:inline;color:var(--tx3);text-decoration:underline;
+      text-underline-offset:2px;margin:0;font-size:12px;}
+    .foot-bar .foot-company a:hover{color:var(--gold-d);}
+    .foot-legal{display:flex;flex-wrap:wrap;gap:6px 16px;}
+    .foot-bar .foot-legal a{display:inline;font-size:12px;font-weight:500;color:var(--tx3);margin:0;}
+    .foot-bar .foot-legal a:hover{color:var(--gold-d);}
 
 
     /* mobile menu */
-    .mmenu{position:fixed;inset:var(--hd) 0 0 0;z-index:55;background:var(--bg);padding:22px 24px;display:none;flex-direction:column;gap:4px;}
+    .mmenu{position:fixed;inset:var(--hd) 0 0 0;z-index:55;background:var(--bg);padding:22px 24px;display:none;flex-direction:column;gap:4px;overflow-y:auto;}
+    .mm-legal{margin-top:auto;padding-top:18px;border-top:1px solid var(--line);
+      display:flex;flex-wrap:wrap;gap:6px 16px;}
+    .mm-legal a{font-size:12.5px;font-weight:500;color:var(--tx3);}
+    .mm-legal a:hover{color:var(--gold-d);}
     .mmenu.open{display:flex;}
     .mmenu a{font-size:18px;font-weight:300;color:var(--tx);padding:12px 0;border-bottom:1px solid var(--line);}
     .mmenu .btn{margin-top:16px;justify-content:center;}
@@ -1564,6 +1579,15 @@
       <a href="{{ route('login') }}" wire:navigate class="btn ghost">Sign in</a>
     @endauth
   </div>
+
+  {{-- The sheet had none of these, so on a phone the refund policy could only
+       be reached by somebody who already knew the URL. Most people here are on
+       a phone, and so is anybody reviewing the site for a payment provider. --}}
+  <div class="mm-legal">
+    @foreach(\App\Support\SiteNav::legal() as $item)
+      <a href="{{ $item['url'] }}" wire:navigate>{{ $item['label'] }}</a>
+    @endforeach
+  </div>
 </div>
 
 <main>
@@ -1577,6 +1601,17 @@
         <a href="{{ route('home') }}" wire:navigate class="brand"><span class="badge">MM</span> Muhindo Mubaraka</a>
         <p class="blurb">Software engineer and programming teacher. I build systems people depend on, and I teach the people who run them.</p>
         <p class="foot-place"><i class="fas fa-location-dot" aria-hidden="true"></i> Kampala, Uganda</p>
+
+        {{-- The accounts, which double as the schema.org sameAs on the home
+             page: the same three links tie the site to the same business. --}}
+        <div class="foot-social">
+          @foreach(config('company.social') as $account)
+            <a href="{{ $account['url'] }}" target="_blank" rel="noopener me"
+               aria-label="{{ $account['label'] }}" title="{{ $account['label'] }}">
+              <i class="{{ $account['icon'] }}" aria-hidden="true"></i>
+            </a>
+          @endforeach
+        </div>
       </div>
 
       {{-- Columns come from SiteNav, so the footer cannot drift away from the
@@ -1584,7 +1619,10 @@
            "Work" and "Skills" as top-level, and had never heard of the blog,
            the source code or the gallery. --}}
       @foreach($nav as $item)
-        @if(!empty($item['children']))
+        {{-- Company is skipped here on purpose: its six links already sit on
+             the bottom rule, and one footer showing the same six twice reads
+             as a mistake rather than as emphasis. --}}
+        @if(!empty($item['children']) && $item['label'] !== 'Company')
           <div>
             <p class="foot-h">{{ $item['label'] }}</p>
             @foreach($item['children'] as $child)
@@ -1618,14 +1656,24 @@
           <a href="{{ route('login') }}" wire:navigate>Sign in</a>
           <a href="{{ route('register') }}" wire:navigate>Create an account</a>
         @endauth
-        <a href="{{ route('privacy') }}" wire:navigate>Privacy</a>
-        <a href="{{ route('terms') }}" wire:navigate>Terms</a>
       </div>
     </div>
 
+    {{-- Legal sits on the bottom rule rather than under "Work with me", which
+         is where it had been piling up: hiring, signing in and three policies
+         in one column under one heading that described none of them. --}}
     <div class="foot-bar">
-      <span>&copy; {{ date('Y') }} Muhindo Mubaraka. All rights reserved.</span>
-      <span>Built and maintained by me.</span>
+      {{-- Who actually trades here. A site that takes payments has to say so,
+           and it is the first thing a payment provider looks for. --}}
+      <span class="foot-company">
+        &copy; {{ date('Y') }} {{ config('company.name') }}. Reg. No. {{ config('company.registration_number') }}.
+        <a href="{{ route('solavia.home') }}" wire:navigate>muhindomubaraka.com is operated by {{ config('company.name') }}</a>.
+      </span>
+      <span class="foot-legal">
+        @foreach(\App\Support\SiteNav::legal() as $item)
+          <a href="{{ $item['url'] }}" wire:navigate>{{ $item['label'] }}</a>
+        @endforeach
+      </span>
     </div>
   </div>
 </footer>

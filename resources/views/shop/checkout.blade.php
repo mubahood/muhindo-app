@@ -52,6 +52,11 @@
         @unless($free)
           <div class="pay-icons"><span>MTN MoMo</span><span>Airtel Money</span><span>Visa</span><span>Mastercard</span></div>
           <p class="money-comfort">Payment is handled by Flutterwave. Your card details never touch this site.</p>
+          {{-- The merchant of record, beside the pay button. Somebody checking
+               who the money goes to should not have to hunt for it, and a
+               reviewer doing a test purchase looks here first. --}}
+          <p class="money-comfort">Payments are processed for {{ config('company.name') }}.
+            <a class="link" href="{{ route('solavia.refund-policy') }}" wire:navigate>Refund policy</a>.</p>
         @endunless
 
         <a href="{{ route('cart.show') }}" wire:navigate class="btn ghost" style="width:100%;justify-content:center;margin-top:8px;">

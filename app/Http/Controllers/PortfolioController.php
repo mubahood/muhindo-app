@@ -46,7 +46,17 @@ class PortfolioController extends Controller
      */
     private function homeJsonLd(array $identity, array $contact): array
     {
-        $sameAs = array_values(array_filter([$contact['github'] ?? null, $contact['youtube'] ?? null]));
+        // The public accounts belong to the business, so they are what ties
+        // the site, the profiles and the company together for anything reading
+        // structured data.
+        $social = array_column(config('company.social'), 'url');
+
+        $sameAs = array_values(array_filter(array_merge(
+            [$contact['github'] ?? null, $contact['youtube'] ?? null],
+            $social,
+        )));
+
+        $address = config('company.address');
 
         return [
             array_filter([
@@ -55,14 +65,32 @@ class PortfolioController extends Controller
                 'name' => $identity['name'] ?? 'Muhindo Mubaraka',
                 'jobTitle' => $identity['title'] ?? null,
                 'url' => route('home'),
+                'worksFor' => ['@type' => 'Organization', 'name' => config('company.name')],
                 'sameAs' => $sameAs,
             ]),
             [
                 '@context' => 'https://schema.org',
                 '@type' => 'Organization',
-                'name' => $identity['name'] ?? 'Muhindo Mubaraka',
+                // The registered company, not the person. This node used to
+                // carry a personal name, which said the site was run by an
+                // individual while the payments were taken by a limited
+                // company. Anything checking the two against each other found
+                // them disagreeing.
+                'name' => config('company.name'),
+                'legalName' => config('company.name'),
+                'identifier' => config('company.registration_number'),
                 'url' => route('home'),
-                'logo' => asset('images/logo-square.png'),
+                'logo' => asset('images/solavia-icon-512.png'),
+                'email' => config('company.email'),
+                'telephone' => config('company.phone_e164'),
+                'address' => [
+                    '@type' => 'PostalAddress',
+                    'streetAddress' => $address['street'],
+                    'addressLocality' => $address['locality'],
+                    'addressRegion' => $address['region'],
+                    'addressCountry' => 'UG',
+                ],
+                'sameAs' => $sameAs,
             ],
         ];
     }

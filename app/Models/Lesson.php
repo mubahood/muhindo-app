@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\CompletionRule;
 use App\Enums\ContentFormat;
+use App\Enums\LessonStage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -66,6 +67,91 @@ class Lesson extends Model
             .'|youtu\.be/)([A-Za-z0-9_-]{6,})~';
 
         return preg_match($pattern, $url, $matches) ? $matches[1] : null;
+    }
+
+    /* Draft state ---------------------------------------------------------
+     *
+     * `is_published` is the only bit stored. Everything a human wants to know
+     * about where a topic has got to is worked out from it and from what the
+     * row actually holds, so the two can never disagree.
+     */
+
+    /**
+     * Nothing at all: no recording and not a word of text.
+     *
+     * Distinct from the Unrecorded stage, which is about the missing video. A
+     * topic can be deliberately written rather than filmed; this is the one
+     * that is neither, and it is the harsher of the two warnings.
+     */
+    public function isBlank(): bool
+    {
+        return ! $this->hasVideo() && trim((string) $this->content) === '';
+    }
+
+    public function hasVideo(): bool
+    {
+        return filled($this->video_url) || filled($this->video_disk_path);
+    }
+
+    public function stage(): LessonStage
+    {
+        if ($this->hasVideo()) {
+            return $this->is_published ? LessonStage::Live : LessonStage::Ready;
+        }
+
+        return $this->is_published ? LessonStage::Unrecorded : LessonStage::Planned;
+    }
+
+    /** Recorded and waiting: the only thing a bulk publish is allowed to touch. */
+    public function isReadyToPublish(): bool
+    {
+        return $this->stage() === LessonStage::Ready;
+    }
+
+    public function publish(): bool
+    {
+        return $this->is_published ? false : $this->forceFill(['is_published' => true])->save();
+    }
+
+    public function unpublish(): bool
+    {
+        return $this->is_published ? $this->forceFill(['is_published' => false])->save() : false;
+    }
+
+    /**
+     * Attach a recording.
+     *
+     * Both URL forms are written from the one the author pasted, whichever it
+     * was: the player iframes `video_url` and so needs the embed form, while
+     * `resource_url` is the canonical watch page, kept for the student who
+     * would rather open it on YouTube and for the case where the video turns
+     * out not to be embeddable at all.
+     *
+     * youtube-nocookie is not decoration. It is what the entire imported
+     * catalogue is written in, and what `extractYoutubeId()` is built to
+     * match; a plain youtube.com embed would leave the IFrame API unloaded and
+     * silently record no watch progress for that lesson.
+     */
+    public function attachVideo(string $url): void
+    {
+        $url = trim($url);
+        $id = self::extractYoutubeId($url);
+
+        if ($id !== null) {
+            $this->video_url = 'https://www.youtube-nocookie.com/embed/'.$id;
+            $this->resource_url = 'https://www.youtube.com/watch?v='.$id;
+
+            return;
+        }
+
+        // Vimeo and the rest: keep what was pasted. It plays in a plain iframe.
+        $this->video_url = $url;
+    }
+
+    public function detachVideo(): void
+    {
+        $this->video_url = null;
+        $this->resource_url = null;
     }
 
     /** @return BelongsTo<CourseModule, $this> */
