@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Bootstrap Icons.">
+  <title>5.3 Bootstrap Icons | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 5.3</p>
+    <h1>Bootstrap Icons</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Bootstrap Icons is a separate icon font and SVG set. It works alongside Bootstrap, but it has its own file and icon names.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Add an icon without hiding its meaning</h3><button class="btn btn-outline-primary"><i class="bi bi-basket3 me-2" aria-hidden="true"></i><span>Add to cart</span></button></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>Load the icon stylesheet</h3><pre class="code-sample"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;../css/vendor/bootstrap-icons.min.css&quot;&gt;</code></pre><h3>Use an icon beside its meaning</h3><pre class="code-sample"><code>&lt;button class=&quot;btn btn-outline-primary&quot;&gt;
+  &lt;i class=&quot;bi bi-basket3 me-2&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;/i&gt;
+  &lt;span&gt;
+    Add to cart
+  &lt;/span&gt;
+&lt;/button&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use an icon to support a short label, such as a basket beside Add to cart.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Load the Bootstrap Icons stylesheet.</li><li>Use the exact icon name from its documentation.</li><li>Give an icon-only control an accessible name.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>An icon should help explain a control, not make its meaning harder to find.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Try another Bootstrap Icon name. Keep visible text or an accessible name for icon-only buttons.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

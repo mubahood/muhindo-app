@@ -1,0 +1,12 @@
+.lesson-code-block{margin:1.2rem 0 1.5rem;border:1px solid #303a49;border-radius:5px;overflow:hidden;background:#0d1117;color:#e6edf3;}
+.lesson-code-tools{display:flex;align-items:center;gap:8px;min-height:38px;padding:5px 8px 5px 12px;background:#151b23;border-bottom:1px solid #303a49;font:12px/1.3 system-ui,-apple-system,sans-serif;}
+.lesson-code-language{margin-right:auto;color:#b8c4d3;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
+.lesson-code-hint{color:#8d99a9;font-size:11px;}
+.lesson-code-button{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:27px;padding:3px 8px;border:1px solid #465164;border-radius:4px;background:transparent;color:#e6edf3;font:inherit;cursor:pointer;}
+.lesson-code-button:hover{background:#273142;border-color:#738198;}
+.lesson-code-button:focus-visible{outline:2px solid #8ab4f8;outline-offset:2px;}
+.lesson-code-block pre.code-sample,.lesson-code-block pre{max-height:480px;margin:0!important;padding:15px 16px!important;overflow:auto;background:#0d1117!important;color:#e6edf3!important;border-radius:0!important;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace!important;tab-size:2;}
+.lesson-code-block pre code{padding:0!important;background:none!important;color:inherit!important;font:inherit!important;white-space:pre;}
+.lesson-code-block pre code.hljs{background:transparent!important;}
+.lesson-code-block.is-editing pre code{outline:1px dashed #e3b341;outline-offset:4px;white-space:pre-wrap;}
+@media(max-width:600px){.lesson-code-tools{flex-wrap:wrap;}.lesson-code-hint{display:none;}.lesson-code-block pre{font-size:12px!important;}}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Selects, checkboxes, radios and switches.">
+  <title>8.2 Selects, checkboxes, radios and switches | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 8.2</p>
+    <h1>Selects, checkboxes, radios and switches</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Selects, checkboxes, radios and switches let people choose values. Each control is best for a different kind of choice.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Offer clear choices</h3><fieldset><legend class="fs-6">Preferred contact</legend><div class="form-check"><input class="form-check-input" type="radio" name="contact" id="contactEmail" checked><label class="form-check-label" for="contactEmail">Email</label></div><div class="form-check"><input class="form-check-input" type="radio" name="contact" id="contactPhone"><label class="form-check-label" for="contactPhone">Phone</label></div><div class="form-check form-switch mt-3"><input class="form-check-input" type="checkbox" role="switch" id="offers"><label class="form-check-label" for="offers">Send me shop updates</label></div></fieldset></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;fieldset&gt;
+  &lt;legend class=&quot;fs-6&quot;&gt;
+    Preferred contact
+  &lt;/legend&gt;
+  &lt;div class=&quot;form-check&quot;&gt;
+    &lt;input class=&quot;form-check-input&quot; type=&quot;radio&quot; name=&quot;contact&quot; id=&quot;contactEmail&quot; checked&gt;
+    &lt;label class=&quot;form-check-label&quot; for=&quot;contactEmail&quot;&gt;
+      Email
+    &lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;form-check&quot;&gt;
+    &lt;input class=&quot;form-check-input&quot; type=&quot;radio&quot; name=&quot;contact&quot; id=&quot;contactPhone&quot;&gt;
+    &lt;label class=&quot;form-check-label&quot; for=&quot;contactPhone&quot;&gt;
+      Phone
+    &lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;form-check form-switch mt-3&quot;&gt;
+    &lt;input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; id=&quot;offers&quot;&gt;
+    &lt;label class=&quot;form-check-label&quot; for=&quot;offers&quot;&gt;
+      Send me shop updates
+    &lt;/label&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use radio buttons for one choice from a short list, checkboxes for choices that can be combined, and a select for a longer list.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Group related controls in a fieldset with a legend.</li><li>Connect each label to its control.</li><li>A switch represents an on or off setting.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Choose the control that matches the kind of choice the person must make.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Add a select menu for a preferred branch. Keep related options grouped.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

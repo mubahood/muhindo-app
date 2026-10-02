@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Scrollspy and offcanvas.">
+  <title>7.4 Scrollspy and offcanvas | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 7.4</p>
+    <h1>Scrollspy and offcanvas</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Offcanvas slides a panel in from the side. Scrollspy updates navigation based on the section currently in view.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Try offcanvas and Scrollspy</h3><button class="btn btn-primary mb-3" data-bs-toggle="offcanvas" data-bs-target="#filterPanel" aria-controls="filterPanel">Choose a category</button><div class="offcanvas offcanvas-start" tabindex="-1" id="filterPanel" aria-labelledby="filterTitle"><div class="offcanvas-header"><h2 class="offcanvas-title h5" id="filterTitle">Categories</h2><button class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button></div><div class="offcanvas-body"><a class="d-block mb-2" href="#">Groceries</a><a href="#">Home care</a></div></div><nav id="spyNav" class="nav"><a class="nav-link" href="#spy-one">Section one</a><a class="nav-link" href="#spy-two">Section two</a></nav><div class="scrollspy-example border p-3" data-bs-spy="scroll" data-bs-target="#spyNav" tabindex="0"><h3 id="spy-one">Section one</h3><p>Scroll this box to see the active link change.</p><p>Scrollspy watches which section is in view.</p><h3 id="spy-two">Section two</h3><p>The link for this section becomes active.</p></div></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;button class=&quot;btn btn-primary mb-3&quot; data-bs-toggle=&quot;offcanvas&quot; data-bs-target=&quot;#filterPanel&quot; aria-controls=&quot;filterPanel&quot;&gt;
+  Choose a category
+&lt;/button&gt;
+&lt;div class=&quot;offcanvas offcanvas-start&quot; tabindex=&quot;-1&quot; id=&quot;filterPanel&quot; aria-labelledby=&quot;filterTitle&quot;&gt;
+  &lt;div class=&quot;offcanvas-header&quot;&gt;
+    &lt;h2 class=&quot;offcanvas-title h5&quot; id=&quot;filterTitle&quot;&gt;
+      Categories
+    &lt;/h2&gt;
+    &lt;button class=&quot;btn-close&quot; data-bs-dismiss=&quot;offcanvas&quot; aria-label=&quot;Close&quot;&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;offcanvas-body&quot;&gt;
+    &lt;a class=&quot;d-block mb-2&quot; href=&quot;#&quot;&gt;
+      Groceries
+    &lt;/a&gt;
+    &lt;a href=&quot;#&quot;&gt;
+      Home care
+    &lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;nav id=&quot;spyNav&quot; class=&quot;nav&quot;&gt;
+  &lt;a class=&quot;nav-link&quot; href=&quot;#spy-one&quot;&gt;
+    Section one
+  &lt;/a&gt;
+  &lt;a class=&quot;nav-link&quot; href=&quot;#spy-two&quot;&gt;
+    Section two
+  &lt;/a&gt;
+&lt;/nav&gt;
+&lt;div class=&quot;scrollspy-example border p-3&quot; data-bs-spy=&quot;scroll&quot; data-bs-target=&quot;#spyNav&quot; tabindex=&quot;0&quot;&gt;
+  &lt;h3 id=&quot;spy-one&quot;&gt;
+    Section one
+  &lt;/h3&gt;
+  &lt;p&gt;
+    Scroll this box to see the active link change.
+  &lt;/p&gt;
+  &lt;p&gt;
+    Scrollspy watches which section is in view.
+  &lt;/p&gt;
+  &lt;h3 id=&quot;spy-two&quot;&gt;
+    Section two
+  &lt;/h3&gt;
+  &lt;p&gt;
+    The link for this section becomes active.
+  &lt;/p&gt;
+&lt;/div&gt;</code></pre><h3>CSS for the scrolling example</h3><pre class="code-sample"><code>.scrollspy-example {
+  position: relative;
+  height: 10rem;
+  overflow: auto;
+}</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use offcanvas for filters or navigation on a narrow screen. Use scrollspy on a long page with clear sections.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>The offcanvas trigger target must match its id.</li><li>Scrollspy links need matching section ids.</li><li>Do not hide the only way to reach important content.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>These tools help with long pages and small screens when their targets are correct.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Open and close the offcanvas panel. Then scroll the example box and watch its navigation links.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

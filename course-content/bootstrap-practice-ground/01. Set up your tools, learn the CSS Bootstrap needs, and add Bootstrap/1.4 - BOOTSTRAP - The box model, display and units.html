@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for The box model, display and units.">
+  <title>1.4 The box model, display and units | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  <style>html { font-size: 20px; }</style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 1.4</p>
+    <h1>The box model, display and units</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Every element is a box made of content, padding, border and margin. The display value controls how the box takes part in a line. CSS units set its size. With content-box, padding and border are added outside the width. With border-box, they fit inside it.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Compare boxes, display and units</h3><h4 class="h6">1. The box model</h4><div class="d-flex flex-wrap gap-3"><div class="box-demo content-box">content-box<br>width: 12rem</div><div class="box-demo border-box">border-box<br>width: 12rem</div></div><p class="small mt-2">Each box is set to 12rem. Padding and border add to the outside of the content-box. They fit inside the border-box.</p><h4 class="h6 mt-4">2. Display</h4><p>A block starts a new line: <span class="display-block-example">block item</span> then the next line.</p><p>Inline items stay in the sentence: before <span class="display-inline-example">inline item</span> after.</p><p>Inline-block stays in the line but accepts a width: <span class="display-inline-block-example">8rem wide</span> beside this text.</p><h4 class="h6 mt-4">3. Units</h4><p class="unit-rem">This text is 1.5rem (30px here).</p><p class="unit-px">This text is 24px.</p></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;h4 class=&quot;h6&quot;&gt;
+  1. The box model
+&lt;/h4&gt;
+&lt;div class=&quot;d-flex flex-wrap gap-3&quot;&gt;
+  &lt;div class=&quot;box-demo content-box&quot;&gt;
+    content-box
+    &lt;br&gt;
+    width: 12rem
+  &lt;/div&gt;
+  &lt;div class=&quot;box-demo border-box&quot;&gt;
+    border-box
+    &lt;br&gt;
+    width: 12rem
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p class=&quot;small mt-2&quot;&gt;
+  Each box is set to 12rem. Padding and border add to the outside of the content-box. They fit inside the border-box.
+&lt;/p&gt;
+&lt;h4 class=&quot;h6 mt-4&quot;&gt;
+  2. Display
+&lt;/h4&gt;
+&lt;p&gt;
+  A block starts a new line:
+  &lt;span class=&quot;display-block-example&quot;&gt;
+    block item
+  &lt;/span&gt;
+  then the next line.
+&lt;/p&gt;
+&lt;p&gt;
+  Inline items stay in the sentence: before
+  &lt;span class=&quot;display-inline-example&quot;&gt;
+    inline item
+  &lt;/span&gt;
+  after.
+&lt;/p&gt;
+&lt;p&gt;
+  Inline-block stays in the line but accepts a width:
+  &lt;span class=&quot;display-inline-block-example&quot;&gt;
+    8rem wide
+  &lt;/span&gt;
+  beside this text.
+&lt;/p&gt;
+&lt;h4 class=&quot;h6 mt-4&quot;&gt;
+  3. Units
+&lt;/h4&gt;
+&lt;p class=&quot;unit-rem&quot;&gt;
+  This text is 1.5rem (30px here).
+&lt;/p&gt;
+&lt;p class=&quot;unit-px&quot;&gt;
+  This text is 24px.
+&lt;/p&gt;</code></pre><h3>CSS</h3><pre class="code-sample"><code>html { font-size: 20px; }
+
+.box-demo {
+  width: 12rem;
+  padding: 1.25rem;
+  border: 4px solid #555;
+  background: #f2f2f2;
+}
+.content-box { box-sizing: content-box; }
+.border-box { box-sizing: border-box; }
+.display-block-example {
+  display: block;
+  width: max-content;
+  background: #f2f2f2;
+}
+.display-inline-example {
+  display: inline;
+  background: #f2f2f2;
+}
+.display-inline-block-example {
+  display: inline-block;
+  width: 8rem;
+  padding: .25rem;
+  background: #f2f2f2;
+}
+.unit-rem { font-size: 1.5rem; }
+.unit-px { font-size: 24px; }</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use border-box when you need a box to stay within a planned width. Use block for page sections, inline for text, and inline-block for small items that need a set size. Use rem for text and spacing that should scale with the root font size.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>The box model order is content, padding, border, margin.</li><li>A 12rem content-box with padding and a border is wider than 12rem.</li><li>A 12rem border-box stays 12rem wide including padding and border.</li><li>At the browser default, 1rem is usually 16px. This page sets the root size to 20px, so 1.5rem is 30px.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Choose box-sizing, display and units deliberately. They explain how large an element is and where it sits.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Change the padding and border and compare the outside widths. Then switch one display value and compare 1.5rem with 24px. Keep the viewport narrow and look for overflow.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Navs and tabs.">
+  <title>6.3 Navs and tabs | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 6.3</p>
+    <h1>Navs and tabs</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Navs arrange related navigation links. Tabs use buttons to switch between content panels on the same page.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Switch between product details</h3><ul class="nav nav-tabs" id="detailsTab" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">Description</button></li><li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#storage" type="button" role="tab">Storage</button></li></ul><div class="tab-content border border-top-0 p-3"><div class="tab-pane fade show active" id="description" role="tabpanel">A useful everyday product.</div><div class="tab-pane fade" id="storage" role="tabpanel">Store in a cool, dry place.</div></div></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;ul class=&quot;nav nav-tabs&quot; id=&quot;detailsTab&quot; role=&quot;tablist&quot;&gt;
+  &lt;li class=&quot;nav-item&quot; role=&quot;presentation&quot;&gt;
+    &lt;button class=&quot;nav-link active&quot; data-bs-toggle=&quot;tab&quot; data-bs-target=&quot;#description&quot; type=&quot;button&quot; role=&quot;tab&quot;&gt;
+      Description
+    &lt;/button&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;nav-item&quot; role=&quot;presentation&quot;&gt;
+    &lt;button class=&quot;nav-link&quot; data-bs-toggle=&quot;tab&quot; data-bs-target=&quot;#storage&quot; type=&quot;button&quot; role=&quot;tab&quot;&gt;
+      Storage
+    &lt;/button&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;tab-content border border-top-0 p-3&quot;&gt;
+  &lt;div class=&quot;tab-pane fade show active&quot; id=&quot;description&quot; role=&quot;tabpanel&quot;&gt;
+    A useful everyday product.
+  &lt;/div&gt;
+  &lt;div class=&quot;tab-pane fade&quot; id=&quot;storage&quot; role=&quot;tabpanel&quot;&gt;
+    Store in a cool, dry place.
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use tabs for short sets of related details, such as product description, storage and reviews.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Each tab target must match one panel id.</li><li>Mark the selected tab as active.</li><li>Use links for navigation to another page.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Tabs switch local content. Ordinary links take people somewhere else.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Add a third tab and panel. Match each data-bs-target to one unique id.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

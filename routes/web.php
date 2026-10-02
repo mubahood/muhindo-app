@@ -28,6 +28,7 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Student\LearningController;
 use App\Http\Controllers\Student\LessonMaterialController as StudentLessonMaterialController;
+use App\Http\Controllers\Student\PracticeWorkspaceController;
 use App\Http\Controllers\Student\QuizAttemptController;
 use Illuminate\Support\Facades\Route;
 
@@ -306,6 +307,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::post('lessons/{lesson}/toggle-publish', [LessonController::class, 'togglePublish'])->name('lessons.toggle-publish');
     // Record, attach and publish in one submit, from the curriculum tree.
     Route::post('lessons/{lesson}/record', [LessonController::class, 'record'])->name('lessons.record');
+    Route::post('lessons/{lesson}/teaching-progress', [\App\Http\Controllers\Admin\LessonTeachingProgressController::class, 'updateLesson'])->name('lessons.teaching-progress');
+    Route::post('courses/{course}/teaching-progress', [\App\Http\Controllers\Admin\LessonTeachingProgressController::class, 'updateCourse'])->name('courses.teaching-progress');
     Route::post('courses/{course}/publish-ready', [\App\Http\Controllers\Admin\CoursePublishingController::class, 'course'])->name('courses.publish-ready');
     Route::post('modules/{module}/publish-ready', [\App\Http\Controllers\Admin\CoursePublishingController::class, 'module'])->name('modules.publish-ready');
     Route::post('lessons/preview-markdown', [LessonController::class, 'previewMarkdown'])->name('lessons.preview-markdown');
@@ -395,6 +398,12 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 */
 Route::prefix('learn')->middleware(['auth'])->name('learn.')->group(function () {
     Route::get('/', [LearningController::class, 'index'])->name('index');
+    Route::get('{course:slug}/playground', [PracticeWorkspaceController::class, 'show'])->name('playground');
+    Route::post('{course:slug}/playground/save', [PracticeWorkspaceController::class, 'save'])
+        ->middleware('throttle:60,1')->name('playground.save');
+    Route::post('{course:slug}/playground/open-snippet', [PracticeWorkspaceController::class, 'openSnippet'])
+        ->middleware('throttle:20,1')->name('playground.snippet');
+    Route::post('{course:slug}/playground/clear', [PracticeWorkspaceController::class, 'clear'])->name('playground.clear');
     // The page a student visits; the stream is what the button on it points at.
     Route::get('{course}/certificate', [LearningController::class, 'certificatePage'])->name('certificate');
     Route::get('certificates/{certificate}', [LearningController::class, 'certificate'])->name('certificate.download');

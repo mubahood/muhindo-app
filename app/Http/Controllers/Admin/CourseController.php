@@ -8,6 +8,7 @@ use App\Models\Course;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -35,8 +36,15 @@ class CourseController extends Controller
         return redirect()->route('admin.courses.show', $course)->with('success', 'Course created.');
     }
 
-    public function show(Course $course): View
+    public function show(Request $request, Course $course): View
     {
+        $lessonIds = $course->lessons()->pluck('lessons.id');
+        $taughtCount = $lessonIds->isNotEmpty()
+            ? DB::table('lesson_teaching_progress')->where('user_id', $request->user()->id)
+                ->whereNotNull('taught_at')->whereIn('lesson_id', $lessonIds)->count()
+            : 0;
+        $totalTeachingTopics = $lessonIds->count();
+
         return view('admin.courses.show', [
             // The curriculum lists each lesson's own quizzes and tasks beneath
             // it, so they load with the lesson rather than one query per row.
@@ -48,6 +56,11 @@ class CourseController extends Controller
                 'assignments.lesson',
                 'announcements',
             ),
+            'teachingProgress' => [
+                'taught' => $taughtCount,
+                'total' => $totalTeachingTopics,
+                'percent' => $totalTeachingTopics > 0 ? (int) round($taughtCount * 100 / $totalTeachingTopics) : 0,
+            ],
         ]);
     }
 

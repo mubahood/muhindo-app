@@ -7,12 +7,14 @@ enum ContentFormat: string
 {
     case Plain = 'plain';
     case Markdown = 'markdown';
+    case Html = 'html';
 
     public function label(): string
     {
         return match ($this) {
             self::Plain => 'Plain text',
             self::Markdown => 'Markdown',
+            self::Html => 'HTML lesson (live example)',
         };
     }
 

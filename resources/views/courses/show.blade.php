@@ -444,12 +444,18 @@
     title.textContent = p.title;
     count.textContent = (current + 1) + ' of ' + previews.length;
     text.innerHTML = p.html || '';
-    text.hidden = !p.html;
+    text.hidden = !p.html || !!p.html_document;
 
     // Rebuilt rather than reused, so the previous video stops the moment the
     // next one opens, swapping a src leaves audio playing in some browsers.
     stage.innerHTML = '';
-    if (p.youtube) {
+    if (p.html_document) {
+      var lesson = document.createElement('iframe');
+      lesson.title = p.title + ' live example';
+      lesson.setAttribute('sandbox', 'allow-scripts allow-forms allow-modals');
+      lesson.srcdoc = p.html_document;
+      stage.appendChild(lesson);
+    } else if (p.youtube) {
       var f = document.createElement('iframe');
       f.src = 'https://www.youtube-nocookie.com/embed/' + p.youtube + '?rel=0&modestbranding=1&cc_load_policy=1';
       f.title = p.title;
@@ -478,7 +484,7 @@
       }
       stage.appendChild(v);
     }
-    stage.hidden = !(p.youtube || p.video || p.watchUrl);
+    stage.hidden = !(p.html_document || p.youtube || p.video || p.watchUrl);
   }
 
   function open(i, trigger) {

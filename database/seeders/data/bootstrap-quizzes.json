@@ -1,0 +1,1409 @@
+[
+    {
+        "lesson_title": "Module 01 quiz",
+        "questions": [
+            {
+                "prompt": "Your CSS has p { color: black; } and .price { color: green; }. What colour is <p class=\"price\">$7.90</p>?",
+                "answer": "b",
+                "explanation": "Specificity: a class selector outranks an element selector whatever the order.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Black, because p comes first in the file"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Green, because a class beats an element"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Black, because element rules always win"
+                    },
+                    {
+                        "key": "d",
+                        "label": "It depends on the browser"
+                    }
+                ]
+            },
+            {
+                "prompt": "A box has width: 300px, padding: 20px and border: 2px, with box-sizing: content-box. How wide is it on screen?",
+                "answer": "d",
+                "explanation": "300 plus 20 on each side plus 2 on each side is 344. With border-box it would be 300.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "300 pixels"
+                    },
+                    {
+                        "key": "b",
+                        "label": "322 pixels"
+                    },
+                    {
+                        "key": "c",
+                        "label": "340 pixels"
+                    },
+                    {
+                        "key": "d",
+                        "label": "344 pixels"
+                    }
+                ]
+            },
+            {
+                "prompt": "Your rule h1 { color: #B5541C; } in style.css is crossed out in DevTools by Bootstrap's h1 rule. The most likely cause:",
+                "answer": "a",
+                "explanation": "With equal specificity the later rule wins, so your file must come after Bootstrap.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "style.css is linked before Bootstrap's CSS"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Live Server is not running"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Bootstrap does not allow h1 colours"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The CDN is slow"
+                    }
+                ]
+            },
+            {
+                "prompt": "A page looks right when you narrow the desktop window but tiny and zoomed out on a real phone. What is missing?",
+                "answer": "b",
+                "explanation": "Without the viewport tag the phone renders a desktop width page and zooms out.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "A media query"
+                    },
+                    {
+                        "key": "b",
+                        "label": "The viewport meta tag"
+                    },
+                    {
+                        "key": "c",
+                        "label": "The Bootstrap bundle script"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The lang attribute"
+                    }
+                ]
+            },
+            {
+                "prompt": "Which script tag lets Bootstrap dropdowns and tooltips work with no other file?",
+                "answer": "c",
+                "explanation": "The bundle contains Popper. Bootstrap 5 needs no jQuery.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "bootstrap.min.js"
+                    },
+                    {
+                        "key": "b",
+                        "label": "jquery.min.js followed by bootstrap.min.js"
+                    },
+                    {
+                        "key": "c",
+                        "label": "bootstrap.bundle.min.js"
+                    },
+                    {
+                        "key": "d",
+                        "label": "popper.min.js"
+                    }
+                ]
+            },
+            {
+                "prompt": "When does the rule inside @media (min-width: 768px) apply?",
+                "answer": "c",
+                "explanation": "min-width means from this width up, which is the mobile first pattern Bootstrap uses.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Only below 768 pixels"
+                    },
+                    {
+                        "key": "b",
+                        "label": "At exactly 768 pixels only"
+                    },
+                    {
+                        "key": "c",
+                        "label": "At 768 pixels and wider"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Only on tablets"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "lesson_title": "Module 02 quiz",
+        "questions": [
+            {
+                "prompt": "An AI answer contains <button data-toggle=\"collapse\" data-target=\"#menu\">. On a phone the menu never opens. Why?",
+                "answer": "b",
+                "explanation": "Bootstrap 5 reads only data-bs-* attributes, so the old ones are silently ignored.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The id menu is too short"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Those are Bootstrap 4 attributes; Bootstrap 5 needs data-bs-toggle and data-bs-target"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Collapse only works on desktop"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The button needs jQuery"
+                    }
+                ]
+            },
+            {
+                "prompt": "You inspect an element with class=\"text-bold\" and the Styles pane shows no rule for text-bold. What does that tell you?",
+                "answer": "b",
+                "explanation": "A real Bootstrap class always shows its rule when you inspect the element.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Bootstrap failed to load"
+                    },
+                    {
+                        "key": "b",
+                        "label": "The class does not exist in Bootstrap 5.3; the real class is fw-bold"
+                    },
+                    {
+                        "key": "c",
+                        "label": "The browser cache is old"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Bold text needs a font file"
+                    }
+                ]
+            },
+            {
+                "prompt": "Which prompt is most likely to give usable code?",
+                "answer": "c",
+                "explanation": "Version, part, content, behaviour per size and output format leave nothing to guess.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Make my footer nice"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Bootstrap footer"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Bootstrap 5.3 from the CDN, no jQuery: a footer with three columns (branches, contact, links), stacked on phones, three columns from md. Only the footer HTML."
+                    },
+                    {
+                        "key": "d",
+                        "label": "Write the best footer you can"
+                    }
+                ]
+            },
+            {
+                "prompt": "Which of these is safe to paste into a public assistant?",
+                "answer": "a",
+                "explanation": "Only invented or public data goes into an assistant.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The invented Marigold product list"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Your GitHub password to debug a login"
+                    },
+                    {
+                        "key": "c",
+                        "label": "A real shop's customer phone numbers"
+                    },
+                    {
+                        "key": "d",
+                        "label": "An API key from a paid service"
+                    }
+                ]
+            },
+            {
+                "prompt": "An AI section looks perfect at 1280 pixels. What must you still do before keeping it?",
+                "answer": "b",
+                "explanation": "The four checks exist because AI cannot see a phone.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Nothing, it works"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Test at 360 and 768, check the Console and inspect unknown classes"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Ask the AI whether it is correct"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Publish it and wait for feedback"
+                    }
+                ]
+            },
+            {
+                "prompt": "Where do you tell Copilot Chat, once, that the project uses Bootstrap 5.3?",
+                "answer": "b",
+                "explanation": "Copilot Chat reads that file automatically with every question in the project.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "In a comment at the top of every file"
+                    },
+                    {
+                        "key": "b",
+                        "label": "In .github/copilot-instructions.md"
+                    },
+                    {
+                        "key": "c",
+                        "label": "In the Live Server settings"
+                    },
+                    {
+                        "key": "d",
+                        "label": "You cannot; you must repeat it every time"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "lesson_title": "Module 03 quiz",
+        "questions": [
+            {
+                "prompt": "A column has class=\"col-12 col-md-6 col-xl-3\". The screen is 800 pixels wide. How many such columns fit on one line?",
+                "answer": "b",
+                "explanation": "800 is at least 768 (md) but less than 1200 (xl), so col-md-6 applies: two per line.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "One"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Two"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Four"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Twelve"
+                    }
+                ]
+            },
+            {
+                "prompt": "A row contains a col-8 and a col-6. What happens?",
+                "answer": "b",
+                "explanation": "8 plus 6 is more than 12, so the second column wraps.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Both shrink to fit on one line"
+                    },
+                    {
+                        "key": "b",
+                        "label": "The col-6 wraps onto a new line"
+                    },
+                    {
+                        "key": "c",
+                        "label": "The page scrolls sideways"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Bootstrap shows an error"
+                    }
+                ]
+            },
+            {
+                "prompt": "You want no space at all between the columns of a row in Bootstrap 5. Which class goes on the row?",
+                "answer": "b",
+                "explanation": "no-gutters was Bootstrap 4. In Bootstrap 5 the gutter classes are g-0 to g-5.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "no-gutters"
+                    },
+                    {
+                        "key": "b",
+                        "label": "g-0"
+                    },
+                    {
+                        "key": "c",
+                        "label": "p-0"
+                    },
+                    {
+                        "key": "d",
+                        "label": "gap-0"
+                    }
+                ]
+            },
+            {
+                "prompt": "An AI hero uses <div class=\"jumbotron\"> and appears as plain text. Why?",
+                "answer": "b",
+                "explanation": "Rebuild it with utilities such as p-5 mb-4 bg-body-tertiary rounded-3.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The CDN link is broken"
+                    },
+                    {
+                        "key": "b",
+                        "label": "The jumbotron component was removed in Bootstrap 5"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Jumbotron needs the bundle script"
+                    },
+                    {
+                        "key": "d",
+                        "label": "It only works inside container-fluid"
+                    }
+                ]
+            },
+            {
+                "prompt": "You want one card per line on phones and three per line from 768 pixels. The simplest row classes are:",
+                "answer": "b",
+                "explanation": "row-cols-1 for phones, row-cols-md-3 from md, and plain .col on each child.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "row row-cols-3"
+                    },
+                    {
+                        "key": "b",
+                        "label": "row row-cols-1 row-cols-md-3"
+                    },
+                    {
+                        "key": "c",
+                        "label": "row col-md-3"
+                    },
+                    {
+                        "key": "d",
+                        "label": "row row-cols-md-1"
+                    }
+                ]
+            },
+            {
+                "prompt": "An AI answer uses ml-auto to push a column right and nothing moves. The fix:",
+                "answer": "b",
+                "explanation": "Bootstrap 5 uses start and end: ms and me replaced ml and mr.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "ml-auto!important"
+                    },
+                    {
+                        "key": "b",
+                        "label": "ms-auto"
+                    },
+                    {
+                        "key": "c",
+                        "label": "margin-left-auto"
+                    },
+                    {
+                        "key": "d",
+                        "label": "float-right"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "lesson_title": "Module 04 quiz",
+        "questions": [
+            {
+                "prompt": "A sidebar title must be an h2 for the page structure but should look small. Which is right?",
+                "answer": "b",
+                "explanation": "Keep the meaning with h2 and borrow the look with the .h5 class.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "<h5>Categories</h5>"
+                    },
+                    {
+                        "key": "b",
+                        "label": "<h2 class=\"h5\">Categories</h2>"
+                    },
+                    {
+                        "key": "c",
+                        "label": "<p class=\"h2\">Categories</p>"
+                    },
+                    {
+                        "key": "d",
+                        "label": "<h2 style=\"font-size: 10px\">Categories</h2>"
+                    }
+                ]
+            },
+            {
+                "prompt": "A yellow label with white text is hard to read. The best Bootstrap 5.3 fix:",
+                "answer": "b",
+                "explanation": "text-bg-* pairs the background with a text colour that has enough contrast.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "bg-warning text-white fw-bold"
+                    },
+                    {
+                        "key": "b",
+                        "label": "text-bg-warning"
+                    },
+                    {
+                        "key": "c",
+                        "label": "bg-warning text-light"
+                    },
+                    {
+                        "key": "d",
+                        "label": "bg-warning opacity-50"
+                    }
+                ]
+            },
+            {
+                "prompt": "On a phone, the cart table makes the whole page scroll sideways. The fix:",
+                "answer": "b",
+                "explanation": "table-responsive lets the table scroll inside its own box.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Add table-sm"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Wrap the table in a div with class table-responsive"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Remove the tfoot"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Set the table width to 360px"
+                    }
+                ]
+            },
+            {
+                "prompt": "Product photos of different shapes make the card row uneven. What keeps them all square without distortion?",
+                "answer": "b",
+                "explanation": "ratio sets the box shape and object-fit-cover crops the photo to fill it.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "width and height in CSS"
+                    },
+                    {
+                        "key": "b",
+                        "label": "A div with ratio ratio-1x1 around the img, and object-fit-cover on the img"
+                    },
+                    {
+                        "key": "c",
+                        "label": "img-thumbnail"
+                    },
+                    {
+                        "key": "d",
+                        "label": "rounded-circle"
+                    }
+                ]
+            },
+            {
+                "prompt": "Which Bootstrap 5.3 class replaces text-muted and adapts to dark mode?",
+                "answer": "b",
+                "explanation": "text-body-secondary is the 5.3 body colour for quieter text.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "text-secondary"
+                    },
+                    {
+                        "key": "b",
+                        "label": "text-body-secondary"
+                    },
+                    {
+                        "key": "c",
+                        "label": "text-light"
+                    },
+                    {
+                        "key": "d",
+                        "label": "opacity-50"
+                    }
+                ]
+            },
+            {
+                "prompt": "<div class=\"justify-content-between\"><span>Rice</span><span>$7.90</span></div> shows both items on the left. What is missing?",
+                "answer": "a",
+                "explanation": "justify-content only works on a flex container.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "d-flex on the div"
+                    },
+                    {
+                        "key": "b",
+                        "label": "A row around it"
+                    },
+                    {
+                        "key": "c",
+                        "label": "text-end on the price"
+                    },
+                    {
+                        "key": "d",
+                        "label": "align-items-center"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "lesson_title": "Module 05 quiz",
+        "questions": [
+            {
+                "prompt": "A dismissible alert's close button does nothing. It has data-dismiss=\"alert\". The fix:",
+                "answer": "b",
+                "explanation": "Bootstrap 5 only reads data-bs-* attributes.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Add the jQuery script"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Change it to data-bs-dismiss=\"alert\""
+                    },
+                    {
+                        "key": "c",
+                        "label": "Add role=\"button\""
+                    },
+                    {
+                        "key": "d",
+                        "label": "Move the alert inside a container"
+                    }
+                ]
+            },
+            {
+                "prompt": "You need a full width Add to cart button on phones. btn-block does nothing. What does Bootstrap 5 use instead?",
+                "answer": "b",
+                "explanation": "btn-block was removed; d-grid or w-100 replace it.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "btn-full"
+                    },
+                    {
+                        "key": "b",
+                        "label": "A wrapper div with d-grid, or w-100 on the button"
+                    },
+                    {
+                        "key": "c",
+                        "label": "btn-lg"
+                    },
+                    {
+                        "key": "d",
+                        "label": "col-12 on the button"
+                    }
+                ]
+            },
+            {
+                "prompt": "<i class=\"bi bi-shopping-cart\"></i> shows nothing and the Console is clean. The most likely cause:",
+                "answer": "a",
+                "explanation": "Check the exact name on icons.getbootstrap.com: bi-cart3 or bi-cart.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The icon name does not exist in Bootstrap Icons"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Icons need the bundle script"
+                    },
+                    {
+                        "key": "c",
+                        "label": "The i element is not allowed"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The icon is white on white"
+                    }
+                ]
+            },
+            {
+                "prompt": "Cards in a row have different heights. Which class on each card fixes it?",
+                "answer": "a",
+                "explanation": "Columns in a row already stretch; h-100 makes the card fill its column.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "h-100"
+                    },
+                    {
+                        "key": "b",
+                        "label": "card-equal"
+                    },
+                    {
+                        "key": "c",
+                        "label": "align-items-stretch"
+                    },
+                    {
+                        "key": "d",
+                        "label": "d-block"
+                    }
+                ]
+            },
+            {
+                "prompt": "A search button shows only a magnifying glass icon. What must you add for screen reader users?",
+                "answer": "b",
+                "explanation": "An icon only button needs a name, and the icon itself gets aria-hidden=\"true\".",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "A title attribute on the icon"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Visually hidden text such as <span class=\"visually-hidden\">Search</span>, or aria-label on the button"
+                    },
+                    {
+                        "key": "c",
+                        "label": "A bigger icon"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Nothing, icons are read aloud"
+                    }
+                ]
+            },
+            {
+                "prompt": "A progress bar is drawn at 40 percent but .progress has aria-valuenow=\"75\". What is wrong?",
+                "answer": "b",
+                "explanation": "The visible value and the announced value must be the same number.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Nothing, the width is what matters"
+                    },
+                    {
+                        "key": "b",
+                        "label": "aria-valuenow must match the width, so a screen reader hears the right value"
+                    },
+                    {
+                        "key": "c",
+                        "label": "aria-valuenow must be on the body"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Progress bars cannot go below 50"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "lesson_title": "Module 06 quiz",
+        "questions": [
+            {
+                "prompt": "The navbar toggler has data-bs-target=\"#mainNav\" and the collapse div has id=\"navbarNav\". What happens on a phone?",
+                "answer": "b",
+                "explanation": "The target must point at an existing id. There is usually no error, just nothing.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The menu opens normally"
+                    },
+                    {
+                        "key": "b",
+                        "label": "The menu never opens"
+                    },
+                    {
+                        "key": "c",
+                        "label": "The menu is always open"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The Console shows a syntax error"
+                    }
+                ]
+            },
+            {
+                "prompt": "You want the navbar links spread out from 768 pixels up and collapsed below. Which class?",
+                "answer": "b",
+                "explanation": "navbar-expand-md expands from the md breakpoint, 768.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "navbar-expand-lg"
+                    },
+                    {
+                        "key": "b",
+                        "label": "navbar-expand-md"
+                    },
+                    {
+                        "key": "c",
+                        "label": "navbar-collapse-md"
+                    },
+                    {
+                        "key": "d",
+                        "label": "navbar-md"
+                    }
+                ]
+            },
+            {
+                "prompt": "A dropdown does not open and the Console says dropdowns require Popper. The fix:",
+                "answer": "b",
+                "explanation": "The bundle includes Popper.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Add jQuery"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Link bootstrap.bundle.min.js instead of bootstrap.min.js"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Add data-toggle as well"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Move the dropdown into the navbar"
+                    }
+                ]
+            },
+            {
+                "prompt": "In the FAQ accordion, opening one question should close the others. What does each accordion-collapse need?",
+                "answer": "a",
+                "explanation": "data-bs-parent links each panel to the accordion so only one stays open.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "data-bs-parent=\"#faq\""
+                    },
+                    {
+                        "key": "b",
+                        "label": "class=\"show\""
+                    },
+                    {
+                        "key": "c",
+                        "label": "aria-expanded=\"true\""
+                    },
+                    {
+                        "key": "d",
+                        "label": "accordion-flush"
+                    }
+                ]
+            },
+            {
+                "prompt": "The carousel area is empty until you click Next. The likely cause:",
+                "answer": "b",
+                "explanation": "Exactly one carousel-item must start with active.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The images are too big"
+                    },
+                    {
+                        "key": "b",
+                        "label": "No carousel-item has the active class"
+                    },
+                    {
+                        "key": "c",
+                        "label": "data-bs-ride is missing"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The indicators are missing"
+                    }
+                ]
+            },
+            {
+                "prompt": "How do you make a dark navbar in Bootstrap 5.3?",
+                "answer": "b",
+                "explanation": "navbar-dark is deprecated in 5.3; colour modes use data-bs-theme.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "navbar-dark bg-dark only"
+                    },
+                    {
+                        "key": "b",
+                        "label": "bg-dark with data-bs-theme=\"dark\" on the nav"
+                    },
+                    {
+                        "key": "c",
+                        "label": "text-bg-dark on every link"
+                    },
+                    {
+                        "key": "d",
+                        "label": "navbar-inverse"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "lesson_title": "Module 07 quiz",
+        "questions": [
+            {
+                "prompt": "Tooltips do not appear and the Console says bootstrap is not defined. The most likely cause:",
+                "answer": "b",
+                "explanation": "The starter uses the bootstrap object, which exists only after the bundle has loaded.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The tooltip text is too long"
+                    },
+                    {
+                        "key": "b",
+                        "label": "marigold.js is linked before bootstrap.bundle.min.js"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Tooltips need jQuery"
+                    },
+                    {
+                        "key": "d",
+                        "label": "data-bs-placement is missing"
+                    }
+                ]
+            },
+            {
+                "prompt": "\"Remove this item?\" must be answered with a button; clicking outside or pressing Esc must not close it. What do you add to the modal?",
+                "answer": "b",
+                "explanation": "A static backdrop and disabled keyboard close force a choice.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "modal-dialog-centered"
+                    },
+                    {
+                        "key": "b",
+                        "label": "data-bs-backdrop=\"static\" and data-bs-keyboard=\"false\""
+                    },
+                    {
+                        "key": "c",
+                        "label": "tabindex=\"0\""
+                    },
+                    {
+                        "key": "d",
+                        "label": "modal-sm"
+                    }
+                ]
+            },
+            {
+                "prompt": "The category list should be a slide in panel on phones and a normal sidebar from 992 pixels. Which class?",
+                "answer": "b",
+                "explanation": "Responsive offcanvas classes switch behaviour at the breakpoint.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "offcanvas-start"
+                    },
+                    {
+                        "key": "b",
+                        "label": "offcanvas-lg"
+                    },
+                    {
+                        "key": "c",
+                        "label": "collapse-lg"
+                    },
+                    {
+                        "key": "d",
+                        "label": "d-lg-block"
+                    }
+                ]
+            },
+            {
+                "prompt": "An element must show only on screens 992 pixels and wider. Which classes?",
+                "answer": "b",
+                "explanation": "Hidden by default, displayed from lg up.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "d-lg-none"
+                    },
+                    {
+                        "key": "b",
+                        "label": "d-none d-lg-block"
+                    },
+                    {
+                        "key": "c",
+                        "label": "invisible d-lg-visible"
+                    },
+                    {
+                        "key": "d",
+                        "label": "d-block d-lg-none"
+                    }
+                ]
+            },
+            {
+                "prompt": "admin/index.html links css/style.css and shows no custom styles. The fix:",
+                "answer": "b",
+                "explanation": "Relative paths start from the file's own folder; ../ goes up one level.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Copy style.css into the admin folder"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Change the link to ../css/style.css"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Use an absolute path starting with C:"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Put the CSS inline"
+                    }
+                ]
+            },
+            {
+                "prompt": "An Added to cart toast should be announced without interrupting the screen reader. Which attributes?",
+                "answer": "b",
+                "explanation": "Polite status messages wait for the screen reader to finish.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "role=\"alert\" aria-live=\"assertive\""
+                    },
+                    {
+                        "key": "b",
+                        "label": "role=\"status\" aria-live=\"polite\""
+                    },
+                    {
+                        "key": "c",
+                        "label": "aria-hidden=\"true\""
+                    },
+                    {
+                        "key": "d",
+                        "label": "No attributes are needed"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "lesson_title": "Module 08 quiz",
+        "questions": [
+            {
+                "prompt": "Clicking the label \"Email\" does not put the cursor in the field. The markup is <label for=\"email\"> and <input id=\"contactEmail\">. The fix:",
+                "answer": "b",
+                "explanation": "for must equal the input's id.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Add class form-label"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Make the for and the id the same"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Put the label after the input"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Add a placeholder"
+                    }
+                ]
+            },
+            {
+                "prompt": "An AI answer contains <div class=\"form-group\"> and <select class=\"custom-select\">. The Bootstrap 5.3 version is:",
+                "answer": "b",
+                "explanation": "form-group and custom-select were removed in Bootstrap 5.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Keep them, they still work"
+                    },
+                    {
+                        "key": "b",
+                        "label": "<div class=\"mb-3\"> and <select class=\"form-select\">"
+                    },
+                    {
+                        "key": "c",
+                        "label": "<div class=\"form-row\"> and <select class=\"form-control\">"
+                    },
+                    {
+                        "key": "d",
+                        "label": "<div class=\"input-group\"> and <select class=\"select\">"
+                    }
+                ]
+            },
+            {
+                "prompt": "A floating label overlaps the text the user types. What is most likely wrong?",
+                "answer": "a",
+                "explanation": "Floating labels need the input first and a placeholder.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The input has no placeholder, or the label comes before the input"
+                    },
+                    {
+                        "key": "b",
+                        "label": "The form has no novalidate"
+                    },
+                    {
+                        "key": "c",
+                        "label": "The input is type email"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The label has no class"
+                    }
+                ]
+            },
+            {
+                "prompt": "A customer can select both Delivery and Click and collect. Why?",
+                "answer": "a",
+                "explanation": "Radios with the same name form one group where only one can be chosen.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The radios have different name values"
+                    },
+                    {
+                        "key": "b",
+                        "label": "They are checkboxes"
+                    },
+                    {
+                        "key": "c",
+                        "label": "form-check-inline is used"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The fieldset is missing"
+                    }
+                ]
+            },
+            {
+                "prompt": "A form has novalidate and class needs-validation. On submit with empty required fields nothing turns red. What is missing?",
+                "answer": "b",
+                "explanation": "Bootstrap only shows the styles after was-validated is added to the form.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The required attribute is not allowed with novalidate"
+                    },
+                    {
+                        "key": "b",
+                        "label": "The JavaScript that adds was-validated is not on the page"
+                    },
+                    {
+                        "key": "c",
+                        "label": "The fields need is-valid"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The button must be type button"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "lesson_title": "Module 09 quiz",
+        "questions": [
+            {
+                "prompt": "In dark mode your footer text turns light but its background stays light grey. Which class is the footer probably using?",
+                "answer": "b",
+                "explanation": "bg-light does not adapt to colour modes; bg-body-tertiary does.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "bg-body-tertiary"
+                    },
+                    {
+                        "key": "b",
+                        "label": "bg-light"
+                    },
+                    {
+                        "key": "c",
+                        "label": "bg-body"
+                    },
+                    {
+                        "key": "d",
+                        "label": "text-body"
+                    }
+                ]
+            },
+            {
+                "prompt": "You set --bs-primary: #B5541C and --bs-primary-rgb. text-primary is now rust, but btn-primary buttons are still blue. Why?",
+                "answer": "b",
+                "explanation": "Component variables must be set on .btn-primary, or the colour changed in Sass.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The CSS file is cached"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Buttons use their own variables such as --bs-btn-bg"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Buttons cannot change colour without Sass"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The rgb value is wrong"
+                    }
+                ]
+            },
+            {
+                "prompt": "A designer wants the focus outline removed because it \"looks ugly\". What do you do?",
+                "answer": "b",
+                "explanation": "Keyboard users need to see where they are.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Remove it with outline: none"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Keep a visible focus style, restyled in the brand colour"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Remove it only on buttons"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Remove it and add hover effects"
+                    }
+                ]
+            },
+            {
+                "prompt": "Which image should NOT get loading=\"lazy\"?",
+                "answer": "b",
+                "explanation": "The first image seen must load first; lazy delays it.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "A product card near the bottom of the page"
+                    },
+                    {
+                        "key": "b",
+                        "label": "The first carousel slide at the top of the home page"
+                    },
+                    {
+                        "key": "c",
+                        "label": "A footer badge"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Branch photos on the About page, lower down"
+                    }
+                ]
+            },
+            {
+                "prompt": "The logo shows locally but is broken on GitHub Pages. The HTML says images/logo.svg. Which is the likely cause?",
+                "answer": "b",
+                "explanation": "The server is case sensitive; the name must match exactly.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "GitHub Pages does not allow SVG"
+                    },
+                    {
+                        "key": "b",
+                        "label": "The file is really named Images/Logo.svg"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Pages needs absolute paths"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The repository is public"
+                    }
+                ]
+            },
+            {
+                "prompt": "In GitHub Pages settings, what do you choose to publish this site?",
+                "answer": "a",
+                "explanation": "The site's index.html is in the top folder of the main branch.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Deploy from a branch, main, / (root)"
+                    },
+                    {
+                        "key": "b",
+                        "label": "A custom PHP server"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Deploy from the docs folder of any repository"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Nothing; every repository is published automatically"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "lesson_title": "Module 10 quiz",
+        "questions": [
+            {
+                "prompt": "The class text-bold does nothing and the Styles pane shows no rule for it. What is the fix?",
+                "answer": "b",
+                "explanation": "text-bold is invented. Bootstrap 5.3 uses fw-bold.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Re-link Bootstrap"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Replace it with fw-bold"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Add !important"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Clear the browser cache"
+                    }
+                ]
+            },
+            {
+                "prompt": "Which set contains only Bootstrap 4 names that do nothing in Bootstrap 5?",
+                "answer": "b",
+                "explanation": "All three were renamed or removed in Bootstrap 5.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "ms-3, form-select, visually-hidden"
+                    },
+                    {
+                        "key": "b",
+                        "label": "ml-3, custom-select, sr-only"
+                    },
+                    {
+                        "key": "c",
+                        "label": "g-0, text-start, rounded-pill"
+                    },
+                    {
+                        "key": "d",
+                        "label": "d-grid, text-bg-primary, mb-3"
+                    }
+                ]
+            },
+            {
+                "prompt": "An AI layout looks perfect on your laptop. What is the minimum check before keeping it?",
+                "answer": "b",
+                "explanation": "AI cannot see a phone; the device toolbar can.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Ask the AI if it is responsive"
+                    },
+                    {
+                        "key": "b",
+                        "label": "View it at 360, 768 and 1280 pixels and look for sideways scrolling"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Run it once at 1280"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Validate the CSS only"
+                    }
+                ]
+            },
+            {
+                "prompt": "You fixed the toggler in an AI navbar by changing data-toggle. What should you do next?",
+                "answer": "b",
+                "explanation": "Most leftovers fail silently; only a search finds them all.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Nothing, it works now"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Search the file for every other Bootstrap 4 leftover such as ml-, sr-only and data-target"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Ask the AI to confirm"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Add jQuery just in case"
+                    }
+                ]
+            },
+            {
+                "prompt": "Which prompt is most likely to give a layout that works on a phone?",
+                "answer": "c",
+                "explanation": "Naming each size removes the guesswork, though you still test.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "A products section with a sidebar"
+                    },
+                    {
+                        "key": "b",
+                        "label": "A modern responsive products section"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Bootstrap 5.3: products one per line on phones, two from md, three from lg; sidebar in an offcanvas below lg; images img-fluid"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Make it look like a big online shop"
+                    }
+                ]
+            },
+            {
+                "prompt": "The habit this course ends with is:",
+                "answer": "c",
+                "explanation": "Useful and accountable at the same time.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Trust the AI when it sounds sure"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Avoid AI for Bootstrap"
+                    },
+                    {
+                        "key": "c",
+                        "label": "AI drafts, you test at three widths, you check the docs, you sign your name to it"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Only use AI for colours"
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Add Bootstrap 5.3 from the jsDelivr CDN.">
+  <title>1.6 Add Bootstrap 5.3 from the jsDelivr CDN | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 1.6</p>
+    <h1>Add Bootstrap 5.3 from the jsDelivr CDN</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Bootstrap CSS provides its classes. The JavaScript bundle powers interactive components such as dropdowns and modals. The bundle also includes Popper for positioned components.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Bootstrap is loaded locally</h3><div class="p-4 border rounded-3"><p class="text-secondary mb-2">Local Bootstrap 5.3.8</p><button class="btn btn-primary">Shop now</button><span class="badge text-bg-success ms-2">CSS is working</span></div></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>Load Bootstrap from the CDN</h3><pre class="code-sample"><code>&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot; integrity=&quot;sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js&quot; integrity=&quot;sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;/script&gt;</code></pre><h3>Or load the included local files</h3><pre class="code-sample"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;../css/vendor/bootstrap.min.css&quot;&gt;
+&lt;script src=&quot;../js/vendor/bootstrap.bundle.min.js&quot;&gt;
+&lt;/script&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use CDN links when your project can load files from the internet. Use local files when you need the project to work offline.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Load Bootstrap CSS in the head.</li><li>Load the Bootstrap bundle near the end of the body.</li><li>Use the same Bootstrap version for the CSS and JavaScript.</li><li>Bootstrap 5 does not need jQuery.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Correct file paths and matching versions let Bootstrap styles and interactive components work.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Inspect the local stylesheet and bundle links. Then compare them with Bootstrap 5.3 CDN tags and explain the offline trade-off.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

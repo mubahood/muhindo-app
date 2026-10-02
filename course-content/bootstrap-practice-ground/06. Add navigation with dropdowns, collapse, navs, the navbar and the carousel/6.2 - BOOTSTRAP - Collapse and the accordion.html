@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Collapse and the accordion.">
+  <title>6.2 Collapse and the accordion | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 6.2</p>
+    <h1>Collapse and the accordion</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Collapse hides or reveals a section. An accordion uses collapse panels to show one or more answers in a group.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Reveal a delivery answer</h3><p><button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#deliveryInfo" aria-expanded="false" aria-controls="deliveryInfo">Delivery details</button></p><div class="collapse" id="deliveryInfo"><div class="card card-body">Orders arrive within two working days.</div></div><div class="accordion mt-3" id="faq"><div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#answer" aria-expanded="false" aria-controls="answer">Can I collect my order?</button></h3><div id="answer" class="accordion-collapse collapse" data-bs-parent="#faq"><div class="accordion-body">Yes, choose a branch at checkout.</div></div></div></div></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;p&gt;
+  &lt;button class=&quot;btn btn-outline-primary&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#deliveryInfo&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;deliveryInfo&quot;&gt;
+    Delivery details
+  &lt;/button&gt;
+&lt;/p&gt;
+&lt;div class=&quot;collapse&quot; id=&quot;deliveryInfo&quot;&gt;
+  &lt;div class=&quot;card card-body&quot;&gt;
+    Orders arrive within two working days.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;accordion mt-3&quot; id=&quot;faq&quot;&gt;
+  &lt;div class=&quot;accordion-item&quot;&gt;
+    &lt;h3 class=&quot;accordion-header&quot;&gt;
+      &lt;button class=&quot;accordion-button collapsed&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#answer&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;answer&quot;&gt;
+        Can I collect my order?
+      &lt;/button&gt;
+    &lt;/h3&gt;
+    &lt;div id=&quot;answer&quot; class=&quot;accordion-collapse collapse&quot; data-bs-parent=&quot;#faq&quot;&gt;
+      &lt;div class=&quot;accordion-body&quot;&gt;
+        Yes, choose a branch at checkout.
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use collapse for extra details that are useful but do not need to stay visible. Use an accordion for a short FAQ.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>The trigger target must match the panel id.</li><li>Update aria-controls and aria-expanded.</li><li>Keep the trigger text clear about what will open.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>A correct target connects the control to the content it reveals.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Change the trigger text and answer. Check that every target id matches exactly.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

@@ -7,7 +7,7 @@
   /* Built here (not just in the layout) because this page's own sections,
      header_meta, shell_component, are buffered before the layout renders. */
   $currentLesson = $lesson;
-  $shell = new \App\Support\Learning\LearnShell($course, auth()->user(), $lesson);
+  $shell = new \App\Support\Learning\LearnShell($course, auth()->user(), $lesson, $teachingMode);
   $activeSeconds = (int) ($enrollment->progressRecords()->where('lesson_id', $lesson->id)->value('active_seconds') ?? 0);
   $debugMode = (bool) $course->debug_mode;
   $activeSecondsLabel = $activeSeconds >= 3600
@@ -19,8 +19,8 @@
     'lessonId' => $lesson->id,
     'completed' => $completedLessonIds->contains($lesson->id),
     'completeUrl' => route('learn.lesson.complete', [$course, $lesson]),
-    'previousLessonUrl' => $previousLesson ? route('learn.lesson', [$course, $previousLesson]) : null,
-    'initialNextLessonUrl' => $nextLessonForNav ? route('learn.lesson', [$course, $nextLessonForNav]) : null,
+    'previousLessonUrl' => $previousLesson ? route('learn.lesson', [$course, $previousLesson]).($teachingMode ? '?teach=1' : '') : null,
+    'initialNextLessonUrl' => $nextLessonForNav ? route('learn.lesson', [$course, $nextLessonForNav]).($teachingMode ? '?teach=1' : '') : null,
     'csrfToken' => csrf_token(),
     'doneLessons' => $shell->doneLessons(),
     'totalLessons' => $shell->totalLessons(),
@@ -30,10 +30,62 @@
     'timeUrl' => route('learn.lesson.time', [$course, $lesson]),
     'minActiveSeconds' => $debugMode ? 0 : (int) ($lesson->min_active_seconds ?? 0),
     'requiredPending' => $debugMode ? 0 : $activities->where('required', true)->where('done', false)->count(),
+    'teachingMode' => $teachingMode,
 ]).')')
 
 @section('banner')
-  @if($debugMode)
+  @if($teachingMode)
+    @php
+      $currentTopicTaught = $taughtLessonIds->contains($lesson->id);
+      $courseTaught = $teachingProgressTotal > 0 && $teachingProgressCount === $teachingProgressTotal;
+    @endphp
+    <section class="teach-dashboard" id="teacher-tools" aria-label="Teaching tools and course progress">
+      <div class="teach-dashboard-top">
+        <div class="teach-intro">
+          <span class="teach-kicker"><i class="fas fa-chalkboard-user" aria-hidden="true"></i> Teacher view</span>
+          <h2>Course teaching progress</h2>
+          <p>Mark a topic after you teach it. These checks are private to your teacher account.</p>
+        </div>
+        <div class="teach-progress-card" aria-label="{{ $teachingProgressCount }} of {{ $teachingProgressTotal }} topics taught">
+          <div class="teach-progress-line">
+            <strong>{{ $teachingProgressPercent }}%</strong>
+            <span>{{ $teachingProgressCount }} of {{ $teachingProgressTotal }} topics</span>
+            <span class="teach-course-state">{{ $courseTaught ? 'Course taught' : ($teachingProgressCount ? 'In progress' : 'Not started') }}</span>
+          </div>
+          <div class="teach-progress-track" role="progressbar" aria-label="Course teaching progress"
+               aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $teachingProgressPercent }}">
+            <span style="width:{{ $teachingProgressPercent }}%"></span>
+          </div>
+          <form method="POST" action="{{ route('admin.courses.teaching-progress', $course) }}"
+                onsubmit="return confirm('{{ $courseTaught ? 'Clear the taught checklist for this course?' : 'Mark every published topic in this course as taught?' }}')">
+            @csrf
+            <input type="hidden" name="taught" value="{{ $courseTaught ? 0 : 1 }}">
+            <button class="teach-course-action" type="submit">
+              <i class="fas {{ $courseTaught ? 'fa-rotate-left' : 'fa-check-double' }}" aria-hidden="true"></i>
+              {{ $courseTaught ? 'Clear course checklist' : 'Mark whole course taught' }}
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="teach-dashboard-bottom">
+        <form class="teach-topic-check" method="POST" action="{{ route('admin.lessons.teaching-progress', $lesson) }}">
+          @csrf
+          <input type="hidden" name="taught" value="{{ $currentTopicTaught ? 0 : 1 }}">
+          <span class="teach-topic-icon"><i class="fas {{ $currentTopicTaught ? 'fa-circle-check' : 'fa-circle' }}" aria-hidden="true"></i></span>
+          <span><strong>Current topic</strong><small>{{ $currentTopicTaught ? 'Marked as taught' : 'Not marked yet' }}</small></span>
+          <button class="teach-control {{ $currentTopicTaught ? '' : 'is-primary' }}" type="submit">
+            {{ $currentTopicTaught ? 'Undo taught mark' : 'Mark topic taught' }}
+          </button>
+        </form>
+        <nav class="teach-navigation" aria-label="Teaching navigation">
+          @if($previousLesson)<a class="teach-control" href="{{ route('learn.lesson', [$course, $previousLesson]) }}?teach=1"><i class="fas fa-arrow-left" aria-hidden="true"></i> Previous</a>@endif
+          @if($nextLessonForNav)<a class="teach-control" href="{{ route('learn.lesson', [$course, $nextLessonForNav]) }}?teach=1">Next <i class="fas fa-arrow-right" aria-hidden="true"></i></a>@endif
+          <button class="teach-control" type="button" onclick="(document.querySelector('.lesson-html-example iframe') || document.getElementById('learn-content')).requestFullscreen?.()"><i class="fas fa-expand" aria-hidden="true"></i> Full screen</button>
+          <a class="teach-control" href="{{ route('admin.courses.show', $course) }}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Course admin</a>
+        </nav>
+      </div>
+    </section>
+  @elseif($debugMode)
     <div class="dbg-strip" role="status">
       <i class="fas fa-flask" aria-hidden="true"></i>
       <span><b>Debug mode is on for this course.</b> Minimum screen time and required
@@ -44,11 +96,16 @@
 
 @section('header_meta')
   <span class="pos">Lesson {{ $shell->lessonPosition() }} of {{ $shell->totalLessons() }}</span>
-  <span class="timer" title="Your time on this lesson, counts only while this tab is focused"
+  @if($canTeach)
+    @unless($teachingMode)
+      <a class="btn" href="{{ route('learn.lesson', [$course, $lesson]) }}?teach=1">Teach this topic</a>
+    @endunless
+  @endif
+  @unless($teachingMode)<span class="timer" title="Your time on this lesson, counts only while this tab is focused"
         :class="{paused: !isFocused}">
     <i class="far fa-clock" aria-hidden="true"></i>
     <span x-text="formatTime(activeSeconds)">{{ $activeSecondsLabel }}</span>
-  </span>
+  </span>@endunless
 @endsection
 
 @push('styles')
@@ -56,9 +113,36 @@
   /* Lesson-player-only pieces (video, notes, materials, activities overlay). */
   .learn-video{aspect-ratio:16/9;width:100%;background:#000;margin-bottom:8px;}
   .learn-video iframe{width:100%;height:100%;border:0;}
+  .lesson-html-example iframe{display:block;width:100%;height:min(78vh,900px);min-height:540px;border:0;background:#fff;}
+  @media(max-width:700px){.lesson-html-example iframe{height:78vh;min-height:480px;}}
   .learn-speed{display:flex;gap:6px;margin-bottom:10px;}
   .learn-speed button{font-size:11px;padding:3px 8px;border:1px solid var(--line);background:var(--surface);color:var(--tx2);cursor:pointer;}
   .learn-speed button.on{background:var(--pri);color:#fff;border-color:var(--pri);}
+  .teach-dashboard{margin:0 0 14px;padding:13px 0 12px;border-bottom:1px solid var(--line);color:var(--tx);}
+  .teach-dashboard-top{display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .teach-kicker{display:inline-flex;align-items:center;gap:6px;color:var(--pri);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+  .teach-intro h2{margin:3px 0 2px!important;font-size:16px!important;color:var(--tx);}
+  .teach-intro p{margin:0;color:var(--tx3);font-size:12px;}
+  .teach-progress-card{width:min(390px,45%);flex-shrink:0;}
+  .teach-progress-line{display:flex;align-items:baseline;gap:8px;font-size:11px;color:var(--tx3);}
+  .teach-progress-line strong{font-size:20px;color:var(--pri);font-variant-numeric:tabular-nums;}
+  .teach-course-state{margin-left:auto;color:var(--tx2);font-weight:600;}
+  .teach-progress-track,.teach-head-bar{display:block;height:5px;background:var(--surface-2);overflow:hidden;margin:5px 0 3px;border-radius:6px;}
+  .teach-progress-track span,.teach-head-bar i{display:block;height:100%;background:var(--pri);border-radius:6px;transition:width .25s ease;}
+  .teach-course-action{padding:0;border:0;background:none;color:var(--pri);font:600 11px var(--font);cursor:pointer;}
+  .teach-course-action:hover{text-decoration:underline;}
+  .teach-dashboard-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:11px;padding-top:10px;border-top:1px solid var(--line);}
+  .teach-topic-check{display:flex;align-items:center;gap:9px;min-width:220px;}
+  .teach-topic-icon{color:var(--ok);font-size:17px;}
+  .teach-topic-check strong,.teach-topic-check small{display:block;}
+  .teach-topic-check strong{font-size:11.5px;}
+  .teach-topic-check small{margin-top:1px;color:var(--tx3);font-size:10.5px;}
+  .teach-navigation{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .teach-control{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:31px;padding:5px 9px;border:1px solid var(--line-2);background:var(--surface);color:var(--tx2);font:500 11.5px var(--font);text-decoration:none;cursor:pointer;}
+  .teach-control:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-soft);}
+  .teach-control.is-primary{border-color:var(--pri);background:var(--pri);color:#fff;}
+  .teach-control.is-primary:hover{background:var(--pri-d);color:#fff;}
+  @media(max-width:820px){.teach-dashboard-top,.teach-dashboard-bottom{align-items:flex-start;flex-direction:column;gap:10px;}.teach-progress-card{width:100%;}.teach-navigation{width:100%;}}
 
   .material-row{padding:6px 0;border-bottom:1px solid var(--line);}
   .material-row:last-child{border-bottom:none;padding-bottom:0;}
@@ -112,6 +196,7 @@
 @endpush
 
 @section('learn_content')
+    @unless($teachingMode)
     @if($lesson->hasSelfHostedVideo())
       <div
         x-data="selfHostedVideoPlayer({
@@ -174,9 +259,10 @@
         </div>
       </div>
     @endif
+    @endunless
 
     @php $requiredPending = $activities->where('required', true)->where('done', false)->count(); @endphp
-    @if($activities->isNotEmpty())
+    @if(! $teachingMode && $activities->isNotEmpty())
       <div class="activities-banner">
         <span class="ab-icon"><i class="fas fa-clipboard-check" aria-hidden="true"></i></span>
         <span class="ab-text">
@@ -191,7 +277,13 @@
       </div>
     @endif
 
-    @if($renderedContent)
+    @if($htmlLessonDocument)
+      <section class="lesson-html-example" aria-label="Live lesson example">
+        <iframe title="Live example for {{ $lesson->title }}" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox" allowfullscreen
+                loading="lazy" srcdoc="{{ $htmlLessonDocument }}"></iframe>
+      </section>
+      <p class="lesson-practice-link"><a class="btn" href="{{ route('learn.playground', [$course, 'lesson' => $lesson->id]) }}"><i class="fas fa-code"></i> Open this lesson in code practice</a></p>
+    @elseif($renderedContent)
       <div class="card markdown-body">{!! $renderedContent !!}</div>
     @elseif($lesson->content)
       <div class="card">{!! nl2br(e($lesson->content)) !!}</div>
@@ -230,7 +322,7 @@
       </div>
     @endif
 
-    <div class="card">
+    @unless($teachingMode)<div class="card">
       <div class="card-title">My notes</div>
       <div id="notes-list">
         @forelse($notes as $note)
@@ -261,10 +353,11 @@
                style="flex:1;padding:7px 10px;border:1px solid var(--line);font-family:var(--font);font-size:13px;">
         <button type="submit" class="btn" :disabled="noteSaving"><span x-text="noteSaving ? 'Saving...' : 'Add'">Add</span></button>
       </form>
-    </div>
+    </div>@endunless
 @endsection
 
 @section('action_bar')
+  @unless($teachingMode)
   <div class="learn-action-bar">
     <div class="learn-action-bar-inner">
       <template x-if="previousLessonUrl">
@@ -302,6 +395,7 @@
       </a>
     </div>
   </div>
+  @endunless
 @endsection
 
 @section('overlays')
@@ -348,6 +442,39 @@
 @endsection
 
 @push('scripts')
+@if($htmlLessonDocument)
+<script>
+(() => {
+  const frame = document.querySelector('.lesson-html-example iframe');
+  if (!frame) return;
+  const endpoint = @js(route('learn.playground.snippet', $course));
+  const playgroundCsrf = @js(csrf_token());
+  const lessonId = @js($lesson->id);
+  const teachingMode = @js($teachingMode);
+
+  window.addEventListener('message', async (event) => {
+    if (event.source !== frame.contentWindow || event.data?.type !== 'lesson-code:open-in-practice') return;
+    const { requestId, language, code, exampleHtml } = event.data;
+    if (!['html', 'css', 'javascript'].includes(language) || typeof code !== 'string' || code.length > 32768) return;
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': playgroundCsrf, Accept: 'application/json' },
+        body: JSON.stringify({ lesson_id: lessonId, language, code, example_html: typeof exampleHtml === 'string' ? exampleHtml : '', teaching_mode: teachingMode }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success || !result.url) throw new Error(result.message || 'Could not open this snippet.');
+      event.source.postMessage({ type: 'lesson-code:practice-result', requestId, success: true, url: result.url }, '*');
+    } catch (error) {
+      event.source.postMessage({ type: 'lesson-code:practice-result', requestId, success: false }, '*');
+      window.dispatchEvent(new CustomEvent('toast', { detail: { message: error.message || 'Could not open this snippet. Please try again.', type: 'error' } }));
+    }
+  });
+})();
+</script>
+@endif
 <script>
 /**
  * Shared by both player wrappers below. The heartbeat request/response
@@ -534,7 +661,7 @@ function lessonPlayer(cfg) {
       const sig = { signal: this.listeners.signal };
       window.addEventListener('lesson-auto-completed', () => { this.bumpProgress(); this.completed = true; }, sig);
       window.addEventListener('keydown', (e) => this.onKeydown(e), sig);
-      this.startActiveTimer(sig);
+      if (!cfg.teachingMode) this.startActiveTimer(sig);
       // wire:navigate swaps the body but keeps the JS context alive, without this
       // teardown, the old lesson's timers and key handlers would keep running (and
       // keep posting time to the WRONG lesson) after every pjax navigation.

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Responsive CSS with the viewport tag and media queries.">
+  <title>1.5 Responsive CSS with the viewport tag and media queries | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 1.5</p>
+    <h1>Responsive CSS with the viewport tag and media queries</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>A responsive page changes its layout to fit the screen. The viewport tag tells a phone to use its real screen width. A media query applies CSS only at chosen widths.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Resize the page</h3><div class="responsive-pair"><p>First box: on a phone, this takes the full line.</p><p>Second box: from 768px, both boxes share a row.</p></div></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;div class=&quot;responsive-pair&quot;&gt;
+  &lt;p&gt;
+    First box: on a phone, this takes the full line.
+  &lt;/p&gt;
+  &lt;p&gt;
+    Second box: from 768px, both boxes share a row.
+  &lt;/p&gt;
+&lt;/div&gt;</code></pre><h3>CSS</h3><pre class="code-sample"><code>.responsive-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use a media query when a layout needs to change at a breakpoint, such as moving from one column on a phone to two on a larger screen.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Start with the phone layout, then add wider-screen rules.</li><li>The viewport tag belongs in the head.</li><li>Flexible images should not grow beyond their parent.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Build for a small screen first, then add changes only where the wider screen needs them.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Resize the browser. Change the breakpoint in the media query, then see where the boxes move.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

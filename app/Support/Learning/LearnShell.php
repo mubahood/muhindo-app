@@ -43,8 +43,9 @@ class LearnShell
         public readonly Course $course,
         ?User $user = null,
         public readonly ?Lesson $currentLesson = null,
+        bool $teachingMode = false,
     ) {
-        $this->enrollment = $user
+        $this->enrollment = $user && ! $teachingMode
             ? Enrollment::where('user_id', $user->id)->where('course_id', $course->id)->first()
             : null;
 

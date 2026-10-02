@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for The carousel.">
+  <title>6.5 The carousel | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 6.5</p>
+    <h1>The carousel</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>A carousel shows one item from a set at a time. Bootstrap controls can move between the items.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Rotate through three promotions</h3><div id="promoCarousel" class="carousel slide" data-bs-ride="carousel"><div class="carousel-indicators"><button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button><button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button></div><div class="carousel-inner rounded"><div class="carousel-item active"><div class="p-5 bg-success-subtle"><h3 class="h4">Fresh picks this week</h3><p class="mb-0">Good food for your table.</p></div></div><div class="carousel-item"><div class="p-5 bg-warning-subtle"><h3 class="h4">Ready for school</h3><p class="mb-0">Find books and supplies.</p></div></div></div><button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev" aria-label="Previous"><span class="carousel-control-prev-icon"></span></button><button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next" aria-label="Next"><span class="carousel-control-next-icon"></span></button></div></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;div id=&quot;promoCarousel&quot; class=&quot;carousel slide&quot; data-bs-ride=&quot;carousel&quot;&gt;
+  &lt;div class=&quot;carousel-indicators&quot;&gt;
+    &lt;button type=&quot;button&quot; data-bs-target=&quot;#promoCarousel&quot; data-bs-slide-to=&quot;0&quot; class=&quot;active&quot; aria-current=&quot;true&quot; aria-label=&quot;Slide 1&quot;&gt;
+    &lt;/button&gt;
+    &lt;button type=&quot;button&quot; data-bs-target=&quot;#promoCarousel&quot; data-bs-slide-to=&quot;1&quot; aria-label=&quot;Slide 2&quot;&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;carousel-inner rounded&quot;&gt;
+    &lt;div class=&quot;carousel-item active&quot;&gt;
+      &lt;div class=&quot;p-5 bg-success-subtle&quot;&gt;
+        &lt;h3 class=&quot;h4&quot;&gt;
+          Fresh picks this week
+        &lt;/h3&gt;
+        &lt;p class=&quot;mb-0&quot;&gt;
+          Good food for your table.
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;carousel-item&quot;&gt;
+      &lt;div class=&quot;p-5 bg-warning-subtle&quot;&gt;
+        &lt;h3 class=&quot;h4&quot;&gt;
+          Ready for school
+        &lt;/h3&gt;
+        &lt;p class=&quot;mb-0&quot;&gt;
+          Find books and supplies.
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button class=&quot;carousel-control-prev&quot; type=&quot;button&quot; data-bs-target=&quot;#promoCarousel&quot; data-bs-slide=&quot;prev&quot; aria-label=&quot;Previous&quot;&gt;
+    &lt;span class=&quot;carousel-control-prev-icon&quot;&gt;
+    &lt;/span&gt;
+  &lt;/button&gt;
+  &lt;button class=&quot;carousel-control-next&quot; type=&quot;button&quot; data-bs-target=&quot;#promoCarousel&quot; data-bs-slide=&quot;next&quot; aria-label=&quot;Next&quot;&gt;
+    &lt;span class=&quot;carousel-control-next-icon&quot;&gt;
+    &lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use a carousel for a small set of important promotions. Do not hide essential information in slides.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>One carousel item must start with active.</li><li>Every control and indicator targets the carousel id.</li><li>Give each slide a clear label or heading.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Carousels need working controls and content that remains easy to find.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Add one slide and its indicator. Keep a clear visible heading on every slide.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

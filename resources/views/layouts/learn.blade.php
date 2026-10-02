@@ -71,6 +71,11 @@
   .learn-hd .hd-progress .bar{width:110px;height:4px;background:rgba(255,255,255,.18);overflow:hidden;}
   .learn-hd .hd-progress .bar i{display:block;height:100%;background:var(--gold);transition:width .4s ease;}
   .learn-hd .hd-progress .pct{font-size:11px;font-weight:600;color:var(--gold);min-width:32px;text-align:right;}
+  .learn-hd .teach-head-progress{display:flex;align-items:center;gap:8px;flex-shrink:0;font-size:10px;color:rgba(255,255,255,.84);}
+  .learn-hd .teach-head-count{white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .learn-hd .teach-head-bar{width:82px;height:4px;margin:0;background:rgba(255,255,255,.2);}
+  .learn-hd .teach-head-bar i{background:#c99a2e;}
+  .learn-hd .teach-head-percent{min-width:27px;text-align:right;color:#e3bd5e;font-size:10px;font-weight:700;}
   .learn-hd a:focus-visible,.learn-hd button:focus-visible{outline:2px solid #fff;outline-offset:2px;}
   .learn-toggle{display:none;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.25);background:none;
     color:#fff;padding:6px 10px;font-size:11.5px;font-weight:500;cursor:pointer;flex-shrink:0;}
@@ -88,6 +93,9 @@
   .learn-side-links a:hover{color:var(--pri);background:var(--pri-soft);}
   .learn-side-links a.on{color:var(--pri);background:var(--pri-soft);font-weight:600;}
   .learn-side-links a i{font-size:11px;}
+  .learn-side-practice{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:11.5px;color:var(--tx2);}
+  .learn-side-practice:hover,.learn-side-practice.on{color:var(--pri);background:var(--pri-soft);}
+  .learn-side-practice .fa-arrow-up-right-from-square{margin-left:auto;font-size:9px;color:var(--tx3);}
   .learn-side-list{overflow-y:auto;flex:1;overscroll-behavior:contain;}
 
   /* Collapsible chapters, native <details>, so collapse works with zero JS. */
@@ -104,6 +112,7 @@
     font-size:12.5px;color:var(--tx2);border-top:1px solid var(--line);line-height:1.35;}
   .lesson-link .st{font-size:10px;flex-shrink:0;width:12px;text-align:center;}
   .lesson-link .st .fa-circle-check{color:var(--ok);}
+  .lesson-link .st .teach-status-check{color:var(--ok);}
   .lesson-link .t{flex:1;min-width:0;}
   .lesson-link .min{font-size:10px;color:var(--tx3);flex-shrink:0;}
   .lesson-link.on{background:var(--pri-soft);color:var(--pri);font-weight:600;box-shadow:inset 3px 0 0 var(--gold);}
@@ -223,25 +232,35 @@
      so the queries only ever happen once per request. */
   $shell = $shell ?? new \App\Support\Learning\LearnShell($course, auth()->user(), $currentLesson ?? null);
   $shellPaths = \App\Support\AppShell::paths();
+  $exitUrl = ($teachingMode ?? false) ? route('admin.courses.show', $course) : route('learn.index');
+  $exitTitle = ($teachingMode ?? false) ? 'Back to course admin' : 'Back to My Courses';
 @endphp
 
 @include('partials.toast-host')
 
 <div class="learn-shell" x-data="@yield('shell_component', 'learnShell()')" x-init="init()">
   <header class="learn-hd">
-    <a href="{{ route('learn.index') }}" wire:navigate class="exit" title="Back to My Courses">
+    <a href="{{ $exitUrl }}" wire:navigate class="exit" title="{{ $exitTitle }}">
       <i class="fas fa-arrow-left" aria-hidden="true"></i> <span>Exit</span>
-      <span class="sr-only">Back to My Courses</span>
+      <span class="sr-only">{{ $exitTitle }}</span>
     </a>
     <span class="divider" aria-hidden="true"></span>
     <span class="course-t">{{ $course->title }}</span>
     <span class="page-t">@yield('page_title', '')</span>
     @yield('header_meta')
+    @if($teachingMode ?? false)
+      <span class="teach-head-progress" role="img" aria-label="{{ $teachingProgressCount }} of {{ $teachingProgressTotal }} topics taught, {{ $teachingProgressPercent }} percent">
+        <span class="teach-head-count">Taught {{ $teachingProgressCount }}/{{ $teachingProgressTotal }}</span>
+        <span class="teach-head-bar"><i style="width:{{ $teachingProgressPercent }}%"></i></span>
+        <span class="teach-head-percent">{{ $teachingProgressPercent }}%</span>
+      </span>
+    @else
     <span class="hd-progress" role="img"
           aria-label="Course progress: {{ $shell->doneLessons() }} of {{ $shell->totalLessons() }} lessons complete">
       <span class="bar" aria-hidden="true"><i style="width:{{ $shell->progressPercent() }}%"></i></span>
       <span class="pct" aria-hidden="true">{{ $shell->progressPercent() }}%</span>
     </span>
+    @endif
     <button type="button" class="learn-toggle" @click="sidebarOpen = true"
             :aria-expanded="sidebarOpen ? 'true' : 'false'" aria-controls="learn-side">
       <i class="fas fa-list-ul" aria-hidden="true"></i> Contents
@@ -250,7 +269,8 @@
 
   <div class="learn-backdrop" :class="{open: sidebarOpen}" @click="sidebarOpen = false"></div>
 
-  @include('learn.partials.sidebar', ['shell' => $shell, 'course' => $course, 'currentLesson' => $currentLesson ?? null])
+  @include('learn.partials.sidebar', ['shell' => $shell, 'course' => $course, 'currentLesson' => $currentLesson ?? null,
+      'teachingMode' => $teachingMode ?? false, 'taughtLessonIds' => $taughtLessonIds ?? collect()])
 
   <main class="learn-main @yield('main_class', 'no-bar')" id="learn-content" tabindex="-1">
     @yield('banner')

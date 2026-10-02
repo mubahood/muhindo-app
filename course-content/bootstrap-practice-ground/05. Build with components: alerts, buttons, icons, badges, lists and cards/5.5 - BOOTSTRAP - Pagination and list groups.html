@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Pagination and list groups.">
+  <title>5.5 Pagination and list groups | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 5.5</p>
+    <h1>Pagination and list groups</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>A list group styles related list items. Pagination gives people links between pages of results.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Group categories and page links</h3><ul class="list-group mb-3"><li class="list-group-item active" aria-current="true">All products</li><li class="list-group-item">Groceries</li><li class="list-group-item">Home care</li></ul><nav aria-label="Product pages"><ul class="pagination mb-0"><li class="page-item active"><a class="page-link" href="#" aria-current="page">1</a></li><li class="page-item"><a class="page-link" href="#">2</a></li></ul></nav></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;ul class=&quot;list-group mb-3&quot;&gt;
+  &lt;li class=&quot;list-group-item active&quot; aria-current=&quot;true&quot;&gt;
+    All products
+  &lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;
+    Groceries
+  &lt;/li&gt;
+  &lt;li class=&quot;list-group-item&quot;&gt;
+    Home care
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;nav aria-label=&quot;Product pages&quot;&gt;
+  &lt;ul class=&quot;pagination mb-0&quot;&gt;
+    &lt;li class=&quot;page-item active&quot;&gt;
+      &lt;a class=&quot;page-link&quot; href=&quot;#&quot; aria-current=&quot;page&quot;&gt;
+        1
+      &lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;page-item&quot;&gt;
+      &lt;a class=&quot;page-link&quot; href=&quot;#&quot;&gt;
+        2
+      &lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use a list group for categories or settings. Use pagination when a long set of results is split into pages.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Mark the current page with active and aria-current.</li><li>Give pagination a descriptive navigation label.</li><li>Use list groups for related items, not every list on a page.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Make the current selection and page easy to identify.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Add one category and one page. Label the pagination navigation for screen readers.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

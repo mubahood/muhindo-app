@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Form validation.">
+  <title>8.5 Form validation | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 8.5</p>
+    <h1>Form validation</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Browser validation checks common rules such as required fields and valid email addresses. Bootstrap styles the valid and invalid states.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Let the browser explain a missing field</h3><form class="needs-validation" novalidate><label class="form-label" for="requiredEmail">Email address</label><input class="form-control" id="requiredEmail" type="email" required><div class="invalid-feedback">Enter a valid email address.</div><button class="btn btn-primary mt-3" type="submit">Send</button></form></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;form class=&quot;needs-validation&quot; novalidate&gt;
+  &lt;label class=&quot;form-label&quot; for=&quot;requiredEmail&quot;&gt;
+    Email address
+  &lt;/label&gt;
+  &lt;input class=&quot;form-control&quot; id=&quot;requiredEmail&quot; type=&quot;email&quot; required&gt;
+  &lt;div class=&quot;invalid-feedback&quot;&gt;
+    Enter a valid email address.
+  &lt;/div&gt;
+  &lt;button class=&quot;btn btn-primary mt-3&quot; type=&quot;submit&quot;&gt;
+    Send
+  &lt;/button&gt;
+&lt;/form&gt;</code></pre><h3>Check the form on submit</h3><pre class="code-sample"><code>const forms = document.querySelectorAll(&quot;.needs-validation&quot;);
+
+forms.forEach(form =&gt; {
+  form.addEventListener(&quot;submit&quot;, event =&gt; {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+    }
+    form.classList.add(&quot;was-validated&quot;);
+  });
+});</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use validation on forms to help people correct missing or wrongly formatted information before submission.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Use HTML attributes such as required and type=email.</li><li>Show a clear message near an invalid field.</li><li>Client-side validation does not replace server-side checks.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Validation should explain how to fix an error, not only show that one exists.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Submit the empty form. Add the Bootstrap validation starter from the lesson notes, then test valid and invalid input.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

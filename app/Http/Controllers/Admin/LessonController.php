@@ -201,7 +201,7 @@ class LessonController extends Controller
 
         $data = $request->validate([
             'title' => 'required|string|max:200',
-            'content' => 'nullable|string',
+            'content' => 'nullable|string|max:5000000',
             'video_url' => 'nullable|url|max:500',
             'captions_url' => 'nullable|url|max:500',
             'duration_minutes' => 'nullable|integer|min:0',

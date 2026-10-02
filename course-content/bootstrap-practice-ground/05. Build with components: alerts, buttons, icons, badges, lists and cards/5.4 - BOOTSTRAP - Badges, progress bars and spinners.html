@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Badges, progress bars and spinners.">
+  <title>5.4 Badges, progress bars and spinners | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 5.4</p>
+    <h1>Badges, progress bars and spinners</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Badges show a short status or count. Progress bars show how much of a task is complete. Spinners signal that a wait is happening.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Show order progress</h3><p>Preparing your order <span class="badge text-bg-primary">In progress</span></p><div class="progress mb-3" role="progressbar" aria-label="Order progress" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:65%">65%</div></div><p><span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span><span role="status">Loading recent orders...</span></p></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;p&gt;
+  Preparing your order
+  &lt;span class=&quot;badge text-bg-primary&quot;&gt;
+    In progress
+  &lt;/span&gt;
+&lt;/p&gt;
+&lt;div class=&quot;progress mb-3&quot; role=&quot;progressbar&quot; aria-label=&quot;Order progress&quot; aria-valuenow=&quot;65&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot;&gt;
+  &lt;div class=&quot;progress-bar&quot; style=&quot;width:65%&quot;&gt;
+    65%
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;
+  &lt;span class=&quot;spinner-border spinner-border-sm me-2&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;/span&gt;
+  &lt;span role=&quot;status&quot;&gt;
+    Loading recent orders...
+  &lt;/span&gt;
+&lt;/p&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use a badge for order status, a progress bar for a known amount of progress, and a spinner while content loads.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Keep badge text short.</li><li>Set the progress width and aria-valuenow to the same value.</li><li>Explain a spinner to assistive technology.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Choose the status component that matches the information you need to show.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Change both the progress width and aria-valuenow to the same number. Then try the spinner beside a short loading message.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

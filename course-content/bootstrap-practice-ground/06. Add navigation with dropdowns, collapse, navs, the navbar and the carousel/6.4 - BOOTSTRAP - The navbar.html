@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for The navbar.">
+  <title>6.4 The navbar | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 6.4</p>
+    <h1>The navbar</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>A navbar is a shared navigation area. The expand classes set the width at which its links collapse into a menu button.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Make a menu that collapses on a phone</h3><nav class="navbar navbar-expand-lg bg-body-tertiary border rounded px-3"><a class="navbar-brand" href="../index.html">Marigold</a><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navPractice" aria-controls="navPractice" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navPractice"><ul class="navbar-nav ms-auto"><li class="nav-item"><a class="nav-link" href="#">Products</a></li><li class="nav-item"><a class="nav-link" href="#">About</a></li></ul></div></nav></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;nav class=&quot;navbar navbar-expand-lg bg-body-tertiary border rounded px-3&quot;&gt;
+  &lt;a class=&quot;navbar-brand&quot; href=&quot;../index.html&quot;&gt;
+    Marigold
+  &lt;/a&gt;
+  &lt;button class=&quot;navbar-toggler&quot; type=&quot;button&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#navPractice&quot; aria-controls=&quot;navPractice&quot; aria-expanded=&quot;false&quot; aria-label=&quot;Toggle navigation&quot;&gt;
+    &lt;span class=&quot;navbar-toggler-icon&quot;&gt;
+    &lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navPractice&quot;&gt;
+    &lt;ul class=&quot;navbar-nav ms-auto&quot;&gt;
+      &lt;li class=&quot;nav-item&quot;&gt;
+        &lt;a class=&quot;nav-link&quot; href=&quot;#&quot;&gt;
+          Products
+        &lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class=&quot;nav-item&quot;&gt;
+        &lt;a class=&quot;nav-link&quot; href=&quot;#&quot;&gt;
+          About
+        &lt;/a&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use a navbar for the main links people need across the pages of a site.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>The toggler target must match the collapsible element id.</li><li>Use navbar-expand-* to choose the expand breakpoint.</li><li>Give the menu button an accessible label.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Keep the main navigation short and make the small-screen toggle work.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Resize the page and open the menu. Add a Contact link and check the target id.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

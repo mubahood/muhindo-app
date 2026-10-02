@@ -10,10 +10,12 @@ use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Services\Learning\CertificateService;
 use App\Services\Learning\MarkdownRenderer;
+use App\Services\Learning\HtmlLessonRenderer;
 use App\Services\Learning\ProgressService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -25,6 +27,7 @@ class LearningController extends Controller
         private readonly CertificateService $certificates,
         private readonly ProgressService $progress,
         private readonly MarkdownRenderer $markdown,
+        private readonly HtmlLessonRenderer $htmlLessons,
     ) {}
 
     public function index(Request $request): View
@@ -68,23 +71,52 @@ class LearningController extends Controller
 
     public function lesson(Request $request, Course $course, Lesson $lesson): View
     {
-        $enrollment = $this->enrollmentFor($request, $course);
+        $teachingMode = $request->boolean('teach');
+        if ($teachingMode) {
+            abort_unless($request->user()->isAdmin(), 403);
+            // An unsaved, admin-only context lets the shared lesson view and
+            // sidebar run without creating or changing a student's progress.
+            $enrollment = new Enrollment(['user_id' => $request->user()->id, 'course_id' => $course->id, 'status' => 'active']);
+        } else {
+            $enrollment = $this->enrollmentFor($request, $course);
+        }
         abort_unless($lesson->module->course_id === $course->id, 404);
         abort_unless($lesson->is_published, 404);
 
-        $this->progress->recordView($enrollment, $lesson);
+        if (! $teachingMode) {
+            $this->progress->recordView($enrollment, $lesson);
+        }
 
         $course->load('modules.lessons');
+        $publishedLessonIds = $course->modules
+            ->flatMap(fn ($module) => $module->lessons->where('is_published', true))
+            ->pluck('id')
+            ->values();
+        $taughtLessonIds = $teachingMode && $publishedLessonIds->isNotEmpty()
+            ? DB::table('lesson_teaching_progress')
+                ->where('user_id', $request->user()->id)
+                ->whereNotNull('taught_at')
+                ->whereIn('lesson_id', $publishedLessonIds)
+                ->pluck('lesson_id')
+            : collect();
+        $teachingProgressTotal = $publishedLessonIds->count();
+        $teachingProgressCount = $taughtLessonIds->count();
+        $teachingProgressPercent = $teachingProgressTotal > 0
+            ? (int) round($teachingProgressCount * 100 / $teachingProgressTotal)
+            : 0;
         $completedLessonIds = $enrollment->progressRecords()->whereNotNull('completed_at')->pluck('lesson_id');
-        $lockedLessonIds = $this->publishedLessonsFlat($course)
+        $lockedLessonIds = $teachingMode ? collect() : $this->publishedLessonsFlat($course)
             ->filter(fn (Lesson $l) => $course->isLessonLocked($enrollment, $l))
             ->pluck('id');
 
         $renderedContent = $lesson->content && $lesson->content_format === ContentFormat::Markdown
             ? $this->markdown->toHtml($lesson->content)
             : null;
+        $htmlLessonDocument = $lesson->content_format === ContentFormat::Html
+            ? $this->htmlLessons->toDocument($lesson->content, $course, $teachingMode)
+            : null;
 
-        $notes = $enrollment->lessonNotes()->where('lesson_id', $lesson->id)->orderBy('seconds')->get();
+        $notes = $teachingMode ? collect() : $enrollment->lessonNotes()->where('lesson_id', $lesson->id)->orderBy('seconds')->get();
 
         // A fresh signed URL every page load; the 6-hour window comfortably covers a
         // single viewing session (including pauses) without staying valid indefinitely if shared.
@@ -122,9 +154,16 @@ class LearningController extends Controller
             'previousLesson' => $this->adjacentLesson($course, $lesson, -1),
             'nextLessonForNav' => $this->adjacentLesson($course, $lesson, 1),
             'renderedContent' => $renderedContent,
+            'htmlLessonDocument' => $htmlLessonDocument,
             'notes' => $notes,
             'videoStreamUrl' => $videoStreamUrl,
             'activities' => $activities,
+            'teachingMode' => $teachingMode,
+            'canTeach' => $request->user()->isAdmin(),
+            'taughtLessonIds' => $taughtLessonIds,
+            'teachingProgressTotal' => $teachingProgressTotal,
+            'teachingProgressCount' => $teachingProgressCount,
+            'teachingProgressPercent' => $teachingProgressPercent,
         ]);
     }
 

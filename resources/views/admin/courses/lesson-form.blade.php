@@ -60,6 +60,14 @@
           </button>
         </div>
 
+        <div class="tb-form-group full" x-show="contentFormat === 'html'" style="margin:0 0 10px;">
+          <label class="tb-label" for="lesson-html-file">Load a complete HTML lesson</label>
+          <input class="tb-input" id="lesson-html-file" type="file" accept=".html,.htm,text/html"
+                 @change="loadHtmlFile($event.target.files[0]); $event.target.value = ''">
+          <p class="muted" style="font-size:.8rem;margin-top:5px;">Choose an HTML file to put its code here. You can also paste HTML into the box. The student sees a live example in a separate, safe preview.</p>
+          <p class="muted" style="font-size:.8rem" x-show="htmlFileMessage" x-text="htmlFileMessage" role="status"></p>
+        </div>
+
         {{-- The editor writes Markdown rather than being a WYSIWYG on purpose.
              The preview renders through the very same server-side renderer the
              student sees, so what is shown here cannot drift from the real
@@ -285,6 +293,23 @@ function lessonEditor(cfg) {
     dragging: false,
     uploading: false,
     uploadLabel: '',
+    htmlFileMessage: '',
+    loadHtmlFile(file) {
+      if (!file) return;
+      if (!/\.html?$/i.test(file.name) || file.size > 5 * 1024 * 1024) {
+        this.htmlFileMessage = 'Choose an HTML file smaller than 5 MB.';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.content = String(reader.result || '');
+        this.contentFormat = 'html';
+        this.showPreview = false;
+        this.htmlFileMessage = `${file.name} loaded. Save the lesson to publish this content.`;
+      };
+      reader.onerror = () => { this.htmlFileMessage = 'The file could not be read.'; };
+      reader.readAsText(file);
+    },
 
     /**
      * wrap, puts the markers either side of the selection.

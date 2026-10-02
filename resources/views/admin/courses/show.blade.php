@@ -52,6 +52,23 @@
 </div>
 
 @php $ready = \App\Services\Catalog\CourseReadiness::forCourse($course); @endphp
+@php $firstTeachingLesson = $course->modules->flatMap->lessons->first(fn ($lesson) => $lesson->is_published); @endphp
+<div class="tb-card" style="margin-bottom:20px;">
+  <div class="tb-card-header">
+    <span class="tb-card-title"><i class="fas fa-chalkboard-user" aria-hidden="true"></i> Your teaching progress</span>
+    <span class="muted" style="font-size:.85rem;">{{ $teachingProgress['taught'] }} of {{ $teachingProgress['total'] }} topics · {{ $teachingProgress['percent'] }}%</span>
+  </div>
+  <div class="tb-card-body" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+    <div class="ready-bar" role="progressbar" aria-label="Your course teaching progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $teachingProgress['percent'] }}" style="flex:1;min-width:180px;margin:0;">
+      <span class="ready-live" style="width:{{ $teachingProgress['percent'] }}%"></span>
+    </div>
+    @if($firstTeachingLesson)
+      <a class="btn-tb btn-tb-ghost btn-tb-sm" href="{{ route('learn.lesson', [$course, $firstTeachingLesson]) }}?teach=1" target="_blank" rel="noopener">
+        <i class="fas fa-play" aria-hidden="true"></i> Open teaching view
+      </a>
+    @endif
+  </div>
+</div>
 @if($ready['total'] > 0)
   {{-- How much of this course actually exists. The bar is the honest answer to
        "how far am I", which the Draft/Published badge above cannot give: a
@@ -156,6 +173,9 @@
                 {{ $lesson->duration_minutes ? $lesson->duration_minutes.' min · ' : '' }}{{ $lesson->materials->count() }} material(s)
                 · <a href="{{ route('admin.courses.quizzes.create', $course) }}?lesson_id={{ $lesson->id }}">+ Quiz</a>
                 · <a href="{{ route('admin.courses.assignments.create', $course) }}?lesson_id={{ $lesson->id }}">+ Assignment</a>
+                @if($lesson->is_published)
+                  · <a href="{{ route('learn.lesson', [$course, $lesson]) }}?teach=1" target="_blank" rel="noopener">Teach this topic</a>
+                @endif
               </div>
             </div>
           </div>

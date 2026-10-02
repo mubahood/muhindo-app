@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Tooltips and popovers.">
+  <title>7.2 Tooltips and popovers | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 7.2</p>
+    <h1>Tooltips and popovers</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>A tooltip shows a short hint on hover or keyboard focus. A popover opens a slightly larger piece of information after activation.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Point to a helpful hint</h3><button class="btn btn-outline-secondary me-2" data-bs-toggle="tooltip" title="We accept cash, card and mobile money">Payment options</button><button class="btn btn-outline-primary" data-bs-toggle="popover" title="Collect in store" data-bs-content="Choose Central, Northgate or Lakeside at checkout.">Click and collect</button></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;button class=&quot;btn btn-outline-secondary me-2&quot; data-bs-toggle=&quot;tooltip&quot; title=&quot;We accept cash, card and mobile money&quot;&gt;
+  Payment options
+&lt;/button&gt;
+&lt;button class=&quot;btn btn-outline-primary&quot; data-bs-toggle=&quot;popover&quot; title=&quot;Collect in store&quot; data-bs-content=&quot;Choose Central, Northgate or Lakeside at checkout.&quot;&gt;
+  Click and collect
+&lt;/button&gt;</code></pre><h3>Initialize the tooltip and popover</h3><pre class="code-sample"><code>document.querySelectorAll(&#39;[data-bs-toggle=&quot;tooltip&quot;]&#39;).forEach(element =&gt; {
+  new bootstrap.Tooltip(element);
+});
+
+document.querySelectorAll(&#39;[data-bs-toggle=&quot;popover&quot;]&#39;).forEach(element =&gt; {
+  new bootstrap.Popover(element);
+});</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Use a tooltip for a brief label and a popover for a small explanation. Keep important instructions visible in the page.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Bootstrap needs JavaScript initialization for both.</li><li>Tooltips should not contain essential information.</li><li>Use buttons or links as interactive triggers.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Hints can help, but a page should still make sense without them.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Hover or focus for the tooltip; click for the popover. Add clear initialisation in practice.js.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

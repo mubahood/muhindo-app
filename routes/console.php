@@ -38,3 +38,6 @@ Schedule::command('analytics:geolocate')->hourlyAt(20)->when(fn () => (bool) con
  * missed run can be caught by hand with --date before anybody looks.
  */
 Schedule::command('tasks:generate-recurring')->dailyAt('05:00');
+
+// Student practice code is disposable scratch work, never course content.
+Schedule::command('practice-workspaces:prune')->hourly();

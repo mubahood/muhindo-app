@@ -12,6 +12,7 @@ use App\Models\Lesson;
 use App\Models\User;
 use App\Services\BillingService;
 use App\Services\Learning\MarkdownRenderer;
+use App\Services\Learning\HtmlLessonRenderer;
 use App\Support\Settings;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
@@ -24,6 +25,7 @@ class CourseCatalogueController extends Controller
     public function __construct(
         private readonly MarkdownRenderer $markdown,
         private readonly BillingService $billing,
+        private readonly HtmlLessonRenderer $htmlLessons,
     ) {}
 
     /** Server-rendered, URL-driven filters/sort/search so listing pages stay shareable and crawlable. */
@@ -113,9 +115,12 @@ class CourseCatalogueController extends Controller
                 'watchUrl' => $lesson->is_embeddable ? null : $lesson->resource_url,
                 'video' => $lesson->video_disk_path ? asset('storage/'.$lesson->video_disk_path) : null,
                 'captions' => $lesson->captions_url,
+                'html_document' => $lesson->content_format === ContentFormat::Html
+                    ? $this->htmlLessons->toDocument($lesson->content, $course)
+                    : null,
                 'html' => $lesson->content && $lesson->content_format === ContentFormat::Markdown
                     ? $this->markdown->toHtml($lesson->content)
-                    : ($lesson->content ? '<p>'.e($lesson->content).'</p>' : null),
+                    : ($lesson->content && $lesson->content_format !== ContentFormat::Html ? '<p>'.e($lesson->content).'</p>' : null),
                 'url' => route('courses.preview', [$course, $lesson]),
             ]);
 
@@ -253,11 +258,15 @@ class CourseCatalogueController extends Controller
         $renderedContent = $lesson->content && $lesson->content_format === ContentFormat::Markdown
             ? $this->markdown->toHtml($lesson->content)
             : null;
+        $htmlLessonDocument = $lesson->content_format === ContentFormat::Html
+            ? $this->htmlLessons->toDocument($lesson->content, $course)
+            : null;
 
         return view('courses.preview', [
             'course' => $course->load('modules.lessons'),
             'lesson' => $lesson,
             'renderedContent' => $renderedContent,
+            'htmlLessonDocument' => $htmlLessonDocument,
         ]);
     }
 
