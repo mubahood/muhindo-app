@@ -1,0 +1,77 @@
+name: CI
+
+# Nothing ran these before. The suite was 1,246 tests that only existed if
+# somebody remembered to type the command, which is the same as not having them
+# on the day it matters.
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          # The suite runs against SQLite in memory, as phpunit.xml sets it.
+          extensions: mbstring, intl, sqlite3, pdo_sqlite, gd, zip, bcmath
+          coverage: none
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      - run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Prepare the environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - run: php artisan test
+
+  static:
+    name: Static analysis and formatting
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, sqlite3, pdo_sqlite, gd, zip, bcmath
+          coverage: none
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      - run: composer install --prefer-dist --no-interaction --no-progress
+
+      # --test reports what it would change without changing it, so a badly
+      # formatted file fails the build instead of being quietly rewritten.
+      - name: Formatting
+        run: vendor/bin/pint --test
+
+      # The baseline holds today's known findings. This fails on new ones only.
+      - name: Static analysis
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=2G

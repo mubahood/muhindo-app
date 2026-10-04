@@ -101,6 +101,17 @@ class CourseCatalogueController extends Controller
            preview that spins before it plays is a preview people abandon. Only
            lessons explicitly marked as free previews are included, so nothing
            paid can leak through the same channel. */
+        /*
+         * Loaded before the first read, not after it.
+         *
+         * The relation was eager loaded further down, in the array handed to
+         * the view, which is too late: the preview list below touches
+         * $course->modules->lessons first, so every module fetched its own
+         * lessons one query at a time. A twelve module course spent twelve
+         * queries re-reading rows it was about to load again anyway.
+         */
+        $course->loadMissing('modules.lessons');
+
         $previews = $course->modules->flatMap->lessons
             ->filter(fn (Lesson $lesson) => $lesson->is_free_preview && $lesson->is_published)
             ->values()

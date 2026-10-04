@@ -6,8 +6,8 @@ use App\Enums\ContentFormat;
 use App\Models\Course;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 /** Import the prepared Bootstrap practice pages as the written lessons in the course. */
 class SyncBootstrapPracticeGround extends Command
