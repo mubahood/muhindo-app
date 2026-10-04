@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Add the About page and make both pages share one navbar.">
+  <title>10.2 Add the About page and make both pages share one navbar | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 10.2</p>
+    <h1>Add the About page and make both pages share one navbar</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>The second page is where an assistant drifts most. Asked for a page on its own it will redesign the navbar, and the site stops looking like one site.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Compare Bootstrap 4 and 5 syntax</h3><h4 class="h6">Old Bootstrap 4 markup</h4><button class="btn btn-secondary" data-toggle="collapse" data-target="#oldExample">This old toggle does not open</button><div class="collapse" id="oldExample"><p>It has no Bootstrap 5 trigger.</p></div><h4 class="h6 mt-3">Bootstrap 5 markup</h4><button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#bs5Example" aria-expanded="false" aria-controls="bs5Example">Open the Bootstrap 5 panel</button><div class="collapse mt-2" id="bs5Example"><p>Bootstrap 5 uses data-bs-* attributes.</p></div></section>
+    <section class="lesson-section lesson-prompts"><h2>Prompts for this lesson</h2><p>Copy each prompt in order. Run one, check the answer against the checklist below it, then move on. Never paste the next prompt until the last one is correct.</p><h3>1. Copy the shell, do not redesign it</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Create about.html in the same folder as index.html.
+Copy the navbar and the footer from index.html exactly as they are, character for character.
+Do not redesign them. Do not rename any class. Do not add or remove any link.
+The only change you may make is which link carries the active class and aria-current=&quot;page&quot;:
+on this page it is About, and Home must no longer have either.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Open both files side by side. The navbar markup should be identical apart from the two active attributes.</p><h3>2. The About content, in named parts</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Between the navbar and the footer in about.html, add these parts in order.
+
+1. A page header: container py-5, an h1 &quot;About me&quot; and one lead paragraph.
+
+2. An intro row: container, row with g-4 and align-items-center.
+   Left column col-12 col-md-5 holding an image with class img-fluid rounded and real alt text.
+   Right column col-12 col-md-7 holding three short paragraphs.
+
+3. A skills list: an h2 then a list-group list-group-flush.
+   Each item uses d-flex justify-content-between align-items-center
+   with the skill name on the left and a badge on the right.
+
+4. A short history: an h2 then three cards in a row row-cols-1 row-cols-md-3 g-3,
+   each card holding a year, a role title and one line of description.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> At 360 pixels the image sits above the text, not beside it. Every image has alt text that is not the filename.</p></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;h4 class=&quot;h6&quot;&gt;
+  Old Bootstrap 4 markup
+&lt;/h4&gt;
+&lt;button class=&quot;btn btn-secondary&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#oldExample&quot;&gt;
+  This old toggle does not open
+&lt;/button&gt;
+&lt;div class=&quot;collapse&quot; id=&quot;oldExample&quot;&gt;
+  &lt;p&gt;
+    It has no Bootstrap 5 trigger.
+  &lt;/p&gt;
+&lt;/div&gt;
+&lt;h4 class=&quot;h6 mt-3&quot;&gt;
+  Bootstrap 5 markup
+&lt;/h4&gt;
+&lt;button class=&quot;btn btn-primary&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#bs5Example&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;bs5Example&quot;&gt;
+  Open the Bootstrap 5 panel
+&lt;/button&gt;
+&lt;div class=&quot;collapse mt-2&quot; id=&quot;bs5Example&quot;&gt;
+  &lt;p&gt;
+    Bootstrap 5 uses data-bs-* attributes.
+  &lt;/p&gt;
+&lt;/div&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Every time you add a page to a project that already has a header and footer.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Tell it to copy the navbar and footer character for character.</li><li>Change only which link carries active and aria-current.</li><li>Use plain relative paths, because a leading slash breaks on GitHub Pages.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Name the first page as the source of truth, or every new page becomes a new design.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Activate both buttons. Search the old example for data-toggle and data-target, then compare it with the working Bootstrap 5 version.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Add the Contact page, link it all up, and finish the mini site.">
+  <title>10.3 Add the Contact page, link it all up, and finish the mini site | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 10.3</p>
+    <h1>Add the Contact page, link it all up, and finish the mini site</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>A review prompt works when you give it the list to check against. Asking an assistant whether your code is good invites it to agree with you.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Test the layout on a phone</h3><div class="row g-3"><div class="col-12 col-md-6 col-lg-4"><div class="p-3 border rounded">Rice</div></div><div class="col-12 col-md-6 col-lg-4"><div class="p-3 border rounded">Tea</div></div><div class="col-12 col-md-6 col-lg-4"><div class="p-3 border rounded">Soap</div></div></div></section>
+    <section class="lesson-section lesson-prompts"><h2>Prompts for this lesson</h2><p>Copy each prompt in order. Run one, check the answer against the checklist below it, then move on. Never paste the next prompt until the last one is correct.</p><h3>1. The contact page</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Create contact.html. Copy the navbar and footer from index.html exactly,
+and set the active link to Contact.
+
+Between them add a container py-5 holding a row with g-4:
+
+Left column col-12 col-lg-7: a form with class needs-validation and the novalidate attribute.
+Fields: Full name (text), Email address (email), Subject (a select with four options),
+and Message (a textarea with rows=&quot;5&quot;). Every field is required, has a label with a for
+attribute matching the input id, and is followed by a div with class invalid-feedback
+containing a helpful sentence that says what to do, not just &quot;invalid&quot;.
+Submit button: btn btn-primary.
+
+Right column col-12 col-lg-5: a card with an h2, then address, phone and email,
+each line beginning with a Bootstrap Icon marked aria-hidden=&quot;true&quot;.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Click submit with the form empty. Every field should show its own message. Tab through the whole form with the keyboard and watch for a visible focus ring at every stop.</p><h3>2. The review prompt. Give it the list, never ask for an opinion.</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Review index.html, about.html and contact.html together as one website.
+Report your findings as a numbered list and change nothing.
+
+Report each of these separately:
+1. Any class that is not part of Bootstrap 5.3, with the file and line.
+2. Any spacing utility value that does not match the pattern used on the other pages.
+3. Any heading level that skips a step, for example an h2 followed by an h4.
+4. Any image with missing alt text, or alt text that is just the filename.
+5. Any id that appears more than once in the same file.
+6. Any link whose target file does not exist in this folder.
+7. Any difference between the three navbars other than the active link.
+
+Do not rewrite the files. Do not suggest redesigns. Only report.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Read the list yourself and decide what to act on. A report is not a to do list; some of what it finds will be wrong.</p></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;div class=&quot;row g-3&quot;&gt;
+  &lt;div class=&quot;col-12 col-md-6 col-lg-4&quot;&gt;
+    &lt;div class=&quot;p-3 border rounded&quot;&gt;
+      Rice
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;col-12 col-md-6 col-lg-4&quot;&gt;
+    &lt;div class=&quot;p-3 border rounded&quot;&gt;
+      Tea
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;col-12 col-md-6 col-lg-4&quot;&gt;
+    &lt;div class=&quot;p-3 border rounded&quot;&gt;
+      Soap
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>At the end of any set of pages, before you call the work finished.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Give the checklist; do not ask for an opinion.</li><li>Tell it to report and change nothing, so you stay the one deciding.</li><li>Run Lighthouse on the page with the form, not only the home page.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>A good review prompt asks for a list of specific problems, not for praise.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Use the device toolbar at 360, 768 and 1280 px. Find and fix any horizontal scrolling.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

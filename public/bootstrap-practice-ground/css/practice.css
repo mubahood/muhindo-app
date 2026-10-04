@@ -31,3 +31,30 @@ p { color: #345; }
 .directory { padding: 1.5rem; }
 .directory section { margin-block: 2rem; }
 .directory li { margin-block: .3rem; }
+
+/* Modules 10 and 11: the prompts are the lesson, so they are set to be read
+   and copied rather than skimmed. Long lines wrap instead of scrolling
+   sideways, because a prompt you cannot see all of is a prompt you cannot
+   check against the answer. */
+.lesson-prompts .prompt-sample {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: visible;
+  background: #f7f7f4;
+  border-left: 3px solid #b5541c;
+  line-height: 1.55;
+  padding: 1rem 1rem 1rem 1.1rem;
+  margin: .4rem 0 .75rem;
+}
+.lesson-prompts h3 {
+  font-size: 1rem;
+  margin: 1.4rem 0 .2rem;
+}
+.lesson-prompts h3:first-of-type { margin-top: .8rem; }
+.prompt-check {
+  font-size: .92rem;
+  margin: 0 0 1.4rem;
+  padding-left: 1.1rem;
+  border-left: 3px solid #d8d2c0;
+  color: #444;
+}

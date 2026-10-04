@@ -1267,140 +1267,283 @@
         "lesson_title": "Module 10 quiz",
         "questions": [
             {
-                "prompt": "The class text-bold does nothing and the Styles pane shows no rule for it. What is the fix?",
+                "prompt": "Why write .github/copilot-instructions.md before the first HTML file?",
                 "answer": "b",
-                "explanation": "text-bold is invented. Bootstrap 5.3 uses fw-bold.",
+                "explanation": "The rules file is read every time, so you stop repeating yourself and the drift stops. You still check.",
                 "options": [
                     {
                         "key": "a",
-                        "label": "Re-link Bootstrap"
+                        "label": "It makes the assistant faster"
                     },
                     {
                         "key": "b",
-                        "label": "Replace it with fw-bold"
+                        "label": "It sets the version and house rules once, so answers stop drifting between Bootstrap 4 and 5"
                     },
                     {
                         "key": "c",
-                        "label": "Add !important"
+                        "label": "It is required by VS Code"
                     },
                     {
                         "key": "d",
-                        "label": "Clear the browser cache"
+                        "label": "It replaces the need to check the output"
                     }
                 ]
             },
             {
-                "prompt": "Which set contains only Bootstrap 4 names that do nothing in Bootstrap 5?",
+                "prompt": "You ask for the second page and the assistant gives it a slightly different navbar. What is the correct instruction?",
                 "answer": "b",
-                "explanation": "All three were renamed or removed in Bootstrap 5.",
+                "explanation": "Copying keeps one site. Redesigning both doubles the work and the risk.",
                 "options": [
                     {
                         "key": "a",
-                        "label": "ms-3, form-select, visually-hidden"
+                        "label": "Accept it, both are valid Bootstrap"
                     },
                     {
                         "key": "b",
-                        "label": "ml-3, custom-select, sr-only"
+                        "label": "Copy the navbar from index.html exactly, character for character, and change only the active link"
                     },
                     {
                         "key": "c",
-                        "label": "g-0, text-start, rounded-pill"
+                        "label": "Ask it to redesign both navbars to match"
                     },
                     {
                         "key": "d",
-                        "label": "d-grid, text-bg-primary, mb-3"
+                        "label": "Move the navbar into a JavaScript file"
                     }
                 ]
             },
             {
-                "prompt": "An AI layout looks perfect on your laptop. What is the minimum check before keeping it?",
-                "answer": "b",
-                "explanation": "AI cannot see a phone; the device toolbar can.",
-                "options": [
-                    {
-                        "key": "a",
-                        "label": "Ask the AI if it is responsive"
-                    },
-                    {
-                        "key": "b",
-                        "label": "View it at 360, 768 and 1280 pixels and look for sideways scrolling"
-                    },
-                    {
-                        "key": "c",
-                        "label": "Run it once at 1280"
-                    },
-                    {
-                        "key": "d",
-                        "label": "Validate the CSS only"
-                    }
-                ]
-            },
-            {
-                "prompt": "You fixed the toggler in an AI navbar by changing data-toggle. What should you do next?",
-                "answer": "b",
-                "explanation": "Most leftovers fail silently; only a search finds them all.",
-                "options": [
-                    {
-                        "key": "a",
-                        "label": "Nothing, it works now"
-                    },
-                    {
-                        "key": "b",
-                        "label": "Search the file for every other Bootstrap 4 leftover such as ml-, sr-only and data-target"
-                    },
-                    {
-                        "key": "c",
-                        "label": "Ask the AI to confirm"
-                    },
-                    {
-                        "key": "d",
-                        "label": "Add jQuery just in case"
-                    }
-                ]
-            },
-            {
-                "prompt": "Which prompt is most likely to give a layout that works on a phone?",
+                "prompt": "Which prompt will give you a page you can actually check?",
                 "answer": "c",
-                "explanation": "Naming each size removes the guesswork, though you still test.",
+                "explanation": "Named parts can be checked one at a time. A whole site cannot.",
                 "options": [
                     {
                         "key": "a",
-                        "label": "A products section with a sidebar"
+                        "label": "Build me a professional portfolio website"
                     },
                     {
                         "key": "b",
-                        "label": "A modern responsive products section"
+                        "label": "Make a modern responsive homepage with good design"
                     },
                     {
                         "key": "c",
-                        "label": "Bootstrap 5.3: products one per line on phones, two from md, three from lg; sidebar in an offcanvas below lg; images img-fluid"
+                        "label": "Build four named sections in order, each naming the Bootstrap classes it should use"
                     },
                     {
                         "key": "d",
-                        "label": "Make it look like a big online shop"
+                        "label": "Build a homepage like Apple"
                     }
                 ]
             },
             {
-                "prompt": "The habit this course ends with is:",
-                "answer": "c",
-                "explanation": "Useful and accountable at the same time.",
+                "prompt": "Why does the sign in page not get the admin sidebar?",
+                "answer": "b",
+                "explanation": "Layouts belong to states. Say so in the prompt.",
                 "options": [
                     {
                         "key": "a",
-                        "label": "Trust the AI when it sounds sure"
+                        "label": "Sidebars are slow"
                     },
                     {
                         "key": "b",
-                        "label": "Avoid AI for Bootstrap"
+                        "label": "Nobody is signed in yet, so there is nothing to navigate; say which pages share which layout or the assistant will guess"
                     },
                     {
                         "key": "c",
-                        "label": "AI drafts, you test at three widths, you check the docs, you sign your name to it"
+                        "label": "Bootstrap does not allow it"
                     },
                     {
                         "key": "d",
-                        "label": "Only use AI for colours"
+                        "label": "It would break the offcanvas"
+                    }
+                ]
+            },
+            {
+                "prompt": "An AI status column shows green, amber and grey dots with no words. What is wrong?",
+                "answer": "b",
+                "explanation": "Anyone who cannot tell the colours apart gets nothing. The word goes in the badge.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Nothing, the colours are clear"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Colour alone carries the meaning, so the status word must be in the badge too"
+                    },
+                    {
+                        "key": "c",
+                        "label": "The badges need to be bigger"
+                    },
+                    {
+                        "key": "d",
+                        "label": "It should use a progress bar"
+                    }
+                ]
+            },
+            {
+                "prompt": "What should you say on camera when the admin project is finished?",
+                "answer": "b",
+                "explanation": "Naming the limit stops learners expecting behaviour that is not there.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "That it is a working admin system"
+                    },
+                    {
+                        "key": "b",
+                        "label": "That it is layout only: nothing saves, the numbers do not change, and courses 3 and 5 make it work"
+                    },
+                    {
+                        "key": "c",
+                        "label": "That it needs a database licence"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Nothing, the learner can see it"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "lesson_title": "Module 11 quiz",
+        "questions": [
+            {
+                "prompt": "Why is the final project a school site rather than the Marigold shop?",
+                "answer": "b",
+                "explanation": "A final project that can be copied from your own earlier work tests nothing.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Schools are easier"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Nothing from the first nine modules can be copy pasted into it, so it tests what you actually know"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Shops cannot be themed"
+                    },
+                    {
+                        "key": "d",
+                        "label": "It is shorter"
+                    }
+                ]
+            },
+            {
+                "prompt": "Before the first prompt in lesson 53, what do you write down?",
+                "answer": "b",
+                "explanation": "Every later prompt refers back to those three groups. Without them the assistant guesses.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The colour codes"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Which pages share the public header, which share the admin shell, and which share neither"
+                    },
+                    {
+                        "key": "c",
+                        "label": "The list of Bootstrap components"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The GitHub repository name"
+                    }
+                ]
+            },
+            {
+                "prompt": "An admin page works in the editor and loses its stylesheet once published. What is the likely cause?",
+                "answer": "b",
+                "explanation": "Paths from a subfolder have to go up a level first.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "GitHub Pages does not allow subfolders"
+                    },
+                    {
+                        "key": "b",
+                        "label": "The page is one folder down and the link is missing ../"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Bootstrap must be installed"
+                    },
+                    {
+                        "key": "d",
+                        "label": "The CSS file is too large"
+                    }
+                ]
+            },
+            {
+                "prompt": "You set --bs-primary to the navy, but the buttons are still Bootstrap blue. Why?",
+                "answer": "b",
+                "explanation": "The same rule as module 9. Theme the component, not just the palette.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "The file is cached"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Buttons use their own component variables such as --bs-btn-bg, which must be set on .btn-primary"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Navy is not a valid colour"
+                    },
+                    {
+                        "key": "d",
+                        "label": "You need Sass"
+                    }
+                ]
+            },
+            {
+                "prompt": "Which accessibility check finds the most problems on the admissions page?",
+                "answer": "b",
+                "explanation": "Lighthouse cannot tell whether the tab order makes sense. Your keyboard can.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Running Lighthouse"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Tabbing through the whole form with the keyboard only"
+                    },
+                    {
+                        "key": "c",
+                        "label": "Checking the colour contrast"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Validating the HTML"
+                    }
+                ]
+            },
+            {
+                "prompt": "What is the habit the course ends on?",
+                "answer": "c",
+                "explanation": "Useful and accountable at the same time, which is the whole course in one line.",
+                "options": [
+                    {
+                        "key": "a",
+                        "label": "Write better prompts"
+                    },
+                    {
+                        "key": "b",
+                        "label": "Use AI only for small things"
+                    },
+                    {
+                        "key": "c",
+                        "label": "The assistant drafts, you check the version and the classes, you test at three widths, and your name goes on the result"
+                    },
+                    {
+                        "key": "d",
+                        "label": "Avoid AI for layout"
                     }
                 ]
             }

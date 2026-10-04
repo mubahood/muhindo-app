@@ -6,16 +6,16 @@ use App\Enums\QuizFeedbackMode;
 use App\Models\Assignment;
 use App\Models\Course;
 use App\Models\Lesson;
-use App\Models\Question;
 use App\Models\Quiz;
-use App\Models\QuestionOption;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
 /** Move the prepared Bootstrap module checks into the existing graded activity system. */
 class SyncBootstrapSystemActivities extends Command
 {
-    protected $signature = 'courses:sync-bootstrap-activities {--path= : Practice-ground content folder}';
+    protected $signature = 'courses:sync-bootstrap-activities
+                            {--path= : Practice-ground content folder}
+                            {--rebuild-manifest : Re-read every quiz from the practice-ground HTML and rewrite the manifest first}';
 
     protected $description = 'Import Bootstrap module quizzes and the final project as system activities';
 
@@ -25,22 +25,62 @@ class SyncBootstrapSystemActivities extends Command
         $course = Course::where('slug', 'ai-powered-frontend-development-with-bootstrap')->first();
         if (! $course) {
             $this->error('The Bootstrap course is not present yet.');
+
             return self::FAILURE;
         }
 
         $sourceQuizzes = [];
         $manifestPath = database_path('seeders/data/bootstrap-quizzes.json');
+
+        /*
+         * The manifest is a cache of the quiz pages, and a cache of generated
+         * files goes stale the first time those files are regenerated. It did:
+         * a module was rewritten, the manifest still held the old module's
+         * questions, and the import produced two quizzes with the same name and
+         * none at all for the new module. --rebuild-manifest re-reads the HTML
+         * and rewrites it, which is what to run after any module changes.
+         */
+        if ($this->option('rebuild-manifest')) {
+            $rebuilt = $this->readQuizzesFromHtml($root);
+            $existing = is_file($manifestPath)
+                ? collect(json_decode((string) file_get_contents($manifestPath), true) ?: [])->keyBy('lesson_title')
+                : collect();
+
+            /*
+             * Merged, never replaced wholesale, and only with quizzes that
+             * actually parsed. Not every page in the folder was written by the
+             * current generator: the older modules use markup this parser
+             * cannot read, and a straight overwrite turned nine good quizzes
+             * into nine empty ones in the file while the database still held
+             * the real questions. A partial parse must not be able to delete
+             * work that parsed fine last time.
+             */
+            $dropped = [];
+
+            foreach ($rebuilt as $quiz) {
+                if (count($quiz['questions']) < 5) {
+                    $dropped[] = $quiz['lesson_title'];
+
+                    continue;
+                }
+
+                $existing[$quiz['lesson_title']] = $quiz;
+            }
+
+            $merged = $existing->sortKeys()->values()->all();
+            file_put_contents($manifestPath, json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n");
+
+            $this->info('Manifest now holds '.count($merged).' quizzes.');
+
+            if ($dropped !== []) {
+                $this->warn('Kept the stored version of these, because the page did not parse: '.implode(', ', $dropped));
+            }
+        }
+
         if (is_file($manifestPath)) {
             $sourceQuizzes = json_decode((string) file_get_contents($manifestPath), true) ?: [];
         } else {
-            foreach (glob($root.'/*/*.html') ?: [] as $path) {
-                if (! preg_match('/^(\d+)\.(\d+)\s+-\s+BOOTSTRAP\s+-\s+Module\s+\d+\s+quiz\.html$/i', basename($path), $match)) continue;
-                $moduleNumber = str_pad($match[1], 2, '0', STR_PAD_LEFT);
-                $sourceQuizzes[] = [
-                    'lesson_title' => 'Module '.$moduleNumber.' quiz',
-                    'questions' => $this->parseQuiz((string) file_get_contents($path)),
-                ];
-            }
+            $sourceQuizzes = $this->readQuizzesFromHtml($root);
         }
 
         $imported = 0;
@@ -50,12 +90,14 @@ class SyncBootstrapSystemActivities extends Command
                 ->where('title', $title)->first();
             if (! $lesson) {
                 $this->warn('Skipped; matching lesson not found: '.$title);
+
                 continue;
             }
 
             $parsed = $sourceQuiz['questions'] ?? [];
             if (count($parsed) < 5) {
                 $this->warn('Skipped; quiz source has fewer than five complete questions: '.$title);
+
                 continue;
             }
 
@@ -101,10 +143,36 @@ class SyncBootstrapSystemActivities extends Command
 
         $this->syncFinalProject($course);
         $this->info("Processed {$imported} module quizzes and the final project assignment.");
+
         return self::SUCCESS;
     }
 
     /** @return list<array{prompt:string, answer:string, explanation:string, options:list<array{key:string,label:string}>}> */
+    /**
+     * Every "Module NN quiz" page under the practice ground, in module order.
+     *
+     * @return list<array{lesson_title:string, questions:array}>
+     */
+    private function readQuizzesFromHtml(string $root): array
+    {
+        $found = [];
+
+        foreach (glob($root.'/*/*.html') ?: [] as $path) {
+            if (! preg_match('/^(\d+)\.(\d+)\s+-\s+BOOTSTRAP\s+-\s+Module\s+\d+\s+quiz\.html$/i', basename($path), $match)) {
+                continue;
+            }
+
+            $found[(int) $match[1]] = [
+                'lesson_title' => 'Module '.str_pad($match[1], 2, '0', STR_PAD_LEFT).' quiz',
+                'questions' => $this->parseQuiz((string) file_get_contents($path)),
+            ];
+        }
+
+        ksort($found);
+
+        return array_values($found);
+    }
+
     private function parseQuiz(string $html): array
     {
         $dom = new \DOMDocument;
@@ -129,7 +197,8 @@ class SyncBootstrapSystemActivities extends Command
 
         $parsed = [];
         $questionItems = $xpath->query('//main//ol[not(ancestor::details)]/li[.//ul]');
-        if ($questionItems) foreach ($questionItems as $index => $item) {
+        if ($questionItems) {
+            foreach ($questionItems as $index => $item) {
                 $promptNode = $xpath->query('.//strong[1]', $item)?->item(0);
                 $optionsNode = $xpath->query('.//ul[1]', $item)?->item(0);
                 if (! $promptNode || ! $optionsNode) {
@@ -151,21 +220,33 @@ class SyncBootstrapSystemActivities extends Command
                         'options' => $options,
                     ];
                 }
+            }
         }
+
         return $parsed;
     }
 
     private function syncFinalProject(Course $course): void
     {
         $lesson = Lesson::whereHas('module', fn ($query) => $query->where('course_id', $course->id))
-            ->where('title', 'like', '%Final project brief%')->first();
-        if (! $lesson) return;
+            ->where('title', 'like', '%What you can do now%')->first();
+        if (! $lesson) {
+            return;
+        }
+
+        // Renamed with the module: the final project is the Kestrel Ridge site
+        // the learner directs an assistant to build across module 11, not the
+        // Marigold storefront, which is the worked example from modules 1 to 9.
+        Assignment::withTrashed()
+            ->where('course_id', $course->id)
+            ->where('title', 'Final project: Marigold Stores website')
+            ->forceDelete();
 
         Assignment::updateOrCreate(
-            ['course_id' => $course->id, 'title' => 'Final project: Marigold Stores website'],
+            ['course_id' => $course->id, 'title' => 'Final project: Kestrel Ridge Secondary School website'],
             [
                 'lesson_id' => $lesson->id,
-                'instructions' => "Build and publish the Marigold Stores website from the course lessons. Submit a live link or a ZIP of your project, then write a short note naming the pages you built and one change you made after testing.\n\n**Your project should include:**\n- Home, product, cart and information pages.\n- Account forms and an admin layout.\n- A responsive layout with working Bootstrap components.\n- Clear labels, keyboard focus and readable colour contrast.\n- A published address, if you submit a live link.\n\n**Before you submit:** open every page, test at phone and laptop widths, try the navigation and forms, and fix any browser console errors. Do not include passwords, real customer information or private API keys.",
+                'instructions' => "Build the complete Kestrel Ridge Secondary School website by directing an AI assistant, following lessons 11.1 to 11.5. Submit a live GitHub Pages address, or a ZIP if you cannot publish.\n\n**The site must include:**\n- index.html, about.html, news.html, article.html and admissions.html, all sharing one header and footer with the correct active link on each.\n- admin/login.html, which has no navbar and no sidebar, plus admin/index.html, admin/news-list.html and admin/news-form.html sharing one admin shell.\n- The navy and gold theme applied through component variables, with no Bootstrap blue left anywhere, and a working dark mode.\n- An admissions form with a label on every field, helpful validation messages, and a sensible tab order you can use with the keyboard alone.\n\n**Also submit:**\n- Your written page plan from lesson 11.1, showing which pages share which layout.\n- Your .github/copilot-instructions.md.\n- notes/ai-log.md with at least eight entries. Each one says what you asked for, what came back, what was wrong with it and how you caught it. Entries that only say it worked score nothing.\n- Lighthouse Accessibility screenshots of 90 or more for index.html, admissions.html and admin/index.html.\n\n**Before you submit:** open every page at 360, 768 and 1280 pixels in both colour modes, click every link, and clear the browser console. You must be able to explain any file in the project on request. Do not include passwords, real personal details or private API keys.",
                 'points' => 100,
                 'allowed_types' => 'text,link,zip',
                 'max_file_mb' => 20,

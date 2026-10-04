@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Brief the assistant once, then build the portfolio home page.">
+  <title>10.1 Brief the assistant once, then build the portfolio home page | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 10.1</p>
+    <h1>Brief the assistant once, then build the portfolio home page</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>An assistant with no house rules drifts. It gives Bootstrap 4 one day and Bootstrap 5 the next, invents class names, and draws a different navbar each time. A short rules file that it reads on every request stops most of that before it starts.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Compare a made-up class with a real one</h3><p class="text-bold">The made-up class text-bold has no Bootstrap style.</p><p class="fw-bold">The real class fw-bold makes this text bold.</p></section>
+    <section class="lesson-section lesson-prompts"><h2>Prompts for this lesson</h2><p>Copy each prompt in order. Run one, check the answer against the checklist below it, then move on. Never paste the next prompt until the last one is correct.</p><h3>1. The house rules, saved as .github/copilot-instructions.md</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">This project uses Bootstrap 5.3 from the jsDelivr CDN only. Never Bootstrap 4.
+Use data-bs-* attributes. Never data-toggle or data-target.
+Use ms and me for horizontal margins. Never ml or mr.
+No jQuery. No inline style attributes. No !important.
+Mobile first: write the plain col class first, then add col-md or col-lg.
+Every image gets class img-fluid and real alt text that describes the image.
+Every icon only button gets an aria-label.
+British spelling. No placeholder or lorem text left in any file.
+When I ask for a new page, copy the header and footer from index.html exactly
+and change only which link carries the active class.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Open the file and read it back. This is the one file you write by hand, because everything after it depends on being right.</p><h3>2. Scaffold only, no content</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Create index.html for a personal portfolio site.
+Include only: the doctype, html with lang=&quot;en&quot;, a head containing charset,
+the viewport meta, a title, the Bootstrap 5.3 CSS link from jsDelivr, and a body
+containing nothing but the Bootstrap bundle script tag before the closing body tag.
+Do not add any page content, navbar, hero or footer yet.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> The version number in both CDN URLs reads 5.3 something. If it says 4, stop and ask again naming the version.</p><h3>3. The page, in four named parts</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">In index.html, build four sections in this order. Use only Bootstrap 5.3 classes.
+
+1. Navbar: classes navbar navbar-expand-lg bg-body-tertiary sticky-top.
+   Brand text &quot;Amina Yusuf&quot;. Links: Home, About, Work, Contact.
+   It collapses behind a navbar-toggler below the lg breakpoint.
+   Home carries class active and aria-current=&quot;page&quot;.
+
+2. Hero: a container with py-5. One h1, one paragraph with class lead,
+   then two buttons, btn btn-primary &quot;See my work&quot; and btn btn-outline-secondary &quot;Contact me&quot;.
+
+3. &quot;What I do&quot;: a row with classes row-cols-1 row-cols-md-3 g-4.
+   Three cards of equal height, each with a Bootstrap Icon, an h3 and two lines of text.
+
+4. Footer: bg-body-tertiary py-4, centred text, with the year inside a span with id=&quot;year&quot;.
+
+No inline styles. No invented class names.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Count the sections. Read every class you do not recognise and look it up. Open the device toolbar at 360 pixels and check the three cards sit one per line with no sideways scrolling. Look at the Console.</p></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;p class=&quot;text-bold&quot;&gt;
+  The made-up class text-bold has no Bootstrap style.
+&lt;/p&gt;
+&lt;p class=&quot;fw-bold&quot;&gt;
+  The real class fw-bold makes this text bold.
+&lt;/p&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Write the rules file first, before any HTML, every time you start a project with an assistant.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Name the exact version in the rules file.</li><li>Ask for one page in named parts, not a whole site.</li><li>Check version, class names, 360 pixels and the Console before you keep anything.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Set the rules once, then ask for small pieces you can actually check.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Inspect both paragraphs in DevTools. Check which class has a matching CSS rule, then verify the real class in the Bootstrap docs.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

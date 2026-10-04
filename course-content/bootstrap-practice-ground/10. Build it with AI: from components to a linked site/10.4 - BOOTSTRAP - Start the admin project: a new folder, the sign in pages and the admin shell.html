@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Start the admin project: a new folder, the sign in pages and the admin shell.">
+  <title>10.4 Start the admin project: a new folder, the sign in pages and the admin shell | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 10.4</p>
+    <h1>Start the admin project: a new folder, the sign in pages and the admin shell</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Layouts belong to states. A signed out page, a signed in page and a public page are three different shells, and an assistant will merge them unless you say so.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">A sign in card with nothing else on the page</h3><div class="d-flex align-items-center justify-content-center bg-body-tertiary rounded-3 p-4"><div class="card shadow-sm" style="max-width:24rem;width:100%"><div class="card-body p-4"><h3 class="h5 text-center mb-4">Amina Yusuf Admin</h3><div class="form-floating mb-3"><input type="email" class="form-control" id="demoEmail" placeholder="name@example.com"><label for="demoEmail">Email address</label></div><div class="form-floating mb-3"><input type="password" class="form-control" id="demoPass" placeholder="Password"><label for="demoPass">Password</label></div><div class="form-check form-switch mb-3"><input class="form-check-input" type="checkbox" id="demoRemember"><label class="form-check-label" for="demoRemember">Remember me</label></div><button class="btn btn-primary w-100">Sign in</button></div></div></div></section>
+    <section class="lesson-section lesson-prompts"><h2>Prompts for this lesson</h2><p>Copy each prompt in order. Run one, check the answer against the checklist below it, then move on. Never paste the next prompt until the last one is correct.</p><h3>1. The admin rules file, saved as admin-demo/.github/copilot-instructions.md</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">This is the admin area of a small shop. Bootstrap 5.3 from the jsDelivr CDN only.
+All the general rules from the public site apply: data-bs-*, ms and me, no jQuery,
+no inline styles, mobile first, img-fluid, alt text, aria-labels on icon only buttons.
+
+Rules that are specific to this folder:
+There is no public navbar anywhere in this project.
+Signed in pages share one shell: a fixed dark top bar, a sidebar, and a main content area.
+login.html and register.html share neither the shell nor a navbar. They are
+centred cards on an otherwise empty page.
+Every table is wrapped in table-responsive.
+Every status is shown as a badge with the status word written inside it, never colour alone.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> The three rules about layout are the ones that save the most time. Without them the assistant puts a sidebar on the sign in page.</p><h3>2. The file tree first, nothing else</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Create these files for a small admin area and leave them empty apart from the page shell:
+index.html (the dashboard), login.html, register.html, products.html,
+product-detail.html, product-form.html, and css/admin.css.
+
+Every HTML file links the Bootstrap 5.3 CSS from jsDelivr first, then css/admin.css,
+and loads the Bootstrap bundle script before the closing body tag.
+Write no page content at all yet.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Open one file and confirm admin.css is linked after Bootstrap, not before, or your own rules will be overridden.</p><h3>3. The sign in page</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Build login.html.
+Do not add a navbar. Do not add a sidebar. This page has neither.
+
+Structure: a wrapper with d-flex align-items-center justify-content-center min-vh-100
+and bg-body-tertiary. Inside it a card with class shadow-sm and a maximum width of
+420 pixels set in css/admin.css, not inline.
+
+Inside the card body:
+an h1 with the shop name, centred, in a smaller display size;
+a form with needs-validation and novalidate;
+two form-floating groups, Email address and Password, each with a matching label and id;
+a form-check form-switch for &quot;Remember me&quot;;
+a submit button with classes btn btn-primary w-100;
+a small centred line underneath reading &quot;No account yet?&quot; with a link to register.html.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> No navbar, no sidebar. The card stays readable at 360 pixels and does not touch the screen edges.</p><h3>4. Register by copying, not by inventing</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Create register.html by copying login.html exactly.
+Change only three things: the heading, the fields, and the bottom link.
+Fields: Full name, Email address, Password, Confirm password, each as a form-floating group.
+The bottom line now reads &quot;Already have an account?&quot; and links to login.html.
+Keep the same wrapper, the same card, the same classes and the same button.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> The two pages should look like the same page. If the card width or spacing changed, ask again and say copy exactly.</p><h3>5. The shell every signed in page shares</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">In index.html build the admin layout only. Add no page content yet.
+
+1. A fixed top bar: nav with classes navbar navbar-dark bg-dark fixed-top.
+   On the left, below lg only, a button that opens the sidebar: it needs
+   data-bs-toggle=&quot;offcanvas&quot;, data-bs-target=&quot;#adminSidebar&quot;, an aria-controls
+   attribute and a visually-hidden label.
+   In the middle the shop name. On the right a dropdown for the signed in user.
+
+2. A sidebar with id=&quot;adminSidebar&quot;: classes offcanvas offcanvas-start below lg,
+   and a fixed column from lg upwards. It holds five nav links in a nav flex-column:
+   Dashboard, Products, Orders, Customers, Settings. Dashboard is active.
+
+3. A main element with id=&quot;adminMain&quot; for page content, offset so it is not hidden
+   behind the fixed top bar, and sitting beside the sidebar from lg upwards.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Two states to test. At 360 the sidebar is hidden and the button opens it as a panel. At 1280 the sidebar is always visible and the content sits beside it, not underneath it.</p></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;div class=&quot;d-flex align-items-center justify-content-center bg-body-tertiary rounded-3 p-4&quot;&gt;
+  &lt;div class=&quot;card shadow-sm&quot; style=&quot;max-width:24rem;width:100%&quot;&gt;
+    &lt;div class=&quot;card-body p-4&quot;&gt;
+      &lt;h3 class=&quot;h5 text-center mb-4&quot;&gt;
+        Amina Yusuf Admin
+      &lt;/h3&gt;
+      &lt;div class=&quot;form-floating mb-3&quot;&gt;
+        &lt;input type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;demoEmail&quot; placeholder=&quot;name@example.com&quot;&gt;
+        &lt;label for=&quot;demoEmail&quot;&gt;
+          Email address
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;form-floating mb-3&quot;&gt;
+        &lt;input type=&quot;password&quot; class=&quot;form-control&quot; id=&quot;demoPass&quot; placeholder=&quot;Password&quot;&gt;
+        &lt;label for=&quot;demoPass&quot;&gt;
+          Password
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;form-check form-switch mb-3&quot;&gt;
+        &lt;input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; id=&quot;demoRemember&quot;&gt;
+        &lt;label class=&quot;form-check-label&quot; for=&quot;demoRemember&quot;&gt;
+          Remember me
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;button class=&quot;btn btn-primary w-100&quot;&gt;
+        Sign in
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Whenever a project has both a public side and an area behind a sign in.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Give the admin project its own rules file.</li><li>Ask for the file tree before any content.</li><li>Say plainly which pages get no navbar and no sidebar.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Tell the assistant which pages share which layout, or it will guess and guess wrongly.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Build this page by prompting, then check the one thing a prompt gets wrong most often: no navbar and no sidebar on a sign in page.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>
