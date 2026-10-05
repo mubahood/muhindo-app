@@ -19,7 +19,7 @@ class GradebookExportController extends Controller
                 ->map(fn ($a) => ['type' => 'assignment', 'id' => $a->id, 'title' => $a->title]))
             ->values();
 
-        $enrollments = $course->enrollments()->whereIn('status', ['active', 'completed'])->with('user')->get();
+        $enrollments = $course->enrollments()->whereIn('status', ['active', 'completed'])->where('source', '!=', 'teacher')->with('user')->get();
 
         $filename = Str::slug($course->title).'-gradebook.csv';
 

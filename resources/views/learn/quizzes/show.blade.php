@@ -5,6 +5,10 @@
 @section('learn_content')
 <h1>{{ $quiz->title }}</h1>
 
+@if($teacherPractice)
+  <p class="muted" style="margin-bottom:16px;">Teacher practice attempt. Your answers and score are kept separate from student results.</p>
+@endif
+
 <div class="card" style="max-width:560px;">
   @if($quiz->description)
     <p style="margin-bottom:18px;">{{ $quiz->description }}</p>
@@ -19,7 +23,7 @@
     @endif
     <li style="margin-bottom:6px;"><i class="fas fa-target"></i> {{ $quiz->pass_percent }}% to pass</li>
     <li style="margin-bottom:6px;"><i class="fas fa-rotate"></i>
-      {{ $attemptsUsed }}{{ $quiz->max_attempts ? ' / ' . $quiz->max_attempts : '' }} attempt{{ $attemptsUsed === 1 ? '' : 's' }} used
+      {{ $attemptsUsed }}{{ $quiz->max_attempts && ! $adminCanRetry ? ' / ' . $quiz->max_attempts : '' }} attempt{{ $attemptsUsed === 1 ? '' : 's' }} used
     </li>
   </ul>
 
@@ -31,13 +35,13 @@
   @endif
 
   @if($inProgress)
-    <a href="{{ route('learn.quiz.attempt', [$course, $quiz, $inProgress]) }}" wire:navigate class="btn gold">
+    <a href="{{ route('learn.quiz.attempt', [$course, $quiz, $inProgress, ...($teachingMode ? ['teach' => 1] : [])]) }}" wire:navigate class="btn gold">
       <i class="fas fa-play"></i> Resume attempt
     </a>
-  @elseif($quiz->max_attempts && $attemptsUsed >= $quiz->max_attempts)
+  @elseif($quiz->max_attempts && $attemptsUsed >= $quiz->max_attempts && ! $adminCanRetry)
     <p class="muted">You've used all of your attempts for this quiz.</p>
   @else
-    <form method="POST" action="{{ route('learn.quiz.start', [$course, $quiz]) }}">
+    <form method="POST" action="{{ route('learn.quiz.start', [$course, $quiz, ...($teachingMode ? ['teach' => 1] : [])]) }}">
       @csrf
       <button type="submit" class="btn gold"><i class="fas fa-play"></i> {{ $attemptsUsed > 0 ? 'Start new attempt' : 'Start quiz' }}</button>
     </form>

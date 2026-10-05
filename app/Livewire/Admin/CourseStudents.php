@@ -71,6 +71,7 @@ class CourseStudents extends Component
         $field = in_array($this->sortField, self::SORTABLE, true) ? $this->sortField : 'progress_percent';
 
         $enrollments = Enrollment::where('course_id', $this->course->id)
+            ->where('source', '!=', 'teacher')
             ->with(['user', 'lastLesson'])
             ->when($this->search !== '', function ($query) {
                 $query->whereHas('user', function ($userQuery) {

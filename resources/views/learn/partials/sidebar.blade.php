@@ -1,12 +1,12 @@
 {{-- Shared course sidebar: quick links + collapsible chapters. Rendered identically
      on every page inside a course by layouts/learn. --}}
-<aside class="learn-side" :class="{open: sidebarOpen}">
+<aside class="learn-side" id="learn-side" :class="{open: sidebarOpen}">
   <div class="learn-side-top">
     <span class="learn-side-course">{{ $course->title }}</span>
     <button type="button" class="learn-side-close" @click="sidebarOpen = false" aria-label="Close"><i class="fas fa-xmark"></i></button>
   </div>
 
-  @unless(request()->boolean('teach'))<div class="learn-side-links">
+  @unless($teachingMode)<div class="learn-side-links">
     <a href="{{ route('learn.course', $course) }}" wire:navigate class="{{ request()->routeIs('learn.course') ? 'on' : '' }}"><i class="fas fa-book-open"></i><span>Course</span></a>
     <a href="{{ route('learn.quizzes.index', $course) }}" wire:navigate class="{{ request()->routeIs('learn.quiz*') ? 'on' : '' }}"><i class="fas fa-list-check"></i><span>Quizzes</span></a>
     <a href="{{ route('learn.assignments.index', $course) }}" wire:navigate class="{{ request()->routeIs('learn.assignment*') ? 'on' : '' }}"><i class="fas fa-file-pen"></i><span>Tasks</span></a>
@@ -14,7 +14,7 @@
     <a href="{{ route('learn.certificate', $course) }}" wire:navigate class="{{ request()->routeIs('learn.certificate') ? 'on' : '' }}"><i class="fas fa-award"></i><span>Certificate</span></a>
     <a href="{{ route('learn.discussions.index', $course) }}" wire:navigate class="{{ request()->routeIs('learn.discussions.*') ? 'on' : '' }}"><i class="fas fa-circle-question"></i><span>Q&amp;A</span></a>
   </div>@endunless
-  @unless(request()->boolean('teach'))
+  @unless($teachingMode)
     <a href="{{ route('learn.playground', $course) }}" wire:navigate class="learn-side-practice {{ request()->routeIs('learn.playground') ? 'on' : '' }}"><i class="fas fa-code" aria-hidden="true"></i><span>Code practice</span><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
   @endunless
 
@@ -48,7 +48,7 @@
               @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
             </span>
           @elseif($currentLesson && $l->id === $currentLesson->id)
-            <a href="{{ route('learn.lesson', [$course, $l]) }}{{ request()->boolean('teach') ? '?teach=1' : '' }}" wire:navigate class="lesson-link on">
+            <a href="{{ route('learn.lesson', [$course, $l]) }}{{ $teachingMode ? '?teach=1' : '' }}" wire:navigate class="lesson-link on">
               <span class="st">
                 @if($teachingMode)<i class="fas {{ $topicTaught ? 'fa-circle-check teach-status-check' : 'fa-circle' }}" aria-label="{{ $topicTaught ? 'Taught' : 'Not marked taught' }}"></i>
                 @else<i class="fas" :class="completed ? 'fa-circle-check' : 'fa-circle'"></i>@endif
@@ -57,7 +57,7 @@
               @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
             </a>
           @else
-            <a href="{{ route('learn.lesson', [$course, $l]) }}{{ request()->boolean('teach') ? '?teach=1' : '' }}" wire:navigate class="lesson-link">
+            <a href="{{ route('learn.lesson', [$course, $l]) }}{{ $teachingMode ? '?teach=1' : '' }}" wire:navigate class="lesson-link">
               <span class="st">
                 @if($teachingMode)<i class="fas {{ $topicTaught ? 'fa-circle-check teach-status-check' : 'fa-circle' }}" aria-label="{{ $topicTaught ? 'Taught' : 'Not marked taught' }}"></i>
                 @else<i class="fas {{ $shell->completedLessonIds->contains($l->id) ? 'fa-circle-check' : 'fa-circle' }}"></i>@endif
@@ -85,7 +85,9 @@
                   <i class="fas {{ $activity['done'] ? 'fa-circle-check' : ($activity['type'] === 'quiz' ? 'fa-list-check' : 'fa-file-pen') }}"></i>
                 </span>
                 <span class="t">{{ $activity['title'] }}</span>
-                @if($activity['required'] && ! $activity['done'])
+                @if($teachingMode && $activity['type'] === 'quiz')
+                  <span class="req">Practice</span>
+                @elseif($activity['required'] && ! $activity['done'])
                   <span class="req" title="Required before this topic can be completed">Required</span>
                 @endif
               </a>

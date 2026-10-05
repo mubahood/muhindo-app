@@ -90,6 +90,10 @@ class RecordAnalyticsConversions
 
     public function onEnrolled(Enrollment $enrollment): void
     {
+        if ($enrollment->source === 'teacher') {
+            return;
+        }
+
         $enrollment->loadMissing('course', 'user');
 
         $this->tracker->event(
@@ -176,7 +180,7 @@ class RecordAnalyticsConversions
     /** Completion is a status change, not a row, so it is caught on update. */
     public function onEnrollmentUpdated(Enrollment $enrollment): void
     {
-        if (! $enrollment->wasChanged('completed_at') || $enrollment->completed_at === null) {
+        if ($enrollment->source === 'teacher' || ! $enrollment->wasChanged('completed_at') || $enrollment->completed_at === null) {
             return;
         }
 

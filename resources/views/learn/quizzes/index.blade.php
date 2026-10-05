@@ -18,6 +18,10 @@
 @section('learn_content')
 <h1>Quizzes</h1>
 
+@if($teacherPractice)
+  <p class="muted" style="margin-bottom:16px;">Teacher practice attempts are separate from student results.</p>
+@endif
+
 @if($quizzes->isEmpty())
   <div class="card"><p class="muted">This course has no quizzes yet.</p></div>
 @else
@@ -32,7 +36,7 @@
           <tr>
             <td>{{ $quiz->title }}</td>
             <td class="muted">{{ $quiz->lesson?->title ?? 'Whole course' }}</td>
-            <td>{{ $latest?->attempt_no ?? 0 }}{{ $quiz->max_attempts ? ' / ' . $quiz->max_attempts : '' }}</td>
+            <td>{{ $latest?->attempt_no ?? 0 }}{{ $quiz->max_attempts && ! $adminCanRetry ? ' / ' . $quiz->max_attempts : '' }}</td>
             <td>
               @if($latest && $latest->status->value === 'graded')
                 {{ rtrim(rtrim(number_format((float) $latest->score_percent, 1), '0'), '.') }}%
@@ -54,9 +58,9 @@
             </td>
             <td>
               @if($latest?->status->value === 'in_progress')
-                <a href="{{ route('learn.quiz.attempt', [$course, $quiz, $latest]) }}" wire:navigate class="btn gold">Resume</a>
+                <a href="{{ route('learn.quiz.attempt', [$course, $quiz, $latest, ...($teachingMode ? ['teach' => 1] : [])]) }}" wire:navigate class="btn gold">Resume</a>
               @else
-                <a href="{{ route('learn.quiz.show', [$course, $quiz]) }}" wire:navigate class="btn">View</a>
+                <a href="{{ route('learn.quiz.show', [$course, $quiz, ...($teachingMode ? ['teach' => 1] : [])]) }}" wire:navigate class="btn">View</a>
               @endif
             </td>
           </tr>

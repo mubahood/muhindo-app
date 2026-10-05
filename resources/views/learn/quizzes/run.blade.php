@@ -27,7 +27,7 @@
 
 @section('learn_content')
 <div class="muted" style="margin-bottom:6px;">
-  <a href="{{ route('learn.quizzes.index', $course) }}">Quizzes</a> / {{ $quiz->title }}
+  <a href="{{ route('learn.quizzes.index', [$course, ...($teachingMode ? ['teach' => 1] : [])]) }}">Quizzes</a> / {{ $quiz->title }}
 </div>
 <h1 style="font-size:20px;">{{ $quiz->title }}</h1>
 
@@ -46,7 +46,7 @@
     <span x-text="formattedTime"></span>
   </div>
 
-  <form method="POST" action="{{ route('learn.quiz.submit', [$course, $quiz, $attempt]) }}" @submit="onFormSubmit">
+  <form method="POST" action="{{ route('learn.quiz.submit', [$course, $quiz, $attempt, ...($teachingMode ? ['teach' => 1] : [])]) }}" @submit="onFormSubmit">
     @csrf
     <input type="hidden" name="integrity[tab_blur_count]" x-ref="blurCount" value="0">
     <input type="hidden" name="integrity[focus_seconds]" x-ref="focusSeconds" value="0">

@@ -31,11 +31,13 @@ class QuizService
             throw new HttpException(404);
         }
 
-        if (! $quiz->is_published) {
+        $adminAttempt = auth()->user()?->isAdmin() === true;
+
+        if (! $quiz->is_published && ! $adminAttempt) {
             throw new HttpException(404);
         }
 
-        if (! $quiz->isAvailableNow()) {
+        if (! $quiz->isAvailableNow() && ! $adminAttempt) {
             throw new HttpException(403, 'This quiz is not currently available.');
         }
 
@@ -51,7 +53,7 @@ class QuizService
 
         $attemptCount = $quiz->attempts()->where('enrollment_id', $enrollment->id)->count();
 
-        if ($quiz->max_attempts && $attemptCount >= $quiz->max_attempts) {
+        if ($quiz->max_attempts && $attemptCount >= $quiz->max_attempts && ! $adminAttempt) {
             throw new HttpException(403, 'You have used all of your attempts for this quiz.');
         }
 
@@ -175,7 +177,7 @@ class QuizService
             return [$attempt->fresh(), false];
         });
 
-        if (! $needsManualReview) {
+        if (! $needsManualReview && $attempt->enrollment->source !== 'teacher') {
             QuizAttemptSubmitted::dispatch($attempt);
         }
 
@@ -274,7 +276,9 @@ class QuizService
             'passed' => $percent >= $attempt->quiz->pass_percent,
         ]);
 
-        QuizAttemptSubmitted::dispatch($attempt->fresh());
+        if ($attempt->enrollment->source !== 'teacher') {
+            QuizAttemptSubmitted::dispatch($attempt->fresh());
+        }
     }
 
     /** Freezes question order (respecting the pool draw) and, per question, option order, so a resumed attempt is stable. */

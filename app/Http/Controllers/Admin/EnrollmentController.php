@@ -27,7 +27,7 @@ class EnrollmentController extends Controller
             'billing' => (string) $request->query('billing', ''),
         ];
 
-        $query = Enrollment::with(['user', 'course', 'invoice'])
+        $query = Enrollment::where('source', '!=', 'teacher')->with(['user', 'course', 'invoice'])
             ->when($filters['q'] !== '', function ($q) use ($filters) {
                 // One box for "who": name or email, because whoever is looking
                 // for a person has whichever of the two they were given.
@@ -50,10 +50,10 @@ class EnrollmentController extends Controller
             'filters' => $filters,
             'statuses' => EnrollmentAdminService::STATUSES,
             'counts' => [
-                'all' => Enrollment::count(),
-                'pending' => Enrollment::where('status', 'pending')->count(),
-                'active' => Enrollment::where('status', 'active')->count(),
-                'unpaid' => Enrollment::whereHas('invoice',
+                'all' => Enrollment::where('source', '!=', 'teacher')->count(),
+                'pending' => Enrollment::where('source', '!=', 'teacher')->where('status', 'pending')->count(),
+                'active' => Enrollment::where('source', '!=', 'teacher')->where('status', 'active')->count(),
+                'unpaid' => Enrollment::where('source', '!=', 'teacher')->whereHas('invoice',
                     fn ($i) => $i->whereIn('status', ['issued', 'partially_paid'])->where('balance', '>', 0))->count(),
             ],
         ]);

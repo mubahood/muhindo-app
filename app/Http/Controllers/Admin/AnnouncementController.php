@@ -84,6 +84,7 @@ class AnnouncementController extends Controller
     private function notifyStudents(Announcement $announcement): void
     {
         $userIds = $announcement->course->enrollments()
+            ->where('source', '!=', 'teacher')
             ->whereIn('status', ['active', 'completed'])
             ->pluck('user_id');
 

@@ -17,7 +17,7 @@ class CourseController extends Controller
     public function index(): View
     {
         return view('admin.courses.index', [
-            'courses' => Course::withCount('enrollments')->latest()->get(),
+            'courses' => Course::withCount(['enrollments' => fn ($query) => $query->where('source', '!=', 'teacher')])->latest()->get(),
         ]);
     }
 

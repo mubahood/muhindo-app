@@ -20,6 +20,7 @@
   <title>{{ $title ?? $__env->yieldContent('title', 'Learning') }} · Muhindo Mubaraka</title>
   <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon.png') }}">
   <meta name="theme-color" content="#ffffff">
+  <script>try{if(localStorage.getItem('learnSideHidden')==='1')document.documentElement.classList.add('learn-side-hidden');}catch(e){}</script>
   <link rel="stylesheet" href="{{ asset('vendor/fonts/inter/inter.css') }}">
   <link rel="stylesheet" href="{{ asset('vendor/fa/css/all.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/td-admin.css') }}?v={{ filemtime(public_path('css/td-admin.css')) }}">
@@ -30,7 +31,7 @@
      The player's own vocabulary, mapped onto the shared design system so the
      two never drift apart on colour. Scoped to the shell so nothing leaks. */
   .learn-shell{
-    --lsw:272px; --lhd:44px; --abh:50px;
+    --lsw:272px; --lhd:52px; --abh:50px; --lpw:360px;
     --pri:var(--br); --pri-d:var(--br-d); --pri-soft:var(--br-soft);
     --gold:#c99a2e; --gold-d:#8a6a1c; --gold-soft:#fbf3e0;
     --tx2:var(--mt); --tx3:var(--mt2);
@@ -60,8 +61,9 @@
     font-weight:500;flex-shrink:0;padding:6px 4px;}
   .learn-hd .exit:hover{color:#fff;}
   .learn-hd .divider{width:1px;height:20px;background:rgba(255,255,255,.18);flex-shrink:0;}
-  .learn-hd .course-t{font-size:12.5px;font-weight:600;color:#fff;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .learn-hd .page-t{font-size:12px;color:rgba(255,255,255,.65);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+  .learn-hd .hd-title{display:flex;flex-direction:column;justify-content:center;min-width:0;flex:1;line-height:1.3;}
+  .learn-hd .course-t{font-size:10.5px;font-weight:500;color:rgba(255,255,255,.58);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .learn-hd .page-t{font-size:13.5px;font-weight:600;color:#fff;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .learn-hd .pos{font-size:11px;color:rgba(255,255,255,.75);white-space:nowrap;flex-shrink:0;}
   .learn-hd .timer{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--gold);
     white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;}
@@ -73,10 +75,53 @@
   .learn-hd .hd-progress .pct{font-size:11px;font-weight:600;color:var(--gold);min-width:32px;text-align:right;}
   .learn-hd .teach-head-progress{display:flex;align-items:center;gap:8px;flex-shrink:0;font-size:10px;color:rgba(255,255,255,.84);}
   .learn-hd .teach-head-count{white-space:nowrap;font-variant-numeric:tabular-nums;}
-  .learn-hd .teach-head-bar{width:82px;height:4px;margin:0;background:rgba(255,255,255,.2);}
+  .learn-hd .teach-head-bar{display:block;width:82px;height:4px;margin:0;overflow:hidden;border-radius:6px;background:rgba(255,255,255,.2);}
+  .learn-hd .teach-head-bar i{display:block;height:100%;border-radius:6px;transition:width .25s ease;}
   .learn-hd .teach-head-bar i{background:#c99a2e;}
   .learn-hd .teach-head-percent{min-width:27px;text-align:right;color:#e3bd5e;font-size:10px;font-weight:700;}
   .learn-hd a:focus-visible,.learn-hd button:focus-visible{outline:2px solid #fff;outline-offset:2px;}
+
+  /* Header controls. Every lesson action lives in this one row, so the
+     content below gets the whole of the remaining screen. */
+  .hd-icon{position:relative;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;
+    flex-shrink:0;border:0;border-radius:6px;background:none;color:rgba(255,255,255,.78);font-size:14px;cursor:pointer;text-decoration:none;}
+  .hd-icon:hover,.hd-icon[aria-expanded="true"]{background:rgba(255,255,255,.12);color:#fff;}
+  .hd-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .hd-form{display:contents;}
+  .hd-chip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 11px;border-radius:999px;flex-shrink:0;
+    border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:rgba(255,255,255,.9);
+    font:600 11.5px var(--font);white-space:nowrap;cursor:pointer;text-decoration:none;}
+  .hd-chip:hover{background:rgba(255,255,255,.14);color:#fff;}
+  .hd-chip.is-gold{border-color:#c99a2e;background:rgba(201,154,46,.18);color:#f3d27f;}
+  .hd-chip.is-ok{border-color:rgba(74,222,128,.55);background:rgba(34,197,94,.16);color:#9ff0bd;}
+  .hd-chip.is-static{cursor:default;}
+  .hd-count{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;
+    border-radius:999px;background:#c99a2e;color:#231a05;font-size:9.5px;font-weight:700;line-height:1;}
+  .hd-icon .hd-count{position:absolute;top:1px;right:-1px;}
+  .hd-sep{width:1px;height:22px;background:rgba(255,255,255,.16);margin:0 3px;flex-shrink:0;}
+  .hd-cta{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 15px;flex-shrink:0;border:0;border-radius:6px;
+    background:#c99a2e;color:#231a05;font:600 12.5px var(--font);white-space:nowrap;cursor:pointer;text-decoration:none;}
+  .hd-cta:hover{background:#ddb04a;color:#231a05;}
+  .hd-cta[disabled]{opacity:.55;cursor:not-allowed;}
+  .hd-pager{display:inline-flex;flex-shrink:0;border:1px solid rgba(255,255,255,.2);border-radius:6px;overflow:hidden;}
+  .hd-pager > *{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:32px;height:32px;padding:0 9px;
+    color:rgba(255,255,255,.85);font-size:12px;font-weight:500;text-decoration:none;}
+  .hd-pager > template{display:none!important;}
+  /* Alpine keeps its <template> tags in the DOM, so "the next sibling" has to skip them. */
+  .hd-pager > :not(template) ~ :not(template){border-left:1px solid rgba(255,255,255,.2);}
+  .hd-pager a:hover{background:rgba(255,255,255,.12);color:#fff;}
+  .hd-pager .off{opacity:.3;}
+  .hd-menu{position:relative;flex-shrink:0;}
+  .hd-menu-list{position:absolute;right:0;top:calc(100% + 9px);min-width:260px;padding:6px;z-index:60;border-radius:8px;
+    background:var(--surface);color:var(--tx);border:1px solid var(--line);box-shadow:0 14px 34px rgba(6,15,31,.24);}
+  .hd-menu-list a,.hd-menu-list button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:0;border-radius:6px;
+    background:none;color:var(--tx);font:500 12.5px var(--font);text-align:left;text-decoration:none;cursor:pointer;}
+  .hd-menu-list a:hover,.hd-menu-list button:hover{background:var(--pri-soft);color:var(--pri);}
+  .hd-menu-list i{width:14px;text-align:center;color:var(--tx3);}
+  .hd-menu-list hr{border:0;border-top:1px solid var(--line);margin:6px 0;}
+  .hd-keys{display:grid;grid-template-columns:auto 1fr;gap:5px 10px;padding:6px 10px 4px;font-size:11px;color:var(--tx3);}
+  .hd-keys kbd{min-width:20px;padding:1px 5px;border:1px solid var(--line-2);border-radius:4px;background:var(--surface-2);
+    color:var(--tx2);font:600 10.5px var(--font);text-align:center;}
   .learn-toggle{display:none;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.25);background:none;
     color:#fff;padding:6px 10px;font-size:11.5px;font-weight:500;cursor:pointer;flex-shrink:0;}
 
@@ -152,6 +197,14 @@
 
   .learn-backdrop{display:none;}
 
+  @media(min-width:961px){
+    .learn-side{transition:transform .22s ease;}
+    .learn-main,.learn-action-bar{transition:margin .22s ease,left .22s ease;}
+    html.learn-side-hidden .learn-side{transform:translateX(-100%);}
+    html.learn-side-hidden .learn-main{margin-left:0;}
+    html.learn-side-hidden .learn-action-bar{left:0;}
+  }
+
   /* Content column */
   .learn-main{margin-left:var(--lsw);margin-top:var(--lhd);padding:10px 14px calc(var(--abh) + 14px);}
   .learn-main.no-bar{padding-bottom:16px;}
@@ -193,8 +246,9 @@
     .learn-main.no-bar{padding-bottom:14px;}
     .learn-action-bar{left:0;padding:6px 10px;padding-bottom:calc(6px + env(safe-area-inset-bottom));}
     .learn-side{top:0;width:88vw;max-width:320px;z-index:70;transform:translateX(-100%);
-      transition:transform .22s ease;box-shadow:10px 0 28px rgba(0,0,0,.18);}
-    .learn-side.open{transform:translateX(0);}
+      transition:transform .22s ease,box-shadow .22s ease;}
+    /* Shadow only while open: a closed drawer used to cast a grey strip down the page edge. */
+    .learn-side.open{transform:translateX(0);box-shadow:10px 0 28px rgba(0,0,0,.18);}
     .learn-side-top{display:flex;}
     .learn-side-close{display:inline-flex;}
     .learn-backdrop{display:block;position:fixed;inset:0;background:rgba(6,15,31,.5);z-index:65;opacity:0;
@@ -230,7 +284,16 @@
      A child view that needs $shell inside its own sections builds it first
      (child sections are buffered before this layout runs), reuse it if so,
      so the queries only ever happen once per request. */
-  $shell = $shell ?? new \App\Support\Learning\LearnShell($course, auth()->user(), $currentLesson ?? null);
+  $teachingMode = $teachingMode ?? (request()->boolean('teach') && auth()->user()?->isAdmin());
+  $shell = $shell ?? new \App\Support\Learning\LearnShell($course, auth()->user(), $currentLesson ?? null, $teachingMode);
+  if ($teachingMode && ! isset($taughtLessonIds)) {
+    $lessonIds = $shell->flatLessons->pluck('id');
+    $taughtLessonIds = $lessonIds->isEmpty() ? collect() : \Illuminate\Support\Facades\DB::table('lesson_teaching_progress')
+        ->where('user_id', auth()->id())->whereNotNull('taught_at')->whereIn('lesson_id', $lessonIds)->pluck('lesson_id');
+    $teachingProgressTotal = $lessonIds->count();
+    $teachingProgressCount = $taughtLessonIds->count();
+    $teachingProgressPercent = $teachingProgressTotal ? (int) round($teachingProgressCount * 100 / $teachingProgressTotal) : 0;
+  }
   $shellPaths = \App\Support\AppShell::paths();
   $exitUrl = ($teachingMode ?? false) ? route('admin.courses.show', $course) : route('learn.index');
   $exitTitle = ($teachingMode ?? false) ? 'Back to course admin' : 'Back to My Courses';
@@ -240,15 +303,25 @@
 
 <div class="learn-shell" x-data="@yield('shell_component', 'learnShell()')" x-init="init()">
   <header class="learn-hd">
+    {{-- One button, two jobs: on a desktop it puts the contents away so the
+         lesson gets the full width, on a phone it opens the contents drawer. --}}
+    <button type="button" class="hd-icon" aria-controls="learn-side" aria-label="Show or hide the course contents"
+            title="Course contents  [" @click="matchMedia('(max-width:960px)').matches ? (sidebarOpen = true) : learnToggleSide()">
+      <i class="fas fa-bars-staggered" aria-hidden="true"></i>
+    </button>
     <a href="{{ $exitUrl }}" wire:navigate class="exit" title="{{ $exitTitle }}">
       <i class="fas fa-arrow-left" aria-hidden="true"></i> <span>Exit</span>
       <span class="sr-only">{{ $exitTitle }}</span>
     </a>
     <span class="divider" aria-hidden="true"></span>
-    <span class="course-t">{{ $course->title }}</span>
-    <span class="page-t">@yield('page_title', '')</span>
+    <div class="hd-title">
+      <span class="course-t">{{ $course->title }}@yield('title_meta')</span>
+      <span class="page-t">@yield('page_title', '')</span>
+    </div>
     @yield('header_meta')
-    @if($teachingMode ?? false)
+    @hasSection('header_actions')
+      <div class="hd-actions">@yield('header_actions')</div>
+    @elseif($teachingMode ?? false)
       <span class="teach-head-progress" role="img" aria-label="{{ $teachingProgressCount }} of {{ $teachingProgressTotal }} topics taught, {{ $teachingProgressPercent }} percent">
         <span class="teach-head-count">Taught {{ $teachingProgressCount }}/{{ $teachingProgressTotal }}</span>
         <span class="teach-head-bar"><i style="width:{{ $teachingProgressPercent }}%"></i></span>
@@ -261,10 +334,6 @@
       <span class="pct" aria-hidden="true">{{ $shell->progressPercent() }}%</span>
     </span>
     @endif
-    <button type="button" class="learn-toggle" @click="sidebarOpen = true"
-            :aria-expanded="sidebarOpen ? 'true' : 'false'" aria-controls="learn-side">
-      <i class="fas fa-list-ul" aria-hidden="true"></i> Contents
-    </button>
   </header>
 
   <div class="learn-backdrop" :class="{open: sidebarOpen}" @click="sidebarOpen = false"></div>
@@ -286,6 +355,23 @@
 <script>
 /** Base shell behaviour: the mobile sidebar drawer. The lesson player supplies
  *  its own richer component (lessonPlayer) that includes these same keys. */
+function learnToggleSide() {
+  const hidden = document.documentElement.classList.toggle('learn-side-hidden');
+  try { localStorage.setItem('learnSideHidden', hidden ? '1' : '0'); } catch (e) { /* private mode */ }
+}
+function learnFullscreen() {
+  const target = document.querySelector('.lesson-html-example iframe') || document.getElementById('learn-content');
+  if (document.fullscreenElement) document.exitFullscreen?.();
+  else target?.requestFullscreen?.();
+}
+if (!window.__learnShellKeys) {
+  window.__learnShellKeys = true;
+  window.addEventListener('keydown', (e) => {
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === '[' && window.matchMedia('(min-width:961px)').matches) learnToggleSide();
+  });
+}
 function learnShell() {
   return {
     sidebarOpen: false,

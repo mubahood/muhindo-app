@@ -27,7 +27,7 @@ class GradeMatrix extends Component
             $items[] = ['type' => 'assignment', 'id' => $assignment->id, 'title' => $assignment->title];
         }
 
-        $enrollments = $this->course->enrollments()->whereIn('status', ['active', 'completed'])->with('user')->get();
+        $enrollments = $this->course->enrollments()->whereIn('status', ['active', 'completed'])->where('source', '!=', 'teacher')->with('user')->get();
 
         $rows = [];
         foreach ($enrollments as $enrollment) {

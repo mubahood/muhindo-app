@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Publish your website on GitHub Pages.">
+  <title>11.1 Publish your website on GitHub Pages | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 11.1</p>
+    <h1>Publish your website on GitHub Pages</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>A site on your laptop is a site nobody can see. GitHub Pages takes a folder of HTML, CSS and images and serves it on a real web address, free, with no server to rent and nothing to configure.</p><p>You push the folder to a repository, switch Pages on in the settings, wait a minute, and you have a link you can put on your CV and send on WhatsApp.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">From a folder on your laptop to a live address</h3><div class="row g-3"><div class="col-md-6"><div class="card h-100"><div class="card-body"><h3 class="h6">What you push</h3><p class="small mb-0">The project folder itself, with <code>index.html</code> at the top level beside <code>css/</code> and <code>images/</code>.</p></div></div></div><div class="col-md-6"><div class="card h-100"><div class="card-body"><h3 class="h6">What you get back</h3><p class="small mb-0">An address shaped like <code>https://yourname.github.io/your-repo/</code> that updates every time you push.</p></div></div></div></div></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>The folder you publish</h3><pre class="code-sample"><code>my-site/
+  index.html        &lt;-- must be called index.html
+  about.html
+  contact.html
+  css/
+    style.css
+  images/
+    hero.jpg
+  admin/
+    index.html</code></pre><h3>Pushing it the first time</h3><pre class="code-sample"><code>cd my-site
+git init
+git add .
+git commit -m "First version of the site"
+git branch -M main
+git remote add origin https://github.com/yourname/my-site.git
+git push -u origin main</code></pre><h3>Then, in the repository on github.com</h3><pre class="code-sample"><code>Settings  &gt;  Pages
+  Source: Deploy from a branch
+  Branch: main    Folder: / (root)
+  Save
+
+Wait about a minute, then reload. The live link appears at the top.</code></pre><h3>Pushing a change later</h3><pre class="code-sample"><code>git add .
+git commit -m "Fix the footer link"
+git push</code></pre></section>
+    <section class="lesson-section"><h2>The finished project</h2><p>Marigold Shop is the finished course project: the shop you build by hand, module by module, from the first container to the admin dashboard. It is published on GitHub Pages exactly the way this module describes.</p><div class="row g-3"><div class="col-md-6"><div class="card h-100"><div class="card-body"><h3 class="h6">Marigold Shop, live</h3><p class="small mb-2">Ten pages: home, products, product, cart, about, contact, log in, register and the staff admin area.</p><a class="btn btn-primary btn-sm" href="https://mubahood.github.io/marigold-shop/" target="_blank" rel="noopener">Open the live site</a></div></div></div><div class="col-md-6"><div class="card h-100"><div class="card-body"><h3 class="h6">The source code</h3><p class="small mb-2">Every page is commented with the Bootstrap parts it uses and the module that teaches them.</p><a class="btn btn-outline-secondary btn-sm" href="https://github.com/mubahood/marigold-shop" target="_blank" rel="noopener">Open the repository</a></div></div></div></div><p class="small text-body-secondary mt-3 mb-1">Live: <code>https://mubahood.github.io/marigold-shop/</code> &middot; Source: <code>https://github.com/mubahood/marigold-shop</code></p><p class="small text-body-secondary mb-0">The practice pages and the AI built example are at <a href="https://mubahood.github.io/bootstrap-practice/" target="_blank" rel="noopener">https://mubahood.github.io/bootstrap-practice/</a>.</p></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>For any site that is only HTML, CSS, images and JavaScript. Anything needing PHP or a database needs real hosting instead, which is a later course.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>The home page must be named <code>index.html</code>, in lower case, at the root of what you publish.</li><li>Use relative paths. <code>css/style.css</code> works; <code>/css/style.css</code> and <code>C:\Users\...</code> both break once published.</li><li>From a subfolder you must go up first: <code>../css/style.css</code>. This is the single most common broken-stylesheet cause.</li><li>GitHub is case sensitive. <code>Hero.JPG</code> on your Mac becomes a missing image on Pages if the HTML says <code>hero.jpg</code>.</li><li>The first build takes a minute or two. A 404 straight after saving usually just means it has not finished.</li><li>Every push republishes. There is no separate deploy step.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Push the folder, switch Pages on, and your work has an address that anyone in the world can open.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Publish the site you built in the previous lesson. Then open the live address on your phone, not your laptop, and walk every page. Write down anything that is broken on Pages but worked locally, and fix the paths until nothing is. Keep the live link; you will submit it with the final project.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

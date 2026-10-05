@@ -53,18 +53,18 @@ class DashboardService
 
     public function enrollmentsTotal(): int
     {
-        return Enrollment::count();
+        return Enrollment::where('source', '!=', 'teacher')->count();
     }
 
     public function newEnrollmentsThisWeek(): int
     {
-        return Enrollment::whereBetween('created_at', $this->weekRange())->count();
+        return Enrollment::where('source', '!=', 'teacher')->whereBetween('created_at', $this->weekRange())->count();
     }
 
     /** Count tagged by the nightly app:detect-at-risk-enrollments command. */
     public function atRiskEnrollmentsCount(): int
     {
-        return Enrollment::whereNotNull('at_risk_reason')->count();
+        return Enrollment::where('source', '!=', 'teacher')->whereNotNull('at_risk_reason')->count();
     }
 
     public function clientsTotal(): int
@@ -133,7 +133,7 @@ class DashboardService
 
     public function recentEnrollments(int $limit = 6): Collection
     {
-        return Enrollment::with(['user', 'course'])->latest()->limit($limit)->get();
+        return Enrollment::where('source', '!=', 'teacher')->with(['user', 'course'])->latest()->limit($limit)->get();
     }
 
     /**

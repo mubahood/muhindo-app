@@ -34,7 +34,7 @@ class DetectAtRiskEnrollments extends Command
         $stalledWindow = now()->subDays(21);
         $counts = ['inactive' => 0, 'stalled' => 0, 'struggling' => 0, 'missing_work' => 0, 'cleared' => 0];
 
-        Enrollment::where('status', 'active')
+        Enrollment::where('status', 'active')->where('source', '!=', 'teacher')
             ->chunkById(200, function ($enrollments) use ($inactiveThreshold, $stalledWindow, &$counts) {
                 foreach ($enrollments as $enrollment) {
                     $reason = $this->determineReason($enrollment, $inactiveThreshold, $stalledWindow);

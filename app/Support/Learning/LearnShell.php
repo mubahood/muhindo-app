@@ -43,7 +43,7 @@ class LearnShell
         public readonly Course $course,
         ?User $user = null,
         public readonly ?Lesson $currentLesson = null,
-        bool $teachingMode = false,
+        public readonly bool $teachingMode = false,
     ) {
         $this->enrollment = $user && ! $teachingMode
             ? Enrollment::where('user_id', $user->id)->where('course_id', $course->id)->first()
@@ -106,7 +106,7 @@ class LearnShell
                 'title' => $quiz->title,
                 'required' => (bool) $quiz->is_required,
                 'done' => $this->submittedQuizIds->contains($quiz->id),
-                'url' => route('learn.quiz.show', [$this->course, $quiz]),
+                'url' => route('learn.quiz.show', [$this->course, $quiz, ...($this->teachingMode ? ['teach' => 1] : [])]),
             ];
         }
 

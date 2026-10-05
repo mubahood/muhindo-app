@@ -71,7 +71,8 @@ class GradingQueue extends Component
 
         foreach (AttemptAnswer::where('auto_graded', false)
             ->whereNull('points_awarded')
-            ->whereHas('attempt', fn ($q) => $q->where('status', 'submitted'))
+            ->whereHas('attempt', fn ($q) => $q->where('status', 'submitted')
+                ->whereHas('enrollment', fn ($enrollment) => $enrollment->where('source', '!=', 'teacher')))
             ->with(['attempt.enrollment.user', 'attempt.quiz.course', 'question'])
             ->get() as $answer) {
             $rows[] = [

@@ -16,6 +16,7 @@ use App\Services\Learning\QuizService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /** The student-facing quiz runner: list → intro/start → take (AJAX autosave) → review. */
@@ -30,21 +31,28 @@ class QuizAttemptController extends Controller
     {
         $enrollment = $this->enrollmentFor($request, $course);
 
-        $quizzes = $course->quizzes()->where('is_published', true)->with('lesson')->get()
+        $quizzes = $course->quizzes()
+            ->when(! $request->user()->isAdmin(), fn ($query) => $query->where('is_published', true))
+            ->with('lesson')->get()
             ->map(function (Quiz $quiz) use ($enrollment) {
                 $latest = $quiz->attempts()->where('enrollment_id', $enrollment->id)->latest('attempt_no')->first();
 
                 return ['quiz' => $quiz, 'latest' => $latest];
             });
 
-        return view('learn.quizzes.index', ['course' => $course, 'quizzes' => $quizzes]);
+        return view('learn.quizzes.index', [
+            'course' => $course, 'quizzes' => $quizzes,
+            'teachingMode' => $this->teachingQuery($request) !== [],
+            'teacherPractice' => $enrollment->source === 'teacher',
+            'adminCanRetry' => $request->user()->isAdmin(),
+        ]);
     }
 
     public function show(Request $request, Course $course, Quiz $quiz): View
     {
         $enrollment = $this->enrollmentFor($request, $course);
         $this->guardQuiz($quiz, $course);
-        abort_unless($quiz->is_published, 404);
+        abort_unless($quiz->is_published || $request->user()->isAdmin(), 404);
 
         $attemptsUsed = $quiz->attempts()->where('enrollment_id', $enrollment->id)->count();
         $inProgress = $quiz->attempts()->where('enrollment_id', $enrollment->id)
@@ -55,6 +63,9 @@ class QuizAttemptController extends Controller
         return view('learn.quizzes.show', [
             'course' => $course, 'quiz' => $quiz,
             'attemptsUsed' => $attemptsUsed, 'inProgress' => $inProgress, 'bestAttempt' => $bestAttempt,
+            'teachingMode' => $this->teachingQuery($request) !== [],
+            'teacherPractice' => $enrollment->source === 'teacher',
+            'adminCanRetry' => $request->user()->isAdmin(),
         ]);
     }
 
@@ -65,7 +76,7 @@ class QuizAttemptController extends Controller
 
         $attempt = $this->quizzes->start($quiz, $enrollment);
 
-        return redirect()->route('learn.quiz.attempt', [$course, $quiz, $attempt]);
+        return redirect()->route('learn.quiz.attempt', [$course, $quiz, $attempt, ...$this->teachingQuery($request)]);
     }
 
     public function run(Request $request, Course $course, Quiz $quiz, QuizAttempt $attempt): View|RedirectResponse
@@ -74,7 +85,7 @@ class QuizAttemptController extends Controller
         $this->guardAttempt($attempt, $quiz, $course, $enrollment);
 
         if ($attempt->status !== QuizAttemptStatus::InProgress) {
-            return redirect()->route('learn.quiz.review', [$course, $quiz, $attempt]);
+            return redirect()->route('learn.quiz.review', [$course, $quiz, $attempt, ...$this->teachingQuery($request)]);
         }
 
         $questionIds = $attempt->question_order['questions'] ?? [];
@@ -99,6 +110,7 @@ class QuizAttemptController extends Controller
             'course' => $course, 'quiz' => $quiz, 'attempt' => $attempt,
             'orderedQuestions' => $orderedQuestions, 'existingAnswers' => $existingAnswers,
             'renderedPrompts' => $renderedPrompts, 'deadline' => $deadline,
+            'teachingMode' => $this->teachingQuery($request) !== [],
         ]);
     }
 
@@ -142,7 +154,7 @@ class QuizAttemptController extends Controller
 
         $integrity = $request->input('integrity');
         $result = $this->quizzes->submit($attempt, is_array($integrity) ? $integrity : null);
-        $reviewUrl = route('learn.quiz.review', [$course, $quiz, $result]);
+        $reviewUrl = route('learn.quiz.review', [$course, $quiz, $result, ...$this->teachingQuery($request)]);
 
         if ($request->wantsJson()) {
             return response()->json(['success' => true, 'redirect' => $reviewUrl]);
@@ -166,18 +178,31 @@ class QuizAttemptController extends Controller
             'course' => $course, 'quiz' => $quiz, 'attempt' => $attempt,
             'feedback' => $feedback ? collect($feedback)->keyBy('question_id') : null,
             'questions' => $questions, 'renderedPrompts' => $renderedPrompts,
+            'teachingMode' => $this->teachingQuery($request) !== [],
         ]);
     }
 
     private function enrollmentFor(Request $request, Course $course): Enrollment
     {
-        $enrollment = Enrollment::where('user_id', $request->user()->id)
-            ->where('course_id', $course->id)
-            ->firstOrFail();
+        // Quiz attempts require an enrollment. Give teachers their own practice record
+        // without turning lesson teaching progress into student course progress.
+        $enrollment = $request->user()->isAdmin()
+            ? Enrollment::firstOrCreate(
+                ['user_id' => $request->user()->id, 'course_id' => $course->id],
+                ['uuid' => (string) Str::uuid(), 'status' => 'active', 'source' => 'teacher', 'enrolled_at' => now()],
+            )
+            : Enrollment::where('user_id', $request->user()->id)
+                ->where('course_id', $course->id)
+                ->firstOrFail();
 
         $this->authorize('access', $enrollment);
 
         return $enrollment;
+    }
+
+    private function teachingQuery(Request $request): array
+    {
+        return $request->boolean('teach') && $request->user()->isAdmin() ? ['teach' => 1] : [];
     }
 
     private function guardQuiz(Quiz $quiz, Course $course): void

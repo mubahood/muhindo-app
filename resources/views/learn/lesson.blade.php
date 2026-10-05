@@ -1,7 +1,7 @@
 @extends('layouts.learn')
 @section('title', $lesson->title)
 @section('page_title', $lesson->title)
-@section('main_class', '')
+@section('main_class', $htmlLessonDocument ? 'is-doc no-bar' : 'no-bar')
 
 @php
   /* Built here (not just in the layout) because this page's own sections,
@@ -31,81 +31,174 @@
     'minActiveSeconds' => $debugMode ? 0 : (int) ($lesson->min_active_seconds ?? 0),
     'requiredPending' => $debugMode ? 0 : $activities->where('required', true)->where('done', false)->count(),
     'teachingMode' => $teachingMode,
+    'notesCount' => $notes->count(),
 ]).')')
 
-@section('banner')
+@section('title_meta')
+  <span class="hd-pos"> · Lesson {{ $shell->lessonPosition() }} of {{ $shell->totalLessons() }}</span>
+@endsection
+
+@section('header_actions')
+  @php $requiredPending = $activities->where('required', true)->where('done', false)->count(); @endphp
   @if($teachingMode)
     @php
       $currentTopicTaught = $taughtLessonIds->contains($lesson->id);
       $courseTaught = $teachingProgressTotal > 0 && $teachingProgressCount === $teachingProgressTotal;
     @endphp
-    <section class="teach-dashboard" id="teacher-tools" aria-label="Teaching tools and course progress">
-      <div class="teach-dashboard-top">
-        <div class="teach-intro">
-          <span class="teach-kicker"><i class="fas fa-chalkboard-user" aria-hidden="true"></i> Teacher view</span>
-          <h2>Course teaching progress</h2>
-          <p>Mark a topic after you teach it. These checks are private to your teacher account.</p>
-        </div>
-        <div class="teach-progress-card" aria-label="{{ $teachingProgressCount }} of {{ $teachingProgressTotal }} topics taught">
-          <div class="teach-progress-line">
-            <strong>{{ $teachingProgressPercent }}%</strong>
-            <span>{{ $teachingProgressCount }} of {{ $teachingProgressTotal }} topics</span>
-            <span class="teach-course-state">{{ $courseTaught ? 'Course taught' : ($teachingProgressCount ? 'In progress' : 'Not started') }}</span>
-          </div>
-          <div class="teach-progress-track" role="progressbar" aria-label="Course teaching progress"
-               aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $teachingProgressPercent }}">
-            <span style="width:{{ $teachingProgressPercent }}%"></span>
-          </div>
-          <form method="POST" action="{{ route('admin.courses.teaching-progress', $course) }}"
-                onsubmit="return confirm('{{ $courseTaught ? 'Clear the taught checklist for this course?' : 'Mark every published topic in this course as taught?' }}')">
-            @csrf
-            <input type="hidden" name="taught" value="{{ $courseTaught ? 0 : 1 }}">
-            <button class="teach-course-action" type="submit">
-              <i class="fas {{ $courseTaught ? 'fa-rotate-left' : 'fa-check-double' }}" aria-hidden="true"></i>
-              {{ $courseTaught ? 'Clear course checklist' : 'Mark whole course taught' }}
-            </button>
-          </form>
-        </div>
-      </div>
-      <div class="teach-dashboard-bottom">
-        <form class="teach-topic-check" method="POST" action="{{ route('admin.lessons.teaching-progress', $lesson) }}">
+    {{-- Teaching: progress, the one decision for this topic, then movement. --}}
+    <span class="teach-head-progress hd-wide" role="img"
+          aria-label="{{ $teachingProgressCount }} of {{ $teachingProgressTotal }} topics taught, {{ $teachingProgressPercent }} percent">
+      <span class="teach-head-count">Taught {{ $teachingProgressCount }}/{{ $teachingProgressTotal }}</span>
+      <span class="teach-head-bar"><i style="width:{{ $teachingProgressPercent }}%"></i></span>
+      <span class="teach-head-percent">{{ $teachingProgressPercent }}%</span>
+    </span>
+    <span class="hd-sep hd-wide" aria-hidden="true"></span>
+
+    @if($lesson->materials->count())
+      <button type="button" class="hd-icon" @click="panelOpen = !panelOpen" :aria-expanded="panelOpen ? 'true' : 'false'"
+              aria-controls="learn-panel" title="Lesson materials  N">
+        <i class="fas fa-paperclip" aria-hidden="true"></i><span class="sr-only">Lesson materials</span>
+        <span class="hd-count">{{ $lesson->materials->count() }}</span>
+      </button>
+    @endif
+    <button type="button" class="hd-icon hd-mid" onclick="learnFullscreen()" title="Full screen  F">
+      <i class="fas fa-expand" aria-hidden="true"></i><span class="sr-only">Full screen</span>
+    </button>
+
+    <form class="hd-form" method="POST" action="{{ route('admin.lessons.teaching-progress', $lesson) }}">
+      @csrf
+      <input type="hidden" name="taught" value="{{ $currentTopicTaught ? 0 : 1 }}">
+      @if($currentTopicTaught)
+        <button class="hd-chip is-ok" type="submit" title="This topic is marked as taught. Select to undo.">
+          <i class="fas fa-circle-check" aria-hidden="true"></i><span class="hd-label">Taught</span>
+        </button>
+      @else
+        <button class="hd-cta" type="submit" title="Mark this topic as taught">
+          <i class="fas fa-check" aria-hidden="true"></i><span class="hd-label">Mark topic taught</span><span class="sr-only">Mark topic taught</span>
+        </button>
+      @endif
+    </form>
+
+    <nav class="hd-pager" aria-label="Teaching navigation">
+      @if($previousLesson)
+        <a href="{{ route('learn.lesson', [$course, $previousLesson]) }}?teach=1" title="Previous topic  Up arrow"><i class="fas fa-chevron-left" aria-hidden="true"></i><span class="sr-only">Previous topic</span></a>
+      @else
+        <span class="off" aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+      @endif
+      @if($nextLessonForNav)
+        <a href="{{ route('learn.lesson', [$course, $nextLessonForNav]) }}?teach=1" title="Next topic  Down arrow"><span class="hd-label">Next</span><i class="fas fa-chevron-right" aria-hidden="true"></i><span class="sr-only">Next topic</span></a>
+      @else
+        <span class="off" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+      @endif
+    </nav>
+
+    <div class="hd-menu" x-data="{ open: false }" @click.outside="open = false" @keydown.escape.stop="open = false">
+      <button type="button" class="hd-icon" @click="open = !open" :aria-expanded="open ? 'true' : 'false'" title="More teaching options">
+        <i class="fas fa-ellipsis-vertical" aria-hidden="true"></i><span class="sr-only">More teaching options</span>
+      </button>
+      <div class="hd-menu-list" x-show="open" x-cloak x-transition.opacity.duration.120ms>
+        <form method="POST" action="{{ route('admin.courses.teaching-progress', $course) }}"
+              onsubmit="return confirm('{{ $courseTaught ? 'Clear the taught checklist for this course?' : 'Mark every published topic in this course as taught?' }}')">
           @csrf
-          <input type="hidden" name="taught" value="{{ $currentTopicTaught ? 0 : 1 }}">
-          <span class="teach-topic-icon"><i class="fas {{ $currentTopicTaught ? 'fa-circle-check' : 'fa-circle' }}" aria-hidden="true"></i></span>
-          <span><strong>Current topic</strong><small>{{ $currentTopicTaught ? 'Marked as taught' : 'Not marked yet' }}</small></span>
-          <button class="teach-control {{ $currentTopicTaught ? '' : 'is-primary' }}" type="submit">
-            {{ $currentTopicTaught ? 'Undo taught mark' : 'Mark topic taught' }}
+          <input type="hidden" name="taught" value="{{ $courseTaught ? 0 : 1 }}">
+          <button type="submit">
+            <i class="fas {{ $courseTaught ? 'fa-rotate-left' : 'fa-check-double' }}" aria-hidden="true"></i>
+            {{ $courseTaught ? 'Clear the course checklist' : 'Mark the whole course taught' }}
           </button>
         </form>
-        <nav class="teach-navigation" aria-label="Teaching navigation">
-          @if($previousLesson)<a class="teach-control" href="{{ route('learn.lesson', [$course, $previousLesson]) }}?teach=1"><i class="fas fa-arrow-left" aria-hidden="true"></i> Previous</a>@endif
-          @if($nextLessonForNav)<a class="teach-control" href="{{ route('learn.lesson', [$course, $nextLessonForNav]) }}?teach=1">Next <i class="fas fa-arrow-right" aria-hidden="true"></i></a>@endif
-          <button class="teach-control" type="button" onclick="(document.querySelector('.lesson-html-example iframe') || document.getElementById('learn-content')).requestFullscreen?.()"><i class="fas fa-expand" aria-hidden="true"></i> Full screen</button>
-          <a class="teach-control" href="{{ route('admin.courses.show', $course) }}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Course admin</a>
-        </nav>
+        <a href="{{ route('admin.courses.show', $course) }}"><i class="fas fa-gear" aria-hidden="true"></i> Course admin</a>
+        <button type="button" onclick="learnFullscreen()"><i class="fas fa-expand" aria-hidden="true"></i> Full screen</button>
+        <hr>
+        <div class="hd-keys" aria-label="Keyboard shortcuts">
+          <kbd>&uarr;</kbd><span>Previous topic</span>
+          <kbd>&darr;</kbd><span>Next topic</span>
+          <kbd>F</kbd><span>Full screen</span>
+          <kbd>[</kbd><span>Show or hide the contents</span>
+        </div>
       </div>
-    </section>
-  @elseif($debugMode)
-    <div class="dbg-strip" role="status">
-      <i class="fas fa-flask" aria-hidden="true"></i>
-      <span><b>Debug mode is on for this course.</b> Minimum screen time and required
-      activities are switched off, so you can move straight to the next topic.</span>
     </div>
-  @endif
-@endsection
 
-@section('header_meta')
-  <span class="pos">Lesson {{ $shell->lessonPosition() }} of {{ $shell->totalLessons() }}</span>
-  @if($canTeach)
-    @unless($teachingMode)
-      <a class="btn" href="{{ route('learn.lesson', [$course, $lesson]) }}?teach=1">Teach this topic</a>
-    @endunless
+  @else
+    {{-- Learning: status on the left of the group, the next step on the right. --}}
+    @if($debugMode)
+      <span class="hd-chip is-gold is-static" title="Debug mode is on for this course. Minimum screen time and required activities are switched off, so anyone can move straight to the next topic.">
+        <i class="fas fa-flask" aria-hidden="true"></i><span class="hd-label">Debug mode on</span>
+      </span>
+    @endif
+    @if($canTeach)
+      <a class="hd-chip hd-wide" href="{{ route('learn.lesson', [$course, $lesson]) }}?teach=1" title="Switch to the teacher view of this topic">
+        <i class="fas fa-chalkboard-user" aria-hidden="true"></i><span class="hd-label">Teach</span>
+      </a>
+    @endif
+    <span class="timer hd-mid" title="Your time on this lesson. It counts only while this tab is in focus." :class="{paused: !isFocused}">
+      <i class="far fa-clock" aria-hidden="true"></i>
+      <span x-text="formatTime(activeSeconds)">{{ $activeSecondsLabel }}</span>
+    </span>
+
+    @if($activities->isNotEmpty())
+      @php $allRequiredDone = $requiredPending === 0 && $activities->where('required', true)->isNotEmpty(); @endphp
+      <button type="button" class="hd-chip {{ $requiredPending ? 'is-gold' : ($allRequiredDone ? 'is-ok' : '') }}" @click="activitiesOpen = true"
+              title="This lesson has {{ $activities->count() }} {{ \Illuminate\Support\Str::plural('activity', $activities->count()) }}{{ $requiredPending ? ', '.$requiredPending.' required before you can complete it' : '' }}">
+        <i class="fas {{ $allRequiredDone ? 'fa-circle-check' : 'fa-clipboard-check' }}" aria-hidden="true"></i>
+        <span class="hd-label">{{ $requiredPending ? $requiredPending.' required' : \Illuminate\Support\Str::plural('Activity', $activities->count()) }}</span>
+      </button>
+    @endif
+
+    <button type="button" class="hd-icon" @click="panelOpen = !panelOpen" :aria-expanded="panelOpen ? 'true' : 'false'"
+            aria-controls="learn-panel" title="My notes{{ $lesson->materials->count() ? ' and materials' : '' }}  N">
+      <i class="far fa-note-sticky" aria-hidden="true"></i><span class="sr-only">My notes</span>
+      <span class="hd-count" x-show="notesCount > 0" x-text="notesCount" x-cloak></span>
+    </button>
+    @if($htmlLessonDocument)
+      <a class="hd-icon hd-mid" href="{{ route('learn.playground', [$course, 'lesson' => $lesson->id]) }}" title="Open this lesson in code practice">
+        <i class="fas fa-code" aria-hidden="true"></i><span class="sr-only">Open this lesson in code practice</span>
+      </a>
+    @endif
+    <button type="button" class="hd-icon hd-mid" onclick="learnFullscreen()" title="Full screen  F">
+      <i class="fas fa-expand" aria-hidden="true"></i><span class="sr-only">Full screen</span>
+    </button>
+    <span class="hd-sep hd-mid" aria-hidden="true"></span>
+    <span class="hd-progress hd-wide" role="img" :aria-label="'Course progress: ' + doneLessons + ' of ' + totalLessons + ' lessons complete'">
+      <span class="bar" aria-hidden="true"><i :style="'width:' + progressPct() + '%'" style="width:{{ $shell->progressPercent() }}%"></i></span>
+      <span class="pct" aria-hidden="true" x-text="progressPct() + '%'">{{ $shell->progressPercent() }}%</span>
+    </span>
+
+    <nav class="hd-pager" aria-label="Lesson navigation">
+      <template x-if="previousLessonUrl">
+        <a :href="previousLessonUrl" wire:navigate title="Previous lesson  Up arrow"><i class="fas fa-chevron-left" aria-hidden="true"></i><span class="sr-only">Previous lesson</span></a>
+      </template>
+      <template x-if="!previousLessonUrl">
+        <span class="off" aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+      </template>
+    </nav>
+
+    {{-- After completing: a short countdown to the next lesson, with a way to stay. --}}
+    <span class="hd-chip is-gold is-static" x-show="showAdvance" x-cloak :title="'Next: ' + (nextLessonTitle || '')">
+      <i class="fas fa-forward" aria-hidden="true"></i> Next in <b x-text="advanceSeconds"></b>s
+    </span>
+    <button type="button" class="hd-chip" x-show="showAdvance" x-cloak @click="cancelAdvance()">
+      <i class="fas fa-pause" aria-hidden="true"></i> Stay
+    </button>
+
+    <form class="hd-form" method="POST" action="{{ route('learn.lesson.complete', [$course, $lesson]) }}" @submit.prevent="attemptComplete()">
+      @csrf
+      <button type="submit" class="hd-cta hd-float" :disabled="submitting || (!completed && timeRemaining() > 0)"
+              x-show="!showAdvance && !(completed && !nextLessonUrl)"
+              :title="(!completed && timeRemaining() > 0) ? 'Minimum time on this lesson: ' + formatTime(timeRemaining()) + ' left' : 'Shortcut: M'">
+        <template x-if="!completed && timeRemaining() > 0">
+          <span><i class="fas fa-hourglass-half" aria-hidden="true"></i> <span x-text="formatTime(timeRemaining())"></span></span>
+        </template>
+        <span x-show="!(!completed && timeRemaining() > 0) && !submitting" x-text="completeLabel()">Mark complete &amp; continue</span>
+        <span x-show="submitting" x-cloak>Saving...</span>
+        <i class="fas fa-arrow-right" aria-hidden="true" x-show="!(!completed && timeRemaining() > 0)"></i>
+      </button>
+    </form>
+    {{-- The end of the course: the button above hides itself, so this takes its place. --}}
+    <a href="{{ route('learn.certificate', $course) }}" wire:navigate class="hd-cta hd-float"
+       x-show="completed && !nextLessonUrl && !showAdvance" x-cloak>
+      <i class="fas fa-award" aria-hidden="true"></i> Get your certificate
+    </a>
   @endif
-  @unless($teachingMode)<span class="timer" title="Your time on this lesson, counts only while this tab is focused"
-        :class="{paused: !isFocused}">
-    <i class="far fa-clock" aria-hidden="true"></i>
-    <span x-text="formatTime(activeSeconds)">{{ $activeSecondsLabel }}</span>
-  </span>@endunless
 @endsection
 
 @push('styles')
@@ -113,36 +206,46 @@
   /* Lesson-player-only pieces (video, notes, materials, activities overlay). */
   .learn-video{aspect-ratio:16/9;width:100%;background:#000;margin-bottom:8px;}
   .learn-video iframe{width:100%;height:100%;border:0;}
-  .lesson-html-example iframe{display:block;width:100%;height:min(78vh,900px);min-height:540px;border:0;background:#fff;}
-  @media(max-width:700px){.lesson-html-example iframe{height:78vh;min-height:480px;}}
+  /* The lesson document fills everything under the header. One scrollbar,
+     the document's own, instead of a page scroll wrapped round a frame scroll. */
+  .learn-main.is-doc{padding:0;}
+  .lesson-html-example iframe{display:block;width:100%;height:calc(100vh - var(--lhd));height:calc(100dvh - var(--lhd));
+    min-height:420px;border:0;background:#fff;}
+  .learn-main.is-doc > .alert-success{margin:10px 14px;}
+  .lesson-flow{max-width:900px;margin:0 auto;padding:6px 4px 20px;}
   .learn-speed{display:flex;gap:6px;margin-bottom:10px;}
   .learn-speed button{font-size:11px;padding:3px 8px;border:1px solid var(--line);background:var(--surface);color:var(--tx2);cursor:pointer;}
   .learn-speed button.on{background:var(--pri);color:#fff;border-color:var(--pri);}
-  .teach-dashboard{margin:0 0 14px;padding:13px 0 12px;border-bottom:1px solid var(--line);color:var(--tx);}
-  .teach-dashboard-top{display:flex;align-items:center;justify-content:space-between;gap:24px;}
-  .teach-kicker{display:inline-flex;align-items:center;gap:6px;color:var(--pri);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
-  .teach-intro h2{margin:3px 0 2px!important;font-size:16px!important;color:var(--tx);}
-  .teach-intro p{margin:0;color:var(--tx3);font-size:12px;}
-  .teach-progress-card{width:min(390px,45%);flex-shrink:0;}
-  .teach-progress-line{display:flex;align-items:baseline;gap:8px;font-size:11px;color:var(--tx3);}
-  .teach-progress-line strong{font-size:20px;color:var(--pri);font-variant-numeric:tabular-nums;}
-  .teach-course-state{margin-left:auto;color:var(--tx2);font-weight:600;}
-  .teach-progress-track,.teach-head-bar{display:block;height:5px;background:var(--surface-2);overflow:hidden;margin:5px 0 3px;border-radius:6px;}
-  .teach-progress-track span,.teach-head-bar i{display:block;height:100%;background:var(--pri);border-radius:6px;transition:width .25s ease;}
-  .teach-course-action{padding:0;border:0;background:none;color:var(--pri);font:600 11px var(--font);cursor:pointer;}
-  .teach-course-action:hover{text-decoration:underline;}
-  .teach-dashboard-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:11px;padding-top:10px;border-top:1px solid var(--line);}
-  .teach-topic-check{display:flex;align-items:center;gap:9px;min-width:220px;}
-  .teach-topic-icon{color:var(--ok);font-size:17px;}
-  .teach-topic-check strong,.teach-topic-check small{display:block;}
-  .teach-topic-check strong{font-size:11.5px;}
-  .teach-topic-check small{margin-top:1px;color:var(--tx3);font-size:10.5px;}
-  .teach-navigation{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-  .teach-control{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:31px;padding:5px 9px;border:1px solid var(--line-2);background:var(--surface);color:var(--tx2);font:500 11.5px var(--font);text-decoration:none;cursor:pointer;}
-  .teach-control:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-soft);}
-  .teach-control.is-primary{border-color:var(--pri);background:var(--pri);color:#fff;}
-  .teach-control.is-primary:hover{background:var(--pri-d);color:#fff;}
-  @media(max-width:820px){.teach-dashboard-top,.teach-dashboard-bottom{align-items:flex-start;flex-direction:column;gap:10px;}.teach-progress-card{width:100%;}.teach-navigation{width:100%;}}
+  .learn-hd .hd-pos{white-space:nowrap;}
+
+  /* Notes and materials: a side panel instead of cards under the lesson.
+     On a wide screen it pushes the lesson over rather than covering it. */
+  .learn-panel{position:fixed;top:var(--lhd);right:0;bottom:0;width:var(--lpw);max-width:100vw;z-index:47;
+    display:flex;flex-direction:column;background:var(--surface);border-left:1px solid var(--line);
+    transform:translateX(100%);visibility:hidden;transition:transform .22s ease,visibility 0s linear .22s;
+    box-shadow:-12px 0 30px rgba(6,15,31,.08);}
+  .learn-panel.open{transform:none;visibility:visible;transition:transform .22s ease;}
+  @media(min-width:961px){ .learn-shell:has(.learn-panel.open) .learn-main{margin-right:var(--lpw);} }
+  .lp-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);}
+  .lp-head h2{margin:0;font-size:13.5px;font-weight:600;}
+  .lp-close{border:0;background:none;color:var(--tx3);font-size:16px;padding:4px;cursor:pointer;}
+  .lp-close:hover{color:var(--tx);}
+  .lp-body{flex:1;overflow-y:auto;padding:12px 14px;overscroll-behavior:contain;}
+  .lp-section + .lp-section{margin-top:18px;}
+  .lp-section h3{margin:0 0 8px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);}
+  .lp-foot{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--line);background:var(--surface-2);}
+  .lp-foot input{flex:1;min-width:0;padding:8px 10px;border:1px solid var(--line);font:13px var(--font);background:var(--surface);}
+
+  /* Narrower screens: labels give way to icons first, then the less used
+     controls, and on a phone the main button floats where a thumb can reach it. */
+  @media(max-width:1280px){ .learn-hd .hd-wide{display:none!important;} }
+  @media(max-width:1100px){ .learn-hd .hd-label{display:none;} .learn-hd .hd-cta .hd-label{display:inline;} .learn-hd .hd-pos{display:none;} }
+  @media(max-width:480px){ .learn-hd .hd-cta:not(.hd-float) .hd-label{display:none;} }
+  @media(max-width:760px){ .learn-hd .hd-mid{display:none!important;} }
+  @media(max-width:560px){
+    .learn-hd .hd-float{position:fixed;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:46;
+      height:46px;padding:0 20px;border-radius:999px;box-shadow:0 10px 26px rgba(6,15,31,.35);}
+  }
 
   .material-row{padding:6px 0;border-bottom:1px solid var(--line);}
   .material-row:last-child{border-bottom:none;padding-bottom:0;}
@@ -153,7 +256,7 @@
   .material-actions a{color:var(--tx2);}
   .material-actions a:hover{color:var(--pri);}
   .pdf-frame{margin-top:8px;border:1px solid var(--line);}
-  .pdf-frame iframe{width:100%;height:70vh;border:0;display:block;}
+  .pdf-frame iframe{width:100%;height:60vh;border:0;display:block;}
 
   .note-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:5px 0;border-bottom:1px solid var(--line);font-size:13px;}
   .note-row .ts{background:none;border:none;color:var(--pri);cursor:pointer;font-weight:600;padding:0;margin-right:8px;font-size:12.5px;}
@@ -261,144 +364,100 @@
     @endif
     @endunless
 
-    @php $requiredPending = $activities->where('required', true)->where('done', false)->count(); @endphp
-    @if(! $teachingMode && $activities->isNotEmpty())
-      <div class="activities-banner">
-        <span class="ab-icon"><i class="fas fa-clipboard-check" aria-hidden="true"></i></span>
-        <span class="ab-text">
-          This lesson has {{ $activities->count() }} {{ \Illuminate\Support\Str::plural('activity', $activities->count()) }}
-          @if($requiredPending > 0),
-            <b>{{ $requiredPending }} required</b> before you can complete the lesson
-          @elseif($activities->where('required', true)->isNotEmpty()).
-            All required work submitted <i class="fas fa-circle-check" style="color:var(--ok);"></i>
-          @endif
-        </span>
-        <button type="button" class="btn" @click="activitiesOpen = true">View</button>
-      </div>
-    @endif
-
     @if($htmlLessonDocument)
       <section class="lesson-html-example" aria-label="Live lesson example">
         <iframe title="Live example for {{ $lesson->title }}" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox" allowfullscreen
                 loading="lazy" srcdoc="{{ $htmlLessonDocument }}"></iframe>
       </section>
-      <p class="lesson-practice-link"><a class="btn" href="{{ route('learn.playground', [$course, 'lesson' => $lesson->id]) }}"><i class="fas fa-code"></i> Open this lesson in code practice</a></p>
     @elseif($renderedContent)
-      <div class="card markdown-body">{!! $renderedContent !!}</div>
+      <div class="lesson-flow"><div class="card markdown-body">{!! $renderedContent !!}</div></div>
     @elseif($lesson->content)
-      <div class="card">{!! nl2br(e($lesson->content)) !!}</div>
+      <div class="lesson-flow"><div class="card">{!! nl2br(e($lesson->content)) !!}</div></div>
     @endif
 
-    @if($lesson->materials->count())
-      <div class="card">
-        <div class="card-title">Materials</div>
-        @foreach($lesson->materials as $material)
-          @php
-            $isLocalPdf = $material->type === 'pdf' && ! \Illuminate\Support\Str::startsWith($material->file_path, 'http');
-            $icon = match($material->type) {
-              'pdf' => 'fa-file-pdf',
-              'zip' => 'fa-file-zipper',
-              'link' => 'fa-link',
-              default => 'fa-paperclip',
-            };
-          @endphp
-          <div class="material-row" x-data="{ open: false }">
-            <div class="material-line">
-              <span class="material-name"><i class="fas {{ $icon }}" aria-hidden="true"></i> {{ $material->title }}</span>
-              <span class="material-actions">
-                @if($isLocalPdf)
-                  <button type="button" @click="open = !open" x-text="open ? 'Hide' : 'View'"></button>
-                @endif
-                <a href="{{ route('learn.materials.download', [$course, $lesson, $material]) }}" title="Download"><i class="fas fa-download"></i></a>
-              </span>
-            </div>
-            @if($isLocalPdf)
-              <div class="pdf-frame" x-show="open" x-cloak>
-                <iframe src="{{ route('learn.materials.preview', [$course, $lesson, $material]) }}" title="{{ $material->title }}"></iframe>
+@endsection
+
+@section('overlays')
+  {{-- Notes and materials. A panel beside the lesson, so writing a note never
+       means scrolling away from what the note is about. --}}
+  @if(! $teachingMode || $lesson->materials->count())
+  <aside class="learn-panel" id="learn-panel" :class="{open: panelOpen}" aria-label="Notes and materials" @keydown.escape="panelOpen = false">
+    <div class="lp-head">
+      <h2>{{ $teachingMode ? 'Lesson materials' : ($lesson->materials->count() ? 'My notes and materials' : 'My notes') }}</h2>
+      <button type="button" class="lp-close" @click="panelOpen = false" aria-label="Close the panel"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <div class="lp-body">
+      @if($lesson->materials->count())
+        <section class="lp-section">
+          <h3>Materials</h3>
+          @foreach($lesson->materials as $material)
+            @php
+              $isLocalPdf = $material->type === 'pdf' && ! \Illuminate\Support\Str::startsWith($material->file_path, 'http');
+              $icon = match($material->type) {
+                'pdf' => 'fa-file-pdf',
+                'zip' => 'fa-file-zipper',
+                'link' => 'fa-link',
+                default => 'fa-paperclip',
+              };
+            @endphp
+            <div class="material-row" x-data="{ open: false }">
+              <div class="material-line">
+                <span class="material-name"><i class="fas {{ $icon }}" aria-hidden="true"></i> {{ $material->title }}</span>
+                <span class="material-actions">
+                  @if($isLocalPdf)
+                    <button type="button" @click="open = !open" x-text="open ? 'Hide' : 'View'"></button>
+                  @endif
+                  <a href="{{ route('learn.materials.download', [$course, $lesson, $material]) }}" title="Download"><i class="fas fa-download"></i></a>
+                </span>
               </div>
-            @endif
-          </div>
-        @endforeach
-      </div>
-    @endif
-
-    @unless($teachingMode)<div class="card">
-      <div class="card-title">My notes</div>
-      <div id="notes-list">
-        @forelse($notes as $note)
-          <div class="note-row" data-note-row>
-            <div>
-              @if($note->formattedTime())
-                <button type="button" class="ts" onclick="window.__lessonVideoPlayer?.seekTo({{ $note->seconds }}, true)">{{ $note->formattedTime() }}</button>
+              @if($isLocalPdf)
+                <div class="pdf-frame" x-show="open" x-cloak>
+                  <iframe src="{{ route('learn.materials.preview', [$course, $lesson, $material]) }}" title="{{ $material->title }}"></iframe>
+                </div>
               @endif
-              <span>{{ $note->body }}</span>
             </div>
-            <form method="POST" action="{{ route('learn.notes.destroy', [$course, $lesson, $note]) }}"
-                  @submit.prevent="deleteNote($event, {{ $note->id }})">
-              @csrf @method('DELETE')
-              <button type="submit" class="del" title="Delete note"><i class="fas fa-trash"></i></button>
-            </form>
+          @endforeach
+        </section>
+      @endif
+
+      @unless($teachingMode)
+        <section class="lp-section">
+          @if($lesson->materials->count())<h3>My notes</h3>@endif
+          <div id="notes-list">
+            @forelse($notes as $note)
+              <div class="note-row" data-note-row>
+                <div>
+                  @if($note->formattedTime())
+                    <button type="button" class="ts" onclick="window.__lessonVideoPlayer?.seekTo({{ $note->seconds }}, true)">{{ $note->formattedTime() }}</button>
+                  @endif
+                  <span>{{ $note->body }}</span>
+                </div>
+                <form method="POST" action="{{ route('learn.notes.destroy', [$course, $lesson, $note]) }}"
+                      @submit.prevent="deleteNote($event, {{ $note->id }})">
+                  @csrf @method('DELETE')
+                  <button type="submit" class="del" title="Delete note"><i class="fas fa-trash"></i></button>
+                </form>
+              </div>
+            @empty
+              <p class="muted" style="font-size:13px;" data-notes-empty>No notes yet. Write down anything you want to remember from this lesson.</p>
+            @endforelse
           </div>
-        @empty
-          <p class="muted" style="font-size:13px;" data-notes-empty>No notes yet, jot one down as you watch.</p>
-        @endforelse
-      </div>
-      <form method="POST" action="{{ route('learn.notes.store', [$course, $lesson]) }}"
-            style="margin-top:8px;display:flex;gap:8px;"
+        </section>
+      @endunless
+    </div>
+    @unless($teachingMode)
+      <form class="lp-foot" method="POST" action="{{ route('learn.notes.store', [$course, $lesson]) }}"
             @submit.prevent="addNote($event)"
             onsubmit="this.querySelector('[name=seconds]').value = Math.floor(window.__lessonVideoPlayer?.getCurrentTime?.() ?? 0) || ''">
         @csrf
         <input type="hidden" name="seconds" value="">
-        <input type="text" name="body" placeholder="Add a note at the current time..." required
-               style="flex:1;padding:7px 10px;border:1px solid var(--line);font-family:var(--font);font-size:13px;">
+        <input type="text" name="body" placeholder="Add a note..." required aria-label="New note" x-ref="noteInput">
         <button type="submit" class="btn" :disabled="noteSaving"><span x-text="noteSaving ? 'Saving...' : 'Add'">Add</span></button>
       </form>
-    </div>@endunless
-@endsection
+    @endunless
+  </aside>
+  @endif
 
-@section('action_bar')
-  @unless($teachingMode)
-  <div class="learn-action-bar">
-    <div class="learn-action-bar-inner">
-      <template x-if="previousLessonUrl">
-        <a :href="previousLessonUrl" wire:navigate class="learn-prev"><i class="fas fa-chevron-left"></i> <span>Previous</span></a>
-      </template>
-      <template x-if="!previousLessonUrl">
-        <span class="learn-prev disabled"><i class="fas fa-chevron-left"></i> <span>Previous</span></span>
-      </template>
-
-      <div x-show="showAdvance" x-cloak class="learn-advance" style="flex:1;margin:0 12px;">
-        <span>Next: <strong x-text="nextLessonTitle"></strong>, <span x-text="advanceSeconds"></span>s</span>
-        <button type="button" @click="cancelAdvance()"><i class="fas fa-pause"></i> Stay</button>
-      </div>
-
-      <form method="POST" action="{{ route('learn.lesson.complete', [$course, $lesson]) }}" @submit.prevent="attemptComplete()" x-show="!showAdvance"
-            style="display:flex;align-items:center;gap:10px;">
-        @csrf
-        <span class="lock-note" x-show="!completed && timeRemaining() > 0" x-cloak>
-          <i class="fas fa-hourglass-half" aria-hidden="true"></i>
-          Min. time: <b x-text="formatTime(timeRemaining())"></b> left
-        </span>
-        <button type="submit" class="btn gold" :disabled="submitting || (!completed && timeRemaining() > 0)" x-show="!(completed && !nextLessonUrl && !showAdvance)">
-          <span x-show="!submitting" x-text="completeLabel()">Mark complete & continue</span>
-          <span x-show="submitting" x-cloak>Saving...</span>
-          <i class="fas fa-arrow-right"></i>
-        </button>
-      </form>
-
-      {{-- The end of the course. Once the last topic is done the button above
-           hides itself, which used to leave the bar empty and the student with
-           nowhere to go. The one moment they most want their certificate. --}}
-      <a href="{{ route('learn.certificate', $course) }}" wire:navigate class="btn gold"
-         x-show="completed && !nextLessonUrl && !showAdvance" x-cloak>
-        <i class="fas fa-award"></i> Get your certificate
-      </a>
-    </div>
-  </div>
-  @endunless
-@endsection
-
-@section('overlays')
   {{-- Activities overlay, its own fixed layer; responding to it never shakes the page. --}}
   <div class="learn-modal-backdrop" x-show="activitiesOpen" x-cloak @click.self="activitiesOpen = false">
     <div class="activities-modal" role="dialog" aria-label="Lesson activities">
@@ -654,6 +713,8 @@ function lessonPlayer(cfg) {
     isFocused: true,
     activeTimerId: null,
     activitiesOpen: false,
+    panelOpen: false,
+    notesCount: cfg.notesCount || 0,
     requiredPending: cfg.requiredPending,
     listeners: null, // AbortController for every window/document listener this component adds
     init() {
@@ -777,10 +838,18 @@ function lessonPlayer(cfg) {
         this.navigate(this.previousLessonUrl);
       } else if (e.code === 'ArrowDown' && this.nextLessonUrl) {
         this.navigate(this.nextLessonUrl);
-      } else if (e.key === 'm' || e.key === 'M') {
+      } else if ((e.key === 'm' || e.key === 'M') && !cfg.teachingMode) {
         this.attemptComplete();
+      } else if (e.key === 'n' || e.key === 'N') {
+        if (document.getElementById('learn-panel')) {
+          this.panelOpen = !this.panelOpen;
+          if (this.panelOpen && !cfg.teachingMode) this.$nextTick(() => this.$refs.noteInput?.focus());
+        }
+      } else if (e.key === 'f' || e.key === 'F') {
+        window.learnFullscreen?.();
       } else if (e.key === 'Escape') {
         if (this.activitiesOpen) this.activitiesOpen = false;
+        else if (this.panelOpen) this.panelOpen = false;
         else if (this.sidebarOpen) this.sidebarOpen = false;
       }
     },
@@ -876,6 +945,7 @@ function lessonPlayer(cfg) {
       row.appendChild(left);
       row.appendChild(del);
       list.appendChild(row);
+      this.notesCount++;
     },
     async deleteNote(e, noteId) {
       const row = e.target.closest('[data-note-row]');
@@ -891,6 +961,7 @@ function lessonPlayer(cfg) {
         });
         if (!res.ok) throw new Error('request failed');
         row.remove();
+        this.notesCount = Math.max(0, this.notesCount - 1);
       } catch (err) {
         row.style.opacity = '';
         window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not delete the note, please try again.', type: 'error' } }));

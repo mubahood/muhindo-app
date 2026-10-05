@@ -15,6 +15,10 @@ class EnrollmentPolicy
     /** Owns the enrollment, its status actually grants lesson/material/completion access, and its access window (if any) hasn't closed. */
     public function access(User $user, Enrollment $enrollment): bool
     {
+        if ($user->isAdmin()) {
+            return $enrollment->user_id === $user->id;
+        }
+
         if ($enrollment->user_id !== $user->id) {
             return false;
         }

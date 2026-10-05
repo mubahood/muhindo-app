@@ -24,7 +24,7 @@ class CourseAnalyticsService
     /** @return array<string,int> ordered funnel stage => count, ready for <x-dash.bars> */
     public function funnel(Course $course): array
     {
-        $base = fn () => $course->enrollments()->whereIn('status', self::ENROLLED_STATUSES);
+        $base = fn () => $course->enrollments()->whereIn('status', self::ENROLLED_STATUSES)->where('source', '!=', 'teacher');
 
         return [
             'enrolled' => $base()->count(),
@@ -40,7 +40,7 @@ class CourseAnalyticsService
     /** @return array<int,array{lesson_id:int,title:string,completed_count:int,completion_rate:float}> */
     public function lessonDropOff(Course $course): array
     {
-        $enrollmentIds = $course->enrollments()->whereIn('status', self::ENROLLED_STATUSES)->pluck('id');
+        $enrollmentIds = $course->enrollments()->whereIn('status', self::ENROLLED_STATUSES)->where('source', '!=', 'teacher')->pluck('id');
         $enrolledCount = $enrollmentIds->count();
 
         $rows = [];
@@ -68,7 +68,7 @@ class CourseAnalyticsService
     {
         $buckets = ['No watch time' => 0, 'Under 30 min' => 0, '30-60 min' => 0, '1-2 hrs' => 0, '2-5 hrs' => 0, '5+ hrs' => 0];
 
-        $seconds = $course->enrollments()->whereIn('status', self::ENROLLED_STATUSES)->pluck('total_watch_seconds');
+        $seconds = $course->enrollments()->whereIn('status', self::ENROLLED_STATUSES)->where('source', '!=', 'teacher')->pluck('total_watch_seconds');
         foreach ($seconds as $totalSeconds) {
             $minutes = (int) $totalSeconds / 60;
             $bucket = match (true) {
@@ -95,7 +95,8 @@ class CourseAnalyticsService
     {
         $rows = [];
         foreach ($course->quizzes()->orderBy('title')->get() as $quiz) {
-            $graded = $quiz->attempts()->where('status', QuizAttemptStatus::Graded);
+            $graded = $quiz->attempts()->where('status', QuizAttemptStatus::Graded)
+                ->whereHas('enrollment', fn ($query) => $query->where('source', '!=', 'teacher'));
             $count = (clone $graded)->count();
 
             $rows[] = [

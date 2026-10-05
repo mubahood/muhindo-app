@@ -18,7 +18,8 @@ class QuizAnalysisService
         $rows = [];
 
         foreach ($quiz->questions()->get() as $question) {
-            $answers = AttemptAnswer::where('question_id', $question->id)->whereNotNull('is_correct')->get();
+            $answers = AttemptAnswer::where('question_id', $question->id)->whereNotNull('is_correct')
+                ->whereHas('attempt.enrollment', fn ($query) => $query->where('source', '!=', 'teacher'))->get();
             $total = $answers->count();
             $correct = $answers->where('is_correct', true)->count();
 

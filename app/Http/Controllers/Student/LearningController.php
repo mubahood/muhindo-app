@@ -32,7 +32,7 @@ class LearningController extends Controller
 
     public function index(Request $request): View
     {
-        $enrollments = Enrollment::where('user_id', $request->user()->id)
+        $enrollments = Enrollment::where('user_id', $request->user()->id)->where('source', '!=', 'teacher')
             ->with(['course' => fn ($query) => $query->withCount('lessons')
                 ->withCount(['quizzes as published_quizzes_count' => fn ($q) => $q->where('is_published', true)])
                 ->withCount(['assignments as published_assignments_count' => fn ($q) => $q->where('is_published', true)]),

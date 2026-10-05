@@ -36,7 +36,7 @@ class CourseCatalogueController extends Controller
             ->withAvg(['reviews as reviews_avg_rating' => fn ($q) => $q->where('is_published', true)], 'rating')
             ->withCount('lessons')
             ->withSum('lessons', 'duration_minutes')
-            ->withCount('enrollments');
+            ->withCount(['enrollments' => fn ($query) => $query->where('source', '!=', 'teacher')]);
 
         if ($category = trim((string) $request->query('category'))) {
             $query->where('category', $category);
