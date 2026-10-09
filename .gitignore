@@ -57,3 +57,6 @@ _deploy-oneoffs/
 # Generated at deploy from config; the URLs inside are environment specific.
 /public/.well-known/company.json
 /.well-known/
+
+# Hosting credentials and any dated backups of them.
+credentials.txt*
