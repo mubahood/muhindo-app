@@ -1,7 +1,6 @@
 @extends('layouts.marketing')
 @section('title', 'Buy Complete PHP and Laravel Source Code')
-@section('desc', 'Complete, working source code from systems I have delivered, with an install guide for each one.')
-
+@section('desc', 'Complete, working systems you can buy, open and build on: inventory, e-commerce, hotel booking and school starters in PHP, Laravel and MySQL. Instant download, with the database and setup notes included.')
 @push('styles')
 <style>
   /* A source-code listing has to answer three questions on the card: what is

@@ -1,7 +1,6 @@
 @extends('layouts.marketing')
 @section('title', 'Software Built for Ministries, NGOs and Business')
-@section('desc', 'Systems delivered for government ministries, NGOs and private organisations across Uganda.')
-
+@section('desc', 'Systems delivered and running: national livestock traceability for the Ministry of Agriculture, hospital and school management platforms, inventory and e-commerce. Case studies with what each one had to solve.')
 @push('styles')
 <style>
   /* A chapter of the About story, not a separate product page.

@@ -1,7 +1,6 @@
 @extends('layouts.marketing')
 @section('title', 'CV: Full-Stack Engineer, Nine Years, Uganda')
-@section('desc', 'Full curriculum vitae: experience, qualifications, skills, research and selected systems delivered.')
-
+@section('desc', 'The full record on one page: nine years of software engineering, the systems delivered for ministries, NGOs and business, the degrees behind them, and the tools used daily. Print it or save it as a PDF.')
 @push('styles')
 <style>
   /* One column, tight, and readable straight through. A CV is a document, not
