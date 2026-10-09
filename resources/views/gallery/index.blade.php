@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
-@section('title', 'Gallery | Muhindo Mubaraka')
-@section('desc', 'The work, the desk, the teams and the study behind the systems.')
+@section('title', 'Training, Fieldwork and Delivery, in Photos')
+@section('desc', 'Training sessions, fieldwork and delivered systems: photographs from nine years of building software and teaching people to build it across Uganda.')
 
 @section('content')
 

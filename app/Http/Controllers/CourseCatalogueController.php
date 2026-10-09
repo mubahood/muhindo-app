@@ -70,7 +70,12 @@ class CourseCatalogueController extends Controller
              * best in small, finishable groups. Paged clearly, with the tier
              * each page belongs to named above it.
              */
-            'courses' => $query->paginate(6)->withQueryString(),
+            'courses' => $paged = $query->paginate(6)->withQueryString(),
+            'jsonLd' => [
+                \App\Support\Seo\Schema::itemList('Programming courses',
+                    collect($paged->items())->map(fn ($c) => route('courses.show', $c))->all()),
+                \App\Support\Seo\Schema::breadcrumb(['e-Learning' => route('courses.index')]),
+            ],
             'categories' => Course::where('is_published', true)->whereNotNull('category')->distinct()->orderBy('category')->pluck('category'),
             'totalLessonCount' => Lesson::where('is_published', true)
                 ->whereHas('module', fn ($q) => $q->whereNull('deleted_at')->whereHas('course', fn ($c) => $c->where('is_published', true)))
@@ -229,14 +234,10 @@ class CourseCatalogueController extends Controller
                     'url' => route('courses.show', $course),
                 ],
             ],
-            [
-                '@context' => 'https://schema.org',
-                '@type' => 'BreadcrumbList',
-                'itemListElement' => [
-                    ['@type' => 'ListItem', 'position' => 1, 'name' => 'e-Learning', 'item' => route('courses.index')],
-                    ['@type' => 'ListItem', 'position' => 2, 'name' => $course->title, 'item' => route('courses.show', $course)],
-                ],
-            ],
+            \App\Support\Seo\Schema::breadcrumb([
+                'e-Learning' => route('courses.index'),
+                $course->title => route('courses.show', $course),
+            ]),
         ];
 
         if ($faq !== []) {

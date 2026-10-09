@@ -6,26 +6,9 @@
 @include('solavia.partials.styles')
 
 @push('jsonld')
-<script type="application/ld+json">{!! json_encode([
-    '@context' => 'https://schema.org',
-    '@type' => 'Organization',
-    'name' => config('company.name'),
-    'legalName' => config('company.name'),
-    'identifier' => config('company.registration_number'),
-    'foundingDate' => '2026-07-22',
-    'url' => route('solavia.home'),
-    'logo' => asset('images/solavia-logo.svg'),
-    'email' => config('company.email'),
-    'telephone' => config('company.phone_e164'),
-    'address' => [
-        '@type' => 'PostalAddress',
-        'streetAddress' => config('company.address.street'),
-        'addressLocality' => config('company.address.locality'),
-        'addressRegion' => config('company.address.region'),
-        'addressCountry' => 'UG',
-    ],
-    'sameAs' => array_column(config('company.social'), 'url'),
-], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@foreach($jsonLd as $node)
+<script type="application/ld+json">{!! json_encode($node, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endforeach
 @endpush
 
 @section('content')

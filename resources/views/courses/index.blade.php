@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
-@section('title', 'e-Learning | Muhindo Mubaraka')
-@section('desc', 'Learn computer programming and computer-related courses with Muhindo Mubaraka: practical, project-based, in plain English.')
+@section('title', 'Programming Courses in Uganda, Online and Practical')
+@section('desc', 'Learn web development, Laravel, Flutter, PHP and databases with project-based courses taught in plain English. Built in Uganda, for work anywhere. Certificates you can verify.')
 
 @section('content')
 
@@ -185,3 +185,9 @@
 </section>
 
 @endsection
+
+@push('jsonld')
+@foreach($jsonLd as $node)
+<script type="application/ld+json">{!! json_encode($node, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endforeach
+@endpush

@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
-@section('title', 'Blog | Muhindo Mubaraka')
-@section('desc', 'Notes on building software that lasts, teaching it, and the systems I work on.')
+@section('title', 'Notes on Building and Teaching Software')
+@section('desc', 'Writing on building software that lasts, teaching people to build it, and the systems I run: Laravel, Flutter, databases, and the decisions behind them.')
 
 @section('content')
 
@@ -71,3 +71,9 @@
 </section>
 
 @endsection
+
+@push('jsonld')
+@foreach($jsonLd as $node)
+<script type="application/ld+json">{!! json_encode($node, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endforeach
+@endpush

@@ -97,8 +97,15 @@ class PortfolioController extends Controller
 
     public function work(): View
     {
+        $projects = PortfolioProject::orderBy('sort_order')->get();
+
         return view('portfolio.work', [
-            'projects' => PortfolioProject::orderBy('sort_order')->get(),
+            'projects' => $projects,
+            'jsonLd' => [
+                \App\Support\Seo\Schema::itemList('Systems delivered',
+                    $projects->map(fn ($p) => route('portfolio.project', $p))->all()),
+                \App\Support\Seo\Schema::breadcrumb(['My work' => route('portfolio.work')]),
+            ],
         ]);
     }
 
@@ -114,6 +121,24 @@ class PortfolioController extends Controller
     {
         return view('portfolio.project', [
             'project' => $portfolioProject,
+            /*
+             * These pages carried no structured data at all, which on a
+             * portfolio is the worst place to have none: a case study is the
+             * page a prospective client is sent, and it was the page a search
+             * engine understood least.
+             */
+            'jsonLd' => [
+                \App\Support\Seo\Schema::project(
+                    name: $portfolioProject->title,
+                    description: $portfolioProject->description,
+                    url: route('portfolio.project', $portfolioProject),
+                    image: $portfolioProject->coverUrl ?? null,
+                ),
+                \App\Support\Seo\Schema::breadcrumb([
+                    'My work' => route('portfolio.work'),
+                    $portfolioProject->title => route('portfolio.project', $portfolioProject),
+                ]),
+            ],
             'identity' => $this->json('portfolio.identity'),
             'contact' => $this->json('portfolio.contact'),
             'related' => PortfolioProject::where('id', '!=', $portfolioProject->id)

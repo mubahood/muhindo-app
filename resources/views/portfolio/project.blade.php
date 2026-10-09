@@ -234,3 +234,9 @@
 </x-action-bar>
 
 @endsection
+
+@push('jsonld')
+@foreach($jsonLd as $node)
+<script type="application/ld+json">{!! json_encode($node, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endforeach
+@endpush

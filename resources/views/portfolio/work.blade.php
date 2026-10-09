@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'My work | Muhindo Mubaraka')
+@section('title', 'Software Built for Ministries, NGOs and Business')
 @section('desc', 'Systems delivered for government ministries, NGOs and private organisations across Uganda.')
 
 @push('styles')
@@ -163,3 +163,9 @@
 </section>
 
 @endsection
+
+@push('jsonld')
+@foreach($jsonLd as $node)
+<script type="application/ld+json">{!! json_encode($node, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endforeach
+@endpush

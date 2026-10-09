@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
-@section('title', 'Consultancy | Muhindo Mubaraka')
-@section('desc', 'What I take on, how an engagement runs, and how to start one.')
+@section('title', 'Hire a Software Engineer in Kampala, Uganda')
+@section('desc', 'Systems built for organisations that depend on them: management platforms, mobile apps and data tools. Based in Kampala, working with ministries, NGOs and business across East Africa.')
 
 @push('styles')
 <style>

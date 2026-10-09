@@ -26,7 +26,18 @@ class SolaviaController extends Controller
 {
     public function home(): View
     {
-        return view('solavia.home');
+        return view('solavia.home', [
+            /*
+             * Built in PHP, not in the view. Laravel has an @context Blade
+             * directive, so a literal '@context' key written in a template is
+             * compiled as that directive and the page ships raw PHP inside its
+             * ld+json block. That was live here.
+             */
+            'jsonLd' => [
+                \App\Support\Seo\Schema::organisation() + ['foundingDate' => '2026-07-22'],
+                \App\Support\Seo\Schema::breadcrumb(['Company' => route('solavia.home')]),
+            ],
+        ]);
     }
 
     public function products(): View

@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'About | Muhindo Mubaraka')
+@section('title', 'About Muhindo Mubaraka, Software Engineer in Uganda')
 @section('desc', $about['lead'] ?? '')
 
 @push('styles')

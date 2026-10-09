@@ -4,16 +4,9 @@
 @section('og_image', $post->cover_image ? asset('storage/'.$post->cover_image) : '')
 
 @push('jsonld')
-<script type="application/ld+json">{!! json_encode([
-    '@context' => 'https://schema.org',
-    '@type' => 'BlogPosting',
-    'headline' => $post->title,
-    'description' => $post->excerpt,
-    'datePublished' => $post->published_at?->toIso8601String(),
-    'dateModified' => $post->updated_at?->toIso8601String(),
-    'author' => ['@type' => 'Person', 'name' => $post->author?->name ?? 'Muhindo Mubaraka'],
-    'mainEntityOfPage' => route('insights.show', $post),
-], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@foreach($jsonLd as $node)
+<script type="application/ld+json">{!! json_encode($node, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endforeach
 @endpush
 
 @push('styles')

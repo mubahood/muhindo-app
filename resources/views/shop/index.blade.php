@@ -1,5 +1,5 @@
 @extends('layouts.marketing')
-@section('title', 'Source code for sale | Muhindo Mubaraka')
+@section('title', 'Buy Complete PHP and Laravel Source Code')
 @section('desc', 'Complete, working source code from systems I have delivered, with an install guide for each one.')
 
 @push('styles')

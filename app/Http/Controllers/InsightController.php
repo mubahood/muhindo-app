@@ -25,6 +25,11 @@ class InsightController extends Controller
 
         return view('insights.index', [
             'posts' => $posts,
+            'jsonLd' => [
+                \App\Support\Seo\Schema::itemList('Articles',
+                    collect($posts->items())->map(fn ($p) => route('insights.show', $p))->all()),
+                \App\Support\Seo\Schema::breadcrumb(['Blog' => route('insights.index')]),
+            ],
             'categories' => Post::published()->whereNotNull('category')
                 ->distinct()->orderBy('category')->pluck('category'),
             'activeCategory' => $category,
@@ -41,6 +46,45 @@ class InsightController extends Controller
 
         return view('insights.show', [
             'post' => $post->load('author'),
+            // The article already describes itself. What it lacked was its
+            // place: a breadcrumb is what turns the grey URL line in a result
+            // into a readable path.
+            /*
+             * Built here, not in the Blade file.
+             *
+             * Laravel has an @context Blade directive, so a literal '@context'
+             * key written inside a view is compiled as that directive and the
+             * page ships a <script type="application/ld+json"> containing raw
+             * PHP instead of JSON. It was live on this page and on /solavia.
+             * In PHP the string is just a string.
+             */
+            'jsonLd' => [
+                array_filter([
+                    '@context' => 'https://schema.org',
+                    '@type' => 'BlogPosting',
+                    'headline' => $post->title,
+                    'description' => $post->excerpt,
+                    'datePublished' => $post->published_at?->toIso8601String(),
+                    'dateModified' => $post->updated_at?->toIso8601String(),
+                    'url' => route('insights.show', $post),
+                    'image' => $post->cover_image ? asset('storage/'.$post->cover_image) : null,
+                    'inLanguage' => 'en',
+                    'author' => ['@type' => 'Person', 'name' => $post->author?->name ?? config('app.name')],
+                    'publisher' => [
+                        '@type' => 'Organization',
+                        'name' => config('company.name'),
+                        'logo' => ['@type' => 'ImageObject', 'url' => asset('images/icon-512.png')],
+                    ],
+                ]),
+                \App\Support\Seo\Schema::breadcrumb([
+                    'Blog' => route('insights.index'),
+                    $post->title => route('insights.show', $post),
+                ]),
+            ],
+            'breadcrumb' => \App\Support\Seo\Schema::breadcrumb([
+                'Blog' => route('insights.index'),
+                $post->title => route('insights.show', $post),
+            ]),
             // Rendered through the project's hardened converter, which escapes
             // raw HTML and refuses javascript: links, CommonMark allows both
             // by default.
