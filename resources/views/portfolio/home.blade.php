@@ -1,6 +1,11 @@
 @extends('layouts.marketing')
 @section('title', ($identity['name'] ?? 'Muhindo Mubaraka').' | '.($identity['title'] ?? 'Information Systems'))
-@section('desc', $identity['tagline'] ?? '')
+{{-- The tagline is written to be read on the page, where the hero around it
+     supplies the context. A search result has no hero, so the snippet says who,
+     what and where in its own right. The tagline is still the first sentence,
+     because it is the best sentence. --}}
+@section('desc', ($identity['tagline'] ?? 'I build software that scales, and I teach others to do the same.')
+    .' Nine years building management systems, mobile apps and data platforms for ministries, NGOs and business across Uganda, and teaching the people who run them.')
 
 @push('jsonld')
 @foreach($jsonLd as $node)
