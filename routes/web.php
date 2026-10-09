@@ -133,6 +133,16 @@ Route::get('/products', [PortfolioController::class, 'products'])->name('portfol
  * BeaconController.
  */
 Route::post('/_a', \App\Http\Controllers\Analytics\BeaconController::class)->name('analytics.beacon');
+
+// The image challenge in front of the public forms. Throttled because the
+// endpoint draws an image and writes a session on every hit, which is exactly
+// the shape of thing worth hammering.
+Route::get('/captcha', function () {
+    return response(\App\Support\Spam\ImageCaptcha::png())
+        ->header('Content-Type', 'image/png')
+        ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+        ->header('Pragma', 'no-cache');
+})->middleware('throttle:40,1')->name('captcha.image');
 /*
  * Hiring.
  *
@@ -149,6 +159,15 @@ Route::get('/hire', \App\Http\Controllers\HireController::class)->name('hire');
 // that replaced it rather than on a 404.
 $movedPermanently('/contact', '/hire');
 $movedPermanently('/start-a-project', '/hire');
+
+/*
+ * The public enquiry. Every Hire button used to redirect a stranger to the
+ * registration form, which asked for a password before it would hear what
+ * they wanted built. This is the door for everybody who has not signed up.
+ */
+Route::get('/enquire', [\App\Http\Controllers\PublicEnquiryController::class, 'create'])->name('enquire');
+Route::post('/enquire', [\App\Http\Controllers\PublicEnquiryController::class, 'store'])
+    ->middleware('throttle:6,1')->name('enquire.store');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/propose', [\App\Http\Controllers\ProjectInquiryController::class, 'create'])->name('propose');

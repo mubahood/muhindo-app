@@ -248,11 +248,20 @@ class SolaviaCompanyTest extends TestCase
     /** A mail server that is down must not lose the message or show an error. */
     public function test_a_failing_mailer_does_not_lose_the_message(): void
     {
-        Mail::shouldReceive('raw')->once()->andThrow(new \RuntimeException('smtp is down'));
+        /*
+         * The form now sends a structured notification instead of a raw body,
+         * so the failure is injected at the transport, which is the layer that
+         * actually breaks in production: a mail server that will not accept
+         * the connection.
+         */
+        \Illuminate\Support\Facades\Mail::shouldReceive('mailer')
+            ->andThrow(new \RuntimeException('smtp is down'));
 
         $this->post(route('solavia.contact.submit'), $this->payload())
             ->assertRedirect()->assertSessionHas('success');
 
+        // The row is the record that matters. The email is a convenience, and
+        // losing it must never cost the message or show the sender an error.
         $this->assertSame(1, ContactMessage::count());
     }
 

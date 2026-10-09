@@ -106,10 +106,9 @@ class SystemScreenshotTest extends TestCase
             ->assertSee(route('hire'), false)
             ->assertSee('Request a walkthrough');
 
-        // Asking for one goes through the same door as hiring: an account
-        // first, so the request has an owner and somewhere to be answered.
-        $this->get(route('hire'))
-            ->assertRedirect(route('register', ['account_type' => 'client']));
+        // Asking for one goes through the same door as hiring, and that door
+        // is now a short form rather than a registration page.
+        $this->get(route('hire'))->assertRedirect(route('enquire'));
     }
 
     public function test_the_screenshots_are_eight_products_not_one(): void

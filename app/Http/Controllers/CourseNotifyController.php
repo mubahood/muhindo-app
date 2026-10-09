@@ -78,6 +78,20 @@ class CourseNotifyController extends Controller
                 label: 'Waitlist: '.$course->title,
                 meta: ['kind' => 'course_waitlist'],
             );
+
+            \App\Notifications\OwnerAlertNotification::fire(
+                subject: 'Waitlist: '.$course->title,
+                headline: $signup->name.' wants to know when "'.$course->title.'" opens.',
+                rows: [
+                    'Name' => $signup->name,
+                    'Email' => $signup->email,
+                    'WhatsApp' => $signup->whatsapp,
+                    'Course' => $course->title,
+                ],
+                replyTo: $signup->email,
+                actionLabel: 'See the whole waitlist',
+                actionUrl: route('admin.waitlist'),
+            );
         }
 
         return $this->thanks($course);

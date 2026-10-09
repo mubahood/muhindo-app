@@ -41,6 +41,8 @@ class SpamShieldTest extends TestCase
             'terms' => '1',
             'account_type' => 'student',
             FormShield::TIMESTAMP => $this->humanStamp(),
+            // The image challenge is the third layer in front of this form.
+            \App\Support\Spam\ImageCaptcha::FIELD => \App\Support\Spam\ImageCaptcha::regenerate(),
         ], $overrides);
     }
 

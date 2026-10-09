@@ -77,6 +77,8 @@
 
         <x-captcha />
 
+        <x-captcha-field />
+
         <button type="submit" class="sv-btn sv-btn-solid" style="border:0;cursor:pointer;">
           <i class="fas fa-paper-plane" aria-hidden="true"></i> Send message
         </button>

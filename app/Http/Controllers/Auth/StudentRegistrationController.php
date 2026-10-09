@@ -50,7 +50,14 @@ class StudentRegistrationController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
             'account_type' => 'required|in:student,client,both',
             'terms' => 'accepted',
-        ] + \App\Support\Spam\Captcha::rules(), \App\Support\Spam\Captcha::messages());
+        ] + \App\Support\Spam\Captcha::rules() + \App\Support\Spam\ImageCaptcha::rules(),
+            \App\Support\Spam\Captcha::messages() + \App\Support\Spam\ImageCaptcha::messages());
+
+        if (\App\Support\Spam\ImageCaptcha::available()
+            && ! \App\Support\Spam\ImageCaptcha::check($request->input(\App\Support\Spam\ImageCaptcha::FIELD))) {
+            return back()->withInput($request->except('password', 'password_confirmation'))
+                ->withErrors([\App\Support\Spam\ImageCaptcha::FIELD => 'That did not match the picture. Here is a new one.']);
+        }
 
         $isStudent = in_array($data['account_type'], ['student', 'both'], true);
         $isClient = in_array($data['account_type'], ['client', 'both'], true);
@@ -73,6 +80,34 @@ class StudentRegistrationController extends Controller
         }
 
         event(new Registered($user));
+
+        // A registration is somebody who typed a real address and chose a
+
+        // password. Until now it told nobody.
+
+        \App\Notifications\OwnerAlertNotification::fire(
+
+            subject: 'New account: '.$user->name,
+
+            headline: $user->name.' just created an account.',
+
+            rows: [
+
+                'Name' => $user->name,
+
+                'Email' => $user->email,
+
+                'Phone' => $user->phone ?: 'Not given',
+
+                'Account type' => $user->isClient() ? 'Client' : 'Student',
+
+                'Signed up' => now()->format('D j M Y, H:i'),
+
+            ],
+
+            replyTo: $user->email,
+
+        );
 
         // remember=true, same policy as login: signed in until they sign out.
         Auth::login($user, true);

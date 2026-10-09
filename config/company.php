@@ -31,6 +31,13 @@ return [
     'phone' => '+256 783 204 665',
     'phone_e164' => '+256783204665',
     'email' => 'solaviaug@gmail.com',
+
+    /*
+     * Where "somebody just engaged" alerts go. Separate from the public
+     * company address on purpose: that one is printed on the site for
+     * customers to write to, this one is a working inbox that should ping.
+     */
+    'owner_alerts' => env('OWNER_ALERT_EMAIL', 'mubahood360@gmail.com'),
     'whatsapp' => 'https://wa.me/256783204665',
 
     /*

@@ -49,7 +49,7 @@ class HireJourneyTest extends TestCase
     public function test_hire_sends_a_stranger_to_make_an_account(): void
     {
         $this->get(route('hire'))
-            ->assertRedirect(route('register', ['account_type' => 'client']));
+            ->assertRedirect(route('enquire'));
     }
 
     public function test_the_old_contact_and_lead_urls_land_on_it_rather_than_404(): void
@@ -59,13 +59,23 @@ class HireJourneyTest extends TestCase
         $this->get('/start-a-project')->assertRedirect(route('hire'));
     }
 
-    public function test_the_register_page_says_where_it_is_in_the_journey(): void
+    /**
+     * There is no longer a step 1 of 2.
+     *
+     * The journey used to be register, then propose, and this test asserted
+     * that the register page at least admitted it was the first of two. The
+     * fix was to delete the first step rather than to label it better: a hire
+     * button that asks for a password before it will hear what you want built
+     * is where most of these were abandoned.
+     */
+    public function test_the_hire_journey_asks_for_no_account(): void
     {
-        // A hire button that asks for a password without explaining itself is
-        // where most of these are abandoned.
-        $this->get(route('register', ['account_type' => 'client']))->assertOk()
-            ->assertSee('Step 1 of 2')
-            ->assertSee('tell me what you want built', false);
+        $html = (string) $this->get(route('enquire'))->assertOk()->getContent();
+
+        $this->assertStringContainsString('Tell me what you want built', $html);
+        $this->assertStringContainsString('No account, no password', $html);
+        $this->assertStringNotContainsString('name="password"', $html);
+        $this->assertStringNotContainsString('Step 1 of 2', $html);
     }
 
     // the rule: a client with nothing proposed is asked

@@ -13,8 +13,14 @@ use Illuminate\Http\Request;
  * right destination depends on who is pressing it and there is no good answer
  * that is the same for everybody:
  *
- *   a stranger      → make an account, so the proposal has an owner and they
- *                     can come back to it
+ *   a stranger      → the short public enquiry form. It used to be the
+ *                     registration form, on the reasoning that a proposal
+ *                     needs an owner. That is true, and it is a fine thing to
+ *                     ask for after the first message rather than before it.
+ *                     Asking somebody to choose a password before they can say
+ *                     what they want built loses most of them, and the ones it
+ *                     loses are the half decided, who are most people who ever
+ *                     hire anybody.
  *   a client with
  *   nothing proposed → the proposal form, which is the actual first step
  *   a client who has
@@ -29,8 +35,7 @@ class HireController extends Controller
         $user = $request->user();
 
         if (! $user) {
-            return redirect()->route('register', ['account_type' => 'client'])
-                ->with('hire_intent', true);
+            return redirect()->route('enquire');
         }
 
         $proposed = ProjectInquiry::where('user_id', $user->id)->exists();

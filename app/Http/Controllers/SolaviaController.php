@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
+use App\Notifications\OwnerAlertNotification;
 use App\Support\Spam\Captcha;
 use App\Support\Spam\FormShield;
+use App\Support\Spam\ImageCaptcha;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -74,10 +76,15 @@ class SolaviaController extends Controller
             'email' => 'required|email:rfc|max:150',
             'phone' => ['nullable', 'string', 'max:32', 'regex:/^[0-9+()\s.-]*$/'],
             'message' => 'required|string|min:10|max:4000',
-        ] + Captcha::rules(), Captcha::messages() + [
+        ] + Captcha::rules() + ImageCaptcha::rules(), Captcha::messages() + ImageCaptcha::messages() + [
             'phone.regex' => 'That does not look like a phone number. Digits, spaces and + only.',
             'message.min' => 'Please say a little more so the reply can be useful.',
         ]);
+
+        if (ImageCaptcha::available() && ! ImageCaptcha::check($request->input(ImageCaptcha::FIELD))) {
+            return back()->withInput()
+                ->withErrors([ImageCaptcha::FIELD => 'That did not match the picture. Here is a new one.']);
+        }
 
         $subject = 'Company enquiry via '.config('app.name');
 
@@ -89,21 +96,27 @@ class SolaviaController extends Controller
                 .(filled($data['phone'] ?? null) ? "\n\nPhone: ".$data['phone'] : ''),
         ]);
 
-        // The database row is the record that matters; the email is a
-        // convenience. A mail server that is down must not lose the message or
-        // show the sender an error for something that did work.
-        try {
-            Mail::raw(
-                $stored->message."\n\n---\nFrom: {$stored->name} <{$stored->email}>",
-                function ($mail) use ($stored, $subject) {
-                    $mail->to(config('company.email'))
-                        ->replyTo($stored->email, $stored->name)
-                        ->subject($subject);
-                }
-            );
-        } catch (\Throwable $e) {
-            report($e);
-        }
+        /*
+         * The database row is the record that matters; the email is a
+         * convenience. A mail server that is down must not lose the message or
+         * show the sender an error for something that did work.
+         *
+         * Sent as a notification rather than Mail::raw, which had no HTML part
+         * and no structure. A plain body with no alternative part is one of the
+         * cheaper things a spam filter scores against, and it is the only mail
+         * on this site that was still shaped that way.
+         */
+        OwnerAlertNotification::fire(
+            subject: $subject,
+            headline: $stored->name.' sent a message through the company contact form.',
+            rows: [
+                'Name' => $stored->name,
+                'Email' => $stored->email,
+                'Phone' => filled($data['phone'] ?? null) ? $data['phone'] : 'Not given',
+            ],
+            body: trim($data['message']),
+            replyTo: $stored->email,
+        );
 
         return $this->thanks();
     }
