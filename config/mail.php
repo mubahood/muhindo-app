@@ -45,7 +45,20 @@ return [
             'port' => env('MAIL_PORT', 2525),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
-            'timeout' => null,
+            /*
+             * Not null. With QUEUE_CONNECTION=sync every notification is sent
+             * inside the request or the cron that triggered it, and PHP here
+             * runs per request rather than under FPM, so a mail server that
+             * accepts a connection and then stops answering holds that process
+             * open for as long as it likes. On a shared account with a cap on
+             * concurrent processes, a handful of those is an outage: new
+             * requests get 429 or queue until they time out.
+             *
+             * Ten seconds is far longer than a healthy send and short enough
+             * that a sick mail server costs one slot briefly instead of one
+             * slot permanently.
+             */
+            'timeout' => (int) env('MAIL_TIMEOUT', 10),
             'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
         ],
 

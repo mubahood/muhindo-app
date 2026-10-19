@@ -9,16 +9,26 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 // Nightly at-risk tagging, ahead of the working day.
-Schedule::command('app:detect-at-risk-enrollments')->dailyAt('02:00');
+/*
+ * Every command below carries withoutOverlapping().
+ *
+ * The scheduler is invoked from cron on a shared account that also runs eight
+ * other Laravel apps and a dozen curl jobs, and PHP here is not under FPM, so
+ * each invocation is its own process against a per account cap. Without this
+ * guard a run that hangs does not delay the next one, it is joined by it, and
+ * an hourly command that stops responding becomes a process leak that ends in
+ * the whole account returning 429.
+ */
+Schedule::command('app:detect-at-risk-enrollments')->dailyAt('02:00')->withoutOverlapping();
 
 // Weekly instructor digest, after Monday's nightly at-risk run.
-Schedule::command('app:send-weekly-instructor-digest')->weeklyOn(1, '07:00');
+Schedule::command('app:send-weekly-instructor-digest')->weeklyOn(1, '07:00')->withoutOverlapping();
 
 // Nightly streak-badge check.
-Schedule::command('app:award-streak-badges')->dailyAt('02:30');
+Schedule::command('app:award-streak-badges')->dailyAt('02:30')->withoutOverlapping();
 
 // Monthly retention prune; volume at this scale makes a tighter schedule unnecessary.
-Schedule::command('app:prune-learning-events')->monthlyOn(1, '03:30');
+Schedule::command('app:prune-learning-events')->monthlyOn(1, '03:30')->withoutOverlapping();
 
 /*
  * Analytics maintenance.
@@ -27,9 +37,9 @@ Schedule::command('app:prune-learning-events')->monthlyOn(1, '03:30');
  * a dashboard somebody is looking at now, and it rebuilds yesterday too, which
  * is what closes off a visit that ran past midnight.
  */
-Schedule::command('analytics:rollup')->hourly();
-Schedule::command('analytics:prune')->weeklyOn(0, '03:45');
-Schedule::command('analytics:geolocate')->hourlyAt(20)->when(fn () => (bool) config('analytics.geo.enabled'));
+Schedule::command('analytics:rollup')->hourly()->withoutOverlapping();
+Schedule::command('analytics:prune')->weeklyOn(0, '03:45')->withoutOverlapping();
+Schedule::command('analytics:geolocate')->hourlyAt(20)->when(fn () => (bool) config('analytics.geo.enabled'))->withoutOverlapping();
 
 /*
  * Repeating tasks become real ones before the day starts.
@@ -37,7 +47,7 @@ Schedule::command('analytics:geolocate')->hourlyAt(20)->when(fn () => (bool) con
  * 05:00 so the day view is already correct at 09:00, and early enough that a
  * missed run can be caught by hand with --date before anybody looks.
  */
-Schedule::command('tasks:generate-recurring')->dailyAt('05:00');
+Schedule::command('tasks:generate-recurring')->dailyAt('05:00')->withoutOverlapping();
 
 // Student practice code is disposable scratch work, never course content.
-Schedule::command('practice-workspaces:prune')->hourly();
+Schedule::command('practice-workspaces:prune')->hourly()->withoutOverlapping();
