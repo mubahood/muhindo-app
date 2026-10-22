@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\InvoiceStatus;
 use App\Enums\PaymentMethod;
 use App\Events\Billing\InvoicePaid;
+use App\Events\Billing\InvoicePartPaid;
 use App\Exceptions\OverpaymentException;
 use App\Models\Client;
 use App\Models\Course;
@@ -160,6 +161,11 @@ class BillingService
 
             if ($status === InvoiceStatus::Paid) {
                 InvoicePaid::dispatch($locked->fresh());
+            } else {
+                // Still owing. A course sold in instalments opens its next part
+                // on this; everything that must happen once, at the end, waits
+                // for InvoicePaid above.
+                InvoicePartPaid::dispatch($locked->fresh());
             }
 
             return $payment;

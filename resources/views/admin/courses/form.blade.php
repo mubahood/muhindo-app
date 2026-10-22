@@ -87,6 +87,23 @@
 
       <div class="tb-form-group">
         <label class="tb-check-group">
+          <input type="checkbox" name="allows_instalments" value="1" {{ old('allows_instalments', $course->allows_instalments) ? 'checked' : '' }}>
+          <span><b>Can be bought in {{ \Illuminate\Support\Str::plural(\App\Support\Catalog\InstalmentPlan::label(), 2) }}</b>,
+            paying for the course a part at a time</span>
+        </label>
+        <p class="muted" style="font-size:.75rem;margin-top:4px;">
+          The student pays {{ \App\Support\Catalog\InstalmentPlan::partCount() }} equal instalments instead of
+          one price, and each one opens the next slice of the syllabus. The total is the same.
+          Ignored on a free course, and on a course with fewer than
+          {{ \App\Support\Catalog\InstalmentPlan::minimumModules() }} modules, where there is nothing to split.
+          For a course in the numbered catalogue this is set from
+          <code>config/catalog.php</code> whenever <code>courses:apply-pricing</code> runs, so
+          change it there if it should stick.
+        </p>
+      </div>
+
+      <div class="tb-form-group">
+        <label class="tb-check-group">
           <input type="checkbox" name="is_coming_soon" value="1" {{ old('is_coming_soon', $course->exists ? $course->is_coming_soon : true) ? 'checked' : '' }}>
           <span><b>Coming soon</b>, the page is live but nothing can be bought</span>
         </label>

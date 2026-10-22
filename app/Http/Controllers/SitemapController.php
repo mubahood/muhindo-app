@@ -55,7 +55,7 @@ class SitemapController extends Controller
             $urls[] = ['loc' => route('insights.show', $post), 'lastmod' => $post->updated_at];
         }
 
-        foreach (Course::where('is_published', true)->get(['slug', 'updated_at']) as $course) {
+        foreach (Course::publiclyVisible()->get(['slug', 'updated_at']) as $course) {
             $urls[] = ['loc' => route('courses.show', $course), 'lastmod' => $course->updated_at];
         }
 

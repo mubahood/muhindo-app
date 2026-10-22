@@ -95,6 +95,58 @@ return [
     'open' => [2, 25],
 
     /*
+    | Show the unopened courses to the public at all?
+    |
+    | false (the default) keeps a course out of the catalogue, the sitemap, the
+    | API and the home page until it is open for enrolment, and 404s its sales
+    | page. The shopfront then shows only what can be bought.
+    |
+    | true restores the waitlist shop window: every published course gets its
+    | page back and collects names. Flip it the day enough of the catalogue is
+    | recorded for "Coming soon" to read as a promise rather than as an empty
+    | shelf.
+    */
+    'show_unopened' => false,
+
+    /*
+    | Paying in parts
+    |
+    | A course can be bought outright or in equal instalments, each one
+    | unlocking the next slice of the syllabus. UGX 130,000 is a month's rent
+    | for some of the people this catalogue is for, and UGX 32,500 to start is
+    | the difference between a sale and a bookmark. They pay the next part when
+    | they reach it, and the course costs exactly the same in the end.
+    |
+    | 'parts' is how many slices, and 'label' is what to call one on screen.
+    | Four of them are quarters; change both together or the page will offer
+    | "thirds" in four instalments.
+    |
+    | 'min_modules' is the honest floor. Slicing a three-module course into
+    | four leaves a part with nothing in it, so a course with fewer modules
+    | than parts is sold whole however its flag is set.
+    */
+    'instalments' => [
+        'parts' => 4,
+        'label' => 'quarter',
+        'min_modules' => 4,
+
+        /*
+        | Which courses may be bought this way, by course number, applied in
+        | both directions by `courses:apply-pricing` for the same reason the
+        | 'open' list is: it decides how money is taken, so it is decided here
+        | and reviewed here rather than on a production database.
+        |
+        | Only the two finished courses. An instalment is a promise that the
+        | next part will be there when they pay for it, and that promise is
+        | only honest about a course that is already recorded.
+        |
+        | 02  AI-Powered Web Development (HTML, CSS & GitHub Copilot)
+        | 25  AI Powered - Frontend Development with Bootstrap
+        */
+        'courses' => [2, 25],
+    ],
+
+    /*
     | Currency
     |
     | 'UGX' is home. A visitor is shown USD when we can tell they are outside

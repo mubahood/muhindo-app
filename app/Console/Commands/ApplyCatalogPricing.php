@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\Course;
+use App\Support\Catalog\InstalmentPlan;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 /**
  * Applies config/catalog.php to the imported courses.
@@ -38,6 +40,7 @@ class ApplyCatalogPricing extends Command
         $tiers = config('catalog.tiers');
         $overrides = config('catalog.overrides', []);
         $open = config('catalog.open', []);
+        $instalments = config('catalog.instalments.courses', []);
         $rows = [];
 
         foreach (Course::orderBy('course_number')->get() as $course) {
@@ -56,10 +59,23 @@ class ApplyCatalogPricing extends Command
 
             $enrolment = ($shouldOpen ? 'OPEN' : 'waitlist').($openChanged ? ' (changed)' : '');
 
+            // How a course may be paid for, same rule as whether it is open:
+            // the file decides, both ways.
+            $inParts = in_array((int) $course->course_number, $instalments, true);
+
+            if (! $this->option('dry-run') && $course->allows_instalments !== $inParts) {
+                $course->allows_instalments = $inParts;
+                $course->save();
+            }
+
+            $terms = $inParts
+                ? InstalmentPlan::partCount().' x '.Str::plural(InstalmentPlan::label(), 2)
+                : 'in full';
+
             $tier = $tiers[$course->tier] ?? null;
 
             if ($tier === null) {
-                $rows[] = [$course->course_number, mb_substr($course->title, 0, 34), '-', '-', '-', $enrolment, 'no tier'];
+                $rows[] = [$course->course_number, mb_substr($course->title, 0, 34), '-', '-', '-', $enrolment, $terms, 'no tier'];
 
                 continue;
             }
@@ -90,6 +106,7 @@ class ApplyCatalogPricing extends Command
                 $was[0].' → '.$price,
                 '$'.rtrim(rtrim($usd, '0'), '.'),
                 $enrolment,
+                $terms,
                 match (true) {
                     $promote => 'published (changed)',
                     (bool) $was[1] => 'published',
@@ -98,7 +115,7 @@ class ApplyCatalogPricing extends Command
             ];
         }
 
-        $this->table(['#', 'Course', 'Tier', 'UGX', 'USD', 'Enrolment', 'Status'], $rows);
+        $this->table(['#', 'Course', 'Tier', 'UGX', 'USD', 'Enrolment', 'Pay', 'Status'], $rows);
 
         if ($this->option('dry-run')) {
             $this->info('Dry run. Nothing was written.');

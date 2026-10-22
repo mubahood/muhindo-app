@@ -35,7 +35,7 @@ class CartController extends Controller
 
         $item = $data['type'] === 'product'
             ? Product::published()->find($data['id'])
-            : Course::where('is_published', true)->find($data['id']);
+            : Course::publiclyVisible()->find($data['id']);
 
         if ($item === null) {
             return back()->with('error', 'That item is no longer available.');

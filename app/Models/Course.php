@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\CourseProgression;
+use App\Support\Catalog\InstalmentPlan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,11 +22,14 @@ class Course extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /** Memoised: isLessonLocked() is asked about every lesson in a course at once. */
+    private ?InstalmentPlan $instalmentPlan = null;
+
     protected $fillable = [
         'uuid', 'title', 'slug', 'description', 'tagline', 'outcomes', 'requirements',
         'cover_image', 'cover_alt', 'price',
         'currency', 'level', 'category', 'is_published', 'is_coming_soon', 'created_by', 'progression', 'debug_mode',
-        'price_usd', 'course_number', 'tier', 'is_featured', 'prerequisites_note', 'playlist_url', 'source_file', 'synced_at',
+        'price_usd', 'allows_instalments', 'course_number', 'tier', 'is_featured', 'prerequisites_note', 'playlist_url', 'source_file', 'synced_at',
         'access_duration_days',
     ];
 
@@ -39,6 +43,7 @@ class Course extends Model
             'debug_mode' => 'boolean',
             'is_featured' => 'boolean',
             'price_usd' => 'decimal:2',
+            'allows_instalments' => 'boolean',
             'synced_at' => 'datetime',
             'outcomes' => 'array',
             'requirements' => 'array',
@@ -141,15 +146,87 @@ class Course extends Model
         $query->where('is_published', true)->where('is_coming_soon', false);
     }
 
+    /**
+     * Courses a visitor is shown at all: the catalogue, the sitemap, the API,
+     * the home page, search, everywhere the public can reach.
+     *
+     * Published used to be enough, and the shopfront was twenty "Coming soon"
+     * cards around two real ones. A catalogue mostly made of things you cannot
+     * buy reads as an empty shop, and the two courses that are finished pay for
+     * the cost of that impression.
+     *
+     * `catalog.show_unopened` puts them back. It is one line, because the
+     * waitlist behind those pages is a real feature with a real admin screen,
+     * and the day the next course is recorded is the day it earns its page
+     * again. See isComingSoon() for what that page is for.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
+     */
+    public function scopePubliclyVisible(\Illuminate\Database\Eloquent\Builder $query): void
+    {
+        $query->where('is_published', true);
+
+        if (! config('catalog.show_unopened', false)) {
+            $query->where('is_coming_soon', false);
+        }
+    }
+
+    /** Would the public see this course at all? The row-level counterpart of scopePubliclyVisible(). */
+    public function isPubliclyVisible(): bool
+    {
+        if (! $this->is_published) {
+            return false;
+        }
+
+        return config('catalog.show_unopened', false) || ! $this->is_coming_soon;
+    }
+
     public function isFree(): bool
     {
         return (float) $this->price <= 0;
+    }
+
+    /**
+     * May this course be bought a part at a time?
+     *
+     * Three things have to be true and the flag is only one of them. A free
+     * course has nothing to split. A course with fewer modules than parts
+     * cannot be divided without handing somebody an empty quarter. Both are
+     * checked here rather than trusted to whoever ticked the box, because the
+     * box is ticked once and the syllabus changes for months afterwards.
+     */
+    public function allowsInstalments(): bool
+    {
+        if (! $this->allows_instalments || $this->isFree()) {
+            return false;
+        }
+
+        $modules = $this->relationLoaded('modules')
+            ? $this->modules->count()
+            : $this->modules()->count();
+
+        return $modules >= InstalmentPlan::minimumModules();
+    }
+
+    public function instalmentPlan(): InstalmentPlan
+    {
+        return $this->instalmentPlan ??= InstalmentPlan::for($this);
     }
 
     /** The access-window expiry to stamp on a newly-activated enrollment; null (lifetime access) unless the course sets a duration. */
     public function enrollmentExpiresAt(): ?Carbon
     {
         return $this->access_duration_days ? now()->addDays($this->access_duration_days) : null;
+    }
+
+    /** Is this part of the syllabus still behind an instalment the student has not paid? */
+    public function isPartLockedFor(Enrollment $enrollment, int $part): bool
+    {
+        if (! $this->allowsInstalments()) {
+            return false;
+        }
+
+        return $part > $enrollment->instalmentPartsUnlocked();
     }
 
     public function lessonCount(): int
@@ -268,21 +345,55 @@ class Course extends Model
      */
     public function isLessonLocked(Enrollment $enrollment, Lesson $lesson): bool
     {
+        /*
+         * Paid-for first, and before the progression check, because the two
+         * locks answer to different authorities. Sequential progression is a
+         * teaching rule and a course can switch it off. An unpaid part of the
+         * syllabus is not a teaching rule; it is the thing the student has not
+         * bought yet, and no setting on the course may open it.
+         *
+         * This is the one gate, so it is the one that has to be right.
+         * ProgressService authorizes LessonPolicy::view before it will record
+         * a view, a heartbeat, active time or a completion, and the material
+         * download and video stream controllers authorize the same policy, so
+         * every surface that can show a lesson passes through here.
+         */
+        return $this->lessonLockReason($enrollment, $lesson) !== null;
+    }
+
+    /**
+     * Why a lesson is shut, or null if it is not.
+     *
+     * Two locks, and the student must be told which one they have hit. "Finish
+     * the previous lesson" in front of somebody who has finished every lesson
+     * they paid for is a dead end with no way out of it; what they need is the
+     * price of the next part and a button.
+     *
+     * @return 'instalment'|'sequence'|null
+     */
+    public function lessonLockReason(Enrollment $enrollment, Lesson $lesson): ?string
+    {
+        if ($this->isPartLockedFor($enrollment, $this->instalmentPlan()->partOfLesson($lesson))) {
+            return 'instalment';
+        }
+
         if ($this->progression !== CourseProgression::Sequential) {
-            return false;
+            return null;
         }
 
         $ordered = $this->modules->flatMap(fn (CourseModule $module) => $module->lessons);
         $index = $ordered->search(fn (Lesson $candidate) => $candidate->id === $lesson->id);
         if ($index === false || $index === 0) {
-            return false;
+            return null;
         }
 
         $previous = $ordered->get($index - 1);
 
-        return ! $enrollment->progressRecords()
+        $done = $enrollment->progressRecords()
             ->where('lesson_id', $previous->id)
             ->whereNotNull('completed_at')
             ->exists();
+
+        return $done ? null : 'sequence';
     }
 }

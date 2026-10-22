@@ -22,6 +22,8 @@ use Illuminate\View\View;
 /** The student-facing quiz runner: list → intro/start → take (AJAX autosave) → review. */
 class QuizAttemptController extends Controller
 {
+    use \App\Http\Controllers\Concerns\GuardsPaidParts;
+
     public function __construct(
         private readonly QuizService $quizzes,
         private readonly MarkdownRenderer $markdown,
@@ -51,7 +53,7 @@ class QuizAttemptController extends Controller
     public function show(Request $request, Course $course, Quiz $quiz): View
     {
         $enrollment = $this->enrollmentFor($request, $course);
-        $this->guardQuiz($quiz, $course);
+        $this->guardQuiz($quiz, $course, $enrollment);
         abort_unless($quiz->is_published || $request->user()->isAdmin(), 404);
 
         $attemptsUsed = $quiz->attempts()->where('enrollment_id', $enrollment->id)->count();
@@ -72,7 +74,7 @@ class QuizAttemptController extends Controller
     public function start(Request $request, Course $course, Quiz $quiz): RedirectResponse
     {
         $enrollment = $this->enrollmentFor($request, $course);
-        $this->guardQuiz($quiz, $course);
+        $this->guardQuiz($quiz, $course, $enrollment);
 
         $attempt = $this->quizzes->start($quiz, $enrollment);
 
@@ -205,14 +207,15 @@ class QuizAttemptController extends Controller
         return $request->boolean('teach') && $request->user()->isAdmin() ? ['teach' => 1] : [];
     }
 
-    private function guardQuiz(Quiz $quiz, Course $course): void
+    private function guardQuiz(Quiz $quiz, Course $course, Enrollment $enrollment): void
     {
         abort_unless($quiz->course_id === $course->id, 404);
+        $this->guardPaidPart($course, $enrollment, $quiz->lesson_id);
     }
 
     private function guardAttempt(QuizAttempt $attempt, Quiz $quiz, Course $course, Enrollment $enrollment): void
     {
-        $this->guardQuiz($quiz, $course);
+        $this->guardQuiz($quiz, $course, $enrollment);
         abort_unless($attempt->quiz_id === $quiz->id, 404);
         abort_unless($attempt->enrollment_id === $enrollment->id, 404);
     }

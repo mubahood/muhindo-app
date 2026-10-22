@@ -74,7 +74,7 @@ class AuthenticatedSessionController extends Controller
     {
         $slug = $request->string('intended_course')->trim()->value();
 
-        return $slug !== '' ? Course::where('slug', $slug)->where('is_published', true)->first() : null;
+        return $slug !== '' ? Course::publiclyVisible()->where('slug', $slug)->first() : null;
     }
 
     /**

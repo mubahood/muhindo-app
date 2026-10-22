@@ -56,9 +56,12 @@ class PaymentController extends Controller
                 ->with('success', 'That order is settled. Everything on it is ready.');
         }
 
+        $invoice->load('items');
+
         return view('payments.show', [
-            'invoice' => $invoice->load('items'),
+            'invoice' => $invoice,
             'destination' => $this->destinationFor($invoice),
+            'instalments' => \App\Support\Catalog\InstalmentPlan::contextFor($invoice),
         ]);
     }
 

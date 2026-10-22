@@ -85,11 +85,25 @@
             </button>
           @endif
 
+          @php $plan = $course->allowsInstalments() ? $course->instalmentPlan() : null; @endphp
           @foreach($course->modules as $module)
             @php
               $moduleMinutes = $module->lessons->sum('duration_minutes');
               $moduleFree = $module->lessons->contains(fn ($l) => $l->is_free_preview && $l->is_published);
+              $modulePart = $plan?->partOfModule($module->id);
+              $partStarts = $modulePart !== null && $modulePart !== ($previousPart ?? null);
+              $previousPart = $modulePart;
             @endphp
+            @if($partStarts)
+              {{-- Where one instalment ends and the next begins, named in the
+                   syllabus itself. Somebody deciding whether to pay a quarter
+                   can see exactly what the quarter contains. --}}
+              <div class="cur-part">
+                <span>{{ \App\Support\Catalog\InstalmentPlan::partName($modulePart) }}</span>
+                <span class="cur-part-price">{{ $course->currency }}
+                  {{ number_format((float) \App\Support\Catalog\InstalmentPlan::priceOfPart((string) $course->price, $modulePart)) }}</span>
+              </div>
+            @endif
             <details class="accordion-mod" @if($loop->first) open @endif>
               <summary>
                 <span class="mod-caret" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
@@ -217,6 +231,17 @@
           <div class="price {{ $course->isFree() ? 'free' : '' }}">
             {{ $course->isFree() ? 'Free' : $course->currency.' '.number_format((float) $course->price) }}
           </div>
+          @if($course->allowsInstalments())
+            {{-- The entry price, not the total. UGX 130,000 is a month's rent
+                 for some of the people reading this; UGX 32,500 is a decision
+                 they can make today. The full price is still the one above it,
+                 in the biggest type on the page, so nothing is being hidden. --}}
+            <div class="price-parts">
+              or {{ $course->currency }}
+              {{ number_format((float) \App\Support\Catalog\InstalmentPlan::priceOfPart((string) $course->price, 1)) }}
+              a {{ \App\Support\Catalog\InstalmentPlan::label() }}, paid as you go
+            </div>
+          @endif
         @endif
 
         {{-- A course that is not open replaces every buying control with the
@@ -260,6 +285,9 @@
           @if($course->lessons_sum_duration_minutes)<li>{{ round($course->lessons_sum_duration_minutes / 60, 1) }} hours of content</li>@endif
           <li>Certificate of completion</li>
           <li>Learn at your own pace</li>
+          @if($course->allowsInstalments())
+            <li>Pay in {{ \App\Support\Catalog\InstalmentPlan::partCount() }} {{ \Illuminate\Support\Str::plural(\App\Support\Catalog\InstalmentPlan::label(), 2) }}, same total</li>
+          @endif
           @if($course->access_duration_days)<li>{{ $course->access_duration_days }} days of access</li>@endif
         </ul>
 
@@ -282,6 +310,11 @@
 <style>
   /* The free lesson, offered as a thing you press rather than a fact you
      read. It is the single most persuasive element on a paid course page. */
+  .price-parts{font-size:12.5px;color:var(--tx2);margin:-4px 0 12px;line-height:1.5;}
+  .cur-part{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    margin:16px 0 7px;padding-bottom:6px;border-bottom:1px solid var(--line-2);
+    font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--tx3);}
+  .cur-part-price{letter-spacing:0;text-transform:none;font-weight:600;color:var(--pri);}
   .cur-free{display:flex;align-items:center;gap:14px;width:100%;text-align:left;
     border:1px solid var(--gold);background:var(--gold-soft);padding:13px 16px;margin-bottom:14px;
     cursor:pointer;font-family:inherit;transition:background .14s,transform .14s;}

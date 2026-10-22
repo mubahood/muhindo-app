@@ -31,7 +31,7 @@ class CourseCatalogueController extends Controller
     /** Server-rendered, URL-driven filters/sort/search so listing pages stay shareable and crawlable. */
     public function index(Request $request): View
     {
-        $query = Course::where('is_published', true)
+        $query = Course::publiclyVisible()
             ->withCount(['reviews as reviews_count' => fn ($q) => $q->where('is_published', true)])
             ->withAvg(['reviews as reviews_avg_rating' => fn ($q) => $q->where('is_published', true)], 'rating')
             ->withCount('lessons')
@@ -76,9 +76,13 @@ class CourseCatalogueController extends Controller
                     collect($paged->items())->map(fn ($c) => route('courses.show', $c))->all()),
                 \App\Support\Seo\Schema::breadcrumb(['e-Learning' => route('courses.index')]),
             ],
-            'categories' => Course::where('is_published', true)->whereNotNull('category')->distinct()->orderBy('category')->pluck('category'),
+            'categories' => Course::publiclyVisible()->whereNotNull('category')->distinct()->orderBy('category')->pluck('category'),
+            // The scope is applied to Course itself and matched by id, rather
+            // than nested two relations deep, so there is one definition of
+            // "public" here and the query says plainly which model it is about.
             'totalLessonCount' => Lesson::where('is_published', true)
-                ->whereHas('module', fn ($q) => $q->whereNull('deleted_at')->whereHas('course', fn ($c) => $c->where('is_published', true)))
+                ->whereHas('module', fn ($q) => $q->whereNull('deleted_at')
+                    ->whereIn('course_id', Course::publiclyVisible()->select('id')))
                 ->count(),
             'filters' => $request->only(['category', 'level', 'price', 'sort', 'q']),
         ]);
@@ -86,7 +90,7 @@ class CourseCatalogueController extends Controller
 
     public function show(Course $course): View
     {
-        abort_unless($course->is_published || auth()->user()?->isAdmin(), 404);
+        abort_unless($this->maySee($course), 404);
 
         $existing = auth()->check()
             ? Enrollment::where('user_id', auth()->id())->where('course_id', $course->id)->first()
@@ -260,10 +264,35 @@ class CourseCatalogueController extends Controller
         );
     }
 
+    /**
+     * May this visitor see the course's public pages?
+     *
+     * Three kinds of person can, and the second two matter more than they look.
+     * An admin, so the owner can read a page before anyone else does. A student
+     * already enrolled, because a course someone paid for must never turn into
+     * a 404 for them, whatever the catalogue decides to advertise this month.
+     * Everybody else sees what the catalogue shows, and nothing else.
+     */
+    private function maySee(Course $course): bool
+    {
+        if ($course->isPubliclyVisible()) {
+            return true;
+        }
+
+        $user = auth()->user();
+
+        if ($user === null) {
+            return false;
+        }
+
+        return $user->isAdmin()
+            || Enrollment::where('user_id', $user->id)->where('course_id', $course->id)->exists();
+    }
+
     /** Free preview: a guest (no enrollment) can view an is_free_preview lesson, closing L5. */
     public function preview(Course $course, Lesson $lesson): View
     {
-        abort_unless($course->is_published, 404);
+        abort_unless($this->maySee($course), 404);
         abort_unless($lesson->module->course_id === $course->id, 404);
         abort_unless($lesson->is_free_preview && $lesson->is_published, 404);
 

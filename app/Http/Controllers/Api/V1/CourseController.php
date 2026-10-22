@@ -12,7 +12,7 @@ class CourseController extends Controller
 {
     public function index(): JsonResponse
     {
-        $courses = Course::where('is_published', true)->latest()->get();
+        $courses = Course::publiclyVisible()->latest()->get();
 
         return ApiResponse::success($courses);
     }

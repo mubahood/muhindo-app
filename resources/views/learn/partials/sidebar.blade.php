@@ -40,10 +40,15 @@
         </summary>
         @foreach($sideModule['lessons'] as $l)
           @php $locked = $shell->lockedLessonIds->contains($l->id); @endphp
+          @php $unpaid = $shell->unpaidLessonIds->contains($l->id); @endphp
           @php $topicTaught = $teachingMode && $taughtLessonIds->contains($l->id); @endphp
 
           @if($locked)
-              <span class="locked" title="Complete the previous lesson to unlock this one">
+              <span class="locked" title="{{ $unpaid
+                  ? ($shell->nextInstalment
+                      ? 'Opens when you pay '.$shell->nextInstalment['name']
+                      : 'This part of the course has not been paid for yet')
+                  : 'Complete the previous lesson to unlock this one' }}">
               <i class="fas fa-lock"></i> <span class="t">{{ $l->title }}</span>
               @if($l->duration_minutes)<span class="min">{{ $l->duration_minutes }}m</span>@endif
             </span>
@@ -74,7 +79,7 @@
                parallel list a student never opens. --}}
           @foreach($shell->activitiesFor($l) as $activity)
             @if($locked)
-              <span class="act-link is-locked" title="Complete the previous lesson first">
+              <span class="act-link is-locked" title="{{ $unpaid ? 'Opens when you pay for this part of the course' : 'Complete the previous lesson first' }}">
                 <span class="st"><i class="fas fa-lock"></i></span>
                 <span class="t">{{ $activity['title'] }}</span>
               </span>
@@ -96,5 +101,42 @@
         @endforeach
       </details>
     @endforeach
+
+    {{-- The way out of the lock.
+
+         A student who has run out of paid-for course meets a row of padlocks,
+         and without this the only thing the page tells them is what they
+         cannot do. The price is quoted from their own invoice, so the figure
+         here is the figure on the payment screen. --}}
+    @if($shell->nextInstalment)
+      <a href="{{ $shell->nextInstalment['url'] }}" class="unlock-next">
+        <i class="fas fa-unlock" aria-hidden="true"></i>
+        <span>
+          <b>Open {{ $shell->nextInstalment['name'] }}</b>
+          {{ $shell->nextInstalment['currency'] }} {{ number_format((float) $shell->nextInstalment['amount']) }},
+          and the next part of the course unlocks straight away.
+        </span>
+      </a>
+    @elseif($shell->unpaidLessonIds->isNotEmpty())
+      <div class="unlock-next is-flat">
+        <i class="fas fa-lock" aria-hidden="true"></i>
+        <span><b>Not paid for yet</b>The rest of this course opens once the next payment is made.</span>
+      </div>
+    @endif
   </div>
 </aside>
+
+@once
+@push('styles')
+<style>
+  .unlock-next{display:flex;gap:11px;align-items:flex-start;margin:14px 10px 6px;padding:12px 13px;
+    border:1px solid var(--gold,#b8903a);background:var(--gold-soft,rgba(184,144,58,.09));
+    color:inherit;text-decoration:none;transition:background .14s,transform .14s;}
+  .unlock-next:hover{background:var(--surface,#fff);transform:translateY(-1px);}
+  .unlock-next.is-flat{border-color:var(--line-2,#ddd);background:transparent;}
+  .unlock-next i{margin-top:2px;color:var(--gold,#b8903a);}
+  .unlock-next span{font-size:12px;line-height:1.55;color:var(--tx2);}
+  .unlock-next b{display:block;font-size:12.5px;color:var(--tx);margin-bottom:2px;}
+</style>
+@endpush
+@endonce

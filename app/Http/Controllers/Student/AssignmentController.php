@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 /** The student side of the Classroom turn-in flow: view, save draft, submit, review. */
 class AssignmentController extends Controller
 {
+    use \App\Http\Controllers\Concerns\GuardsPaidParts;
+
     public function __construct(
         private readonly AssignmentService $assignments,
         private readonly MarkdownRenderer $markdown,
@@ -38,7 +40,7 @@ class AssignmentController extends Controller
     public function show(Request $request, Course $course, Assignment $assignment): View
     {
         $enrollment = $this->enrollmentFor($request, $course);
-        $this->guardAssignment($assignment, $course);
+        $this->guardAssignment($assignment, $course, $enrollment);
         abort_unless($assignment->is_published, 404);
 
         $latest = $assignment->submissions()->where('enrollment_id', $enrollment->id)->latest('attempt_no')->first();
@@ -54,7 +56,7 @@ class AssignmentController extends Controller
     public function saveDraft(Request $request, Course $course, Assignment $assignment): RedirectResponse
     {
         $enrollment = $this->enrollmentFor($request, $course);
-        $this->guardAssignment($assignment, $course);
+        $this->guardAssignment($assignment, $course, $enrollment);
 
         $data = $this->validated($request, $assignment);
         $this->assignments->saveDraft($enrollment, $assignment, $data, $request->file('file'));
@@ -65,7 +67,7 @@ class AssignmentController extends Controller
     public function submit(Request $request, Course $course, Assignment $assignment): RedirectResponse
     {
         $enrollment = $this->enrollmentFor($request, $course);
-        $this->guardAssignment($assignment, $course);
+        $this->guardAssignment($assignment, $course, $enrollment);
 
         $data = $this->validated($request, $assignment);
         $this->assignments->submit($enrollment, $assignment, $data, $request->file('file'));
@@ -76,7 +78,7 @@ class AssignmentController extends Controller
     public function download(Request $request, Course $course, Assignment $assignment, AssignmentSubmission $submission): StreamedResponse
     {
         $enrollment = $this->enrollmentFor($request, $course);
-        $this->guardAssignment($assignment, $course);
+        $this->guardAssignment($assignment, $course, $enrollment);
         abort_unless($submission->assignment_id === $assignment->id, 404);
         abort_unless($submission->enrollment_id === $enrollment->id, 404);
         abort_unless($submission->hasFile(), 404);
@@ -95,9 +97,10 @@ class AssignmentController extends Controller
         return $enrollment;
     }
 
-    private function guardAssignment(Assignment $assignment, Course $course): void
+    private function guardAssignment(Assignment $assignment, Course $course, Enrollment $enrollment): void
     {
         abort_unless($assignment->course_id === $course->id, 404);
+        $this->guardPaidPart($course, $enrollment, $assignment->lesson_id);
     }
 
     /** @return array{body: ?string, link_url: ?string} */

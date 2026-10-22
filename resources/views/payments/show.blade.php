@@ -29,6 +29,10 @@
   .opt.primary h3 i{color:var(--pri);}
   .opt p{font-size:12px;line-height:1.55;color:var(--tx2);margin:0 0 11px;}
   .opt form{margin:0;}
+  .pay-parts{margin-top:14px;padding:13px 15px;border:1px solid var(--gold,#b8903a);
+    background:var(--gold-soft,rgba(184,144,58,.08));}
+  .pay-parts b{display:block;font-size:13px;margin-bottom:5px;}
+  .pay-parts span{display:block;font-size:12.5px;line-height:1.6;color:var(--tx2);}
   .opt .btn-tb{width:100%;justify-content:center;}
 
   .pay-note{display:flex;gap:9px;padding:12px 13px;background:var(--warn-soft,#fdf6e3);
@@ -116,12 +120,35 @@
         <span class="val">{{ $invoice->currency }} {{ number_format((float) $invoice->balance, 2) }}</span>
       </div>
 
+      @if(($instalments ?? null) && bccomp($instalments['next_amount'], '0', 2) > 0)
+        {{-- What the next payment actually buys, named, so "pay a part" is a
+             thing you can picture rather than a smaller number. --}}
+        <div class="pay-parts">
+          <b>You can pay for this course {{ \Illuminate\Support\Str::plural(\App\Support\Catalog\InstalmentPlan::label(), 2) }} at a time.</b>
+          <span>
+            @if($instalments['paid'] === 0)
+              Start with {{ $instalments['next_name'] }} for {{ $invoice->currency }} {{ number_format((float) $instalments['next_amount']) }}
+              and open the first part of the course today. Pay the next when you reach it.
+              The course costs the same either way.
+            @else
+              You have paid for {{ $instalments['paid'] }} of {{ $instalments['of'] }}.
+              {{ $instalments['next_name'] }} is {{ $invoice->currency }} {{ number_format((float) $instalments['next_amount']) }},
+              and opens the next part of the course as soon as it clears.
+            @endif
+          </span>
+        </div>
+      @endif
+
       {{-- The moment someone is deciding whether to hand over money is the
            moment to say plainly what happens next. --}}
       <ol class="pay-steps">
         <li><b>You pay</b><span>Card, mobile money or bank, or arrange it with Muhindo directly.</span></li>
         <li><b>It clears</b><span>Online payments confirm in seconds. Direct payments unlock once Muhindo confirms them.</span></li>
-        <li><b>{{ $destination['label'] }}</b><span>Yours from then on, with nothing further to pay.</span></li>
+        @if(($instalments ?? null) && bccomp($instalments['next_amount'], '0', 2) > 0 && bccomp($instalments['next_amount'], (string) $invoice->balance, 2) < 0)
+          <li><b>{{ $destination['label'] }}</b><span>{{ $instalments['next_name'] }} opens straight away. The rest opens as you pay for it.</span></li>
+        @else
+          <li><b>{{ $destination['label'] }}</b><span>Yours from then on, with nothing further to pay.</span></li>
+        @endif
       </ol>
     </div>
   </div>
@@ -132,13 +159,32 @@
     <div class="opt primary">
       <h3><i class="fas fa-bolt" aria-hidden="true"></i> Pay now, online</h3>
       <p>Card, mobile money or bank. Your course or download unlocks the moment the payment clears.</p>
-      <form method="POST" action="{{ route('portal.invoice.pay', $invoice) }}">
-        @csrf
-        <button type="submit" class="btn-tb btn-tb-primary">
-          Pay {{ $invoice->currency }} {{ number_format((float) $invoice->balance, 2) }}
-          <i class="fas fa-arrow-right" aria-hidden="true"></i>
-        </button>
-      </form>
+      @if(($instalments ?? null) && bccomp($instalments['next_amount'], '0', 2) > 0 && bccomp($instalments['next_amount'], (string) $invoice->balance, 2) < 0)
+        {{-- The part first and in the primary button: it is the offer that
+             makes the sale, and the full price is still one click away. --}}
+        <form method="POST" action="{{ route('portal.invoice.pay', $invoice) }}">
+          @csrf
+          <input type="hidden" name="instalment" value="1">
+          <button type="submit" class="btn-tb btn-tb-primary">
+            Pay {{ $instalments['next_name'] }}, {{ $invoice->currency }} {{ number_format((float) $instalments['next_amount']) }}
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </button>
+        </form>
+        <form method="POST" action="{{ route('portal.invoice.pay', $invoice) }}" style="margin-top:8px;">
+          @csrf
+          <button type="submit" class="btn-tb btn-tb-ghost">
+            Or pay the whole course, {{ $invoice->currency }} {{ number_format((float) $invoice->balance, 2) }}
+          </button>
+        </form>
+      @else
+        <form method="POST" action="{{ route('portal.invoice.pay', $invoice) }}">
+          @csrf
+          <button type="submit" class="btn-tb btn-tb-primary">
+            Pay {{ $invoice->currency }} {{ number_format((float) $invoice->balance, 2) }}
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </button>
+        </form>
+      @endif
     </div>
 
     {{-- 2. Pay Muhindo directly --}}

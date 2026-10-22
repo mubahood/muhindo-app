@@ -8,6 +8,7 @@ use App\Models\GatewayLog;
 use App\Models\Invoice;
 use App\Services\Gateway\GatewayPaymentService;
 use App\Services\Gateway\PaymentGateway;
+use App\Support\Catalog\InstalmentPlan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -30,12 +31,18 @@ class GatewayPaymentController extends Controller
             return back()->with('error', 'This invoice has nothing outstanding to pay.');
         }
 
+        $amount = $this->amountToCharge($request, $invoice);
+
+        if ($amount === null) {
+            return back()->with('error', 'That is not an amount this order can be paid in.');
+        }
+
         $invoice->loadMissing('billable');
         $billable = $invoice->billable;
 
         [, $charge] = $this->service->initialize(
             $invoice,
-            (string) $invoice->balance,
+            $amount,
             route('gateway.callback'),
             [
                 'email' => $billable?->email ?: 'billing@'.parse_url(config('app.url'), PHP_URL_HOST),
@@ -49,6 +56,43 @@ class GatewayPaymentController extends Controller
         }
 
         return redirect()->away($charge->link);
+    }
+
+    /**
+     * How much to charge: the whole balance, or one instalment.
+     *
+     * The caller may ask for a part, but it is never trusted as a number. A
+     * posted "pay one quarter" is re-derived here from the invoice, so the
+     * form cannot name its own price, and anything that is neither the next
+     * instalment nor the full balance is refused rather than quietly rounded
+     * into one of them.
+     *
+     * Returns null when the request asked for something this invoice cannot be
+     * paid in.
+     */
+    private function amountToCharge(Request $request, Invoice $invoice): ?string
+    {
+        $balance = (string) $invoice->balance;
+
+        if (! $request->boolean('instalment')) {
+            return $balance;
+        }
+
+        $invoice->loadMissing('items');
+        $context = InstalmentPlan::contextFor($invoice);
+
+        if ($context === null) {
+            return null;
+        }
+
+        $next = $context['next_amount'];
+
+        if (bccomp($next, '0', 2) <= 0) {
+            return null;
+        }
+
+        // The last instalment is the balance; never ask for more than is owed.
+        return bccomp($next, $balance, 2) > 0 ? $balance : $next;
     }
 
     /** Browser return from Flutterwave. Public. The payer may not be signed in. */

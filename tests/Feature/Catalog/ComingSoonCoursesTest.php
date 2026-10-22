@@ -25,6 +25,20 @@ class ComingSoonCoursesTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        /*
+         * This class is about how the waitlist shop window behaves, so it runs
+         * with that window open. The catalogue's own default is now to hide an
+         * unopened course entirely; HiddenUnopenedCoursesTest covers that side.
+         * Everything asserted below is what the owner gets back the day they
+         * set catalog.show_unopened to true.
+         */
+        config()->set('catalog.show_unopened', true);
+    }
+
     private function course(bool $comingSoon = true, float $price = 150000): Course
     {
         return Course::factory()->create([

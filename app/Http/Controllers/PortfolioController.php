@@ -27,7 +27,7 @@ class PortfolioController extends Controller
             'about' => $this->json('portfolio.about'),
             'services' => Service::orderBy('sort_order')->limit(4)->get(),
             'projects' => PortfolioProject::orderBy('sort_order')->limit(3)->get(),
-            'courses' => Course::where('is_published', true)->latest()->limit(3)->get(),
+            'courses' => Course::publiclyVisible()->latest()->limit(3)->get(),
             'clients' => $this->json('portfolio.clients', []),
             'posts' => \App\Models\Post::published()->latest('published_at')->limit(3)->get(),
             'photos' => \App\Models\GalleryPhoto::published()->where('is_featured', true)

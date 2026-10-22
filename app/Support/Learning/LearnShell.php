@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Models\User;
+use App\Support\Catalog\InstalmentPlan;
 use Illuminate\Support\Collection;
 
 /**
@@ -32,6 +33,18 @@ class LearnShell
 
     /** @var Collection<int,int> */
     public readonly Collection $lockedLessonIds;
+
+    /**
+     * The subset of the above shut because the student has not paid for that
+     * part of the course yet, which is a different message and a different
+     * button from "finish the previous lesson".
+     *
+     * @var Collection<int,int>
+     */
+    public readonly Collection $unpaidLessonIds;
+
+    /** The instalment the student is being asked for next, or null when they owe nothing. */
+    public readonly ?array $nextInstalment;
 
     /** @var Collection<int,int> */
     public readonly Collection $submittedQuizIds;
@@ -74,11 +87,17 @@ class LearnShell
 
         // A lesson is only "locked" for a real enrollment; without one there's
         // nothing to gate against, so the sidebar renders every lesson plainly.
-        $this->lockedLessonIds = $this->enrollment
-            ? $this->flatLessons
-                ->filter(fn (Lesson $l) => $course->isLessonLocked($this->enrollment, $l))
-                ->pluck('id')
+        $reasons = $this->enrollment
+            ? $this->flatLessons->mapWithKeys(fn (Lesson $l) => [
+                $l->id => $course->lessonLockReason($this->enrollment, $l),
+            ])->filter()
             : collect();
+
+        $this->lockedLessonIds = $reasons->keys();
+        $this->unpaidLessonIds = $reasons->filter(fn (?string $why) => $why === 'instalment')->keys();
+        $this->nextInstalment = $this->unpaidLessonIds->isNotEmpty()
+            ? $this->describeNextInstalment()
+            : null;
 
         $this->submittedQuizIds = $this->enrollment
             ? $this->enrollment->quizAttempts()->whereNotNull('submitted_at')->pluck('quiz_id')->unique()
@@ -87,6 +106,40 @@ class LearnShell
         $this->submittedAssignmentIds = $this->enrollment
             ? $this->enrollment->assignmentSubmissions()->whereNotNull('submitted_at')->pluck('assignment_id')->unique()
             : collect();
+    }
+
+    /**
+     * What the student would pay to open the next part, and where to pay it.
+     *
+     * Read from the invoice they are already part-way through, so the figure on
+     * the lock is the figure on the payment screen. Null if that invoice has
+     * gone (cancelled, voided), in which case the lock still holds and the
+     * sidebar simply says so without quoting a price it cannot stand behind.
+     *
+     * @return array{name:string,amount:string,currency:string,url:string}|null
+     */
+    private function describeNextInstalment(): ?array
+    {
+        $invoice = $this->enrollment?->invoice_id
+            ? \App\Models\Invoice::with('items')->find($this->enrollment->invoice_id)
+            : null;
+
+        if ($invoice === null) {
+            return null;
+        }
+
+        $context = InstalmentPlan::contextFor($invoice);
+
+        if ($context === null || bccomp($context['next_amount'], '0', 2) <= 0) {
+            return null;
+        }
+
+        return [
+            'name' => $context['next_name'],
+            'amount' => $context['next_amount'],
+            'currency' => $invoice->currency,
+            'url' => route('payments.show', $invoice),
+        ];
     }
 
     /**
