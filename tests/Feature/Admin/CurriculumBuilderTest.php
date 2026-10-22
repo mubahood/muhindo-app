@@ -140,9 +140,24 @@ class CurriculumBuilderTest extends TestCase
         $this->actingAs($student)->postJson(route('admin.courses.curriculum.reorder', $course), [])->assertRedirect(route('login'));
     }
 
-    public function test_duration_fetch_reports_unavailable_with_no_api_key_configured(): void
+    public function test_duration_fetch_still_works_with_no_api_key_configured(): void
+    {
+        // It used to report "unavailable" without a Data API key. The public
+        // watch page carries the length too, so the button now works for an
+        // owner who has never provisioned a Google Cloud project.
+        config(['services.youtube.key' => null]);
+        Http::fake(['youtube.com/*' => Http::response('{"lengthSeconds":"213"}')]);
+        $admin = $this->admin();
+
+        $this->actingAs($admin)->postJson(route('admin.lessons.fetch-video-duration'), [
+            'video_url' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        ])->assertOk()->assertJson(['available' => true, 'minutes' => 4]);
+    }
+
+    public function test_duration_fetch_reports_unavailable_when_youtube_says_nothing_useful(): void
     {
         config(['services.youtube.key' => null]);
+        Http::fake(['youtube.com/*' => Http::response('no player payload here', 500)]);
         $admin = $this->admin();
 
         $this->actingAs($admin)->postJson(route('admin.lessons.fetch-video-duration'), [

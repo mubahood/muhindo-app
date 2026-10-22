@@ -60,19 +60,40 @@ class SyncBootstrapPracticeGround extends Command
                 'A computer with VS Code and a current web browser.',
                 'Internet access. A free GitHub account is needed for the final publishing lessons.',
             ],
-            'price' => 60000,
-            'currency' => 'UGX',
             'level' => 'beginner',
             'category' => 'Frontend development',
-            'course_number' => 2,
-            'is_published' => true,
+            // 25, not 2. The authoring folder calls this course "02" because
+            // it is the second in the AI-Powered series, but the catalogue is
+            // numbered on its own sequence and 02 there is AI-Powered Web
+            // Development. Two courses sharing a number made course_number
+            // useless as a key, which is exactly what config/catalog.php and
+            // courses:open-first-lessons both use it as.
+            'course_number' => 25,
+            'tier' => 2,
             'progression' => 'sequential',
-        ])->save();
+        ]);
+
+        /*
+         * Price and publication are set when the course is first created and
+         * never again. They belong to config/catalog.php and the admin UI, and
+         * a content sync that reasserted them would quietly undo a pricing
+         * decision every time somebody re-ran it over new lesson pages.
+         */
+        if (! $course->exists) {
+            $course->fill([
+                'price' => 130000,
+                'currency' => 'UGX',
+                'is_published' => true,
+            ]);
+        }
+
+        $course->save();
 
         $lessonCount = 0;
         $liveCount = 0;
+        $textCount = 0;
         $prunedLessons = 0;
-        DB::transaction(function () use ($modules, $course, $videos, &$lessonCount, &$liveCount, &$prunedLessons): void {
+        DB::transaction(function () use ($modules, $course, $videos, &$lessonCount, &$liveCount, &$textCount, &$prunedLessons): void {
             $keptModules = [];
 
             foreach ($modules as $moduleIndex => $modulePath) {
@@ -98,7 +119,10 @@ class SyncBootstrapPracticeGround extends Command
                     // The leading number in the file name is the key the video
                     // manifest is written against: "4.2.1 - BOOTSTRAP - ...".
                     $number = $this->lessonNumber($file->getFilename());
-                    $video = $number !== null ? ($videos[$number] ?? null) : null;
+                    $entry = $number !== null ? ($videos[$number] ?? null) : null;
+                    // A text-only entry carries no video, so everything that
+                    // reads a YouTube id or a runtime has to see null.
+                    $video = isset($entry['youtube']) ? $entry : null;
 
                     $module->lessons()->updateOrCreate(
                         ['title' => $title],
@@ -106,10 +130,13 @@ class SyncBootstrapPracticeGround extends Command
                             'content' => $html,
                             'content_format' => ContentFormat::Html,
                             'sort_order' => $lessonIndex,
-                            // A lesson goes live when its video exists and stays a
-                            // draft until then. The manifest is the only authority,
-                            // so a re-sync never silently publishes an empty lesson.
-                            'is_published' => $video !== null,
+                            // A lesson goes live when the manifest accounts for
+                            // it: either it names a video, or it marks the page
+                            // as text by design ("text": true). A page the
+                            // manifest says nothing about is one whose video is
+                            // still to record, and it stays a draft, so a
+                            // re-sync never silently publishes an empty lesson.
+                            'is_published' => $entry !== null,
                             'video_url' => $video
                                 ? 'https://www.youtube-nocookie.com/embed/'.$video['youtube']
                                 : null,
@@ -126,6 +153,8 @@ class SyncBootstrapPracticeGround extends Command
                     $lessonCount++;
                     if ($video !== null) {
                         $liveCount++;
+                    } elseif ($entry !== null) {
+                        $textCount++;
                     }
                 }
 
@@ -139,9 +168,9 @@ class SyncBootstrapPracticeGround extends Command
             $course->modules()->whereNotIn('title', $keptModules)->get()->each->delete();
         });
 
-        $drafts = $lessonCount - $liveCount;
+        $drafts = $lessonCount - $liveCount - $textCount;
         $this->info("Synced {$modules->count()} modules and {$lessonCount} HTML lessons to {$course->title}.");
-        $this->line("{$liveCount} lessons are live with a video; {$drafts} stay drafts until one is recorded.");
+        $this->line("{$liveCount} lessons are live with a video and {$textCount} live as written material; {$drafts} stay drafts until a video is recorded.");
         if ($prunedLessons > 0) {
             $this->line("{$prunedLessons} lesson(s) no longer in the source were removed.");
         }

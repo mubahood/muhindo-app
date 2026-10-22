@@ -10,9 +10,11 @@ use Tests\TestCase;
 /**
  * The command that turns the authored practice pages into the Bootstrap course.
  *
- * The rule that matters: a lesson goes live only when the video manifest names
- * a video for it. Everything else stays a draft, so a re-sync can never put an
- * empty lesson in front of a student.
+ * The rule that matters: a lesson goes live only when the video manifest
+ * accounts for it, either with a video or with "text": true for a page that is
+ * written material by design. A page the manifest says nothing about is one
+ * whose video is still to record, and it stays a draft, so a re-sync can never
+ * put an empty lesson in front of a student.
  */
 class BootstrapPracticeGroundSyncTest extends TestCase
 {
@@ -113,6 +115,49 @@ class BootstrapPracticeGroundSyncTest extends TestCase
         $this->sync();
 
         $this->assertSame(['Keeps'], $this->course()->modules()->first()->lessons()->pluck('title')->all());
+    }
+
+    public function test_a_page_the_manifest_marks_as_text_goes_live_without_a_video(): void
+    {
+        $this->page('00. Start here', '0.1 - BOOTSTRAP - How this course works.html', 'How this course works');
+        $this->page('00. Start here', '0.9 - BOOTSTRAP - Still to record.html', 'Still to record');
+        $this->manifest(['0.1' => ['text' => true]]);
+
+        $this->sync();
+
+        $lessons = $this->course()->modules()->first()->lessons()->orderBy('sort_order')->get();
+
+        $this->assertTrue($lessons[0]->is_published);
+        $this->assertNull($lessons[0]->video_url);
+        $this->assertNull($lessons[0]->duration_minutes);
+
+        $this->assertFalse($lessons[1]->is_published);
+    }
+
+    public function test_the_course_keeps_the_price_and_publication_it_was_given(): void
+    {
+        $this->page('01. Module', '1.1 - BOOTSTRAP - A lesson.html', 'A lesson');
+        $this->manifest(['1.1' => ['youtube' => 'abc123XYZ_1', 'seconds' => 415]]);
+        $this->sync();
+
+        $this->course()->forceFill(['price' => 199000, 'is_published' => false])->save();
+        $this->sync();
+
+        $course = $this->course();
+        $this->assertSame('199000.00', (string) $course->price);
+        $this->assertFalse($course->is_published);
+    }
+
+    public function test_the_course_takes_its_own_catalogue_number(): void
+    {
+        $this->page('01. Module', '1.1 - BOOTSTRAP - A lesson.html', 'A lesson');
+        $this->manifest([]);
+
+        $this->sync();
+
+        // 2 is AI-Powered Web Development's number in the catalogue; sharing it
+        // broke config/catalog.php's per-course overrides.
+        $this->assertSame(25, $this->course()->course_number);
     }
 
     public function test_a_missing_manifest_leaves_every_lesson_a_draft(): void
