@@ -102,41 +102,44 @@
       </details>
     @endforeach
 
-    {{-- The way out of the lock.
-
-         A student who has run out of paid-for course meets a row of padlocks,
-         and without this the only thing the page tells them is what they
-         cannot do. The price is quoted from their own invoice, so the figure
-         here is the figure on the payment screen. --}}
-    @if($shell->nextInstalment)
-      <a href="{{ $shell->nextInstalment['url'] }}" class="unlock-next">
-        <i class="fas fa-unlock" aria-hidden="true"></i>
-        <span>
-          <b>Open {{ $shell->nextInstalment['name'] }}</b>
-          {{ $shell->nextInstalment['currency'] }} {{ number_format((float) $shell->nextInstalment['amount']) }},
-          and the next part of the course unlocks straight away.
-        </span>
-      </a>
-    @elseif($shell->unpaidLessonIds->isNotEmpty())
-      <div class="unlock-next is-flat">
-        <i class="fas fa-lock" aria-hidden="true"></i>
-        <span><b>Not paid for yet</b>The rest of this course opens once the next payment is made.</span>
-      </div>
-    @endif
   </div>
-</aside>
 
-@once
-@push('styles')
-<style>
-  .unlock-next{display:flex;gap:11px;align-items:flex-start;margin:14px 10px 6px;padding:12px 13px;
-    border:1px solid var(--gold,#b8903a);background:var(--gold-soft,rgba(184,144,58,.09));
-    color:inherit;text-decoration:none;transition:background .14s,transform .14s;}
-  .unlock-next:hover{background:var(--surface,#fff);transform:translateY(-1px);}
-  .unlock-next.is-flat{border-color:var(--line-2,#ddd);background:transparent;}
-  .unlock-next i{margin-top:2px;color:var(--gold,#b8903a);}
-  .unlock-next span{font-size:12px;line-height:1.55;color:var(--tx2);}
-  .unlock-next b{display:block;font-size:12.5px;color:var(--tx);margin-bottom:2px;}
-</style>
-@endpush
-@endonce
+  {{-- The way out of the lock.
+
+       Outside the scrolling list on purpose, so it sits in the sidebar's
+       footer and stays on screen. It was the last thing after eleven
+       collapsed modules, which is the one place a student looking at a column
+       of padlocks will never scroll to.
+
+       The price is quoted from their own invoice, so the figure here is the
+       figure on the payment screen. --}}
+  @if($shell->nextInstalment)
+    <div class="unlock-box">
+      <div class="unlock-meta">
+        <i class="fas fa-lock" aria-hidden="true"></i>
+        <span>{{ $shell->nextInstalment['paid'] }} of {{ $shell->nextInstalment['of'] }} paid</span>
+      </div>
+      <p class="unlock-say">
+        @if($shell->nextInstalment['paid'] === 0)
+          Pay {{ $shell->nextInstalment['name'] }} to start the course.
+        @else
+          {{ $shell->nextInstalment['name'] }} is next.
+        @endif
+        @if($shell->nextInstalment['lessons'] > 0)
+          It opens the {{ $shell->nextInstalment['paid'] === 0 ? 'first' : 'next' }}
+          {{ $shell->nextInstalment['lessons'] }} {{ \Illuminate\Support\Str::plural('lesson', $shell->nextInstalment['lessons']) }}, straight away.
+        @endif
+      </p>
+      <a href="{{ $shell->nextInstalment['url'] }}" class="unlock-btn">
+        <span>Pay {{ $shell->nextInstalment['currency'] }} {{ number_format((float) $shell->nextInstalment['amount']) }}</span>
+        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+      </a>
+      <span class="unlock-fine">Unlocks the moment the payment clears</span>
+    </div>
+  @elseif($shell->unpaidLessonIds->isNotEmpty())
+    <div class="unlock-box is-flat">
+      <div class="unlock-meta"><i class="fas fa-lock" aria-hidden="true"></i><span>Locked</span></div>
+      <p class="unlock-say">The rest of this course opens once the next payment is made.</p>
+    </div>
+  @endif
+</aside>

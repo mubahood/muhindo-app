@@ -143,6 +143,48 @@
   .learn-side-practice .fa-arrow-up-right-from-square{margin-left:auto;font-size:9px;color:var(--tx3);}
   .learn-side-list{overflow-y:auto;flex:1;overscroll-behavior:contain;}
 
+  /* The next instalment.
+
+     In the sidebar's footer rather than at the end of the scrolling list, so
+     a student looking at a column of padlocks can always see the way out of
+     it without scrolling past eleven collapsed modules to find one. */
+  .unlock-box{flex-shrink:0;border-top:2px solid var(--gold);background:var(--gold-soft);padding:12px 13px 13px;}
+  .unlock-box.is-flat{border-top-color:var(--line-2);background:var(--surface-2);}
+  .unlock-meta{display:flex;align-items:center;gap:6px;font-size:9.5px;font-weight:700;
+    letter-spacing:.11em;text-transform:uppercase;color:var(--gold-d);margin-bottom:6px;}
+  .unlock-box.is-flat .unlock-meta{color:var(--tx3);}
+  .unlock-meta i{font-size:9px;}
+  .unlock-say{font-size:12px;line-height:1.55;color:var(--tx);margin:0 0 10px;}
+  .unlock-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+    padding:11px 14px;background:var(--gold);color:#231a05;border:1px solid var(--gold);
+    font-size:13.5px;font-weight:700;letter-spacing:.01em;text-decoration:none;
+    transition:background .14s,border-color .14s,color .14s,transform .14s;}
+  .unlock-btn:hover,.unlock-btn:focus-visible{background:var(--gold-d);border-color:var(--gold-d);
+    color:#fff;transform:translateY(-1px);}
+  .unlock-btn:focus-visible{outline:2px solid var(--pri);outline-offset:2px;}
+  .unlock-btn i{font-size:11px;}
+  .unlock-fine{display:block;text-align:center;font-size:10.5px;color:var(--tx3);margin-top:7px;}
+
+  /* The same offer across the top of the content. */
+  .unlock-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    margin:0 0 18px;padding:13px 16px;background:var(--gold-soft);border:1px solid var(--gold);
+    border-left-width:4px;}
+  .ub-say{display:flex;align-items:flex-start;gap:10px;min-width:0;flex:1;}
+  .ub-say i{margin-top:3px;color:var(--gold-d);font-size:12px;flex-shrink:0;}
+  .ub-say span{font-size:13px;line-height:1.55;color:var(--tx);}
+  .ub-say b{font-weight:700;}
+  .ub-btn{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;padding:10px 18px;
+    background:var(--gold);color:#231a05;border:1px solid var(--gold);
+    font-size:13.5px;font-weight:700;text-decoration:none;white-space:nowrap;
+    transition:background .14s,border-color .14s,color .14s,transform .14s;}
+  .ub-btn:hover,.ub-btn:focus-visible{background:var(--gold-d);border-color:var(--gold-d);color:#fff;transform:translateY(-1px);}
+  .ub-btn:focus-visible{outline:2px solid var(--pri);outline-offset:2px;}
+  .ub-btn i{font-size:11px;}
+  @media (max-width:640px){
+    .unlock-bar{flex-direction:column;align-items:stretch;}
+    .ub-btn{justify-content:center;}
+  }
+
   /* Collapsible chapters, native <details>, so collapse works with zero JS. */
   .mod-group{border-bottom:1px solid var(--line);}
   .mod-group summary{list-style:none;display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;
@@ -342,6 +384,35 @@
       'teachingMode' => $teachingMode ?? false, 'taughtLessonIds' => $taughtLessonIds ?? collect()])
 
   <main class="learn-main @yield('main_class', 'no-bar')" id="learn-content" tabindex="-1">
+    {{-- Said once more, across the top of whatever page they are on.
+
+         The sidebar collapses on a phone, which is where most of these
+         students are, so on a small screen the footer button is behind a menu
+         they have no reason to open. This strip is the one that is always in
+         front of them. --}}
+    @if(($shell->nextInstalment ?? null))
+      <div class="unlock-bar">
+        <div class="ub-say">
+          <i class="fas fa-lock" aria-hidden="true"></i>
+          <span>
+            <b>{{ $shell->nextInstalment['paid'] }} of {{ $shell->nextInstalment['of'] }} paid.</b>
+            @if($shell->nextInstalment['paid'] === 0)
+              Pay {{ $shell->nextInstalment['name'] }} to start the course.
+            @else
+              {{ $shell->nextInstalment['name'] }} is next.
+            @endif
+            @if($shell->nextInstalment['lessons'] > 0)
+              It opens the {{ $shell->nextInstalment['paid'] === 0 ? 'first' : 'next' }}
+              {{ $shell->nextInstalment['lessons'] }} {{ \Illuminate\Support\Str::plural('lesson', $shell->nextInstalment['lessons']) }}.
+            @endif
+          </span>
+        </div>
+        <a href="{{ $shell->nextInstalment['url'] }}" class="ub-btn">
+          Pay {{ $shell->nextInstalment['currency'] }} {{ number_format((float) $shell->nextInstalment['amount']) }}
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+    @endif
     @yield('banner')
     @if(session('success'))<div class="alert-success" role="status">{{ session('success') }}</div>@endif
     @if(session('error'))<div class="alert-success" role="alert" style="background:var(--bad-soft);color:var(--bad);border-color:var(--bad);">{{ session('error') }}</div>@endif

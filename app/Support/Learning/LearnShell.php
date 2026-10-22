@@ -116,7 +116,7 @@ class LearnShell
      * gone (cancelled, voided), in which case the lock still holds and the
      * sidebar simply says so without quoting a price it cannot stand behind.
      *
-     * @return array{name:string,amount:string,currency:string,url:string}|null
+     * @return array{name:string,amount:string,currency:string,url:string,paid:int,of:int,lessons:int}|null
      */
     private function describeNextInstalment(): ?array
     {
@@ -134,11 +134,21 @@ class LearnShell
             return null;
         }
 
+        // How much course the next payment actually opens. "Pay 32,500" is a
+        // price; "opens the next 17 lessons" is what they are buying, and the
+        // second one is the reason to press the button.
+        $nextPart = min($context['paid'] + 1, InstalmentPlan::partCount());
+        $lessons = collect($this->course->instalmentPlan()->summary())
+            ->firstWhere('part', $nextPart)['lessons'] ?? 0;
+
         return [
             'name' => $context['next_name'],
             'amount' => $context['next_amount'],
             'currency' => $invoice->currency,
             'url' => route('payments.show', $invoice),
+            'paid' => $context['paid'],
+            'of' => $context['of'],
+            'lessons' => $lessons,
         ];
     }
 

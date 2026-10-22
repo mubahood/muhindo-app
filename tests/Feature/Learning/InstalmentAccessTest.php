@@ -258,6 +258,58 @@ class InstalmentAccessTest extends TestCase
             ->assertForbidden();
     }
 
+    /* Landing somewhere useful -------------------------------------------- */
+
+    public function test_a_student_with_nothing_paid_lands_on_a_page_that_sells_them_the_first_part(): void
+    {
+        // The course page redirects to the first lesson. With the course sold
+        // in parts that lesson is lockable, so it used to redirect into a 403
+        // and leave them with no way back and nothing to press.
+        $this->enrolAndPay('0.00');
+
+        $this->actingAs($this->student)
+            ->get(route('learn.course', $this->course))
+            ->assertOk()
+            ->assertSee('Pay UGX 32,500')
+            ->assertSee('0 of 4 paid');
+    }
+
+    public function test_the_course_page_still_resumes_into_a_lesson_they_can_open(): void
+    {
+        $this->enrolAndPay('32500.00');
+
+        $this->actingAs($this->student)
+            ->get(route('learn.course', $this->course))
+            ->assertRedirect(route('learn.lesson', [$this->course, $this->lessonIn(1)]));
+    }
+
+    public function test_a_fully_paid_student_is_never_asked_for_money_again(): void
+    {
+        $this->enrolAndPay('130000.00');
+
+        $this->actingAs($this->student)
+            ->get(route('learn.lesson', [$this->course, $this->lessonIn(1)]))
+            ->assertOk()
+            ->assertDontSee('class="unlock-btn"', false)
+            ->assertDontSee('<div class="unlock-bar">', false);
+    }
+
+    public function test_the_locked_sidebar_offers_the_price_and_a_button(): void
+    {
+        $this->enrolAndPay('32500.00');
+
+        $this->actingAs($this->student)
+            ->get(route('learn.lesson', [$this->course, $this->lessonIn(1)]))
+            ->assertOk()
+            ->assertSee('class="unlock-btn"', false)
+            ->assertSee('<div class="unlock-bar">', false)
+            // The styles live in the layout, not a @push: the sidebar is
+            // included after @stack('styles') has already been rendered, so a
+            // pushed stylesheet never reaches the page at all.
+            ->assertSee('.unlock-btn{', false)
+            ->assertSee('1 of 4 paid');
+    }
+
     /* The first payment is what opens the course ------------------------- */
 
     public function test_the_first_instalment_activates_a_pending_enrollment(): void

@@ -61,7 +61,19 @@ class LearningController extends Controller
             return redirect()->route('learn.lesson', [$course, $resumeLesson]);
         }
 
-        $firstLesson = $this->publishedLessonsFlat($course)->first();
+        /*
+         * The first lesson they can actually open, not simply the first one.
+         *
+         * The resume branch above already refuses to redirect into a locked
+         * lesson, and this fallback did exactly that: with the course sold in
+         * parts, lesson one is lockable, so a student who had not paid yet was
+         * bounced off the course page into a 403 with no way back. The
+         * overview is the right landing page when nothing is open, because it
+         * is the page carrying the price of the next part and the button.
+         */
+        $firstLesson = $this->publishedLessonsFlat($course)
+            ->first(fn (Lesson $lesson) => ! $course->isLessonLocked($enrollment, $lesson));
+
         if ($firstLesson) {
             return redirect()->route('learn.lesson', [$course, $firstLesson]);
         }
