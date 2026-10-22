@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Prompt the theme, dark mode, accessibility and publish.">
+  <title>11.5 Prompt the theme, dark mode, accessibility and publish | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 11.5</p>
+    <h1>Prompt the theme, dark mode, accessibility and publish</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Setting the palette variable is half a theme. Components such as buttons and pagination read their own variables, so they stay Bootstrap blue until you set those too.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Theme the component, not just the palette</h3><div class="d-flex flex-wrap gap-2 align-items-center"><button class="btn btn-primary kr-btn-navy">Navy primary</button><button class="btn btn-warning kr-btn-gold">Gold action</button><span class="badge text-bg-secondary">Draft</span></div><p class="small text-secondary mb-0 mt-2">Setting only --bs-primary leaves buttons blue. Buttons read their own component variables.</p></section>
+    <section class="lesson-section lesson-prompts"><h2>Prompts for this lesson</h2><p>Copy each prompt in order. Run one, check the answer against the checklist below it, then move on. Never paste the next prompt until the last one is correct.</p><h3>1. The theme, naming every target</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">In css/style.css, below the :root block, add a theme section.
+
+Set --bs-primary and --bs-primary-rgb to the navy #1F3A5F.
+
+Then override the components, because they read their own variables:
+.btn-primary: set --bs-btn-bg, --bs-btn-border-color, --bs-btn-hover-bg,
+  --bs-btn-hover-border-color, --bs-btn-active-bg and --bs-btn-focus-shadow-rgb.
+.btn-warning: the same set, using the gold #C8963E, with dark text for contrast.
+.pagination: set --bs-pagination-active-bg and --bs-pagination-active-border-color.
+.nav-pills: set --bs-nav-pills-link-active-bg.
+
+Do not use !important anywhere. Do not change any HTML.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Look at every page. If any button, link or active pagination number is still Bootstrap blue, a component variable was missed.</p><h3>2. Dark mode, and the three classes that break it</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Add a [data-bs-theme=&quot;dark&quot;] block to css/style.css that sets lighter link colours
+so they stay readable on a dark background.
+
+Then go through all nine pages and replace:
+  bg-light   with bg-body-tertiary
+  bg-white   with bg-body
+  text-dark  with text-body
+These three do not adapt to colour mode and are the usual cause of white boxes
+and invisible text in dark mode.
+
+Add a theme toggle button to the navbar with id=&quot;themeToggle&quot; and an aria-label.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Switch to dark mode and look at every page yourself. No prompt can do this check for you. Look for white boxes, grey on grey text, and any icon that disappears.</p><h3>3. The accessibility pass</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Check all nine pages and report as a list, changing nothing:
+1. Every image with missing alt text, or alt text that repeats the filename.
+2. Every icon only button or link with no accessible name.
+3. Every form field whose label is missing or whose for does not match an id.
+4. Every heading level that skips a step.
+5. Every place where colour alone carries meaning, with no word or icon beside it.
+6. Every id used more than once in the same file.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Fix what it finds, then run Lighthouse Accessibility on index.html, admissions.html and admin/index.html. You need 90 or more on all three. Never remove the focus outline to raise a score; restyle it in the brand colour instead.</p><h3>4. Publish</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Create a new public repository on GitHub, push this project to it,
+then in Settings, Pages, choose Deploy from a branch, main, / (root).
+Wait for the address, then open it on a real phone.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Check every image loads on the live site. A file saved as Logo.png and linked as logo.png works on your laptop and fails on the server, because the server is case sensitive.</p></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;div class=&quot;d-flex flex-wrap gap-2 align-items-center&quot;&gt;
+  &lt;button class=&quot;btn btn-primary kr-btn-navy&quot;&gt;
+    Navy primary
+  &lt;/button&gt;
+  &lt;button class=&quot;btn btn-warning kr-btn-gold&quot;&gt;
+    Gold action
+  &lt;/button&gt;
+  &lt;span class=&quot;badge text-bg-secondary&quot;&gt;
+    Draft
+  &lt;/span&gt;
+&lt;/div&gt;
+&lt;p class=&quot;small text-secondary mb-0 mt-2&quot;&gt;
+  Setting only --bs-primary leaves buttons blue. Buttons read their own component variables.
+&lt;/p&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Every time you brand a Bootstrap site in its own colours.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Override component variables, never with !important.</li><li>Replace bg-light, bg-white and text-dark before testing dark mode.</li><li>Keep a visible focus state; restyle it rather than removing it.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Theme the components, then look at every page in both colour modes yourself.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Prompt for the theme section, then check that no Bootstrap blue is left on any page in either colour mode.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short Bootstrap 5.3 practice activity for Prompt the news list, the article page and the admissions form.">
+  <title>11.3 Prompt the news list, the article page and the admissions form | Bootstrap Practice</title>
+  <link rel="stylesheet" href="../css/vendor/bootstrap.min.css"><link rel="stylesheet" href="../css/vendor/bootstrap-icons.min.css"><link rel="stylesheet" href="../css/practice.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to example</a>
+  <main id="main" class="lesson">
+    <p class="lesson-label">Lesson 11.3</p>
+    <h1>Prompt the news list, the article page and the admissions form</h1>
+    <section class="lesson-section"><h2>How it works</h2><p>Long text needs a reading column. The grid will happily run a paragraph the full width of a laptop, and the assistant will let it.</p></section>
+    <section class="lesson-section"><h2>Example</h2><h3 class="h5">Keep long text inside a reading column</h3><div class="row"><div class="col-lg-8 mx-auto"><nav aria-label="breadcrumb"><ol class="breadcrumb small"><li class="breadcrumb-item"><a href="#">News</a></li><li class="breadcrumb-item active" aria-current="page">Science fair</li></ol></nav><h2 class="h3">Science fair results announced</h2><p class="text-secondary small">12 March 2026 &middot; Mrs. Grace Okello</p><p>The annual science fair closed on Friday with projects from all three streams on display in the main hall.</p><blockquote class="blockquote border-start border-3 ps-3"><p class="mb-0 fs-6">Every entry this year came from a question a student asked themselves.</p></blockquote><p>Judging was done by staff and two visiting teachers from neighbouring schools.</p></div></div></section>
+    <section class="lesson-section lesson-prompts"><h2>Prompts for this lesson</h2><p>Copy each prompt in order. Run one, check the answer against the checklist below it, then move on. Never paste the next prompt until the last one is correct.</p><h3>1. The news list</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Build news.html with the shared header and footer copied exactly from index.html,
+News active.
+
+Inside, a container py-5 holding:
+1. A page header with an h1 &quot;School news&quot; and one lead line.
+2. A row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 holding nine cards.
+   Each card: an image with a 16 by 9 ratio and real alt text, a date in a small
+   muted line, an h3 title, two lines of text, and a stretched-link &quot;Read more&quot;
+   pointing at article.html.
+   Every card must be the same height regardless of title length.
+3. Pagination with three pages underneath, inside a nav with an aria-label.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Give one card a much longer title and confirm the cards stay level. If they do not, the row is missing h-100 on the cards.</p><h3>2. The article page</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Build article.html with the shared header and footer, News active.
+
+Inside a container, put everything in a single column: col-lg-8 mx-auto.
+Nothing on this page runs wider than that column.
+
+1. A breadcrumb nav back to News.
+2. An h1 headline.
+3. A byline line in small muted text: the date and the author.
+4. A feature image, img-fluid rounded, with real alt text.
+5. Five paragraphs of real sentences about a school event. No lorem text.
+6. One h2 subheading between the paragraphs.
+7. One blockquote using class blockquote.
+8. One unordered list of three items.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Open it at 1280. The text should stop well before the edges of the screen. A line of text that runs the full width of a laptop is tiring to read.</p><h3>3. The admissions form</h3><pre class="code-sample prompt-sample"><code class="language-plaintext">Build admissions.html with the shared header and footer, Admissions active.
+
+Inside a container py-5, one form with needs-validation and novalidate,
+split into three fieldsets, each inside its own card with a legend.
+
+Fieldset 1, Student details:
+  Full name (text), Date of birth (date), Gender (radio group),
+  Current school (text, optional).
+
+Fieldset 2, Guardian details:
+  Guardian name (text), Relationship (select: Parent, Guardian, Other),
+  Phone (tel inside an input-group with a phone icon prefix),
+  Email address (email).
+
+Fieldset 3, Application:
+  Stream (select: Sciences, Arts, Vocational),
+  Boarding required (form-check form-switch),
+  Anything else we should know (textarea rows=&quot;4&quot;, optional),
+  and a required checkbox agreeing to the terms.
+
+Every field has a label with a for matching its input id.
+Every required field has an invalid-feedback div with a sentence that says what to do.
+Submit is btn btn-primary, w-100 on phones and auto width from md upwards.</code></pre><p class="prompt-check"><strong>Check before you keep it:</strong> Put your mouse away. Tab from the first field to the submit button. Every stop must be visible and must announce what it is. This single check finds more than Lighthouse does.</p></section>
+    <section class="lesson-section"><h2>Code for this example</h2><h3>HTML</h3><pre class="code-sample"><code>&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;col-lg-8 mx-auto&quot;&gt;
+    &lt;nav aria-label=&quot;breadcrumb&quot;&gt;
+      &lt;ol class=&quot;breadcrumb small&quot;&gt;
+        &lt;li class=&quot;breadcrumb-item&quot;&gt;
+          &lt;a href=&quot;#&quot;&gt;
+            News
+          &lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class=&quot;breadcrumb-item active&quot; aria-current=&quot;page&quot;&gt;
+          Science fair
+        &lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/nav&gt;
+    &lt;h2 class=&quot;h3&quot;&gt;
+      Science fair results announced
+    &lt;/h2&gt;
+    &lt;p class=&quot;text-secondary small&quot;&gt;
+      12 March 2026 &amp;middot; Mrs. Grace Okello
+    &lt;/p&gt;
+    &lt;p&gt;
+      The annual science fair closed on Friday with projects from all three streams on display in the main hall.
+    &lt;/p&gt;
+    &lt;blockquote class=&quot;blockquote border-start border-3 ps-3&quot;&gt;
+      &lt;p class=&quot;mb-0 fs-6&quot;&gt;
+        Every entry this year came from a question a student asked themselves.
+      &lt;/p&gt;
+    &lt;/blockquote&gt;
+    &lt;p&gt;
+      Judging was done by staff and two visiting teachers from neighbouring schools.
+    &lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></section>
+    <section class="lesson-section"><h2>When should you use this?</h2><p>Articles, policies, about pages and anything with more than three paragraphs.</p></section>
+    <section class="lesson-section"><h2>Key points</h2><ul><li>Put body text in col-lg-8 mx-auto or similar.</li><li>Check a long form with the keyboard alone, not only with Lighthouse.</li><li>Every field needs a label with a matching for and id.</li></ul></section>
+    <section class="lesson-section"><h2>In short</h2><p>Readable is a layout decision, and nothing in Bootstrap makes it for you.</p></section>
+    <section class="lesson-section practice-task"><h2>Try it yourself</h2><p>Prompt for an article page, then check that the text sits in a narrow column. A line that runs the full width of a laptop is hard to read.</p></section>
+  </main>
+  <script src="../js/vendor/bootstrap.bundle.min.js"></script><script src="../js/practice.js"></script>
+</body></html>

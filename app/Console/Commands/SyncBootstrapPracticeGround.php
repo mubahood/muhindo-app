@@ -25,7 +25,11 @@ class SyncBootstrapPracticeGround extends Command
             return self::FAILURE;
         }
 
+        // css/, js/ and images/ sit beside the module folders; only a directory
+        // that actually holds lesson pages is a module.
         $modules = collect(File::directories($root))
+            ->filter(fn ($dir) => collect(File::files($dir))
+                ->contains(fn ($f) => in_array(strtolower($f->getExtension()), ['html', 'htm'], true)))
             ->sort(fn ($a, $b) => strnatcasecmp(basename($a), basename($b)))
             ->values();
         if ($modules->isEmpty()) {
@@ -33,6 +37,8 @@ class SyncBootstrapPracticeGround extends Command
 
             return self::FAILURE;
         }
+
+        $videos = $this->videoManifest($root);
 
         $course = Course::firstOrNew(['slug' => 'ai-powered-frontend-development-with-bootstrap']);
         if (! $course->exists) {
@@ -64,23 +70,35 @@ class SyncBootstrapPracticeGround extends Command
         ])->save();
 
         $lessonCount = 0;
-        DB::transaction(function () use ($modules, $course, &$lessonCount): void {
+        $liveCount = 0;
+        $prunedLessons = 0;
+        DB::transaction(function () use ($modules, $course, $videos, &$lessonCount, &$liveCount, &$prunedLessons): void {
+            $keptModules = [];
+
             foreach ($modules as $moduleIndex => $modulePath) {
                 $moduleTitle = basename($modulePath);
                 $module = $course->modules()->updateOrCreate(
                     ['title' => $moduleTitle],
                     ['sort_order' => $moduleIndex],
                 );
+                $keptModules[] = $moduleTitle;
 
                 $files = collect(File::files($modulePath))
                     ->filter(fn ($file) => in_array(strtolower($file->getExtension()), ['html', 'htm'], true))
                     ->sort(fn ($a, $b) => strnatcasecmp($a->getFilename(), $b->getFilename()))
                     ->values();
 
+                $keptLessons = [];
+
                 foreach ($files as $lessonIndex => $file) {
                     $html = File::get($file->getPathname());
                     $title = $this->pageTitle($html)
                         ?: pathinfo($file->getFilename(), PATHINFO_FILENAME);
+
+                    // The leading number in the file name is the key the video
+                    // manifest is written against: "4.2.1 - BOOTSTRAP - ...".
+                    $number = $this->lessonNumber($file->getFilename());
+                    $video = $number !== null ? ($videos[$number] ?? null) : null;
 
                     $module->lessons()->updateOrCreate(
                         ['title' => $title],
@@ -88,21 +106,77 @@ class SyncBootstrapPracticeGround extends Command
                             'content' => $html,
                             'content_format' => ContentFormat::Html,
                             'sort_order' => $lessonIndex,
-                            'is_published' => true,
+                            // A lesson goes live when its video exists and stays a
+                            // draft until then. The manifest is the only authority,
+                            // so a re-sync never silently publishes an empty lesson.
+                            'is_published' => $video !== null,
+                            'video_url' => $video
+                                ? 'https://www.youtube-nocookie.com/embed/'.$video['youtube']
+                                : null,
+                            'duration_minutes' => $video
+                                ? max(1, (int) round($video['seconds'] / 60))
+                                : null,
                             'is_free_preview' => str_starts_with($file->getFilename(), '0.0'),
                             'completion_rule' => 'manual',
                             'completion_threshold' => 80,
                         ],
                     );
+
+                    $keptLessons[] = $title;
                     $lessonCount++;
+                    if ($video !== null) {
+                        $liveCount++;
+                    }
                 }
+
+                // Renumbered or dropped lessons would otherwise linger for ever.
+                // get()->each->delete() so the model events and cascades fire.
+                $stale = $module->lessons()->whereNotIn('title', $keptLessons)->get();
+                $stale->each->delete();
+                $prunedLessons += $stale->count();
             }
+
+            $course->modules()->whereNotIn('title', $keptModules)->get()->each->delete();
         });
 
+        $drafts = $lessonCount - $liveCount;
         $this->info("Synced {$modules->count()} modules and {$lessonCount} HTML lessons to {$course->title}.");
+        $this->line("{$liveCount} lessons are live with a video; {$drafts} stay drafts until one is recorded.");
+        if ($prunedLessons > 0) {
+            $this->line("{$prunedLessons} lesson(s) no longer in the source were removed.");
+        }
         $this->line('Existing student lessons and progress outside this Bootstrap course were not changed.');
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Lesson number -> {youtube, seconds}, authored beside the pages.
+     * Absent file means every lesson syncs as a draft, which is the safe default.
+     */
+    private function videoManifest(string $root): array
+    {
+        $path = $root.'/_videos.json';
+        if (! File::exists($path)) {
+            $this->warn('No _videos.json found; every lesson will sync as a draft.');
+
+            return [];
+        }
+
+        $decoded = json_decode(File::get($path), true);
+        if (! is_array($decoded)) {
+            $this->warn('_videos.json could not be read; every lesson will sync as a draft.');
+
+            return [];
+        }
+
+        return $decoded;
+    }
+
+    /** "4.2.1 - BOOTSTRAP - Advanced typography.html" -> "4.2.1" */
+    private function lessonNumber(string $filename): ?string
+    {
+        return preg_match('/^(\d+(?:\.\d+)*)\s*-/', $filename, $m) ? $m[1] : null;
     }
 
     private function pageTitle(string $html): ?string
