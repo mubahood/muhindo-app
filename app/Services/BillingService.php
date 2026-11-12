@@ -96,17 +96,28 @@ class BillingService
         });
     }
 
-    /** Convenience: raise a single-line invoice for a course purchase, with an optional coupon. */
+    /**
+     * Convenience: raise a single-line invoice for a course purchase, with an
+     * optional coupon.
+     *
+     * The coupon holds a use rather than spending one, and the hold is pointed
+     * at the invoice so that paying it confirms the use and abandoning it hands
+     * the use back. See CouponService.
+     */
     public function generateCourseInvoice(User $student, Course $course, ?string $couponCode = null, ?int $by = null): Invoice
     {
         $discount = '0.00';
+        $redemption = null;
 
         if ($couponCode !== null) {
-            $redemption = $this->coupons->redeem($couponCode, $course, (string) $course->price);
-            $discount = $redemption['discount'];
+            $held = $this->coupons->reserve(
+                $couponCode, $course, (string) $course->price, $student, $course->currency
+            );
+            $discount = $held['discount'];
+            $redemption = $held['redemption'];
         }
 
-        return $this->generateInvoice(
+        $invoice = $this->generateInvoice(
             billable: $student,
             items: [[
                 'description' => 'Course: '.$course->title,
@@ -118,6 +129,12 @@ class BillingService
             currency: $course->currency,
             by: $by,
         );
+
+        if ($redemption !== null) {
+            $this->coupons->attachToInvoice($redemption, $invoice);
+        }
+
+        return $invoice;
     }
 
     /**
@@ -160,6 +177,11 @@ class BillingService
             ]);
 
             if ($status === InvoiceStatus::Paid) {
+                // Settled, so any coupon hold against it becomes a real use.
+                // Inside this transaction, so a confirmed use and a paid
+                // invoice can never disagree.
+                $this->coupons->confirmFor($locked);
+
                 InvoicePaid::dispatch($locked->fresh());
             } else {
                 // Still owing. A course sold in instalments opens its next part
@@ -196,6 +218,11 @@ class BillingService
             }
 
             $locked->update(['amount_paid' => '0.00', 'balance' => '0.00', 'status' => InvoiceStatus::Paid]);
+
+            // A coupon can be what made the total zero, so a free order
+            // confirms its hold exactly like a paid one.
+            $this->coupons->confirmFor($locked);
+
             InvoicePaid::dispatch($locked->fresh());
 
             return $locked->fresh();
@@ -221,6 +248,13 @@ class BillingService
             }
 
             $locked->update(['status' => InvoiceStatus::Refunded, 'refunded_by' => $by, 'refunded_at' => Carbon::now()]);
+
+            /* A refunded sale should not go on consuming a limited campaign.
+               The discount was given and then taken back, so the slot returns
+               to the pool and the released row keeps the history. A confirmed
+               use is deliberately not left in place: "50 students get this
+               price" should mean fifty who kept the course. */
+            $this->coupons->revokeFor($locked);
 
             return $locked;
         });

@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\BillingService;
+use App\Services\CouponService;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
@@ -25,15 +26,21 @@ class CheckoutService
     public function __construct(
         private readonly Cart $cart,
         private readonly BillingService $billing,
+        private readonly CouponService $coupons,
     ) {}
 
     /**
      * Everything already owned is dropped before invoicing, so a full basket of
      * things someone bought last week cannot bill them again.
      *
-     * @return array{invoice:?Invoice, owned:list<string>}
+     * A coupon is applied to the part of the basket it covers, after the
+     * already-owned lines have been dropped — so a code scoped to a product
+     * someone already bought is refused rather than silently discounting
+     * whatever is left.
+     *
+     * @return array{invoice:?Invoice, owned:list<string>, discount:numeric-string, coupon:?string}
      */
-    public function checkout(User $user): array
+    public function checkout(User $user, ?string $couponCode = null): array
     {
         $contents = $this->cart->contents();
 
@@ -47,6 +54,7 @@ class CheckoutService
 
         $owned = [];
         $items = [];
+        $eligible = collect();
 
         /* Second check. A basket can sit in a session for days, and a product
            that was deliverable when it went in may have had its file removed
@@ -75,21 +83,50 @@ class CheckoutService
                 'unit_price' => $line['unit_price'],
                 'source' => $line['model'],
             ];
+
+            $eligible->push([
+                'model' => $line['model'],
+                'name' => $line['name'],
+                'line_total' => bcmul((string) $line['unit_price'], (string) $line['quantity'], 2),
+            ]);
         }
 
         if ($items === []) {
-            return ['invoice' => null, 'owned' => $owned];
+            return ['invoice' => null, 'owned' => $owned, 'discount' => '0.00', 'coupon' => null];
         }
 
-        $invoice = DB::transaction(fn () => $this->billing->generateInvoice(
-            billable: $user,
-            items: $items,
-            currency: $this->cart->currency() ?? 'UGX',
-        ));
+        $currency = $this->cart->currency() ?? 'UGX';
+        $discount = '0.00';
+        $held = null;
+
+        if ($couponCode !== null && trim($couponCode) !== '') {
+            $held = $this->coupons->reserveForBasket($couponCode, $eligible, $user, $currency);
+            $discount = $held['discount'];
+        }
+
+        $invoice = DB::transaction(function () use ($user, $items, $currency, $discount, $held) {
+            $invoice = $this->billing->generateInvoice(
+                billable: $user,
+                items: $items,
+                discount: $discount,
+                currency: $currency,
+            );
+
+            if ($held !== null) {
+                $this->coupons->attachToInvoice($held['redemption'], $invoice);
+            }
+
+            return $invoice;
+        });
 
         $this->cart->clear();
 
-        return ['invoice' => $invoice, 'owned' => $owned];
+        return [
+            'invoice' => $invoice,
+            'owned' => $owned,
+            'discount' => $discount,
+            'coupon' => $held['coupon']->code ?? null,
+        ];
     }
 
     /** @param array<string,mixed> $line */

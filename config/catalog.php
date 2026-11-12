@@ -163,4 +163,19 @@ return [
     // Countries billed in shillings. Everywhere else defaults to USD.
     'ugx_countries' => ['UG'],
 
+    /*
+    | How long a coupon hold survives without payment
+    |
+    | Applying a coupon reserves one of its uses so a limited campaign cannot
+    | oversell while buyers sit on the payment screen. A hold nobody pays for
+    | stops counting after this many hours and the use returns to the pool.
+    |
+    | Long enough for a mobile-money payment that needs a second attempt, or a
+    | buyer who comes back tomorrow with the money; short enough that a 50-use
+    | launch code is not held hostage by abandoned checkouts. On this site's own
+    | figures only 4 invoices in 19 are ever paid, which is what makes the
+    | difference between "50 students get this price" and "50 people clicked".
+    */
+    'coupon_reservation_hours' => 48,
+
 ];

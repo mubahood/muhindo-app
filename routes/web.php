@@ -402,7 +402,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::post('invoices/{invoice}/payments', [AdminPaymentController::class, 'store'])->name('invoices.payments.store');
     Route::post('invoices/{invoice}/pay/flutterwave', [GatewayPaymentController::class, 'start'])->name('invoices.flutterwave');
     Route::get('payments/{payment}/receipt', [AdminPaymentController::class, 'receipt'])->name('payments.receipt');
-    Route::resource('coupons', \App\Http\Controllers\Admin\CouponController::class)->except(['show']);
+    // show() is the redemption ledger: who used the code and what it gave away.
+    Route::resource('coupons', \App\Http\Controllers\Admin\CouponController::class);
 
     // Users & settings
     Route::resource('users', UserController::class)->middleware('permission:manage-users');

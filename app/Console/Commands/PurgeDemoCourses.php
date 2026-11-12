@@ -105,8 +105,24 @@ class PurgeDemoCourses extends Command
             'course reviews' => DB::table('course_reviews')->whereIn('course_id', $courseIds)->count(),
             'discussions' => DB::table('discussions')->whereIn('course_id', $courseIds)->count(),
             'announcements' => DB::table('announcements')->whereIn('course_id', $courseIds)->count(),
-            'coupons' => DB::table('coupons')->whereIn('course_id', $courseIds)->count(),
+            'coupons' => $this->couponsTargeting($courseIds)->count(),
         ];
+    }
+
+    /**
+     * Coupons pointed at one of these courses.
+     *
+     * Only targeted coupons are swept. A coupon scoped to "any course" is a
+     * catalogue-wide campaign that outlives whichever demo course is being
+     * deleted, so deleting it with the course would be wrong.
+     *
+     * @param  list<int>  $courseIds
+     */
+    private function couponsTargeting(array $courseIds): \Illuminate\Database\Query\Builder
+    {
+        return DB::table('coupons')
+            ->where('target_type', (new \App\Models\Course)->getMorphClass())
+            ->whereIn('target_id', $courseIds);
     }
 
     /** @return array{0:list<int>,1:list<int>,2:list<int>,3:list<int>,4:list<int>} */
@@ -147,7 +163,8 @@ class PurgeDemoCourses extends Command
             DB::table('discussions')->whereIn('course_id', $courseIds)->delete();
             DB::table('announcements')->whereIn('course_id', $courseIds)->delete();
             DB::table('course_reviews')->whereIn('course_id', $courseIds)->delete();
-            DB::table('coupons')->whereIn('course_id', $courseIds)->delete();
+            // Redemption rows cascade from the coupon, so they need no sweep.
+            $this->couponsTargeting($courseIds)->delete();
 
             // last_lesson_id points into the lessons about to go.
             DB::table('enrollments')->whereIn('course_id', $courseIds)->update(['last_lesson_id' => null]);

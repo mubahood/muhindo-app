@@ -40,6 +40,21 @@
       <aside class="buy-box">
         <form method="POST" action="{{ route('checkout.place') }}">
           @csrf
+
+          {{-- The course page has had a coupon field all along and the basket
+               never did, so no discount could be offered on source code at
+               all. Optional and quiet: a field nobody has a code for should
+               not look like a missing step. --}}
+          @unless($free)
+            <label for="coupon" class="muted" style="display:block;font-size:12px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">
+              Coupon code (optional)
+            </label>
+            <input id="coupon" name="coupon" type="text" value="{{ old('coupon') }}"
+                   autocomplete="off" autocapitalize="characters" maxlength="50"
+                   style="width:100%;text-transform:uppercase;margin-bottom:10px;"
+                   @error('coupon') aria-invalid="true" @enderror>
+          @endunless
+
           <button type="submit" class="btn gold" style="width:100%;justify-content:center;">
             @if($free)
               <i class="fas fa-download"></i> Get it free

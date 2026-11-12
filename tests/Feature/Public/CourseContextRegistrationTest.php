@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\Public;
 
+use App\Enums\CouponScope;
+use App\Enums\RedemptionStatus;
 use App\Models\Coupon;
+use App\Models\CouponRedemption;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Invoice;
@@ -166,7 +169,8 @@ class CourseContextRegistrationTest extends TestCase
     {
         $course = Course::factory()->create(['is_published' => true, 'price' => 100000, 'currency' => 'UGX']);
         Coupon::create([
-            'code' => 'GUEST20', 'type' => 'percent', 'value' => 20, 'course_id' => $course->id,
+            'code' => 'GUEST20', 'type' => 'percent', 'value' => 20,
+            'scope' => CouponScope::Target, 'target_type' => $course->getMorphClass(), 'target_id' => $course->id,
             'max_uses' => 10, 'used_count' => 0, 'is_active' => true,
         ]);
 
@@ -187,7 +191,14 @@ class CourseContextRegistrationTest extends TestCase
         $invoice = Invoice::findOrFail($enrollment->invoice_id);
         $this->assertSame('20000.00', (string) $invoice->discount);
         $this->assertSame('80000.00', (string) $invoice->total);
-        $this->assertSame(1, Coupon::where('code', 'GUEST20')->value('used_count'));
+
+        /* The use is held against this invoice, not yet spent: nothing has
+           been paid. It becomes a confirmed use when the money lands, which is
+           what stops a limited campaign being emptied by people who register
+           and never pay. */
+        $redemption = CouponRedemption::where('invoice_id', $invoice->id)->sole();
+        $this->assertSame(RedemptionStatus::Reserved, $redemption->status);
+        $this->assertSame(0, Coupon::where('code', 'GUEST20')->value('used_count'));
     }
 
     public function test_signing_in_as_a_guest_with_a_coupon_applies_the_discount_to_the_first_invoice(): void
@@ -195,7 +206,8 @@ class CourseContextRegistrationTest extends TestCase
         $course = Course::factory()->create(['is_published' => true, 'price' => 100000, 'currency' => 'UGX']);
         $student = User::factory()->create(['role' => 'student', 'password' => Hash::make('password123')]);
         Coupon::create([
-            'code' => 'SIGNIN20', 'type' => 'percent', 'value' => 20, 'course_id' => $course->id,
+            'code' => 'SIGNIN20', 'type' => 'percent', 'value' => 20,
+            'scope' => CouponScope::Target, 'target_type' => $course->getMorphClass(), 'target_id' => $course->id,
             'max_uses' => 10, 'used_count' => 0, 'is_active' => true,
         ]);
 

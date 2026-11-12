@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Exceptions\InvalidCouponException;
 use App\Http\Controllers\Controller;
 use App\Services\Shop\Cart;
 use App\Services\Shop\CheckoutService;
@@ -54,8 +55,19 @@ class CheckoutController extends Controller
      */
     public function place(Request $request): RedirectResponse
     {
+        $data = $request->validate(['coupon' => 'nullable|string|max:50']);
+
         try {
-            ['invoice' => $invoice, 'owned' => $owned] = $this->checkout->checkout($request->user());
+            ['invoice' => $invoice, 'owned' => $owned, 'discount' => $discount, 'coupon' => $coupon]
+                = $this->checkout->checkout($request->user(), $data['coupon'] ?? null);
+        } catch (InvalidCouponException $e) {
+            /* The basket is deliberately left intact and the code echoed back:
+               a mistyped coupon is the commonest thing to get wrong here, and
+               clearing someone's basket over it would be the worst possible
+               answer. */
+            return redirect()->route('cart.show')
+                ->withInput($data)
+                ->with('error', $e->getMessage());
         } catch (RuntimeException $e) {
             return redirect()->route('cart.show')->with('error', $e->getMessage());
         }
@@ -68,6 +80,12 @@ class CheckoutController extends Controller
         $notice = $owned === []
             ? null
             : 'Already owned, so left off this order: '.implode(', ', $owned).'.';
+
+        if ($coupon !== null && bccomp($discount, '0', 2) > 0) {
+            $notice = trim(($notice ? $notice.' ' : '')
+                .'Coupon '.$coupon.' applied: '
+                .$invoice->currency.' '.number_format((float) $discount).' off.');
+        }
 
         // A free order has nothing to pay for. It is still settled through
         // billing rather than fulfilled here, so free and paid orders reach

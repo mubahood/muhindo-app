@@ -241,12 +241,6 @@ parameters:
 			path: app/Services/Catalog/CourseImporter.php
 
 		-
-			message: '#^Cannot access property \$value on string\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: app/Services/CouponService.php
-
-		-
 			message: '#^Property App\\Models\\AssignmentSubmission\:\:\$status \(string\) does not accept App\\Enums\\AssignmentSubmissionStatus\:\:Draft\.$#'
 			identifier: assign.propertyType
 			count: 1

@@ -17,6 +17,11 @@ class CouponPolicy
         return $user->can('billing.manage');
     }
 
+    public function view(User $user, Coupon $coupon): bool
+    {
+        return $user->can('billing.manage');
+    }
+
     public function create(User $user): bool
     {
         return $user->can('billing.manage');
