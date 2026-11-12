@@ -60,3 +60,8 @@ _deploy-oneoffs/
 
 # Hosting credentials and any dated backups of them.
 credentials.txt*
+
+# cPanel writes these beside the app and inside the docroot. They are the
+# host's own PHP error logs, not ours, and they made the live tree look dirty.
+error_log
+public/error_log
